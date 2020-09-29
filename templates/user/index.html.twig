@@ -1,0 +1,46 @@
+{% extends 'dataview.html.twig' %}
+{% import 'macro/_forms.html.twig' as macros %}
+
+{% block pageTitle 'Utilisateurs' %}
+
+{% block pageActions %}
+    <a href="{{ path('user_add') }}" class="btn btn-primary"><span
+                class="fa fa-plus-circle"></span>
+        Ajouter</a>
+{% endblock %}
+
+{% block pageTable %}
+    <table class="table table-striped mt-3 bg-white">
+        <thead>
+        <tr class="d-flex">
+            <th class="col-3">Prénom</th>
+            <th class="col-3">Nom</th>
+            <th class="col-4">Email</th>
+            <th class="col-2">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for user in users %}
+            <tr class="d-flex">
+                <td class="col-3">{{ user.firstName }} </td>
+                <td class="col-3">{{ user.lastName }} </td>
+                <td class="col-4">{{ user.email }} </td>
+                <td class="col-2">
+                    {{ macros.editButton('user_edit', user.id) }}
+                    {{ macros.button_open_modal_delete(
+                        user.id,
+                        'Suppression d\'utilisateur',
+                        'user_delete',
+                        'Voulez vous vraiment supprimer cet utilisateur ?',
+                        users.currentPageNumber
+                    ) }}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block pagePagination knp_pagination_render(users) %}
+

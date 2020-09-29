@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="mt-5 col-8 offset-2">
+        <h1>{% block pageTitle %}{% endblock %}</h1>
+
+        <div class="mt-4">
+            {% block pageActions %} {% endblock %}
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-8 offset-2 form-white">
+                {% block pageForm %} {% endblock %}
+            </div>
+        </div>
+
+
+        {% block pageContent %}{% endblock %}
+    </div>
+
+{% endblock %}
+
+

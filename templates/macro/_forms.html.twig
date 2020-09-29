@@ -1,0 +1,98 @@
+{% macro save(cancelPath, param = {} ,saveName = 'Enregistrer') %}
+    <a href="{{ path( cancelPath, param ) }}" class="btn btn-outline-dark">
+        <span class="fa fa-times"></span> Annuler</a>
+
+    <button class="btn btn-primary" type="submit">
+        <span class="fa fa-save"></span>
+        {{ saveName }}
+    </button>
+{% endmacro %}
+
+
+{% macro editButton(editPath, id) %}
+
+    <a href="{{ path(editPath, {'id': id}) }}" class="btn btn-outline-primary borderless"
+       title="Modifier"><span class="fas fa-pen"></span></a>
+{% endmacro %}
+
+
+
+
+{% macro showButton(showPath, id) %}
+
+    <a href="{{ path(showPath, {'id': id}) }}" class="btn btn-outline-primary borderless"
+       title="Visualiser"><span class="fa fa-eye"></span></a>
+{% endmacro %}
+
+{% macro button_open_modal_delete(id, title, pathAction, content, page = 1) %}
+    <button type="button" class="btn btn-outline-danger borderless" title="supprimer"
+            data-target="#delete{{ id }}" data-toggle="modal">
+        <span class="fa fa-trash-alt"></span>
+    </button>
+
+    <div id="delete{{ id }}" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">{{ title }}</h4>
+                    <button class="close" data-dismiss="modal" type="button">&times;</button>
+                </div>
+                <div class="modal-body">
+                    {{ content }}
+                </div>
+
+                <div class="modal-footer">
+
+                    <button class="btn btn-secondary" data-dismiss="modal" type="button">
+                        <span class="fa fa-times"></span> Annuler
+                    </button>
+                    <form method="post" action="{{ path(pathAction, {id: id, page: page}) }}"
+                          style="display: inline-block">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ id) }}">
+                        <button type="submit" class="btn btn-danger"><span class="fa fa-trash-alt"></span> Supprimer
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{%- endmacro -%}
+
+{% macro button_open_modal_post(id, title, content, pathAction, icon = "fa fa-paper-plane",
+    confirmMessage = '<span class="fas fa-exclamation-circle"></span> Confirmer' ) %}
+    <button type="button" class="btn btn-outline-warning borderless" title="Envoyer"
+            data-target="#post{{ id }}" data-toggle="modal">
+        <span class="{{ icon }}"></span>
+    </button>
+
+    <div id="post{{ id }}" class="modal fade" role="dialog" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">{{ title }}</h4>
+                    <button class="close" data-dismiss="modal" type="button">&times;</button>
+                </div>
+                <div class="modal-body">
+                    {{ content }}
+                </div>
+
+                <div class="modal-footer">
+
+                    <button class="btn btn-secondary" data-dismiss="modal" type="button">
+                        <span class="fa fa-times"></span> Annuler
+                    </button>
+                    <form method="post" action="{{ path(pathAction, {id: id}) }}"
+                          style="display: inline-block">
+                        <input type="hidden" name="_token" value="{{ csrf_token('postForm' ~ id) }}">
+                        <button type="submit" class="btn btn-danger submit_post">{{ confirmMessage | raw }}</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{%- endmacro -%}

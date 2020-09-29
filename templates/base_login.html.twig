@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}idelibre{% endblock %}</title>
+    {% block stylesheets %}{% endblock %}
+    <link rel="stylesheet" href="{{ asset('assets/bootstrap/css/il-bootstrap-4.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/fontawesome-free-5.12.1-web/css/all.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/general.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/login_ls.css') }}">
+</head>
+<body>
+
+{% block navigation %}
+
+{% endblock %}
+
+<div class="container-fluid">
+
+    <main class="connection-page">
+        <section class="main">
+
+            <div class="coll-side">
+                <div class="img-container">
+
+
+                    {% if structure.logoPath is defined and structure.logoPath is not null %}
+                        <img src="{{ asset('custom_logos/' ~ structure.logoPath) }}" alt="logo" class="epci-logo">
+                    {% else %}
+                        <img id="libriciel-logo" alt="Image du Libriciel"
+                             src="{{ asset('assets/img/logo_Libriciel.png') }}">
+                    {% endif %}
+
+
+                </div>
+                <div class="sub-txt">
+                    <span></span>
+                </div>
+            </div>
+
+            {% block body %}{% endblock %}
+        </section>
+    </main>
+</div>
+
+{{ include('include/_footer.html.twig') }}
+
+<script src="{{ asset('assets/jquery.min.js') }}"></script>
+<script src="{{ asset('assets/popper.min.js') }}"></script>
+<script src="{{ asset('assets/bootstrap/js/bootstrap.min.js') }}"></script>
+{% block javascripts %}{% endblock %}
+</body>
+</html>

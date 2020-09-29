@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}idelibre{% endblock %}</title>
+    {% block stylesheets %}{% endblock %}
+    <link rel="stylesheet" href="{{ asset('assets/bootstrap/css/il-bootstrap-4.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/fontawesome-free-5.12.1-web/css/all.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/general.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/select2/select2.css') }}">
+</head>
+<body>
+
+{% block navigation %}
+    {{ include('include/_navbar.html.twig') }}
+{% endblock %}
+
+<div class="container-fluid" style="margin-bottom: 150px">
+    {% block body %}{% endblock %}
+</div>
+
+
+{{ include('include/_footer.html.twig') }}
+
+<script src="{{ asset('assets/jquery.min.js') }}"></script>
+<script src="{{ asset('assets/popper.min.js') }}"></script>
+<script src="{{ asset('assets/bootstrap/js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('assets/bootstrap/js/bs-custom-file-input.js') }}"></script>
+<script src="{{ asset('assets/select2/select2.js') }}"></script>
+<script src="{{ asset('assets/fontawesome-free-5.12.1-web/js/all.js') }}"></script>
+{% block javascripts %}{% endblock %}
+</body>
+</html>

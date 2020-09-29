@@ -1,0 +1,28 @@
+{% extends 'form.html.twig' %}
+{% import 'macro/_forms.html.twig' as macro %}
+
+{% block pageTitle 'Associer des structures' %}
+
+{% block pageActions %}
+    <a href="{{ path('group_index') }}" class="btn btn-outline-primary">
+        <span class="fa fa-arrow-left"></span> Retour
+    </a>
+{% endblock %}
+
+{% block pageForm %}
+    {{ form_start(form) }}
+
+    {{ form_widget(form) }}
+
+    <div class="float-right">
+        {{ macro.save('group_index') }}
+    </div>
+    {{ form_end(form) }}
+{% endblock %}
+
+
+{% block javascripts %}
+    <script src="{{ asset('assets/enableSelect2.js') }}"></script>
+{% endblock %}
+
+

@@ -1,0 +1,50 @@
+{% extends 'base_login.html.twig' %}
+
+{% block body %}
+
+    <div class="form-side">
+        <div class="form-content">
+            <div class="soft-logo">
+                <img id="libriciel-logo" alt="Image du Libriciel"
+                     height="10" width="10"
+                     src="{{ asset('assets/img/il-color.svg') }}">
+            </div>
+
+            <section>
+                <h1 class="page-title">Mot de passe oublié ?</h1>
+                <form method="post">
+                    <input type="hidden" name="_csrf_token"
+                           value="{{ csrf_token('authenticate') }}"
+                    >
+
+                    <div class="form-group row">
+                        <label for="staticEmail" class="col-sm-3 col-form-label">Adresse email</label>
+                        <div class="col-sm-9">
+
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text"><span class="fa fa-user"></span></div>
+                                </div>
+                                <input type="email" name="email" id="inputEmail" class="form-control"
+                                       placeholder="adresse email" required autofocus>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="float-right">
+                        <a href="{{ path('app_login') }}" class="btn btn-link forgot-passwd-lnk">
+                            Revenir à l'écran de connexion
+                        </a>
+
+                        <button class="btn btn-primary" type="submit">
+                            <i class="fa fa-sign-in fa-sign-in-alt fa-fw"></i>
+                            Soumettre
+                        </button>
+                    </div>
+                </form>
+            </section>
+        </div>
+    </div>
+
+{% endblock %}

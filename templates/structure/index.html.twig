@@ -1,0 +1,74 @@
+{% extends 'dataview.html.twig' %}
+{% import 'macro/_forms.html.twig' as macros %}
+
+{% block pageTitle 'Structures' %}
+
+{% block pageActions %}
+    <div class="row">
+        <div class="col-6 pull-left">
+            <a href="{{ path('structure_add') }}" class="btn btn-primary"><span
+                        class="fa fa-plus-circle"></span>
+                Ajouter</a>
+        </div>
+
+        <div class="col-6">
+            {{ form_start(formSearch, {'method': 'GET'}) }}
+
+            <div class="input-group col-8 float-right pr-0">
+                {{ form_widget(formSearch.search, {'value': searchTerm}) }}
+                <div class="input-group-append">
+                    <button class="btn btn-primary" title="Filtrer">
+                        <span class="fas fa-search"></span>
+                    </button>
+                </div>
+            </div>
+            {{ form_end(formSearch) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block pageTable %}
+    <table class="table table-striped mt-3 bg-white">
+        <thead>
+        <tr class="d-flex">
+            <th class="col-4">{{ knp_pagination_sortable(structures, 'Nom', 's.name') }}</th>
+            <th class="col-3">{{ knp_pagination_sortable(structures, 'Suffixe', 's.suffix') }}</th>
+            <th class="col-3">{{ knp_pagination_sortable(structures, 'Groupe', 'g.name') }}</th>
+            <th class="col-2">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for structure in structures %}
+            <tr class="d-flex">
+                <td class="col-4">{{ structure.name }} </td>
+                <td class="col-3">{{ structure.suffix | slice(0,15) }} </td>
+                <td class="col-3">{{ (structure.group ? structure.group.name : "") | slice(0,15) }} </td>
+                <td class="col-2">
+
+                    <a href="{{ path('security_impersonate', {'id': structure.id}) }}"
+                       class="btn btn-outline-primary borderless" title="Se connecter dans la structure">
+                        <span class="fas fa-sign-in-alt "></span>
+                    </a>
+
+                    {{ macros.editButton('structure_edit', structure.id) }}
+
+                    {{ macros.button_open_modal_delete(
+                        structure.id,
+                        "Confirmer suppression de la structure.",
+                        "structure_delete",
+                        "Confirmer la suppression de " ~ structure.name ~
+                        ". Cela supprimera la structure et l'ensemble de ce qui lui est lié.",
+                        structures.currentPageNumber
+                    ) }}
+
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block pagePagination  knp_pagination_render(structures) %}
+
+

@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="mt-5 col-10 offset-1">
+        {{ include('include/flash.html.twig') }}
+
+        <h1>{% block pageTitle %}{% endblock %}</h1>
+
+        <div class="mt-4">
+            {% block pageActions %} {% endblock %}
+        </div>
+
+        <div class="mt-3">
+            {% block pageTable %}{% endblock %}
+        </div>
+
+        <div class="pagination float-right">
+            {% block pagePagination %}{% endblock %}
+        </div>
+
+    </div>
+
+{% endblock %}
+
+

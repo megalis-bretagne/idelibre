@@ -1,0 +1,47 @@
+{% extends 'dataview.html.twig' %}
+{% import 'macro/_forms.html.twig' as macros %}
+
+{% block pageTitle 'Groupes' %}
+
+{% block pageActions %}
+    <a href="{{ path('group_add') }}" class="btn btn-primary"><span
+                class="fa fa-plus-circle"></span>
+        Ajouter</a>
+{% endblock %}
+
+{% block pageTable %}
+
+    <table class="table table-striped bg-white">
+        <thead>
+        <tr class="d-flex">
+            <th class="col-9">Intitulé</th>
+            <th class="col-3">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for group in groups %}
+            <tr class="d-flex">
+                <td class="col-9">{{ group.name }} </td>
+                <td class="col-3">
+                    {{ macros.editButton('group_edit', group.id) }}
+                    <a href="{{ path('group_manage', {'id': group.id}) }}" class="btn btn-outline-primary borderless"
+                       title="Configurer">
+                        <span class="fa fa-cog"></span>
+                    </a>
+
+                    {{ macros.button_open_modal_delete(
+                        group.id,
+                        'Suppression de groupe',
+                        'group_delete',
+                        'Voulez vous vraiment supprimer ce groupe ?',
+                        groups.currentPageNumber
+                    ) }}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block pagePagination knp_pagination_render(groups) %}
