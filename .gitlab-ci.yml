@@ -50,7 +50,8 @@ phpTest:
     - docker-resources/initAppTest.sh
     - SYMFONY_DEPRECATIONS_HELPER=disabled bin/phpunit --coverage-text --colors=never --coverage-clover coverage/coverage.xml --log-junit coverage/logfile.xml
     - ls -l coverage
+    - cp -rf coverage $CI_PROJECT_DIR
   artifacts:
     paths:
-      - /app/coverage
+      - coverage
     expire_in: 1h
