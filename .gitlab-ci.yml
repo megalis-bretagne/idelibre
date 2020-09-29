@@ -9,9 +9,8 @@ variables:
 build:
   stage: build
 
-  image: docker:latest
-  services:
-    - docker:dind
+  tags:
+    - docker-build
 
   script:
     - docker login -u "gitlab-ci-token" -p "$CI_JOB_TOKEN" $CI_REGISTRY
