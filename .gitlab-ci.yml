@@ -64,4 +64,7 @@ quality:
     - master
   image: gitlab.libriciel.fr:4567/docker/sonar-scanner:latest
   script:
+    - mkdir /app
+    - cp -rf $CI_PROJECT_DIR/* /app
+    - cd /app
     - /sonar-scanner -Dsonar.login=$SONAR_LOGIN -Dsonar.host.url=$SONAR_HOST_URL
