@@ -1,6 +1,7 @@
 stages:
   - build
   - test
+  - quality
 
 variables:
   CONTAINER_IMAGE: "${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME}"
@@ -49,8 +50,18 @@ phpTest:
     - composer install
     - docker-resources/initAppTest.sh
     - SYMFONY_DEPRECATIONS_HELPER=disabled bin/phpunit --coverage-text --colors=never --coverage-clover coverage/coverage.xml --log-junit coverage/logfile.xml
-    - ls -l coverage
+    - cp -rf coverage $CI_PROJECT_DIR
   artifacts:
     paths:
-      - /app/coverage
+      - coverage
     expire_in: 1h
+
+
+
+quality:
+  stage: quality
+  only:
+    - master
+  image: gitlab.libriciel.fr:4567/docker/sonar-scanner:latest
+  script:
+    - /sonar-scanner -Dsonar.login=$SONAR_LOGIN -Dsonar.host.url=$SONAR_HOST_URL
