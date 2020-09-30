@@ -32,11 +32,6 @@ class User implements UserInterface
      */
     private $email;
 
-//    /**
-//     * @ORM\Column(type="json", options={"jsonb"=true})
-//     */
-//    private $roles = [];
-
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")

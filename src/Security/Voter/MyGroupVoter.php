@@ -30,14 +30,23 @@ class MyGroupVoter extends Voter
             return false;
         }
 
-        if (in_array("ROLE_SUPERADMIN", $user->getRoles())) {
+        if ($this->isSuperAdmin($user)) {
             return true;
         }
 
-        if (in_array("ROLE_GROUP_ADMIN", $user->getRoles()) && $user->getGroup() === $subject->getGroup()) {
-            return true;
-        }
-
-        return false;
+        return $this->isAdminGroupAndOwnSubject($user, $subject);
     }
+
+    private function isSuperAdmin(User $user)
+    {
+        return in_array("ROLE_SUPERADMIN", $user->getRoles());
+    }
+
+    private function isAdminGroupAndOwnSubject(User $user, $subject):bool {
+        if (!in_array("ROLE_GROUP_ADMIN", $user->getRoles())) {
+            return false;
+        }
+        return $user->getGroup() === $subject->getGroup();
+    }
+
 }

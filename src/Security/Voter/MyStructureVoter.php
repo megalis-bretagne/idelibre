@@ -16,11 +16,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class MyStructureVoter extends Voter
 {
-    //TODO avec la structure dans la route. le subject pourrait etre toujours structure au lieu
-    //de plein de class differente
-    //fixme au lieu de tester si le subject est instance of plein de classe on devrait tester avec une interface !!
-    // (qui doit implémenter getStructure)
-
     protected function supports($attribute, $subject)
     {
         // replace with your own logic
