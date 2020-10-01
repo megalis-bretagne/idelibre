@@ -55,8 +55,10 @@ class TypeControllerTest extends WebTestCase
 
     public function testIndex(){
         $this->loginAsAdminLibriciel();
-        $this->client->request(Request::METHOD_GET, '/type/index/');
+        $crawler = $this->client->request(Request::METHOD_GET, '/type');
         $this->assertResponseStatusCodeSame(200);
+        $title = $crawler->filter('html:contains("Types de séance")');
+        $this->assertCount(1, $title);
     }
 
 

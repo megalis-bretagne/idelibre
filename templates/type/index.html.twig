@@ -1,20 +1,61 @@
-{% extends 'base.html.twig' %}
+% extends 'dataview.html.twig' %}
+{% import 'macro/_forms.html.twig' as macros %}
 
-{% block title %}Hello TypeController!{% endblock %}
+{% block pageTitle 'Types de séance' %}
 
-{% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+{% block pageActions %}
+    <div class="row">
+        <div class="col-6 pull-left">
+            {% if is_granted('ROLE_MANAGE_TYPES') %}
+                <a href="{{ path('type_add') }}" class="btn btn-primary"><span
+                           class="fa fa-plus-circle"></span> Ajouter
+                </a>
+            {% endif %}
+        </div>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+        <div class="col-6">
+            {{ form_start(formSearch, {'method': 'GET'}) }}
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/home/rdubourget/workspace/idelibre/src/Controller/TypeController.php'|file_link(0) }}">src/Controller/TypeController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/home/rdubourget/workspace/idelibre/templates/type/index.html.twig'|file_link(0) }}">templates/type/index.html.twig</a></code></li>
-    </ul>
-</div>
+            <div class="input-group col-8 float-right pr-0">
+                {{ form_widget(formSearch.search, {'value': searchTerm}) }}
+                <div class="input-group-append">
+                    <button class="btn btn-primary" title="Filtrer">
+                        <span class="fas fa-search"></span>
+                    </button>
+                </div>
+            </div>
+            {{ form_end(formSearch) }}
+        </div>
+    </div>
 {% endblock %}
+
+{% block pageTable %}
+    <table class="table table-striped  bg-white">
+        <thead>
+        <tr class="d-flex">
+            <th class="col-10">Intitulé</th>
+            <th class="col-2">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for type in types %}
+            <tr class="d-flex">
+                <td class="col-10">{{ type.name }} </td>
+                <td class="col-2">
+                    {{ macros.editButton('type_edit', type.id) }}
+                    {{ macros.button_open_modal_delete(
+                        type.id,
+                        'Suppression de type',
+                        'type_delete',
+                        'Voulez vous vraiment supprimer ce type',
+                        types.currentPageNumber
+                    ) }}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block pagePagination knp_pagination_render(types) %}

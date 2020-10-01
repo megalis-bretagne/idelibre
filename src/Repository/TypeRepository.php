@@ -22,8 +22,8 @@ class TypeRepository extends ServiceEntityRepository
 
     public function findByStructure(Structure $structure)
     {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.structure =:structure')
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.structure =:structure')
             ->setParameter('structure', $structure);
     }
 }
