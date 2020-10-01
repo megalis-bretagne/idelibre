@@ -44,6 +44,14 @@ class RoleFixtures extends Fixture
         $this->addReference(self::REFERENCE . 'secretary', $roleSecretary);
 
 
+        $roleActor = new Role();
+        $roleActor->setName('Actor')
+            ->addComposite('ROLE_ACTOR');
+
+        $manager->persist($roleActor);
+        $this->addReference(self::REFERENCE . 'actor', $roleActor);
+
+
         $manager->flush();
     }
 }

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -65,6 +67,17 @@ class User implements UserInterface
      * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
     private $role;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Type::class, mappedBy="associatedUsers")
+     */
+    private $associatedTypes;
+
+
+    public function __construct()
+    {
+        $this->associatedTypes = new ArrayCollection();
+    }
 
 
     public function getId(): ?string
@@ -220,6 +233,34 @@ class User implements UserInterface
     public function setRole(?Role $role): self
     {
         $this->role = $role;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Type[]
+     */
+    public function getAssociatedTypes(): Collection
+    {
+        return $this->associatedTypes;
+    }
+
+    public function addAssociatedType(Type $associatedType): self
+    {
+        if (!$this->associatedTypes->contains($associatedType)) {
+            $this->associatedTypes[] = $associatedType;
+            $associatedType->addAssociatedUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAssociatedType(Type $associatedType): self
+    {
+        if ($this->associatedTypes->contains($associatedType)) {
+            $this->associatedTypes->removeElement($associatedType);
+            $associatedType->removeAssociatedUser($this);
+        }
 
         return $this;
     }
