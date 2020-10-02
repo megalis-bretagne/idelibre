@@ -38,11 +38,14 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         /** @var Role $roleSuperAdmin */
         $roleSuperAdmin = $this->getReference(RoleFixtures::REFERENCE . 'superAdmin');
 
-        /** @var Role $roleSuperAdmin */
+        /** @var Role $roleGroupAdmin */
         $roleGroupAdmin = $this->getReference(RoleFixtures::REFERENCE . 'groupAdmin');
 
-        /** @var Role $roleSuperAdmin */
+        /** @var Role $roleStructureAdminLibriciel */
         $roleStructureAdminLibriciel = $this->getReference(RoleFixtures::REFERENCE . 'structureAdmin');
+
+        /** @var Role $roleActor */
+        $roleActor = $this->getReference(RoleFixtures::REFERENCE . 'actor');
 
         ///////// SuperAdmin  ////////////////////
 
@@ -123,6 +126,46 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
 
         $manager->persist($userGroupRecia);
         $this->addReference(self::REFERENCE . 'userGroupRecia', $userGroupRecia);
+
+        
+        // Actors
+        $actorLibriciel1 = new User();
+        $actorLibriciel1->setEmail('actor1@example.org')
+            ->setRole($roleActor)
+            ->setUsername('actor1@libriciel.coop')
+            ->setFirstName('actor_1')
+            ->setLastname('libriciel')
+            ->setStructure($structureLibriciel)
+            ->setPassword($this->passwordEncoder->encodePassword($actorLibriciel1, 'password'));
+
+        $manager->persist($actorLibriciel1);
+        $this->addReference(self::REFERENCE . 'actorLibriciel1', $actorLibriciel1);
+
+
+        $actorLibriciel2 = new User();
+        $actorLibriciel2->setEmail('actor2@example.org')
+            ->setRole($roleActor)
+            ->setUsername('actor2@libriciel.coop')
+            ->setFirstName('actor_2')
+            ->setLastname('libriciel')
+            ->setStructure($structureLibriciel)
+            ->setPassword($this->passwordEncoder->encodePassword($actorLibriciel2, 'password'));
+
+        $manager->persist($actorLibriciel2);
+        $this->addReference(self::REFERENCE . 'actorLibriciel2', $actorLibriciel2);
+
+
+        $actorLibriciel3 = new User();
+        $actorLibriciel3->setEmail('actor3@example.org')
+            ->setRole($roleActor)
+            ->setUsername('actor3@libriciel.coop')
+            ->setFirstName('actor_3')
+            ->setLastname('libriciel')
+            ->setStructure($structureLibriciel)
+            ->setPassword($this->passwordEncoder->encodePassword($actorLibriciel3, 'password'));
+
+        $manager->persist($actorLibriciel3);
+        $this->addReference(self::REFERENCE . 'actorLibriciel3', $actorLibriciel3);
 
         $manager->flush();
     }

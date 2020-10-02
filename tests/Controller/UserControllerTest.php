@@ -67,6 +67,8 @@ class UserControllerTest extends WebTestCase
         $successMsg = $crawler->filter('html:contains("l\'utilisateur a bien été supprimé")');
         $this->assertCount(1, $successMsg);
 
+        $this->assertEmpty($this->getOneEntityBy(User::class, ['id' => $user->getId()]));
+
     }
 
     public function testDeleteOtherStructureUser()
@@ -107,9 +109,9 @@ class UserControllerTest extends WebTestCase
         $form = $crawler->selectButton('Enregistrer')->form();
 
         $form['user[firstName]'] = 'new';
-        $form['user[lastName]'] = 'admin';
-        $form['user[username]'] = 'newadmin';
-        $form['user[email]'] = 'newadmin@example.org';
+        $form['user[lastName]'] = 'user';
+        $form['user[username]'] = 'newuser';
+        $form['user[email]'] = 'newuser@example.org';
         $form['user[role]'] = $adminRole->getId();
         $form['user[plainPassword][first]'] = 'password';
         $form['user[plainPassword][second]'] = 'password';
@@ -123,6 +125,8 @@ class UserControllerTest extends WebTestCase
 
         $successMsg = $crawler->filter('html:contains("votre utilisateur a bien été ajouté")');
         $this->assertCount(1, $successMsg);
+
+        $this->assertNotEmpty($this->getOneEntityBy(User::class, ['username' => 'newuser']));
     }
 
     public function testEdit()

@@ -94,4 +94,14 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
         return $qb->getQuery();
     }
+
+    public function findActorByStructure($structure) : QueryBuilder
+    {
+        return $this->createQueryBuilder('u')
+            ->leftJoin('u.role', 'r')
+            ->andWhere(' r.name =:actor')
+            ->setParameter('actor', 'Actor')
+            ->andWhere('u.structure = :structure')
+            ->setParameter('structure', $structure);
+    }
 }

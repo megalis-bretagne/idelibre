@@ -65,7 +65,7 @@ class UserRepositoryTest extends WebTestCase
         /** @var Structure $structure */
         $structure = $this->getOneEntityBy(Structure::class, ['name' => 'Libriciel']);
 
-        $this->assertCount(2, $this->userRepository->findByStructure($structure)->getQuery()->getResult());
+        $this->assertCount(5, $this->userRepository->findByStructure($structure)->getQuery()->getResult());
     }
 
     public function testFindSuperAdminAndGroupAdmin()
@@ -106,5 +106,13 @@ class UserRepositoryTest extends WebTestCase
 
         $this->assertNotEmpty($userGroupRecia->getStructure());
         $this->assertCount(2, $this->userRepository->findSuperAdminAndGroupAdminInStructure($structure)->getResult());
+    }
+
+    public function testFindActorByStructure()
+    {
+        /** @var Structure $structure */
+        $structure = $this->getOneEntityBy(Structure::class, ['name' => 'Libriciel']);
+        $actorQB = $this->userRepository->findActorByStructure($structure);
+        $this->assertCount(3, $actorQB->getQuery()->getResult());
     }
 }

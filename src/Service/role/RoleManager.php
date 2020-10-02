@@ -25,4 +25,9 @@ class RoleManager
     {
         return $this->roleRepository->findOneBy(['name' => 'GroupAdmin']);
     }
+
+    public function getActorRole(): Role
+    {
+        return $this->roleRepository->findOneBy(['name' => 'Actor']);
+    }
 }

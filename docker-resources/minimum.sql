@@ -12,6 +12,12 @@ INSERT INTO role (id, name, composites)
 VALUES ('160e7561-7ffa-459c-ae9b-4da32b49e1b1', 'Secretary', '["ROLE_SECRETARY"]');
 
 INSERT INTO role (id, name, composites)
+VALUES ('230a1c1d-eaec-4fb7-9ba7-d7ac47dc97bb', 'Actor', '["ROLE_ACTOR"]');
+
+
+
+
+INSERT INTO role (id, name, composites)
 VALUES ('17f4b8ba-7a34-4463-9901-88b619a64be3', 'Admin', '["ROLE_STRUCTURE_ADMIN"]');
 
 INSERT INTO "user" (id, structure_id, email, username, role_id, password, first_name, last_name)
