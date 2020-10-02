@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20200924124635 extends AbstractMigration
+final class Version20201002110846 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -22,9 +22,9 @@ final class Version20200924124635 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
-        $this->addSql('CREATE TABLE forget_token (id UUID NOT NULL, user_id UUID NOT NULL, token VARCHAR(255) NOT NULL, expire_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
-        $this->addSql('CREATE UNIQUE INDEX UNIQ_51C96252A76ED395 ON forget_token (user_id)');
-        $this->addSql('ALTER TABLE forget_token ADD CONSTRAINT FK_51C96252A76ED395 FOREIGN KEY (user_id) REFERENCES "user" (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_3701B2975E237E06 ON timezone (name)');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_6F0137EAB5B087DE ON structure (suffix)');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_8CDE57295E237E06 ON type (name)');
     }
 
     public function down(Schema $schema) : void
@@ -33,6 +33,8 @@ final class Version20200924124635 extends AbstractMigration
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
         $this->addSql('CREATE SCHEMA public');
-        $this->addSql('DROP TABLE forget_token');
+        $this->addSql('DROP INDEX UNIQ_3701B2975E237E06');
+        $this->addSql('DROP INDEX UNIQ_6F0137EAB5B087DE');
+        $this->addSql('DROP INDEX UNIQ_8CDE57295E237E06');
     }
 }
