@@ -71,7 +71,7 @@ class GroupControllerTest extends WebTestCase
 
         $form = $crawler->selectButton('Enregistrer')->form();
 
-        $form['group[name]'] = 'new groupe';
+        $form['group[name]'] = 'new group';
         $form['group[user][firstName]'] = 'new firstname';
         $form['group[user][lastName]'] = 'new lastname';
         $form['group[user][email]'] = 'new@email.com';
@@ -88,6 +88,8 @@ class GroupControllerTest extends WebTestCase
 
         $successMsg = $crawler->filter('html:contains("Le groupe a bien été créé")');
         $this->assertCount(1, $successMsg);
+
+        $this->assertNotEmpty($this->getOneEntityBy(Group::class, ['name' => 'new group']));
     }
 
     public function testEdit()
@@ -138,5 +140,7 @@ class GroupControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(200);
         $successMsg = $crawler->filter('html:contains("Le groupe a bien été supprimée")');
         $this->assertCount(1, $successMsg);
+
+        $this->assertEmpty($this->getOneEntityBy(Group::class, ['id' => $group->getId()]));
     }
 }

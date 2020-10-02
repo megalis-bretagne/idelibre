@@ -66,6 +66,8 @@ class AdminControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(200);
         $successMsg = $crawler->filter('html:contains("l\'utilisateur a bien été supprimé")');
         $this->assertCount(1, $successMsg);
+
+        $this->assertEmpty($this->getOneEntityBy(User::class, ['id' => $user->getId()]));
     }
 
     public function testDeleteYourself()
@@ -108,6 +110,7 @@ class AdminControllerTest extends WebTestCase
 
         $successMsg = $crawler->filter('html:contains("votre administrateur a bien été ajouté")');
         $this->assertCount(1, $successMsg);
+        $this->assertNotEmpty($this->getOneEntityBy(User::class, ['username' => 'newadmin']));
     }
 
     public function testEdit()

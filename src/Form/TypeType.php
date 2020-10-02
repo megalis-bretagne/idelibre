@@ -23,8 +23,8 @@ class TypeType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('associatedUsers')
             ->add('associatedUsers', EntityType::class, [
+                'placeholder' => 'Sélectionner les acteurs',
                 'required' => false,
                 'label' => 'Acteurs associés',
                 'class' => User::class,

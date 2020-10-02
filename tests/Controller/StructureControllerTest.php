@@ -11,6 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Bundle\MakerBundle\Str;
 use Symfony\Component\HttpFoundation\Request;
 
 class StructureControllerTest extends WebTestCase
@@ -101,6 +102,8 @@ class StructureControllerTest extends WebTestCase
 
         $successMsg = $crawler->filter('html:contains("La structure a été créée")');
         $this->assertCount(1, $successMsg);
+
+        $this->assertNotEmpty($this->getOneEntityBy(Structure::class, ['name' => 'New structure']));
     }
 
 
@@ -142,5 +145,7 @@ class StructureControllerTest extends WebTestCase
 
         $successMsg = $crawler->filter('html:contains("La structure a bien été supprimée")');
         $this->assertCount(1, $successMsg);
+
+        $this->assertEmpty($this->getOneEntityBy(Structure::class, ['id' => $structure->getId()]));
     }
 }

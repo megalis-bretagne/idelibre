@@ -68,7 +68,7 @@ class TypeController extends AbstractController
     }
 
     /**
-     * @Route("/tpye/edit/{id}", name="type_edit")
+     * @Route("/type/edit/{id}", name="type_edit")
      * @IsGranted("MANAGE_TYPES", subject="type")
      */
     public function edit(Type $type, Request $request, TypeManager $typeManager): Response
