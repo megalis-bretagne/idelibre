@@ -61,5 +61,32 @@ class TypeControllerTest extends WebTestCase
         $this->assertCount(1, $title);
     }
 
+    public function testDelete()
+    {
+        $this->loginAsAdminLibriciel();
+        /** @var Type $user */
+        $type = $this->getOneEntityBy(Type::class, ['name' => 'Conseil Communautaire Libriciel']);
+        $this->client->request(Request::METHOD_DELETE, '/type/delete/' . $type->getId());
+        $this->assertTrue($this->client->getResponse()->isRedirect());
+
+        $crawler = $this->client->followRedirect();
+        $this->assertResponseStatusCodeSame(200);
+        $successMsg = $crawler->filter('html:contains("Le type a bien été supprimé")');
+        $this->assertCount(1, $successMsg);
+    }
+
+
+    public function testDeleteNotMyType()
+    {
+        $this->loginAsAdminLibriciel();
+        /** @var Type $user */
+        $type = $this->getOneEntityBy(Type::class, ['name' => 'Conseil Municipal Montpellier']);
+        $this->client->request(Request::METHOD_DELETE, '/type/delete/' . $type->getId());
+        $this->assertResponseStatusCodeSame(403);
+    }
+
+
+
+
 
 }

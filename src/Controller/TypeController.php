@@ -2,11 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\Type;
 use App\Entity\User;
 use App\Form\SearchType;
 use App\Form\SuperUserType;
+use App\Form\TypeType;
 use App\Repository\TypeRepository;
 use App\Service\role\RoleManager;
+use App\Service\Type\TypeManager;
 use App\Service\User\UserManager;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -49,64 +52,50 @@ class TypeController extends AbstractController
      * @Route("/type/add", name="type_add")
      * @IsGranted("ROLE_MANAGE_TYPES")
      */
-    public function add(Request $request, UserManager $userManager, RoleManager $roleManager): Response
+    public function add(Request $request, TypeManager $typeManager): Response
     {
-        $form = $this->createForm(SuperUserType::class);
+        $form = $this->createForm(TypeType::class, null, ["structure" => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $userManager->saveAdmin(
-                $form->getData(),
-                $form->get('plainPassword')->getData(),
-                $roleManager->getSuperAdminRole()
-            );
+            $typeManager->save($form->getData(), $this->getUser()->getStructure());
 
-            $this->addFlash('success', 'votre administrateur a bien été ajouté');
-            return $this->redirectToRoute('admin_index');
+            $this->addFlash('success', 'Votre type a bien été ajouté');
+            return $this->redirectToRoute('type_index');
         }
-        return $this->render('admin/add.html.twig', [
+        return $this->render('type/add.html.twig', [
             'form' => $form->createView()
         ]);
     }
 
-
-
-
     /**
      * @Route("/tpye/edit/{id}", name="type_edit")
-     * @IsGranted("MY_GROUP", subject="user")
+     * @IsGranted("MANAGE_TYPES", subject="type")
      */
-    public function edit(User $user, Request $request, UserManager $userManager): Response
+    public function edit(Type $type, Request $request, TypeManager $typeManager): Response
     {
-        $form = $this->createForm(SuperUserType::class, $user, ['isEditMode' => true]);
+        $form = $this->createForm(TypeType::class, $type, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $userManager->saveAdmin(
-                $form->getData(),
-                $form->get('plainPassword')->getData()
-            );
+            $typeManager->save($form->getData(), $this->getUser()->getStructure());
 
-            $this->addFlash('success', 'votre administrateur a bien été modifié');
-            return $this->redirectToRoute('admin_index');
+            $this->addFlash('success', 'Votre type a bien été modifié');
+            return $this->redirectToRoute('type_index');
         }
-        return $this->render('admin/edit.html.twig', [
+        return $this->render('type/edit.html.twig', [
             'form' => $form->createView(),
-            'user' => $user
+            'user' => $type
         ]);
     }
 
     /**
      * @Route("/type/delete/{id}", name="type_delete", methods={"DELETE"})
-     * @IsGranted("MY_GROUP", subject="user")
+     * @IsGranted("MANAGE_TYPES", subject="type")
      */
-    public function delete(User $user, UserManager $userManager, Request $request): Response
+    public function delete(Type $type, TypeManager $typeManager, Request $request): Response
     {
-        if ($this->getUser()->getid() == $user->getId()) {
-            $this->addFlash('error', 'Impossible de supprimer son propre utilisateur');
-            return $this->redirectToRoute('admin_index');
-        }
-        $userManager->delete($user);
-        $this->addFlash('success', 'l\'utilisateur a bien été supprimé');
-        return $this->redirectToRoute('admin_index', [
+        $typeManager->delete($type);
+        $this->addFlash('success', 'Le type a bien été supprimé');
+        return $this->redirectToRoute('type_index', [
             'page' => $request->get('page')
         ]);
     }

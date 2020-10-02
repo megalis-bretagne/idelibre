@@ -71,4 +71,7 @@ class TypeRepositoryTest extends WebTestCase
         $this->assertCount(2, $this->typeRepository->findByStructure($structure)->getQuery()->getResult());
     }
 
+
+
+
 }

@@ -38,11 +38,14 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         /** @var Role $roleSuperAdmin */
         $roleSuperAdmin = $this->getReference(RoleFixtures::REFERENCE . 'superAdmin');
 
-        /** @var Role $roleSuperAdmin */
+        /** @var Role $roleGroupAdmin */
         $roleGroupAdmin = $this->getReference(RoleFixtures::REFERENCE . 'groupAdmin');
 
-        /** @var Role $roleSuperAdmin */
+        /** @var Role $roleStructureAdminLibriciel */
         $roleStructureAdminLibriciel = $this->getReference(RoleFixtures::REFERENCE . 'structureAdmin');
+
+        /** @var Role $roleActor */
+        $roleActor = $this->getReference(RoleFixtures::REFERENCE . 'actor');
 
         ///////// SuperAdmin  ////////////////////
 
@@ -128,6 +131,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         // Actors
         $actorLibriciel1 = new User();
         $actorLibriciel1->setEmail('actor1@example.org')
+            ->setRole($roleActor)
             ->setUsername('actor1@libriciel.coop')
             ->setFirstName('actor_1')
             ->setLastname('libriciel')
@@ -140,6 +144,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
 
         $actorLibriciel2 = new User();
         $actorLibriciel2->setEmail('actor2@example.org')
+            ->setRole($roleActor)
             ->setUsername('actor2@libriciel.coop')
             ->setFirstName('actor_2')
             ->setLastname('libriciel')
@@ -152,6 +157,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
 
         $actorLibriciel3 = new User();
         $actorLibriciel3->setEmail('actor3@example.org')
+            ->setRole($roleActor)
             ->setUsername('actor3@libriciel.coop')
             ->setFirstName('actor_3')
             ->setLastname('libriciel')
