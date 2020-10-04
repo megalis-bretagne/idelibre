@@ -24,10 +24,6 @@ class EmailTemplateFixtures extends Fixture implements DependentFixtureInterface
         /** @var Type $typeConseilLibriciel */
         $typeConseilLibriciel = $this->getReference(TypeFixtures::REFERENCE . 'conseilLibriciel');
 
-        /** @var Type $typeBureauLibriciel */
-        $typeBureauLibriciel = $this->getReference(TypeFixtures::REFERENCE . 'bureauLibriciel');
-
-
         $emailTemplateConseilLs = new EmailTemplate();
         $emailTemplateConseilLs->setStructure($structureLibriciel)
             ->setType($typeConseilLibriciel)
