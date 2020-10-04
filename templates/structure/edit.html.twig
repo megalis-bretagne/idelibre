@@ -4,20 +4,9 @@
 {% block pageTitle 'Modifier une structure' %}
 
 {% block pageActions %}
-    <a href="{{ path('structure_index') }}" class="btn btn-outline-primary">
-        <span class="fa fa-arrow-left"></span> Retour
-    </a>
+    {{ macro.backButton('structure_index') }}
 {% endblock %}
 
-{% block pageForm %}
-    {{ form_start(form) }}
-
-    {{ form_widget(form) }}
-
-    <div class="float-right">
-
-        {{ macro.save('structure_index') }}
-    </div>
-
-    {{ form_end(form) }}
+{% block pageSaveReturn %}
+    {{ macro.save('structure_index') }}
 {% endblock %}

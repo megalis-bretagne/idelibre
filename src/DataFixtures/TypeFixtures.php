@@ -63,7 +63,7 @@ class TypeFixtures extends Fixture implements DependentFixtureInterface
 
     public function getDependencies()
     {
-       return [
+        return [
            StructureFixtures::class,
            UserFixtures::class
        ];

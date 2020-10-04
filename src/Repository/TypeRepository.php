@@ -2,9 +2,11 @@
 
 namespace App\Repository;
 
+use App\Entity\EmailTemplate;
 use App\Entity\Structure;
 use App\Entity\Type;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -20,10 +22,22 @@ class TypeRepository extends ServiceEntityRepository
         parent::__construct($registry, Type::class);
     }
 
+
     public function findByStructure(Structure $structure)
     {
         return $this->createQueryBuilder('t')
             ->andWhere('t.structure =:structure')
             ->setParameter('structure', $structure);
+    }
+
+
+    public function findNotAssociatedWithOtherTemplateByStructure(Structure $structure, ?EmailTemplate $emailTemplate): QueryBuilder
+    {
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.structure =:structure')
+            ->setParameter('structure', $structure)
+            ->leftJoin('t.emailTemplate', 'et')
+            ->andWhere('et is null or et =:emailTemplate')
+            ->setParameter('emailTemplate', $emailTemplate);
     }
 }

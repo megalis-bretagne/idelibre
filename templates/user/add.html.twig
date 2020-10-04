@@ -3,23 +3,11 @@
 
 {% block pageTitle 'Ajouter un utilisateur' %}
 
-
 {% block pageActions %}
-    <a href="{{ path('user_index') }}" class="btn btn-outline-primary">
-        <span class="fa fa-arrow-left"></span> Retour
-    </a>
+    {{ macro.backButton('user_index') }}
 {% endblock %}
 
-{% block pageForm %}
-    {{ form_start(form) }}
-
-    {{ form_widget(form) }}
-
-    <div class="float-right">
-        {{ macro.save('user_index') }}
-    </div>
-
-    {{ form_end(form) }}
+{% block pageSaveReturn %}
+    {{ macro.save('user_index') }}
 {% endblock %}
-
 

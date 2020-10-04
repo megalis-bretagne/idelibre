@@ -10,12 +10,19 @@
 
         <div class="row mt-4">
             <div class="col-8 offset-2 form-white">
-                {% block pageForm %} {% endblock %}
+                {% block pageForm %}
+
+                    {{ form_start(form) }}
+                    {{ form_widget(form) }}
+                    <div class="float-right">
+                        {% block pageSaveReturn %}{% endblock %}
+                    </div>
+                    {{ form_end(form) }}
+
+                {% endblock %}
             </div>
         </div>
 
-
-        {% block pageContent %}{% endblock %}
     </div>
 
 {% endblock %}

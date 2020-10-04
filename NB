@@ -1,0 +1,14 @@
+Quand on passe directement les entity au form (sans faire de dto) doctrine persist directement l'objet.
+Normalement c'est bon mais parfois on a besoin de faire du menage ailleur avant le persist
+ex : EmailTemplateManager::save
+
+La solution est d'empecher dotrine d'auto persister sur cet entity
+Au dessus du model IL FAUT UN @ChangeTrackingPolicy("DEFERRED_EXPLICIT") qui ne persistera pas sans em->persit();
+
+/**
+ * @ORM\Entity(repositoryClass=EmailTemplateRepository::class)
+ * @UniqueEntity("name")
+ * @ChangeTrackingPolicy("DEFERRED_EXPLICIT")
+ */
+class EmailTemplate
+
