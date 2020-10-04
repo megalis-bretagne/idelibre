@@ -73,6 +73,11 @@ class User implements UserInterface
      */
     private $associatedTypes;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Party::class, inversedBy="users")
+     */
+    private $party;
+
 
     public function __construct()
     {
@@ -261,6 +266,18 @@ class User implements UserInterface
             $this->associatedTypes->removeElement($associatedType);
             $associatedType->removeAssociatedUser($this);
         }
+
+        return $this;
+    }
+
+    public function getParty(): ?Party
+    {
+        return $this->party;
+    }
+
+    public function setParty(?Party $party): self
+    {
+        $this->party = $party;
 
         return $this;
     }
