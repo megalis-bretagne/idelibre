@@ -34,17 +34,12 @@ class GdprController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $gdprManager->save($form->getData());
 
-            $this->addFlash('success', 'Vos données RGPD ont été mise à jour');
+            $this->addFlash('success', 'Vos informations RGPD ont été mises à jour');
             return $this->redirectToRoute('gdpr_notice');
         }
 
         return $this->render('gdpr/edit.html.twig', [
             'form' => $form->createView()
         ]);
-
-
     }
-
-
-
 }

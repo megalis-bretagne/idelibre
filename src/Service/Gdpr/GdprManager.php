@@ -3,14 +3,12 @@
 
 namespace App\Service\Gdpr;
 
-
 use App\Entity\Gdpr;
 use App\Repository\GdprRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 class GdprManager
 {
-
     private GdprRepository $gdprRepository;
     private EntityManagerInterface $em;
 
@@ -30,5 +28,4 @@ class GdprManager
         $this->em->persist($gdpr);
         $this->em->flush();
     }
-
 }

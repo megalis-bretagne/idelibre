@@ -13,31 +13,31 @@ class GdprType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('companyName',TextType::class,[
+            ->add('companyName', TextType::class, [
                 'label' => 'Raison sociale'
             ])
-            ->add('address',TextType::class,[
+            ->add('address', TextType::class, [
                 'label' => 'Adresse'
             ])
-            ->add('companyPhone',TextType::class,[
+            ->add('companyPhone', TextType::class, [
                 'label' => 'Numéro de téléphone'
             ])
-            ->add('companyEmail',TextType::class,[
+            ->add('companyEmail', TextType::class, [
                 'label' => 'Adresse email'
             ])
-            ->add('representative',TextType::class,[
+            ->add('representative', TextType::class, [
                 'label' => 'Représentée par'
             ])
-            ->add('quality',TextType::class,[
+            ->add('quality', TextType::class, [
                 'label' => 'en qualité de'
             ])
-            ->add('siret',TextType::class,[
+            ->add('siret', TextType::class, [
                 'label' => 'Siret'
             ])
-            ->add('ape',TextType::class,[
+            ->add('ape', TextType::class, [
                 'label' => 'Code ape'
             ])
-            ->add('dpoEmail',TextType::class,[
+            ->add('dpoEmail', TextType::class, [
                 'label' => 'Adresse email du dpo'
             ]);
     }
