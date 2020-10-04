@@ -101,4 +101,12 @@ class Type
 
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getEmailTemplate()
+    {
+        return $this->emailTemplate;
+    }
 }
