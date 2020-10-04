@@ -14,7 +14,7 @@ final class Version20201004133346 extends AbstractMigration
 {
     public function getDescription() : string
     {
-        return '';
+        return 'add gdpr table';
     }
 
     public function up(Schema $schema) : void
