@@ -10,7 +10,6 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class TypeManager
 {
-
     private TypeRepository $typeRepository;
     private EntityManagerInterface $em;
 
@@ -18,7 +17,6 @@ class TypeManager
         TypeRepository $typeRepository,
         EntityManagerInterface $em
     ) {
-
         $this->typeRepository = $typeRepository;
         $this->em = $em;
     }
@@ -37,5 +35,4 @@ class TypeManager
         $this->em->remove($type);
         $this->em->flush();
     }
-
 }

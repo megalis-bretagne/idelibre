@@ -1,15 +1,12 @@
 {% extends 'form.html.twig' %}
 {% import 'macro/_forms.html.twig' as macro %}
 
-{% block pageTitle 'Ajouter un administrateur' %}
+{% block pageTitle 'Modifier un modèle d\'email' %}
 
 {% block pageActions %}
-    {{ macro.backButton('admin_index') }}
+    {{ macro.backButton('email_template_index') }}
 {% endblock %}
 
 {% block pageSaveReturn %}
-    {{ macro.save('admin_index') }}
+    {{ macro.save('email_template_index') }}
 {% endblock %}
-
-
-

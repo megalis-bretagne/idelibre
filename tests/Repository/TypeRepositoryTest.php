@@ -2,17 +2,14 @@
 
 namespace App\Tests\Repository;
 
-use App\DataFixtures\GroupFixtures;
-use App\DataFixtures\RoleFixtures;
+use App\DataFixtures\EmailTemplateFixtures;
 use App\DataFixtures\StructureFixtures;
 use App\DataFixtures\TypeFixtures;
 use App\DataFixtures\UserFixtures;
-use App\Entity\Group;
+use App\Entity\EmailTemplate;
 use App\Entity\Structure;
 use App\Entity\Type;
-use App\Entity\User;
 use App\Repository\TypeRepository;
-use App\Repository\UserRepository;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
 use Doctrine\Persistence\ObjectManager;
@@ -52,7 +49,8 @@ class TypeRepositoryTest extends WebTestCase
         $this->loadFixtures([
             StructureFixtures::class,
             UserFixtures::class,
-            TypeFixtures::class
+            TypeFixtures::class,
+            EmailTemplateFixtures::class
         ]);
     }
 
@@ -72,6 +70,31 @@ class TypeRepositoryTest extends WebTestCase
     }
 
 
+    public function testFindNotAssociatedWithOtherTemplateByStructure()
+    {
+        /** @var Structure $structure */
+        $structure = $this->getOneEntityBy(Structure::class, ['name' => 'Libriciel']);
 
+        /** @var EmailTemplate $associatedEmailTemplate */
+        $associatedEmailTemplate = $this->getOneEntityBy(EmailTemplate::class, ['name' => 'Conseil Libriciel']);
 
+        /** @var EmailTemplate $notAssociatedEmailTemplate */
+        $notAssociatedEmailTemplate = $this->getOneEntityBy(EmailTemplate::class, ['name' => 'Bureau Libriciel']);
+
+        $this->assertCount(
+            2,
+            $this->typeRepository->findNotAssociatedWithOtherTemplateByStructure(
+                $structure,
+                $associatedEmailTemplate
+            )->getQuery()->getResult()
+        );
+
+        $this->assertCount(
+            1,
+            $this->typeRepository->findNotAssociatedWithOtherTemplateByStructure(
+                $structure,
+                $notAssociatedEmailTemplate
+            )->getQuery()->getResult()
+        );
+    }
 }

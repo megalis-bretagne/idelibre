@@ -54,7 +54,8 @@ class TypeControllerTest extends WebTestCase
     }
 
 
-    public function testIndex(){
+    public function testIndex()
+    {
         $this->loginAsAdminLibriciel();
         $crawler = $this->client->request(Request::METHOD_GET, '/type');
         $this->assertResponseStatusCodeSame(200);
@@ -147,8 +148,8 @@ class TypeControllerTest extends WebTestCase
         $this->assertSame($actorLs, $addedType->getAssociatedUsers()->first());
     }
 
-    public function testEdit(){
-
+    public function testEdit()
+    {
         $this->loginAsAdminLibriciel();
         /** @var Type $type */
         $type = $this->getOneEntityBy(Type::class, ['name' => 'Conseil Communautaire Libriciel']);
@@ -179,8 +180,5 @@ class TypeControllerTest extends WebTestCase
         $this->assertNotEmpty($modifiedType);
         $this->assertCount(1, $modifiedType->getAssociatedUsers());
         $this->assertSame($notAssociatedActor, $modifiedType->getAssociatedUsers()->first());
-
     }
-
-
 }
