@@ -1,0 +1,43 @@
+{% extends 'dataview.html.twig' %}
+{% import 'macro/_forms.html.twig' as macros %}
+
+{% block pageTitle 'Groupes politiques' %}
+
+{% block pageActions %}
+    <a href="{{ path('party_add') }}" class="btn btn-primary"><span
+                class="fa fa-plus-circle"></span>
+        Ajouter</a>
+{% endblock %}
+
+{% block pageTable %}
+
+    <table class="table table-striped bg-white">
+        <thead>
+        <tr class="d-flex">
+            <th class="col-9">Intitulé</th>
+            <th class="col-3">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for party in parties %}
+            <tr class="d-flex">
+                <td class="col-9">{{ party.name }} </td>
+                <td class="col-3">
+                    {{ macros.editButton('party_edit', party.id) }}
+
+                    {{ macros.button_open_modal_delete(
+                        party.id,
+                        'Suppression du groupe politique',
+                        'party_delete',
+                        'Voulez vous vraiment supprimer ce groupe politique ?',
+                        parties.currentPageNumber
+                    ) }}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block pagePagination knp_pagination_render(parties) %}

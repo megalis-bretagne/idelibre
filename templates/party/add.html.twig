@@ -1,0 +1,13 @@
+{% extends 'form.html.twig' %}
+{% import 'macro/_forms.html.twig' as macro %}
+
+{% block pageTitle 'Ajouter un groupe politique' %}
+
+{% block pageActions %}
+    {{ macro.backButton('party_index') }}
+{% endblock %}
+
+{% block pageSaveReturn %}
+    {{ macro.save('party_index') }}
+{% endblock %}
+

@@ -6,9 +6,11 @@ use App\Repository\PartyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=PartyRepository::class)
+ * @UniqueEntity("name")
  */
 class Party
 {
@@ -20,18 +22,26 @@ class Party
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
+     *
      */
     private $name;
 
     /**
      * @ORM\OneToMany(targetEntity=User::class, mappedBy="party")
      */
-    private $users;
+    private $actors;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Structure::class)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     */
+    private $structure;
+
 
     public function __construct()
     {
-        $this->users = new ArrayCollection();
+        $this->actors = new ArrayCollection();
     }
 
     public function getId(): ?string
@@ -54,30 +64,42 @@ class Party
     /**
      * @return Collection|User[]
      */
-    public function getUsers(): Collection
+    public function getActors(): Collection
     {
-        return $this->users;
+        return $this->actors;
     }
 
-    public function addUser(User $user): self
+    public function addActor(User $actor): self
     {
-        if (!$this->users->contains($user)) {
-            $this->users[] = $user;
-            $user->setParty($this);
+        if (!$this->actors->contains($actor)) {
+            $this->actors[] = $actor;
+            $actor->setParty($this);
         }
 
         return $this;
     }
 
-    public function removeUser(User $user): self
+    public function removeActor(User $actor): self
     {
-        if ($this->users->contains($user)) {
-            $this->users->removeElement($user);
+        if ($this->actors->contains($actor)) {
+            $this->actors->removeElement($actor);
             // set the owning side to null (unless already changed)
-            if ($user->getParty() === $this) {
-                $user->setParty(null);
+            if ($actor->getParty() === $this) {
+                $actor->setParty(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getStructure(): ?Structure
+    {
+        return $this->structure;
+    }
+
+    public function setStructure(?Structure $structure): self
+    {
+        $this->structure = $structure;
 
         return $this;
     }

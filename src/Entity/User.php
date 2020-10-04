@@ -74,7 +74,8 @@ class User implements UserInterface
     private $associatedTypes;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Party::class, inversedBy="users")
+     * @ORM\ManyToOne(targetEntity=Party::class, inversedBy="actors")
+     * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $party;
 

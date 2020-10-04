@@ -3,7 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Party;
+use App\Entity\Structure;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -19,32 +21,11 @@ class PartyRepository extends ServiceEntityRepository
         parent::__construct($registry, Party::class);
     }
 
-    // /**
-    //  * @return Party[] Returns an array of Party objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findByStructure(Structure $structure): QueryBuilder
     {
         return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+            ->andWhere('p.structure =:structure')
+            ->setParameter('structure', $structure);
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Party
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }
