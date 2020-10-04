@@ -1,0 +1,48 @@
+{% extends 'dataview.html.twig' %}
+{% import 'macro/_forms.html.twig' as macros %}
+
+{% block pageTitle 'Modèles d\'email' %}
+
+{% block pageActions %}
+    <a href="{{ path('email_template_add') }}" class="btn btn-primary">
+        <span class="fa fa-plus-circle"></span> Ajouter
+    </a>
+{% endblock %}
+
+{% block pageTable %}
+    <table class="table table-striped mt-3 bg-white">
+        <thead>
+        <tr class="d-flex">
+            <th class="col-5">{{ knp_pagination_sortable(templates, 'Intitulé', 'et.name') }}</th>
+            <th class="col-5">{{ knp_pagination_sortable(templates, 'Type de séance', 't.name') }}</th>
+            <th class="col-2">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for template in templates %}
+            <tr class="d-flex">
+                <td class="col-5">{{ template.name }} </td>
+                <td class="col-5">{{ template.type ? template.type.name : '' }} </td>
+                <td class="col-2">
+                    {{ macros.editButton('email_template_edit', template.id) }}
+                    {{ macros.showButton('email_template_preview', template.id) }}
+
+                    {{ macros.button_open_modal_delete(
+                        template.id,
+                        "Confirmer suppression du modèle.",
+                        "email_template_delete",
+                        "Confirmer la suppression de " ~ template.name,
+                        templates.currentPageNumber
+                    ) }}
+
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block pagePagination  knp_pagination_render(templates) %}
+
+

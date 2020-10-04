@@ -32,6 +32,11 @@ class Type
     private $associatedUsers;
 
     /**
+     * @ORM\OneToOne(targetEntity=EmailTemplate::class, mappedBy="type")
+     */
+    private $emailTemplate;
+
+    /**
      * @ORM\ManyToOne(targetEntity=Structure::class)
      * @ORM\JoinColumn(nullable=false)
      */

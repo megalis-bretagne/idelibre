@@ -4,20 +4,11 @@
 {% block pageTitle 'Associer des structures' %}
 
 {% block pageActions %}
-    <a href="{{ path('group_index') }}" class="btn btn-outline-primary">
-        <span class="fa fa-arrow-left"></span> Retour
-    </a>
+    {{ macro.backButton('group_index') }}
 {% endblock %}
 
-{% block pageForm %}
-    {{ form_start(form) }}
-
-    {{ form_widget(form) }}
-
-    <div class="float-right">
-        {{ macro.save('group_index') }}
-    </div>
-    {{ form_end(form) }}
+{% block pageSaveReturn %}
+    {{ macro.save('group_index') }}
 {% endblock %}
 
 

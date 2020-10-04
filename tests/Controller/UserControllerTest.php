@@ -16,8 +16,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 class UserControllerTest extends WebTestCase
 {
-
-
     use FixturesTrait;
     use FindEntityTrait;
     use LoginTrait;
@@ -68,7 +66,6 @@ class UserControllerTest extends WebTestCase
         $this->assertCount(1, $successMsg);
 
         $this->assertEmpty($this->getOneEntityBy(User::class, ['id' => $user->getId()]));
-
     }
 
     public function testDeleteOtherStructureUser()
@@ -98,7 +95,7 @@ class UserControllerTest extends WebTestCase
     public function testAdd()
     {
         /** @var Role $adminRole */
-        $adminRole = $this->getOneEntityBy(Role::class,['name' => 'Admin']);
+        $adminRole = $this->getOneEntityBy(Role::class, ['name' => 'Admin']);
 
         $this->loginAsAdminLibriciel();
         $crawler = $this->client->request(Request::METHOD_GET, '/user/add');
@@ -149,7 +146,6 @@ class UserControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(200);
         $successMsg = $crawler->filter('html:contains("votre utilisateur a bien été modifié")');
         $this->assertCount(1, $successMsg);
-
     }
 
     public function testIndex()
@@ -160,6 +156,5 @@ class UserControllerTest extends WebTestCase
 
         $item = $crawler->filter('html:contains("Utilisateurs")');
         $this->assertCount(1, $item);
-
     }
 }

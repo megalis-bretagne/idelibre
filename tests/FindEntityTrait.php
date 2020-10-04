@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Tests;
 
 trait FindEntityTrait

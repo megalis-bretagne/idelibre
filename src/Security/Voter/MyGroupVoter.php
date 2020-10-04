@@ -42,11 +42,11 @@ class MyGroupVoter extends Voter
         return in_array("ROLE_SUPERADMIN", $user->getRoles());
     }
 
-    private function isAdminGroupAndOwnSubject(User $user, $subject):bool {
+    private function isAdminGroupAndOwnSubject(User $user, $subject):bool
+    {
         if (!in_array("ROLE_GROUP_ADMIN", $user->getRoles())) {
             return false;
         }
         return $user->getGroup() === $subject->getGroup();
     }
-
 }

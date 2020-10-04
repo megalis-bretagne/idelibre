@@ -9,7 +9,6 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-
 class ManageTypesVoter extends Voter
 {
 
@@ -46,8 +45,8 @@ class ManageTypesVoter extends Voter
         return false;
     }
     
-    private function isSameStructure(User $loggedInUser, Type $subject){
+    private function isSameStructure(User $loggedInUser, Type $subject)
+    {
         return $loggedInUser->getStructure()->getId() === $subject->getStructure()->getId();
     }
-    
 }
