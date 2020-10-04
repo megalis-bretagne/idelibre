@@ -1,0 +1,13 @@
+{% extends 'form.html.twig' %}
+{% import 'macro/_forms.html.twig' as macro %}
+
+{% block pageTitle 'Modifier les informations RGPD' %}
+
+{% block pageActions %}
+    {{ macro.backButton('structure_index') }}
+{% endblock %}
+
+{% block pageSaveReturn %}
+    {{ macro.save('structure_index') }}
+{% endblock %}
+
