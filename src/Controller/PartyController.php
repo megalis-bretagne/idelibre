@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Party;
 use App\Form\PartyType;
 use App\Repository\PartyRepository;
 use App\Service\Party\PartyManager;
@@ -46,6 +47,9 @@ class PartyController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $partyManager->save($form->getData(), $this->getUser()->getStructure());
+            $this->addFlash('success', 'Votre groupe politique a été ajouté');
+
+            return $this->redirectToRoute("party_index");
         }
 
         return $this->render('party/add.html.twig', [
@@ -54,10 +58,23 @@ class PartyController extends AbstractController
     }
 
     /**
-     * @Route("/party/edit", name="party_edit")
+     * @Route("/party/edit/{id}", name="party_edit")
      */
-    public function edit()
+    public function edit(Party $party, Request $request, PartyManager $partyManager)
     {
+        $form = $this->createForm(PartyType::class, $party, ['structure' => $this->getUser()->getStructure()]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $partyManager->update($form->getData(), $this->getUser()->getStructure());
+            $this->addFlash('success', 'Votre groupe politique a été ajouté');
+
+            return $this->redirectToRoute("party_index");
+        }
+
+        return $this->render('party/edit.html.twig', [
+            'form' => $form->createView(),
+        ]);
 
     }
 
