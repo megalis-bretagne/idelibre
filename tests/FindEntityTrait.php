@@ -11,7 +11,6 @@ trait FindEntityTrait
         }
         $repository = $this->entityManager->getRepository($entityClass);
 
-        //dd($repository->findOneBy($criteria));
         return $repository->findOneBy($criteria);
     }
 }
