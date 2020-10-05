@@ -3,10 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Form\UserFormType;
+use App\Form\PreferenceType;
 use App\Form\UserType;
 use App\Repository\UserRepository;
-
 use App\Service\User\UserManager;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -95,6 +94,32 @@ class UserController extends AbstractController
         $this->addFlash('success', 'l\'utilisateur a bien été supprimé');
         return $this->redirectToRoute('user_index', [
             'page' => $request->get('page')
+        ]);
+    }
+
+
+    /**
+     * @Route("/user/preferences", name="user_preferences")
+     * @IsGranted("ROLE_MANAGE_PREFERENCES")
+     */
+    public function preferences(Request $request, UserManager $userManager): Response
+    {
+        $form = $this->createForm(PreferenceType::class, $this->getUser());
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $userManager->save(
+                $form->getData(),
+                $form->get('plainPassword')->getData(),
+                $this->getUser()->getStructure()
+            );
+
+            $this->addFlash('success', 'Vos préférences utilisateur ont bien été modifiées');
+            return $this->redirectToRoute('app_entrypoint');
+        }
+
+        return $this->render('user/preferences.html.twig', [
+            'form' => $form->createView()
         ]);
     }
 }

@@ -80,9 +80,14 @@
                             </a>
                         {% endif %}
                         <div class="dropdown-divider"></div>
-                        {# <a href="{{ path('rgpd_policy') }}" class="dropdown-item">
-                             <span class="fa fa-user-secret"></span> Politique de confidentialité
-                         </a>#}
+                        <a href="{{ path('user_preferences') }}" class="dropdown-item">
+                            <span class="fas fa-user-cog"></span> Préférences utilisateur
+                        </a>
+
+                        <div class="dropdown-divider"></div>
+                        <a href="{{ path('gdpr_notice') }}" class="dropdown-item">
+                            <span class="fas fa-user-secret"></span> Notice rgpd
+                        </a>
 
                     </div>
 

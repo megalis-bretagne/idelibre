@@ -157,4 +157,36 @@ class UserControllerTest extends WebTestCase
         $item = $crawler->filter('html:contains("Utilisateurs")');
         $this->assertCount(1, $item);
     }
+
+
+    public function testPreferences()
+    {
+        $this->loginAsAdminLibriciel();
+
+        $crawler = $this->client->request(Request::METHOD_GET, '/user/preferences');
+        $this->assertResponseStatusCodeSame(200);
+        $item = $crawler->filter('html:contains("Préférences utilisateur")');
+        $this->assertCount(1, $item);
+
+
+
+        $form = $crawler->selectButton('Enregistrer')->form();
+        $form['preference[username]'] = 'New username';
+
+
+        $this->client->submit($form);
+
+        $this->assertTrue($this->client->getResponse()->isRedirect());
+
+
+        $this->client->followRedirect();
+        $crawler =$this->client->followRedirect();
+
+        $this->assertResponseStatusCodeSame(200);
+
+        $successMsg = $crawler->filter('html:contains("Vos préférences utilisateur ont bien été modifiées")');
+        $this->assertCount(1, $successMsg);
+
+        $this->assertNotEmpty($user = $this->getOneEntityBy(User::class, ['username' => 'New username']));
+    }
 }
