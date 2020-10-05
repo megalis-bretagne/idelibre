@@ -34,7 +34,7 @@ class SecurityController extends AbstractController
             return $this->redirectToRoute('structure_index');
         }
 
-        return $this->redirectToRoute('document_index');
+        return $this->redirectToRoute('user_index');
     }
 
 

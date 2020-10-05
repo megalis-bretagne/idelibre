@@ -89,7 +89,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
                 $this->router->generate('structure_index')
             );
         }
-        return new RedirectResponse($this->router->generate('document_index'));
+        return new RedirectResponse($this->router->generate('user_index'));
     }
 
     public function supportsRememberMe()
