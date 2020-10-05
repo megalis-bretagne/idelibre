@@ -10,6 +10,7 @@ trait FindEntityTrait
             throw new \Exception('entityManager is not defined');
         }
         $repository = $this->entityManager->getRepository($entityClass);
+
         return $repository->findOneBy($criteria);
     }
 }

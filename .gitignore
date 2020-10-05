@@ -17,3 +17,4 @@
 ###< symfony/phpunit-bridge ###
 /.idea/
 /bin/
+/.php_cs.cache
