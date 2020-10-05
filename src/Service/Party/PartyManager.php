@@ -77,5 +77,11 @@ class PartyManager
         return in_array($userInDB, $selectedUsers);
     }
 
+    public function delete(Party $party)
+    {
+        $this->em->remove($party);
+        $this->em->flush();
+    }
+
 
 }

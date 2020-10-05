@@ -79,11 +79,15 @@ class PartyController extends AbstractController
     }
 
     /**
-     * @Route("/party/delete", name="party_delete")
+     * @Route("/party/delete/{id}", name="party_delete")
      */
-    public function delete()
+    public function delete(Party $party, PartyManager $partyManager, Request $request)
     {
-
+        $partyManager->delete($party);
+        $this->addFlash('success', 'le groupe politique a bien été supprimé');
+        return $this->redirectToRoute('party_index', [
+            'page' => $request->get('page')
+        ]);
     }
 
 }
