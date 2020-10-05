@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Form\PreferenceType;
+use App\Form\UserPreferenceType;
 use App\Form\UserType;
 use App\Repository\UserRepository;
 use App\Service\User\UserManager;
@@ -104,7 +104,7 @@ class UserController extends AbstractController
      */
     public function preferences(Request $request, UserManager $userManager): Response
     {
-        $form = $this->createForm(PreferenceType::class, $this->getUser());
+        $form = $this->createForm(UserPreferenceType::class, $this->getUser());
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

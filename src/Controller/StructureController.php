@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Structure;
 use App\Form\SearchType;
+use App\Form\StructureInformationType;
 use App\Form\StructureType;
 use App\Repository\StructureRepository;
 use App\Service\RoleTrait;
@@ -119,6 +120,27 @@ class StructureController extends AbstractController
 
         return $this->redirectToRoute('structure_index', [
             'page' => $request->get('page')
+        ]);
+    }
+
+
+    /**
+     * @Route("/structure/preferences", name="structure_preferences")
+     * @IsGranted("ROLE_STRUCTURE_ADMIN")
+     */
+    public function preferences(Request $request, StructureManager $structureManager): Response
+    {
+        $form = $this->createForm(StructureInformationType::class, $this->getUser()->getStructure());
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $structureManager->save($form->getData());
+            $this->addFlash('success', 'Les informations de la structure ont été mises à jour');
+            return $this->redirectToRoute('app_entrypoint');
+        }
+
+        return $this->render('structure/preferences.html.twig', [
+            'form' => $form->createView()
         ]);
     }
 }
