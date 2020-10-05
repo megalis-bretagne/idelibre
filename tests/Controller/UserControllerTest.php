@@ -171,7 +171,7 @@ class UserControllerTest extends WebTestCase
 
 
         $form = $crawler->selectButton('Enregistrer')->form();
-        $form['preference[username]'] = 'New username';
+        $form['user_preference[username]'] = 'New username';
 
 
         $this->client->submit($form);

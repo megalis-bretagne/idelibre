@@ -129,6 +129,8 @@ class StructureControllerTest extends WebTestCase
 
         $successMsg = $crawler->filter('html:contains("La structure a été modifiée")');
         $this->assertCount(1, $successMsg);
+
+        $this->assertNotEmpty($this->getOneEntityBy(Structure::class, ['name' => 'New structure name']));
     }
 
 
@@ -147,5 +149,31 @@ class StructureControllerTest extends WebTestCase
         $this->assertCount(1, $successMsg);
 
         $this->assertEmpty($this->getOneEntityBy(Structure::class, ['id' => $structure->getId()]));
+    }
+
+
+    public function testPreferences()
+    {
+        $this->loginAsAdminLibriciel();
+        $crawler = $this->client->request(Request::METHOD_GET, '/structure/preferences');
+        $this->assertResponseStatusCodeSame(200);
+
+        $editTitle = $crawler->filter('html:contains("Informations de la struture")');
+        $this->assertCount(1, $editTitle);
+        $form = $crawler->selectButton('Enregistrer')->form();
+        $form['structure_information[name]'] = 'New structure name';
+
+        $this->client->submit($form);
+
+        $this->assertTrue($this->client->getResponse()->isRedirect());
+
+        $this->client->followRedirect();
+        $crawler = $this->client->followRedirect();
+        $this->assertResponseStatusCodeSame(200);
+
+        $successMsg = $crawler->filter('html:contains("Les informations de la structure ont été mises à jour")');
+        $this->assertCount(1, $successMsg);
+
+        $this->assertNotEmpty($this->getOneEntityBy(Structure::class, ['name' => 'New structure name']));
     }
 }

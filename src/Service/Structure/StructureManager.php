@@ -7,6 +7,7 @@ use App\Entity\Group;
 use App\Entity\Structure;
 use App\Entity\User;
 use App\Repository\StructureRepository;
+use App\Service\role\RoleManager;
 use App\Service\User\ImpersonateStructure;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -21,8 +22,8 @@ class StructureManager
     private UserPasswordEncoderInterface $passwordEncoder;
     private ValidatorInterface $validator;
     private ParameterBagInterface $bag;
-    //private $emailTemplateManager;
     private ImpersonateStructure $impersonateStructure;
+    private RoleManager $roleManager;
 
     public function __construct(
         StructureRepository $structureRepository,
@@ -30,7 +31,7 @@ class StructureManager
         UserPasswordEncoderInterface $passwordEncoder,
         ValidatorInterface $validator,
         ParameterBagInterface $bag,
-        //EmailTemplateManager $emailTemplateManager,
+        RoleManager $roleManager,
         ImpersonateStructure $impersonateStructure
     ) {
         $this->structureRepository = $structureRepository;
@@ -38,8 +39,8 @@ class StructureManager
         $this->passwordEncoder = $passwordEncoder;
         $this->validator = $validator;
         $this->bag = $bag;
-        //$this->emailTemplateManager = $emailTemplateManager;
         $this->impersonateStructure = $impersonateStructure;
+        $this->roleManager = $roleManager;
     }
 
     public function save(Structure $structure)
@@ -70,18 +71,14 @@ class StructureManager
             return $errors;
         }
 
+        $user->setRole($this->roleManager->getStructureAdminRole());
         $this->em->persist($user);
         $structure->addUser($user);
-
-        //$structure->setApiToken(new ApiToken($structure));
 
         $structure->setGroup($group);
 
         $this->em->persist($structure);
         $this->em->flush();
-
-        //intialize default templates
-        //$this->emailTemplateManager->initDefaultTemplates($structure);
 
         return null;
     }
