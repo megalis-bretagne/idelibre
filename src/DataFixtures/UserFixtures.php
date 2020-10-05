@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Group;
+use App\Entity\Party;
 use App\Entity\Role;
 use App\Entity\Structure;
 use App\Entity\User;
@@ -46,6 +47,9 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
 
         /** @var Role $roleActor */
         $roleActor = $this->getReference(RoleFixtures::REFERENCE . 'actor');
+
+        /** @var Party $partyMajority */
+        $partyMajority = $this->getReference(PartyFixtures::REFERENCE . 'majorite');
 
         ///////// SuperAdmin  ////////////////////
 
@@ -135,6 +139,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             ->setUsername('actor1@libriciel.coop')
             ->setFirstName('actor_1')
             ->setLastname('libriciel')
+            ->setParty($partyMajority)
             ->setStructure($structureLibriciel)
             ->setPassword($this->passwordEncoder->encodePassword($actorLibriciel1, 'password'));
 
@@ -178,7 +183,8 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         return [
             StructureFixtures::class,
             GroupFixtures::class,
-            RoleFixtures::class
+            RoleFixtures::class,
+            PartyFixtures::class
         ];
     }
 }

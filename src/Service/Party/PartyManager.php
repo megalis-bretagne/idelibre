@@ -3,7 +3,6 @@
 
 namespace App\Service\Party;
 
-
 use App\Entity\Party;
 use App\Entity\Structure;
 use App\Entity\User;
@@ -13,7 +12,6 @@ use phpDocumentor\Reflection\Types\Iterable_;
 
 class PartyManager
 {
-
     private EntityManagerInterface $em;
     /**
      * @var UserRepository
@@ -63,7 +61,8 @@ class PartyManager
     /**
      * @param User[] $selectedUsers
      */
-    private function associateUsers(array $selectedUsers, Party $party) {
+    private function associateUsers(array $selectedUsers, Party $party)
+    {
         foreach ($selectedUsers as $selectedUser) {
             $selectedUser->setParty($party);
         }
@@ -82,6 +81,4 @@ class PartyManager
         $this->em->remove($party);
         $this->em->flush();
     }
-
-
 }

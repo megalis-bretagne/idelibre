@@ -13,7 +13,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class PartyType extends AbstractType
 {
-
     private UserRepository $userRepository;
 
     public function __construct(UserRepository $userRepository)

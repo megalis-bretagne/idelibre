@@ -27,5 +27,4 @@ class PartyRepository extends ServiceEntityRepository
             ->andWhere('p.structure =:structure')
             ->setParameter('structure', $structure);
     }
-
 }

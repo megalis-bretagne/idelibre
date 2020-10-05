@@ -17,7 +17,7 @@ class PartyController extends AbstractController
 {
     /**
      * @Route("/party/index", name="party_index")
-     * @IsGranted("ROLE_MANAGE_USERS")
+     * @IsGranted("ROLE_MANAGE_PARTIES")
      */
     public function index(PartyRepository $partyRepository, PaginatorInterface $paginator, Request $request): Response
     {
@@ -38,7 +38,7 @@ class PartyController extends AbstractController
 
     /**
      * @Route("/party/add", name="party_add")
-     * @IsGranted("ROLE_MANAGE_USERS")
+     * @IsGranted("ROLE_MANAGE_PARTIES")
      */
     public function add(Request $request, PartyManager $partyManager): Response
     {
@@ -59,15 +59,17 @@ class PartyController extends AbstractController
 
     /**
      * @Route("/party/edit/{id}", name="party_edit")
+     * @IsGranted("MANAGE_PARTIES", subject="party")
+     *
      */
-    public function edit(Party $party, Request $request, PartyManager $partyManager)
+    public function edit(Party $party, Request $request, PartyManager $partyManager): Response
     {
         $form = $this->createForm(PartyType::class, $party, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $partyManager->update($form->getData(), $this->getUser()->getStructure());
-            $this->addFlash('success', 'Votre groupe politique a été ajouté');
+            $this->addFlash('success', 'Votre groupe politique a été modifié');
 
             return $this->redirectToRoute("party_index");
         }
@@ -75,13 +77,13 @@ class PartyController extends AbstractController
         return $this->render('party/edit.html.twig', [
             'form' => $form->createView(),
         ]);
-
     }
 
     /**
      * @Route("/party/delete/{id}", name="party_delete")
+     * @IsGranted("MANAGE_PARTIES", subject="party")
      */
-    public function delete(Party $party, PartyManager $partyManager, Request $request)
+    public function delete(Party $party, PartyManager $partyManager, Request $request): Response
     {
         $partyManager->delete($party);
         $this->addFlash('success', 'le groupe politique a bien été supprimé');
@@ -89,5 +91,4 @@ class PartyController extends AbstractController
             'page' => $request->get('page')
         ]);
     }
-
 }
