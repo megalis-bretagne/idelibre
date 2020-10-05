@@ -1,6 +1,7 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-ls-dark">
-    <a class="nav-item mr-3" href="#"><img style="height: 22px; padding-bottom: 2px;" src="{{ asset('assets/img/id-color-white.svg') }}"
-                                          alt="idelibre" class="img-fluid"></a>
+    <a class="nav-item mr-3" href="#"><img style="height: 22px; padding-bottom: 2px;"
+                                           src="{{ asset('assets/img/id-color-white.svg') }}"
+                                           alt="idelibre" class="img-fluid"></a>
 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -19,18 +20,14 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         {% if is_granted('ROLE_SUPERADMIN') %}
-{#                            <a class="dropdown-item" href="{{ path('platform_check') }}">Services</a>#}
                             <a class="dropdown-item" href="{{ path('group_index') }}">Groupes</a>
+                            <a class="dropdown-item" href="{{ path('gdpr_edit') }}">Rgpd</a>
                         {% endif %}
                         {% if is_granted('ROLE_MANAGE_STRUCTURES') %}
                             <a class="dropdown-item" href="{{ path('structure_index') }}">Structures</a>
                             <a class="dropdown-item" href="{{ path('admin_index') }}">Administrateurs</a>
-{#                            <a class="dropdown-item" href="{{ path('csv_generate') }}">Utilitaires</a>#}
                         {% endif %}
-                        {% if  app.user.structure %}
-                            <a class="dropdown-item" href="{{ path('user_index') }}">Utilisateurs</a>
-{#                            <a class="dropdown-item" href="{{ path('information') }}">Informations</a>#}
-                        {% endif %}
+
                     </div>
                 </li>
 
@@ -43,10 +40,21 @@
                         </a>
 
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">Types de séances</a>
-                            <a class="dropdown-item" href="#">Thèmes</a>
-                            <a class="dropdown-item" href="#">Modèles d'emails</a>
-                            <a class="dropdown-item" href="#">Profile</a>
+                            {% if is_granted('ROLE_MANAGE_TYPES') %}
+                                <a class="dropdown-item" href="{{ path('type_index') }}">Types de séance</a>
+                            {% endif %}
+
+                            {% if is_granted('ROLE_MANAGE_USERS') %}
+                                <a class="dropdown-item" href="{{ path('user_index') }}">Utilisateurs</a>
+                            {% endif %}
+
+                            {% if is_granted('ROLE_MANAGE_PARTIES') %}
+                                <a class="dropdown-item" href="{{ path('party_index') }}">Groupes politique</a>
+                            {% endif %}
+
+                            {% if is_granted('ROLE_MANAGE_EMAIL_TEMPLATES') %}
+                                <a class="dropdown-item" href="{{ path('email_template_index') }}">Modèles d'email</a>
+                            {% endif %}
                         </div>
                     </li>
                 {% endif %}
@@ -72,9 +80,9 @@
                             </a>
                         {% endif %}
                         <div class="dropdown-divider"></div>
-                       {# <a href="{{ path('rgpd_policy') }}" class="dropdown-item">
-                            <span class="fa fa-user-secret"></span> Politique de confidentialité
-                        </a>#}
+                        {# <a href="{{ path('rgpd_policy') }}" class="dropdown-item">
+                             <span class="fa fa-user-secret"></span> Politique de confidentialité
+                         </a>#}
 
                     </div>
 
