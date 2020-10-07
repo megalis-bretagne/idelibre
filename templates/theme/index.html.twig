@@ -1,0 +1,48 @@
+{% extends 'dataview.html.twig' %}
+{% import 'macro/_forms.html.twig' as macros %}
+
+{% block pageTitle 'Themes' %}
+
+{% block pageActions %}
+    <a href="{{ path('theme_add') }}" class="btn btn-primary"><span
+                class="fa fa-plus-circle"></span>
+        Ajouter</a>
+{% endblock %}
+
+{% block pageTable %}
+    <table class="table table-striped mt-3 bg-white">
+        <thead>
+        <tr class="d-flex">
+            <th class="col-10">Intitulé</th>
+            <th class="col-2">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for theme in themes %}
+            <tr class="d-flex">
+                <td class="col-10">
+                    {% if(theme.lvl) > 1 %}
+                        {% for i in range (1, theme.lvl - 1) %}
+                            - - -
+                        {% endfor %}
+                    {% endif %}
+                    {{ theme.name }}
+
+                </td>
+                <td class="col-2">
+                    {{ macros.editButton('theme_edit', theme.id) }}
+                    {{ macros.button_open_modal_delete(
+                        theme.id,
+                        'Suppression de thème',
+                        'theme_delete',
+                        'Voulez vous vraiment supprimer ce thème ? ' ~
+                        'Attention s\'il possède des sous thèmes is seront eux aussi supprimés'
+                    ) }}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+

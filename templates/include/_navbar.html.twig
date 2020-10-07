@@ -58,6 +58,10 @@
                             {% if is_granted('ROLE_MANAGE_EMAIL_TEMPLATES') %}
                                 <a class="dropdown-item" href="{{ path('email_template_index') }}">Modèles d'email</a>
                             {% endif %}
+
+                            {% if is_granted('ROLE_MANAGE_THEMES') %}
+                                <a class="dropdown-item" href="{{ path('theme_index') }}">Thèmes</a>
+                            {% endif %}
                         </div>
                     </li>
                 {% endif %}

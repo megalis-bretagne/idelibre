@@ -8,6 +8,7 @@ use App\Entity\Structure;
 use App\Entity\User;
 use App\Repository\StructureRepository;
 use App\Service\role\RoleManager;
+use App\Service\Theme\ThemeManager;
 use App\Service\User\ImpersonateStructure;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -24,6 +25,7 @@ class StructureManager
     private ParameterBagInterface $bag;
     private ImpersonateStructure $impersonateStructure;
     private RoleManager $roleManager;
+    private ThemeManager $themeManager;
 
     public function __construct(
         StructureRepository $structureRepository,
@@ -32,7 +34,8 @@ class StructureManager
         ValidatorInterface $validator,
         ParameterBagInterface $bag,
         RoleManager $roleManager,
-        ImpersonateStructure $impersonateStructure
+        ImpersonateStructure $impersonateStructure,
+        ThemeManager $themeManager
     ) {
         $this->structureRepository = $structureRepository;
         $this->em = $em;
@@ -41,6 +44,7 @@ class StructureManager
         $this->bag = $bag;
         $this->impersonateStructure = $impersonateStructure;
         $this->roleManager = $roleManager;
+        $this->themeManager = $themeManager;
     }
 
     public function save(Structure $structure)
@@ -79,6 +83,8 @@ class StructureManager
 
         $this->em->persist($structure);
         $this->em->flush();
+
+        $this->themeManager->createStructureRootNode($structure);
 
         return null;
     }
