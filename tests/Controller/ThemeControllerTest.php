@@ -137,6 +137,4 @@ class ThemeControllerTest extends WebTestCase
         $this->client->request(Request::METHOD_DELETE, '/theme/delete/' . $themeMtp->getId());
         $this->assertResponseStatusCodeSame(403);
     }
-
-
 }

@@ -3,7 +3,6 @@
 
 namespace App\Service\Theme;
 
-
 use App\Entity\Structure;
 use App\Entity\Theme;
 use App\Repository\ThemeRepository;
@@ -23,11 +22,10 @@ class ThemeManager
     public function save(Theme $theme, Structure $structure, ?Theme $parentTheme = null)
     {
         $theme->setStructure($structure);
-        if(!$parentTheme) {
-            $parentTheme = $this->themeRepository->findRootNodeByStructure($structure);
-        }
 
-        $theme->setParent($parentTheme);
+        $parent = $parentTheme ?? $this->themeRepository->findRootNodeByStructure($structure);
+
+        $theme->setParent($parent);
         $this->em->persist($theme);
         $this->em->flush();
     }
@@ -41,6 +39,16 @@ class ThemeManager
     public function delete(Theme $theme)
     {
         $this->em->remove($theme);
+        $this->em->flush();
+    }
+
+    public function createStructureRootNode(Structure $structure)
+    {
+        $rootTheme = new Theme();
+        $rootTheme->setName('ROOT')
+            ->setStructure($structure);
+
+        $this->em->persist($rootTheme);
         $this->em->flush();
     }
 }

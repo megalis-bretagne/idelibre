@@ -7,7 +7,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
 use Gedmo\Mapping\Annotation as Gedmo;
 
-
 //* @ORM\Entity(repositoryClass=ThemeRepository::class)
 //@ORM\Entity(repositoryClass="Gedmo\Tree\Entity\Repository\NestedTreeRepository")
 
@@ -158,6 +157,4 @@ class Theme
     {
         return $this->rgt;
     }
-
-
 }
