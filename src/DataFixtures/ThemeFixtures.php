@@ -40,7 +40,7 @@ class ThemeFixtures extends Fixture implements DependentFixtureInterface
 
 
         $ecoleTheme = new Theme();
-        $ecoleTheme->setName('Finance')
+        $ecoleTheme->setName('Ecole')
             ->setParent($rootTheme)
             ->setStructure($structureLibriciel);
 

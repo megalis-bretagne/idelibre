@@ -10,7 +10,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class ManageTypesVoter extends Voter
+class ManageThemesVoter extends Voter
 {
 
     /**

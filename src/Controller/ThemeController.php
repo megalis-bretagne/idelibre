@@ -40,7 +40,7 @@ class ThemeController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $themeManager->save($form->getData(), $this->getUser()->getStructure(), $form->get('parentTheme')->getData());
 
-            $this->addFlash('success', 'Votre theme a bien été ajouté');
+            $this->addFlash('success', 'Votre thème a bien été ajouté');
             return $this->redirectToRoute('theme_index');
         }
         return $this->render('theme/add.html.twig', [
@@ -51,7 +51,7 @@ class ThemeController extends AbstractController
 
     /**
      * @Route("/theme/edit/{id}", name="theme_edit")
-     *
+     * @IsGranted("MANAGE_THEMES", subject="theme")
      */
     public function edit(Theme $theme, ThemeManager $themeManager, Request $request)
     {
@@ -60,7 +60,7 @@ class ThemeController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $themeManager->update($form->getData());
 
-            $this->addFlash('success', 'Votre theme a bien été modifié');
+            $this->addFlash('success', 'Votre thème a bien été modifié');
             return $this->redirectToRoute('theme_index');
         }
         return $this->render('theme/edit.html.twig', [
@@ -70,6 +70,7 @@ class ThemeController extends AbstractController
 
     /**
      * @Route("/theme/delete/{id}", name="theme_delete", methods={"DELETE"})
+     * @IsGranted("MANAGE_THEMES", subject="theme")
      */
     public function delete(Theme $theme, ThemeManager $themeManager)
     {
