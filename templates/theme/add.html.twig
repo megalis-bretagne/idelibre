@@ -1,0 +1,18 @@
+{% extends 'form.html.twig' %}
+{% import 'macro/_forms.html.twig' as macro %}
+
+{% block pageTitle 'Ajouter un thème' %}
+
+
+{% block pageActions %}
+    {{ macro.backButton('theme_index') }}
+{% endblock %}
+
+{% block pageSaveReturn %}
+    {{ macro.save('theme_index') }}
+{% endblock %}
+
+
+{% block javascripts %}
+    <script src="{{ asset('assets/enableSelect2.js') }}"></script>
+{% endblock %}
