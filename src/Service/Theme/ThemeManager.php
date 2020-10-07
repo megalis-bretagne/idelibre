@@ -31,4 +31,16 @@ class ThemeManager
         $this->em->persist($theme);
         $this->em->flush();
     }
+
+    public function update(Theme $theme)
+    {
+        $this->em->persist($theme);
+        $this->em->flush();
+    }
+
+    public function delete(Theme $theme)
+    {
+        $this->em->remove($theme);
+        $this->em->flush();
+    }
 }
