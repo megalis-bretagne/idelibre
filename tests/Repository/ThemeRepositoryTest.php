@@ -66,6 +66,6 @@ class ThemeRepositoryTest extends WebTestCase
     {
         /** @var Structure $structure */
         $structure = $this->getOneEntityBy(Structure::class, ['name' => 'Libriciel']);
-        $this->assertCount(5, $this->themeRepository->findChildrenFromStructure($structure)->getQuery()->getResult());
+        $this->assertCount(4, $this->themeRepository->findChildrenFromStructure($structure)->getQuery()->getResult());
     }
 }

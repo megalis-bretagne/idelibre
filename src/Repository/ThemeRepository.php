@@ -27,11 +27,14 @@ class ThemeRepository extends \Gedmo\Tree\Entity\Repository\NestedTreeRepository
         $rootNode = $this->findOneBy(['name' => 'ROOT', 'structure' => $structure]);
 
         return $this->createQueryBuilder('t')
-            ->orderBy('t.lft', 'ASC')
+            // On devrait utiliser cet order by et mettre dans l'ordre au moment de l'ajout ->orderBy('t.lft', 'ASC')
+            ->orderBy('t.fullName', 'ASC')
             ->andWhere('t.lft >:rootNodeLft')
             ->andWhere('t.rgt <:rootNodeRgt')
+            ->andWhere('t.root =:rootNode')
             ->setParameter('rootNodeLft', $rootNode->getLft())
-            ->setParameter('rootNodeRgt', $rootNode->getRgt());
+            ->setParameter('rootNodeRgt', $rootNode->getRgt())
+            ->setParameter('rootNode', $rootNode);
     }
 
     public function findRootNodeByStructure(Structure $structure): Theme

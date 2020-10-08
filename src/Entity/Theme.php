@@ -86,6 +86,11 @@ class Theme
      */
     private $structure;
 
+    /**
+     * @ORM\Column(type="string", length=512, nullable=true)
+     */
+    private $fullName;
+
 
     public function getId(): string
     {
@@ -156,5 +161,17 @@ class Theme
     public function getRgt(): int
     {
         return $this->rgt;
+    }
+
+    public function getFullName(): ?string
+    {
+        return $this->fullName;
+    }
+
+    public function setFullName(string $fullName): self
+    {
+        $this->fullName = $fullName;
+
+        return $this;
     }
 }
