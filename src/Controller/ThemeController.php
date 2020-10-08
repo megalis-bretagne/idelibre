@@ -24,7 +24,7 @@ class ThemeController extends AbstractController
         $root = $themeRepository->findOneBy(['name' => 'ROOT', 'structure' => $this->getUser()->getStructure()]);
 
         if (!empty($root)) {
-            $themes = $themeRepository->getChildren($root);
+            $themes = $themeRepository->getChildren($root, false, ['fullName']);
         }
         return $this->render('theme/index.html.twig', [
             'themes' => $themes ?? null,

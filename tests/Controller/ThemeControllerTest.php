@@ -85,6 +85,7 @@ class ThemeControllerTest extends WebTestCase
         $this->assertCount(1, $successMsg);
 
         $this->assertNotEmpty($this->getOneEntityBy(Theme::class, ['name' => 'New Theme']));
+        $this->assertNotEmpty($this->getOneEntityBy(Theme::class, ['fullName' => 'New Theme']));
     }
 
     public function testEdit()
