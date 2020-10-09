@@ -10,6 +10,7 @@ use App\Repository\StructureRepository;
 use App\Service\RoleTrait;
 use App\Service\Structure\StructureManager;
 use App\Service\ValidationTrait;
+use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,6 +18,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Breadcrumb("Structure", routeName="structure_index")
+ */
 class StructureController extends AbstractController
 {
     use ValidationTrait;
@@ -57,6 +61,7 @@ class StructureController extends AbstractController
     /**
      * @Route("/structure/add", name="structure_add")
      * @IsGranted("ROLE_MANAGE_STRUCTURES")
+     * @Breadcrumb("Ajouter")
      */
     public function add(Request $request, StructureManager $structureManager): Response
     {
@@ -91,6 +96,7 @@ class StructureController extends AbstractController
     /**
      * @Route("/structure/edit/{id}", name="structure_edit")
      * @IsGranted("MY_GROUP", subject="structure")
+     * @Breadcrumb("Modifier {structure.name}")
      */
     public function edit(Structure $structure, Request $request, StructureManager $structureManager): Response
     {
@@ -127,6 +133,7 @@ class StructureController extends AbstractController
     /**
      * @Route("/structure/preferences", name="structure_preferences")
      * @IsGranted("ROLE_STRUCTURE_ADMIN")
+     * @Breadcrumb("Préférences")
      */
     public function preferences(Request $request, StructureManager $structureManager): Response
     {

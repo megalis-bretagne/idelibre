@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Form\CsvType;
 use App\Service\Csv\CsvManager;
+use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,11 +12,15 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Breadcrumb("Utilisateurs", routeName="user_index")
+ */
 class CsvController extends AbstractController
 {
     /**
      * @Route("/csv/importUsers", name="csv_add_users")
      * @IsGranted("ROLE_MANAGE_USERS")
+     * @Breadcrumb("Importer des utilisateurs via csv")
      */
     public function importUsers(Request $request, CsvManager $csvManager, Session $session): Response
     {
@@ -41,6 +46,7 @@ class CsvController extends AbstractController
     /**
      * @Route("/csv/errors", name="user_csv_error")
      * @IsGranted("ROLE_MANAGE_USERS")
+     * @Breadcrumb("Erreur lors de l'import")
      */
     public function csvError(Session $session): Response
     {

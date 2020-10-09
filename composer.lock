@@ -4,8 +4,65 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a465ebda36bca3a429f362da46b0bace",
+    "content-hash": "888855589a5719b430c5f26cba179ac8",
     "packages": [
+        {
+            "name": "apy/breadcrumbtrail-bundle",
+            "version": "v1.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/APY/APYBreadcrumbTrailBundle.git",
+                "reference": "9382e32280e7476b79ce46557c799d66494e912b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/APY/APYBreadcrumbTrailBundle/zipball/9382e32280e7476b79ce46557c799d66494e912b",
+                "reference": "9382e32280e7476b79ce46557c799d66494e912b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1",
+                "symfony/framework-bundle": "^3.4|^4.0|^5.0",
+                "twig/twig": "^1.41|^2.0|^3.0"
+            },
+            "require-dev": {
+                "doctrine/doctrine-bundle": "^v1.0|^v2.0",
+                "matthiasnoback/symfony-dependency-injection-test": "^4.0",
+                "nyholm/symfony-bundle-test": "^1.5",
+                "symfony/phpunit-bridge": "^5.0",
+                "symfony/twig-bundle": "^3.4|^4.0|^5.0"
+            },
+            "suggest": {
+                "doctrine/doctrine-bundle": "To allow adding breadcrumbs on controller actions by the use of annotations.",
+                "twig/twig": "To allow adding breadcrumbs via Twig templates."
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "APY\\BreadcrumbTrailBundle\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Yoann Petit",
+                    "email": "abhoryo@free.fr"
+                }
+            ],
+            "description": "Symfony2 Breadcrumbs Bundle with annotations and PHP",
+            "homepage": "https://github.com/Abhoryo/APYBreadcrumbTrailBundle",
+            "keywords": [
+                "Breadcrumb Trail",
+                "annotation",
+                "breadcrumbs",
+                "fil ariane",
+                "symfony"
+            ],
+            "time": "2020-06-12T11:04:32+00:00"
+        },
         {
             "name": "behat/transliterator",
             "version": "v1.3.0",

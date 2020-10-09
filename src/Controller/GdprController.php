@@ -4,12 +4,16 @@ namespace App\Controller;
 
 use App\Form\GdprType;
 use App\Service\Gdpr\GdprManager;
+use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Breadcrumb("Notice RGPD")
+ */
 class GdprController extends AbstractController
 {
     /**
@@ -26,6 +30,7 @@ class GdprController extends AbstractController
     /**
      * @Route("/gdpr/edit", name="gdpr_edit")
      * @IsGranted("ROLE_SUPERADMIN")
+     * @Breadcrumb("Modifier")
      */
     public function edit(GdprManager $gdprManager, Request $request):Response
     {

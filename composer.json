@@ -5,6 +5,7 @@
         "php": ">=7.4",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "apy/breadcrumbtrail-bundle": "^1.6",
         "composer/package-versions-deprecated": "^1.11",
         "knplabs/knp-paginator-bundle": "^5.3",
         "league/csv": " ^9.5",

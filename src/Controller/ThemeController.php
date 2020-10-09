@@ -7,12 +7,16 @@ use App\Form\ThemeType;
 use App\Form\ThemeWithParentType;
 use App\Repository\ThemeRepository;
 use App\Service\Theme\ThemeManager;
+use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Breadcrumb("Thèmes", routeName="theme_index")
+ */
 class ThemeController extends AbstractController
 {
     /**
@@ -35,6 +39,7 @@ class ThemeController extends AbstractController
     /**
      * @Route("/theme/add", name="theme_add")
      * @IsGranted("ROLE_MANAGE_THEMES")
+     * @Breadcrumb("Ajouter")
      */
     public function add(ThemeManager $themeManager, Request $request): Response
     {
@@ -55,6 +60,7 @@ class ThemeController extends AbstractController
     /**
      * @Route("/theme/edit/{id}", name="theme_edit")
      * @IsGranted("MANAGE_THEMES", subject="theme")
+     * @Breadcrumb("Modifier {theme.name}")
      */
     public function edit(Theme $theme, ThemeManager $themeManager, Request $request): Response
     {
