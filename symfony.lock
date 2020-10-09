@@ -1,4 +1,7 @@
 {
+    "apy/breadcrumbtrail-bundle": {
+        "version": "v1.6.0"
+    },
     "behat/transliterator": {
         "version": "v1.3.0"
     },

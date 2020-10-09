@@ -6,6 +6,7 @@
 parameters:
   version: '%env(VERSION)%'
 
+
 services:
     # default configuration for services in *this* file
     _defaults:

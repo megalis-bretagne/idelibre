@@ -8,12 +8,16 @@ use App\Form\GroupType;
 use App\Repository\GroupRepository;
 use App\Service\Group\GroupManager;
 use App\Service\ValidationTrait;
+use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Breadcrumb("Groupe", routeName="group_index")
+ */
 class GroupController extends AbstractController
 {
     use ValidationTrait;
@@ -40,6 +44,7 @@ class GroupController extends AbstractController
     /**
      * @Route("/group/add", name="group_add")
      * @IsGranted("ROLE_SUPERADMIN")
+     * @Breadcrumb("Ajouter")
      */
     public function add(Request $request, GroupManager $groupManager)
     {
@@ -73,6 +78,7 @@ class GroupController extends AbstractController
     /**
      * @Route("/group/manage/{id}", name="group_manage")
      * @IsGranted("ROLE_SUPERADMIN")
+     * @Breadcrumb("Gérer {goupe.name}")
      */
     public function manage(Group $group, Request $request, GroupManager $groupManager)
     {
@@ -94,6 +100,7 @@ class GroupController extends AbstractController
     /**
      * @Route("/group/edit/{id}", name="group_edit")
      * @IsGranted("ROLE_SUPERADMIN")
+     * @Breadcrumb("Modifier {goupe.name}")
      */
     public function edit(Group $group, Request $request, GroupManager $groupManager)
     {

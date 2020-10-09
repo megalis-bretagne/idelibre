@@ -6,6 +6,7 @@ use App\Entity\Party;
 use App\Form\PartyType;
 use App\Repository\PartyRepository;
 use App\Service\Party\PartyManager;
+use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,6 +14,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Breadcrumb("Groupes politiques")
+ */
 class PartyController extends AbstractController
 {
     /**
@@ -39,6 +43,7 @@ class PartyController extends AbstractController
     /**
      * @Route("/party/add", name="party_add")
      * @IsGranted("ROLE_MANAGE_PARTIES")
+     * @Breadcrumb("Ajouter")
      */
     public function add(Request $request, PartyManager $partyManager): Response
     {
@@ -60,7 +65,7 @@ class PartyController extends AbstractController
     /**
      * @Route("/party/edit/{id}", name="party_edit")
      * @IsGranted("MANAGE_PARTIES", subject="party")
-     *
+     * @Breadcrumb("Modifier {party.name}")
      */
     public function edit(Party $party, Request $request, PartyManager $partyManager): Response
     {

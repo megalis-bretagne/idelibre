@@ -8,6 +8,7 @@ use App\Form\UserPreferenceType;
 use App\Form\UserType;
 use App\Repository\UserRepository;
 use App\Service\User\UserManager;
+use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,11 +16,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Breadcrumb("Utilisateurs", routeName="user_index")
+ */
 class UserController extends AbstractController
 {
     /**
      * @Route("/user", name="user_index")
      * @IsGranted("ROLE_MANAGE_USERS")
+     *
      */
     public function index(UserRepository $userRepository, PaginatorInterface $paginator, Request $request): Response
     {
@@ -46,6 +51,7 @@ class UserController extends AbstractController
     /**
      * @Route("/user/add", name="user_add")
      * @IsGranted("ROLE_MANAGE_USERS")
+     * @Breadcrumb("Ajouter")
      */
     public function add(Request $request, UserManager $manageUser): Response
     {
@@ -69,6 +75,7 @@ class UserController extends AbstractController
     /**
      * @Route("/user/edit/{id}", name="user_edit")
      * @IsGranted("MANAGE_USERS", subject="user")
+     * @Breadcrumb("Modifier {user.firstName} {user.lastName}")
      */
     public function edit(User $user, Request $request, UserManager $manageUser): Response
     {
@@ -110,6 +117,7 @@ class UserController extends AbstractController
     /**
      * @Route("/user/preferences", name="user_preferences")
      * @IsGranted("ROLE_MANAGE_PREFERENCES")
+     * @Breadcrumb("Préférences utilisateur")
      */
     public function preferences(Request $request, UserManager $userManager): Response
     {

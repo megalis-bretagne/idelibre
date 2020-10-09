@@ -1,0 +1,12 @@
+{%- if breadcrumbs.count %}
+    <div class="mt-3">
+        {% for breadcrumb in breadcrumbs %}
+            {% if loop.last %}
+                <a href="{{ breadcrumb.url }}" style="text-decoration: none;"><b>{{ breadcrumb.title }} </b></a>
+            {% else %}
+                <a href="{{ breadcrumb.url }}" style="text-decoration: none;">{{ breadcrumb.title }}</a> >
+            {% endif %}
+        {% endfor %}
+    </div>
+
+{%- endif -%}

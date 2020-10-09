@@ -9,6 +9,7 @@ use App\Repository\UserRepository;
 
 use App\Service\role\RoleManager;
 use App\Service\User\UserManager;
+use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,6 +17,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Breadcrumb("Administrateurs", routeName="admin_index" )
+ */
 class AdminController extends AbstractController
 {
 
@@ -52,6 +56,7 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/add", name="admin_add")
      * @IsGranted("ROLE_SUPERADMIN")
+     * @Breadcrumb("Ajouter")
      */
     public function add(Request $request, UserManager $userManager, RoleManager $roleManager): Response
     {
@@ -76,6 +81,7 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/group/add", name="admin_goup_add")
      * @IsGranted("ROLE_MANAGE_STRUCTURES")
+     * @Breadcrumb("Ajouter un administrateur de groupe")
      */
     public function addGroupAdmin(Request $request, UserManager $userManager, RoleManager $roleManager): Response
     {
@@ -105,6 +111,7 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/edit/{id}", name="admin_edit")
      * @IsGranted("MY_GROUP", subject="user")
+     * @Breadcrumb("Modifier {user.firstName} {user.lastName}")
      */
     public function edit(User $user, Request $request, UserManager $userManager): Response
     {

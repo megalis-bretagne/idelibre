@@ -7,6 +7,7 @@ use App\Form\EmailTemplateType;
 use App\Repository\EmailTemplateRepository;
 use App\Service\Email\EmailGenerator;
 use App\Service\Email\EmailTemplateManager;
+use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,6 +15,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Breadcrumb("Modèle d\'email", routeName="email_template_index")
+ */
 class EmailTemplateController extends AbstractController
 {
     /**
@@ -40,6 +44,7 @@ class EmailTemplateController extends AbstractController
     /**
      * @Route("/emailTemplate/add", name="email_template_add")
      * @IsGranted("ROLE_MANAGE_EMAIL_TEMPLATES")
+     * @Breadcrumb("Ajouter")
      */
     public function add(Request $request, EmailTemplateManager $templateManager)
     {
@@ -60,6 +65,7 @@ class EmailTemplateController extends AbstractController
     /**
      * @Route("/emailTemplate/edit/{id}", name="email_template_edit", methods={"GET","POST"})
      * @IsGranted("MANAGE_EMAIL_TEMPLATES", subject="emailTemplate")
+     * @Breadcrumb("Modifier {emailTemplate.name}")
      */
     public function edit(Request $request, EmailTemplate $emailTemplate, EmailTemplateManager $templateManager): Response
     {
@@ -95,6 +101,7 @@ class EmailTemplateController extends AbstractController
     /**
      * @Route("/emailTemplate/preview/{id}", name="email_template_preview", methods={"GET"})
      * @IsGranted("MY_STRUCTURE", subject="emailTemplate")
+     * @Breadcrumb("Visualiser {emailTemplate.name}")
      */
     public function preview(EmailTemplate $emailTemplate): Response
     {

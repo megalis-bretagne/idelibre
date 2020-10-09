@@ -11,6 +11,7 @@ use App\Repository\TypeRepository;
 use App\Service\role\RoleManager;
 use App\Service\Type\TypeManager;
 use App\Service\User\UserManager;
+use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,6 +19,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Breadcrumb("Types de séance", routeName="type_index")
+ */
 class TypeController extends AbstractController
 {
     /**
@@ -51,6 +55,7 @@ class TypeController extends AbstractController
     /**
      * @Route("/type/add", name="type_add")
      * @IsGranted("ROLE_MANAGE_TYPES")
+     * @Breadcrumb("Ajouter")
      */
     public function add(Request $request, TypeManager $typeManager): Response
     {
@@ -70,6 +75,7 @@ class TypeController extends AbstractController
     /**
      * @Route("/type/edit/{id}", name="type_edit")
      * @IsGranted("MANAGE_TYPES", subject="type")
+     * @Breadcrumb("Modifier {type.name}")
      */
     public function edit(Type $type, Request $request, TypeManager $typeManager): Response
     {
