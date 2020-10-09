@@ -1,0 +1,38 @@
+{% extends 'form.html.twig' %}
+{% import 'macro/_forms.html.twig' as macro %}
+
+{% block pageTitle 'Erreurs lors de l\'import' %}
+
+
+{% block pageActions %}
+    {{ macro.backButton('user_index') }}
+{% endblock %}
+
+{% block pageDetails %}
+<div class="alert alert-primary">
+    L'import du csv a bien été réalisé, mais certains utilisateurs n'ont pas pu être importés
+</div>
+
+{% for error in errors %}
+<div class="alert alert-danger">
+
+    {% for violation in error %}
+    Entrée : {{ violation.root.username }}, {{ violation.root.firstName }}, {{ violation.root.lastName }}
+    , {{ violation.root.lastName }} <br>
+    Message : {{ violation.message }} <br>
+    Champ en erreur : {{ violation.propertyPath }} <br>
+    Valeur du champ : {{ violation.invalidValue }} <br>
+
+    {% if not loop.last %}
+        <hr>
+    {% endif %}
+
+    {% endfor %}
+</div>
+{% endfor %}
+{% endblock %}
+
+{% block pageForm %}
+{% endblock %}
+
+

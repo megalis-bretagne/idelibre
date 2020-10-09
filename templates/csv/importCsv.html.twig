@@ -1,0 +1,44 @@
+{% extends 'form.html.twig' %}
+{% import 'macro/_forms.html.twig' as macro %}
+
+{% block pageTitle 'Importer des utilisateurs via csv' %}
+
+{% block pageActions %}
+    {{ macro.backButton('user_index') }}
+{% endblock %}
+
+{% block pageDetails %}
+
+    <div class="alert alert-info">
+        Information : Votre csv doit être contruit de la manière suivante : <br>
+        Le séparateur est le caractère "," <br>
+        champ 1 : Nom d'utilisateur <br>
+        champ 2 : Prénom <br>
+        champ 3 : Nom <br>
+        champ 4 : Email <br>
+        champ 5 : Mot de passe <br>
+        champ 6 : Type d'utilisateur
+        <ul>
+            <li>Secretaire : 1</li>
+            <li>Administrateur : 2</li>
+            <li>Acteur : 3</li>
+        </ul>
+        <br>
+        Exemple : <br>
+        d.martin,Damien,Martin,d.martin@exemple.org,azety<br>
+        e.durant,Emilie,Durant,e.durant@exemple.org,wxcvb
+    </div>
+{% endblock %}
+
+
+{% block pageSaveReturn %}
+    {{ macro.save('user_index') }}
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(document).ready(function () {
+            bsCustomFileInput.init()
+        })
+    </script>
+{% endblock %}

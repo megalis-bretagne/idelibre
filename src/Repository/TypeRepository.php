@@ -40,4 +40,10 @@ class TypeRepository extends ServiceEntityRepository
             ->andWhere('et is null or et =:emailTemplate')
             ->setParameter('emailTemplate', $emailTemplate);
     }
+
+
+    public function exists(string $typeName, Structure $structure)
+    {
+        return $this->count(['name' => $typeName, 'structure' => $structure]) > 0;
+    }
 }

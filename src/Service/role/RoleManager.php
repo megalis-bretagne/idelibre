@@ -35,4 +35,10 @@ class RoleManager
     {
         return $this->roleRepository->findOneBy(['name' => 'Admin']);
     }
+
+
+    public function getSecretaryRole(): Role
+    {
+        return $this->roleRepository->findOneBy(['name' => 'Secretary']);
+    }
 }
