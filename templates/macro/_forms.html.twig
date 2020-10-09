@@ -24,6 +24,20 @@
 {% endmacro %}
 
 
+{% macro searchForm(formSearch, searchTerm) %}
+        {{ form_start(formSearch, {'method': 'GET'}) }}
+
+        <div class="input-group col-8 float-right pr-0">
+            {{ form_widget(formSearch.search, {'value': searchTerm}) }}
+            <div class="input-group-append">
+                <button class="btn btn-primary" title="Filtrer">
+                    <span class="fas fa-search"></span>
+                </button>
+            </div>
+        </div>
+        {{ form_end(formSearch) }}
+
+{% endmacro %}
 
 
 {% macro showButton(showPath, id) %}

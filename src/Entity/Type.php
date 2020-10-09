@@ -7,10 +7,16 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=TypeRepository::class)
- * @UniqueEntity("name")
+ * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="IDX_TYPE_NAME_STRUCTURE", columns={"name", "structure_id"})})
+ *
+ * @UniqueEntity(
+ *     fields={"name", "structure"},
+ *     errorPath="name",
+ *     message="Ce type est déja utilisé dans cette structure")
  */
 class Type
 {
@@ -22,7 +28,9 @@ class Type
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255, unique=true)
+     * @ORM\Column(type="string", length=255, nullable=false)
+     * @Assert\NotBlank()
+     * @Assert\Length(max="255")
      */
     private $name;
 

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\SearchType;
 use App\Form\UserPreferenceType;
 use App\Form\UserType;
 use App\Repository\UserRepository;
@@ -22,14 +23,22 @@ class UserController extends AbstractController
      */
     public function index(UserRepository $userRepository, PaginatorInterface $paginator, Request $request): Response
     {
+        $formSearch = $this->createForm(SearchType::class);
+
         $users = $paginator->paginate(
-            $userRepository->findByStructure($this->getUser()->getStructure()),
+            $userRepository->findByStructure($this->getUser()->getStructure(), $request->query->get('search')),
             $request->query->getInt('page', 1),
-            20
+            20,
+            [
+                'defaultSortFieldName' => ['u.lastName'],
+                'defaultSortDirection' => 'asc',
+            ]
         );
 
         return $this->render('user/index.html.twig', [
             'users' => $users,
+            'formSearch' => $formSearch->createView(),
+            'searchTerm' => $request->query->get('search')
         ]);
     }
 

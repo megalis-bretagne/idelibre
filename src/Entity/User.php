@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -25,12 +26,17 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
+     * @Assert\NotBlank()
+     * @Assert\Length(max=255)
      */
     private $username;
 
 
     /**
      * @ORM\Column(type="string", length=180)
+     * @Assert\NotBlank()
+     * @Assert\Length(max=255)
+     * @Assert\Email()
      */
     private $email;
 
@@ -42,17 +48,22 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Length(max=255)
      */
     private $firstName;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Length(max=255)
      */
     private $lastName;
 
     /**
      * @ORM\ManyToOne(targetEntity=Structure::class, inversedBy="users")
      * @ORM\JoinColumn(onDelete="CASCADE")
+     *
      */
     private $structure;
 

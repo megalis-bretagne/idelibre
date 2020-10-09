@@ -12,6 +12,11 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  */
 class Role
 {
+    public const SECRETARY = 1;
+    public const STRUCTURE_ADMIN = 2;
+    public const ACTOR = 3;
+
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="UUID")

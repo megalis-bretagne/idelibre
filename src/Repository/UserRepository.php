@@ -42,9 +42,9 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     }
 
 
-    public function findByStructure(Structure $structure): QueryBuilder
+    public function findByStructure(Structure $structure, ?string $search = null): QueryBuilder
     {
-        return $this->createQueryBuilder('u')
+        $qb = $this->createQueryBuilder('u')
             ->andWhere('u.structure =:structure')
             ->setParameter('structure', $structure)
             ->leftJoin('u.role', 'r')
@@ -54,7 +54,15 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             (r.name is null)')
             ->setParameter('superAdmin', 'SuperAdmin')
             ->setParameter('groupAdmin', 'GroupAdmin')
-            ->orderBy('u.lastName');
+            ->addSelect('r');
+
+
+        if (!empty($search)) {
+            $qb->andWhere('LOWER(u.lastName) like :search OR LOWER(u.username) like :search')
+                ->setParameter('search', mb_strtolower("%${search}%"));
+        }
+        return $qb;
+
     }
 
 
@@ -95,7 +103,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         return $qb->getQuery();
     }
 
-    public function findActorByStructure($structure) : QueryBuilder
+    public function findActorByStructure($structure): QueryBuilder
     {
         return $this->createQueryBuilder('u')
             ->leftJoin('u.role', 'r')

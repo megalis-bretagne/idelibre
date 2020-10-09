@@ -4,18 +4,30 @@
 {% block pageTitle 'Utilisateurs' %}
 
 {% block pageActions %}
+<div class="row">
+    <div class="col-6 pull-left">
     <a href="{{ path('user_add') }}" class="btn btn-primary"><span
                 class="fa fa-plus-circle"></span>
         Ajouter</a>
+    <a href="{{ path('csv_add_users') }}" class="btn btn-outline-primary"><span
+                class="fa fa-plus-circle"></span>
+        Ajouter via csv</a>
+    </div>
+    <div class="col-6">
+        {{ macros.searchForm(formSearch, searchTerm) }}
+    </div>
+
+
+</div>
 {% endblock %}
 
 {% block pageTable %}
     <table class="table table-striped mt-3 bg-white">
         <thead>
         <tr class="d-flex">
-            <th class="col-3">Prénom</th>
-            <th class="col-3">Nom</th>
-            <th class="col-4">Email</th>
+            <th class="col-3">{{ knp_pagination_sortable(users, 'Nom', 'u.lastName') }}</th>
+            <th class="col-4">{{ knp_pagination_sortable(users, 'Nom d\'utilisateur', 'u.username') }}</th>
+            <th class="col-3">{{ knp_pagination_sortable(users, 'Role', 'r.name') }}</th>
             <th class="col-2">Actions</th>
         </tr>
         </thead>
@@ -23,9 +35,9 @@
 
         {% for user in users %}
             <tr class="d-flex">
-                <td class="col-3">{{ user.firstName }} </td>
                 <td class="col-3">{{ user.lastName }} </td>
-                <td class="col-4">{{ user.email }} </td>
+                <td class="col-4">{{ user.username }} </td>
+                <td class="col-3">{{ user.role ? user.role.name : '' }} </td>
                 <td class="col-2">
                     {{ macros.editButton('user_edit', user.id) }}
                     {{ macros.button_open_modal_delete(

@@ -30,8 +30,7 @@ class AdminController extends AbstractController
 
         $admins = $paginator->paginate(
             $userRepository->findSuperAdminAndGroupAdmin(
-                //$this->getUser()->getGroup(),
-                null,
+                $this->getUser()->getGroup(),
                 $request->query->get('search')
             ),
             $request->query->getInt('page', 1),
