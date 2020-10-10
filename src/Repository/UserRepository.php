@@ -62,7 +62,6 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
                 ->setParameter('search', mb_strtolower("%${search}%"));
         }
         return $qb;
-
     }
 
 
