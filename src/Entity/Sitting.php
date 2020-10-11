@@ -60,6 +60,12 @@ class Sitting
      */
     private $type;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Structure::class)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     */
+    private $structure;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -176,6 +182,18 @@ class Sitting
     public function setType(?Type $type): self
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getStructure(): ?Structure
+    {
+        return $this->structure;
+    }
+
+    public function setStructure(?Structure $structure): self
+    {
+        $this->structure = $structure;
 
         return $this;
     }

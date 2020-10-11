@@ -3,7 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Sitting;
+use App\Entity\Structure;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -19,32 +21,17 @@ class SittingRepository extends ServiceEntityRepository
         parent::__construct($registry, Sitting::class);
     }
 
-    // /**
-    //  * @return Sitting[] Returns an array of Sitting objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findByStructure(Structure $structure, ?string $searchTerm =null): QueryBuilder
     {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $qb =  $this->createQueryBuilder('s')
+            ->andWhere('s.structure =:structure')
+            ->setParameter('structure', $structure);
 
-    /*
-    public function findOneBySomeField($value): ?Sitting
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        if($searchTerm) {
+            $qb->andWhere('LOWER(s.name) =:search')
+            ->setParameter('search', mb_strtolower("%${searchTerm}%"));
+        }
+
+        return $qb;
     }
-    */
 }

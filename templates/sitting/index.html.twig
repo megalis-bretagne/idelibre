@@ -1,0 +1,58 @@
+{% extends 'dataview.html.twig' %}
+{% import 'macro/_forms.html.twig' as macros %}
+
+{% block pageTitle 'Seances' %}
+
+{% block pageActions %}
+
+    <div class="row">
+        <div class="col-6 pull-left">
+            <a href="{{ path('sitting_add') }}" class="btn btn-primary"><span
+                        class="fa fa-plus-circle"></span>
+                Ajouter</a>
+
+            <div class="col-6">
+                {{ macros.searchForm(formSearch, searchTerm) }}
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block pageTable %}
+    <table class="table table-striped mt-3 bg-white">
+        <thead>
+        <tr class="d-flex">
+            <th class="col-10">Intitulé</th>
+            <th class="col-2">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% if sittings |length == 0 %}
+        <tr class="d-flex">
+            <td class="col-12 text-center"> Aucune Séance à afficher</td>
+        </tr>
+        {% endif %}
+
+        {% for sitting in sittings %}
+            <tr class="d-flex">
+                <td class="col-10">{{ sitting.name }} </td>
+
+                <td class="col-2">
+                    {{ macros.editButton('sitting_edit', sitting.id) }}
+                    {{ macros.button_open_modal_delete(
+                        sitting.id,
+                        'Suppression de la séance',
+                        'sitting_delete',
+                        'Voulez vous vraiment supprimer cette séance ?',
+                        sittings.currentPageNumber
+                    ) }}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block pagePagination knp_pagination_render(sittings) %}
