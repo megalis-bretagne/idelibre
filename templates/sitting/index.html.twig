@@ -10,12 +10,13 @@
             <a href="{{ path('sitting_add') }}" class="btn btn-primary"><span
                         class="fa fa-plus-circle"></span>
                 Ajouter</a>
-
-            <div class="col-6">
-                {{ macros.searchForm(formSearch, searchTerm) }}
-            </div>
-
         </div>
+
+        <div class="col-6 -pull-right">
+            {{ macros.searchForm(formSearch, searchTerm) }}
+        </div>
+
+
     </div>
 {% endblock %}
 
@@ -30,9 +31,9 @@
         <tbody>
 
         {% if sittings |length == 0 %}
-        <tr class="d-flex">
-            <td class="col-12 text-center"> Aucune Séance à afficher</td>
-        </tr>
+            <tr class="d-flex">
+                <td class="col-12 text-center"> Aucune Séance à afficher</td>
+            </tr>
         {% endif %}
 
         {% for sitting in sittings %}
