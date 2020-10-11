@@ -39,7 +39,7 @@ class Convocation
 
     /**
      * @ORM\ManyToOne(targetEntity=Sitting::class, inversedBy="convocations")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $sitting;
 
@@ -47,6 +47,12 @@ class Convocation
      * @ORM\OneToOne(targetEntity=Timestamp::class, mappedBy="convocation", cascade={"persist", "remove"})
      */
     private $timestamp;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=File::class)
+     * @ORM\JoinColumn(onDelete="SET NULL")
+     */
+    private $file;
 
     public function getId(): ?string
     {
@@ -128,6 +134,18 @@ class Convocation
         if ($timestamp->getConvocation() !== $newConvocation) {
             $timestamp->setConvocation($newConvocation);
         }
+
+        return $this;
+    }
+
+    public function getFile(): ?File
+    {
+        return $this->file;
+    }
+
+    public function setFile(?File $file): self
+    {
+        $this->file = $file;
 
         return $this;
     }

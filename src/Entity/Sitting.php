@@ -54,6 +54,12 @@ class Sitting
      */
     private $convocations;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Type::class)
+     * @ORM\JoinColumn(onDelete="SET NULL")
+     */
+    private $type;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -158,6 +164,18 @@ class Sitting
                 $convocation->setSitting(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getType(): ?Type
+    {
+        return $this->type;
+    }
+
+    public function setType(?Type $type): self
+    {
+        $this->type = $type;
 
         return $this;
     }
