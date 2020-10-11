@@ -30,11 +30,7 @@
         </thead>
         <tbody>
 
-        {% if sittings |length == 0 %}
-            <tr class="d-flex">
-                <td class="col-12 text-center"> Aucune Séance à afficher</td>
-            </tr>
-        {% endif %}
+        {{ macros.emptyList(sittings, "aucune séance à afficher") }}
 
         {% for sitting in sittings %}
             <tr class="d-flex">

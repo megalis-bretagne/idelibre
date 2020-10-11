@@ -1,0 +1,13 @@
+{% extends 'form.html.twig' %}
+{% import 'macro/_forms.html.twig' as macro %}
+
+{% block pageTitle 'Ajouter une séance' %}
+
+{% block pageActions %}
+    {{ macro.backButton('sitting_index') }}
+{% endblock %}
+
+{% block pageSaveReturn %}
+    {{ macro.save('sitting_index') }}
+{% endblock %}
+

@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Form\SearchType;
+use App\Form\SittingType;
 use App\Repository\SittingRepository;
+use App\Service\Seance\SeanceManager;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -48,8 +50,22 @@ class SittingController extends AbstractController
      * @Route("/sitting/add", name="sitting_add")
      * @IsGranted("ROLE_MANAGE_SEANCES")
      */
-    public function add()
+    public function add(Request $request, SeanceManager $seanceManager)
     {
+        $form = $this->createForm(SittingType::class, null, ['structure' => $this->getUser()->getStructure()]);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $seanceManager->save(
+                $form->getData(),
+                $this->getUser()->getStructure()
+            );
+
+            $this->addFlash('success', 'votre séance a bien été ajouté');
+            return $this->redirectToRoute('sitting_index');
+        }
+        return $this->render('sitting/add.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
 
 
