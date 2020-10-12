@@ -5,8 +5,10 @@ namespace App\Service\Seance;
 
 use App\Entity\Sitting;
 use App\Entity\Structure;
+use App\Entity\Type;
 use App\Service\Convocation\ConvocationManager;
 use App\Service\File\FileManager;
+use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -29,7 +31,7 @@ class SittingManager
         $convocationFile = $this->fileManager->save($uploadedFile, $structure);
 
         $sitting->setStructure($structure)
-        ->setName($sitting->getType()->getName() . uniqid())
+        ->setName($sitting->getType()->getName())
             ->setFile($convocationFile);
         $this->em->persist($sitting);
 
@@ -42,5 +44,9 @@ class SittingManager
         $this->fileManager->delete($sitting->getFile());
         $this->em->remove($sitting);
         $this->em->flush();
+    }
+
+    private function createNameFromTypeAndDate(Type $type, DateTimeInterface $date) {
+        return  $type->getName() . " " . $date->format('d/m/y - H:i');
     }
 }

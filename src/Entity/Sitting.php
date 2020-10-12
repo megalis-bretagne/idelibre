@@ -6,9 +6,20 @@ use App\Repository\SittingRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=SittingRepository::class)
+ * @ORM\Table(
+ *     uniqueConstraints={@ORM\UniqueConstraint(
+ *         name="IDX_SITTING_NAME_DATE_STRUCTURE",
+ *         columns={"name", "structure_id", "date"}
+ *     )})
+ *
+ * @UniqueEntity(
+ *     fields={"name", "structure", "date"},
+ *     errorPath="name",
+ *     message="Une séance du même type existe déja à la même heure")
  */
 class Sitting
 {

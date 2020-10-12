@@ -42,7 +42,8 @@ class SittingController extends AbstractController
         return $this->render('sitting/index.html.twig', [
             'sittings' => $sittings,
             'formSearch' => $formSearch->createView(),
-            'searchTerm' => $request->query->get('search') ?? ''
+            'searchTerm' => $request->query->get('search') ?? '',
+            'timezone' => $this->getUser()->getStructure()->getTimezone()->getName()
         ]);
     }
 

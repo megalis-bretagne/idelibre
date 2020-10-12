@@ -24,7 +24,8 @@
     <table class="table table-striped mt-3 bg-white">
         <thead>
         <tr class="d-flex">
-            <th class="col-10">Intitulé</th>
+            <th class="col-7">Intitulé</th>
+            <th class="col-3">Date</th>
             <th class="col-2">Actions</th>
         </tr>
         </thead>
@@ -34,7 +35,8 @@
 
         {% for sitting in sittings %}
             <tr class="d-flex">
-                <td class="col-10">{{ sitting.name }} </td>
+                <td class="col-7">{{ sitting.name }} </td>
+                <td class="col-3">{{ sitting.date | date('d/m/yy : H:i' , timezone) }} </td>
 
                 <td class="col-2">
                     {{ macros.editButton('sitting_edit', sitting.id) }}
