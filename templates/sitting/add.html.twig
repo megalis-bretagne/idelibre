@@ -11,3 +11,15 @@
     {{ macro.save('sitting_index') }}
 {% endblock %}
 
+
+{% block javascripts %}
+    <script>
+        let config = {
+            enableTime: true,
+            "locale": "fr"
+        };
+        $("#sitting_date").flatpickr(config);
+    </script>
+{% endblock %}
+
+

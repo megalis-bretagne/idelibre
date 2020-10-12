@@ -16,7 +16,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SittingType extends AbstractType
 {
-
     private TypeRepository $typeRepository;
 
     public function __construct(TypeRepository $typeRepository)
@@ -33,19 +32,21 @@ class SittingType extends AbstractType
                 'query_builder' => $this->typeRepository->findByStructure($options['structure']),
                 'choice_label'=> 'name'
             ])
-            ->add('date', DateTimeType::class, [
+            ->add('date', null, [
                 'label' => 'Date et heure',
-                'required' => true
+                'required' => true,
+                'widget' => 'single_text'
             ])
             ->add('place', TextType::class, [
                 'label' => 'Lieu',
                 'required'=> false
             ])
             ->add('convocationFile', FileType::class, [
-                'label' => 'convocation',
+                'label' => 'Fichier de convocation',
                 'attr' => [
                     'placeholder' => 'Sélectionner un fichier'
-                ]
+                ],
+                'mapped' => false
             ])
         ;
     }

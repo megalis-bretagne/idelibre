@@ -27,7 +27,7 @@ class SittingRepository extends ServiceEntityRepository
             ->andWhere('s.structure =:structure')
             ->setParameter('structure', $structure);
 
-        if($searchTerm) {
+        if ($searchTerm) {
             $qb->andWhere('LOWER(s.name) =:search')
             ->setParameter('search', mb_strtolower("%${searchTerm}%"));
         }

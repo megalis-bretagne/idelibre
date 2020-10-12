@@ -50,8 +50,6 @@ class TypeController extends AbstractController
         ]);
     }
 
-
-
     /**
      * @Route("/type/add", name="type_add")
      * @IsGranted("ROLE_MANAGE_TYPES")

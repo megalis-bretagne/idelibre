@@ -20,7 +20,7 @@ class Convocation
     /**
      * @ORM\Column(type="boolean")
      */
-    private $isRead;
+    private $isRead = false;
 
     /**
      * @ORM\Column(type="datetime")
@@ -30,12 +30,12 @@ class Convocation
     /**
      * @ORM\Column(type="boolean")
      */
-    private $isActive;
+    private $isActive = false;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    private $isEmailed;
+    private $isEmailed = false;
 
     /**
      * @ORM\ManyToOne(targetEntity=Sitting::class, inversedBy="convocations")
@@ -49,10 +49,16 @@ class Convocation
     private $timestamp;
 
     /**
-     * @ORM\ManyToOne(targetEntity=File::class)
-     * @ORM\JoinColumn(onDelete="SET NULL")
+     * @ORM\ManyToOne(targetEntity=User::class)
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $file;
+    private $actor;
+
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+    }
 
     public function getId(): ?string
     {
@@ -74,13 +80,6 @@ class Convocation
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
     }
 
     public function getIsActive(): ?bool
@@ -138,14 +137,14 @@ class Convocation
         return $this;
     }
 
-    public function getFile(): ?File
+    public function getActor(): ?User
     {
-        return $this->file;
+        return $this->actor;
     }
 
-    public function setFile(?File $file): self
+    public function setActor(?User $actor): self
     {
-        $this->file = $file;
+        $this->actor = $actor;
 
         return $this;
     }

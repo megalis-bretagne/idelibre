@@ -1,3 +1,8 @@
 Create theme ROOT soit à la creation de la structure soit le creer lorss du premier enregistrement s'il n'existe pas
 
 Il manque la colone roe sur le tableau index des acteurs
+
+rename $type->getAssociatedUsers() en $type->getAssociatedActors()
+
+
+Il faut lier le ficher de convocation à la séance car sinon c'est la emrdeour ajouter de sutilisateurs ou pire encore si pas d'acteur dans e type de seance!

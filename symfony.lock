@@ -41,6 +41,9 @@
     "symfony/dom-crawler": {
         "version": "v5.1.5"
     },
+    "symfony/mime": {
+        "version": "v5.1.7"
+    },
     "symfony/polyfill-intl-idn": {
         "version": "v1.18.1"
     },

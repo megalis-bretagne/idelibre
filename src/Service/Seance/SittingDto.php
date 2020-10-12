@@ -3,7 +3,6 @@
 
 namespace App\Service\Seance;
 
-
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class SittingDto
@@ -12,6 +11,4 @@ class SittingDto
     private string $name;
     private \DateTimeInterface $date;
     private UploadedFile $convocationFile;
-
-
 }

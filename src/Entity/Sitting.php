@@ -32,12 +32,12 @@ class Sitting
     /**
      * @ORM\Column(type="integer")
      */
-    private $revision;
+    private $revision = 0;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $isArchived;
+    private $isArchived = false;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -65,6 +65,11 @@ class Sitting
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $structure;
+
+    /**
+     * @ORM\OneToOne(targetEntity=File::class, cascade={"persist", "remove"})
+     */
+    private $file;
 
     public function __construct()
     {
@@ -194,6 +199,18 @@ class Sitting
     public function setStructure(?Structure $structure): self
     {
         $this->structure = $structure;
+
+        return $this;
+    }
+
+    public function getFile(): ?File
+    {
+        return $this->file;
+    }
+
+    public function setFile(?File $file): self
+    {
+        $this->file = $file;
 
         return $this;
     }

@@ -2,10 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Sitting;
 use App\Form\SearchType;
 use App\Form\SittingType;
 use App\Repository\SittingRepository;
-use App\Service\Seance\SeanceManager;
+use App\Service\Seance\SittingManager;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -22,7 +23,7 @@ class SittingController extends AbstractController
 {
     /**
      * @Route("/sitting/index", name="sitting_index")
-     * @IsGranted("ROLE_MANAGE_SEANCES")
+     * @IsGranted("ROLE_MANAGE_SITTINGS")
      */
     public function index(SittingRepository $sittingRepository, PaginatorInterface $paginator, Request $request): Response
     {
@@ -43,20 +44,21 @@ class SittingController extends AbstractController
             'formSearch' => $formSearch->createView(),
             'searchTerm' => $request->query->get('search') ?? ''
         ]);
-
     }
 
     /**
      * @Route("/sitting/add", name="sitting_add")
-     * @IsGranted("ROLE_MANAGE_SEANCES")
+     * @IsGranted("ROLE_MANAGE_SITTINGS")
+     * @Breadcrumb("Ajouter")
      */
-    public function add(Request $request, SeanceManager $seanceManager)
+    public function add(Request $request, SittingManager $seanceManager)
     {
         $form = $this->createForm(SittingType::class, null, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $seanceManager->save(
                 $form->getData(),
+                $form->get('convocationFile')->getData(),
                 $this->getUser()->getStructure()
             );
 
@@ -71,7 +73,7 @@ class SittingController extends AbstractController
 
     /**
      * @Route("/sitting/edit/{id}", name="sitting_edit")
-     * @IsGranted("ROLE_MANAGE_SEANCES")
+     * @IsGranted("ROLE_MANAGE_SITTINGS")
      */
     public function edit()
     {
@@ -80,9 +82,14 @@ class SittingController extends AbstractController
 
     /**
      * @Route("/sitting/delete/{id}", name="sitting_delete", methods={"DELETE"})
-     * @IsGranted("ROLE_MANAGE_SEANCES")
+     * @IsGranted("MANAGE_SITTINGS", subject="sitting")
      */
-    public function delete()
+    public function delete(Sitting $sitting, SittingManager $sittingManager, Request $request)
     {
+        $sittingManager->delete($sitting);
+        $this->addFlash('success', 'la séance a bien été supprimée');
+        return $this->redirectToRoute('sitting_index', [
+            'page' => $request->get('page')
+        ]);
     }
 }
