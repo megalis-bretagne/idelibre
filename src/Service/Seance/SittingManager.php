@@ -46,7 +46,6 @@ class SittingManager
         $this->em->flush();
     }
 
-    private function createNameFromTypeAndDate(Type $type, DateTimeInterface $date) {
-        return  $type->getName() . " " . $date->format('d/m/y - H:i');
-    }
+
+
 }

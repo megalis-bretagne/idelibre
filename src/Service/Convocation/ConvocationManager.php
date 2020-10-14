@@ -6,6 +6,7 @@ namespace App\Service\Convocation;
 use App\Entity\Convocation;
 use App\Entity\File;
 use App\Entity\Sitting;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 
 class ConvocationManager
@@ -26,4 +27,19 @@ class ConvocationManager
             $this->em->persist($convocation);
         }
     }
+
+    /**
+     * @param User[] $actors
+     */
+    public function addConvocations(iterable $actors, Sitting $sitting)
+    {
+        foreach ($actors as $actor) {
+            $convocation = new Convocation();
+            $convocation->setSitting($sitting)
+                ->setActor($actor);
+            $this->em->persist($convocation);
+        }
+        $this->em->flush();
+    }
+
 }

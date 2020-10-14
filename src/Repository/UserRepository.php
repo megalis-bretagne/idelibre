@@ -2,11 +2,14 @@
 
 namespace App\Repository;
 
+use App\Entity\Convocation;
 use App\Entity\Group;
+use App\Entity\Sitting;
 use App\Entity\Structure;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -111,4 +114,32 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->andWhere('u.structure = :structure')
             ->setParameter('structure', $structure);
     }
+
+    public function findActorsInSitting(Sitting $sitting, Structure $structure): QueryBuilder
+    {
+        return $this->createQueryBuilder('u')
+            ->leftJoin('u.role', 'r')
+            ->andWhere(' r.name =:actor')
+            ->setParameter('actor', 'Actor')
+            ->andWhere('u.structure =:structure')
+            ->setParameter('structure', $structure)
+            ->join(Convocation::class, 'c', Join::WITH, 'c.actor = u')
+            ->andWhere('c.sitting =:sitting')
+            ->setParameter('sitting', $sitting);
+    }
+
+    public function findActorsNotInSitting(Sitting $sitting, Structure $structure): QueryBuilder
+    {
+        $actorsInSitting = $this->findActorsInSitting($sitting, $structure)->getQuery()->getResult();
+
+        return $this->createQueryBuilder('u')
+            ->leftJoin('u.role', 'r')
+            ->andWhere(' r.name =:actor')
+            ->setParameter('actor', 'Actor')
+            ->andWhere('u.structure =:structure')
+            ->setParameter('structure', $structure)
+            ->andWhere('u not in (:alreadyIn)')
+            ->setParameter('alreadyIn', $actorsInSitting);
+    }
+
 }

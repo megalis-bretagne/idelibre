@@ -3,9 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Sitting;
+use App\Form\AddActorType;
 use App\Form\SearchType;
 use App\Form\SittingType;
 use App\Repository\SittingRepository;
+use App\Service\Convocation\ConvocationManager;
+use App\Service\Seance\ActorManager;
 use App\Service\Seance\SittingManager;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
@@ -52,7 +55,7 @@ class SittingController extends AbstractController
      * @IsGranted("ROLE_MANAGE_SITTINGS")
      * @Breadcrumb("Ajouter")
      */
-    public function add(Request $request, SittingManager $seanceManager)
+    public function add(Request $request, SittingManager $seanceManager): Response
     {
         $form = $this->createForm(SittingType::class, null, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
@@ -68,6 +71,39 @@ class SittingController extends AbstractController
         }
         return $this->render('sitting/add.html.twig', [
             'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/sitting/{id}/actors", name="sitting_actor")
+     * @IsGranted("ROLE_MANAGE_SITTINGS")
+     */
+    public function editUsers(Sitting $sitting, Request $request, ActorManager $actorManager, ConvocationManager $convocationManager): Response
+    {
+        $form = $this->createForm(AddActorType::class, null, ['structure' => $sitting->getStructure(), 'sitting' => $sitting]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $convocationManager->addConvocations($form->get('notAssociatedActors')->getData(), $sitting);
+            $this->addFlash('success', 'les utilisateurs ont été modifié');
+            return $this->redirectToRoute('sitting_index');
+        }
+
+        return $this->render('sitting/actors.html.twig', [
+            'convocatedActors' => $actorManager->getActorsBySitting($sitting),
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/sitting/{id}/projects", name="sitting_project")
+     * IsGranted("ROLE_MANAGE_SITTINGS")
+     */
+    public function editProjects(Sitting $sitting){
+
+        // todo get theme lists
+
+        return $this->render('sitting/projects.html.twig', [
         ]);
     }
 
