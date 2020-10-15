@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
+    <script src="//cdn.jsdelivr.net/npm/sortablejs@1.8.4/Sortable.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.20.0/vuedraggable.umd.min.js"></script>
 </head>
 
 <body>
@@ -18,49 +20,71 @@
                 <input type="file" class="btn btn-info" @change="addProject($event)" multiple>
 
                 <div class="mt-4"></div>
+                <draggable v-model="projects">
 
-                <div v-for="(project, index) in projects" class="jumbotron">
-                    <div class="row">
-                        <div class="col-1">
-                            <span class="badge badge-primary" style="font-size: 1.5em">{{index + 1}}</span>
+                    <div v-for="(project, index) in projects">
+                        <div class="alert alert-secondary">
+                            <div class="row">
+                                <div class="col-1">
+                                    <span class="badge badge-primary" style="font-size: 1.5em">{{index + 1}}</span>
+                                </div>
+
+                                <div class="col-5">
+                                    <textarea v-model="project.name" class="form-control"> </textarea>
+                                </div>
+
+                                <div class="col-5">
+                                    <b>{{project.file.name}}</b>
+                                </div>
+
+                                <div class="col-1">
+                                    <button class="btn btn-danger" v-on:click="removeProject(index)">del</button>
+                                </div>
+
+                            </div>
+
+                            <div class="row mt-3">
+                                <div class="col-1">
+                                    <b>Rapporteur</b>
+                                </div>
+
+                                <div class="col-4">
+                                    <select v-model="project.rapporteurId" class="form-control">
+                                        <option v-for="rapporteur in rapporteurs" v-bind:value="rapporteur.id">
+                                            {{ rapporteur.firstName }} {{ rapporteur.lastName }}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-6">
+                                    <select v-model="project.themeId" class="form-control">
+                                        <option v-for="theme in themes" v-bind:value="theme.value">
+                                            {{ theme.text }}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-11 offset-1 mt-3">
+                                    <input type="file" class="btn btn-info" @change="addAnnexes($event, project)"
+                                           multiple>Ajouter des annexes
+                                </div>
+
+                            </div>
                         </div>
 
-                        <div class="col-5">
-                            <textarea v-model="project.name" class="form-control"> </textarea>
-                        </div>
-
-                        <div class="col-5">
-                            <b>{{project.fileName}}</b>
-                        </div>
-
-                        <div class="col-1">
-                            <button class="btn btn-danger" v-on:click="removeProject(index)">del</button>
-                        </div>
+                        <draggable v-model="project.annexes">
+                            <div class="col-10 offset-1 alert alert-info" v-for="(annex, index) in project.annexes">
+                                <div class="row">
+                                    <div class="col-1">{{index + 1}}</div>
+                                    <div class="col-10">{{annex.file.name}}</div>
+                                    <div class="col-1">
+                                        <button class="btn btn-danger" @click="deleteAnnex(project.annexes, index)">del
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </draggable>
 
                     </div>
-
-                    <div class="row mt-3">
-                        <div class="col-1">
-                            <b>Rapporteur</b>
-                        </div>
-
-                        <div class="col-4">
-                            <select v-model="project.rapporteurId" class="form-control">
-                                <option v-for="rapporteur in rapporteurs" v-bind:value="rapporteur.id">
-                                    {{ rapporteur.firstName }} {{ rapporteur.lastName }}
-                                </option>
-                            </select>
-                        </div>
-                        <div class="col-6">
-                            <select v-model="project.themeId" class="form-control">
-                                <option v-for="theme in themes" v-bind:value="theme.value">
-                                    {{ theme.text }}
-                                </option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
+                </draggable>
 
 
                 <button v-if="projects.length > 0" class="btn btn-success" @click="save()">Enregistrer</button>
@@ -95,23 +119,13 @@
         },
 
         methods: {
-            addProjectFake() {
-                const project = {
-                    name: 'Demande de travaux rue Marceau',
-                    fileName: 'demandeTravaux.pdf',
-                    rapporteurId: 3,
-                    themeId: 4
-                };
-                this.projects.push(project);
-            },
-
             addProject(event) {
                 for (let i = 0; i < event.target.files.length; i++) {
                     let file = event.target.files[i];
                     let project = {
-                        name: getPrettyNameFromFileName(file.name),  //todo prettify
-                        fileName: file.name,  //remove use file.name in template instead
-                        file: file
+                        name: getPrettyNameFromFileName(file.name),
+                        file: file,
+                        annexes: []
                     };
                     this.projects.push(project);
                 }
@@ -120,11 +134,24 @@
             removeProject(index) {
                 this.projects.splice(index, 1);
             },
+            addAnnexes(event, project) {
+                console.log(event);
+                console.log(project);
+                for (let i = 0; i < event.target.files.length; i++) {
+                    let file = event.target.files[i];
+                    let annex = {
+                        file: file,
+                    };
+                    project.annexes.push(annex);
+                }
+            },
+            deleteAnnex(annexes, index) {
+                annexes.splice(index, 1);
+            },
 
             save() {
                 formatData();
             },
-
 
 
             http() {
@@ -143,8 +170,8 @@
         console.log('ooooo');
     }
 
-    function getPrettyNameFromFileName(fileName){
-        return fileName.replace(/\.[^/.]+$/, "").replace(/_/g," ");
+    function getPrettyNameFromFileName(fileName) {
+        return fileName.replace(/\.[^/.]+$/, "").replace(/_/g, " ");
     }
 
 
