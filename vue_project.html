@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+</head>
+
+<body>
+<div class="container">
+
+    <div class="row">
+        <div class="col-12">
+            <div id="app">
+                <input type="file" class="btn btn-info" @change="addProject($event)" multiple>
+
+                <div class="mt-4"></div>
+
+                <div v-for="(project, index) in projects" class="jumbotron">
+                    <div class="row">
+                        <div class="col-1">
+                            <span class="badge badge-primary" style="font-size: 1.5em">{{index + 1}}</span>
+                        </div>
+
+                        <div class="col-5">
+                            <textarea v-model="project.name" class="form-control"> </textarea>
+                        </div>
+
+                        <div class="col-5">
+                            <b>{{project.fileName}}</b>
+                        </div>
+
+                        <div class="col-1">
+                            <button class="btn btn-danger" v-on:click="removeProject(index)">del</button>
+                        </div>
+
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-1">
+                            <b>Rapporteur</b>
+                        </div>
+
+                        <div class="col-4">
+                            <select v-model="project.rapporteurId" class="form-control">
+                                <option v-for="rapporteur in rapporteurs" v-bind:value="rapporteur.id">
+                                    {{ rapporteur.firstName }} {{ rapporteur.lastName }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <select v-model="project.themeId" class="form-control">
+                                <option v-for="theme in themes" v-bind:value="theme.value">
+                                    {{ theme.text }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <button v-if="projects.length > 0" class="btn btn-success" @click="save()">Enregistrer</button>
+
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+    var app = new Vue({
+        el: "#app",
+        data: {
+            projects: [],
+            themes: [
+                {text: 'Urbanisme', value: 1},
+                {text: 'Ecole', value: 2},
+                {text: 'RH', value: 3},
+                {text: 'Budget, finance', value: 4},
+            ],
+
+            rapporteurs: [
+                {firstName: 'Thomas', lastName: 'Durant', id: 1},
+                {firstName: 'Arnaud', lastName: 'Auzolat', id: 2},
+                {firstName: 'Maxime', lastName: 'Bertrand', id: 3},
+                {firstName: 'Estelle', lastName: 'Martin', id: 4},
+            ],
+        },
+
+        methods: {
+            addProjectFake() {
+                const project = {
+                    name: 'Demande de travaux rue Marceau',
+                    fileName: 'demandeTravaux.pdf',
+                    rapporteurId: 3,
+                    themeId: 4
+                };
+                this.projects.push(project);
+            },
+
+            addProject(event) {
+                for (let i = 0; i < event.target.files.length; i++) {
+                    let file = event.target.files[i];
+                    let project = {
+                        name: getPrettyNameFromFileName(file.name),  //todo prettify
+                        fileName: file.name,  //remove use file.name in template instead
+                        file: file
+                    };
+                    this.projects.push(project);
+                }
+            },
+
+            removeProject(index) {
+                this.projects.splice(index, 1);
+            },
+
+            save() {
+                formatData();
+            },
+
+
+
+            http() {
+                axios
+                    .get('https://api.coindesk.com/v1/bpi/currentprice.json')
+                    .then(response => (this.info = response))
+            }
+        },
+        mounted() {
+            console.log('mounted');
+        }
+
+    });
+
+    function formatData() {
+        console.log('ooooo');
+    }
+
+    function getPrettyNameFromFileName(fileName){
+        return fileName.replace(/\.[^/.]+$/, "").replace(/_/g," ");
+    }
+
+
+</script>
+
+</body>
+</html>
