@@ -41,7 +41,19 @@ let app = new Vue({
         },
 
         save() {
-            formatData();
+            let formData = new FormData();
+            formData.append('projects', JSON.stringify(this.projects));
+
+            for(let i = 0; i< this.projects.length; i++){
+                formData.append(`projet_${i}_rapport`, this.projects[i].file, this.projects[i].file.name );
+                for(let j = 0; j< this.projects[i].annexes.length; j++){
+                    formData.append(`projet_${i}_${j}_annexe`, this.projects[i].annexes[j].file, this.projects[i].annexes[j].file.name);
+                }
+            }
+
+            axios.post('/api/themes', formData).then(response => {
+                console.log(response);
+            });
         },
 
 
@@ -58,7 +70,7 @@ let app = new Vue({
 });
 
 function formatData() {
-    console.log('ooooo');
+
 }
 
 function getPrettyNameFromFileName(fileName) {
