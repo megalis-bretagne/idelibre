@@ -19,6 +19,7 @@ let app = new Vue({
                     annexes: [],
                     themeId: null,
                     rapporteurId: null,
+                    linkedFile: null
                 };
                 this.projects.push(project);
             }
@@ -32,6 +33,7 @@ let app = new Vue({
                 let file = event.target.files[i];
                 let annex = {
                     file: file,
+                    linkedFile: null
                 };
                 project.annexes.push(annex);
             }
@@ -42,14 +44,8 @@ let app = new Vue({
 
         save() {
             let formData = new FormData();
+            addProjectAndAnnexeFiles(this.projects, formData);
             formData.append('projects', JSON.stringify(this.projects));
-
-            for(let i = 0; i< this.projects.length; i++){
-                formData.append(`projet_${i}_rapport`, this.projects[i].file, this.projects[i].file.name );
-                for(let j = 0; j< this.projects[i].annexes.length; j++){
-                    formData.append(`projet_${i}_${j}_annexe`, this.projects[i].annexes[j].file, this.projects[i].annexes[j].file.name);
-                }
-            }
 
             axios.post('/api/themes', formData).then(response => {
                 console.log(response);
@@ -69,8 +65,22 @@ let app = new Vue({
     }
 });
 
-function formatData() {
+function addProjectAndAnnexeFiles(projects, formData) {
+    for (let i = 0; i < projects.length; i++) {
+        formData.append(`projet_${i}_rapport`, projects[i].file, projects[i].file.name);
+        projects[i].linkedFile = `projet_${i}_rapport`;
+        addAnnexeFiles(projects[i], i, formData);
+    }
+}
 
+function addAnnexeFiles(project, index, formData) {
+    if (!project.annexes) {
+        return;
+    }
+    for (let j = 0; j < project.annexes.length; j++) {
+        formData.append(`projet_${index}_${j}_annexe`, project.annexes[j].file, project.annexes[j].file.name);
+        project.annexes[j].linkedFile = `projet_${index}_${j}_annexe`;
+    }
 }
 
 function getPrettyNameFromFileName(fileName) {
@@ -87,3 +97,4 @@ function setThemeLevelName(themes) {
     }
     return themes;
 }
+
