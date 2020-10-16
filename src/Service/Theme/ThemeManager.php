@@ -81,4 +81,18 @@ class ThemeManager
         $this->em->persist($theme);
         $this->em->flush();
     }
+
+    /**
+     * @return Theme[]
+     */
+    public function getThemesFromStructure(Structure $structure): array
+    {
+        $rootTheme = $this->themeRepository->findOneBy(['name' => 'ROOT', 'structure' => $structure]);
+
+        if (!empty($rootTheme)) {
+            $themes = $this->themeRepository->getChildren($rootTheme, false, ['fullName']);
+        }
+
+        return $themes ?? [];
+    }
 }

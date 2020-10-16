@@ -26,7 +26,7 @@
                         <div class="alert alert-secondary">
                             <div class="row">
                                 <div class="col-1">
-                                    <span class="badge badge-primary" style="font-size: 1.5em">{{index + 1}}</span>
+                                    <span class="badge badge-primary" style="font-size: 1.5em">${index + 1}</span>
                                 </div>
 
                                 <div class="col-5">
@@ -34,7 +34,7 @@
                                 </div>
 
                                 <div class="col-5">
-                                    <b>{{project.file.name}}</b>
+                                    <b>${project.file.name}</b>
                                 </div>
 
                                 <div class="col-1">
@@ -51,14 +51,14 @@
                                 <div class="col-4">
                                     <select v-model="project.rapporteurId" class="form-control">
                                         <option v-for="rapporteur in rapporteurs" v-bind:value="rapporteur.id">
-                                            {{ rapporteur.firstName }} {{ rapporteur.lastName }}
+                                            ${ rapporteur.firstName } ${ rapporteur.lastName }
                                         </option>
                                     </select>
                                 </div>
                                 <div class="col-6">
                                     <select v-model="project.themeId" class="form-control">
                                         <option v-for="theme in themes" v-bind:value="theme.value">
-                                            {{ theme.text }}
+                                            ${ theme.text }
                                         </option>
                                     </select>
                                 </div>
@@ -73,8 +73,8 @@
                         <draggable v-model="project.annexes">
                             <div class="col-10 offset-1 alert alert-info" v-for="(annex, index) in project.annexes">
                                 <div class="row">
-                                    <div class="col-1">{{index + 1}}</div>
-                                    <div class="col-10">{{annex.file.name}}</div>
+                                    <div class="col-1">${index + 1}</div>
+                                    <div class="col-10">${annex.file.name}</div>
                                     <div class="col-1">
                                         <button class="btn btn-danger" @click="deleteAnnex(project.annexes, index)">del
                                         </button>
@@ -99,7 +99,8 @@
 
 
 <script>
-    var app = new Vue({
+    let app = new Vue({
+        delimiters: ['${', '}'],
         el: "#app",
         data: {
             projects: [],
@@ -135,8 +136,6 @@
                 this.projects.splice(index, 1);
             },
             addAnnexes(event, project) {
-                console.log(event);
-                console.log(project);
                 for (let i = 0; i < event.target.files.length; i++) {
                     let file = event.target.files[i];
                     let annex = {

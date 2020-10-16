@@ -17,6 +17,15 @@
     "php": {
         "version": "7.4"
     },
+    "phpdocumentor/reflection-common": {
+        "version": "2.2.0"
+    },
+    "phpdocumentor/reflection-docblock": {
+        "version": "5.2.2"
+    },
+    "phpdocumentor/type-resolver": {
+        "version": "1.4.0"
+    },
     "stof/doctrine-extensions-bundle": {
         "version": "1.2",
         "recipe": {
@@ -47,6 +56,12 @@
     "symfony/polyfill-intl-idn": {
         "version": "v1.18.1"
     },
+    "symfony/serializer": {
+        "version": "v5.1.7"
+    },
+    "symfony/serializer-pack": {
+        "version": "v1.0.3"
+    },
     "symfony/swiftmailer-bundle": {
         "version": "2.5",
         "recipe": {
@@ -60,5 +75,8 @@
             "config/packages/swiftmailer.yaml",
             "config/packages/test/swiftmailer.yaml"
         ]
+    },
+    "webmozart/assert": {
+        "version": "1.9.1"
     }
 }
