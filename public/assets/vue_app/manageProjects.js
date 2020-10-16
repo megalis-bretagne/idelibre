@@ -47,7 +47,7 @@ let app = new Vue({
             addProjectAndAnnexeFiles(this.projects, formData);
             formData.append('projects', JSON.stringify(this.projects));
 
-            axios.post('/api/themes', formData).then(response => {
+            axios.post('/api/projects', formData).then(response => {
                 console.log(response);
             });
         },
