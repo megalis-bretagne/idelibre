@@ -17,26 +17,54 @@
 
 <div id="app">
     <div>
-        <v-select :reduce="item => item.id" label="text" v-bind:options="myOptions">
+        <v-select  :reduce="item => item.id" label="text" v-bind:options="myOptions">
             <template #selected-option="{ fullName }">
-                <strong> ${fullName }</strong>
+                <strong>{{  fullName }}</strong>
             </template>
         </v-select>
     </div>
 
+    <div>
+        <button class="btn btn-primary" v-on:click="http()"> Http</button>
+        <br>
+        {{info}}
+    </div>
+
+    login : <input type="text" v-model="user.name"> | {{user.name}}
+
+
+    <h2 v-if="commande.length > 0"> Liste des produits commandé</h2>
+    <br>
+    {{commande}}
+    <br>
+    <ul>
+        <li v-for="prod in commande">
+            {{prod}}
+        </li>
+    </ul>
+
+    <br>
+    <br>
+    <br>
+
+    <div v-for="produit in produits">
+        {{produit}}
+        <button class="btn btn-primary" v-on:click="order(produit)"> Commander</button>
+    </div>
+
 </div>
+
 
 <script>
     Vue.component('v-select', VueSelect.VueSelect);
 
     var app = new Vue({
-        delimiters: ['${', '}'],
         el: "#app",
         data: {
             info: {},
             myOptions: [
-                {text: 'elea', id: 15, fullName: "elea amice"},
-                {text: 'gribouille', id: 22, fullName: "gribouille dubourget"}
+                {text : 'elea', id: 15, fullName: "elea amice"},
+                {text : 'gribouille', id: 22, fullName: "gribouille dubourget"}
             ],
             user: {
                 name: 'Rémi'
@@ -57,7 +85,7 @@
                     .then(response => (this.info = response))
             }
         },
-        mounted() {
+        mounted () {
             console.log('mounted');
         }
 
