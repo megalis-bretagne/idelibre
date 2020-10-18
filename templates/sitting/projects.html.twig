@@ -32,7 +32,7 @@
     </div>
 
 
-    <div class="col-10 offset-1 mt-4" id="app">
+    <div v-cloak class="col-10 offset-1 mt-4 " id="app">
 
         <label class="custom-file-upload btn btn-primary" title="Ajouter des projets">
             <input type="file" accept=".pdf,.PDF" multiple @change="addProject($event)">
@@ -40,7 +40,13 @@
         </label>
 
         <div class="mt-4"></div>
-        <draggable v-model="projects">
+
+        <div v-if="projects.length == 0" class="text-center">
+            Aucun projet associé
+        </div>
+
+
+        <draggable v-model="projects" class="bg-white">
 
             <div v-for="(project, index) in projects">
                 <div class="alert alert-secondary">

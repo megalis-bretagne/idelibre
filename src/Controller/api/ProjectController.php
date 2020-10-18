@@ -20,38 +20,6 @@ class ProjectController extends AbstractController
 {
 
     /**
-     * @Route("/api/check", name="api_check", methods={"GET"})
-     */
-    public function check(SerializerInterface $serializer)
-    {
-        $annex1 = new ClientAnnex();
-        $annex1->linkedFile='mnFichierAnnex';
-
-        $annex2 = new ClientAnnex();
-        $annex2->linkedFile='Un autre fichier annex';
-
-        $projet = new ClientProject();
-        $projet->setName('premier')
-            ->setRapporteurId('azazaz')
-            ->setThemeId('rerere')
-            ->setAnnexes([$annex1, $annex2]);
-
-        $projet2 = new ClientProject();
-        $projet2->setName('deuxieme');
-
-        $projects = [$projet, $projet2];
-
-        $serialized = $serializer->serialize($projects, 'json');
-
-
-
-        $clientProject = $serializer->deserialize($serialized, ClientProject::class .'[]', 'json');
-
-        dd($clientProject);
-
-    }
-
-    /**
      * @Route("/api/projects/{id}", name="api_project_add", methods={"POST"})
      * @IsGranted("MANAGE_SITTINGS", subject="sitting")
      */
@@ -61,8 +29,6 @@ class ProjectController extends AbstractController
         $projects = $serializer->deserialize($rawProjects, ClientProject::class . '[]', 'json');
 
         $projectManager->update($projects, $request->files->all(), $sitting);
-
-
 
         return $this->json(['reception' => 'ok']);
     }
