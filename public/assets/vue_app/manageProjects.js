@@ -47,7 +47,7 @@ let app = new Vue({
             addProjectAndAnnexeFiles(this.projects, formData);
             formData.append('projects', JSON.stringify(this.projects));
 
-            axios.post('/api/projects', formData).then(response => {
+            axios.post(`/api/projects/${getSittingId()}`, formData).then(response => {
                 console.log(response);
             });
         },
@@ -69,6 +69,7 @@ function addProjectAndAnnexeFiles(projects, formData) {
     for (let i = 0; i < projects.length; i++) {
         formData.append(`projet_${i}_rapport`, projects[i].file, projects[i].file.name);
         projects[i].linkedFile = `projet_${i}_rapport`;
+        projects[i].rank = i;
         addAnnexeFiles(projects[i], i, formData);
     }
 }
@@ -80,6 +81,7 @@ function addAnnexeFiles(project, index, formData) {
     for (let j = 0; j < project.annexes.length; j++) {
         formData.append(`projet_${index}_${j}_annexe`, project.annexes[j].file, project.annexes[j].file.name);
         project.annexes[j].linkedFile = `projet_${index}_${j}_annexe`;
+        project.annexes[j].rank = j;
     }
 }
 
@@ -98,3 +100,6 @@ function setThemeLevelName(themes) {
     return themes;
 }
 
+function getSittingId() {
+    return window.location.pathname.split('/')[2];
+}
