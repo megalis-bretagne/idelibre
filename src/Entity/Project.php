@@ -28,11 +28,6 @@ class Project
      */
     private $rank;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Structure::class)
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $structure;
 
     /**
      * @ORM\OneToOne(targetEntity=File::class, cascade={"persist", "remove"})
@@ -54,6 +49,12 @@ class Project
      * @ORM\Column(type="datetime_immutable")
      */
     private $createdAt;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Sitting::class, inversedBy="projects")
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     */
+    private $sitting;
 
     public function __construct()
     {
@@ -89,17 +90,7 @@ class Project
         return $this;
     }
 
-    public function getStructure(): ?Structure
-    {
-        return $this->structure;
-    }
 
-    public function setStructure(?Structure $structure): self
-    {
-        $this->structure = $structure;
-
-        return $this;
-    }
 
     public function getFile(): ?File
     {
@@ -140,6 +131,18 @@ class Project
     public function getCreatedAt(): ?DateTimeImmutable
     {
         return $this->createdAt;
+    }
+
+    public function getSitting(): ?Sitting
+    {
+        return $this->sitting;
+    }
+
+    public function setSitting(?Sitting $sitting): self
+    {
+        $this->sitting = $sitting;
+
+        return $this;
     }
 
 }

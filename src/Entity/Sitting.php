@@ -82,10 +82,16 @@ class Sitting
      */
     private $file;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Project::class, mappedBy="sitting")
+     */
+    private $projects;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->convocations = new ArrayCollection();
+        $this->projects = new ArrayCollection();
     }
 
 
@@ -222,6 +228,37 @@ class Sitting
     public function setFile(?File $file): self
     {
         $this->file = $file;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Project[]
+     */
+    public function getProjects(): Collection
+    {
+        return $this->projects;
+    }
+
+    public function addProject(Project $project): self
+    {
+        if (!$this->projects->contains($project)) {
+            $this->projects[] = $project;
+            $project->setSitting($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProject(Project $project): self
+    {
+        if ($this->projects->contains($project)) {
+            $this->projects->removeElement($project);
+            // set the owning side to null (unless already changed)
+            if ($project->getSitting() === $this) {
+                $project->setSitting(null);
+            }
+        }
 
         return $this;
     }

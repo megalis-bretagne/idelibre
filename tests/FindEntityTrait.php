@@ -2,6 +2,8 @@
 
 namespace App\Tests;
 
+use App\Entity\Sitting;
+
 trait FindEntityTrait
 {
     public function getOneEntityBy($entityClass, array $criteria)
@@ -12,5 +14,11 @@ trait FindEntityTrait
         $repository = $this->entityManager->getRepository($entityClass);
 
         return $repository->findOneBy($criteria);
+    }
+
+
+    public function getOneSittingBy(array $criteria): Sitting
+    {
+        return $this->getOneEntityBy(Sitting::class, $criteria);
     }
 }

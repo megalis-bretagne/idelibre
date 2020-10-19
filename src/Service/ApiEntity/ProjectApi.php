@@ -1,22 +1,24 @@
 <?php
 
 
-namespace App\Service\ClientEntity;
+namespace App\Service\ApiEntity;
 
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-class ClientProject
+class ProjectApi
 {
 
+    private ?string $id = null;
     /**
      * @Assert\NotBlank(message="Un projet doit avoir un nom")
      * @Assert\Length(max="Le nom du projet ne doit pas excéder 500 carractères")
      */
     private ?string $name;
     private ?string $themeId = null;
-    private ?string $rapporteurId = null;
+    private ?string $reporterId = null;
     private ?string $linkedFile = null;
+
     /**
      * @Assert\NotBlank()
      */
@@ -24,7 +26,7 @@ class ClientProject
 
 
     /**
-     * @var ClientAnnex[]
+     * @var AnnexApi[]
      */
     private $annexes = [];
 
@@ -38,9 +40,9 @@ class ClientProject
 
     /**
      * @param string|null $name
-     * @return ClientProject
+     * @return ProjectApi
      */
-    public function setName(?string $name): ClientProject
+    public function setName(?string $name): ProjectApi
     {
         $this->name = $name;
         return $this;
@@ -56,9 +58,9 @@ class ClientProject
 
     /**
      * @param string|null $themeId
-     * @return ClientProject
+     * @return ProjectApi
      */
-    public function setThemeId(?string $themeId): ClientProject
+    public function setThemeId(?string $themeId): ProjectApi
     {
         $this->themeId = $themeId;
         return $this;
@@ -67,18 +69,18 @@ class ClientProject
     /**
      * @return string|null
      */
-    public function getRapporteurId(): ?string
+    public function getReporterId(): ?string
     {
-        return $this->rapporteurId;
+        return $this->reporterId;
     }
 
     /**
-     * @param string|null $rapporteurId
-     * @return ClientProject
+     * @param string|null $reporterId
+     * @return ProjectApi
      */
-    public function setRapporteurId(?string $rapporteurId): ClientProject
+    public function setReporterId(?string $reporterId): ProjectApi
     {
-        $this->rapporteurId = $rapporteurId;
+        $this->reporterId = $reporterId;
         return $this;
     }
 
@@ -92,16 +94,16 @@ class ClientProject
 
     /**
      * @param string|null $linkedFile
-     * @return ClientProject
+     * @return ProjectApi
      */
-    public function setLinkedFile(?string $linkedFile): ClientProject
+    public function setLinkedFile(?string $linkedFile): ProjectApi
     {
         $this->linkedFile = $linkedFile;
         return $this;
     }
 
     /**
-     * @return ClientAnnex[]
+     * @return AnnexApi[]
      */
     public function getAnnexes(): array
     {
@@ -109,10 +111,10 @@ class ClientProject
     }
 
     /**
-     * @param ClientAnnex[] $annexes
-     * @return ClientProject
+     * @param AnnexApi[] $annexes
+     * @return ProjectApi
      */
-    public function setAnnexes(array $annexes): ClientProject
+    public function setAnnexes(array $annexes): ProjectApi
     {
         $this->annexes = $annexes;
         return $this;
@@ -128,11 +130,29 @@ class ClientProject
 
     /**
      * @param int|null $rank
-     * @return ClientProject
+     * @return ProjectApi
      */
-    public function setRank(?int $rank): ClientProject
+    public function setRank(?int $rank): ProjectApi
     {
         $this->rank = $rank;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getId(): ?string
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param string|null $id
+     * @return ProjectApi
+     */
+    public function setId(?string $id): ProjectApi
+    {
+        $this->id = $id;
         return $this;
     }
 
