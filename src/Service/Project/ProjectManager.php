@@ -4,6 +4,7 @@
 namespace App\Service\Project;
 
 
+use App\Entity\Annex;
 use App\Entity\Project;
 use App\Entity\Sitting;
 use App\Entity\Structure;
@@ -12,6 +13,7 @@ use App\Entity\User;
 use App\Repository\ProjectRepository;
 use App\Repository\ThemeRepository;
 use App\Repository\UserRepository;
+use App\Service\ApiEntity\AnnexApi;
 use App\Service\ApiEntity\ProjectApi;
 use App\Service\File\FileManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -95,14 +97,11 @@ class ProjectManager
             ->setReporter($this->getReporter($clientProject->getReporterId()))
             ->setTheme($this->getTheme($clientProject->getThemeId()))
             ->setSitting($sitting)
-            ->setFile($this->fileManager->save($uploadedFile, $sitting->getStructure()))
-            ->setAnnexes($this->createAnnexes($clientProject, $uploadedFiles, $sitting->getStructure()));
+            ->setFile($this->fileManager->save($uploadedFile, $sitting->getStructure()));
 
-
-        // TODO validate
+        $this->createAndAddAnnexesToProject($project, $clientProject->getAnnexes(), $uploadedFiles, $sitting->getStructure());
 
         $this->em->persist($project);
-
 
         return $project;
     }
@@ -139,8 +138,63 @@ class ProjectManager
 
     /**
      * @param UploadedFile[] $uploadedFiles
+     * @param AnnexApi[] $clientAnnexes
      */
-    private function createAnnexes(ProjectApi $clientProject, array $uploadedFiles, Structure $structure)
+    private function createAndAddAnnexesToProject(Project $project, array $clientAnnexes, array $uploadedFiles, Structure $structure)
     {
+        foreach ($clientAnnexes as $clientAnnex) {
+            if (!isset($uploadedFiles[$clientAnnex->getLinkedFile()])) {
+                throw new BadRequestException('Le fichier de l\'annexe n\'hexiste pas');
+            }
+
+            $annex = new Annex();
+            $annex->setRank($clientAnnex->getRank())
+                ->setProject($project)
+                ->setFile($this->fileManager->save($uploadedFiles[$clientAnnex->getLinkedFile()], $structure));
+            $this->em->persist($annex);
+        }
     }
+
+    public function getProjectsFromSitting(Sitting $sitting)
+    {
+        // TODO query with linked entities
+        return $this->projectRepository->findBy(['sitting' => $sitting]);
+    }
+
+    /**
+     * @param project[] $projects
+     * @return ProjectApi[]
+     */
+    public function getApiProjectsFromProjects(array $projects): array
+    {
+        $apiProjects = [];
+        foreach ($projects as $project) {
+            $apiProject = new ProjectApi();
+            $apiProject->setName($project->getName())
+                ->setRank($project->getRank())
+                ->setThemeId($project->getTheme()->getId())
+                ->setReporterId($project->getReporter()->getId())
+                ->setAnnexes($this->getApiAnnexesFromAnnexes($project->getAnnexes()));
+            $apiProjects[] = $apiProject;
+        }
+        return $apiProjects;
+    }
+
+
+    /**
+     * @param annex[] $annexes
+     * @return AnnexApi[]
+     */
+    public function getApiAnnexesFromAnnexes(array $annexes):array
+    {
+        $apiAnnexes = [];
+        foreach ($annexes as $annex) {
+            $annexApi = new AnnexApi();
+            $annexApi->setRank($annex->getRank());
+            $apiAnnexes[] = $annexApi;
+        }
+        return $apiAnnexes;
+    }
+
+
 }

@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\ProjectRepository;
 use DateTimeImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -56,9 +58,15 @@ class Project
      */
     private $sitting;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Annex::class, mappedBy="project")
+     */
+    private $annexes;
+
     public function __construct()
     {
         $this->createdAt = new DateTimeImmutable();
+        $this->annexes = new ArrayCollection();
     }
 
     public function getId(): ?string
@@ -89,7 +97,6 @@ class Project
 
         return $this;
     }
-
 
 
     public function getFile(): ?File
@@ -141,6 +148,49 @@ class Project
     public function setSitting(?Sitting $sitting): self
     {
         $this->sitting = $sitting;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Annex[]
+     */
+    public function getAnnexes(): Collection
+    {
+        return $this->annexes;
+    }
+
+    public function addAnnex(Annex $annex): self
+    {
+        if (!$this->annexes->contains($annex)) {
+            $this->annexes[] = $annex;
+            $annex->setProject($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Annex[] $annexes
+     */
+    public function addAnnexes(array $annexes): self
+    {
+        foreach ($annexes as $annex) {
+            $this->addAnnex($annex);
+        }
+        return $this;
+    }
+
+
+    public function removeAnnex(Annex $annex): self
+    {
+        if ($this->annexes->contains($annex)) {
+            $this->annexes->removeElement($annex);
+            // set the owning side to null (unless already changed)
+            if ($annex->getProject() === $this) {
+                $annex->setProject(null);
+            }
+        }
 
         return $this;
     }
