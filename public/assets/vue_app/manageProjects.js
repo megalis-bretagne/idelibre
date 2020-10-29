@@ -6,7 +6,7 @@ let app = new Vue({
     data: {
         projects: [],
         themes: [],
-        rapporteurs: [],
+        reporters: [],
     },
 
     methods: {
@@ -15,11 +15,13 @@ let app = new Vue({
                 let file = event.target.files[i];
                 let project = {
                     name: getPrettyNameFromFileName(file.name),
+                    fileName: file.name,
                     file: file,
                     annexes: [],
                     themeId: null,
-                    rapporteurId: null,
-                    linkedFile: null
+                    reporterId: null,
+                    linkedFileKey: null,
+                    id: null
                 };
                 this.projects.push(project);
             }
@@ -33,7 +35,9 @@ let app = new Vue({
                 let file = event.target.files[i];
                 let annex = {
                     file: file,
-                    linkedFile: null
+                    linkedFileKey: null,
+                    fileName: file.name,
+                    id: null
                 };
                 project.annexes.push(annex);
             }
@@ -45,6 +49,7 @@ let app = new Vue({
         save() {
             let formData = new FormData();
             addProjectAndAnnexeFiles(this.projects, formData);
+            setProjectsRank(this.projects);
             formData.append('projects', JSON.stringify(this.projects));
 
             axios.post(`/api/projects/${getSittingId()}`, formData).then(response => {
@@ -58,18 +63,24 @@ let app = new Vue({
         Promise.all([
             axios.get('/api/themes'),
             axios.get('/api/actors'),
+            axios.get(`/api/projects/${getSittingId()}`)
+
         ]).then((response) => {
             this.themes = setThemeLevelName(response[0].data);
-            this.rapporteurs = response[1].data
+            this.reporters = response[1].data;
+            this.projects = response[2].data;
         });
     }
 });
 
+
 function addProjectAndAnnexeFiles(projects, formData) {
     for (let i = 0; i < projects.length; i++) {
-        formData.append(`projet_${i}_rapport`, projects[i].file, projects[i].file.name);
-        projects[i].linkedFile = `projet_${i}_rapport`;
-        projects[i].rank = i;
+        if (isNewProject(projects[i])) {
+            formData.append(`projet_${i}_rapport`, projects[i].file, projects[i].file.name);
+            projects[i].linkedFileKey = `projet_${i}_rapport`;
+          //  projects[i].rank = i;
+        }
         addAnnexeFiles(projects[i], i, formData);
     }
 }
@@ -79,9 +90,10 @@ function addAnnexeFiles(project, index, formData) {
         return;
     }
     for (let j = 0; j < project.annexes.length; j++) {
-        formData.append(`projet_${index}_${j}_annexe`, project.annexes[j].file, project.annexes[j].file.name);
-        project.annexes[j].linkedFile = `projet_${index}_${j}_annexe`;
-        project.annexes[j].rank = j;
+        if (isNewAnnex(project.annexes[j]))
+            formData.append(`projet_${index}_${j}_annexe`, project.annexes[j].file, project.annexes[j].file.name);
+        project.annexes[j].linkedFileKey = `projet_${index}_${j}_annexe`;
+        //project.annexes[j].rank = j;
     }
 }
 
@@ -102,4 +114,27 @@ function setThemeLevelName(themes) {
 
 function getSittingId() {
     return window.location.pathname.split('/')[2];
+}
+
+function isNewProject(project) {
+    return !project.id;
+}
+
+function isNewAnnex(annex) {
+    return !annex.id;
+}
+
+function setProjectsRank(projects) {
+    for (let i = 0; i < projects.length; i++) {
+        projects[i].rank = i;
+        setAnnexesRank(projects[i].annexes)
+    }
+
+}
+
+
+function setAnnexesRank(annexes) {
+    for (let i = 0; i < annexes.length; i++) {
+        annexes[i].rank = i;
+    }
 }

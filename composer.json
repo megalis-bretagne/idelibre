@@ -48,7 +48,8 @@
         "doctrine/doctrine-fixtures-bundle": "^3.3",
         "liip/test-fixtures-bundle": "^1.7",
         "symfony/css-selector": "5.1.*",
-        "symfony/phpunit-bridge": "^5.1"
+        "symfony/phpunit-bridge": "^5.1",
+      "ext-json": "*"
     },
     "config": {
         "optimize-autoloader": true,

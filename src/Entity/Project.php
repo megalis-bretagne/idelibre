@@ -60,6 +60,7 @@ class Project
 
     /**
      * @ORM\OneToMany(targetEntity=Annex::class, mappedBy="project")
+     * @ORM\OrderBy({"rank" = "ASC"})
      */
     private $annexes;
 

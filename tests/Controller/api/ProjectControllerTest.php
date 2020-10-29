@@ -2,8 +2,13 @@
 
 namespace App\Tests\Controller\api;
 
-use App\DataFixtures\SittingFixtures;
+use App\DataFixtures\AnnexFixtures;
+use App\DataFixtures\FileFixtures;
+use App\DataFixtures\ProjectFixtures;
+use App\DataFixtures\ThemeFixtures;
 use App\DataFixtures\UserFixtures;
+use App\Entity\Project;
+use App\Repository\ProjectRepository;
 use App\Service\ApiEntity\AnnexApi;
 use App\Service\ApiEntity\ProjectApi;
 use App\Tests\FindEntityTrait;
@@ -15,6 +20,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Serializer\Serializer;
 
 class ProjectControllerTest extends WebTestCase
 {
@@ -29,7 +35,7 @@ class ProjectControllerTest extends WebTestCase
      */
     private $entityManager;
     /**
-     * @var object|\Symfony\Component\Serializer\Serializer|null
+     * @var object|Serializer|null
      */
     private $serializer;
 
@@ -47,8 +53,12 @@ class ProjectControllerTest extends WebTestCase
             ->get('serializer');
 
         $this->loadFixtures([
-            SittingFixtures::class,
-            UserFixtures::class
+            ProjectFixtures::class,
+            UserFixtures::class,
+            AnnexFixtures::class,
+            FileFixtures::class,
+            ThemeFixtures::class
+
         ]);
     }
 
@@ -60,15 +70,15 @@ class ProjectControllerTest extends WebTestCase
     }
 
 
-    public function testAdd()
+    public function testEdit()
     {
         $sitting = $this->getOneSittingBy(['name' => ['Conseil Libriciel']]);
         $this->loginAsAdminLibriciel();
 
         $filesystem = new Filesystem();
-        $filesystem->copy(__DIR__ .'/../../resources/fichier.pdf', __DIR__ . '/../../resources/project1.pdf');
-        $filesystem->copy(__DIR__ .'/../../resources/fichier.pdf', __DIR__ . '/../../resources/project2.pdf');
-        $filesystem->copy(__DIR__ .'/../../resources/fichier.pdf', __DIR__ . '/../../resources/annex1.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/project1.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/project2.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/annex1.pdf');
 
         $fileProject1 = new UploadedFile(__DIR__ . '/../../resources/project1.pdf', 'fichier.pdf', 'application/pdf');
         $fileProject2 = new UploadedFile(__DIR__ . '/../../resources/project2.pdf', 'fichier.pdf', 'application/pdf');
@@ -76,23 +86,23 @@ class ProjectControllerTest extends WebTestCase
 
 
         $annex = new AnnexApi();
-        $annex->setLinkedFile('annex1')
+        $annex->setLinkedFileKey('annex1')
             ->setRank(0);
 
         $project1 = new ProjectApi();
         $project1->setName("first Project")
             ->setRank(0)
-            ->setLinkedFile('project1')
+            ->setLinkedFileKey('project1')
             ->setAnnexes([$annex]);
 
         $project2 = new ProjectApi();
         $project2->setName("second project")
             ->setRank(1)
-            ->setLinkedFile('project2');
+            ->setLinkedFileKey('project2');
 
         $serializedProjects = $this->serializer->serialize([$project1, $project2], 'json');
 
-        $response = $this->client->request(Request::METHOD_POST,
+        $this->client->request(Request::METHOD_POST,
             '/api/projects/' . $sitting->getId(),
             ['projects' => $serializedProjects],
             [
@@ -102,7 +112,33 @@ class ProjectControllerTest extends WebTestCase
             ]
         );
 
-        dd($response);
+        $this->assertResponseStatusCodeSame(200);
+
+        /** @var ProjectRepository $projectRepository */
+        $projectRepository = $this->entityManager->getRepository(Project::class);
+        $project = $projectRepository->findOneBy(['name' => 'first Project']);
+        $this->assertNotEmpty($project);
+        $this->assertNotEmpty($project->getAnnexes());
+
+    }
+
+
+    public function testGetProjectsFromSitting()
+    {
+        $this->loginAsAdminLibriciel();
+        $sitting = $this->getOneSittingBy(['name' => ['Conseil Libriciel']]);
+
+        $this->client->request(Request::METHOD_GET, '/api/projects/' . $sitting->getId());
+        $this->assertResponseStatusCodeSame(200);
+
+        $projectsArray = json_decode($this->client->getResponse()->getContent(), true);
+
+        $this->assertCount(2, $projectsArray);
+        $this->assertEquals("Project 1", $projectsArray[0]['name']);
+        $this->assertNotEmpty($projectsArray[0]['themeId']);
+        $this->assertNotEmpty($projectsArray[0]['reporterId']);
+        $this->assertCount(2, $projectsArray[0]['annexes']);
+        $this->assertNotEmpty($projectsArray[0]['annexes'][0]['fileName']);
 
     }
 

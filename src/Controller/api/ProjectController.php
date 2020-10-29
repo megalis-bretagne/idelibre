@@ -11,7 +11,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -22,7 +21,7 @@ class ProjectController extends AbstractController
      * @Route("/api/projects/{id}", name="api_project_add", methods={"POST"})
      * @IsGranted("MANAGE_SITTINGS", subject="sitting")
      */
-    public function add(Sitting $sitting, Request $request, SerializerInterface $serializer, ProjectManager $projectManager): JsonResponse
+    public function edit(Sitting $sitting, Request $request, SerializerInterface $serializer, ProjectManager $projectManager): JsonResponse
     {
 
         $rawProjects = $request->request->get('projects');
@@ -34,7 +33,7 @@ class ProjectController extends AbstractController
     }
 
     /**
-     * @Route("/api/projects/{id}", name="api_project_add", methods={"GET"})
+     * @Route("/api/projects/{id}", name="api_project_get", methods={"GET"})
      * @IsGranted("MANAGE_SITTINGS", subject="sitting")
      */
     public function getProjectsFromSitting(Sitting $sitting, SerializerInterface $serializer, ProjectManager $projectManager) :JsonResponse

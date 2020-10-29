@@ -17,7 +17,8 @@ class ProjectApi
     private ?string $name;
     private ?string $themeId = null;
     private ?string $reporterId = null;
-    private ?string $linkedFile = null;
+    private ?string $linkedFileKey = null;
+    private ?string $fileName = null;
 
     /**
      * @Assert\NotBlank()
@@ -87,18 +88,18 @@ class ProjectApi
     /**
      * @return string|null
      */
-    public function getLinkedFile(): ?string
+    public function getLinkedFileKey(): ?string
     {
-        return $this->linkedFile;
+        return $this->linkedFileKey;
     }
 
     /**
-     * @param string|null $linkedFile
+     * @param string|null $linkedFileKey
      * @return ProjectApi
      */
-    public function setLinkedFile(?string $linkedFile): ProjectApi
+    public function setLinkedFileKey(?string $linkedFileKey): ProjectApi
     {
-        $this->linkedFile = $linkedFile;
+        $this->linkedFileKey = $linkedFileKey;
         return $this;
     }
 
@@ -155,6 +156,26 @@ class ProjectApi
         $this->id = $id;
         return $this;
     }
+
+    /**
+     * @return string|null
+     */
+    public function getFileName(): ?string
+    {
+        return $this->fileName;
+    }
+
+    /**
+     * @param string|null $fileName
+     * @return ProjectApi
+     */
+    public function setFileName(?string $fileName): ProjectApi
+    {
+        $this->fileName = $fileName;
+        return $this;
+    }
+
+
 
 
 

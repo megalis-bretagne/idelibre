@@ -61,7 +61,7 @@
                         </div>
 
                         <div class="col-5">
-                            <b>${project.file.name}</b>
+                            <b>${project.fileName}</b>
                         </div>
 
                         <div class="col-1">
@@ -82,8 +82,8 @@
                         </div>
 
                         <div class="col-4">
-                            <v-select v-bind:options="rapporteurs"
-                                      v-model="project.rapporteurId"
+                            <v-select v-bind:options="reporters"
+                                      v-model="project.reporterId"
                                       :reduce="item => item.id"
                                       label="lastName"
                                       class="bs-form-like">
@@ -119,7 +119,7 @@
                         <div class="col-10 offset-1" v-for="(annex, index) in project.annexes">
                             <div class="row">
                                 <span class="">${index + 1}</span>
-                                <div class="col-10">${annex.file.name}</div>
+                                <div class="col-10">${annex.fileName}</div>
                                 <div class="col-1">
                                     <button class="btn btn-outline-danger borderless"
                                             @click="deleteAnnex(project.annexes, index)">

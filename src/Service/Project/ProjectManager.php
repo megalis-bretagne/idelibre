@@ -10,6 +10,7 @@ use App\Entity\Sitting;
 use App\Entity\Structure;
 use App\Entity\Theme;
 use App\Entity\User;
+use App\Repository\AnnexRepository;
 use App\Repository\ProjectRepository;
 use App\Repository\ThemeRepository;
 use App\Repository\UserRepository;
@@ -24,25 +25,15 @@ class ProjectManager
 {
 
     private ProjectRepository $projectRepository;
-    /**
-     * @var UserRepository
-     */
     private UserRepository $userRepository;
-    /**
-     * @var ThemeRepository
-     */
     private ThemeRepository $themeRepository;
-    /**
-     * @var FileManager
-     */
     private FileManager $fileManager;
-    /**
-     * @var EntityManagerInterface
-     */
     private EntityManagerInterface $em;
+    private AnnexRepository $annexRepository;
 
     public function __construct(ProjectRepository $projectRepository,
                                 UserRepository $userRepository,
+                                AnnexRepository $annexRepository,
                                 ThemeRepository $themeRepository,
                                 FileManager $fileManager,
                                 EntityManagerInterface $em)
@@ -52,6 +43,7 @@ class ProjectManager
         $this->themeRepository = $themeRepository;
         $this->fileManager = $fileManager;
         $this->em = $em;
+        $this->annexRepository = $annexRepository;
     }
 
     /**
@@ -73,11 +65,10 @@ class ProjectManager
     private function createOrUpdateProject(ProjectApi $clientProject, array $uploadedFiles, Sitting $sitting): Project
     {
         if (!$clientProject->getId()) {
-
             return $this->createProject($clientProject, $uploadedFiles, $sitting);
         }
 
-        return $this->updateProject($clientProject);
+        return $this->updateProject($clientProject, $uploadedFiles, $sitting->getStructure());
 
     }
 
@@ -86,10 +77,10 @@ class ProjectManager
      */
     private function createProject(ProjectApi $clientProject, array $uploadedFiles, Sitting $sitting): Project
     {
-        if (!isset($uploadedFiles[$clientProject->getLinkedFile()])) {
+        if (!isset($uploadedFiles[$clientProject->getLinkedFileKey()])) {
             throw new BadRequestException('Le fichier associé est obligatoire');
         }
-        $uploadedFile = $uploadedFiles[$clientProject->getLinkedFile()];
+        $uploadedFile = $uploadedFiles[$clientProject->getLinkedFileKey()];
 
         $project = new Project();
         $project->setName($clientProject->getName())
@@ -124,15 +115,26 @@ class ProjectManager
         return $this->themeRepository->findOneBy(['id' => $themeId]);
     }
 
-
-    private function updateProject(ProjectApi $clientProject): Project
+    /**
+     * @param UploadedFile[] $uploadedFiles
+     */
+    private function updateProject(ProjectApi $clientProject, array $uploadedFiles, Structure $structure): Project
     {
         $project = $this->projectRepository->findOneBy(['id' => $clientProject->getId()]);
         if (!$project) {
             throw new BadRequestException('le projet n\'existe pas');
         }
 
-        // Todo update project
+        $project->setName($clientProject->getName())
+            ->setRank($clientProject->getRank())
+            ->setReporter($this->getReporter($clientProject->getReporterId()))
+            ->setTheme($this->getTheme($clientProject->getThemeId()));
+
+        $this->createOrUpdateAnnexes($project, $clientProject->getAnnexes(), $uploadedFiles, $structure);
+
+        $this->em->persist($project);
+
+
         return $project;
     }
 
@@ -143,37 +145,39 @@ class ProjectManager
     private function createAndAddAnnexesToProject(Project $project, array $clientAnnexes, array $uploadedFiles, Structure $structure)
     {
         foreach ($clientAnnexes as $clientAnnex) {
-            if (!isset($uploadedFiles[$clientAnnex->getLinkedFile()])) {
+            if (!isset($uploadedFiles[$clientAnnex->getLinkedFileKey()])) {
                 throw new BadRequestException('Le fichier de l\'annexe n\'hexiste pas');
             }
 
-            $annex = new Annex();
-            $annex->setRank($clientAnnex->getRank())
-                ->setProject($project)
-                ->setFile($this->fileManager->save($uploadedFiles[$clientAnnex->getLinkedFile()], $structure));
-            $this->em->persist($annex);
+            $this->createAndAddAnnex($project, $clientAnnex, $uploadedFiles, $structure);
         }
     }
 
-    public function getProjectsFromSitting(Sitting $sitting)
+
+    /**
+     * @param Sitting $sitting
+     * @return iterable
+     */
+    public function getProjectsFromSitting(Sitting $sitting): iterable
     {
-        // TODO query with linked entities
-        return $this->projectRepository->findBy(['sitting' => $sitting]);
+        return $this->projectRepository->getProjectsWithAssociatedEntities($sitting);
     }
 
     /**
      * @param project[] $projects
      * @return ProjectApi[]
      */
-    public function getApiProjectsFromProjects(array $projects): array
+    public function getApiProjectsFromProjects(iterable $projects): array
     {
         $apiProjects = [];
         foreach ($projects as $project) {
             $apiProject = new ProjectApi();
             $apiProject->setName($project->getName())
                 ->setRank($project->getRank())
-                ->setThemeId($project->getTheme()->getId())
-                ->setReporterId($project->getReporter()->getId())
+                ->setThemeId($project->getTheme() ? $project->getTheme()->getId() : null)
+                ->setReporterId($project->getReporter() ? $project->getReporter()->getId() : null)
+                ->setFileName($project->getFile()->getName())
+                ->setId($project->getId())
                 ->setAnnexes($this->getApiAnnexesFromAnnexes($project->getAnnexes()));
             $apiProjects[] = $apiProject;
         }
@@ -185,15 +189,56 @@ class ProjectManager
      * @param annex[] $annexes
      * @return AnnexApi[]
      */
-    public function getApiAnnexesFromAnnexes(array $annexes):array
+    public function getApiAnnexesFromAnnexes(iterable $annexes): array
     {
         $apiAnnexes = [];
         foreach ($annexes as $annex) {
             $annexApi = new AnnexApi();
-            $annexApi->setRank($annex->getRank());
+            $annexApi->setRank($annex->getRank())
+                ->setId($annex->getId())
+                ->setFileName($annex->getFile()->getName());
             $apiAnnexes[] = $annexApi;
         }
         return $apiAnnexes;
+    }
+
+    /**
+     * @param AnnexApi[] $clientAnnexes
+     * @param UploadedFile[] $uploadedFiles
+     */
+    private function createOrUpdateAnnexes(Project $project, array $clientAnnexes, array $uploadedFiles, Structure $structure)
+    {
+        foreach ($clientAnnexes as $clientAnnex) {
+            if (!$clientAnnex->getId()) {
+                $this->createAndAddAnnex($project, $clientAnnex, $uploadedFiles, $structure);
+                continue;
+            }
+            $this->updateAnnex($clientAnnex);
+        }
+    }
+
+
+    private function updateAnnex(AnnexApi $clientAnnex)
+    {
+        $annex = $this->annexRepository->findOneBy(['id' => $clientAnnex->getId()]);
+        if (!$annex) {
+            throw new BadRequestException('l\'annexe n\'existe pas');
+        }
+
+        $annex->setRank($clientAnnex->getRank());
+        $this->em->persist($annex);
+    }
+
+    /**
+     * @param UploadedFile[] $uploadedFiles
+     */
+    private function createAndAddAnnex(Project $project, AnnexApi $clientAnnex, array $uploadedFiles, Structure $structure): void
+    {
+        $annex = new Annex();
+        $annex->setRank($clientAnnex->getRank())
+            ->setProject($project)
+            ->setFile($this->fileManager->save($uploadedFiles[$clientAnnex->getLinkedFileKey()], $structure));
+        $this->em->persist($annex);
     }
 
 

@@ -31,7 +31,7 @@ class SittingFixtures extends Fixture implements DependentFixtureInterface
             ->setType($typeConseilLibriciel);
 
         $manager->persist($sittingConseilLibriciel);
-        $this->addReference(self::REFERENCE . '$sittingConseilLibriciel', $sittingConseilLibriciel);
+        $this->addReference(self::REFERENCE . 'sittingConseilLibriciel', $sittingConseilLibriciel);
 
 
         $manager->flush();
