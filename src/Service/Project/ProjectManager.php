@@ -52,7 +52,9 @@ class ProjectManager
      */
     public function update(array $clientProjects, array $uploadedFiles, Sitting $sitting)
     {
+        $this->deleteRemovedProjects($clientProjects, $sitting);
         foreach ($clientProjects as $clientProject) {
+
             $this->createOrUpdateProject($clientProject, $uploadedFiles, $sitting);
         }
         $this->em->flush();
@@ -239,6 +241,33 @@ class ProjectManager
             ->setProject($project)
             ->setFile($this->fileManager->save($uploadedFiles[$clientAnnex->getLinkedFileKey()], $structure));
         $this->em->persist($annex);
+    }
+
+    /**
+     * @param ProjectApi[] $clientProjects
+     */
+    private function deleteRemovedProjects(array $clientProjects, Sitting $sitting)
+    {
+        $toDeleteProjects = $this->projectRepository->findNotInListProjects($this->listClientProjectIds($clientProjects), $sitting);
+    }
+
+    //TODO
+    //deleteProjects , deleteAnnexes, deleteAssociatedFiles
+
+
+    /**
+     * @param ProjectApi[] $clientProjects
+     */
+    private function listClientProjectIds(array $clientProjects): array
+    {
+        $ids = [];
+        foreach ($clientProjects as $clientProject) {
+            if ($clientProject->getId()) {
+                $ids[] = $clientProject->getId();
+            }
+        }
+
+        return $ids;
     }
 
 

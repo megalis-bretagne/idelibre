@@ -38,4 +38,18 @@ class ProjectRepository extends ServiceEntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    /**
+     * @return Project[]
+     */
+    public function findNotInListProjects(array $projectIds, Sitting $sitting): iterable
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->andWhere('p.sitting = :sitting')
+            ->setParameter('sitting', $sitting)
+            ->andWhere('p.id not in (:projectIds)')
+            ->setParameter('projectIds', $projectIds);
+
+        return $qb->getQuery()->getResult();
+    }
 }
