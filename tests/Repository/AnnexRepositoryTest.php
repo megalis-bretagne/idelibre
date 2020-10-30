@@ -5,8 +5,11 @@ namespace App\Tests\Repository;
 use App\DataFixtures\AnnexFixtures;
 use App\DataFixtures\FileFixtures;
 use App\DataFixtures\ProjectFixtures;
+use App\DataFixtures\SittingFixtures;
 use App\DataFixtures\ThemeFixtures;
+use App\Entity\Annex;
 use App\Entity\Project;
+use App\Repository\AnnexRepository;
 use App\Repository\ProjectRepository;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
@@ -15,7 +18,7 @@ use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class ProjectRepositoryTest extends WebTestCase
+class AnnexRepositoryTest extends WebTestCase
 {
     use FixturesTrait;
     use FindEntityTrait;
@@ -28,9 +31,9 @@ class ProjectRepositoryTest extends WebTestCase
      */
     private $entityManager;
     /**
-     * @var ProjectRepository
+     * @var AnnexRepository
      */
-    private $projectRepository;
+    private $annexRepository;
 
 
     protected function setUp(): void
@@ -42,13 +45,13 @@ class ProjectRepositoryTest extends WebTestCase
             ->get('doctrine')
             ->getManager();
 
-        $this->projectRepository = $this->entityManager->getRepository(Project::class);
+        $this->annexRepository = $this->entityManager->getRepository(Annex::class);
 
         $this->loadFixtures([
             ProjectFixtures::class,
             AnnexFixtures::class,
-            ThemeFixtures::class,
-            FileFixtures::class
+            FileFixtures::class,
+            SittingFixtures::class
         ]);
     }
 
@@ -59,20 +62,15 @@ class ProjectRepositoryTest extends WebTestCase
         $this->entityManager->close();
     }
 
-    public function testGetProjectsWithAssociatedEntities()
-    {
-        $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
-
-        $projects = $this->projectRepository->getProjectsWithAssociatedEntities($sitting);
-        $this->assertCount(2, $projects);
-    }
 
     public function testFindNotInListProjects()
     {
         $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
-        $projectId = $this->getOneProjectBy(['name' => 'Project 2'])->getId();
-        $projects = $this->projectRepository->findNotInListProjects([$projectId], $sitting);
-        $this->assertCount(1, $projects);
+        $project1 = $this->getOneProjectBy(['name' => 'Project 1']);
+        $annexId = $this->getOneAnnexBy(['project' => $project1, 'rank' => 0])->getId();
+        $annexes = $this->annexRepository->findNotInListAnnexes([$annexId], $sitting);
+        $this->assertCount(1, $annexes);
+        $this->assertSame('Fichier annexe 2', $annexes[0]->getFile()->getName());
     }
 
 

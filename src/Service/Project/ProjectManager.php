@@ -14,6 +14,7 @@ use App\Repository\AnnexRepository;
 use App\Repository\ProjectRepository;
 use App\Repository\ThemeRepository;
 use App\Repository\UserRepository;
+use App\Service\Annex\AnnexManager;
 use App\Service\ApiEntity\AnnexApi;
 use App\Service\ApiEntity\ProjectApi;
 use App\Service\File\FileManager;
@@ -30,12 +31,14 @@ class ProjectManager
     private FileManager $fileManager;
     private EntityManagerInterface $em;
     private AnnexRepository $annexRepository;
+    private AnnexManager $annexManager;
 
     public function __construct(ProjectRepository $projectRepository,
                                 UserRepository $userRepository,
                                 AnnexRepository $annexRepository,
                                 ThemeRepository $themeRepository,
                                 FileManager $fileManager,
+                                AnnexManager $annexManager,
                                 EntityManagerInterface $em)
     {
         $this->projectRepository = $projectRepository;
@@ -44,6 +47,7 @@ class ProjectManager
         $this->fileManager = $fileManager;
         $this->em = $em;
         $this->annexRepository = $annexRepository;
+        $this->annexManager = $annexManager;
     }
 
     /**
@@ -52,6 +56,7 @@ class ProjectManager
      */
     public function update(array $clientProjects, array $uploadedFiles, Sitting $sitting)
     {
+        $this->annexManager->deleteRemovedAnnexe($clientProjects, $sitting);
         $this->deleteRemovedProjects($clientProjects, $sitting);
         foreach ($clientProjects as $clientProject) {
 
@@ -249,10 +254,21 @@ class ProjectManager
     private function deleteRemovedProjects(array $clientProjects, Sitting $sitting)
     {
         $toDeleteProjects = $this->projectRepository->findNotInListProjects($this->listClientProjectIds($clientProjects), $sitting);
+        $this->deleteProjects($toDeleteProjects);
     }
 
-    //TODO
-    //deleteProjects , deleteAnnexes, deleteAssociatedFiles
+
+    /**
+     * @param Project[] $projects
+     */
+    private function deleteProjects(iterable $projects)
+    {
+        foreach ($projects as $project){
+            $this->annexManager->deleteAnnexes($project->getAnnexes());
+            $this->fileManager->delete($project->getFile());
+            $this->em->remove($project);
+        }
+    }
 
 
     /**

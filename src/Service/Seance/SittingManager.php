@@ -46,6 +46,14 @@ class SittingManager
         $this->em->flush();
     }
 
-
+    public function update(Sitting $sitting, ?UploadedFile $uploadedFile)
+    {
+        if($uploadedFile) {
+            $convocationFile = $this->fileManager->replace($uploadedFile, $sitting);
+            $sitting->setFile($convocationFile);
+        }
+        $this->em->persist($sitting);
+        $this->em->flush();
+    }
 
 }

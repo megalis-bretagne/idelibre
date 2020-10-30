@@ -25,6 +25,8 @@ class SittingType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $isNew = !isset($options['data']);
+
         $builder
             ->add('type', EntityType::class, [
                 'label' => 'type de séance',
@@ -42,11 +44,12 @@ class SittingType extends AbstractType
                 'required'=> false
             ])
             ->add('convocationFile', FileType::class, [
-                'label' => 'Fichier de convocation',
+                'label' => $isNew ? 'Fichier de convocation' : 'Remplacer le fichier de convocation',
                 'attr' => [
                     'placeholder' => 'Sélectionner un fichier'
                 ],
-                'mapped' => false
+                'mapped' => false,
+                'required' => $isNew
             ])
         ;
     }

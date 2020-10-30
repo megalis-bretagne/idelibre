@@ -2,6 +2,8 @@
 
 namespace App\Tests;
 
+use App\Entity\Annex;
+use App\Entity\Project;
 use App\Entity\Sitting;
 
 trait FindEntityTrait
@@ -20,5 +22,16 @@ trait FindEntityTrait
     public function getOneSittingBy(array $criteria): Sitting
     {
         return $this->getOneEntityBy(Sitting::class, $criteria);
+    }
+
+
+    public function getOneProjectBy(array $criteria): Project
+    {
+        return $this->getOneEntityBy(Project::class, $criteria);
+    }
+
+    public function getOneAnnexBy(array $criteria): Annex
+    {
+        return $this->getOneEntityBy(Annex::class, $criteria);
     }
 }

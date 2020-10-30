@@ -4,6 +4,7 @@
 namespace App\Service\File;
 
 use App\Entity\File;
+use App\Entity\Sitting;
 use App\Entity\Structure;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -68,7 +69,17 @@ class FileManager
 
     public function delete(?File $file)
     {
+        if (!$file) {
+            return;
+        }
         $this->filesystem->remove($file->getPath());
         $this->em->remove($file);
+    }
+
+
+    public function replace(UploadedFile $uploadedFile, Sitting $sitting): File
+    {
+        $this->delete($sitting->getFile());
+        return $this->save($uploadedFile, $sitting->getStructure());
     }
 }

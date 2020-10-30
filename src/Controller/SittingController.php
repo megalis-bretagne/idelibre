@@ -55,18 +55,18 @@ class SittingController extends AbstractController
      * @IsGranted("ROLE_MANAGE_SITTINGS")
      * @Breadcrumb("Ajouter")
      */
-    public function add(Request $request, SittingManager $seanceManager): Response
+    public function addInformation(Request $request, SittingManager $sittingManager): Response
     {
         $form = $this->createForm(SittingType::class, null, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $seanceManager->save(
+            $sittingManager->save(
                 $form->getData(),
                 $form->get('convocationFile')->getData(),
                 $this->getUser()->getStructure()
             );
 
-            $this->addFlash('success', 'votre séance a bien été ajouté');
+            $this->addFlash('success', 'votre séance a bien été ajoutée');
             return $this->redirectToRoute('sitting_index');
         }
         return $this->render('sitting/add.html.twig', [
@@ -75,8 +75,9 @@ class SittingController extends AbstractController
     }
 
     /**
-     * @Route("/sitting/{id}/actors", name="sitting_actor")
+     * @Route("/sitting/{id}/actors", name="edit_sitting_actor")
      * @IsGranted("ROLE_MANAGE_SITTINGS")
+     * @Breadcrumb("Modifier les acteurs")
      */
     public function editUsers(Sitting $sitting, Request $request, ActorManager $actorManager, ConvocationManager $convocationManager): Response
     {
@@ -85,35 +86,51 @@ class SittingController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $convocationManager->addConvocations($form->get('notAssociatedActors')->getData(), $sitting);
-            $this->addFlash('success', 'les utilisateurs ont été modifié');
+            $this->addFlash('success', 'les utilisateurs ont été modifiés');
             return $this->redirectToRoute('sitting_index');
         }
 
         return $this->render('sitting/actors.html.twig', [
             'convocatedActors' => $actorManager->getActorsBySitting($sitting),
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'sitting' => $sitting
         ]);
     }
 
     /**
-     * @Route("/sitting/{id}/projects", name="sitting_project")
+     * @Route("/sitting/{id}/projects", name="edit_sitting_project")
      * IsGranted("ROLE_MANAGE_SITTINGS")
      */
-    public function editProjects(Sitting $sitting){
-
-        // todo get theme lists
-
+    public function editProjects(Sitting $sitting)
+    {
         return $this->render('sitting/projects.html.twig', [
+            'sitting' => $sitting
         ]);
     }
 
 
     /**
-     * @Route("/sitting/edit/{id}", name="sitting_edit")
+     * @Route("/sitting/edit/{id}", name="edit_sitting_information")
      * @IsGranted("ROLE_MANAGE_SITTINGS")
+     * @Breadcrumb("Modifier")
      */
-    public function edit()
+    public function editInformation(Sitting $sitting, Request $request, SittingManager $sittingManager)
     {
+        $form = $this->createForm(SittingType::class, $sitting, ['structure' => $this->getUser()->getStructure()]);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $sittingManager->update(
+                $form->getData(),
+                $form->get('convocationFile')->getData()
+            );
+
+            $this->addFlash('success', 'votre séance a bien été modifiée');
+            return $this->redirectToRoute('sitting_index');
+        }
+        return $this->render('sitting/information.html.twig', [
+            'form' => $form->createView(),
+            'sitting' => $sitting
+        ]);
     }
 
 

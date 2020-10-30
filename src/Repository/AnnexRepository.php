@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Annex;
+use App\Entity\Sitting;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,32 +20,24 @@ class AnnexRepository extends ServiceEntityRepository
         parent::__construct($registry, Annex::class);
     }
 
-    // /**
-    //  * @return Annex[] Returns an array of Annex objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('a.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Annex
+    /**
+     * @return Annex[]
+     */
+    public function findNotInListAnnexes(array $annexeIds, Sitting $sitting): array
     {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $qb = $this->createQueryBuilder('a')
+            ->join('a.project', 'p')
+            ->andWhere('p.sitting = :sitting')
+            ->setParameter('sitting', $sitting)
+            ->leftJoin('a.file', 'f')
+            ->addSelect('f');
+
+        if (!empty($annexeIds)) {
+            $qb->andWhere('a.id not in (:annexeIds)')
+                ->setParameter('annexeIds', $annexeIds);
+        }
+
+        return $qb->getQuery()->getResult();
     }
-    */
 }

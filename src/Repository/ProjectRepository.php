@@ -47,8 +47,17 @@ class ProjectRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('p')
             ->andWhere('p.sitting = :sitting')
             ->setParameter('sitting', $sitting)
-            ->andWhere('p.id not in (:projectIds)')
-            ->setParameter('projectIds', $projectIds);
+            ->leftJoin('p.annexes', 'a')
+            ->leftJoin('p.file', 'pf')
+            ->leftJoin('a.file', 'af')
+            ->addSelect('a')
+            ->addSelect('pf')
+            ->addSelect('af');
+
+        if (!empty($projectIds)) {
+            $qb->andWhere('p.id not in (:projectIds)')
+                ->setParameter('projectIds', $projectIds);
+        }
 
         return $qb->getQuery()->getResult();
     }

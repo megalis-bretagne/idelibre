@@ -1,0 +1,31 @@
+{% extends 'form.html.twig' %}
+{% import 'macro/_forms.html.twig' as macro %}
+{% import 'macro/_sitting_tabs.html.twig' as macroTab %}
+
+{% block pageTop %}
+    {{ macroTab.tabs('information', sitting) }}
+{% endblock %}
+
+
+{% block pageTitle 'Modifier les informations d\'une séance' %}
+
+{% block pageActions %}
+    {{ macro.backButton('sitting_index') }}
+{% endblock %}
+
+{% block pageSaveReturn %}
+    {{ macro.save('sitting_index') }}
+{% endblock %}
+
+
+{% block javascripts %}
+    <script>
+        let config = {
+            enableTime: true,
+            "locale": "fr"
+        };
+        $("#sitting_date").flatpickr(config);
+    </script>
+{% endblock %}
+
+
