@@ -50,6 +50,9 @@
     "symfony/dom-crawler": {
         "version": "v5.1.5"
     },
+    "symfony/http-client-contracts": {
+        "version": "v2.3.1"
+    },
     "symfony/mime": {
         "version": "v5.1.7"
     },
