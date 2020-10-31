@@ -159,7 +159,8 @@ class SittingController extends AbstractController
         return $this->render('sitting/details.html.twig', [
             'sitting' => $sitting,
             'convocations' => $convocationRepository->getConvocationsBySitting($sitting),
-            'projects' => $projectRepository->getProjectsWithAssociatedEntities($sitting)
+            'projects' => $projectRepository->getProjectsWithAssociatedEntities($sitting),
+            'timezone' => $sitting->getStructure()->getTimezone()->getName()
         ]);
     }
 }
