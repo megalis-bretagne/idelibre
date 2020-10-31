@@ -3,7 +3,6 @@
 
 namespace App\Controller\api;
 
-
 use App\Repository\UserRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,6 +21,7 @@ class ActorController extends AbstractController
             $userRepository->findActorByStructure($this->getUser()->getStructure())->getQuery()->getResult(),
             200,
             [],
-            ['groups' => ['user']]);
+            ['groups' => ['user']]
+        );
     }
 }

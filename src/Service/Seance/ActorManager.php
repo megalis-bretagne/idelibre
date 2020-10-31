@@ -3,7 +3,6 @@
 
 namespace App\Service\Seance;
 
-
 use App\Entity\Sitting;
 use App\Entity\User;
 use App\Repository\UserRepository;
@@ -24,5 +23,4 @@ class ActorManager
     {
         return $this->userRepository->findActorsInSitting($sitting, $sitting->getStructure())->getQuery()->getResult();
     }
-
 }

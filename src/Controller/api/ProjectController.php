@@ -3,7 +3,6 @@
 
 namespace App\Controller\api;
 
-
 use App\Entity\Sitting;
 use App\Service\ApiEntity\ProjectApi;
 use App\Service\Project\ProjectManager;
@@ -23,7 +22,6 @@ class ProjectController extends AbstractController
      */
     public function edit(Sitting $sitting, Request $request, SerializerInterface $serializer, ProjectManager $projectManager): JsonResponse
     {
-
         $rawProjects = $request->request->get('projects');
         $projects = $serializer->deserialize($rawProjects, ProjectApi::class . '[]', 'json');
 
@@ -42,6 +40,4 @@ class ProjectController extends AbstractController
 
         return $this->json($projectsApi);
     }
-
-
 }

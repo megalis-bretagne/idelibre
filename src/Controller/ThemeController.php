@@ -87,5 +87,4 @@ class ThemeController extends AbstractController
         $this->addFlash('success', 'Le thème a bien été supprimé');
         return $this->redirectToRoute('theme_index');
     }
-
 }

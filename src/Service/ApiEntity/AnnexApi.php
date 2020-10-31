@@ -3,7 +3,6 @@
 
 namespace App\Service\ApiEntity;
 
-
 use Symfony\Component\Validator\Constraints as Assert;
 
 class AnnexApi
@@ -70,8 +69,4 @@ class AnnexApi
         $this->id = $id;
         return $this;
     }
-
-
-
-
 }

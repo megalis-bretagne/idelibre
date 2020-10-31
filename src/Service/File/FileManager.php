@@ -56,7 +56,7 @@ class FileManager
 
     private function getAndCreateDestinationDirectory(Structure $structure)
     {
-        $directoryPath = $this->bag->get('document_files_directory') . $structure->getId() . '/' . date('yy') . '/' . date('m');
+        $directoryPath = $this->bag->get('document_files_directory') . $structure->getId() . '/' . date('y') . '/' . date('m');
         $this->filesystem->mkdir($directoryPath);
         return $directoryPath;
     }

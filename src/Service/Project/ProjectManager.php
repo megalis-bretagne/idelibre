@@ -3,7 +3,6 @@
 
 namespace App\Service\Project;
 
-
 use App\Entity\Annex;
 use App\Entity\Project;
 use App\Entity\Sitting;
@@ -24,7 +23,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ProjectManager
 {
-
     private ProjectRepository $projectRepository;
     private UserRepository $userRepository;
     private ThemeRepository $themeRepository;
@@ -33,13 +31,15 @@ class ProjectManager
     private AnnexRepository $annexRepository;
     private AnnexManager $annexManager;
 
-    public function __construct(ProjectRepository $projectRepository,
-                                UserRepository $userRepository,
-                                AnnexRepository $annexRepository,
-                                ThemeRepository $themeRepository,
-                                FileManager $fileManager,
-                                AnnexManager $annexManager,
-                                EntityManagerInterface $em)
+    public function __construct(
+        ProjectRepository $projectRepository,
+        UserRepository $userRepository,
+        AnnexRepository $annexRepository,
+        ThemeRepository $themeRepository,
+        FileManager $fileManager,
+        AnnexManager $annexManager,
+        EntityManagerInterface $em
+    )
     {
         $this->projectRepository = $projectRepository;
         $this->userRepository = $userRepository;
@@ -59,11 +59,9 @@ class ProjectManager
         $this->annexManager->deleteRemovedAnnexe($clientProjects, $sitting);
         $this->deleteRemovedProjects($clientProjects, $sitting);
         foreach ($clientProjects as $clientProject) {
-
             $this->createOrUpdateProject($clientProject, $uploadedFiles, $sitting);
         }
         $this->em->flush();
-
     }
 
     /**
@@ -76,7 +74,6 @@ class ProjectManager
         }
 
         return $this->updateProject($clientProject, $uploadedFiles, $sitting->getStructure());
-
     }
 
     /**
@@ -263,7 +260,7 @@ class ProjectManager
      */
     private function deleteProjects(iterable $projects)
     {
-        foreach ($projects as $project){
+        foreach ($projects as $project) {
             $this->annexManager->deleteAnnexes($project->getAnnexes());
             $this->fileManager->delete($project->getFile());
             $this->em->remove($project);
@@ -285,6 +282,4 @@ class ProjectManager
 
         return $ids;
     }
-
-
 }

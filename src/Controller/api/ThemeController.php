@@ -3,7 +3,6 @@
 
 namespace App\Controller\api;
 
-
 use App\Service\Theme\ThemeManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,6 +21,7 @@ class ThemeController extends AbstractController
             $themeManager->getThemesFromStructure($this->getUser()->getStructure()),
             200,
             [],
-            ['groups' => ['theme']]);
+            ['groups' => ['theme']]
+        );
     }
 }

@@ -3,7 +3,6 @@
 
 namespace App\Service\Annex;
 
-
 use App\Entity\Annex;
 use App\Entity\Sitting;
 use App\Repository\AnnexRepository;
@@ -13,7 +12,6 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class AnnexManager
 {
-
     private EntityManagerInterface $em;
     private FileManager $fileManager;
     /**
@@ -33,7 +31,7 @@ class AnnexManager
      */
     public function deleteAnnexes(iterable $annexes)
     {
-        foreach ($annexes as $annex){
+        foreach ($annexes as $annex) {
             $this->fileManager->delete($annex->getFile());
             $this->em->remove($annex);
         }
@@ -57,7 +55,7 @@ class AnnexManager
         foreach ($clientProjects as $clientProject) {
             if ($clientProject->getId()) {
                 foreach ($clientProject->getAnnexes() as $annex) {
-                    if($annex->getId()){
+                    if ($annex->getId()) {
                         $annexIds[] = $annex->getId();
                     }
                 }
@@ -65,6 +63,4 @@ class AnnexManager
         }
         return $annexIds;
     }
-
-
 }

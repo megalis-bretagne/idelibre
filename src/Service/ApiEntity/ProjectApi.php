@@ -3,12 +3,10 @@
 
 namespace App\Service\ApiEntity;
 
-
 use Symfony\Component\Validator\Constraints as Assert;
 
 class ProjectApi
 {
-
     private ?string $id = null;
     /**
      * @Assert\NotBlank(message="Un projet doit avoir un nom")
@@ -174,11 +172,4 @@ class ProjectApi
         $this->fileName = $fileName;
         return $this;
     }
-
-
-
-
-
-
-
 }

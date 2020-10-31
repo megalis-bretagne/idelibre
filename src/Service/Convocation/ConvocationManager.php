@@ -41,5 +41,4 @@ class ConvocationManager
         }
         $this->em->flush();
     }
-
 }

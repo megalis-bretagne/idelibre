@@ -24,7 +24,7 @@ class AddActorType extends AbstractType
             ->add('notAssociatedActors', EntityType::class, [
                 'label' => 'Ajouter des acteurs',
                 'class' => User::class,
-                'choice_label'=> fn(User $user) => $user->getFirstName() . " " . $user->getLastName(),
+                'choice_label'=> fn (User $user) => $user->getFirstName() . " " . $user->getLastName(),
                 'query_builder' => $this->userRepository->findActorsNotInSitting($options['sitting'], $options['structure']),
                 'multiple' => true
             ])

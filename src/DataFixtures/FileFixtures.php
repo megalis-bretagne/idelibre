@@ -13,7 +13,6 @@ class FileFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-
         $fileProject1 = new File();
         $fileProject1->setName('Fichier projet 1')
             ->setSize(100)
@@ -55,6 +54,4 @@ class FileFixtures extends Fixture
 
         $manager->flush();
     }
-
-
 }

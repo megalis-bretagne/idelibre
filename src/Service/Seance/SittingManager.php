@@ -48,12 +48,11 @@ class SittingManager
 
     public function update(Sitting $sitting, ?UploadedFile $uploadedFile)
     {
-        if($uploadedFile) {
+        if ($uploadedFile) {
             $convocationFile = $this->fileManager->replace($uploadedFile, $sitting);
             $sitting->setFile($convocationFile);
         }
         $this->em->persist($sitting);
         $this->em->flush();
     }
-
 }
