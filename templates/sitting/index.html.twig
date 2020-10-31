@@ -1,6 +1,7 @@
 {% extends 'dataview.html.twig' %}
 {% import 'macro/_forms.html.twig' as macros %}
 
+
 {% block pageTitle 'Seances' %}
 
 {% block pageActions %}
@@ -39,7 +40,8 @@
                 <td class="col-3">{{ sitting.date | date('d/m/yy : H:i' , timezone) }} </td>
 
                 <td class="col-2">
-                    {{ macros.editButton('sitting_edit', sitting.id) }}
+                    {{ macros.showButton('sitting_show', sitting.id) }}
+                    {{ macros.editButton('edit_sitting_information', sitting.id) }}
                     {{ macros.button_open_modal_delete(
                         sitting.id,
                         'Suppression de la séance',

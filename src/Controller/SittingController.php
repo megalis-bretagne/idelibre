@@ -6,6 +6,8 @@ use App\Entity\Sitting;
 use App\Form\AddActorType;
 use App\Form\SearchType;
 use App\Form\SittingType;
+use App\Repository\ConvocationRepository;
+use App\Repository\ProjectRepository;
 use App\Repository\SittingRepository;
 use App\Service\Convocation\ConvocationManager;
 use App\Service\Seance\ActorManager;
@@ -25,7 +27,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class SittingController extends AbstractController
 {
     /**
-     * @Route("/sitting/index", name="sitting_index")
+     * @Route("/sitting", name="sitting_index")
      * @IsGranted("ROLE_MANAGE_SITTINGS")
      */
     public function index(SittingRepository $sittingRepository, PaginatorInterface $paginator, Request $request): Response
@@ -77,7 +79,7 @@ class SittingController extends AbstractController
     /**
      * @Route("/sitting/{id}/actors", name="edit_sitting_actor")
      * @IsGranted("ROLE_MANAGE_SITTINGS")
-     * @Breadcrumb("Modifier les acteurs")
+     * @Breadcrumb("Gérer les acteurs")
      */
     public function editUsers(Sitting $sitting, Request $request, ActorManager $actorManager, ConvocationManager $convocationManager): Response
     {
@@ -100,6 +102,7 @@ class SittingController extends AbstractController
     /**
      * @Route("/sitting/{id}/projects", name="edit_sitting_project")
      * IsGranted("ROLE_MANAGE_SITTINGS")
+     * @Breadcrumb("Gérer les projets")
      */
     public function editProjects(Sitting $sitting)
     {
@@ -144,6 +147,19 @@ class SittingController extends AbstractController
         $this->addFlash('success', 'la séance a bien été supprimée');
         return $this->redirectToRoute('sitting_index', [
             'page' => $request->get('page')
+        ]);
+    }
+
+    /**
+     * @Route("/sitting/show/{id}", name="sitting_show", methods={"GET"})
+     * @IsGranted("MANAGE_SITTINGS", subject="sitting")
+     */
+    public function show(Sitting $sitting, ConvocationRepository $convocationRepository, ProjectRepository $projectRepository)
+    {
+        return $this->render('sitting/details.html.twig', [
+            'sitting' => $sitting,
+            'convocations' => $convocationRepository->getConvocationsBySitting($sitting),
+            'projects' => $projectRepository->getProjectsWithAssociatedEntities($sitting)
         ]);
     }
 }

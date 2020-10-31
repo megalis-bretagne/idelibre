@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Convocation;
+use App\Entity\Sitting;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,32 +20,18 @@ class ConvocationRepository extends ServiceEntityRepository
         parent::__construct($registry, Convocation::class);
     }
 
-    // /**
-    //  * @return Convocation[] Returns an array of Convocation objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return Convocation[]
+     */
+    public function getConvocationsBySitting(Sitting $sitting):array
     {
         return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
+            ->andWhere('c.sitting = :sitting')
+            ->setParameter('sitting', $sitting)
+            ->leftJoin('c.actor', 'actor')
+            ->addSelect('actor')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Convocation
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }
