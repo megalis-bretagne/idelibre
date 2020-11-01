@@ -6,7 +6,7 @@ namespace App\Service\Seance;
 use App\Entity\Sitting;
 use App\Entity\Structure;
 use App\Entity\Type;
-use App\Message\GenZipSitting;
+use App\Message\UpdatedSitting;
 use App\Service\Convocation\ConvocationManager;
 use App\Service\File\FileManager;
 use DateTimeInterface;
@@ -45,7 +45,7 @@ class SittingManager
         $this->convocationManager->createConvocations($sitting);
         $this->em->flush();
 
-        $this->messageBus->dispatch(new GenZipSitting($sitting->getId()));
+        $this->messageBus->dispatch(new UpdatedSitting($sitting->getId()));
     }
 
     public function delete(Sitting $sitting)
@@ -64,6 +64,6 @@ class SittingManager
         $this->em->persist($sitting);
         $this->em->flush();
 
-        $this->messageBus->dispatch(new GenZipSitting($sitting->getId()));
+        $this->messageBus->dispatch(new UpdatedSitting($sitting->getId()));
     }
 }

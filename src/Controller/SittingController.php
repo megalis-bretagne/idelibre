@@ -6,6 +6,7 @@ use App\Entity\Sitting;
 use App\Form\AddActorType;
 use App\Form\SearchType;
 use App\Form\SittingType;
+use App\Message\TwoListener;
 use App\Repository\ConvocationRepository;
 use App\Repository\ProjectRepository;
 use App\Repository\SittingRepository;
@@ -22,6 +23,7 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -183,11 +185,20 @@ class SittingController extends AbstractController
         return $response;
     }
 
+
     /**
-     * @Route("/check", name="checkpdf", methods={"GET"})
+     * @Route("/sitting/pdf/{id}", name="sitting_full_pdf", methods={"GET"})
+     * @IsGranted("MANAGE_SITTINGS", subject="sitting")
      */
-    public function check(PdfSittingGenerator $generator)
+    public function getFullPdfSitting(Sitting $sitting, PdfSittingGenerator $pdfSittingGenerator)
     {
-        $generator->generateFullSittingPdf(null);
+        $response = new BinaryFileResponse($pdfSittingGenerator->getPdfPath($sitting));
+        $response->setContentDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            $sitting->getName() . '.pdf'
+        );
+
+        return $response;
     }
+
 }

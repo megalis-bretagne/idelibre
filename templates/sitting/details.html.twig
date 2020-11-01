@@ -74,6 +74,20 @@
                 </div>
             </div>
 
+            <div class="row mt-2">
+                <div class="col-4 text-right">
+                    <b>Pdf complet de la séance :</b>
+                </div>
+                <div class="col-8">
+                    {{ sitting.name }}.pdf
+                    <a class="btn btn-outline-secondary borderless"
+                       href="{{ path('sitting_full_pdf', {'id': sitting.id}) }}"
+                       title="Télécharger le pdf">
+                        <span class="fas fa-download"></span>
+                    </a>
+                </div>
+            </div>
+
 
         </div>
 

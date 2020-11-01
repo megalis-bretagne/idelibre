@@ -4,7 +4,7 @@
 namespace App\Controller\api;
 
 use App\Entity\Sitting;
-use App\Message\GenZipSitting;
+use App\Message\UpdatedSitting;
 use App\Service\ApiEntity\ProjectApi;
 use App\Service\Project\ProjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -29,7 +29,7 @@ class ProjectController extends AbstractController
 
         $projectManager->update($projects, $request->files->all(), $sitting);
 
-        $messageBus->dispatch(new GenZipSitting($sitting->getId()));
+        $messageBus->dispatch(new UpdatedSitting($sitting->getId()));
 
         return $this->json(['reception' => 'ok']);
     }

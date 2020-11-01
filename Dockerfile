@@ -24,6 +24,7 @@ RUN apt-get update -yqq \
         libzip-dev \
         netcat \
         openssl \
+        pdftk \
         -yqq
 
 

@@ -64,7 +64,8 @@ class PdfSittingGenerator
             return false;
         }
 
-        $extension = end(explode('.', $fileName));
+        $exploded = (explode('.', $fileName));
+        $extension = $exploded[count($exploded) -1];
 
         return $extension === 'pdf' || $extension === 'PDF';
     }

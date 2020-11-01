@@ -4,7 +4,7 @@
 namespace App\Message;
 
 
-class GenZipSitting
+class UpdatedSitting
 {
 
     private string $sittingId;
