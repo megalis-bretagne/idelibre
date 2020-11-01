@@ -31,7 +31,7 @@ class ZipSittingGenerator
         return $zipPath;
     }
 
-    private function getZipPath(Sitting $sitting): string
+    public function getZipPath(Sitting $sitting): string
     {
         $directoryPath = $this->bag->get('document_zip_directory') . $sitting->getStructure()->getId();
         $this->filesystem->mkdir($directoryPath);

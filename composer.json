@@ -12,6 +12,7 @@
         "doctrine/annotations": "^1.0",
         "knplabs/knp-paginator-bundle": "^5.3",
         "league/csv": " ^9.5",
+        "mikehaertl/php-pdftk": "^0.9.1",
         "neitanod/forceutf8": "^2.0",
         "phpdocumentor/reflection-docblock": "^5.2",
         "scienta/doctrine-json-functions": "^4.1",

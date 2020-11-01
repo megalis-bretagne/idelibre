@@ -10,14 +10,18 @@ use App\Repository\ConvocationRepository;
 use App\Repository\ProjectRepository;
 use App\Repository\SittingRepository;
 use App\Service\Convocation\ConvocationManager;
+use App\Service\Pdf\PdfSittingGenerator;
 use App\Service\Seance\ActorManager;
 use App\Service\Seance\SittingManager;
+use App\Service\Zip\ZipSittingGenerator;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -162,5 +166,28 @@ class SittingController extends AbstractController
             'projects' => $projectRepository->getProjectsWithAssociatedEntities($sitting),
             'timezone' => $sitting->getStructure()->getTimezone()->getName()
         ]);
+    }
+
+    /**
+     * @Route("/sitting/zip/{id}", name="sitting_zip", methods={"GET"})
+     * @IsGranted("MANAGE_SITTINGS", subject="sitting")
+     */
+    public function getZipSitting(Sitting $sitting, ZipSittingGenerator $zipSittingGenerator)
+    {
+        $response = new BinaryFileResponse($zipSittingGenerator->getZipPath($sitting));
+        $response->setContentDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            $sitting->getName() . '.zip'
+        );
+
+        return $response;
+    }
+
+    /**
+     * @Route("/check", name="checkpdf", methods={"GET"})
+     */
+    public function check(PdfSittingGenerator $generator)
+    {
+        $generator->generateFullSittingPdf(null);
     }
 }
