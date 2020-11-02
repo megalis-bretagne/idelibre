@@ -6,7 +6,6 @@ use App\Entity\Sitting;
 use App\Form\AddActorType;
 use App\Form\SearchType;
 use App\Form\SittingType;
-use App\Message\TwoListener;
 use App\Repository\ConvocationRepository;
 use App\Repository\ProjectRepository;
 use App\Repository\SittingRepository;
@@ -23,7 +22,6 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
-use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
