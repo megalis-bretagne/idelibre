@@ -40,7 +40,7 @@
                 <td class="col-3">{{ sitting.date | date('d/m/Y : H:i' , timezone) }} </td>
 
                 <td class="col-2">
-                    {{ macros.showButton('sitting_show', sitting.id) }}
+                    {{ macros.showButton('sitting_show_information', sitting.id) }}
                     {{ macros.editButton('edit_sitting_information', sitting.id) }}
                     {{ macros.button_open_modal_delete(
                         sitting.id,

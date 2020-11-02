@@ -1,4 +1,4 @@
-{% macro tabs(activeTab, sitting) %}
+{% macro editTabs(activeTab, sitting) %}
     <nav class="mb-3">
         <div class="nav nav-tabs justify-content-end" id="nav-tab" role="tablist">
             <a class="nav-item nav-link {{ activeTab == 'information' ? 'active': '' }}" id="nav-information"
@@ -14,4 +14,21 @@
     </nav>
 {% endmacro %}
 
+
+
+{% macro showTabs(activeTab, sitting) %}
+    <nav class="mb-3">
+        <div class="nav nav-tabs justify-content-end" id="nav-tab" role="tablist">
+            <a class="nav-item nav-link {{ activeTab == 'information' ? 'active': '' }}" id="nav-information"
+               href="{{ path('sitting_show_information', {'id': sitting.id}) }}"
+               aria-selected="{{ activeTab == 'information' ? 'false' : 'true' }}">Informations</a>
+            <a class="nav-item nav-link {{ activeTab == 'actors' ? 'active': '' }}" id="nav-actors"
+               href="{{ path('sitting_show_actors', {'id': sitting.id}) }}"
+               aria-selected="{{ activeTab == 'actors' ? 'false' : 'true' }}">Convoqués</a>
+            <a class="nav-item nav-link {{ activeTab == 'projects' ? 'active': '' }}" id="nav-projects"
+               href="{{ path('sitting_show_projects', {'id': sitting.id}) }}"
+               aria-selected="{{ activeTab == 'projects' ? 'false' : 'true' }}">Projets</a>
+        </div>
+    </nav>
+{% endmacro %}
 

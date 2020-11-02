@@ -96,7 +96,7 @@ class SittingController extends AbstractController
             return $this->redirectToRoute('sitting_index');
         }
 
-        return $this->render('sitting/actors.html.twig', [
+        return $this->render('sitting/edit_actors.html.twig', [
             'convocatedActors' => $actorManager->getActorsBySitting($sitting),
             'form' => $form->createView(),
             'sitting' => $sitting
@@ -110,7 +110,7 @@ class SittingController extends AbstractController
      */
     public function editProjects(Sitting $sitting)
     {
-        return $this->render('sitting/projects.html.twig', [
+        return $this->render('sitting/edit_projects.html.twig', [
             'sitting' => $sitting
         ]);
     }
@@ -134,7 +134,7 @@ class SittingController extends AbstractController
             $this->addFlash('success', 'votre séance a bien été modifiée');
             return $this->redirectToRoute('sitting_index');
         }
-        return $this->render('sitting/information.html.twig', [
+        return $this->render('sitting/edit_information.html.twig', [
             'form' => $form->createView(),
             'sitting' => $sitting
         ]);
@@ -155,16 +155,44 @@ class SittingController extends AbstractController
     }
 
     /**
-     * @Route("/sitting/show/{id}", name="sitting_show", methods={"GET"})
+     * @Route("/sitting/show/{id}/information", name="sitting_show_information", methods={"GET"})
      * @IsGranted("MANAGE_SITTINGS", subject="sitting")
+     * @Breadcrumb("Détail {sitting.name}")
      */
-    public function show(Sitting $sitting, ConvocationRepository $convocationRepository, ProjectRepository $projectRepository)
+    public function showInformation(Sitting $sitting, ConvocationRepository $convocationRepository, ProjectRepository $projectRepository)
     {
-        return $this->render('sitting/details.html.twig', [
+        return $this->render('sitting/details_information.html.twig', [
+            'sitting' => $sitting,
+            'timezone' => $sitting->getStructure()->getTimezone()->getName()
+        ]);
+    }
+
+
+    /**
+     * @Route("/sitting/show/{id}/actors", name="sitting_show_actors", methods={"GET"})
+     * @IsGranted("MANAGE_SITTINGS", subject="sitting")
+     * @Breadcrumb("Détail {sitting.name}")
+     */
+    public function showActors(Sitting $sitting, ConvocationRepository $convocationRepository)
+    {
+        return $this->render('sitting/details_actors.html.twig', [
             'sitting' => $sitting,
             'convocations' => $convocationRepository->getConvocationsBySitting($sitting),
-            'projects' => $projectRepository->getProjectsWithAssociatedEntities($sitting),
             'timezone' => $sitting->getStructure()->getTimezone()->getName()
+        ]);
+    }
+
+
+    /**
+     * @Route("/sitting/show/{id}/projects", name="sitting_show_projects", methods={"GET"})
+     * @IsGranted("MANAGE_SITTINGS", subject="sitting")
+     * @Breadcrumb("Détail {sitting.name}")
+     */
+    public function showProjects(Sitting $sitting, ConvocationRepository $convocationRepository, ProjectRepository $projectRepository)
+    {
+        return $this->render('sitting/details_projects.html.twig', [
+            'sitting' => $sitting,
+            'projects' => $projectRepository->getProjectsWithAssociatedEntities($sitting),
         ]);
     }
 
