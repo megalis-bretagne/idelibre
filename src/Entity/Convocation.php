@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ConvocationRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=ConvocationRepository::class)
@@ -14,11 +15,13 @@ class Convocation
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid")
+     * @Groups({"convocation"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"convocation"})
      */
     private $isRead = false;
 
@@ -29,11 +32,13 @@ class Convocation
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"convocation"})
      */
     private $isActive = false;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
+     * @Groups({"convocation"})
      */
     private $isEmailed = false;
 
@@ -43,16 +48,26 @@ class Convocation
      */
     private $sitting;
 
-    /**
-     * @ORM\OneToOne(targetEntity=Timestamp::class, mappedBy="convocation", cascade={"persist", "remove"})
-     */
-    private $timestamp;
+
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class)
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"convocation"})
      */
     private $actor;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Timestamp::class, cascade={"persist", "remove"})
+     * @Groups({"convocation"})
+     */
+    private $sentTimestamp;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Timestamp::class, cascade={"persist", "remove"})
+     * @Groups({"convocation"})
+     */
+    private $receivedTimestamp;
 
 
     public function __construct()
@@ -119,23 +134,9 @@ class Convocation
         return $this;
     }
 
-    public function getTimestamp(): ?Timestamp
-    {
-        return $this->timestamp;
-    }
 
-    public function setTimestamp(?Timestamp $timestamp): self
-    {
-        $this->timestamp = $timestamp;
 
-        // set (or unset) the owning side of the relation if necessary
-        $newConvocation = null === $timestamp ? null : $this;
-        if ($timestamp->getConvocation() !== $newConvocation) {
-            $timestamp->setConvocation($newConvocation);
-        }
 
-        return $this;
-    }
 
     public function getActor(): ?User
     {
@@ -145,6 +146,30 @@ class Convocation
     public function setActor(?User $actor): self
     {
         $this->actor = $actor;
+
+        return $this;
+    }
+
+    public function getSentTimestamp(): ?Timestamp
+    {
+        return $this->sentTimestamp;
+    }
+
+    public function setSentTimestamp(?Timestamp $sentTimestamp): self
+    {
+        $this->sentTimestamp = $sentTimestamp;
+
+        return $this;
+    }
+
+    public function getReceivedTimestamp(): ?Timestamp
+    {
+        return $this->receivedTimestamp;
+    }
+
+    public function setReceivedTimestamp(?Timestamp $receivedTimestamp): self
+    {
+        $this->receivedTimestamp = $receivedTimestamp;
 
         return $this;
     }

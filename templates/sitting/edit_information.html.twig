@@ -15,7 +15,35 @@
 
 {% block pageSaveReturn %}
     {{ macro.save('sitting_index') }}
+
+    <div id="confirm-not-save" class="modal fade" role="dialog" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Attention</h4>
+                    <button class="close" data-dismiss="modal" type="button">&times;</button>
+                </div>
+                <div class="modal-body">
+                    Voulez vous changer de page sans sauvegarder ?
+                </div>
+
+                <div class="modal-footer">
+
+                    <button class="btn btn-secondary" data-dismiss="modal" type="button">
+                        <span class="fa fa-times"></span> Annuler
+                    </button>
+                    <a href="#" id="confirm-btn">Confirmer</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
+
+
+
+
 
 
 {% block javascripts %}
@@ -25,7 +53,35 @@
             "locale": "fr"
         };
         $("#sitting_date").flatpickr(config);
+
+
+        let $isDirty = false;
+        $('input, select').click(function () {
+            $isDirty = true;
+        });
+
+
+        $('.change-tab').click(function (event) {
+
+            if ($(this).hasClass('active')) {
+                event.preventDefault();
+                return false;
+            }
+
+            if ($isDirty) {
+                event.preventDefault();
+                $('#confirm-btn').attr('href', $(this).attr('href'));
+                $('#confirm-not-save').modal();
+
+                return false;
+            }
+            return true;
+        });
+
+
     </script>
+
+
 {% endblock %}
 
 

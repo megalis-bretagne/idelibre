@@ -184,6 +184,21 @@ class SittingController extends AbstractController
 
 
     /**
+     * @Route("/sitting/show/{id}/actorsvue", name="sitting_show_actors_vue", methods={"GET"})
+     * @IsGranted("MANAGE_SITTINGS", subject="sitting")
+     * @Breadcrumb("Détail {sitting.name}")
+     */
+    public function showActorsVue(Sitting $sitting, ConvocationRepository $convocationRepository)
+    {
+        return $this->render('sitting/details_actors_vue.html.twig', [
+            'sitting' => $sitting,
+            'convocations' => $convocationRepository->getConvocationsBySitting($sitting),
+            'timezone' => $sitting->getStructure()->getTimezone()->getName()
+        ]);
+    }
+
+
+    /**
      * @Route("/sitting/show/{id}/projects", name="sitting_show_projects", methods={"GET"})
      * @IsGranted("MANAGE_SITTINGS", subject="sitting")
      * @Breadcrumb("Détail {sitting.name}")

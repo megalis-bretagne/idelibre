@@ -30,6 +30,7 @@ class ConvocationRepository extends ServiceEntityRepository
             ->setParameter('sitting', $sitting)
             ->leftJoin('c.actor', 'actor')
             ->addSelect('actor')
+            ->orderBy('actor.lastName')
             ->getQuery()
             ->getResult();
     }

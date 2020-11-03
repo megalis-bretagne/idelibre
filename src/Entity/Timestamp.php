@@ -3,7 +3,9 @@
 namespace App\Entity;
 
 use App\Repository\TimestampRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=TimestampRepository::class)
@@ -19,6 +21,7 @@ class Timestamp
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"convocation"})
      */
     private $createAt;
 
@@ -32,10 +35,12 @@ class Timestamp
      */
     private $tsa;
 
-    /**
-     * @ORM\OneToOne(targetEntity=Convocation::class, inversedBy="timestamp", cascade={"persist", "remove"})
-     */
-    private $convocation;
+
+
+    public function __construct()
+    {
+        $this->createAt = new DateTimeImmutable();
+    }
 
     public function getId(): ?int
     {
@@ -47,12 +52,6 @@ class Timestamp
         return $this->createAt;
     }
 
-    public function setCreateAt(\DateTimeInterface $createAt): self
-    {
-        $this->createAt = $createAt;
-
-        return $this;
-    }
 
     public function getContent(): ?string
     {
@@ -78,15 +77,4 @@ class Timestamp
         return $this;
     }
 
-    public function getConvocation(): ?Convocation
-    {
-        return $this->convocation;
-    }
-
-    public function setConvocation(?Convocation $convocation): self
-    {
-        $this->convocation = $convocation;
-
-        return $this;
-    }
 }
