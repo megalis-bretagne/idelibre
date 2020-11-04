@@ -110,7 +110,7 @@ function setThemeLevelName(themes) {
 }
 
 function getSittingId() {
-    return window.location.pathname.split('/')[2];
+    return window.location.pathname.split('/')[3];
 }
 
 function isNewProject(project) {

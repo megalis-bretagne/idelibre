@@ -81,7 +81,7 @@ class SittingController extends AbstractController
     }
 
     /**
-     * @Route("/sitting/{id}/actors", name="edit_sitting_actor")
+     * @Route("/sitting/edit/{id}/actors", name="edit_sitting_actor")
      * @IsGranted("ROLE_MANAGE_SITTINGS")
      * @Breadcrumb("Gérer les acteurs")
      */
@@ -104,7 +104,7 @@ class SittingController extends AbstractController
     }
 
     /**
-     * @Route("/sitting/{id}/projects", name="edit_sitting_project")
+     * @Route("/sitting/edit/{id}/projects", name="edit_sitting_project")
      * IsGranted("ROLE_MANAGE_SITTINGS")
      * @Breadcrumb("Gérer les projets")
      */

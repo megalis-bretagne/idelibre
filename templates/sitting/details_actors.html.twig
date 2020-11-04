@@ -19,8 +19,17 @@
         </div>
 
 
-        <div class="col-10 offset-1 form-white mt-4">
-            <h2>Acteurs : convocation et présence</h2>
+        <div v-cloak class="col-10 offset-1 form-white mt-4" id="app">
+            <div class="row">
+                <div class="col-6">
+                    <h2>Acteurs : convocation et présence</h2>
+                </div>
+                <div class="col-6">
+                    <button :disabled="isAlreadySent" class="btn btn-primary float-right" title="Envoyer" data-target="#confirm" data-toggle="modal">
+                        <span class="fa fa-paper-plane"></span> Envoyer toutes les convocations
+                    </button>
+                </div>
+            </div>
 
             <table class="table table-striped mt-5 bg-white">
                 <thead>
@@ -33,25 +42,135 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for convocation in convocations %}
-                    <tr class="d-flex">
-                        <td class="col-3">{{ convocation.actor.firstName }} {{ convocation.actor.lastName }}</td>
-                        <td class="col-2"></td>
-                        <td class="col-2"></td>
-                        <td class="col-2"></td>
-                        <td class="col-3"></td>
 
-                    </tr>
+                <tr class="d-flex" v-for="convocation in convocations">
+                    <td class="col-3">
+                        ${convocation.actor.firstName} ${convocation.actor.lastName}
+                    </td>
+                    <td v-if="convocation.sentTimestamp" class="col-2"> ${convocation.sentTimestamp.createAt | formatDateString }
+                    </td>
+                    <td v-else class="col-2">
+                        <button v-on:click="sendConvocation(convocation.id)" class="btn btn-outline-primary borderless"
+                                title="Envoyer"><span class="fa fa-paper-plane"></span></button>
+                    </td>
 
-                {% endfor %}
+                    <td v-if="convocation.receivedTimestamp" class="col-2"> oui (mettre date)</td>
+                    <td class="col-2"></td>
+                    <td class="col-3"></td>
 
+                </tr>
 
                 </tbody>
 
             </table>
+
+            <div id="confirm" ref="confirm" class="modal fade" role="dialog" data-backdrop="static">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Attention</h4>
+                            <button class="close" data-dismiss="modal" type="button">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            Veuillez valider l'envoi de toutes les convocations
+                        </div>
+
+                        <div class="modal-footer">
+
+                            <button class="btn btn-secondary" data-dismiss="modal" type="button">
+                                <span class="fa fa-times"></span> Annuler
+                            </button>
+                            <button class="btn btn-primary" data-dismiss="modal" type="button" v-on:click="sendConvocations()">
+                                Envoyer
+                            </button>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
+
+
 
     </div>
 
 
+
+
+
+{% endblock %}
+
+
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.9.4/dayjs.min.js"></script>
+
+    <script>
+        Vue.filter('formatDateString', function (value) {
+            if (value) {
+                return dayjs(value).format('DD/MM/YY H:mm')
+            }
+        });
+
+        let app = new Vue({
+            delimiters: ['${', '}'],
+            el: "#app",
+            data: {
+                convocations: [],
+                isAlreadySent: false
+            },
+
+            methods: {
+                sendConvocation(convocationId) {
+                    axios.post(`/api/convocations/${convocationId}/send`).then(response => {
+                        updateConvocations(this.convocations, response.data);
+                        this.isAlreadySent = isAlreadySentSitting(this.convocations);
+                    });
+                },
+
+                sendConvocations() {
+                    axios.post(`/api/sittings/${getSittingId()}/sendConvocations`).then(() => {
+                        this.getConvocations();
+                    });
+                },
+
+                getConvocations() {
+                    axios.get(`/api/convocations/${getSittingId()}`).then(convocations => {
+                        this.convocations = convocations.data;
+                        this.isAlreadySent = isAlreadySentSitting(this.convocations);
+                    })
+                }
+
+            },
+
+            mounted() {
+                this.getConvocations();
+            }
+        });
+
+        function getSittingId() {
+            return window.location.pathname.split('/')[3];
+        }
+
+        function updateConvocations(convocations, convocation) {
+            for (let i = 0; i < convocations.length; i++) {
+                if (convocations[i].id === convocation.id) {
+                    app.$set(app.convocations, i, convocation)
+                }
+            }
+        }
+
+        function isAlreadySentSitting(convocations) {
+            for (let i = 0; i < convocations.length; i++) {
+                if (!convocations[i].sentTimestamp) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+    </script>
 {% endblock %}

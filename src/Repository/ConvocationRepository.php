@@ -34,4 +34,20 @@ class ConvocationRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * @return Convocation[]
+     */
+    public function getConvocationsBySittingAndActorIds(Sitting $sitting, array $actorIds):array
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.sitting = :sitting')
+            ->setParameter('sitting', $sitting)
+            ->join('c.actor', 'actor')
+            ->andWhere('actor.id in (:actorIds)')
+            ->setParameter('actorIds', $actorIds)
+            ->getQuery()
+            ->getResult();
+    }
+
 }

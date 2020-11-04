@@ -2,55 +2,162 @@
 {% import 'macro/_forms.html.twig' as macro %}
 {% import 'macro/_sitting_tabs.html.twig' as macroTab %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://unpkg.com/vue-select@latest/dist/vue-select.css">
+{% endblock %}
+
 {% block body %}
-    <div class="col-10 offset-1">
-        {{ apy_breadcrumb_trail_render(breadcrumb) }}
+<div class="col-10 offset-1">
+    {{ apy_breadcrumb_trail_render(breadcrumb) }}
+</div>
+
+<div class="col-10 offset-1">
+    {{ macroTab.editTabs('actors', sitting) }}
+</div>
+
+<div class="mt-3 col-10 offset-1">
+    <h1>Gerer les destinataires</h1>
+
+    <div class="mt-4">
+        {{ macro.backButton('sitting_index') }}
     </div>
 
-    <div class="col-10 offset-1">
-        {{ macroTab.editTabs('actors', sitting) }}
-    </div>
 
-    <div class="mt-3 col-10 offset-1">
-        <h1>Gerer les utilisateurs convoqués</h1>
-
-        <div class="mt-4">
-            {{ macro.backButton('sitting_index') }}
-        </div>
-
-
+    <div id="app" v-cloak>
         <div class="row mt-4">
             <div class="col-8 offset-2 form-white">
                 <div class="row">
-                    {% for actor in convocatedActors %}
-                        <div class="col-6">
-                            <li> {{ actor.firstName }} {{ actor.lastName }}</li>
-                        </div>
-                    {% endfor %}
+                    <div v-for="actor in inSittingActors" class="col-4">
+                        <button class="btn btn-outline-danger borderless" v-on:click="removeActor(actor.id)">
+                            <span class="fa fa-trash-alt" title="Retirer"></span>
+                        </button>
+                        <span :title="actor.username">${ actor.firstName } ${ actor.lastName }</span>
+                    </div>
+
                 </div>
             </div>
         </div>
 
         <div class="row mt-4">
             <div class="col-8 offset-2 form-white">
-                {% block pageForm %}
+                <v-select
+                        v-bind:options="notInSittingActors"
+                        label="lastName"
+                        class="bs-form-like"
+                        v-model="addedActors"
+                        :reduce="item => item.id"
+                        multiple>
+                    <template #option="{ firstName, lastName }">
+                        ${ firstName } ${ lastName }
+                    </template>
+                    <template #selected-option="{ firstName, lastName }">
+                        ${ firstName } ${ lastName }
+                    </template>
 
-                    {{ form_start(form) }}
-                    {{ form_widget(form) }}
-                    <div class="float-right">
-                        {{ macro.save('sitting_index') }}
-                    </div>
-                    {{ form_end(form) }}
+                </v-select>
+            </div>
 
-                {% endblock %}
+
+        </div>
+
+
+        <div class="row mt-4">
+            <div class="col-8 offset-2">
+                <div class="float-right">
+                    <a href="{{ path('sitting_index') }}" class="btn btn-outline-dark">
+                        <span class="fa fa-times"></span> Annuler</a>
+
+                    <button class="btn btn-primary" @click="save()">
+                        <span class="fa fa-save"></span>
+                        Enregistrer
+                    </button>
+                </div>
             </div>
         </div>
 
     </div>
 
-{% endblock %}
+    {% endblock %}
 
 
-{% block javascripts %}
-    <script src="{{ asset('assets/enableSelect2.js') }}"></script>
-{% endblock %}
+    {% block javascripts %}
+
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.9.4/dayjs.min.js"></script>
+        <script src="https://unpkg.com/vue-select@latest"></script>
+
+        <script>
+            Vue.component('v-select', VueSelect.VueSelect);
+            let app = new Vue({
+                delimiters: ['${', '}'],
+                el: "#app",
+                data: {
+                    inSittingActors: [],
+                    notInSittingActors: [],
+                    removedActors: [],
+                    addedActors: []
+                },
+
+                methods: {
+
+                    removeActor(actorId) {
+                        removeInSittingActor(this.inSittingActors, actorId);
+                        this.removedActors.push(actorId);
+                    },
+
+                    save() {
+                        axios.put(`/api/actors/sittings/${getSittingId()}`, {removedActors: this.removedActors, addedActors: this.addedActors}).then((response) => {
+                            this.removedActors = [];
+                            this.addedActors = [];
+                            this.getActors()
+                        })
+                    },
+
+                    getActors(){
+                        Promise.all([
+                            axios.get(`/api/actors/sittings/${getSittingId()}`),
+                            axios.get(`/api/actors/sittings/${getSittingId()}/not`),
+                        ]).then((response) => {
+                            this.inSittingActors = response[0].data;
+                            this.notInSittingActors = response[1].data;
+                        });
+                    }
+
+
+
+                },
+
+                mounted() {
+                    this.getActors();
+                }
+            });
+
+            function getSittingId() {
+                return window.location.pathname.split('/')[3];
+            }
+
+            function findActorIndex(actors, actorId) {
+                for (let i = 0; i < actors.length; i++) {
+                    if (actors[i].id === actorId) {
+                        return i;
+                    }
+                }
+                return -1;
+            }
+
+            function removeInSittingActor(actors, actorId) {
+                const index = findActorIndex(actors, actorId);
+                if (index === -1) {
+                    return;
+                }
+                app.$delete(app.inSittingActors, index)
+            }
+
+
+        </script>
+
+
+
+
+    {% endblock %}

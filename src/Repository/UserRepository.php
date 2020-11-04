@@ -141,4 +141,5 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->andWhere('u not in (:alreadyIn)')
             ->setParameter('alreadyIn', $actorsInSitting);
     }
+
 }

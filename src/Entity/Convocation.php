@@ -59,12 +59,14 @@ class Convocation
 
     /**
      * @ORM\OneToOne(targetEntity=Timestamp::class, cascade={"persist", "remove"})
+     * @ORM\JoinColumn(onDelete="SET NULL")
      * @Groups({"convocation"})
      */
     private $sentTimestamp;
 
     /**
      * @ORM\OneToOne(targetEntity=Timestamp::class, cascade={"persist", "remove"})
+     * @ORM\JoinColumn(onDelete="SET NULL")
      * @Groups({"convocation"})
      */
     private $receivedTimestamp;

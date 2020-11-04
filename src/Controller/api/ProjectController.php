@@ -31,7 +31,7 @@ class ProjectController extends AbstractController
 
         $messageBus->dispatch(new UpdatedSitting($sitting->getId()));
 
-        return $this->json(['reception' => 'ok']);
+        return $this->json(['success' => true]);
     }
 
     /**
