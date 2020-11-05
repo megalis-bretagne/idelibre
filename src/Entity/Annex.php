@@ -23,7 +23,7 @@ class Annex
     private $rank;
 
     /**
-     * @ORM\OneToOne(targetEntity=File::class, cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=File::class, cascade={"persist", "remove"}, inversedBy="annex")
      * @ORM\JoinColumn(nullable=false)
      */
     private $file;

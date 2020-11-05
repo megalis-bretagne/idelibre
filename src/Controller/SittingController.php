@@ -86,18 +86,7 @@ class SittingController extends AbstractController
      */
     public function editUsers(Sitting $sitting, Request $request, ActorManager $actorManager, ConvocationManager $convocationManager): Response
     {
-        $form = $this->createForm(AddActorType::class, null, ['structure' => $sitting->getStructure(), 'sitting' => $sitting]);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $convocationManager->addConvocations($form->get('notAssociatedActors')->getData(), $sitting);
-            $this->addFlash('success', 'les utilisateurs ont été modifiés');
-            return $this->redirectToRoute('sitting_index');
-        }
-
         return $this->render('sitting/edit_actors.html.twig', [
-            'convocatedActors' => $actorManager->getActorsBySitting($sitting),
-            'form' => $form->createView(),
             'sitting' => $sitting
         ]);
     }

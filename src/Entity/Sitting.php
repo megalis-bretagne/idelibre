@@ -78,7 +78,7 @@ class Sitting
     private $structure;
 
     /**
-     * @ORM\OneToOne(targetEntity=File::class, cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=File::class, cascade={"persist", "remove"}, inversedBy="sitting")
      */
     private $file;
 

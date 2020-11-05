@@ -39,6 +39,27 @@ class File
      */
     private $createdAt;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Project::class, mappedBy="file")
+     * @var Project
+     */
+    private $project;
+
+
+    /**
+     * @ORM\OneToOne(targetEntity=Annex::class, mappedBy="file")
+     * @var Annex
+     */
+    private $annex;
+
+
+    /**
+     * @ORM\OneToOne(targetEntity=Sitting::class, mappedBy="file")
+     * @var Sitting
+     */
+    private $sitting;
+
+
     public function __construct()
     {
         $this->createdAt = new DateTimeImmutable();
@@ -90,4 +111,19 @@ class File
     {
         return $this->createdAt;
     }
+
+
+    public function getStructure(): Structure
+    {
+        if ($this->project) {
+            return $this->project->getSitting()->getStructure();
+        }
+        if ($this->annex) {
+            return $this->annex->getProject()->getSitting()->getStructure();
+        }
+
+        return $this->sitting->getStructure();
+    }
+
+
 }

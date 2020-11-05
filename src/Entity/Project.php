@@ -32,7 +32,7 @@ class Project
 
 
     /**
-     * @ORM\OneToOne(targetEntity=File::class, cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=File::class, cascade={"persist", "remove"}, inversedBy="project")
      * @ORM\JoinColumn(nullable=false)
      */
     private $file;

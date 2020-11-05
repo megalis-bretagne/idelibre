@@ -5,6 +5,7 @@ namespace App\Tests;
 use App\Entity\Annex;
 use App\Entity\Project;
 use App\Entity\Sitting;
+use App\Entity\Type;
 
 trait FindEntityTrait
 {
@@ -33,5 +34,10 @@ trait FindEntityTrait
     public function getOneAnnexBy(array $criteria): Annex
     {
         return $this->getOneEntityBy(Annex::class, $criteria);
+    }
+
+    public function getOneTypeBy(array $criteria): Type
+    {
+        return $this->getOneEntityBy(Type::class, $criteria);
     }
 }
