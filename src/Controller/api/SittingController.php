@@ -3,7 +3,6 @@
 
 namespace App\Controller\api;
 
-
 use App\Entity\Convocation;
 use App\Entity\Sitting;
 use App\Repository\ConvocationRepository;
@@ -22,5 +21,4 @@ class SittingController extends AbstractController
         $convocationManager->sendConvocations($convocationRepository->findBy(['sitting' => $sitting]));
         return $this->json(['success' => true]);
     }
-
 }

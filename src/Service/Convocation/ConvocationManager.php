@@ -110,6 +110,4 @@ class ConvocationManager
     {
         return !!$convocation->getSentTimestamp();
     }
-
-
 }

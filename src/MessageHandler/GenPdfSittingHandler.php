@@ -3,7 +3,6 @@
 
 namespace App\MessageHandler;
 
-
 use App\Message\UpdatedSitting;
 use App\Repository\SittingRepository;
 use App\Service\Pdf\PdfSittingGenerator;
@@ -13,7 +12,6 @@ use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 class GenPdfSittingHandler implements MessageHandlerInterface
 {
-
     private PdfSittingGenerator $pdfSittingGenerator;
     private SittingRepository $sittingRepository;
 

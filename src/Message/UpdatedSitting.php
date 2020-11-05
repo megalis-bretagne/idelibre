@@ -3,10 +3,8 @@
 
 namespace App\Message;
 
-
 class UpdatedSitting
 {
-
     private string $sittingId;
 
     public function __construct(string $sittingId)
@@ -19,7 +17,4 @@ class UpdatedSitting
     {
         return $this->sittingId;
     }
-
-
-
 }

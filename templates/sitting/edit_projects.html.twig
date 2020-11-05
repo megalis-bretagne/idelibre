@@ -7,14 +7,7 @@
     <link rel="stylesheet" href="https://unpkg.com/vue-select@latest/dist/vue-select.css">
 {% endblock %}
 
-{% block javascripts %}
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="//cdn.jsdelivr.net/npm/sortablejs@1.8.4/Sortable.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.20.0/vuedraggable.umd.min.js"></script>
-    <script src="https://unpkg.com/vue-select@latest"></script>
-    <script src="{{ asset('assets/vue_app/manageProjects.js') }}"></script>
-{% endblock %}
+
 
 
 {% block body %}
@@ -39,6 +32,8 @@
 
     <div v-cloak class="col-10 offset-1 mt-4 " id="app">
 
+        <div class="alert alert-success mt-2" v-if="messageInfo"> ${messageInfo}</div>
+
         <label class="custom-file-upload btn btn-primary" title="Ajouter des projets">
             <input type="file" accept=".pdf,.PDF" multiple @change="addProject($event)">
             <span class="fa fa-folder-open"></span> Ajouter des projets
@@ -51,7 +46,7 @@
         </div>
 
 
-        <draggable v-model="projects" class="bg-white">
+        <draggable v-model="projects" class="bg-white" v-on:change="projectChange()">
 
             <div v-for="(project, index) in projects">
                 <div class="alert alert-secondary">
@@ -62,7 +57,7 @@
                         </div>
 
                         <div class="col-5">
-                            <textarea v-model="project.name" class="form-control"> </textarea>
+                            <textarea v-model="project.name" class="form-control" v-on:change="projectChange()"> </textarea>
                         </div>
 
                         <div class="col-5">
@@ -120,7 +115,7 @@
 
                     {# annexes#}
 
-                    <draggable v-model="project.annexes" class="mt-1">
+                    <draggable v-model="project.annexes" class="mt-1" v-on:change="projectChange()">
                         <div class="col-10 offset-1" v-for="(annex, index) in project.annexes">
                             <div class="row">
                                 <span class="">${index + 1}</span>
@@ -140,8 +135,9 @@
         </draggable>
 
         <div class="float-right" v-if="projects.length > 0">
-            <a href="{{ path('sitting_index') }}" class="btn btn-outline-dark">
-                <span class="fa fa-times"></span> Annuler</a>
+            <button class="btn btn-outline-dark" @click="cancel()">
+                <span class="fa fa-times"></span> Annuler
+            </button>
 
             <button class="btn btn-primary" @click="save()">
                 <span class="fa fa-save"></span>
@@ -150,7 +146,58 @@
         </div>
     </div>
 
+
+    <div id="confirm-not-save" class="modal fade" role="dialog" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Attention</h4>
+                    <button class="close" data-dismiss="modal" type="button">&times;</button>
+                </div>
+                <div class="modal-body">
+                    Voulez vous changer de page sans sauvegarder ?
+                </div>
+
+                <div class="modal-footer">
+
+                    <button class="btn btn-secondary" data-dismiss="modal" type="button">
+                        <span class="fa fa-times"></span> Annuler
+                    </button>
+                    <a href="#" id="confirm-btn">Confirmer</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 {% endblock %}
 
 
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sortablejs@1.8.4/Sortable.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.20.0/vuedraggable.umd.min.js"></script>
+    <script src="https://unpkg.com/vue-select@latest"></script>
+    <script src="{{ asset('assets/vue_app/manageProjects.js') }}"></script>
+    <script>
+        $('.change-tab').click(function (event) {
 
+            if ($(this).hasClass('active')) {
+                event.preventDefault();
+                return false;
+            }
+
+            if (isDirty) {
+                event.preventDefault();
+                $('#confirm-btn').attr('href', $(this).attr('href'));
+                $('#confirm-not-save').modal();
+
+                return false;
+            }
+            return true;
+        });
+    </script>
+
+{% endblock %}

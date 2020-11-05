@@ -255,10 +255,11 @@ class ProjectManager
     }
 
 
+
     /**
      * @param Project[] $projects
      */
-    private function deleteProjects(iterable $projects)
+    public function deleteProjects(iterable $projects)
     {
         foreach ($projects as $project) {
             $this->annexManager->deleteAnnexes($project->getAnnexes());

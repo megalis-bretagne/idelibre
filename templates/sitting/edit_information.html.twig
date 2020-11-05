@@ -50,14 +50,17 @@
     <script>
         let config = {
             enableTime: true,
+            altInput: true,
+            altFormat: "d/m/y : H:i",
+            //dateFormat: "d/m/y : H:i",
             "locale": "fr"
         };
         $("#sitting_date").flatpickr(config);
 
 
-        let $isDirty = false;
+        let isDirty = false;
         $('input, select').click(function () {
-            $isDirty = true;
+            isDirty = true;
         });
 
 
@@ -68,7 +71,7 @@
                 return false;
             }
 
-            if ($isDirty) {
+            if (isDirty) {
                 event.preventDefault();
                 $('#confirm-btn').attr('href', $(this).attr('href'));
                 $('#confirm-not-save').modal();

@@ -3,7 +3,6 @@
 
 namespace App\MessageHandler;
 
-
 use App\Message\UpdatedSitting;
 use App\Repository\SittingRepository;
 use App\Service\Zip\ZipSittingGenerator;

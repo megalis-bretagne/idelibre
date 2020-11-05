@@ -9,6 +9,7 @@ use App\Entity\Type;
 use App\Message\UpdatedSitting;
 use App\Service\Convocation\ConvocationManager;
 use App\Service\File\FileManager;
+use App\Service\Project\ProjectManager;
 use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -23,13 +24,18 @@ class SittingManager
      * @var MessageBusInterface
      */
     private MessageBusInterface $messageBus;
+    /**
+     * @var ProjectManager
+     */
+    private ProjectManager $projectManager;
 
-    public function __construct(ConvocationManager $convocationManager, FileManager $fileManager, EntityManagerInterface $em, MessageBusInterface $messageBus)
+    public function __construct(ConvocationManager $convocationManager, FileManager $fileManager, EntityManagerInterface $em, MessageBusInterface $messageBus, ProjectManager $projectManager)
     {
         $this->convocationManager = $convocationManager;
         $this->fileManager = $fileManager;
         $this->em = $em;
         $this->messageBus = $messageBus;
+        $this->projectManager = $projectManager;
     }
 
     public function save(Sitting $sitting, UploadedFile $uploadedFile, Structure $structure)
@@ -51,6 +57,7 @@ class SittingManager
     public function delete(Sitting $sitting)
     {
         $this->fileManager->delete($sitting->getFile());
+        $this->projectManager->deleteProjects($sitting->getProjects());
         $this->em->remove($sitting);
         $this->em->flush();
     }

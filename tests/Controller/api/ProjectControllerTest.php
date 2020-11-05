@@ -5,6 +5,7 @@ namespace App\Tests\Controller\api;
 use App\DataFixtures\AnnexFixtures;
 use App\DataFixtures\FileFixtures;
 use App\DataFixtures\ProjectFixtures;
+use App\DataFixtures\SittingFixtures;
 use App\DataFixtures\ThemeFixtures;
 use App\DataFixtures\UserFixtures;
 use App\Entity\Project;
@@ -57,8 +58,8 @@ class ProjectControllerTest extends WebTestCase
             UserFixtures::class,
             AnnexFixtures::class,
             FileFixtures::class,
-            ThemeFixtures::class
-
+            ThemeFixtures::class,
+            SittingFixtures::class
         ]);
     }
 
@@ -101,6 +102,7 @@ class ProjectControllerTest extends WebTestCase
             ->setLinkedFileKey('project2');
 
         $serializedProjects = $this->serializer->serialize([$project1, $project2], 'json');
+
 
         $this->client->request(Request::METHOD_POST,
             '/api/projects/' . $sitting->getId(),

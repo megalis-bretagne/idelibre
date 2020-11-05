@@ -109,3 +109,8 @@ body {
 [v-cloak] {
     display: none;
 }
+
+
+.flatpickr-input{
+    background-color: white !important;
+}

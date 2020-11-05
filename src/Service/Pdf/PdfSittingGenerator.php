@@ -11,7 +11,6 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class PdfSittingGenerator
 {
-
     private ParameterBagInterface $bag;
     private Filesystem $filesystem;
 
@@ -51,7 +50,7 @@ class PdfSittingGenerator
      */
     private function addAnnexes(Pdf $pdf, iterable $annexes)
     {
-        foreach ($annexes as $annex){
+        foreach ($annexes as $annex) {
             if ($this->isPdfFile($annex->getFile()->getName())) {
                 $pdf->addFile($annex->getFile()->getPath());
             }
@@ -77,5 +76,4 @@ class PdfSittingGenerator
 
         return $directoryPath . '/' . $sitting->getId() . '.pdf';
     }
-
 }

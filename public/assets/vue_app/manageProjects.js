@@ -7,9 +7,15 @@ let app = new Vue({
         projects: [],
         themes: [],
         reporters: [],
+        messageInfo: null
     },
 
     methods: {
+        projectChange($event) {
+            isDirty = true;
+        },
+
+
         addProject(event) {
             for (let i = 0; i < event.target.files.length; i++) {
                 let file = event.target.files[i];
@@ -25,10 +31,12 @@ let app = new Vue({
                 };
                 this.projects.push(project);
             }
+            isDirty = true;
         },
 
         removeProject(index) {
             this.projects.splice(index, 1);
+            isDirty = true;
         },
         addAnnexes(event, project) {
             for (let i = 0; i < event.target.files.length; i++) {
@@ -41,9 +49,11 @@ let app = new Vue({
                 };
                 project.annexes.push(annex);
             }
+            isDirty = true;
         },
         deleteAnnex(annexes, index) {
             annexes.splice(index, 1);
+            isDirty = true;
         },
 
         save() {
@@ -53,8 +63,23 @@ let app = new Vue({
             formData.append('projects', JSON.stringify(this.projects));
 
             axios.post(`/api/projects/${getSittingId()}`, formData).then(response => {
-                console.log(response);
+                this.showMessage('Modifications enregistrées');
+                isDirty = false;
             });
+        },
+
+
+        cancel(){
+            axios.get(`/api/projects/${getSittingId()}`).then((response ) => {
+                this.projects = response.data;
+                isDirty = false;
+                this.showMessage('Modifications annulées');
+            })
+        },
+
+        showMessage(msg) {
+            this.messageInfo = msg;
+            setTimeout(() => this.messageInfo = null, 3000);
         },
 
 
@@ -135,3 +160,6 @@ function setAnnexesRank(annexes) {
         annexes[i].rank = i;
     }
 }
+
+
+let isDirty = false;

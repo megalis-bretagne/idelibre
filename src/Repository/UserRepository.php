@@ -132,14 +132,18 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     {
         $actorsInSitting = $this->findActorsInSitting($sitting, $structure)->getQuery()->getResult();
 
-        return $this->createQueryBuilder('u')
+        $qb = $this->createQueryBuilder('u')
             ->leftJoin('u.role', 'r')
             ->andWhere(' r.name =:actor')
             ->setParameter('actor', 'Actor')
             ->andWhere('u.structure =:structure')
-            ->setParameter('structure', $structure)
-            ->andWhere('u not in (:alreadyIn)')
-            ->setParameter('alreadyIn', $actorsInSitting);
-    }
+            ->setParameter('structure', $structure);
 
+        if (!empty($actorsInSitting)) {
+            $qb->andWhere('u not in (:alreadyIn)')
+                ->setParameter('alreadyIn', $actorsInSitting);
+        }
+
+        return $qb;
+    }
 }

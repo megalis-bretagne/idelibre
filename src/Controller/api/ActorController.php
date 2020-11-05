@@ -51,7 +51,6 @@ class ActorController extends AbstractController
      */
     public function getActorsNotInSitting(Sitting $sitting, UserRepository $userRepository): Response
     {
-
         return $this->json(
             $userRepository->findActorsNotInSitting($sitting, $sitting->getStructure())->getQuery()->getResult(),
             200,
@@ -74,7 +73,5 @@ class ActorController extends AbstractController
         return $this->json(
             ['ok' => true]
         );
-
-
     }
 }

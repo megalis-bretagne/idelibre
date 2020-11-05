@@ -52,6 +52,19 @@ class FileFixtures extends Fixture
 
         $this->addReference(self::REFERENCE . 'fileAnnex2', $fileAnnex2);
 
+
+        $fileConvocation = new File();
+        $fileConvocation->setName('fichier de convocation')
+            ->setSize(100)
+            ->setPath('/tmp/convocation');
+
+        $manager->persist($fileConvocation);
+
+        $this->addReference(self::REFERENCE . 'convocation', $fileConvocation);
+
+
+
+
         $manager->flush();
     }
 }

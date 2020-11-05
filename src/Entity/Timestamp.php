@@ -76,5 +76,4 @@ class Timestamp
 
         return $this;
     }
-
 }

@@ -2,162 +2,145 @@
 {% import 'macro/_forms.html.twig' as macro %}
 {% import 'macro/_sitting_tabs.html.twig' as macroTab %}
 
+
 {% block stylesheets %}
     <link rel="stylesheet" href="https://unpkg.com/vue-select@latest/dist/vue-select.css">
 {% endblock %}
 
+
+
+
+
 {% block body %}
-<div class="col-10 offset-1">
-    {{ apy_breadcrumb_trail_render(breadcrumb) }}
-</div>
-
-<div class="col-10 offset-1">
-    {{ macroTab.editTabs('actors', sitting) }}
-</div>
-
-<div class="mt-3 col-10 offset-1">
-    <h1>Gerer les destinataires</h1>
-
-    <div class="mt-4">
-        {{ macro.backButton('sitting_index') }}
+    <div class="col-10 offset-1">
+        {{ apy_breadcrumb_trail_render(breadcrumb) }}
     </div>
 
+    <div class="col-10 offset-1">
+        {{ macroTab.editTabs('actors', sitting) }}
+    </div>
 
-    <div id="app" v-cloak>
-        <div class="row mt-4">
-            <div class="col-8 offset-2 form-white">
-                <div class="row">
-                    <div v-for="actor in inSittingActors" class="col-4">
-                        <button class="btn btn-outline-danger borderless" v-on:click="removeActor(actor.id)">
-                            <span class="fa fa-trash-alt" title="Retirer"></span>
-                        </button>
-                        <span :title="actor.username">${ actor.firstName } ${ actor.lastName }</span>
+    <div class="mt-3 col-10 offset-1">
+        <h1>Gerer les destinataires</h1>
+
+        <div class="mt-4">
+            {{ macro.backButton('sitting_index') }}
+        </div>
+
+
+        <div id="app" v-cloak>
+            <div class="alert alert-success mt-2" v-if="messageInfo"> ${messageInfo}</div>
+
+            <div class="row mt-4">
+                <div class="col-8 offset-2 form-white">
+                    <h2 class="mt-4">Acteurs convoqués</h2>
+                    <div class="row">
+                        <div v-for="actor in inSittingActors" class="col-4">
+                            <button class="btn btn-outline-danger borderless" v-on:click="removeActor(actor.id)">
+                                <span class="fa fa-trash-alt" title="Retirer"></span>
+                            </button>
+                            <span :title="actor.username">${ actor.firstName } ${ actor.lastName }</span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-8 offset-2 form-white">
+                    <div class="form-group">
+                        <label for="actors">Ajouter des acteurs</label>
+                        <v-select
+                                v-bind:options="notInSittingActors"
+                                id="actors"
+                                label="lastName"
+                                class="bs-form-like"
+                                v-model="addedActors"
+                                :reduce="item => item.id"
+                                multiple>
+                            <template #option="{ firstName, lastName }">
+                                ${ firstName } ${ lastName }
+                            </template>
+                            <template #selected-option="{ firstName, lastName }">
+                                ${ firstName } ${ lastName }
+                            </template>
+
+                        </v-select>
                     </div>
 
                 </div>
             </div>
-        </div>
 
-        <div class="row mt-4">
-            <div class="col-8 offset-2 form-white">
-                <v-select
-                        v-bind:options="notInSittingActors"
-                        label="lastName"
-                        class="bs-form-like"
-                        v-model="addedActors"
-                        :reduce="item => item.id"
-                        multiple>
-                    <template #option="{ firstName, lastName }">
-                        ${ firstName } ${ lastName }
-                    </template>
-                    <template #selected-option="{ firstName, lastName }">
-                        ${ firstName } ${ lastName }
-                    </template>
+            <div class="row mt-4">
+                <div class="col-8 offset-2">
+                    <div class="float-right">
 
-                </v-select>
+                        <button class="btn btn-outline-dark" @click="cancel()">
+                            <span class="fa fa-times"></span> Annuler
+                        </button>
+
+                        <button class="btn btn-primary" @click="save()">
+                            <span class="fa fa-save"></span>
+                            Enregistrer
+                        </button>
+                    </div>
+                </div>
             </div>
 
-
         </div>
+    </div>
 
+    <div id="confirm-not-save" class="modal fade" role="dialog" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Attention</h4>
+                    <button class="close" data-dismiss="modal" type="button">&times;</button>
+                </div>
+                <div class="modal-body">
+                    Voulez vous changer de page sans sauvegarder ?
+                </div>
 
-        <div class="row mt-4">
-            <div class="col-8 offset-2">
-                <div class="float-right">
-                    <a href="{{ path('sitting_index') }}" class="btn btn-outline-dark">
-                        <span class="fa fa-times"></span> Annuler</a>
+                <div class="modal-footer">
 
-                    <button class="btn btn-primary" @click="save()">
-                        <span class="fa fa-save"></span>
-                        Enregistrer
+                    <button class="btn btn-secondary" data-dismiss="modal" type="button">
+                        <span class="fa fa-times"></span> Annuler
                     </button>
+                    <a href="#" id="confirm-btn">Confirmer</a>
+
                 </div>
             </div>
         </div>
-
     </div>
 
-    {% endblock %}
-
-
-    {% block javascripts %}
-
-        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.9.4/dayjs.min.js"></script>
-        <script src="https://unpkg.com/vue-select@latest"></script>
-
-        <script>
-            Vue.component('v-select', VueSelect.VueSelect);
-            let app = new Vue({
-                delimiters: ['${', '}'],
-                el: "#app",
-                data: {
-                    inSittingActors: [],
-                    notInSittingActors: [],
-                    removedActors: [],
-                    addedActors: []
-                },
-
-                methods: {
-
-                    removeActor(actorId) {
-                        removeInSittingActor(this.inSittingActors, actorId);
-                        this.removedActors.push(actorId);
-                    },
-
-                    save() {
-                        axios.put(`/api/actors/sittings/${getSittingId()}`, {removedActors: this.removedActors, addedActors: this.addedActors}).then((response) => {
-                            this.removedActors = [];
-                            this.addedActors = [];
-                            this.getActors()
-                        })
-                    },
-
-                    getActors(){
-                        Promise.all([
-                            axios.get(`/api/actors/sittings/${getSittingId()}`),
-                            axios.get(`/api/actors/sittings/${getSittingId()}/not`),
-                        ]).then((response) => {
-                            this.inSittingActors = response[0].data;
-                            this.notInSittingActors = response[1].data;
-                        });
-                    }
+{% endblock %}
 
 
 
-                },
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.9.4/dayjs.min.js"></script>
+    <script src="https://unpkg.com/vue-select@latest"></script>
+    <script src="{{ asset('assets/vue_app/manageActors.js') }}"></script>
 
-                mounted() {
-                    this.getActors();
-                }
-            });
+    <script>
+        $('.change-tab').click(function (event) {
 
-            function getSittingId() {
-                return window.location.pathname.split('/')[3];
+            if ($(this).hasClass('active')) {
+                event.preventDefault();
+                return false;
             }
 
-            function findActorIndex(actors, actorId) {
-                for (let i = 0; i < actors.length; i++) {
-                    if (actors[i].id === actorId) {
-                        return i;
-                    }
-                }
-                return -1;
+            if (isDirty()) {
+                event.preventDefault();
+                $('#confirm-btn').attr('href', $(this).attr('href'));
+                $('#confirm-not-save').modal();
+
+                return false;
             }
+            return true;
+        });
+    </script>
 
-            function removeInSittingActor(actors, actorId) {
-                const index = findActorIndex(actors, actorId);
-                if (index === -1) {
-                    return;
-                }
-                app.$delete(app.inSittingActors, index)
-            }
-
-
-        </script>
-
-
-
-
-    {% endblock %}
+{% endblock %}
