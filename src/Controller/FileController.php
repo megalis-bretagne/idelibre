@@ -13,6 +13,7 @@ class FileController extends AbstractController
 {
     /**
      * @Route("/file/download/{id}", name="file_download", methods={"GET"})
+     *
      */
     public function download(File $file) :Response
     {

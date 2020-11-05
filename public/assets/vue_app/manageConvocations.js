@@ -10,20 +10,24 @@ let app = new Vue({
     data: {
         convocations: [],
         isAlreadySent: false,
-        filter: ""
+        filter: {
+            actor: "",
+            guest: "",
+            administrative: ""
+        }
     },
 
     computed: {
         filteredConvocations: function () {
-            if (!this.filter || this.filter === "") {
+            if (!this.filter.actor || this.filter.actor === "") {
                 return this.convocations
             }
 
-            let filterLowerCase = this.filter.toLowerCase();
+            let filterLowerCase = this.filter.actor.toLowerCase();
 
             return this.convocations.filter(convocation =>
                 convocation.actor.lastName.toLowerCase().includes(filterLowerCase) ||
-                convocation.actor.firstName.toLowerCase().includes(filterLowerCase)||
+                convocation.actor.firstName.toLowerCase().includes(filterLowerCase) ||
                 convocation.actor.username.toLowerCase().includes(filterLowerCase)
             )
         }
@@ -48,6 +52,10 @@ let app = new Vue({
                 this.convocations = convocations.data;
                 this.isAlreadySent = isAlreadySentSitting(this.convocations);
             })
+        },
+
+        resetFilters() {
+            this.filter = { actor: "", guest: "", administrative: "" };
         }
 
     },

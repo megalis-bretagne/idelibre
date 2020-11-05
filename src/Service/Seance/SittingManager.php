@@ -38,7 +38,7 @@ class SittingManager
         $this->projectManager = $projectManager;
     }
 
-    public function save(Sitting $sitting, UploadedFile $uploadedFile, Structure $structure)
+    public function save(Sitting $sitting, UploadedFile $uploadedFile, Structure $structure): string
     {
         // TODO remove file if transaction failed
         $convocationFile = $this->fileManager->save($uploadedFile, $structure);
@@ -52,14 +52,17 @@ class SittingManager
         $this->em->flush();
 
         $this->messageBus->dispatch(new UpdatedSitting($sitting->getId()));
+
+        return $sitting->getId();
     }
 
     public function delete(Sitting $sitting)
     {
-        $this->fileManager->delete($sitting->getFile());
+        $this->fileManager->deletse($sitting->getFile());
         $this->projectManager->deleteProjects($sitting->getProjects());
         $this->em->remove($sitting);
         $this->em->flush();
+        // TODO remove fullpdf and zip !
     }
 
     public function update(Sitting $sitting, ?UploadedFile $uploadedFile)

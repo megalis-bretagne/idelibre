@@ -6,3 +6,7 @@ rename $type->getAssociatedUsers() en $type->getAssociatedActors()
 
 
 Il faut lier le ficher de convocation à la séance car sinon c'est la emrdeour ajouter de sutilisateurs ou pire encore si pas d'acteur dans e type de seance!
+
+
+Il faudrait que ce soit FILE qui contiene la reference à la table a laquelle elle appartient et non l'inverse comme aujourd'hui
+Come ça si je supprime un projet ça supprime le file associé et on l'inverse.

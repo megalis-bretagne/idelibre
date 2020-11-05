@@ -61,19 +61,18 @@ class SittingController extends AbstractController
      * @IsGranted("ROLE_MANAGE_SITTINGS")
      * @Breadcrumb("Ajouter")
      */
-    public function addInformation(Request $request, SittingManager $sittingManager): Response
+    public function createSitting(Request $request, SittingManager $sittingManager): Response
     {
         $form = $this->createForm(SittingType::class, null, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $sittingManager->save(
+            $sittingId = $sittingManager->save(
                 $form->getData(),
                 $form->get('convocationFile')->getData(),
                 $this->getUser()->getStructure()
             );
 
-            $this->addFlash('success', 'votre séance a bien été ajoutée');
-            return $this->redirectToRoute('sitting_index');
+            return $this->redirectToRoute('edit_sitting_actor', ['id' => $sittingId]);
         }
         return $this->render('sitting/add.html.twig', [
             'form' => $form->createView()

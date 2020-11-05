@@ -46,7 +46,8 @@ class SittingType extends AbstractType
             ->add('convocationFile', FileType::class, [
                 'label' => $isNew ? 'Fichier de convocation' : 'Remplacer le fichier de convocation',
                 'attr' => [
-                    'placeholder' => 'Sélectionner un fichier'
+                    'placeholder' => 'Sélectionner un fichier',
+                    'accept' => ".pdf,.PDF"
                 ],
                 'mapped' => false,
                 'required' => $isNew

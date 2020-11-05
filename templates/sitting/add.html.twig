@@ -14,6 +14,11 @@
 
 {% block javascripts %}
     <script>
+
+        $(document).ready(function () {
+            bsCustomFileInput.init();
+        });
+
         let config = {
             enableTime: true,
             //dateFormat: "d/m/Y : H:i",
