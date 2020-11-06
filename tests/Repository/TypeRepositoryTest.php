@@ -66,7 +66,7 @@ class TypeRepositoryTest extends WebTestCase
         /** @var Structure $structure */
         $structure = $this->getOneEntityBy(Structure::class, ['name' => 'Libriciel']);
 
-        $this->assertCount(2, $this->typeRepository->findByStructure($structure)->getQuery()->getResult());
+        $this->assertCount(3, $this->typeRepository->findByStructure($structure)->getQuery()->getResult());
     }
 
 
@@ -82,7 +82,7 @@ class TypeRepositoryTest extends WebTestCase
         $notAssociatedEmailTemplate = $this->getOneEntityBy(EmailTemplate::class, ['name' => 'Bureau Libriciel']);
 
         $this->assertCount(
-            2,
+            3,
             $this->typeRepository->findNotAssociatedWithOtherTemplateByStructure(
                 $structure,
                 $associatedEmailTemplate
@@ -90,7 +90,7 @@ class TypeRepositoryTest extends WebTestCase
         );
 
         $this->assertCount(
-            1,
+            2,
             $this->typeRepository->findNotAssociatedWithOtherTemplateByStructure(
                 $structure,
                 $notAssociatedEmailTemplate

@@ -5,7 +5,9 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
   version: '%env(VERSION)%'
-
+  document_files_directory: '/tmp/'
+  document_zip_directory: '/tmp/'
+  document_full_pdf_directory: '/tmp/'
 
 services:
     # default configuration for services in *this* file

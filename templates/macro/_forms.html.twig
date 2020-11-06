@@ -9,6 +9,15 @@
 {% endmacro %}
 
 
+{% macro emptyList(elements, text) %}
+    {% if elements |length == 0 %}
+        <tr class="d-flex">
+            <td class="col-12 text-center">{{ text }}</td>
+        </tr>
+    {% endif %}
+{% endmacro %}
+
+
 {% macro editButton(editPath, id) %}
 
     <a href="{{ path(editPath, {'id': id}) }}" class="btn btn-outline-primary borderless"

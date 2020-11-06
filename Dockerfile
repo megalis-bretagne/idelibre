@@ -1,5 +1,7 @@
 FROM php:7.4-fpm
 
+RUN mkdir -p /usr/share/man/man1/ /usr/share/man/man3/ /usr/share/man/man7/
+
 ENV PHP_OPCACHE_VALIDATE_TIMESTAMPS="0" \
     PHP_OPCACHE_MAX_ACCELERATED_FILES="10000" \
     PHP_OPCACHE_MEMORY_CONSUMPTION="192" \
@@ -24,6 +26,7 @@ RUN apt-get update -yqq \
         libzip-dev \
         netcat \
         openssl \
+        pdftk \
         -yqq
 
 

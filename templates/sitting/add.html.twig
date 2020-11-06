@@ -1,0 +1,33 @@
+{% extends 'form.html.twig' %}
+{% import 'macro/_forms.html.twig' as macro %}
+
+{% block pageTitle 'Ajouter une séance' %}
+
+{% block pageActions %}
+    {{ macro.backButton('sitting_index') }}
+{% endblock %}
+
+{% block pageSaveReturn %}
+    {{ macro.save('sitting_index') }}
+{% endblock %}
+
+
+{% block javascripts %}
+    <script>
+
+        $(document).ready(function () {
+            bsCustomFileInput.init();
+        });
+
+        let config = {
+            enableTime: true,
+            //dateFormat: "d/m/Y : H:i",
+            altInput: true,
+            altFormat: "d/m/y : H:i",
+            "locale": "fr"
+        };
+        $("#sitting_date").flatpickr(config);
+    </script>
+{% endblock %}
+
+

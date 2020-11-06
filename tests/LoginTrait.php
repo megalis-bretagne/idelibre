@@ -35,6 +35,13 @@ trait LoginTrait
         $this->login('admin@libriciel');
     }
 
+    public function loginAsUserMontpellier()
+    {
+        $this->login('user@montpellier');
+    }
+
+
+
 
     public function loginAsSuperAdmin()
     {

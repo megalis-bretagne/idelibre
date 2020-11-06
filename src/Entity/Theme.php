@@ -6,6 +6,7 @@ use App\Repository\ThemeRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 //* @ORM\Entity(repositoryClass=ThemeRepository::class)
 //@ORM\Entity(repositoryClass="Gedmo\Tree\Entity\Repository\NestedTreeRepository")
@@ -28,12 +29,14 @@ class Theme
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid")
+     * @Groups({"theme"})
      */
     private $id;
 
 
     /**
      * @ORM\Column(type="string")
+     * @Groups({"theme"})
      */
     private $name;
 
@@ -47,6 +50,7 @@ class Theme
     /**
      * @Gedmo\TreeLevel()
      * @ORM\Column(type="integer")
+     * @Groups({"theme"})
      */
     private $lvl;
 
@@ -88,6 +92,7 @@ class Theme
 
     /**
      * @ORM\Column(type="string", length=512, nullable=true)
+     * @Groups({"theme"})
      */
     private $fullName;
 

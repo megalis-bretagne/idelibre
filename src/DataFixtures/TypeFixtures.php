@@ -57,6 +57,15 @@ class TypeFixtures extends Fixture implements DependentFixtureInterface
         $this->addReference(self::REFERENCE . 'conseilMontpellier', $typeConseilMontpellier);
 
 
+        $testTypeLS = new Type();
+        $testTypeLS->setName('unUsedType')
+            ->setStructure($structureLibriciel)
+            ->addAssociatedUser($actor1Libriciel)
+            ->addAssociatedUser($actor2Libriciel);
+        $manager->persist($testTypeLS);
+        $this->addReference(self::REFERENCE . 'unUsedType', $testTypeLS);
+
+
         $manager->flush();
     }
 

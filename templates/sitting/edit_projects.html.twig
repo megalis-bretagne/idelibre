@@ -1,0 +1,203 @@
+{% extends 'base.html.twig' %}
+{% import 'macro/_forms.html.twig' as macro %}
+{% import 'macro/_sitting_tabs.html.twig' as macroTab %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('assets/inputFile.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/vue-select@latest/dist/vue-select.css">
+{% endblock %}
+
+
+
+
+{% block body %}
+    <div class="col-10 offset-1">
+        {{ apy_breadcrumb_trail_render(breadcrumb) }}
+    </div>
+
+    <div class="col-10 offset-1">
+        {{ macroTab.editTabs('projects', sitting) }}
+    </div>
+
+    <div class="mt-3 col-10 offset-1">
+        <h1>Gérer les projets</h1>
+
+        <div class="mt-4">
+            {{ macro.backButton('sitting_index') }}
+        </div>
+
+
+    </div>
+
+
+    <div v-cloak class="col-10 offset-1 mt-4 " id="app">
+
+        <div class="alert alert-success mt-2" v-if="messageInfo"> ${messageInfo}</div>
+
+        <label class="custom-file-upload btn btn-primary" title="Ajouter des projets">
+            <input type="file" accept=".pdf,.PDF" multiple @change="addProject($event)">
+            <span class="fa fa-folder-open"></span> Ajouter des projets
+        </label>
+
+        <div class="mt-4"></div>
+
+        <div v-if="projects.length == 0" class="text-center">
+            Aucun projet associé
+        </div>
+
+
+        <draggable v-model="projects" class="bg-white" v-on:change="projectChange()">
+
+            <div v-for="(project, index) in projects">
+                <div class="alert alert-secondary">
+                    {# firstLine #}
+                    <div class="row">
+                        <div class="col-1">
+                            <span class="badge badge-primary" style="font-size: 1.5em">${index + 1}</span>
+                        </div>
+
+                        <div class="col-5">
+                            <textarea v-model="project.name" class="form-control" v-on:change="projectChange()"> </textarea>
+                        </div>
+
+                        <div class="col-5">
+                            <b>${project.fileName}</b>
+                        </div>
+
+                        <div class="col-1">
+                            <button class="btn btn-outline-danger borderless float-right"
+                                    v-on:click="removeProject(index)">
+                                <span class="fa fa-trash-alt" title="Supprimer"></span>
+                            </button>
+                        </div>
+
+                    </div>
+                    {# second line #}
+                    <div class="row mt-3">
+                        <div class="col-2">
+                            <label class="custom-file-upload btn btn-outline-primary" title="Ajouter des annexes">
+                                <input type="file" multiple @change="addAnnexes($event, project)">
+                                <span class="fa fa-folder-open"></span> annexes
+                            </label>
+                        </div>
+
+                        <div class="col-4">
+                            <v-select v-bind:options="reporters"
+                                      v-model="project.reporterId"
+                                      :reduce="item => item.id"
+                                      label="lastName"
+                                      class="bs-form-like">
+                                <template #option="{ firstName, lastName }">
+                                    ${ firstName } ${ lastName }
+                                </template>
+                                <template #selected-option="{ firstName, lastName }">
+                                    <strong> ${ firstName } ${ lastName } </strong>
+                                </template>
+                            </v-select>
+
+
+                        </div>
+                        <div class="col-6">
+                            <v-select v-bind:options="themes"
+                                      v-model="project.themeId"
+                                      :reduce="item => item.id"
+                                      label="fullName"
+                                      class="bs-form-like">
+                                <template #option="{ levelName }">
+                                    ${ levelName }
+                                </template>
+                                <template #selected-option="{ fullName }">
+                                    <strong> ${ fullName } </strong>
+                                </template>
+                            </v-select>
+                        </div>
+                    </div>
+
+                    {# annexes#}
+
+                    <draggable v-model="project.annexes" class="mt-1" v-on:change="projectChange()">
+                        <div class="col-10 offset-1" v-for="(annex, index) in project.annexes">
+                            <div class="row">
+                                <span class="">${index + 1}</span>
+                                <div class="col-10">${annex.fileName}</div>
+                                <div class="col-1">
+                                    <button class="btn btn-outline-danger borderless"
+                                            @click="deleteAnnex(project.annexes, index)">
+                                        <span class="fa fa-trash-alt" title="Supprimer"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </draggable>
+
+                </div>
+            </div>
+        </draggable>
+
+        <div class="float-right" v-if="projects.length > 0">
+            <button class="btn btn-outline-dark" @click="cancel()">
+                <span class="fa fa-times"></span> Annuler
+            </button>
+
+            <button class="btn btn-primary" @click="save()">
+                <span class="fa fa-save"></span>
+                Enregistrer
+            </button>
+        </div>
+    </div>
+
+
+    <div id="confirm-not-save" class="modal fade" role="dialog" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Attention</h4>
+                    <button class="close" data-dismiss="modal" type="button">&times;</button>
+                </div>
+                <div class="modal-body">
+                    Voulez vous changer de page sans sauvegarder ?
+                </div>
+
+                <div class="modal-footer">
+
+                    <button class="btn btn-secondary" data-dismiss="modal" type="button">
+                        <span class="fa fa-times"></span> Annuler
+                    </button>
+                    <a href="#" id="confirm-btn">Confirmer</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sortablejs@1.8.4/Sortable.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.20.0/vuedraggable.umd.min.js"></script>
+    <script src="https://unpkg.com/vue-select@latest"></script>
+    <script src="{{ asset('assets/vue_app/manageProjects.js') }}"></script>
+    <script>
+        $('.change-tab').click(function (event) {
+
+            if ($(this).hasClass('active')) {
+                event.preventDefault();
+                return false;
+            }
+
+            if (isDirty) {
+                event.preventDefault();
+                $('#confirm-btn').attr('href', $(this).attr('href'));
+                $('#confirm-not-save').modal();
+
+                return false;
+            }
+            return true;
+        });
+    </script>
+
+{% endblock %}

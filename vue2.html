@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/vue-select@latest"></script>
+    <link rel="stylesheet" href="https://unpkg.com/vue-select@latest/dist/vue-select.css">
+</head>
+
+<body>
+<div class="container">
+    <h1> test vue</h1>
+</div>
+
+<div id="app">
+    <div>
+        <v-select  :reduce="item => item.id" label="text" v-bind:options="myOptions">
+            <template #selected-option="{ fullName }">
+                <strong>{{  fullName }}</strong>
+            </template>
+        </v-select>
+    </div>
+
+    <div>
+        <button class="btn btn-primary" v-on:click="http()"> Http</button>
+        <br>
+        {{info}}
+    </div>
+
+    login : <input type="text" v-model="user.name"> | {{user.name}}
+
+
+    <h2 v-if="commande.length > 0"> Liste des produits commandé</h2>
+    <br>
+    {{commande}}
+    <br>
+    <ul>
+        <li v-for="prod in commande">
+            {{prod}}
+        </li>
+    </ul>
+
+    <br>
+    <br>
+    <br>
+
+    <div v-for="produit in produits">
+        {{produit}}
+        <button class="btn btn-primary" v-on:click="order(produit)"> Commander</button>
+    </div>
+
+</div>
+
+
+<script>
+    Vue.component('v-select', VueSelect.VueSelect);
+
+    var app = new Vue({
+        el: "#app",
+        data: {
+            info: {},
+            myOptions: [
+                {text : 'elea', id: 15, fullName: "elea amice"},
+                {text : 'gribouille', id: 22, fullName: "gribouille dubourget"}
+            ],
+            user: {
+                name: 'Rémi'
+            },
+            produits: [
+                "Pizza", "Hamburger", "Tacos"
+            ],
+            commande: []
+        },
+        methods: {
+            order(produit) {
+                console.log(produit);
+                this.commande.push(produit);
+            },
+            http() {
+                axios
+                    .get('https://api.coindesk.com/v1/bpi/currentprice.json')
+                    .then(response => (this.info = response))
+            }
+        },
+        mounted () {
+            console.log('mounted');
+        }
+
+
+        /*
+        Performing multiple concurrent requests
+
+function getUserAccount() {
+  return axios.get('/user/12345');
+}
+
+function getUserPermissions() {
+  return axios.get('/user/12345/permissions');
+}
+
+Promise.all([getUserAccount(), getUserPermissions()])
+  .then(function (results) {
+    const acct = results[0];
+    const perm = results[1];
+  });
+         */
+
+
+    });
+</script>
+
+</body>
+</html>

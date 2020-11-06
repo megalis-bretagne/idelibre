@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\File;
 use App\Entity\Group;
 use App\Entity\Structure;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -52,4 +53,5 @@ class StructureRepository extends ServiceEntityRepository
 
         return $qb;
     }
+
 }

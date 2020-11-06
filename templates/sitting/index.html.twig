@@ -1,0 +1,59 @@
+{% extends 'dataview.html.twig' %}
+{% import 'macro/_forms.html.twig' as macros %}
+
+
+{% block pageTitle 'Seances' %}
+
+{% block pageActions %}
+
+    <div class="row">
+        <div class="col-6 pull-left">
+            <a href="{{ path('sitting_add') }}" class="btn btn-primary"><span
+                        class="fa fa-plus-circle"></span>
+                Ajouter</a>
+        </div>
+
+        <div class="col-6 -pull-right">
+            {{ macros.searchForm(formSearch, searchTerm) }}
+        </div>
+
+
+    </div>
+{% endblock %}
+
+{% block pageTable %}
+    <table class="table table-striped mt-3 bg-white">
+        <thead>
+        <tr class="d-flex">
+            <th class="col-7">{{ knp_pagination_sortable(sittings, 'Intitulé', 's.name') }}</th>
+            <th class="col-3">{{ knp_pagination_sortable(sittings, 'Date', 's.date') }}</th>
+            <th class="col-2">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {{ macros.emptyList(sittings, "aucune séance à afficher") }}
+
+        {% for sitting in sittings %}
+            <tr class="d-flex">
+                <td class="col-7">{{ sitting.name }} </td>
+                <td class="col-3">{{ sitting.date | date('d/m/Y : H:i' , timezone) }} </td>
+
+                <td class="col-2">
+                    {{ macros.showButton('sitting_show_information', sitting.id) }}
+                    {{ macros.editButton('edit_sitting_information', sitting.id) }}
+                    {{ macros.button_open_modal_delete(
+                        sitting.id,
+                        'Suppression de la séance',
+                        'sitting_delete',
+                        'Voulez vous vraiment supprimer cette séance ?',
+                        sittings.currentPageNumber
+                    ) }}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block pagePagination knp_pagination_render(sittings) %}

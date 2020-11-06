@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -21,6 +22,7 @@ class User implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid")
+     * @Groups({"user"})
      */
     private $id;
 
@@ -28,6 +30,7 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255, unique=true)
      * @Assert\NotBlank()
      * @Assert\Length(max=255)
+     * @Groups({"user"})
      */
     private $username;
 
@@ -37,6 +40,7 @@ class User implements UserInterface
      * @Assert\NotBlank()
      * @Assert\Length(max=255)
      * @Assert\Email()
+     * @Groups({"user"})
      */
     private $email;
 
@@ -50,6 +54,7 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Length(max=255)
+     * @Groups({"user"})
      */
     private $firstName;
 
@@ -57,6 +62,7 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Length(max=255)
+     * @Groups({"user"})
      */
     private $lastName;
 
@@ -129,8 +135,6 @@ class User implements UserInterface
         $this->username = $username;
         return $this;
     }
-
-
 
 
     /**
