@@ -58,7 +58,7 @@ class SittingManager
 
     public function delete(Sitting $sitting)
     {
-        $this->fileManager->deletse($sitting->getFile());
+        $this->fileManager->delete($sitting->getFile());
         $this->projectManager->deleteProjects($sitting->getProjects());
         $this->em->remove($sitting);
         $this->em->flush();

@@ -2,7 +2,6 @@
 
 namespace App\Tests\Controller;
 
-use App\Controller\SittingController;
 use App\DataFixtures\SittingFixtures;
 use App\Entity\Sitting;
 use App\Tests\FindEntityTrait;
@@ -98,5 +97,158 @@ class SittingControllerTest extends WebTestCase
     }
 
 
+    public function testEditUsers()
+    {
+        $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
+        $this->loginAsAdminLibriciel();
+        $crawler = $this->client->request(Request::METHOD_GET, '/sitting/edit/' . $sitting->getId() . '/actors');
+        $this->assertResponseStatusCodeSame(200);
+
+        $item = $crawler->filter('html:contains("Gérer les destinataires")');
+        $this->assertCount(1, $item);
+    }
+
+
+    public function testEditProjects()
+    {
+        $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
+        $this->loginAsAdminLibriciel();
+        $crawler = $this->client->request(Request::METHOD_GET, '/sitting/edit/' . $sitting->getId() . '/projects');
+        $this->assertResponseStatusCodeSame(200);
+
+        $item = $crawler->filter('html:contains("Gérer les projets")');
+        $this->assertCount(1, $item);
+    }
+
+
+    public function testDelete()
+    {
+        $this->loginAsAdminLibriciel();
+        $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
+
+        $crawler = $this->client->request(Request::METHOD_DELETE, '/sitting/delete/' . $sitting->getId());
+        $this->assertTrue($this->client->getResponse()->isRedirect());
+
+        $crawler = $this->client->followRedirect();
+        $this->assertResponseStatusCodeSame(200);
+        $successMsg = $crawler->filter('html:contains("Seances")');
+        $this->assertCount(1, $successMsg);
+
+        $this->assertEmpty($this->getOneSittingBy(['name' => 'Conseil Libriciel']));
+    }
+
+
+    public function testShowInformation()
+    {
+        $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
+        $this->loginAsAdminLibriciel();
+        $crawler = $this->client->request(Request::METHOD_GET, '/sitting/show/' . $sitting->getId() . '/information');
+        $this->assertResponseStatusCodeSame(200);
+
+        $item = $crawler->filter('html:contains("Détail de la séance")');
+        $this->assertCount(1, $item);
+    }
+
+    public function testShowActors()
+    {
+        $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
+        $this->loginAsAdminLibriciel();
+        $crawler = $this->client->request(Request::METHOD_GET, '/sitting/show/' . $sitting->getId() . '/actors');
+        $this->assertResponseStatusCodeSame(200);
+
+        $item = $crawler->filter('html:contains("Détail des destinataires")');
+        $this->assertCount(1, $item);
+    }
+
+
+    public function testShowProjects()
+    {
+        $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
+        $this->loginAsAdminLibriciel();
+        $crawler = $this->client->request(Request::METHOD_GET, '/sitting/show/' . $sitting->getId() . '/projects');
+        $this->assertResponseStatusCodeSame(200);
+
+        $item = $crawler->filter('html:contains("Ordre du jour")');
+        $this->assertCount(1, $item);
+    }
+
+
+    public function testGetZipSeances()
+    {
+        $container = self::$container;
+        $bag = $container->get('parameter_bag');
+
+        $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
+
+        $zipDirectory = $bag->get('document_zip_directory') . $sitting->getStructure()->getId() . '/';
+
+        $filesystem = new FileSystem();
+        $filesystem->copy(__DIR__ . '/../resources/fichier.pdf', $zipDirectory . $sitting->getId() . '.zip');
+
+
+        $this->loginAsAdminLibriciel();
+
+        $this->client->request(Request::METHOD_GET, '/sitting/zip/' . $sitting->getId());
+        $this->assertResponseStatusCodeSame(200);
+    }
+
+    public function testGetZipSeancesWrongStructure()
+    {
+        $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
+
+        $this->loginAsUserMontpellier();
+        $this->client->request(Request::METHOD_GET, '/sitting/zip/' . $sitting->getId());
+        $this->assertResponseStatusCodeSame(403);
+    }
+
+
+    public function testGetPdfSeances()
+    {
+        $container = self::$container;
+        $bag = $container->get('parameter_bag');
+
+        $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
+
+        $zipDirectory = $bag->get('document_full_pdf_directory') . $sitting->getStructure()->getId() . '/';
+
+        $filesystem = new FileSystem();
+        $filesystem->copy(__DIR__ . '/../resources/fichier.pdf', $zipDirectory . $sitting->getId() . '.pdf');
+
+
+        $this->loginAsAdminLibriciel();
+
+        $this->client->request(Request::METHOD_GET, '/sitting/pdf/' . $sitting->getId());
+        $this->assertResponseStatusCodeSame(200);
+    }
+
+
+    public function testEditInformation()
+    {
+        $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
+        $this->loginAsAdminLibriciel();
+        $crawler = $this->client->request(Request::METHOD_GET, '/sitting/edit/' . $sitting->getId());
+        $this->assertResponseStatusCodeSame(200);
+
+
+        $item = $crawler->filter('html:contains("Modifier les informations d\'une séance")');
+        $this->assertCount(1, $item);
+
+        $form = $crawler->selectButton('Enregistrer')->form();
+
+        $form['sitting[place]'] = 'MyUniquePlace';
+
+        $this->client->submit($form);
+
+        $this->assertTrue($this->client->getResponse()->isRedirect());
+
+        $crawler = $this->client->followRedirect();
+        $this->assertResponseStatusCodeSame(200);
+
+        $successMsg = $crawler->filter('html:contains("Modifier les informations d\'une séance")');
+        $this->assertCount(1, $successMsg);
+
+        $this->assertNotEmpty($this->getOneEntityBy(Sitting::class, ['place' => 'MyUniquePlace']));
+
+    }
 
 }

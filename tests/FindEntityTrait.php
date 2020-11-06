@@ -3,9 +3,11 @@
 namespace App\Tests;
 
 use App\Entity\Annex;
+use App\Entity\Convocation;
 use App\Entity\Project;
 use App\Entity\Sitting;
 use App\Entity\Type;
+use App\Entity\User;
 
 trait FindEntityTrait
 {
@@ -20,24 +22,34 @@ trait FindEntityTrait
     }
 
 
-    public function getOneSittingBy(array $criteria): Sitting
+    public function getOneSittingBy(array $criteria): ?Sitting
     {
         return $this->getOneEntityBy(Sitting::class, $criteria);
     }
 
 
-    public function getOneProjectBy(array $criteria): Project
+    public function getOneProjectBy(array $criteria): ?Project
     {
         return $this->getOneEntityBy(Project::class, $criteria);
     }
 
-    public function getOneAnnexBy(array $criteria): Annex
+    public function getOneAnnexBy(array $criteria): ?Annex
     {
         return $this->getOneEntityBy(Annex::class, $criteria);
     }
 
-    public function getOneTypeBy(array $criteria): Type
+    public function getOneTypeBy(array $criteria): ?Type
     {
         return $this->getOneEntityBy(Type::class, $criteria);
+    }
+
+    public function getOneUserBy(array $criteria): ?User
+    {
+        return $this->getOneEntityBy(User::class, $criteria);
+    }
+
+    public function getOneConvocationBy(array $criteria): ?Convocation
+    {
+        return $this->getOneEntityBy(Convocation::class, $criteria);
     }
 }

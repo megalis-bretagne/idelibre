@@ -14,7 +14,7 @@ class FileController extends AbstractController
 {
     /**
      * @Route("/file/download/{id}", name="file_download", methods={"GET"})
-     * @IsGranted("MANAGE_FILES", subject="file")
+     * @IsGranted("DOWNLOAD_FILES", subject="file")
      */
     public function download(File $file) :Response
     {

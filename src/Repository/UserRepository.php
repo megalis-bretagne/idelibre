@@ -112,7 +112,9 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->andWhere(' r.name =:actor')
             ->setParameter('actor', 'Actor')
             ->andWhere('u.structure = :structure')
-            ->setParameter('structure', $structure);
+            ->setParameter('structure', $structure)
+            ->orderBy('u.lastName', 'ASC')
+        ;
     }
 
     public function findActorsInSitting(Sitting $sitting, Structure $structure): QueryBuilder

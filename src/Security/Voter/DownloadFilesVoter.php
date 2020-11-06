@@ -3,14 +3,13 @@
 namespace App\Security\Voter;
 
 use App\Entity\File;
-use App\Entity\Type;
 use App\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class ManageFilesVoter extends Voter
+class DownloadFilesVoter extends Voter
 {
 
     /**
@@ -25,7 +24,7 @@ class ManageFilesVoter extends Voter
 
     protected function supports($attribute, $subject)
     {
-        return in_array($attribute, ['MANAGE_FILES'])
+        return in_array($attribute, ['DOWNLOAD_FILES'])
             && ($subject instanceof File);
     }
 

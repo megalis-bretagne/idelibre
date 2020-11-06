@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Sitting;
-use App\Form\AddActorType;
 use App\Form\SearchType;
 use App\Form\SittingType;
 use App\Repository\ConvocationRepository;
@@ -80,7 +79,7 @@ class SittingController extends AbstractController
     }
 
     /**
-     * @Route("/sitting/edit/{id}/actors", name="edit_sitting_actor")
+     * @Route("/sitting/edit/{id}/actors", name="edit_sitting_actor", methods={"GET"})
      * @IsGranted("ROLE_MANAGE_SITTINGS")
      * @Breadcrumb("Gérer les acteurs")
      */
@@ -120,7 +119,7 @@ class SittingController extends AbstractController
             );
 
             $this->addFlash('success', 'votre séance a bien été modifiée');
-            return $this->redirectToRoute('sitting_index');
+            return $this->redirectToRoute('edit_sitting_information', ['id' => $sitting->getId()]);
         }
         return $this->render('sitting/edit_information.html.twig', [
             'form' => $form->createView(),
@@ -142,12 +141,13 @@ class SittingController extends AbstractController
         ]);
     }
 
+
     /**
      * @Route("/sitting/show/{id}/information", name="sitting_show_information", methods={"GET"})
      * @IsGranted("MANAGE_SITTINGS", subject="sitting")
      * @Breadcrumb("Détail {sitting.name}")
      */
-    public function showInformation(Sitting $sitting, ConvocationRepository $convocationRepository, ProjectRepository $projectRepository)
+    public function showInformation(Sitting $sitting)
     {
         return $this->render('sitting/details_information.html.twig', [
             'sitting' => $sitting,
@@ -167,7 +167,6 @@ class SittingController extends AbstractController
             'sitting' => $sitting,
         ]);
     }
-
 
 
     /**
