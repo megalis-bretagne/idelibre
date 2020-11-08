@@ -104,7 +104,8 @@ class ProjectControllerTest extends WebTestCase
         $serializedProjects = $this->serializer->serialize([$project1, $project2], 'json');
 
 
-        $this->client->request(Request::METHOD_POST,
+        $this->client->request(
+            Request::METHOD_POST,
             '/api/projects/' . $sitting->getId(),
             ['projects' => $serializedProjects],
             [
@@ -138,7 +139,8 @@ class ProjectControllerTest extends WebTestCase
 
         $serializedProjects = $this->serializer->serialize([$project2], 'json');
 
-        $this->client->request(Request::METHOD_POST,
+        $this->client->request(
+            Request::METHOD_POST,
             '/api/projects/' . $sitting->getId(),
             ['projects' => $serializedProjects]
         );
@@ -175,7 +177,8 @@ class ProjectControllerTest extends WebTestCase
 
         $serializedProjects = $this->serializer->serialize([$project1Client, $project2Client], 'json');
 
-        $this->client->request(Request::METHOD_POST,
+        $this->client->request(
+            Request::METHOD_POST,
             '/api/projects/' . $sitting->getId(),
             ['projects' => $serializedProjects]
         );
@@ -206,5 +209,4 @@ class ProjectControllerTest extends WebTestCase
         $this->assertCount(2, $projectsArray[0]['annexes']);
         $this->assertNotEmpty($projectsArray[0]['annexes'][0]['fileName']);
     }
-
 }

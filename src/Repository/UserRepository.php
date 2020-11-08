@@ -113,8 +113,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->setParameter('actor', 'Actor')
             ->andWhere('u.structure = :structure')
             ->setParameter('structure', $structure)
-            ->orderBy('u.lastName', 'ASC')
-        ;
+            ->orderBy('u.lastName', 'ASC');
     }
 
     public function findActorsInSitting(Sitting $sitting, Structure $structure): QueryBuilder
@@ -147,5 +146,16 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         }
 
         return $qb;
+    }
+
+
+    public function findActorIdsConvocationSent(Sitting $sitting): array
+    {
+        $qb = $this->findActorsInSitting($sitting, $sitting->getStructure())
+            ->andWhere('c.sentTimestamp is not null')
+            ->select('u.id');
+
+        $associatedArrayIds = $qb->getQuery()->getScalarResult();
+        return array_map(fn($el) => $el['id'], $associatedArrayIds);
     }
 }

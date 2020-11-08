@@ -74,4 +74,12 @@ class ActorController extends AbstractController
             ['ok' => true]
         );
     }
+
+    /**
+     * @Route("/api/actors/sittings/{id}/sent", name="api_actors_sitting_sent", methods={"GET"})
+     * @IsGranted("MANAGE_SITTINGS", subject="sitting")
+     */
+    public function getActorsConvocationSent(Sitting $sitting, UserRepository $userRepository){
+        return $this->json($userRepository->findActorIdsConvocationSent($sitting));
+    }
 }

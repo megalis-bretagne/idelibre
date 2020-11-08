@@ -248,7 +248,5 @@ class SittingControllerTest extends WebTestCase
         $this->assertCount(1, $successMsg);
 
         $this->assertNotEmpty($this->getOneEntityBy(Sitting::class, ['place' => 'MyUniquePlace']));
-
     }
-
 }

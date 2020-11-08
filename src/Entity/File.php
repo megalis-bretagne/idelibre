@@ -124,6 +124,4 @@ class File
 
         return $this->sitting->getStructure();
     }
-
-
 }

@@ -39,8 +39,7 @@ class ProjectManager
         FileManager $fileManager,
         AnnexManager $annexManager,
         EntityManagerInterface $em
-    )
-    {
+    ) {
         $this->projectRepository = $projectRepository;
         $this->userRepository = $userRepository;
         $this->themeRepository = $themeRepository;

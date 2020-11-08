@@ -6,6 +6,7 @@ let app = new Vue({
     data: {
         inSittingActors: [],
         notInSittingActors: [],
+        alreadySentConvocationActorIds : [],
         removedActors: [],
         addedActors: [],
         messageInfo: null
@@ -46,10 +47,16 @@ let app = new Vue({
             Promise.all([
                 axios.get(`/api/actors/sittings/${getSittingId()}`),
                 axios.get(`/api/actors/sittings/${getSittingId()}/not`),
+                axios.get(`/api/actors/sittings/${getSittingId()}/sent`),
             ]).then((response) => {
                 this.inSittingActors = response[0].data;
                 this.notInSittingActors = response[1].data;
+                this.alreadySentConvocationActorIds = response[2].data;
             });
+        },
+
+        alreadySentConvocation(actorId) {
+            return this.alreadySentConvocationActorIds.indexOf(actorId) > -1;
         }
     },
 
