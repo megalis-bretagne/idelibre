@@ -58,5 +58,4 @@ class ThemeControllerTest extends WebTestCase
         $themes = json_decode($this->client->getResponse()->getContent(), true);
         $this->assertCount(4, $themes);
     }
-
 }

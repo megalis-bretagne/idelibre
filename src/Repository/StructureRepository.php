@@ -53,5 +53,4 @@ class StructureRepository extends ServiceEntityRepository
 
         return $qb;
     }
-
 }

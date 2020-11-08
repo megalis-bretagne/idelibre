@@ -60,7 +60,6 @@ class FileControllerTest extends WebTestCase
 
     public function testDownload()
     {
-
         $fileId = $this->prepareFile();
         $this->loginAsAdminLibriciel();
         $this->client->request(Request::METHOD_GET, '/file/download/' . $fileId);
@@ -84,5 +83,4 @@ class FileControllerTest extends WebTestCase
         $this->client = null;
         $this->entityManager->close();
     }
-
 }

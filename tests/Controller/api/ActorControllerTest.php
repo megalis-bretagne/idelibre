@@ -92,16 +92,19 @@ class ActorControllerTest extends WebTestCase
         $this->loginAsAdminLibriciel();
         $data = json_encode(['addedActors' => [$actor3->getId()], 'removedActors' => []]);
 
-        $this->client->request(Request::METHOD_PUT,
+        $this->client->request(
+            Request::METHOD_PUT,
             '/api/actors/sittings/' . $sitting->getId(),
-            [], [], [], $data
+            [],
+            [],
+            [],
+            $data
         );
 
         $this->assertResponseStatusCodeSame(200);
         $this->entityManager->refresh($sitting);
 
         $this->assertCount(3, $sitting->getConvocations());
-
     }
 
     public function testUpdateActorsInSittingRemoveActor()
@@ -111,9 +114,13 @@ class ActorControllerTest extends WebTestCase
         $this->loginAsAdminLibriciel();
         $data = json_encode(['addedActors' => [], 'removedActors' => [$actor1->getId()]]);
 
-        $this->client->request(Request::METHOD_PUT,
+        $this->client->request(
+            Request::METHOD_PUT,
             '/api/actors/sittings/' . $sitting->getId(),
-            [], [], [], $data
+            [],
+            [],
+            [],
+            $data
         );
 
         $this->assertResponseStatusCodeSame(200);
@@ -122,4 +129,13 @@ class ActorControllerTest extends WebTestCase
         $this->assertCount(1, $sitting->getConvocations());
     }
 
+    public function testGetActorsConvocationSent()
+    {
+        $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
+        $this->loginAsAdminLibriciel();
+        $this->client->request(Request::METHOD_GET, '/api/actors/sittings/' . $sitting->getId() . '/sent');
+        $this->assertResponseStatusCodeSame(200);
+        $content = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertCount(1, $content);
+    }
 }

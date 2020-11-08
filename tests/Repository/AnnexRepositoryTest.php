@@ -72,6 +72,4 @@ class AnnexRepositoryTest extends WebTestCase
         $this->assertCount(1, $annexes);
         $this->assertSame('Fichier annexe 2', $annexes[0]->getFile()->getName());
     }
-
-
 }

@@ -36,7 +36,7 @@
                     <h2 class="mt-4">Acteurs convoqués</h2>
                     <div class="row">
                         <div v-for="actor in inSittingActors" class="col-4">
-                            <button class="btn btn-outline-danger borderless" v-on:click="removeActor(actor.id)">
+                            <button :disabled="alreadySentConvocation(actor.id)" class="btn btn-outline-danger borderless" v-on:click="removeActor(actor.id)">
                                 <span class="fa fa-trash-alt" title="Retirer"></span>
                             </button>
                             <span :title="actor.username">${ actor.firstName } ${ actor.lastName }</span>

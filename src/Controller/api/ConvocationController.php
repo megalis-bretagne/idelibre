@@ -38,4 +38,5 @@ class ConvocationController extends AbstractController
 
         return $this->json($convocation, 200, [], ['groups' => ['convocation', 'user']]);
     }
+
 }

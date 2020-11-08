@@ -74,6 +74,4 @@ class ProjectRepositoryTest extends WebTestCase
         $projects = $this->projectRepository->findNotInListProjects([$projectId], $sitting);
         $this->assertCount(1, $projects);
     }
-
-
 }

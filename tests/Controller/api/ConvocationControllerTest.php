@@ -72,5 +72,4 @@ class ConvocationControllerTest extends WebTestCase
 
         $this->assertNotEmpty($convocation->getSentTimestamp());
     }
-
 }
