@@ -60,6 +60,7 @@ class SittingManager
     {
         $this->fileManager->delete($sitting->getFile());
         $this->projectManager->deleteProjects($sitting->getProjects());
+        $this->convocationManager->deleteConvocations($sitting->getConvocations());
         $this->em->remove($sitting);
         $this->em->flush();
         // TODO remove fullpdf and zip !
@@ -75,5 +76,13 @@ class SittingManager
         $this->em->flush();
 
         $this->messageBus->dispatch(new UpdatedSitting($sitting->getId()));
+    }
+
+    public function archive(Sitting $sitting)
+    {
+        $sitting->setIsArchived(true);
+        $this->convocationManager->deactivate($sitting->getConvocations());
+        $this->em->persist($sitting);
+        $this->em->flush();
     }
 }

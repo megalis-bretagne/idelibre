@@ -92,6 +92,35 @@
                 </div>
             </div>
 
+            <div class="row mt-2">
+                <div class="col-4 text-right mt-1">
+                    <b>rapport pdf de la séance :</b>
+                </div>
+                <div class="col-8">
+                    {{ sitting.name }}_rapport.pdf
+                    <a class="btn btn-outline-secondary borderless"
+                       href="{{ path('sitting_report_pdf', {'id': sitting.id}) }}"
+                       title="Télécharger le rapport">
+                        <span class="fas fa-download"></span>
+                    </a>
+                </div>
+            </div>
+
+
+            <div class="row mt-2">
+                <div class="col-4 text-right mt-1">
+                    <b>rapport csv de la séance :</b>
+                </div>
+                <div class="col-8">
+                    {{ sitting.name }}_rapport.csv
+                    <a class="btn btn-outline-secondary borderless"
+                       href="{{ path('sitting_report_csv', {'id': sitting.id}) }}"
+                       title="Télécharger le rapport">
+                        <span class="fas fa-download"></span>
+                    </a>
+                </div>
+            </div>
+
 
         </div>
 

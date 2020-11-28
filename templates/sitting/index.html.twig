@@ -42,6 +42,16 @@
                 <td class="col-2">
                     {{ macros.showButton('sitting_show_information', sitting.id) }}
                     {{ macros.editButton('edit_sitting_information', sitting.id) }}
+
+                    {{ macros.button_open_modal_post(
+                        sitting.id,
+                        'Classement de la séances',
+                        'Voulez vous classez cette séance ?',
+                        'sitting_archive',
+                        'fas fa-book'
+                    ) }}
+
+
                     {{ macros.button_open_modal_delete(
                         sitting.id,
                         'Suppression de la séance',

@@ -8,21 +8,24 @@ use App\Entity\Sitting;
 use App\Entity\Timestamp;
 use App\Entity\User;
 use App\Repository\ConvocationRepository;
-use App\Service\Timestamp\TimestampManagerInterface;
+use App\Service\Timestamp\TimestampManager;
+use App\Service\Timestamp\TimestampServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
 class ConvocationManager
 {
     private EntityManagerInterface $em;
-    private TimestampManagerInterface $timestampManager;
+    private TimestampServiceInterface $timestampService;
     private ConvocationRepository $convocationRepository;
+    private TimestampManager $timestampManager;
 
 
-    public function __construct(EntityManagerInterface $em, TimestampManagerInterface $timestampManager, ConvocationRepository $convocationRepository)
+    public function __construct(EntityManagerInterface $em, TimestampServiceInterface $timestampService, ConvocationRepository $convocationRepository, TimestampManager $timestampManager)
     {
         $this->em = $em;
-        $this->timestampManager = $timestampManager;
+        $this->timestampService = $timestampService;
         $this->convocationRepository = $convocationRepository;
+        $this->timestampManager = $timestampManager;
     }
 
     public function createConvocations(Sitting $sitting)
@@ -56,7 +59,7 @@ class ConvocationManager
     /**
      * @param Convocation[] $convocations
      */
-    public function removeConvocations(iterable $convocations)
+    public function deleteConvocationsNotSent(iterable $convocations)
     {
         foreach ($convocations as $convocation) {
             if ($this->isAlreadySent($convocation)) {
@@ -66,8 +69,6 @@ class ConvocationManager
         }
         $this->em->flush();
     }
-
-
 
 
     private function alreadyHasConvocation(User $actor, Sitting $sitting): bool
@@ -97,7 +98,7 @@ class ConvocationManager
         }
         $timeStamp = new Timestamp();
         $timeStamp->setContent("les infos de cet envoi");
-        $this->timestampManager->signTimestamp($timeStamp);
+        $this->timestampService->signTimestamp($timeStamp);
         $this->em->persist($timeStamp);
         $convocation->setIsActive(true)
             ->setSentTimestamp($timeStamp);
@@ -111,4 +112,35 @@ class ConvocationManager
         return !!$convocation->getSentTimestamp();
     }
 
+    /**
+     * @param Convocation[] $convocations
+     */
+    public function deleteConvocations(iterable $convocations)
+    {
+        foreach ($convocations as $convocation) {
+            $this->em->remove($convocation);
+            $this->deleteAssociatedTimestamp($convocation);
+        }
+    }
+
+    private function deleteAssociatedTimestamp(Convocation $convocation)
+    {
+        if ($convocation->getSentTimestamp()) {
+            $this->timestampManager->delete($convocation->getSentTimestamp());
+        }
+        if ($convocation->getReceivedTimestamp()) {
+            $this->timestampManager->delete($convocation->getReceivedTimestamp());
+        }
+    }
+
+    /**
+     * @param Convocation[] $convocations
+     */
+    public function deactivate(iterable $convocations)
+    {
+        foreach ($convocations as $convocation) {
+            $convocation->setIsActive(false);
+            $this->em->persist($convocation);
+        }
+    }
 }

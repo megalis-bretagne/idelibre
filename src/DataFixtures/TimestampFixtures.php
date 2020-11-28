@@ -16,15 +16,12 @@ class TimestampFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-       $timestamp = new Timestamp();
-       $timestamp->setContent('message sent')
+        $timestamp = new Timestamp();
+        $timestamp->setContent('message sent')
            ->setTsa('valid');
 
-       $this->addReference(self::REFERENCE . 'sent', $timestamp);
+        $this->addReference(self::REFERENCE . 'sent', $timestamp);
 
         $manager->flush();
     }
-
-
-
 }

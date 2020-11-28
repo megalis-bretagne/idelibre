@@ -10,3 +10,27 @@ Il faut lier le ficher de convocation à la séance car sinon c'est la emrdeour 
 
 Il faudrait que ce soit FILE qui contiene la reference à la table a laquelle elle appartient et non l'inverse comme aujourd'hui
 Come ça si je supprime un projet ça supprime le file associé et on l'inverse.
+
+
+
+Faire une deifrerence entre la denomination remve et delete.
+le delete faisant unn remove + flush
+
+
+configuration snappy
+
+$pdf = $snappy->getOutputFromHtml($html, array(
+    'orientation' => 'landscape',
+    'enable-javascript' => true,
+    'javascript-delay' => 1000,
+    'no-stop-slow-scripts' => true,
+    'no-background' => false,
+    'lowquality' => false,
+    'page-height' => 124 * 3,
+    'page-width'  => 192 * 3,
+    'encoding' => 'utf-8',
+    'images' => true,
+    'cookie' => array(),
+    'dpi' => 300,
+    'enable-external-links' => true,
+    'enable-internal-links' => true

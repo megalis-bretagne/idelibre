@@ -68,7 +68,7 @@ class ActorController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
         $convocationManager->addConvocations($userRepository->findBy(['id' => $data['addedActors']]), $sitting);
-        $convocationManager->removeConvocations($convocationRepository->getConvocationsBySittingAndActorIds($sitting, $data['removedActors']));
+        $convocationManager->deleteConvocationsNotSent($convocationRepository->getConvocationsBySittingAndActorIds($sitting, $data['removedActors']));
 
         return $this->json(
             ['ok' => true]
@@ -79,7 +79,8 @@ class ActorController extends AbstractController
      * @Route("/api/actors/sittings/{id}/sent", name="api_actors_sitting_sent", methods={"GET"})
      * @IsGranted("MANAGE_SITTINGS", subject="sitting")
      */
-    public function getActorsConvocationSent(Sitting $sitting, UserRepository $userRepository){
+    public function getActorsConvocationSent(Sitting $sitting, UserRepository $userRepository)
+    {
         return $this->json($userRepository->findActorIdsConvocationSent($sitting));
     }
 }
