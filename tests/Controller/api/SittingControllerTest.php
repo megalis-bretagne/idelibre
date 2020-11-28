@@ -64,4 +64,7 @@ class SittingControllerTest extends WebTestCase
             $this->assertNotEmpty($convocation->getSentTimestamp());
         }
     }
+
+
+
 }

@@ -249,4 +249,22 @@ class SittingControllerTest extends WebTestCase
 
         $this->assertNotEmpty($this->getOneEntityBy(Sitting::class, ['place' => 'MyUniquePlace']));
     }
+
+
+    public function testArchiveSeance()
+    {
+        $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
+        $this->loginAsAdminLibriciel();
+        $this->client->request(Request::METHOD_POST, '/sitting/archive/' . $sitting->getId());
+        $this->assertTrue($this->client->getResponse()->isRedirect());
+
+        $crawler = $this->client->followRedirect();
+        $this->assertResponseStatusCodeSame(200);
+
+        $successMsg = $crawler->filter('html:contains("La séance a été classée")');
+        $this->assertCount(1, $successMsg);
+
+        $item = $crawler->filter('html:contains("Seances")');
+        $this->assertCount(1, $item);
+    }
 }

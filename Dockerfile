@@ -27,11 +27,18 @@ RUN apt-get update -yqq \
         netcat \
         openssl \
         pdftk \
+        xfonts-75dpi \
+        fontconfig \
+        xfonts-base \
         -yqq
 
 
 RUN docker-php-ext-configure intl
 RUN docker-php-ext-install intl mbstring xml zip pdo pdo_pgsql pgsql opcache
+
+
+COPY ./docker-resources/wkhtmltox_0.12.6-1.buster_amd64.deb /tmp/wkhtmltox.deb
+RUN  dpkg -i /tmp/wkhtmltox.deb
 
 
 RUN pecl install -o -f redis \

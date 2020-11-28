@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}idelibre{% endblock %}</title>
+    <link rel="stylesheet" href="{{ absolute_url(asset('assets/bootstrap/css/il-bootstrap-4.css')) }}">
+</head>
+<body>
+<div class="container-fluid">
+
+    <img src="{{ absolute_url(asset('assets/img/logo_Libriciel.png')) }}" style="width: 200px" alt="ls"
+         class="float-right">
+
+    <div>Généré le {{ date() | date('d/m/Y à H:i') }}</div>
+
+    <h3> {{ sitting.name }} - {{ sitting.date | date('d/m/Y à H:i') }}</h3>
+
+    <table class="table table-striped mt-4">
+        <thead>
+        <tr>
+            <th style="width: 15%;">Prénom</th>
+            <th style="width: 15%;">Nom</th>
+            <th style="width: 10%;">Envoi</th>
+            <th style="width: 10%;">Reception</th>
+            <th style="width: 10%;">Présence</th>
+            <th style="width: 30%;">Mandataire</th>
+        </thead>
+        <tbody>
+        {% for convocation in convocations %}
+            <tr class="d-flex">
+                <td style="width: 15%;">{{ convocation.actor.firstName }} </td>
+                <td style="width: 15%;">{{ convocation.actor.lastName }} </td>
+                <td style="width: 15%;">{{ convocation.sentTimestamp ? convocation.sentTimestamp.createAt | date('d/m/Y') : '' }} </td>
+                <td style="width: 15%;">{{ convocation.receivedTimestamp ? convocation.receivedTimestamp.createAt | date('d/m/Y') : '' }} </td>
+                <td style="width: 10%;"></td>
+                <td style="width: 30%;"></td>
+            </tr>
+
+        {% endfor %}
+        </tbody>
+
+    </table>
+</div>
+
+</body>
+
+
+</html>

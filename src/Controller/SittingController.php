@@ -10,6 +10,8 @@ use App\Repository\ProjectRepository;
 use App\Repository\SittingRepository;
 use App\Service\Convocation\ConvocationManager;
 use App\Service\Pdf\PdfSittingGenerator;
+use App\Service\Report\CsvSittingReport;
+use App\Service\Report\PdfSittingReport;
 use App\Service\Seance\ActorManager;
 use App\Service\Seance\SittingManager;
 use App\Service\Zip\ZipSittingGenerator;
@@ -211,5 +213,16 @@ class SittingController extends AbstractController
         );
 
         return $response;
+    }
+
+    /**
+     * @Route("/sitting/archive/{id}", name="sitting_archive", methods={"POST"})
+     * @IsGranted("MANAGE_SITTINGS", subject="sitting")
+     */
+    public function archiveSitting(Sitting $sitting, SittingManager $sittingManager): Response
+    {
+        $sittingManager->archive($sitting);
+        $this->addFlash('success', 'La séance a été classée');
+        return $this->redirectToRoute('sitting_index');
     }
 }

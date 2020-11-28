@@ -156,6 +156,6 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->select('u.id');
 
         $associatedArrayIds = $qb->getQuery()->getScalarResult();
-        return array_map(fn($el) => $el['id'], $associatedArrayIds);
+        return array_map(fn ($el) => $el['id'], $associatedArrayIds);
     }
 }
