@@ -62,12 +62,6 @@ class CreateSuperAdminCommand extends Command
 
         $io->caution("Be careful");
 
-        //$io->createProgressBar(30);
-
-        //$io->
-
-
-
 
         $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
 
