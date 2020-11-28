@@ -90,7 +90,7 @@ class ThemeManager
         $rootTheme = $this->themeRepository->findOneBy(['name' => 'ROOT', 'structure' => $structure]);
 
         if (!empty($rootTheme)) {
-            $themes = $this->themeRepository->getChildren($rootTheme, false, ['fullName']);
+            $themes = $this->themeRepository->getChildren($rootTheme, false, 'fullName');
         }
 
         return $themes ?? [];
