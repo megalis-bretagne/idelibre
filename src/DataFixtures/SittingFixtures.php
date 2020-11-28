@@ -19,9 +19,6 @@ class SittingFixtures extends Fixture implements DependentFixtureInterface
         /** @var Structure $structureLibriciel */
         $structureLibriciel = $this->getReference(StructureFixtures::REFERENCE . 'libriciel');
 
-        /** @var Structure $structureMontpellier */
-        $structureMontpellier = $this->getReference(StructureFixtures::REFERENCE . 'montpellier');
-
         /** @var Type $typeConseilLibriciel */
         $typeConseilLibriciel = $this->getReference(TypeFixtures::REFERENCE . 'conseilLibriciel');
 
