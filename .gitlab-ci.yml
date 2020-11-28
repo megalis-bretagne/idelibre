@@ -30,6 +30,7 @@ phpTest:
     - name: postgres:10.12
       alias: db-idelibre
   variables:
+    XDEBUG_MODE: coverage
     POSTGRES_DB: idelibre_test
     POSTGRES_USER: idelibre
     POSTGRES_PASSWORD: idelibre
