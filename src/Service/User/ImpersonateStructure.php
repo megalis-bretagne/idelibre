@@ -4,6 +4,7 @@
 namespace App\Service\User;
 
 use App\Entity\Structure;
+use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;
@@ -23,6 +24,7 @@ class ImpersonateStructure
 
     public function logInStructure(Structure $structure): bool
     {
+        /** @var User $user */
         $user = $this->security->getUser();
         $user->setStructure($structure);
         $this->em->persist($user);
@@ -32,6 +34,7 @@ class ImpersonateStructure
 
     public function logoutStructure(): bool
     {
+        /** @var User $user */
         $user = $this->security->getUser();
         $user->setStructure(null);
         $this->em->persist($user);

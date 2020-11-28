@@ -38,7 +38,6 @@ class InitBddCommand extends Command
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @param EntityManagerInterface $entityManager
      * @return int
      * @throws Exception
      */

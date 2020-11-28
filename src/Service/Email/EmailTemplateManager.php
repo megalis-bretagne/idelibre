@@ -29,7 +29,6 @@ class EmailTemplateManager
         $forgetTpl = new EmailTemplate();
         $forgetTpl->setName('Mot de passe oublié')
             ->setStructure($structure)
-            ->setType(EmailTemplate::TYPE_FORGET)
             ->setContent($forgetMsg);
         $this->em->persist($forgetTpl);
 
@@ -39,7 +38,6 @@ Un dossier a été mis à votre disposition. veuillez cliquez sur le lien pour l
         $notifyTpl = new EmailTemplate();
         $notifyTpl->setName('Message de notification')
             ->setStructure($structure)
-            ->setType(EmailTemplate::TYPE_NOTIF)
             ->setContent($notifyMsg);
         $this->em->persist($notifyTpl);
 

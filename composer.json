@@ -49,12 +49,13 @@
         "twig/twig": "^2.12|^3.0"
     },
     "require-dev": {
+        "ext-json": "*",
         "dama/doctrine-test-bundle": "^6.3",
         "doctrine/doctrine-fixtures-bundle": "^3.3",
         "liip/test-fixtures-bundle": "^1.7",
+        "phpstan/phpstan": "^0.12.57",
         "symfony/css-selector": "5.1.*",
-        "symfony/phpunit-bridge": "^5.1",
-      "ext-json": "*"
+        "symfony/phpunit-bridge": "^5.1"
     },
     "config": {
         "optimize-autoloader": true,

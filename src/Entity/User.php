@@ -169,7 +169,7 @@ class User implements UserInterface
      */
     public function getSalt()
     {
-        // not needed when using the "bcrypt" algorithm in security.yaml
+        return null;
     }
 
     /**
@@ -205,22 +205,6 @@ class User implements UserInterface
         return $this;
     }
 
-    public function serialize()
-    {
-        return serialize(array(
-            $this->id,
-            $this->email,
-            $this->roles
-        ));
-    }
-
-    public function unserialize($serialized)
-    {
-        list(
-            $this->id,
-            $this->email,
-            ) = unserialize($serialized, array("allowed_classes" => false));
-    }
 
     public function getStructure(): ?Structure
     {

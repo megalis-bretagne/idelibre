@@ -94,6 +94,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     public function supportsRememberMe()
     {
+        return false;
     }
 
     /**
