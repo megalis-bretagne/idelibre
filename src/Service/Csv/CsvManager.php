@@ -47,7 +47,9 @@ class CsvManager
         $this->typeRepository = $typeRepository;
     }
 
-
+    /**
+     * @return ConstraintViolationListInterface[]
+     */
     public function importUsers(UploadedFile $file, Structure $structure): array
     {
         $errors = [];

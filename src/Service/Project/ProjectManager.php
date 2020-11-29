@@ -158,7 +158,7 @@ class ProjectManager
 
     /**
      * @param Sitting $sitting
-     * @return iterable
+     * @return Project[]
      */
     public function getProjectsFromSitting(Sitting $sitting): iterable
     {
@@ -271,6 +271,7 @@ class ProjectManager
 
     /**
      * @param ProjectApi[] $clientProjects
+     * @return string[]
      */
     private function listClientProjectIds(array $clientProjects): array
     {

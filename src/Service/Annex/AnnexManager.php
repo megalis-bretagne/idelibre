@@ -48,6 +48,7 @@ class AnnexManager
 
     /**
      * @param ProjectApi[] $clientProjects
+     * @return string[]
      */
     private function listClientAnnexeIds(array $clientProjects): array
     {

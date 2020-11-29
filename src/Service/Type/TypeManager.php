@@ -16,13 +16,14 @@ class TypeManager
     public function __construct(
         TypeRepository $typeRepository,
         EntityManagerInterface $em
-    ) {
+    )
+    {
         $this->typeRepository = $typeRepository;
         $this->em = $em;
     }
 
 
-    public function save(Type $type, Structure $structure)
+    public function save(Type $type, Structure $structure): void
     {
         $type->setStructure($structure);
         $this->em->persist($type);
@@ -30,7 +31,7 @@ class TypeManager
     }
 
 
-    public function delete(Type $type)
+    public function delete(Type $type): void
     {
         $this->em->remove($type);
         $this->em->flush();

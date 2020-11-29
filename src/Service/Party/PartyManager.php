@@ -8,7 +8,6 @@ use App\Entity\Structure;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use phpDocumentor\Reflection\Types\Iterable_;
 
 class PartyManager
 {
@@ -21,7 +20,7 @@ class PartyManager
         $this->userRepository = $userRepository;
     }
 
-    public function save(Party $party, Structure $structure)
+    public function save(Party $party, Structure $structure): void
     {
         $party->setStructure($structure);
 
@@ -30,7 +29,7 @@ class PartyManager
     }
 
 
-    public function update(Party $party, Structure $structure)
+    public function update(Party $party, Structure $structure): void
     {
         $party->setStructure($structure);
 
@@ -45,7 +44,7 @@ class PartyManager
      * @param User[] $selectedUsers
      *
      */
-    private function dissociateUsers(array $selectedUsers, Party $party)
+    private function dissociateUsers(array $selectedUsers, Party $party): void
     {
         $associatedUsersInDB = $this->userRepository->findBy(['party' => $party]);
         foreach ($associatedUsersInDB as $associatedUserInDB) {
@@ -58,7 +57,7 @@ class PartyManager
     /**
      * @param User[] $selectedUsers
      */
-    private function associateUsers(array $selectedUsers, Party $party)
+    private function associateUsers(array $selectedUsers, Party $party): void
     {
         foreach ($selectedUsers as $selectedUser) {
             $selectedUser->setParty($party);
@@ -73,7 +72,7 @@ class PartyManager
         return in_array($userInDB, $selectedUsers);
     }
 
-    public function delete(Party $party)
+    public function delete(Party $party): void
     {
         $this->em->remove($party);
         $this->em->flush();
