@@ -13,7 +13,7 @@ class AnnexFixtures extends Fixture implements DependentFixtureInterface
 {
     const REFERENCE = 'Annex_';
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         /** @var File $fileAnnex1 */
         $fileAnnex1 = $this->getReference(FileFixtures::REFERENCE . 'fileAnnex1');

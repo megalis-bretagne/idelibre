@@ -12,7 +12,7 @@ class ForgetTokenFixtures extends Fixture implements DependentFixtureInterface
 {
     const GROUP = 'ForgetToken_';
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         /** @var User $user */
         $user = $this->getReference(UserFixtures::REFERENCE . 'adminLibriciel');

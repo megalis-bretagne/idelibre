@@ -11,7 +11,7 @@ class FileFixtures extends Fixture
 {
     const REFERENCE = 'File_';
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $fileProject1 = new File();
         $fileProject1->setName('Fichier projet 1')

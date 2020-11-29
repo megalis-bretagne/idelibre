@@ -13,7 +13,7 @@ class CreateSuperAdminCommand extends Command
 {
     protected static $defaultName = 'admin:create:superadmin';
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             // bin/console list

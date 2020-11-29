@@ -14,7 +14,7 @@ class ConvocationFixtures extends Fixture implements DependentFixtureInterface
 {
     const REFERENCE = 'Convocation_';
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         /** @var Sitting $sittingConseilLibriciel */
         $sittingConseilLibriciel = $this->getReference(SittingFixtures::REFERENCE . 'sittingConseilLibriciel');

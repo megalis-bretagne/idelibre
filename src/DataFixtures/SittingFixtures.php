@@ -14,7 +14,7 @@ class SittingFixtures extends Fixture implements DependentFixtureInterface
 {
     const REFERENCE = 'Sitting_';
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         /** @var Structure $structureLibriciel */
         $structureLibriciel = $this->getReference(StructureFixtures::REFERENCE . 'libriciel');

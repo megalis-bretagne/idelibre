@@ -27,7 +27,7 @@ class InitBddCommand extends Command
         $this->entityManager = $entityManager;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription('Add a short description for your command')
@@ -41,7 +41,7 @@ class InitBddCommand extends Command
      * @return int
      * @throws Exception
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
         if ($this->isAlreadyInit()) {

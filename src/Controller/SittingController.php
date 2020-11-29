@@ -95,7 +95,7 @@ class SittingController extends AbstractController
      * IsGranted("ROLE_MANAGE_SITTINGS")
      * @Breadcrumb("Gérer les projets")
      */
-    public function editProjects(Sitting $sitting)
+    public function editProjects(Sitting $sitting): Response
     {
         return $this->render('sitting/edit_projects.html.twig', [
             'sitting' => $sitting
