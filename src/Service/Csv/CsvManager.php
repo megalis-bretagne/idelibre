@@ -47,7 +47,9 @@ class CsvManager
         $this->typeRepository = $typeRepository;
     }
 
-
+    /**
+     * @return ConstraintViolationListInterface[]
+     */
     public function importUsers(UploadedFile $file, Structure $structure): array
     {
         $errors = [];
@@ -82,7 +84,7 @@ class CsvManager
     }
 
 
-    private function associateActorToTypeSeances(User $user, ?string $typeNamesString, Structure $structure)
+    private function associateActorToTypeSeances(User $user, ?string $typeNamesString, Structure $structure): void
     {
         if (!$typeNamesString || $user->getRole()->getName() != 'Actor') {
             return;

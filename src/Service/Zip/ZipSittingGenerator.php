@@ -40,7 +40,7 @@ class ZipSittingGenerator
     }
 
 
-    private function addProjectAndAnnexesFiles(ZipArchive $zip, Sitting $sitting)
+    private function addProjectAndAnnexesFiles(ZipArchive $zip, Sitting $sitting): void
     {
         foreach ($sitting->getProjects() as $project) {
             $directory = 'projet_' . ($project->getRank() + 1) . '/';

@@ -19,7 +19,7 @@ class GdprController extends AbstractController
     /**
      * @Route("/gdpr/notice", name="gdpr_notice")
      */
-    public function notice(GdprManager $gdprManager):Response
+    public function notice(GdprManager $gdprManager): Response
     {
         return $this->render('gdpr/notice.html.twig', [
             'gdpr' => $gdprManager->getGdpr()
@@ -32,7 +32,7 @@ class GdprController extends AbstractController
      * @IsGranted("ROLE_SUPERADMIN")
      * @Breadcrumb("Modifier")
      */
-    public function edit(GdprManager $gdprManager, Request $request):Response
+    public function edit(GdprManager $gdprManager, Request $request): Response
     {
         $form = $this->createForm(GdprType::class, $gdprManager->getGdpr());
         $form->handleRequest($request);

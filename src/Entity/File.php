@@ -41,21 +41,21 @@ class File
 
     /**
      * @ORM\OneToOne(targetEntity=Project::class, mappedBy="file")
-     * @var Project
+     * @var Project | null
      */
     private $project;
 
 
     /**
      * @ORM\OneToOne(targetEntity=Annex::class, mappedBy="file")
-     * @var Annex
+     * @var Annex | null
      */
     private $annex;
 
 
     /**
      * @ORM\OneToOne(targetEntity=Sitting::class, mappedBy="file")
-     * @var Sitting
+     * @var Sitting | null
      */
     private $sitting;
 

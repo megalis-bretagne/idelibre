@@ -13,7 +13,7 @@ class StructureFixtures extends Fixture implements DependentFixtureInterface
 {
     const REFERENCE = "STRUCTURE_";
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         /** @var Group $groupRecia */
         $groupRecia = $this->getReference(GroupFixtures::REFERENCE . 'recia');

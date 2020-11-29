@@ -10,7 +10,7 @@ class TimezoneFixtures extends Fixture
 {
     const REFERENCE = 'Timezone_';
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $timeZone = new Timezone();
         $timeZone->setName('Europe/Paris');

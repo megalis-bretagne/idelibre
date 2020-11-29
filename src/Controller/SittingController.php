@@ -10,8 +10,6 @@ use App\Repository\ProjectRepository;
 use App\Repository\SittingRepository;
 use App\Service\Convocation\ConvocationManager;
 use App\Service\Pdf\PdfSittingGenerator;
-use App\Service\Report\CsvSittingReport;
-use App\Service\Report\PdfSittingReport;
 use App\Service\Seance\ActorManager;
 use App\Service\Seance\SittingManager;
 use App\Service\Zip\ZipSittingGenerator;
@@ -97,7 +95,7 @@ class SittingController extends AbstractController
      * IsGranted("ROLE_MANAGE_SITTINGS")
      * @Breadcrumb("Gérer les projets")
      */
-    public function editProjects(Sitting $sitting)
+    public function editProjects(Sitting $sitting): Response
     {
         return $this->render('sitting/edit_projects.html.twig', [
             'sitting' => $sitting
@@ -110,7 +108,7 @@ class SittingController extends AbstractController
      * @IsGranted("ROLE_MANAGE_SITTINGS")
      * @Breadcrumb("Modifier")
      */
-    public function editInformation(Sitting $sitting, Request $request, SittingManager $sittingManager)
+    public function editInformation(Sitting $sitting, Request $request, SittingManager $sittingManager): Response
     {
         $form = $this->createForm(SittingType::class, $sitting, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
@@ -134,7 +132,7 @@ class SittingController extends AbstractController
      * @Route("/sitting/delete/{id}", name="sitting_delete", methods={"DELETE"})
      * @IsGranted("MANAGE_SITTINGS", subject="sitting")
      */
-    public function delete(Sitting $sitting, SittingManager $sittingManager, Request $request)
+    public function delete(Sitting $sitting, SittingManager $sittingManager, Request $request): Response
     {
         $sittingManager->delete($sitting);
         $this->addFlash('success', 'la séance a bien été supprimée');
@@ -149,7 +147,7 @@ class SittingController extends AbstractController
      * @IsGranted("MANAGE_SITTINGS", subject="sitting")
      * @Breadcrumb("Détail {sitting.name}")
      */
-    public function showInformation(Sitting $sitting)
+    public function showInformation(Sitting $sitting): Response
     {
         return $this->render('sitting/details_information.html.twig', [
             'sitting' => $sitting,
@@ -163,7 +161,7 @@ class SittingController extends AbstractController
      * @IsGranted("MANAGE_SITTINGS", subject="sitting")
      * @Breadcrumb("Détail {sitting.name}")
      */
-    public function showActors(Sitting $sitting, ConvocationRepository $convocationRepository)
+    public function showActors(Sitting $sitting, ConvocationRepository $convocationRepository): Response
     {
         return $this->render('sitting/details_actors.html.twig', [
             'sitting' => $sitting,
@@ -176,7 +174,7 @@ class SittingController extends AbstractController
      * @IsGranted("MANAGE_SITTINGS", subject="sitting")
      * @Breadcrumb("Détail {sitting.name}")
      */
-    public function showProjects(Sitting $sitting, ConvocationRepository $convocationRepository, ProjectRepository $projectRepository)
+    public function showProjects(Sitting $sitting, ConvocationRepository $convocationRepository, ProjectRepository $projectRepository): Response
     {
         return $this->render('sitting/details_projects.html.twig', [
             'sitting' => $sitting,
@@ -188,7 +186,7 @@ class SittingController extends AbstractController
      * @Route("/sitting/zip/{id}", name="sitting_zip", methods={"GET"})
      * @IsGranted("MANAGE_SITTINGS", subject="sitting")
      */
-    public function getZipSitting(Sitting $sitting, ZipSittingGenerator $zipSittingGenerator)
+    public function getZipSitting(Sitting $sitting, ZipSittingGenerator $zipSittingGenerator): Response
     {
         $response = new BinaryFileResponse($zipSittingGenerator->getZipPath($sitting));
         $response->setContentDisposition(
@@ -204,7 +202,7 @@ class SittingController extends AbstractController
      * @Route("/sitting/pdf/{id}", name="sitting_full_pdf", methods={"GET"})
      * @IsGranted("MANAGE_SITTINGS", subject="sitting")
      */
-    public function getFullPdfSitting(Sitting $sitting, PdfSittingGenerator $pdfSittingGenerator)
+    public function getFullPdfSitting(Sitting $sitting, PdfSittingGenerator $pdfSittingGenerator): Response
     {
         $response = new BinaryFileResponse($pdfSittingGenerator->getPdfPath($sitting));
         $response->setContentDisposition(

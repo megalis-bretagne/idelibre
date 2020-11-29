@@ -13,7 +13,7 @@ class TypeFixtures extends Fixture implements DependentFixtureInterface
 {
     const REFERENCE = 'Type_';
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
 
         /** @var Structure $structureLibriciel */

@@ -21,7 +21,7 @@ class EmailTemplateManager
     }
 
 
-    public function initDefaultTemplates(Structure $structure)
+    public function initDefaultTemplates(Structure $structure): void
     {
         $forgetMsg = 'bonjour, <br>
     Vous avez effectuer une demande remise à zéro de mot de passe <br>
@@ -29,7 +29,6 @@ class EmailTemplateManager
         $forgetTpl = new EmailTemplate();
         $forgetTpl->setName('Mot de passe oublié')
             ->setStructure($structure)
-            ->setType(EmailTemplate::TYPE_FORGET)
             ->setContent($forgetMsg);
         $this->em->persist($forgetTpl);
 
@@ -39,7 +38,6 @@ Un dossier a été mis à votre disposition. veuillez cliquez sur le lien pour l
         $notifyTpl = new EmailTemplate();
         $notifyTpl->setName('Message de notification')
             ->setStructure($structure)
-            ->setType(EmailTemplate::TYPE_NOTIF)
             ->setContent($notifyMsg);
         $this->em->persist($notifyTpl);
 
@@ -47,14 +45,14 @@ Un dossier a été mis à votre disposition. veuillez cliquez sur le lien pour l
     }
 
 
-    public function save(EmailTemplate $template, Structure $structure)
+    public function save(EmailTemplate $template, Structure $structure): void
     {
         $template->setStructure($structure);
         $this->em->persist($template);
         $this->em->flush();
     }
 
-    public function delete(EmailTemplate $emailTemplate)
+    public function delete(EmailTemplate $emailTemplate): void
     {
         $this->em->remove($emailTemplate);
         $this->em->flush();

@@ -14,7 +14,7 @@ class TimestampFixtures extends Fixture
 {
     const REFERENCE = 'Timestamp_';
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $timestamp = new Timestamp();
         $timestamp->setContent('message sent')

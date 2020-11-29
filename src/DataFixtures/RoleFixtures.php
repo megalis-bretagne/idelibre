@@ -10,7 +10,7 @@ class RoleFixtures extends Fixture
 {
     const REFERENCE = 'Role_';
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $roleSuperAdmin = new Role();
         $roleSuperAdmin->setName('SuperAdmin')

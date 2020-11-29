@@ -46,7 +46,7 @@ class EmailTemplateController extends AbstractController
      * @IsGranted("ROLE_MANAGE_EMAIL_TEMPLATES")
      * @Breadcrumb("Ajouter")
      */
-    public function add(Request $request, EmailTemplateManager $templateManager)
+    public function add(Request $request, EmailTemplateManager $templateManager): Response
     {
         $form = $this->createForm(EmailTemplateType::class, null, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
@@ -100,7 +100,7 @@ class EmailTemplateController extends AbstractController
 
     /**
      * @Route("/emailTemplate/preview/{id}", name="email_template_preview", methods={"GET"})
-     * @IsGranted("MY_STRUCTURE", subject="emailTemplate")
+     * @IsGranted("MANAGE_EMAIL_TEMPLATES", subject="emailTemplate")
      * @Breadcrumb("Visualiser {emailTemplate.name}")
      */
     public function preview(EmailTemplate $emailTemplate): Response
@@ -112,7 +112,7 @@ class EmailTemplateController extends AbstractController
 
     /**
      * @Route("/emailTemplate/iframe/preview/{id}", name="email_template_iframe_preview", methods={"GET"})
-     * @IsGranted("MY_STRUCTURE", subject="emailTemplate")
+     * @IsGranted("MANAGE_EMAIL_TEMPLATES", subject="emailTemplate")
      */
     public function iframePreview(EmailTemplate $emailTemplate, EmailGenerator $generator): Response
     {

@@ -13,7 +13,7 @@ class EmailTemplateFixtures extends Fixture implements DependentFixtureInterface
 {
     const REFERENCE = 'EmailTemplate_';
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         /** @var Structure $structureLibriciel */
         $structureLibriciel = $this->getReference(StructureFixtures::REFERENCE . 'libriciel');

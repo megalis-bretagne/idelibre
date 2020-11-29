@@ -16,7 +16,7 @@ class FileController extends AbstractController
      * @Route("/file/download/{id}", name="file_download", methods={"GET"})
      * @IsGranted("DOWNLOAD_FILES", subject="file")
      */
-    public function download(File $file) :Response
+    public function download(File $file): Response
     {
         $response = new BinaryFileResponse($file->getPath());
         $response->setContentDisposition(

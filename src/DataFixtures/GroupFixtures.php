@@ -10,7 +10,7 @@ class GroupFixtures extends Fixture
 {
     const REFERENCE = 'group_';
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $group = new Group();
 

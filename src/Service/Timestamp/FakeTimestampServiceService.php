@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class FakeTimestampServiceService implements TimestampServiceInterface
 {
-    public function signTimestamp(Timestamp $timestamp)
+    public function signTimestamp(Timestamp $timestamp): void
     {
         $timestamp->setTsa('signed');
     }

@@ -20,7 +20,7 @@ class PdfSittingGenerator
         $this->filesystem = $filesystem;
     }
 
-    public function generateFullSittingPdf(Sitting $sitting)
+    public function generateFullSittingPdf(Sitting $sitting): void
     {
         $pdf = new Pdf();
         $this->addConvocation($pdf, $sitting);
@@ -28,7 +28,7 @@ class PdfSittingGenerator
         $pdf->saveAs($this->getPdfPath($sitting));
     }
 
-    private function addConvocation(Pdf $pdf, Sitting $sitting)
+    private function addConvocation(Pdf $pdf, Sitting $sitting): void
     {
         $pdf->addFile($sitting->getFile()->getPath());
     }
@@ -37,7 +37,7 @@ class PdfSittingGenerator
      * @param Pdf $pdf
      * @param Project[] $projects
      */
-    private function addProjectsAndAnnexes(Pdf $pdf, iterable $projects)
+    private function addProjectsAndAnnexes(Pdf $pdf, iterable $projects): void
     {
         foreach ($projects as $project) {
             $pdf->addFile($project->getFile()->getPath());
@@ -48,7 +48,7 @@ class PdfSittingGenerator
     /**
      * @param Annex[] $annexes
      */
-    private function addAnnexes(Pdf $pdf, iterable $annexes)
+    private function addAnnexes(Pdf $pdf, iterable $annexes): void
     {
         foreach ($annexes as $annex) {
             if ($this->isPdfFile($annex->getFile()->getName())) {
@@ -64,7 +64,7 @@ class PdfSittingGenerator
         }
 
         $exploded = (explode('.', $fileName));
-        $extension = $exploded[count($exploded) -1];
+        $extension = $exploded[count($exploded) - 1];
 
         return $extension === 'pdf' || $extension === 'PDF';
     }

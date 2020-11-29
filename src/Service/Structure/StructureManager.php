@@ -47,14 +47,14 @@ class StructureManager
         $this->themeManager = $themeManager;
     }
 
-    public function save(Structure $structure)
+    public function save(Structure $structure): void
     {
         $this->em->persist($structure);
         $this->em->flush();
     }
 
 
-    public function delete(Structure $structure)
+    public function delete(Structure $structure): void
     {
 
         //deco superadmin and group admin
@@ -89,7 +89,7 @@ class StructureManager
         return null;
     }
 
-    public function replaceReplyTo(Structure $structure, ?string $replyTo)
+    public function replaceReplyTo(Structure $structure, ?string $replyTo): void
     {
         $structure->setReplyTo($replyTo);
         $this->em->persist($structure);
