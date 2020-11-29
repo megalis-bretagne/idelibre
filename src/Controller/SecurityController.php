@@ -43,7 +43,7 @@ class SecurityController extends AbstractController
      * @param AuthenticationUtils $authenticationUtils
      * @return Response
      */
-    public function login(AuthenticationUtils $authenticationUtils)
+    public function login(AuthenticationUtils $authenticationUtils): Response
     {
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
@@ -72,7 +72,7 @@ class SecurityController extends AbstractController
      * @Route("/security/impersonate/{id}", name="security_impersonate")
      * @IsGranted("MY_GROUP", subject="structure")
      */
-    public function impersonateAs(Structure $structure, ImpersonateStructure $impersonateStructure)
+    public function impersonateAs(Structure $structure, ImpersonateStructure $impersonateStructure): Response
     {
         $impersonateStructure->logInStructure($structure);
         $this->addFlash('success', 'Vous êtes connecté dans la structure ' . $structure->getName());
@@ -84,7 +84,7 @@ class SecurityController extends AbstractController
      * @Route("/security/impersonateExit", name="security_impersonate_exit")
      * @IsGranted("ROLE_MANAGE_STRUCTURES")
      */
-    public function impersonateExit(ImpersonateStructure $impersonateStructure)
+    public function impersonateExit(ImpersonateStructure $impersonateStructure): Response
     {
         $impersonateStructure->logoutStructure();
         $this->addFlash('success', 'Vous n\'êtes plus connecté dans une structure');
@@ -120,7 +120,7 @@ class SecurityController extends AbstractController
      * @Route("/reset/{token}", name="app_reset")
      * @throws Exception
      */
-    public function resetPassword(string $token, ResetPassword $resetPassword, Request $request)
+    public function resetPassword(string $token, ResetPassword $resetPassword, Request $request): Response
     {
         try {
             $user = $resetPassword->getUserFromToken($token);

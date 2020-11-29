@@ -13,6 +13,7 @@ use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -26,7 +27,7 @@ class GroupController extends AbstractController
      * @Route("/group", name="group_index")
      * @IsGranted("ROLE_SUPERADMIN")
      */
-    public function index(GroupRepository $groupRepository, PaginatorInterface $paginator, Request $request)
+    public function index(GroupRepository $groupRepository, PaginatorInterface $paginator, Request $request): Response
     {
         $groupQueryAll = $groupRepository->findAllQuery();
         $groups = $paginator->paginate(
@@ -46,7 +47,7 @@ class GroupController extends AbstractController
      * @IsGranted("ROLE_SUPERADMIN")
      * @Breadcrumb("Ajouter")
      */
-    public function add(Request $request, GroupManager $groupManager)
+    public function add(Request $request, GroupManager $groupManager): Response
     {
         $form = $this->createForm(GroupType::class, null, ['isNew' => true]);
         $form->handleRequest($request);
@@ -80,7 +81,7 @@ class GroupController extends AbstractController
      * @IsGranted("ROLE_SUPERADMIN")
      * @Breadcrumb("Gérer {goupe.name}")
      */
-    public function manage(Group $group, Request $request, GroupManager $groupManager)
+    public function manage(Group $group, Request $request, GroupManager $groupManager): Response
     {
         $form = $this->createForm(GroupStructureType::class, $group);
         $form->handleRequest($request);
@@ -102,7 +103,7 @@ class GroupController extends AbstractController
      * @IsGranted("ROLE_SUPERADMIN")
      * @Breadcrumb("Modifier {goupe.name}")
      */
-    public function edit(Group $group, Request $request, GroupManager $groupManager)
+    public function edit(Group $group, Request $request, GroupManager $groupManager): Response
     {
         $form = $this->createForm(GroupType::class, $group);
         $form->handleRequest($request);
@@ -123,7 +124,7 @@ class GroupController extends AbstractController
      * @Route("/group/delete/{id}", name="group_delete", methods={"DELETE"})
      * @IsGranted("ROLE_SUPERADMIN")
      */
-    public function delete(Group $group, GroupManager $groupManager, Request $request)
+    public function delete(Group $group, GroupManager $groupManager, Request $request): Response
     {
         $groupManager->delete($group);
         $this->addFlash('success', 'Le groupe a bien été supprimée');

@@ -46,7 +46,7 @@ class EmailTemplateController extends AbstractController
      * @IsGranted("ROLE_MANAGE_EMAIL_TEMPLATES")
      * @Breadcrumb("Ajouter")
      */
-    public function add(Request $request, EmailTemplateManager $templateManager)
+    public function add(Request $request, EmailTemplateManager $templateManager): Response
     {
         $form = $this->createForm(EmailTemplateType::class, null, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
