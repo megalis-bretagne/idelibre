@@ -7,5 +7,5 @@ use App\Entity\Timestamp;
 
 interface TimestampServiceInterface
 {
-    public function signTimestamp(Timestamp $timestamp);
+    public function signTimestamp(Timestamp $timestamp): void;
 }

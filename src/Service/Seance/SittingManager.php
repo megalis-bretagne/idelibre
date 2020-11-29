@@ -5,12 +5,10 @@ namespace App\Service\Seance;
 
 use App\Entity\Sitting;
 use App\Entity\Structure;
-use App\Entity\Type;
 use App\Message\UpdatedSitting;
 use App\Service\Convocation\ConvocationManager;
 use App\Service\File\FileManager;
 use App\Service\Project\ProjectManager;
-use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -29,7 +27,11 @@ class SittingManager
      */
     private ProjectManager $projectManager;
 
-    public function __construct(ConvocationManager $convocationManager, FileManager $fileManager, EntityManagerInterface $em, MessageBusInterface $messageBus, ProjectManager $projectManager)
+    public function __construct(ConvocationManager $convocationManager,
+                                FileManager $fileManager,
+                                EntityManagerInterface $em,
+                                MessageBusInterface $messageBus,
+                                ProjectManager $projectManager)
     {
         $this->convocationManager = $convocationManager;
         $this->fileManager = $fileManager;
@@ -44,7 +46,7 @@ class SittingManager
         $convocationFile = $this->fileManager->save($uploadedFile, $structure);
 
         $sitting->setStructure($structure)
-        ->setName($sitting->getType()->getName())
+            ->setName($sitting->getType()->getName())
             ->setFile($convocationFile);
         $this->em->persist($sitting);
 
@@ -56,7 +58,7 @@ class SittingManager
         return $sitting->getId();
     }
 
-    public function delete(Sitting $sitting)
+    public function delete(Sitting $sitting): void
     {
         $this->fileManager->delete($sitting->getFile());
         $this->projectManager->deleteProjects($sitting->getProjects());
@@ -66,7 +68,7 @@ class SittingManager
         // TODO remove fullpdf and zip !
     }
 
-    public function update(Sitting $sitting, ?UploadedFile $uploadedFile)
+    public function update(Sitting $sitting, ?UploadedFile $uploadedFile): void
     {
         if ($uploadedFile) {
             $convocationFile = $this->fileManager->replace($uploadedFile, $sitting);
@@ -78,7 +80,7 @@ class SittingManager
         $this->messageBus->dispatch(new UpdatedSitting($sitting->getId()));
     }
 
-    public function archive(Sitting $sitting)
+    public function archive(Sitting $sitting): void
     {
         $sitting->setIsArchived(true);
         $this->convocationManager->deactivate($sitting->getConvocations());

@@ -21,7 +21,7 @@ class UserManager
         $this->passwordEncoder = $passwordEncoder;
     }
 
-    public function save(User $user, ?string $plainPassword, Structure $structure)
+    public function save(User $user, ?string $plainPassword, Structure $structure): void
     {
         if ($plainPassword) {
             $user->setPassword($this->passwordEncoder->encodePassword($user, $plainPassword));
@@ -34,7 +34,7 @@ class UserManager
     }
 
 
-    public function saveAdmin(User $user, ?string $plainPassword, Role $role = null, ?Group $group = null)
+    public function saveAdmin(User $user, ?string $plainPassword, Role $role = null, ?Group $group = null): void
     {
         if ($plainPassword) {
             $user->setPassword($this->passwordEncoder->encodePassword($user, $plainPassword));
@@ -50,7 +50,7 @@ class UserManager
     }
 
 
-    public function delete(User $user)
+    public function delete(User $user): void
     {
         $this->em->remove($user);
         $this->em->flush();

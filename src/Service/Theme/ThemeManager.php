@@ -19,7 +19,7 @@ class ThemeManager
         $this->em = $em;
     }
 
-    public function save(Theme $theme, Structure $structure, ?Theme $parentTheme = null)
+    public function save(Theme $theme, Structure $structure, ?Theme $parentTheme = null): void
     {
         $theme->setStructure($structure);
 
@@ -32,19 +32,19 @@ class ThemeManager
         $this->addFullNameToTheme($theme, $this->generateFullName($theme));
     }
 
-    public function update(Theme $theme)
+    public function update(Theme $theme): void
     {
         $this->em->persist($theme);
         $this->em->flush();
     }
 
-    public function delete(Theme $theme)
+    public function delete(Theme $theme): void
     {
         $this->em->remove($theme);
         $this->em->flush();
     }
 
-    public function createStructureRootNode(Structure $structure)
+    public function createStructureRootNode(Structure $structure): void
     {
         $rootTheme = new Theme();
         $rootTheme->setName('ROOT')
@@ -90,7 +90,7 @@ class ThemeManager
         $rootTheme = $this->themeRepository->findOneBy(['name' => 'ROOT', 'structure' => $structure]);
 
         if (!empty($rootTheme)) {
-            $themes = $this->themeRepository->getChildren($rootTheme, false, 'fullName');
+            $themes = $this->themeRepository->getChildren($rootTheme, false, ['fullName']);
         }
 
         return $themes ?? [];

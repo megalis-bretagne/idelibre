@@ -29,7 +29,7 @@ class AnnexManager
     /**
      * @param Annex[] $annexes
      */
-    public function deleteAnnexes(iterable $annexes)
+    public function deleteAnnexes(iterable $annexes): void
     {
         foreach ($annexes as $annex) {
             $this->fileManager->delete($annex->getFile());
@@ -40,7 +40,7 @@ class AnnexManager
     /**
      * @param ProjectApi[] $clientProjects
      */
-    public function deleteRemovedAnnexe(array $clientProjects, Sitting $sitting)
+    public function deleteRemovedAnnexe(array $clientProjects, Sitting $sitting): void
     {
         $toDeleteAnnexes = $this->annexRepository->findNotInListAnnexes($this->listClientAnnexeIds($clientProjects), $sitting);
         $this->deleteAnnexes($toDeleteAnnexes);
@@ -49,7 +49,7 @@ class AnnexManager
     /**
      * @param ProjectApi[] $clientProjects
      */
-    private function listClientAnnexeIds(array $clientProjects):array
+    private function listClientAnnexeIds(array $clientProjects): array
     {
         $annexIds = [];
         foreach ($clientProjects as $clientProject) {

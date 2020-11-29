@@ -13,9 +13,6 @@ use phpDocumentor\Reflection\Types\Iterable_;
 class PartyManager
 {
     private EntityManagerInterface $em;
-    /**
-     * @var UserRepository
-     */
     private UserRepository $userRepository;
 
     public function __construct(EntityManagerInterface $em, UserRepository $userRepository)

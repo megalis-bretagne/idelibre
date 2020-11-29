@@ -34,14 +34,14 @@ class GroupManager
         $this->roleManager = $roleManager;
     }
 
-    public function save(Group $group)
+    public function save(Group $group): void
     {
         $this->em->persist($group);
         $this->em->flush();
     }
 
 
-    public function associateStructure(Group $group)
+    public function associateStructure(Group $group): void
     {
         $structures = $this->structureRepository->findBy(['group' => $group]);
 
@@ -76,7 +76,7 @@ class GroupManager
         return null;
     }
 
-    public function delete(Group $group)
+    public function delete(Group $group): void
     {
         $this->em->remove($group);
         $this->em->flush();

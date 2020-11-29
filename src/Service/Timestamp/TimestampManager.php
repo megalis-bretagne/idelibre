@@ -15,7 +15,7 @@ class TimestampManager
         $this->em = $em;
     }
 
-    public function delete(Timestamp $timestamp)
+    public function delete(Timestamp $timestamp): void
     {
         $this->em->remove($timestamp);
     }

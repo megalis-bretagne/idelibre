@@ -53,7 +53,7 @@ class ProjectManager
      * @param ProjectApi[] $clientProjects
      * @param UploadedFile[] $uploadedFiles
      */
-    public function update(array $clientProjects, array $uploadedFiles, Sitting $sitting)
+    public function update(array $clientProjects, array $uploadedFiles, Sitting $sitting): void
     {
         $this->annexManager->deleteRemovedAnnexe($clientProjects, $sitting);
         $this->deleteRemovedProjects($clientProjects, $sitting);
@@ -137,7 +137,6 @@ class ProjectManager
 
         $this->em->persist($project);
 
-
         return $project;
     }
 
@@ -145,7 +144,7 @@ class ProjectManager
      * @param UploadedFile[] $uploadedFiles
      * @param AnnexApi[] $clientAnnexes
      */
-    private function createAndAddAnnexesToProject(Project $project, array $clientAnnexes, array $uploadedFiles, Structure $structure)
+    private function createAndAddAnnexesToProject(Project $project, array $clientAnnexes, array $uploadedFiles, Structure $structure): void
     {
         foreach ($clientAnnexes as $clientAnnex) {
             if (!isset($uploadedFiles[$clientAnnex->getLinkedFileKey()])) {
@@ -184,6 +183,7 @@ class ProjectManager
                 ->setAnnexes($this->getApiAnnexesFromAnnexes($project->getAnnexes()));
             $apiProjects[] = $apiProject;
         }
+
         return $apiProjects;
     }
 
@@ -202,6 +202,7 @@ class ProjectManager
                 ->setFileName($annex->getFile()->getName());
             $apiAnnexes[] = $annexApi;
         }
+
         return $apiAnnexes;
     }
 
@@ -209,7 +210,7 @@ class ProjectManager
      * @param AnnexApi[] $clientAnnexes
      * @param UploadedFile[] $uploadedFiles
      */
-    private function createOrUpdateAnnexes(Project $project, array $clientAnnexes, array $uploadedFiles, Structure $structure)
+    private function createOrUpdateAnnexes(Project $project, array $clientAnnexes, array $uploadedFiles, Structure $structure): void
     {
         foreach ($clientAnnexes as $clientAnnex) {
             if (!$clientAnnex->getId()) {
@@ -221,7 +222,7 @@ class ProjectManager
     }
 
 
-    private function updateAnnex(AnnexApi $clientAnnex)
+    private function updateAnnex(AnnexApi $clientAnnex): void
     {
         $annex = $this->annexRepository->findOneBy(['id' => $clientAnnex->getId()]);
         if (!$annex) {
@@ -247,7 +248,7 @@ class ProjectManager
     /**
      * @param ProjectApi[] $clientProjects
      */
-    private function deleteRemovedProjects(array $clientProjects, Sitting $sitting)
+    private function deleteRemovedProjects(array $clientProjects, Sitting $sitting): void
     {
         $toDeleteProjects = $this->projectRepository->findNotInListProjects($this->listClientProjectIds($clientProjects), $sitting);
         $this->deleteProjects($toDeleteProjects);
@@ -258,7 +259,7 @@ class ProjectManager
     /**
      * @param Project[] $projects
      */
-    public function deleteProjects(iterable $projects)
+    public function deleteProjects(iterable $projects): void
     {
         foreach ($projects as $project) {
             $this->annexManager->deleteAnnexes($project->getAnnexes());

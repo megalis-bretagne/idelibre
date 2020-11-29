@@ -28,7 +28,7 @@ class ConvocationManager
         $this->timestampManager = $timestampManager;
     }
 
-    public function createConvocations(Sitting $sitting)
+    public function createConvocations(Sitting $sitting): void
     {
         foreach ($sitting->getType()->getAssociatedUsers() as $actor) {
             $convocation = new Convocation();
@@ -41,7 +41,7 @@ class ConvocationManager
     /**
      * @param User[] $actors
      */
-    public function addConvocations(iterable $actors, Sitting $sitting)
+    public function addConvocations(iterable $actors, Sitting $sitting): void
     {
         foreach ($actors as $actor) {
             if ($this->alreadyHasConvocation($actor, $sitting)) {
@@ -59,7 +59,7 @@ class ConvocationManager
     /**
      * @param Convocation[] $convocations
      */
-    public function deleteConvocationsNotSent(iterable $convocations)
+    public function deleteConvocationsNotSent(iterable $convocations): void
     {
         foreach ($convocations as $convocation) {
             if ($this->isAlreadySent($convocation)) {
@@ -81,7 +81,7 @@ class ConvocationManager
     /**
      * @param Convocation[] $convocations
      */
-    public function sendConvocations(iterable $convocations)
+    public function sendConvocations(iterable $convocations): void
     {
         foreach ($convocations as $convocation) {
             $this->sendConvocation($convocation);
@@ -91,7 +91,7 @@ class ConvocationManager
         //Todo send email and notify clients
     }
 
-    private function sendConvocation(Convocation $convocation)
+    private function sendConvocation(Convocation $convocation): void
     {
         if ($this->isAlreadySent($convocation)) {
             return;
@@ -107,7 +107,7 @@ class ConvocationManager
     }
 
 
-    private function isAlreadySent(Convocation $convocation)
+    private function isAlreadySent(Convocation $convocation): bool
     {
         return !!$convocation->getSentTimestamp();
     }
@@ -115,7 +115,7 @@ class ConvocationManager
     /**
      * @param Convocation[] $convocations
      */
-    public function deleteConvocations(iterable $convocations)
+    public function deleteConvocations(iterable $convocations): void
     {
         foreach ($convocations as $convocation) {
             $this->em->remove($convocation);
@@ -123,7 +123,7 @@ class ConvocationManager
         }
     }
 
-    private function deleteAssociatedTimestamp(Convocation $convocation)
+    private function deleteAssociatedTimestamp(Convocation $convocation): void
     {
         if ($convocation->getSentTimestamp()) {
             $this->timestampManager->delete($convocation->getSentTimestamp());
@@ -136,7 +136,7 @@ class ConvocationManager
     /**
      * @param Convocation[] $convocations
      */
-    public function deactivate(iterable $convocations)
+    public function deactivate(iterable $convocations): void
     {
         foreach ($convocations as $convocation) {
             $convocation->setIsActive(false);

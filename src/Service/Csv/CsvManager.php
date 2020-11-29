@@ -82,7 +82,7 @@ class CsvManager
     }
 
 
-    private function associateActorToTypeSeances(User $user, ?string $typeNamesString, Structure $structure)
+    private function associateActorToTypeSeances(User $user, ?string $typeNamesString, Structure $structure): void
     {
         if (!$typeNamesString || $user->getRole()->getName() != 'Actor') {
             return;

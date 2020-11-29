@@ -23,7 +23,7 @@ class GdprManager
         return $this->gdprRepository->findOneBy([]);
     }
 
-    public function save(Gdpr $gdpr)
+    public function save(Gdpr $gdpr): void
     {
         $this->em->persist($gdpr);
         $this->em->flush();
