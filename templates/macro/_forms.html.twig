@@ -18,10 +18,15 @@
 {% endmacro %}
 
 
-{% macro editButton(editPath, id) %}
+{% macro editButton(editPath, id = null) %}
 
-    <a href="{{ path(editPath, {'id': id}) }}" class="btn btn-outline-primary borderless"
-       title="Modifier"><span class="fas fa-pen"></span></a>
+    {% if id ==null %}
+        <a href="{{ path(editPath) }}" class="btn btn-outline-primary borderless"
+           title="Modifier"><span class="fas fa-pen"></span></a>
+    {% else %}
+        <a href="{{ path(editPath, {'id': id}) }}" class="btn btn-outline-primary borderless"
+           title="Modifier"><span class="fas fa-pen"></span></a>
+    {% endif %}
 {% endmacro %}
 
 
@@ -34,17 +39,17 @@
 
 
 {% macro searchForm(formSearch, searchTerm) %}
-        {{ form_start(formSearch, {'method': 'GET'}) }}
+    {{ form_start(formSearch, {'method': 'GET'}) }}
 
-        <div class="input-group col-8 float-right pr-0">
-            {{ form_widget(formSearch.search, {'value': searchTerm}) }}
-            <div class="input-group-append">
-                <button class="btn btn-primary" title="Filtrer">
-                    <span class="fas fa-search"></span>
-                </button>
-            </div>
+    <div class="input-group col-8 float-right pr-0">
+        {{ form_widget(formSearch.search, {'value': searchTerm}) }}
+        <div class="input-group-append">
+            <button class="btn btn-primary" title="Filtrer">
+                <span class="fas fa-search"></span>
+            </button>
         </div>
-        {{ form_end(formSearch) }}
+    </div>
+    {{ form_end(formSearch) }}
 
 {% endmacro %}
 
