@@ -5,6 +5,7 @@ namespace App\Tests\Controller\Connector;
 use App\Controller\Connector\ConnectorController;
 use App\DataFixtures\ComelusConnectorFixtures;
 use App\DataFixtures\LsMessageConnectorFixtures;
+use App\DataFixtures\UserFixtures;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
 use Doctrine\Persistence\ObjectManager;
@@ -37,8 +38,9 @@ class ConnectorControllerTest extends WebTestCase
             ->getManager();
 
         $this->loadFixtures([
-           // ComelusConnectorFixtures::class,
-            //LsMessageConnectorFixtures::class
+            UserFixtures::class,
+            ComelusConnectorFixtures::class,
+            LsMessageConnectorFixtures::class
         ]);
     }
 
