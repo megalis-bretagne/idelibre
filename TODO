@@ -20,6 +20,8 @@ le delete faisant unn remove + flush
 VOIR AVEC ERIC EST CE QUE JE METS LES ROPERTIES OBLIGATOIRE DANS LE CONSTRUCTEUR OU NON
 SI NON JE ME RETROUVE AVEC  DES NULLABLES A TESTER !
 
+CHANGER LE USERINTERFACE du l'utilisateur pour avoir des methodes en plus !!
+
 configuration snappy
 
 $pdf = $snappy->getOutputFromHtml($html, array(
