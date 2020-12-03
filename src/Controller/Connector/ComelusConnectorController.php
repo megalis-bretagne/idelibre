@@ -26,7 +26,7 @@ class ComelusConnectorController extends AbstractController
     public function edit(ComelusConnectorRepository $comelusConnectorRepository, ComelusConnectorManager $comelusConnectorManager,
                          Request $request): Response
     {
-        $connector = $comelusConnectorRepository->getConnector($this->getUser()->getStructure());
+        $connector = $comelusConnectorRepository->findOneBy(['structure' => $this->getUser()->getStructure()]);
 
         $form = $this->createForm(ComelusConnectorType::class, $connector);
         $form->handleRequest($request);

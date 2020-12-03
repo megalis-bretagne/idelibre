@@ -14,6 +14,8 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Bundle\MakerBundle\Str;
 use Symfony\Component\HttpFoundation\Request;
 
+// TODO improve TESTS STRUCTURE CREATION (ie connectors, templates ...)
+
 class StructureControllerTest extends WebTestCase
 {
     use FixturesTrait;

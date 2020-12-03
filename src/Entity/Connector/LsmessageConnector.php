@@ -5,9 +5,10 @@ namespace App\Entity\Connector;
 use App\Entity\Connector\Exception\LsmessageConnectorException;
 use App\Entity\Structure;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\Connector\LsmessageConnectorRepository;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass=LsmessageConnectorRepository::class)
  */
 class LsmessageConnector extends Connector
 {

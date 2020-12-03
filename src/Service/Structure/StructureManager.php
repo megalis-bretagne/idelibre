@@ -3,12 +3,15 @@
 
 namespace App\Service\Structure;
 
+use App\Entity\Connector\Exception\ComelusConnectorException;
+use App\Entity\Connector\Exception\LsmessageConnectorException;
 use App\Entity\Connector\LsmessageConnector;
 use App\Entity\Group;
 use App\Entity\Structure;
 use App\Entity\User;
 use App\Repository\StructureRepository;
 use App\Service\Connector\ComelusConnectorManager;
+use App\Service\Connector\LsmessageConnectorManager;
 use App\Service\role\RoleManager;
 use App\Service\Theme\ThemeManager;
 use App\Service\User\ImpersonateStructure;
@@ -31,7 +34,8 @@ class StructureManager
     private RoleManager $roleManager;
     private ThemeManager $themeManager;
     private ComelusConnectorManager $comelusConnectorManager;
-    private LsmessageConnector $lsmessageConnector;
+    private LsmessageConnectorManager $lsmessageConnectorManager;
+
 
     public function __construct(
         StructureRepository $structureRepository,
@@ -43,7 +47,7 @@ class StructureManager
         ImpersonateStructure $impersonateStructure,
         ThemeManager $themeManager,
         ComelusConnectorManager $comelusConnectorManager,
-        LsmessageConnector $lsmessageConnector
+        LsmessageConnectorManager $lsmessageConnectorManager
     ) {
         $this->structureRepository = $structureRepository;
         $this->em = $em;
@@ -54,7 +58,7 @@ class StructureManager
         $this->roleManager = $roleManager;
         $this->themeManager = $themeManager;
         $this->comelusConnectorManager = $comelusConnectorManager;
-        $this->lsmessageConnector = $lsmessageConnector;
+        $this->lsmessageConnectorManager = $lsmessageConnectorManager;
     }
 
     public function save(Structure $structure): void
@@ -72,7 +76,10 @@ class StructureManager
         $this->em->flush();
     }
 
-
+    /**
+     * @throws ComelusConnectorException
+     * @throws LsmessageConnectorException
+     */
     public function create(Structure $structure, User $user, string $plainPassword, Group $group = null): ?ConstraintViolationListInterface
     {
         $user->setPassword($this->passwordEncoder->encodePassword($user, $plainPassword));
@@ -92,8 +99,9 @@ class StructureManager
         $this->em->flush();
 
         $this->themeManager->createStructureRootNode($structure);
+
         $this->comelusConnectorManager->createConnector($structure);
-        $this->comelusConnectorManager->createConnector($structure);
+        $this->lsmessageConnectorManager->createConnector($structure);
 
         return null;
     }

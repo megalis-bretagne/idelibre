@@ -3,31 +3,20 @@
 namespace App\Repository\Connector;
 
 use App\Entity\Connector\LsmessageConnector;
-use App\Entity\Structure;
-use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
-class LsmessageConnectorRepository
+/**
+ * @method LsmessageConnector|null find($id, $lockMode = null, $lockVersion = null)
+ * @method LsmessageConnector|null findOneBy(array $criteria, array $orderBy = null)
+ * @method LsmessageConnector[]    findAll()
+ * @method LsmessageConnector[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ */
+class LsmessageConnectorRepository extends ServiceEntityRepository
 {
-    private EntityManagerInterface $em;
-
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(ManagerRegistry $registry)
     {
-        $this->em = $em;
-    }
-
-    public function getConnector(Structure $structure): LsmessageConnector
-    {
-        $qb = $this->em->createQueryBuilder();
-
-        $q = $qb->select(['c'])
-            ->from(LsmessageConnector::class, 'c')
-            ->andWhere('c.name = :name')
-            ->setParameter('name', LsmessageConnector::NAME)
-            ->andWhere('c.structure = :structure')
-            ->setParameter('structure', $structure)
-            ->getQuery();
-
-        return $q->getSingleResult();
+        parent::__construct($registry, LsmessageConnector::class);
     }
 
 }

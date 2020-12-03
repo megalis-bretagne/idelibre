@@ -5,9 +5,10 @@ namespace App\Entity\Connector;
 use App\Entity\Connector\Exception\ComelusConnectorException;
 use App\Entity\Structure;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\Connector\ComelusConnectorRepository;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass=ComelusConnectorRepository::class)
  *
  */
 class ComelusConnector extends Connector

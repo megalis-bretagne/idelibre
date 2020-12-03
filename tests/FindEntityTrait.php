@@ -6,6 +6,7 @@ use App\Entity\Annex;
 use App\Entity\Convocation;
 use App\Entity\Project;
 use App\Entity\Sitting;
+use App\Entity\Structure;
 use App\Entity\Type;
 use App\Entity\User;
 
@@ -51,5 +52,10 @@ trait FindEntityTrait
     public function getOneConvocationBy(array $criteria): ?Convocation
     {
         return $this->getOneEntityBy(Convocation::class, $criteria);
+    }
+
+    public function getOneStructureBy(array $criteria): ?Structure
+    {
+        return $this->getOneEntityBy(Structure::class, $criteria);
     }
 }

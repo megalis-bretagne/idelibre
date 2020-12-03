@@ -26,7 +26,7 @@ class LsmessageConnectorController extends AbstractController
     public function edit(LsmessageConnectorRepository $lsmessageConnectorRepository, LsmessageConnectorManager $lsmessageConnectorManager,
                          Request $request): Response
     {
-        $connector = $lsmessageConnectorRepository->getConnector($this->getUser()->getStructure());
+        $connector = $lsmessageConnectorRepository->findOneBy(['structure' => $this->getUser()->getStructure()]);
 
         $form = $this->createForm(LsmessageConnectorType::class, $connector);
         $form->handleRequest($request);

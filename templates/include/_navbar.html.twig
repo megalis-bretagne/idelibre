@@ -66,6 +66,9 @@
                             {% if is_granted('ROLE_MANAGE_SITTINGS') %}
                                 <a class="dropdown-item" href="{{ path('sitting_index') }}">Séances</a>
                             {% endif %}
+                            {% if is_granted('ROLE_MANAGE_CONNECTORS') %}
+                                <a class="dropdown-item" href="{{ path('connector_index') }}">Connecteurs</a>
+                            {% endif %}
                         </div>
                     </li>
                 {% endif %}
