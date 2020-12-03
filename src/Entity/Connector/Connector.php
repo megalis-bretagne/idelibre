@@ -2,15 +2,16 @@
 
 namespace App\Entity\Connector;
 
-use App\Entity\Connector\Exception\ComelusConnectorException;
 use App\Entity\Structure;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\DiscriminatorMap;
 use Doctrine\ORM\Mapping\InheritanceType;
 
 /**
  * @ORM\Entity()
  * @ORM\Table(name="connector")
  * @InheritanceType("SINGLE_TABLE")
+ * @DiscriminatorMap({"comelus" = "ComelusConnector", "lsmessage" = "LsmessageConnector"})
  *
  */
 abstract class Connector implements ConnectorInterface
