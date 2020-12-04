@@ -8,6 +8,7 @@ use App\Form\StructureInformationType;
 use App\Form\StructureType;
 use App\Repository\StructureRepository;
 use App\Service\RoleTrait;
+use App\Service\Structure\StructureCreator;
 use App\Service\Structure\StructureManager;
 use App\Service\ValidationTrait;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
@@ -63,18 +64,19 @@ class StructureController extends AbstractController
      * @IsGranted("ROLE_MANAGE_STRUCTURES")
      * @Breadcrumb("Ajouter")
      */
-    public function add(Request $request, StructureManager $structureManager): Response
+    public function add(Request $request, StructureCreator $structureCreator): Response
     {
         $form = $this->createForm(StructureType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $errors = $structureManager->create(
-                $form->getData(),
-                $form->get('user')->getData(),
-                $form->get('user')->get('plainPassword')->getData(),
-                $this->getUser()->getGroup()
-            );
+
+                $errors = $structureCreator->create(
+                    $form->getData(),
+                    $form->get('user')->getData(),
+                    $form->get('user')->get('plainPassword')->getData(),
+                    $this->getUser()->getGroup()
+                );
 
             if (!empty($errors)) {
                 $this->addErrorToForm($form->get('user'), $errors);
