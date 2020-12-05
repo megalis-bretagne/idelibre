@@ -69,7 +69,7 @@ class ResetPassword
             throw new EntityNotFoundException("no user with username : " . $username, 404);
         }
 
-        $token =$this->createToken($user);
+        $token = $this->createToken($user);
         $this->email->sendReinitPassword($user, $token);
     }
 

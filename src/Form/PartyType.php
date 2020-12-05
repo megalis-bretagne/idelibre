@@ -30,7 +30,7 @@ class PartyType extends AbstractType
                 'label' => 'Acteurs associés',
                 'required' => false,
                 'class' => User::class,
-                'choice_label' => fn (User $user) =>  $user->getFirstName() . ' ' . $user->getLastName(),
+                'choice_label' => fn (User $user) => $user->getFirstName() . ' ' . $user->getLastName(),
                 'multiple' => true,
                 'query_builder' => $this->userRepository->findActorByStructure($options['structure'])
             ])

@@ -11,7 +11,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class DownloadFilesVoter extends Voter
 {
-
     /**
      * @var Security
      */

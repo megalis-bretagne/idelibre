@@ -11,7 +11,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class ThemeFixtures extends Fixture implements DependentFixtureInterface
 {
-    const REFERENCE = 'Theme_';
+    public const REFERENCE = 'Theme_';
 
     private ThemeRepository $themeRepository;
 

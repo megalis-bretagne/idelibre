@@ -12,7 +12,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class SittingFixtures extends Fixture implements DependentFixtureInterface
 {
-    const REFERENCE = 'Sitting_';
+    public const REFERENCE = 'Sitting_';
 
     public function load(ObjectManager $manager): void
     {

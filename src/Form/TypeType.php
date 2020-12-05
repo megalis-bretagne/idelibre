@@ -28,12 +28,12 @@ class TypeType extends AbstractType
                 'required' => false,
                 'label' => 'Acteurs associés',
                 'class' => User::class,
-                'query_builder'=> $this->userRepository
+                'query_builder' => $this->userRepository
                     ->findActorByStructure($options['structure']),
                 'choice_label' => function (User $user) {
                     return  sprintf("%s %s <%s>", $user->getFirstName(), $user->getLastName(), $user->getUsername());
                 },
-                'multiple'=> true
+                'multiple' => true
             ]);
         ;
     }

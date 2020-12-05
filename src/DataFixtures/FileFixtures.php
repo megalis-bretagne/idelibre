@@ -9,7 +9,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class FileFixtures extends Fixture
 {
-    const REFERENCE = 'File_';
+    public const REFERENCE = 'File_';
 
     public function load(ObjectManager $manager): void
     {

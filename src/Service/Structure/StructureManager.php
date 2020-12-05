@@ -25,8 +25,7 @@ class StructureManager
         UserPasswordEncoderInterface $passwordEncoder,
         ValidatorInterface $validator,
         ImpersonateStructure $impersonateStructure
-    )
-    {
+    ) {
         $this->structureRepository = $structureRepository;
         $this->em = $em;
         $this->passwordEncoder = $passwordEncoder;

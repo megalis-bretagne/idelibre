@@ -12,7 +12,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class ManageThemesVoter extends Voter
 {
-
     /**
      * @var Security
      */

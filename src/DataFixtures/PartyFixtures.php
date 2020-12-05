@@ -10,7 +10,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class PartyFixtures extends Fixture implements DependentFixtureInterface
 {
-    const REFERENCE = 'Party_';
+    public const REFERENCE = 'Party_';
 
     public function load(ObjectManager $manager): void
     {

@@ -14,7 +14,6 @@ use Symfony\Component\Validator\Constraints\Length;
 
 class LsmessageConnectorType extends AbstractType
 {
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder

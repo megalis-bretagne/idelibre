@@ -11,7 +11,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class StructureFixtures extends Fixture implements DependentFixtureInterface
 {
-    const REFERENCE = "STRUCTURE_";
+    public const REFERENCE = "STRUCTURE_";
 
     public function load(ObjectManager $manager): void
     {

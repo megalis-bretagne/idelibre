@@ -23,7 +23,7 @@ class ConvocationRepository extends ServiceEntityRepository
     /**
      * @return Convocation[]
      */
-    public function getConvocationsBySitting(Sitting $sitting):array
+    public function getConvocationsBySitting(Sitting $sitting): array
     {
         return $this->createQueryBuilder('c')
             ->andWhere('c.sitting = :sitting')
@@ -38,7 +38,7 @@ class ConvocationRepository extends ServiceEntityRepository
     /**
      * @return Convocation[]
      */
-    public function getConvocationsBySittingAndActorIds(Sitting $sitting, array $actorIds):array
+    public function getConvocationsBySittingAndActorIds(Sitting $sitting, array $actorIds): array
     {
         return $this->createQueryBuilder('c')
             ->andWhere('c.sitting = :sitting')

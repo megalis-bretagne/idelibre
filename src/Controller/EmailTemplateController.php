@@ -89,7 +89,7 @@ class EmailTemplateController extends AbstractController
      * @Route("/emailTemplate/delete/{id}", name="email_template_delete", methods={"DELETE"})
      * @IsGranted("MANAGE_EMAIL_TEMPLATES", subject="emailTemplate")
      */
-    public function delete(EmailTemplate $emailTemplate, EmailTemplateManager $emailTemplateManager, Request $request):Response
+    public function delete(EmailTemplate $emailTemplate, EmailTemplateManager $emailTemplateManager, Request $request): Response
     {
         $emailTemplateManager->delete($emailTemplate);
         $this->addFlash('success', 'Le modèle d\'email a bien été supprimé');

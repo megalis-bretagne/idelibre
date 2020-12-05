@@ -11,7 +11,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class TypeFixtures extends Fixture implements DependentFixtureInterface
 {
-    const REFERENCE = 'Type_';
+    public const REFERENCE = 'Type_';
 
     public function load(ObjectManager $manager): void
     {

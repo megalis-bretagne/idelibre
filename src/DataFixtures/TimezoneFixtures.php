@@ -8,7 +8,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class TimezoneFixtures extends Fixture
 {
-    const REFERENCE = 'Timezone_';
+    public const REFERENCE = 'Timezone_';
 
     public function load(ObjectManager $manager): void
     {

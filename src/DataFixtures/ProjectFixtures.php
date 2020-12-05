@@ -13,7 +13,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class ProjectFixtures extends Fixture implements DependentFixtureInterface
 {
-    const REFERENCE = 'Project_';
+    public const REFERENCE = 'Project_';
 
     public function load(ObjectManager $manager): void
     {

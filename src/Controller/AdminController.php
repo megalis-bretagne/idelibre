@@ -22,7 +22,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class AdminController extends AbstractController
 {
-
     /**
      * @Route("/admin", name="admin_index")
      * @IsGranted("ROLE_MANAGE_STRUCTURES")

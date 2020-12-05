@@ -67,7 +67,7 @@ class FileManager
         return $file->getClientOriginalExtension() ? '.' . $file->getClientOriginalExtension() : '';
     }
 
-    public function delete(?File $file):void
+    public function delete(?File $file): void
     {
         if (!$file) {
             return;

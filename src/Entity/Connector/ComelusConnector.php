@@ -4,8 +4,8 @@ namespace App\Entity\Connector;
 
 use App\Entity\Connector\Exception\ComelusConnectorException;
 use App\Entity\Structure;
-use Doctrine\ORM\Mapping as ORM;
 use App\Repository\Connector\ComelusConnectorRepository;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=ComelusConnectorRepository::class)
@@ -13,10 +13,10 @@ use App\Repository\Connector\ComelusConnectorRepository;
  */
 class ComelusConnector extends Connector
 {
-    const NAME = 'comelus';
-    const MAX_URL_LENGTH = 255;
-    const MAX_API_KEY_LENGTH = 255;
-    const MAX_DESCRIPTION_LENGTH = 1000;
+    public const NAME = 'comelus';
+    public const MAX_URL_LENGTH = 255;
+    public const MAX_API_KEY_LENGTH = 255;
+    public const MAX_DESCRIPTION_LENGTH = 1000;
 
     /**
      * @ORM\Id
@@ -140,13 +140,13 @@ class ComelusConnector extends Connector
     /**
      * @throws ComelusConnectorException
      */
-    private function validateLength(?string $string, int $length) {
-        if(!$string) {
+    private function validateLength(?string $string, int $length)
+    {
+        if (!$string) {
             return;
         }
-        if(strlen($string) > $length) {
+        if (strlen($string) > $length) {
             throw new ComelusConnectorException("length should be < $length");
         }
     }
-
 }

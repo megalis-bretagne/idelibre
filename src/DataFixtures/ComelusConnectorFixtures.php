@@ -12,7 +12,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class ComelusConnectorFixtures extends Fixture implements DependentFixtureInterface
 {
-    const REFERENCE = 'ComelusConnectorFixtures_';
+    public const REFERENCE = 'ComelusConnectorFixtures_';
 
     public function load(ObjectManager $manager): void
     {

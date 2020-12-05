@@ -6,8 +6,8 @@ use App\Entity\File;
 use App\Entity\Group;
 use App\Entity\Structure;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method Structure|null find($id, $lockMode = null, $lockVersion = null)

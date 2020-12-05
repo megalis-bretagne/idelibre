@@ -39,5 +39,4 @@ abstract class Connector implements ConnectorInterface
      * @ORM\JoinColumn(nullable=false)
      */
     protected $structure;
-
 }

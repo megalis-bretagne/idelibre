@@ -8,7 +8,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class RoleFixtures extends Fixture
 {
-    const REFERENCE = 'Role_';
+    public const REFERENCE = 'Role_';
 
     public function load(ObjectManager $manager): void
     {

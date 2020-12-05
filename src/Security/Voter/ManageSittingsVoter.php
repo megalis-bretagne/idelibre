@@ -11,7 +11,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class ManageSittingsVoter extends Voter
 {
-
     /**
      * @var Security
      */

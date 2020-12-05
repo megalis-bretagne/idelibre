@@ -12,7 +12,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class TimestampFixtures extends Fixture
 {
-    const REFERENCE = 'Timestamp_';
+    public const REFERENCE = 'Timestamp_';
 
     public function load(ObjectManager $manager): void
     {

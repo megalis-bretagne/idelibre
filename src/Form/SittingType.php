@@ -30,9 +30,9 @@ class SittingType extends AbstractType
         $builder
             ->add('type', EntityType::class, [
                 'label' => 'type de séance',
-                'class'=> Type::class,
+                'class' => Type::class,
                 'query_builder' => $this->typeRepository->findByStructure($options['structure']),
-                'choice_label'=> 'name'
+                'choice_label' => 'name'
             ])
             ->add('date', null, [
                 'label' => 'Date et heure',
@@ -41,7 +41,7 @@ class SittingType extends AbstractType
             ])
             ->add('place', TextType::class, [
                 'label' => 'Lieu',
-                'required'=> false
+                'required' => false
             ])
             ->add('convocationFile', FileType::class, [
                 'label' => $isNew ? 'Fichier de convocation' : 'Remplacer le fichier de convocation',

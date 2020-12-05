@@ -12,7 +12,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SittingController extends AbstractController
 {
-
     /**
      * @Route("/api/sittings/{id}/sendConvocations", name="api_convocations_send", methods={"POST"})
      */

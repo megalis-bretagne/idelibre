@@ -17,7 +17,6 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class ProjectController extends AbstractController
 {
-
     /**
      * @Route("/api/projects/{id}", name="api_project_add", methods={"POST"})
      * @IsGranted("MANAGE_SITTINGS", subject="sitting")

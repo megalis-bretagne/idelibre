@@ -18,5 +18,4 @@ class ComelusConnectorRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, ComelusConnector::class);
     }
-
 }

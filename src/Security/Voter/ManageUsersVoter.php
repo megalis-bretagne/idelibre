@@ -10,7 +10,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class ManageUsersVoter extends Voter
 {
-
     /**
      * @var Security
      */
