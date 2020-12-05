@@ -40,7 +40,7 @@ class TimestampContentFileGeneratorTest extends WebTestCase
     protected function setUp(): void
     {
 
-        $kernel = self::bootKernel();
+        self::bootKernel();
         $container = self::$container;
 
         $this->environment = $container->get('twig');
@@ -63,11 +63,20 @@ class TimestampContentFileGeneratorTest extends WebTestCase
         $this->entityManager->close();
     }
 
-    public function testGenerate()
+    public function testGenerateFile()
     {
         $sitting = $this->getOneSittingBy(['name' =>'Conseil Libriciel']) ;
         $timestampGenerator = new TimestampContentFileGenerator($this->environment, $this->bag, $this->fileSystem);
-        $timestampGenerator->generateFile($sitting, $sitting->getConvocations());
+        $path = $timestampGenerator->generateFile($sitting, $sitting->getConvocations());
+        $this->assertSame(52, $this->countFileLines($path));
+
+    }
+
+    private function countFileLines(string $path){
+        $file = new \SplFileObject($path, 'r');
+        $file->seek(PHP_INT_MAX);
+
+        return $file->key();
     }
 
 }
