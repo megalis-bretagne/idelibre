@@ -1,6 +1,43 @@
-toto
+Date de mise a disposition :
+Nom de la seance :{{ sitting.name }}
+Date de la seance : {{ sitting.date | date("d/m/Y à H:i") }}
 
-{{ name }}
+Destinataires de cet envoi :
+{% for convocation in convocations %}
+
+Prénom : {{ convocation.actor.firstName}}
+Nom : {{ convocation.actor.lastName}}
+Identifiant : {{ convocation.actor.username}}
+Email : {{ convocation.actor.email}}
+UUID : {{ convocation.actor.id}}
+{% endfor %}
 
 
-encore un fichier
+Contenu de l'envoi original
+
+convocation :
+Fichier : {{ sitting.file.name}}
+Taille : {{ sitting.file.size }}
+UUID : {{ sitting.file.size }}
+
+Liste des projets
+{% for project in sitting.projects %}
+
+Rang : {{ project.rank + 1 }}
+Intitulé : {{ project.name }}
+Fichier : {{ project.file.name }}
+Taille : {{ project.file.size }}
+UUID : {{ project.id }}
+{% if project.annexes.count > 0 %}
+
+Annexes associée :
+{% for annex in project.annexes %}
+
+Fichier : {{ annex.file.name }}
+Taille : {{ annex.file.size }}
+UUID : {{ annex.id }}
+{% endfor %}
+{% endif %}
+----------------------------
+{% endfor %}
+

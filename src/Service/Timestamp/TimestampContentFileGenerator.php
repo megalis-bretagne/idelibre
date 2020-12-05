@@ -7,20 +7,23 @@ use App\Entity\Convocation;
 use App\Entity\Sitting;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
-class TimestampFormatter
+class TimestampContentFileGenerator
 {
     private Environment $twig;
     private ParameterBagInterface $bag;
+    private Filesystem $filesystem;
 
-    public function __construct(Environment $twig, ParameterBagInterface $bag)
+    public function __construct(Environment $twig, ParameterBagInterface $bag, Filesystem $filesystem)
     {
         $this->twig = $twig;
         $this->bag = $bag;
+        $this->filesystem = $filesystem;
     }
 
     /**
@@ -29,17 +32,25 @@ class TimestampFormatter
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function generate(Sitting $sitting, iterable $convocations): string
+    public function generateFile(Sitting $sitting, iterable $convocations): string
     {
         $txt = $this->twig->render('generate/sent_timestamp_template.txt.twig', [
             'sitting' => $sitting,
             'convocations' => $convocations
         ]);
 
-        $path = "{$sitting->getStructure()->getId()}/{$sitting->getId()}/" . Uuid::uuid4() ;
-
+        $path = $this->getAndCreateTokenDirectory($sitting) . Uuid::uuid4();
         file_put_contents($path, $txt);
 
-        return $txt;
+        return $path;
+    }
+
+
+    private function getAndCreateTokenDirectory(Sitting $sitting): string
+    {
+        $year = $sitting->getDate()->format("Y");
+        $tokenDirectory = "{$this->bag->get('token_directory')}{$sitting->getStructure()->getId()}/$year/{$sitting->getId()}/";
+        $this->filesystem->mkdir($tokenDirectory);
+        return $tokenDirectory;
     }
 }
