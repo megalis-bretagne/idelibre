@@ -8,7 +8,7 @@ use App\Entity\Sitting;
 use App\Entity\User;
 use App\Repository\ConvocationRepository;
 use App\Service\Timestamp\TimestampManager;
-use App\Service\Timestamp\TimestampServiceInterface;
+use Doctrine\DBAL\ConnectionException;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Psr\Log\LoggerInterface;
@@ -16,17 +16,18 @@ use Psr\Log\LoggerInterface;
 class ConvocationManager
 {
     private EntityManagerInterface $em;
-    private TimestampServiceInterface $timestampService;
     private ConvocationRepository $convocationRepository;
     private TimestampManager $timestampManager;
     private LoggerInterface $logger;
 
 
-    public function __construct(EntityManagerInterface $em, TimestampServiceInterface $timestampService,
-                                ConvocationRepository $convocationRepository, TimestampManager $timestampManager, LoggerInterface $logger)
-    {
+    public function __construct(
+        EntityManagerInterface $em,
+        ConvocationRepository $convocationRepository,
+        TimestampManager $timestampManager,
+        LoggerInterface $logger
+    ) {
         $this->em = $em;
-        $this->timestampService = $timestampService;
         $this->convocationRepository = $convocationRepository;
         $this->timestampManager = $timestampManager;
         $this->logger = $logger;
@@ -83,20 +84,29 @@ class ConvocationManager
 
 
     /**
-     * @param Convocation[] $convocations
+     * @param Sitting $sitting
+     * @throws ConnectionException
      */
     public function sendAllConvocations(Sitting $sitting): void
     {
-        foreach ($sitting->getConvocations() as $convocation) {
-            $this->timestampAndActiveConvocations($sitting, $convocation);
-        }
-        $this->em->flush();
+        // TODO loop by Max message mailjet or timestamp !
+        $this->timestampAndActiveConvocations($sitting, $sitting->getConvocations());
 
-        //Todo send email and notify clients
+        // TODO send email !
     }
+
+
+    public function sendConvocation(Convocation $convocation)
+    {
+        $this->timestampAndActiveConvocations($convocation->getSitting(), [$convocation]);
+
+        // TODO send email !
+    }
+
 
     /**
      * @param iterable $convocations
+     * @throws ConnectionException
      */
     private function timestampAndActiveConvocations(Sitting $sitting, iterable $convocations): bool
     {

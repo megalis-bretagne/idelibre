@@ -58,7 +58,7 @@ class Convocation
     private $actor;
 
     /**
-     * @ORM\OneToOne(targetEntity=Timestamp::class, cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity=Timestamp::class, cascade={"persist", "remove"})
      * @ORM\JoinColumn(onDelete="SET NULL")
      * @Groups({"convocation"})
      */

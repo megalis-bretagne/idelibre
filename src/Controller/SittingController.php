@@ -188,7 +188,7 @@ class SittingController extends AbstractController
      */
     public function getZipSitting(Sitting $sitting, ZipSittingGenerator $zipSittingGenerator): Response
     {
-        $response = new BinaryFileResponse($zipSittingGenerator->getZipPath($sitting));
+        $response = new BinaryFileResponse($zipSittingGenerator->getAndCreateZipPath($sitting));
         $response->setContentDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
             $sitting->getName() . '.zip'

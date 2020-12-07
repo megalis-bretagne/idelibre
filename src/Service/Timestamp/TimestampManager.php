@@ -7,6 +7,7 @@ use App\Entity\Convocation;
 use App\Entity\Sitting;
 use App\Entity\Timestamp;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -17,8 +18,11 @@ class TimestampManager
     private TimestampContentFileGenerator $contentGenerator;
     private TimestampServiceInterface $timestampService;
 
-    public function __construct(EntityManagerInterface $em, TimestampContentFileGenerator $contentGenerator, TimestampServiceInterface $timestampService)
-    {
+    public function __construct(
+        EntityManagerInterface $em,
+        TimestampContentFileGenerator $contentGenerator,
+        TimestampServiceInterface $timestampService
+    ) {
         $this->em = $em;
         $this->contentGenerator = $contentGenerator;
         $this->timestampService = $timestampService;
@@ -46,6 +50,4 @@ class TimestampManager
 
         return $timeStamp;
     }
-
-
 }

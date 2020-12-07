@@ -12,6 +12,7 @@ use Doctrine\Persistence\ObjectManager;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 
 class ReportSittingControllerTest extends WebTestCase
@@ -65,6 +66,30 @@ class ReportSittingControllerTest extends WebTestCase
         $this->loginAsAdminLibriciel();
         $this->client->request(Request::METHOD_GET, '/reportSitting/csv/' . $sitting->getId());
         $this->assertResponseStatusCodeSame(200);
+    }
+
+    public function testGetSittingZipTokens()
+    {
+        $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
+        $bag = self::$container->get('parameter_bag');
+        $year = $sitting->getDate()->format("Y");
+        $tokenPath = "{$bag->get('token_directory')}{$sitting->getStructure()->getId()}/$year/{$sitting->getId()}";
+
+        $filesystem = new FileSystem();
+        $filesystem->copy(__DIR__ . '/../resources/timestampContent', $tokenPath . '/timestampContentFile');
+        $filesystem->copy(__DIR__ . '/../resources/timestampContent.tsa', $tokenPath . '/timestampContentFile.tsa');
+
+        $this->loginAsAdminLibriciel();
+        $this->client->request(Request::METHOD_GET, '/reportSitting/token/' . $sitting->getId());
+
+        $this->assertResponseStatusCodeSame(200);
+
+        $response = $this->client->getResponse();
+
+        $this->assertTrue($response->headers->has('content-disposition'));
+        $this->assertSame('attachment; filename="Conseil Libriciel_jetons.zip"', $response->headers->get('content-disposition'));
+        $this->assertSame("application/zip", $response->headers->get('content-type'));
+        $this->assertSame('713', $response->headers->get('content-length'));
     }
 
 }

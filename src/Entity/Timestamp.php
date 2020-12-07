@@ -82,5 +82,4 @@ class Timestamp
         $this->filePathTsa = $filePathTsa;
         return $this;
     }
-
 }

@@ -1,5 +1,5 @@
-Date de mise a disposition :
-Nom de la seance :{{ sitting.name }}
+Date de mise a disposition : {{ "now" | date("m/d/Y à H:i") }}
+Nom de la seance : {{ sitting.name }}
 Date de la seance : {{ sitting.date | date("d/m/Y à H:i") }}
 
 Destinataires de cet envoi :
@@ -30,7 +30,7 @@ Taille : {{ project.file.size }}
 UUID : {{ project.id }}
 {% if project.annexes.count > 0 %}
 
-Annexes associée :
+Annexes associées :
 {% for annex in project.annexes %}
 
 Fichier : {{ annex.file.name }}
@@ -40,4 +40,3 @@ UUID : {{ annex.id }}
 {% endif %}
 ----------------------------
 {% endfor %}
-
