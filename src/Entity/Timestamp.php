@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\TimestampRepository;
 use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -16,24 +17,28 @@ class Timestamp
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid")
+     * @var string | null
      */
     private $id;
 
     /**
      * @ORM\Column(type="datetime")
      * @Groups({"convocation"})
+     * @var DateTimeInterface
      */
     private $createAt;
 
     /**
      * @ORM\Column(type="text")
+     * @var string | null
      */
-    private $content;
+    private $filePathContent;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @var string | null
      */
-    private $tsa;
+    private $filePathTsa;
 
 
 
@@ -47,33 +52,35 @@ class Timestamp
         return $this->id;
     }
 
-    public function getCreateAt(): ?\DateTimeInterface
+    public function getCreateAt(): ?DateTimeInterface
     {
         return $this->createAt;
     }
 
 
-    public function getContent(): ?string
+    public function getFilePathContent(): ?string
     {
-        return $this->content;
+        return $this->filePathContent;
     }
 
-    public function setContent(string $content): self
-    {
-        $this->content = $content;
 
+    public function setFilePathContent(?string $filePathContent): Timestamp
+    {
+        $this->filePathContent = $filePathContent;
         return $this;
     }
 
-    public function getTsa(): ?string
+
+    public function getFilePathTsa(): ?string
     {
-        return $this->tsa;
+        return $this->filePathTsa;
     }
 
-    public function setTsa(?string $tsa): self
-    {
-        $this->tsa = $tsa;
 
+    public function setFilePathTsa(?string $filePathTsa): Timestamp
+    {
+        $this->filePathTsa = $filePathTsa;
         return $this;
     }
+
 }

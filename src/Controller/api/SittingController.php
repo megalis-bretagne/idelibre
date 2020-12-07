@@ -17,7 +17,7 @@ class SittingController extends AbstractController
      */
     public function sendConvocations(Sitting $sitting, ConvocationRepository $convocationRepository, ConvocationManager $convocationManager): JsonResponse
     {
-        $convocationManager->sendConvocations($convocationRepository->findBy(['sitting' => $sitting]));
+        $convocationManager->sendAllConvocations($sitting);
         return $this->json(['success' => true]);
     }
 }
