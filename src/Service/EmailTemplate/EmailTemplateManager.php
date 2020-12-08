@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Service\Email;
+namespace App\Service\EmailTemplate;
 
 use App\Entity\EmailTemplate;
 use App\Entity\Structure;

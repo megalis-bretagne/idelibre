@@ -7,7 +7,7 @@ use App\Entity\ForgetToken;
 use App\Entity\User;
 use App\Repository\ForgetTokenRepository;
 use App\Repository\UserRepository;
-use App\Service\Email\IEmail;
+use App\Service\Email\EmailInterface;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
@@ -37,12 +37,12 @@ class ResetPassword
      */
     private $passwordEncoder;
     /**
-     * @var IEmail
+     * @var EmailInterface
      */
     private $email;
 
     public function __construct(
-        IEmail $email,
+        EmailInterface $email,
         EntityManagerInterface $em,
         RouterInterface $router,
         UserRepository $userRepository,
@@ -70,7 +70,7 @@ class ResetPassword
         }
 
         $token = $this->createToken($user);
-        $this->email->sendReinitPassword($user, $token);
+        $this->email->sendReInitPassword($user, $token);
     }
 
     /**
