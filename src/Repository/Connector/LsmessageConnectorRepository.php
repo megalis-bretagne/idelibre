@@ -18,5 +18,4 @@ class LsmessageConnectorRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, LsmessageConnector::class);
     }
-
 }

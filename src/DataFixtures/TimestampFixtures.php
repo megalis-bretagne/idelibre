@@ -12,13 +12,13 @@ use Doctrine\Persistence\ObjectManager;
 
 class TimestampFixtures extends Fixture
 {
-    const REFERENCE = 'Timestamp_';
+    public const REFERENCE = 'Timestamp_';
 
     public function load(ObjectManager $manager): void
     {
         $timestamp = new Timestamp();
-        $timestamp->setContent('message sent')
-           ->setTsa('valid');
+        $timestamp->setFilePathContent('fake path File content')
+           ->setFilePathTsa('fakepathFile tsa');
 
         $this->addReference(self::REFERENCE . 'sent', $timestamp);
 

@@ -12,13 +12,12 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SittingController extends AbstractController
 {
-
     /**
      * @Route("/api/sittings/{id}/sendConvocations", name="api_convocations_send", methods={"POST"})
      */
-    public function sendConvocations(Sitting $sitting, ConvocationRepository $convocationRepository, ConvocationManager $convocationManager): JsonResponse
+    public function sendConvocations(Sitting $sitting, ConvocationManager $convocationManager): JsonResponse
     {
-        $convocationManager->sendConvocations($convocationRepository->findBy(['sitting' => $sitting]));
+        $convocationManager->sendAllConvocations($sitting);
         return $this->json(['success' => true]);
     }
 }

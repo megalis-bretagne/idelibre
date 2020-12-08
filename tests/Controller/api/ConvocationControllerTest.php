@@ -4,12 +4,14 @@ namespace App\Tests\Controller\api;
 
 use App\Controller\api\ConvocationController;
 use App\DataFixtures\ConvocationFixtures;
+use App\Tests\FileTrait;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
 use Doctrine\Persistence\ObjectManager;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 
 class ConvocationControllerTest extends WebTestCase
@@ -17,6 +19,7 @@ class ConvocationControllerTest extends WebTestCase
     use FixturesTrait;
     use FindEntityTrait;
     use LoginTrait;
+    use FileTrait;
 
 
     private ?KernelBrowser $client;
@@ -71,5 +74,11 @@ class ConvocationControllerTest extends WebTestCase
         $this->entityManager->refresh($convocation);
 
         $this->assertNotEmpty($convocation->getSentTimestamp());
+
+        $bag = self::$container->get('parameter_bag');
+
+        $year = $sitting->getDate()->format("Y");
+        $tokenPath = "{$bag->get('token_directory')}{$sitting->getStructure()->getId()}/$year/{$sitting->getId()}";
+        $this->assertEquals(2, $this->countFileInDirectory($tokenPath));
     }
 }

@@ -11,7 +11,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class AnnexFixtures extends Fixture implements DependentFixtureInterface
 {
-    const REFERENCE = 'Annex_';
+    public const REFERENCE = 'Annex_';
 
     public function load(ObjectManager $manager): void
     {

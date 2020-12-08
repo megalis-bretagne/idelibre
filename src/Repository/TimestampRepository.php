@@ -18,5 +18,4 @@ class TimestampRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Timestamp::class);
     }
-
 }

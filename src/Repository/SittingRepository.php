@@ -21,9 +21,9 @@ class SittingRepository extends ServiceEntityRepository
         parent::__construct($registry, Sitting::class);
     }
 
-    public function findByStructure(Structure $structure, ?string $searchTerm =null): QueryBuilder
+    public function findByStructure(Structure $structure, ?string $searchTerm = null): QueryBuilder
     {
-        $qb =  $this->createQueryBuilder('s')
+        $qb = $this->createQueryBuilder('s')
             ->andWhere('s.structure =:structure')
             ->setParameter('structure', $structure);
 

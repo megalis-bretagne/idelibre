@@ -14,7 +14,7 @@ class SearchType extends AbstractType
         $builder
             ->add('search', TextType::class, [
                 'required' => false,
-                'label'=> false,
+                'label' => false,
                 'attr' => [
                     'placeholder' => 'Rechercher ...',
                 ]

@@ -12,7 +12,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class ConvocationFixtures extends Fixture implements DependentFixtureInterface
 {
-    const REFERENCE = 'Convocation_';
+    public const REFERENCE = 'Convocation_';
 
     public function load(ObjectManager $manager): void
     {

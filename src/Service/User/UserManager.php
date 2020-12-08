@@ -23,9 +23,12 @@ class UserManager
      */
     private RoleManager $roleManager;
 
-    public function __construct(EntityManagerInterface $em, UserPasswordEncoderInterface $passwordEncoder,
-                                ValidatorInterface $validator, RoleManager $roleManager)
-    {
+    public function __construct(
+        EntityManagerInterface $em,
+        UserPasswordEncoderInterface $passwordEncoder,
+        ValidatorInterface $validator,
+        RoleManager $roleManager
+    ) {
         $this->em = $em;
         $this->passwordEncoder = $passwordEncoder;
         $this->validator = $validator;

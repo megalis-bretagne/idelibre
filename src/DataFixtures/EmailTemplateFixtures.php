@@ -11,7 +11,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class EmailTemplateFixtures extends Fixture implements DependentFixtureInterface
 {
-    const REFERENCE = 'EmailTemplate_';
+    public const REFERENCE = 'EmailTemplate_';
 
     public function load(ObjectManager $manager): void
     {

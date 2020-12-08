@@ -3,7 +3,6 @@
 
 namespace App\Service\Connector;
 
-
 use App\Entity\Connector\Exception\LsmessageConnectorException;
 use App\Entity\Connector\LsmessageConnector;
 use App\Entity\Structure;
@@ -44,5 +43,4 @@ class LsmessageConnectorManager
         $this->em->persist($lsmessageConnector);
         $this->em->flush();
     }
-
 }

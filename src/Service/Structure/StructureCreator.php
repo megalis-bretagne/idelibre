@@ -3,7 +3,6 @@
 
 namespace App\Service\Structure;
 
-
 use App\Entity\Connector\Exception\ComelusConnectorException;
 use App\Entity\Connector\Exception\LsmessageConnectorException;
 use App\Entity\Group;
@@ -19,7 +18,6 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 class StructureCreator
 {
-
     private UserManager $userManager;
     private EntityManagerInterface $em;
     private ThemeManager $themeManager;
@@ -32,8 +30,7 @@ class StructureCreator
         ThemeManager $themeManager,
         ComelusConnectorManager $comelusConnectorManager,
         LsmessageConnectorManager $lsmessageConnectorManager
-    )
-    {
+    ) {
         $this->userManager = $userManager;
         $this->em = $em;
         $this->themeManager = $themeManager;
@@ -77,5 +74,4 @@ class StructureCreator
         $this->comelusConnectorManager->createConnector($structure);
         $this->lsmessageConnectorManager->createConnector($structure);
     }
-
 }

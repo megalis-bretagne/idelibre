@@ -10,7 +10,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class ForgetTokenFixtures extends Fixture implements DependentFixtureInterface
 {
-    const GROUP = 'ForgetToken_';
+    public const GROUP = 'ForgetToken_';
 
     public function load(ObjectManager $manager): void
     {

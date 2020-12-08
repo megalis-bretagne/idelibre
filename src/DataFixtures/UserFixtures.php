@@ -14,7 +14,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserFixtures extends Fixture implements DependentFixtureInterface
 {
-    const REFERENCE = 'User_';
+    public const REFERENCE = 'User_';
 
     private UserPasswordEncoderInterface $passwordEncoder;
 

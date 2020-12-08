@@ -22,7 +22,7 @@ class ZipSittingGenerator
     public function generateZipSitting(Sitting $sitting): string
     {
         $zip = new ZipArchive();
-        $zipPath = $this->getZipPath($sitting);
+        $zipPath = $this->getAndCreateZipPath($sitting);
         $zip->open($zipPath, ZipArchive::CREATE);
         $zip->addFile($sitting->getFile()->getPath(), $sitting->getFile()->getName());
         $this->addProjectAndAnnexesFiles($zip, $sitting);
@@ -31,7 +31,7 @@ class ZipSittingGenerator
         return $zipPath;
     }
 
-    public function getZipPath(Sitting $sitting): string
+    public function getAndCreateZipPath(Sitting $sitting): string
     {
         $directoryPath = $this->bag->get('document_zip_directory') . $sitting->getStructure()->getId();
         $this->filesystem->mkdir($directoryPath);

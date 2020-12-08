@@ -35,7 +35,7 @@ class ConvocationController extends AbstractController
      */
     public function sendConvocation(Convocation $convocation, ConvocationManager $convocationManager): JsonResponse
     {
-        $convocationManager->sendConvocations([$convocation]);
+        $convocationManager->sendConvocation($convocation);
 
         return $this->json($convocation, 200, [], ['groups' => ['convocation', 'user']]);
     }

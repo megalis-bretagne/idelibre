@@ -8,6 +8,7 @@ parameters:
   document_files_directory: '/tmp/'
   document_zip_directory: '/tmp/'
   document_full_pdf_directory: '/tmp/'
+  token_directory: '/tmp/'
 
 services:
     # default configuration for services in *this* file

@@ -27,12 +27,13 @@ class SittingManager
      */
     private ProjectManager $projectManager;
 
-    public function __construct(ConvocationManager $convocationManager,
-                                FileManager $fileManager,
-                                EntityManagerInterface $em,
-                                MessageBusInterface $messageBus,
-                                ProjectManager $projectManager)
-    {
+    public function __construct(
+        ConvocationManager $convocationManager,
+        FileManager $fileManager,
+        EntityManagerInterface $em,
+        MessageBusInterface $messageBus,
+        ProjectManager $projectManager
+    ) {
         $this->convocationManager = $convocationManager;
         $this->fileManager = $fileManager;
         $this->em = $em;

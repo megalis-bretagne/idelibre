@@ -13,7 +13,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class LsMessageConnectorFixtures extends Fixture implements DependentFixtureInterface
 {
-    const REFERENCE = 'LsmessageFixtures_';
+    public const REFERENCE = 'LsmessageFixtures_';
 
     public function load(ObjectManager $manager): void
     {

@@ -7,7 +7,6 @@ use App\Entity\EmailTemplate;
 
 class EmailGenerator
 {
-
     /**
      * @param array $params ["#maVar#" => 'value']
      */

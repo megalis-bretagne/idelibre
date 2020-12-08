@@ -5,27 +5,32 @@ namespace App\Service\Convocation;
 
 use App\Entity\Convocation;
 use App\Entity\Sitting;
-use App\Entity\Timestamp;
 use App\Entity\User;
 use App\Repository\ConvocationRepository;
 use App\Service\Timestamp\TimestampManager;
-use App\Service\Timestamp\TimestampServiceInterface;
+use Doctrine\DBAL\ConnectionException;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
+use Psr\Log\LoggerInterface;
 
 class ConvocationManager
 {
     private EntityManagerInterface $em;
-    private TimestampServiceInterface $timestampService;
     private ConvocationRepository $convocationRepository;
     private TimestampManager $timestampManager;
+    private LoggerInterface $logger;
 
 
-    public function __construct(EntityManagerInterface $em, TimestampServiceInterface $timestampService, ConvocationRepository $convocationRepository, TimestampManager $timestampManager)
-    {
+    public function __construct(
+        EntityManagerInterface $em,
+        ConvocationRepository $convocationRepository,
+        TimestampManager $timestampManager,
+        LoggerInterface $logger
+    ) {
         $this->em = $em;
-        $this->timestampService = $timestampService;
         $this->convocationRepository = $convocationRepository;
         $this->timestampManager = $timestampManager;
+        $this->logger = $logger;
     }
 
     public function createConvocations(Sitting $sitting): void
@@ -79,33 +84,68 @@ class ConvocationManager
 
 
     /**
-     * @param Convocation[] $convocations
+     * @param Sitting $sitting
+     * @throws ConnectionException
      */
-    public function sendConvocations(iterable $convocations): void
+    public function sendAllConvocations(Sitting $sitting): void
     {
+        // TODO loop by Max message mailjet or timestamp !
+        $this->timestampAndActiveConvocations($sitting, $sitting->getConvocations());
+
+        // TODO send email !
+    }
+
+
+    public function sendConvocation(Convocation $convocation)
+    {
+        $this->timestampAndActiveConvocations($convocation->getSitting(), [$convocation]);
+
+        // TODO send email !
+    }
+
+
+    /**
+     * @param iterable $convocations
+     * @throws ConnectionException
+     */
+    private function timestampAndActiveConvocations(Sitting $sitting, iterable $convocations): bool
+    {
+        $this->em->getConnection()->beginTransaction();
+        try {
+            $notSentConvocations = $this->filterNotSentConvocations($convocations);
+            $timeStamp = $this->timestampManager->createTimestamp($sitting, $notSentConvocations);
+
+            foreach ($notSentConvocations as $convocation) {
+                $convocation->setIsActive(true)
+                    ->setSentTimestamp($timeStamp);
+
+                $this->em->persist($convocation);
+            }
+            $this->em->flush();
+            $this->em->getConnection()->commit();
+        } catch (Exception $e) {
+            $this->em->getConnection()->rollBack();
+            $this->logger->error($e->getMessage());
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @param iterable $convocations
+     */
+    private function filterNotSentConvocations(iterable $convocations): array
+    {
+        $notSent = [];
         foreach ($convocations as $convocation) {
-            $this->sendConvocation($convocation);
+            if (!$this->isAlreadySent($convocation)) {
+                $notSent[] = $convocation;
+            }
         }
-        $this->em->flush();
 
-        //Todo send email and notify clients
+        return $notSent;
     }
-
-    private function sendConvocation(Convocation $convocation): void
-    {
-        if ($this->isAlreadySent($convocation)) {
-            return;
-        }
-        $timeStamp = new Timestamp();
-        $timeStamp->setContent("les infos de cet envoi");
-        $this->timestampService->signTimestamp($timeStamp);
-        $this->em->persist($timeStamp);
-        $convocation->setIsActive(true)
-            ->setSentTimestamp($timeStamp);
-
-        $this->em->persist($convocation);
-    }
-
 
     private function isAlreadySent(Convocation $convocation): bool
     {

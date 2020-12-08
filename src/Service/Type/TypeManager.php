@@ -16,8 +16,7 @@ class TypeManager
     public function __construct(
         TypeRepository $typeRepository,
         EntityManagerInterface $em
-    )
-    {
+    ) {
         $this->typeRepository = $typeRepository;
         $this->em = $em;
     }

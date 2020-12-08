@@ -70,13 +70,12 @@ class StructureController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-                $errors = $structureCreator->create(
-                    $form->getData(),
-                    $form->get('user')->getData(),
-                    $form->get('user')->get('plainPassword')->getData(),
-                    $this->getUser()->getGroup()
-                );
+            $errors = $structureCreator->create(
+                $form->getData(),
+                $form->get('user')->getData(),
+                $form->get('user')->get('plainPassword')->getData(),
+                $this->getUser()->getGroup()
+            );
 
             if (!empty($errors)) {
                 $this->addErrorToForm($form->get('user'), $errors);

@@ -11,7 +11,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class ManageEmailTemplatesVoter extends Voter
 {
-
     /**
      * @var Security
      */

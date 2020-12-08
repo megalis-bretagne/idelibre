@@ -4,19 +4,19 @@ namespace App\Entity\Connector;
 
 use App\Entity\Connector\Exception\LsmessageConnectorException;
 use App\Entity\Structure;
-use Doctrine\ORM\Mapping as ORM;
 use App\Repository\Connector\LsmessageConnectorRepository;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=LsmessageConnectorRepository::class)
  */
 class LsmessageConnector extends Connector
 {
-    const NAME = 'lsmessage';
-    const MAX_URL_LENGTH = 255;
-    const MAX_API_KEY_LENGTH = 255;
-    const MAX_CONTENT_LENGTH = 140;
-    const MAX_SENDER_LENGTH = 7;
+    public const NAME = 'lsmessage';
+    public const MAX_URL_LENGTH = 255;
+    public const MAX_API_KEY_LENGTH = 255;
+    public const MAX_CONTENT_LENGTH = 140;
+    public const MAX_SENDER_LENGTH = 7;
 
     /**
      * @ORM\Id
@@ -143,13 +143,13 @@ class LsmessageConnector extends Connector
     /**
      * @throws LsmessageConnectorException
      */
-    private function validateLength(?string $string, int $length) {
-        if(!$string) {
+    private function validateLength(?string $string, int $length)
+    {
+        if (!$string) {
             return;
         }
-        if(strlen($string) > $length) {
+        if (strlen($string) > $length) {
             throw new LsmessageConnectorException("length should be < $length");
         }
     }
-
 }
