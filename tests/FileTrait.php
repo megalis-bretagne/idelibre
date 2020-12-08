@@ -14,4 +14,12 @@ trait FileTrait
 
         return 0;
     }
+
+
+    public function countFileLines(string $path){
+        $file = new \SplFileObject($path, 'r');
+        $file->seek(PHP_INT_MAX);
+
+        return $file->key();
+    }
 }

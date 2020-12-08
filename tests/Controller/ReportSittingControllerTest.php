@@ -58,6 +58,12 @@ class ReportSittingControllerTest extends WebTestCase
         $this->loginAsAdminLibriciel();
         $this->client->request(Request::METHOD_GET, '/reportSitting/pdf/' . $sitting->getId());
         $this->assertResponseStatusCodeSame(200);
+
+        $response = $this->client->getResponse();
+        $this->assertTrue($response->headers->has('content-disposition'));
+        $this->assertSame('attachment; filename="Conseil Libriciel_rapport.pdf"', $response->headers->get('content-disposition'));
+        $this->assertSame("application/pdf", $response->headers->get('content-type'));
+        $this->assertGreaterThan(5000, intval($response->headers->get('content-length')));
     }
 
     public function testCsvReport()
@@ -66,6 +72,12 @@ class ReportSittingControllerTest extends WebTestCase
         $this->loginAsAdminLibriciel();
         $this->client->request(Request::METHOD_GET, '/reportSitting/csv/' . $sitting->getId());
         $this->assertResponseStatusCodeSame(200);
+
+        $response = $this->client->getResponse();
+        $this->assertTrue($response->headers->has('content-disposition'));
+        $this->assertSame('attachment; filename="Conseil Libriciel_rapport.csv"', $response->headers->get('content-disposition'));
+        $this->assertSame("text/plain", $response->headers->get('content-type'));
+        $this->assertGreaterThan(20, intval($response->headers->get('content-length')));
     }
 
     public function testGetSittingZipTokens()
@@ -89,7 +101,7 @@ class ReportSittingControllerTest extends WebTestCase
         $this->assertTrue($response->headers->has('content-disposition'));
         $this->assertSame('attachment; filename="Conseil Libriciel_jetons.zip"', $response->headers->get('content-disposition'));
         $this->assertSame("application/zip", $response->headers->get('content-type'));
-        $this->assertSame('713', $response->headers->get('content-length'));
+        $this->assertGreaterThan(100, intval($response->headers->get('content-length')));
     }
 
 }

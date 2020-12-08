@@ -21,7 +21,7 @@ class ZipTokenGenerator
         $tmpPath = "/tmp/" . uniqid("zip_token");
         $zip = new ZipArchive();
         $zip->open($tmpPath, ZipArchive::CREATE);
-        $zip->addGlob($this->getTimestampDirectory($sitting) . '*');
+        $zip->addGlob($this->getTimestampDirectory($sitting) . '*', 0, ["remove_all_path" => true, "add_path" => "jetons/"]);
         $zip->close();
 
         return $tmpPath;

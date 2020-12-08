@@ -8,6 +8,7 @@ use App\DataFixtures\FileFixtures;
 use App\DataFixtures\ProjectFixtures;
 use App\DataFixtures\SittingFixtures;
 use App\Service\Timestamp\TimestampContentFileGenerator;
+use App\Tests\FileTrait;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
 use Doctrine\Persistence\ObjectManager;
@@ -19,6 +20,7 @@ class TimestampContentFileGeneratorTest extends WebTestCase
     use FixturesTrait;
     use FindEntityTrait;
     use LoginTrait;
+    use FileTrait;
 
 
 
@@ -68,15 +70,10 @@ class TimestampContentFileGeneratorTest extends WebTestCase
         $sitting = $this->getOneSittingBy(['name' =>'Conseil Libriciel']) ;
         $timestampGenerator = new TimestampContentFileGenerator($this->environment, $this->bag, $this->fileSystem);
         $path = $timestampGenerator->generateFile($sitting, $sitting->getConvocations());
-        $this->assertSame(52, $this->countFileLines($path));
+        $this->assertSame(51, $this->countFileLines($path));
 
     }
 
-    private function countFileLines(string $path){
-        $file = new \SplFileObject($path, 'r');
-        $file->seek(PHP_INT_MAX);
 
-        return $file->key();
-    }
 
 }
