@@ -4,6 +4,7 @@ namespace App\Tests\Service\Email;
 
 use App\Entity\EmailTemplate;
 use App\Service\Email\EmailGenerator;
+use App\Service\EmailTemplate\HtmlTag;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class EmailContentGeneratorTest extends WebTestCase
@@ -16,7 +17,7 @@ class EmailContentGeneratorTest extends WebTestCase
         $generator = new EmailGenerator();
         $emailData = $generator->generateNotification($emailTemplate, ['#variable#' => 'test']);
         $this->assertEquals(
-            'test de génération de message : test',
+            HtmlTag::START_HTML . 'test de génération de message : test' . HtmlTag::END_HTML,
             $emailData->getContent()
         );
         $this->assertEquals(

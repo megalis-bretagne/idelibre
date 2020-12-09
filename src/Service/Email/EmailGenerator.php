@@ -4,6 +4,7 @@
 namespace App\Service\Email;
 
 use App\Entity\EmailTemplate;
+use App\Service\EmailTemplate\HtmlTag;
 
 class EmailGenerator
 {
@@ -14,7 +15,7 @@ class EmailGenerator
     {
         return new EmailData(
             $this->generate($emailTemplate->getSubject(), $params),
-            $this->generate($emailTemplate->getContent(), $params)
+            HtmlTag::START_HTML . $this->generate($emailTemplate->getContent(), $params) . HtmlTag::END_HTML
         );
     }
 

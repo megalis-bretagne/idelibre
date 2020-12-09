@@ -27,9 +27,9 @@ class DefaultTemplateCreator
 
     private function initResetPassword(Structure $structure)
     {
-        $forgetMsg = HtmlTag::START_HTML . 'Bonjour, <br>
+        $forgetMsg = 'Bonjour, <br>
     Vous avez effectué une demande de remise à zéro de mot de passe <br>
-    Veuillez Cliquer ici pour le réinitialiser #reinitLink#' . HtmlTag::END_HTML;
+    Veuillez Cliquer ici pour le réinitialiser #reinitLink#';
 
         $forgetTemplate = new EmailTemplate();
         $forgetTemplate->setName('Mot de passe oublié')
@@ -44,8 +44,8 @@ class DefaultTemplateCreator
 
     private function initDefaultConvocationTemplates(Structure $structure): void
     {
-        $convocationMsg = HtmlTag::START_HTML . 'Bonjour, <br>
-        Vous êtes convoqué à la séance ... <br> ' . HtmlTag::END_HTML;
+        $convocationMsg = 'Bonjour, <br>
+        Vous êtes convoqué à la séance ... <br> ';
 
         $convocationTemplate = new EmailTemplate();
         $convocationTemplate->setName('Convocation par défaut')
@@ -60,8 +60,8 @@ class DefaultTemplateCreator
 
     private function initDefaultInvitationTemplates(Structure $structure): void
     {
-        $invitationMsg = HtmlTag::START_HTML . 'Bonjour, <br>
-        Vous êtes invité à la séance ... <br>' . HtmlTag::END_HTML;
+        $invitationMsg = 'Bonjour, <br>
+        Vous êtes invité à la séance ... <br>';
 
         $invitationTemplate = new EmailTemplate();
         $invitationTemplate->setName('Invitation par défaut')

@@ -50,8 +50,7 @@ class EmailTemplateController extends AbstractController
      */
     public function add(Request $request, EmailTemplateManager $templateManager, DefaultTemplateCreator $defaultTemplateCreator, EntityManagerInterface $em): Response
     {
-        /*
-                $defaultTemplateCreator->initDefaultTemplates($this->getUser()->getStructure());
+        /*        $defaultTemplateCreator->initDefaultTemplates($this->getUser()->getStructure());
                 $em->flush();
 
                 dd('OK');
