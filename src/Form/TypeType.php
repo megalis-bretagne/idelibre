@@ -31,18 +31,17 @@ class TypeType extends AbstractType
                 'query_builder' => $this->userRepository
                     ->findActorByStructure($options['structure']),
                 'choice_label' => function (User $user) {
-                    return  sprintf("%s %s <%s>", $user->getFirstName(), $user->getLastName(), $user->getUsername());
+                    return  sprintf('%s %s <%s>', $user->getFirstName(), $user->getLastName(), $user->getUsername());
                 },
-                'multiple' => true
+                'multiple' => true,
             ]);
-        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'data_class' => Type::class,
-            'structure' => null
+            'structure' => null,
         ]);
     }
 }

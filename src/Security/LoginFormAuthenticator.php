@@ -26,7 +26,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     private Security $security;
     private ImpersonateStructure $impersonateStructure;
 
-
     public function __construct(
         UserRepository $userRepository,
         RouterInterface $router,
@@ -45,7 +44,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     public function supports(Request $request)
     {
-        return $request->attributes->get('_route') === 'app_login' && $request->isMethod('POST');
+        return 'app_login' === $request->attributes->get('_route') && $request->isMethod('POST');
     }
 
     public function getCredentials(Request $request)
@@ -80,15 +79,16 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
     }
 
-
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
         if ($this->security->isGranted('ROLE_MANAGE_STRUCTURES')) {
             $this->impersonateStructure->logoutStructure();
+
             return new RedirectResponse(
                 $this->router->generate('structure_index')
             );
         }
+
         return new RedirectResponse($this->router->generate('user_index'));
     }
 
@@ -98,7 +98,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function getLoginUrl()
     {

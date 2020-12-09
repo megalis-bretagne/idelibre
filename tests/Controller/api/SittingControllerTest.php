@@ -63,6 +63,8 @@ class SittingControllerTest extends WebTestCase
         foreach ($sitting->getConvocations() as $convocation) {
             $this->assertNotEmpty($convocation->getSentTimestamp());
         }
+
+        // TODO CHECK GENERATED FILES !
     }
 
 

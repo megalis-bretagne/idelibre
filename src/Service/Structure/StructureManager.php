@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\Structure;
 
 use App\Entity\Structure;
@@ -18,7 +17,6 @@ class StructureManager
     private ValidatorInterface $validator;
     private ImpersonateStructure $impersonateStructure;
 
-
     public function __construct(
         StructureRepository $structureRepository,
         EntityManagerInterface $em,
@@ -33,13 +31,11 @@ class StructureManager
         $this->impersonateStructure = $impersonateStructure;
     }
 
-
     public function save(Structure $structure): void
     {
         $this->em->persist($structure);
         $this->em->flush();
     }
-
 
     public function delete(Structure $structure): void
     {
@@ -47,7 +43,6 @@ class StructureManager
         $this->em->remove($structure);
         $this->em->flush();
     }
-
 
     public function replaceReplyTo(Structure $structure, ?string $replyTo): void
     {

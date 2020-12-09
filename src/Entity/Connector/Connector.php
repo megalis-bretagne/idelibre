@@ -12,7 +12,6 @@ use Doctrine\ORM\Mapping\InheritanceType;
  * @ORM\Table(name="connector")
  * @InheritanceType("SINGLE_TABLE")
  * @DiscriminatorMap({"comelus" = "ComelusConnector", "lsmessage" = "LsmessageConnector"})
- *
  */
 abstract class Connector implements ConnectorInterface
 {
@@ -32,7 +31,6 @@ abstract class Connector implements ConnectorInterface
      * @ORM\Column(type="json", options={"jsonb"=true})
      */
     protected $fields = [];
-
 
     /**
      * @ORM\ManyToOne(targetEntity=Structure::class)

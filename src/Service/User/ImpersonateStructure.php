@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\User;
 
 use App\Entity\Structure;
@@ -29,6 +28,7 @@ class ImpersonateStructure
         $user->setStructure($structure);
         $this->em->persist($user);
         $this->em->flush();
+
         return true;
     }
 
@@ -39,6 +39,7 @@ class ImpersonateStructure
         $user->setStructure(null);
         $this->em->persist($user);
         $this->em->flush();
+
         return true;
     }
 
@@ -50,6 +51,7 @@ class ImpersonateStructure
             $this->em->persist($user);
         }
         $this->em->flush();
+
         return true;
     }
 }

@@ -14,7 +14,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Breadcrumb("Configuration des connecteurs", routeName="connector_index")
- *
  */
 class LsmessageConnectorController extends AbstractController
 {
@@ -36,11 +35,12 @@ class LsmessageConnectorController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $lsmessageConnectorManager->save($form->getData());
             $this->addFlash('success', 'Le connecteur a bien été modifié');
+
             return $this->redirectToRoute('connector_index');
         }
 
         return $this->render('connector/lsmessage.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 }

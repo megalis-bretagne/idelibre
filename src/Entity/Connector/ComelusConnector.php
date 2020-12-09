@@ -9,7 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=ComelusConnectorRepository::class)
- *
  */
 class ComelusConnector extends Connector
 {
@@ -38,9 +37,8 @@ class ComelusConnector extends Connector
         'api_key' => null,
         'description' => null,
         'mailing_list_id' => null,
-        'active' => false
+        'active' => false,
     ];
-
 
     /**
      * @ORM\ManyToOne(targetEntity=Structure::class)
@@ -48,12 +46,10 @@ class ComelusConnector extends Connector
      */
     protected $structure;
 
-
     public function __construct(Structure $structure)
     {
         $this->structure = $structure;
     }
-
 
     public function getId(): ?int
     {
@@ -65,12 +61,10 @@ class ComelusConnector extends Connector
         return $this->name;
     }
 
-
     public function getStructure(): ?Structure
     {
         return $this->structure;
     }
-
 
     public function getUrl(): ?string
     {
@@ -84,7 +78,6 @@ class ComelusConnector extends Connector
 
         return $this;
     }
-
 
     public function getApiKey(): ?string
     {
@@ -111,7 +104,6 @@ class ComelusConnector extends Connector
 
         return $this;
     }
-
 
     public function getMailingListId(): ?string
     {

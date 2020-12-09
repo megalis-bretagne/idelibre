@@ -14,13 +14,13 @@ class GroupType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label' => 'Intitulé'
+                'label' => 'Intitulé',
             ]);
 
         if ($options['isNew']) {
             $builder->add('user', SuperUserType::class, [
                 'mapped' => false,
-                'label' => false
+                'label' => false,
             ]);
         }
     }
@@ -29,7 +29,7 @@ class GroupType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Group::class,
-            'isNew' => false
+            'isNew' => false,
         ]);
     }
 }

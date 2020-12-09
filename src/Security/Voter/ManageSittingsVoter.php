@@ -11,9 +11,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class ManageSittingsVoter extends Voter
 {
-    /**
-     * @var Security
-     */
     private Security $security;
 
     public function __construct(Security $security)
@@ -27,7 +24,6 @@ class ManageSittingsVoter extends Voter
             && ($subject instanceof Sitting);
     }
 
-
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
     {
         /** @var User $loggedInUser */
@@ -38,12 +34,12 @@ class ManageSittingsVoter extends Voter
         }
 
         if ($this->isSameStructure($loggedInUser, $subject)) {
-            return $this->security->isGranted("ROLE_MANAGE_SITTINGS");
+            return $this->security->isGranted('ROLE_MANAGE_SITTINGS');
         }
 
         return false;
     }
-    
+
     private function isSameStructure(User $loggedInUser, Sitting $subject)
     {
         return $loggedInUser->getStructure()->getId() === $subject->getStructure()->getId();

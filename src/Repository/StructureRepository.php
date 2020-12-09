@@ -2,7 +2,6 @@
 
 namespace App\Repository;
 
-use App\Entity\File;
 use App\Entity\Group;
 use App\Entity\Structure;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -22,7 +21,6 @@ class StructureRepository extends ServiceEntityRepository
         parent::__construct($registry, Structure::class);
     }
 
-
     public function findAllQueryBuilder($search = null): QueryBuilder
     {
         $qb = $this->createQueryBuilder('s')
@@ -36,7 +34,6 @@ class StructureRepository extends ServiceEntityRepository
 
         return $qb;
     }
-
 
     public function findByGroupQueryBuilder(Group $group, $search = null): QueryBuilder
     {

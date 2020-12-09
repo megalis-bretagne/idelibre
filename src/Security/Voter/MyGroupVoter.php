@@ -20,7 +20,6 @@ class MyGroupVoter extends Voter
             );
     }
 
-
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
     {
         /** @var User $user */
@@ -39,14 +38,15 @@ class MyGroupVoter extends Voter
 
     private function isSuperAdmin(User $user)
     {
-        return in_array("ROLE_SUPERADMIN", $user->getRoles());
+        return in_array('ROLE_SUPERADMIN', $user->getRoles());
     }
 
     private function isAdminGroupAndOwnSubject(User $user, $subject): bool
     {
-        if (!in_array("ROLE_GROUP_ADMIN", $user->getRoles())) {
+        if (!in_array('ROLE_GROUP_ADMIN', $user->getRoles())) {
             return false;
         }
+
         return $user->getGroup() === $subject->getGroup();
     }
 }

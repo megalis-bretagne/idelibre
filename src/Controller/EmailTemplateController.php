@@ -5,11 +5,9 @@ namespace App\Controller;
 use App\Entity\EmailTemplate;
 use App\Form\EmailTemplateType;
 use App\Repository\EmailTemplateRepository;
-use App\Service\Email\EmailGenerator;
-use App\Service\EmailTemplate\DefaultTemplateCreator;
+use App\Service\EmailTemplate\EmailGenerator;
 use App\Service\EmailTemplate\EmailTemplateManager;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
-use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -48,19 +46,15 @@ class EmailTemplateController extends AbstractController
      * @IsGranted("ROLE_MANAGE_EMAIL_TEMPLATES")
      * @Breadcrumb("Ajouter")
      */
-    public function add(Request $request, EmailTemplateManager $templateManager, DefaultTemplateCreator $defaultTemplateCreator, EntityManagerInterface $em): Response
+    public function add(Request $request, EmailTemplateManager $templateManager): Response
     {
-        /*        $defaultTemplateCreator->initDefaultTemplates($this->getUser()->getStructure());
-                $em->flush();
-
-                dd('OK');
-        */
         $form = $this->createForm(EmailTemplateType::class, null, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $templateManager->save($form->getData(), $this->getUser()->getStructure());
             $this->addFlash('success', 'Votre modèle d\'email a été enregistré');
+
             return $this->redirectToRoute('email_template_index');
         }
 
@@ -82,6 +76,7 @@ class EmailTemplateController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $templateManager->save($form->getData(), $this->getUser()->getStructure());
             $this->addFlash('success', 'Votre template d\'email a été modifié');
+
             return $this->redirectToRoute('email_template_index');
         }
 
@@ -91,7 +86,6 @@ class EmailTemplateController extends AbstractController
         ]);
     }
 
-
     /**
      * @Route("/emailTemplate/delete/{id}", name="email_template_delete", methods={"DELETE"})
      * @IsGranted("MANAGE_EMAIL_TEMPLATES", subject="emailTemplate")
@@ -100,8 +94,9 @@ class EmailTemplateController extends AbstractController
     {
         $emailTemplateManager->delete($emailTemplate);
         $this->addFlash('success', 'Le modèle d\'email a bien été supprimé');
+
         return $this->redirectToRoute('email_template_index', [
-            'page' => $request->get('page')
+            'page' => $request->get('page'),
         ]);
     }
 
@@ -123,7 +118,7 @@ class EmailTemplateController extends AbstractController
      */
     public function iframePreview(EmailTemplate $emailTemplate, EmailGenerator $generator): Response
     {
-        $emailData = $generator->generateNotification($emailTemplate, [
+        $emailData = $generator->generateFromTemplate($emailTemplate, [
             '#linkUrl#' => '<a href="#">Accéder aux dossiers</a>',
             '#reinitLink#' => '<a href="#">Réinitialiser le mot de passe</a>',
             '#typeseance#' => 'Conseil municipal',
@@ -133,7 +128,7 @@ class EmailTemplateController extends AbstractController
             '#prenom#' => 'Thomas',
             '#nom#' => 'Dupont',
             '#titre#' => 'Monsieur le Maire',
-            '#civilite#' => 'Monsieur'
+            '#civilite#' => 'Monsieur',
         ]);
 
         return new Response($emailData->getContent());

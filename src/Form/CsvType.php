@@ -16,14 +16,14 @@ class CsvType extends AbstractType
             ->add('csv', FileType::class, [
                 'label' => 'Fichier csv',
                 'attr' => [
-                    'placeholder' => 'Sélectionner un csv'
+                    'placeholder' => 'Sélectionner un csv',
                 ],
                 'constraints' => [
                     new File([
                         'maxSize' => '5M',
-                        'maxSizeMessage' => 'Le fichier doit faire moins de 5mo'
-                    ])
-                ]
+                        'maxSizeMessage' => 'Le fichier doit faire moins de 5mo',
+                    ]),
+                ],
             ])
         ;
     }

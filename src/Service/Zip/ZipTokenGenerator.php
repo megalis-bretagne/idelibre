@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\Zip;
 
 use App\Entity\Sitting;
@@ -18,10 +17,10 @@ class ZipTokenGenerator
 
     public function generateZipToken(Sitting $sitting)
     {
-        $tmpPath = "/tmp/" . uniqid("zip_token");
+        $tmpPath = '/tmp/' . uniqid('zip_token');
         $zip = new ZipArchive();
         $zip->open($tmpPath, ZipArchive::CREATE);
-        $zip->addGlob($this->getTimestampDirectory($sitting) . '*', 0, ["remove_all_path" => true, "add_path" => "jetons/"]);
+        $zip->addGlob($this->getTimestampDirectory($sitting) . '*', 0, ['remove_all_path' => true, 'add_path' => 'jetons/']);
         $zip->close();
 
         return $tmpPath;
@@ -29,7 +28,8 @@ class ZipTokenGenerator
 
     private function getTimestampDirectory(Sitting $sitting)
     {
-        $year = $sitting->getDate()->format("Y");
+        $year = $sitting->getDate()->format('Y');
+
         return "{$this->bag->get('token_directory')}{$sitting->getStructure()->getId()}/$year/{$sitting->getId()}/";
     }
 }

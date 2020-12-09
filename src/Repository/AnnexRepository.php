@@ -20,7 +20,6 @@ class AnnexRepository extends ServiceEntityRepository
         parent::__construct($registry, Annex::class);
     }
 
-
     /**
      * @return Annex[]
      */

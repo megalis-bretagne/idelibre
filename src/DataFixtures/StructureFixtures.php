@@ -11,7 +11,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class StructureFixtures extends Fixture implements DependentFixtureInterface
 {
-    public const REFERENCE = "STRUCTURE_";
+    public const REFERENCE = 'STRUCTURE_';
 
     public function load(ObjectManager $manager): void
     {
@@ -20,7 +20,6 @@ class StructureFixtures extends Fixture implements DependentFixtureInterface
 
         /** @var Timezone $timezoneParis */
         $timezoneParis = $this->getReference(TimezoneFixtures::REFERENCE . 'paris');
-
 
         $structureLibriciel = new Structure();
         $structureLibriciel->setName('Libriciel')
@@ -44,13 +43,13 @@ class StructureFixtures extends Fixture implements DependentFixtureInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getDependencies()
     {
         return [
             TimezoneFixtures::class,
-            GroupFixtures::class
+            GroupFixtures::class,
         ];
     }
 }

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\Zip;
 
 use App\Entity\Sitting;
@@ -38,7 +37,6 @@ class ZipSittingGenerator
 
         return $directoryPath . '/' . $sitting->getId() . '.zip';
     }
-
 
     private function addProjectAndAnnexesFiles(ZipArchive $zip, Sitting $sitting): void
     {

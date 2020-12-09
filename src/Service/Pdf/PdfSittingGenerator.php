@@ -34,7 +34,6 @@ class PdfSittingGenerator
     }
 
     /**
-     * @param Pdf $pdf
      * @param Project[] $projects
      */
     private function addProjectsAndAnnexes(Pdf $pdf, iterable $projects): void
@@ -66,7 +65,7 @@ class PdfSittingGenerator
         $exploded = (explode('.', $fileName));
         $extension = $exploded[count($exploded) - 1];
 
-        return $extension === 'pdf' || $extension === 'PDF';
+        return 'pdf' === $extension || 'PDF' === $extension;
     }
 
     public function getPdfPath(Sitting $sitting): string

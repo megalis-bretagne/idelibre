@@ -10,9 +10,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class ManageUsersVoter extends Voter
 {
-    /**
-     * @var Security
-     */
     private Security $security;
 
     public function __construct(Security $security)
@@ -26,7 +23,6 @@ class ManageUsersVoter extends Voter
             && ($subject instanceof User);
     }
 
-
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
     {
         /** @var User $user */
@@ -37,7 +33,7 @@ class ManageUsersVoter extends Voter
         }
 
         if ($user->getStructure()->getId() === $subject->getStructure()->getId()) {
-            return $this->security->isGranted("ROLE_MANAGE_USERS");
+            return $this->security->isGranted('ROLE_MANAGE_USERS');
         }
 
         return false;

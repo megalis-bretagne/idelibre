@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\Email;
 
 class EmailData
@@ -13,7 +12,6 @@ class EmailData
         $this->subject = $subject;
         $this->content = $content;
     }
-
 
     public function getSubject(): string
     {

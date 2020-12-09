@@ -19,14 +19,14 @@ class SuperUserType extends AbstractType
     {
         $builder
             ->add('firstName', TextType::class, [
-                'label' => 'Prénom'
+                'label' => 'Prénom',
             ])
             ->add('lastName', TextType::class, [
-                'label' => 'Nom'])
+                'label' => 'Nom', ])
             ->add('username', TextType::class, [
-                'label' => 'Nom d\'utilisateur'])
+                'label' => 'Nom d\'utilisateur', ])
             ->add('email', EmailType::class, [
-                'label' => 'Email'])
+                'label' => 'Email', ])
             ->add('plainPassword', RepeatedType::class, [
                 'mapped' => false,
                 'type' => PasswordType::class,
@@ -41,7 +41,7 @@ class SuperUserType extends AbstractType
             $builder->add('group', EntityType::class, [
                 'label' => 'Groupe',
                 'class' => Group::class,
-                'choice_label' => 'name'
+                'choice_label' => 'name',
             ]);
         }
     }

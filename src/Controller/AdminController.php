@@ -6,7 +6,6 @@ use App\Entity\User;
 use App\Form\SearchType;
 use App\Form\SuperUserType;
 use App\Repository\UserRepository;
-
 use App\Service\role\RoleManager;
 use App\Service\User\UserManager;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
@@ -25,7 +24,6 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin", name="admin_index")
      * @IsGranted("ROLE_MANAGE_STRUCTURES")
-     *
      */
     public function index(UserRepository $userRepository, PaginatorInterface $paginator, Request $request): Response
     {
@@ -47,10 +45,9 @@ class AdminController extends AbstractController
         return $this->render('admin/index.html.twig', [
             'users' => $admins,
             'formSearch' => $formSearch->createView(),
-            'searchTerm' => $request->query->get('search') ?? ''
+            'searchTerm' => $request->query->get('search') ?? '',
         ]);
     }
-
 
     /**
      * @Route("/admin/add", name="admin_add")
@@ -69,13 +66,14 @@ class AdminController extends AbstractController
             );
 
             $this->addFlash('success', 'votre administrateur a bien été ajouté');
+
             return $this->redirectToRoute('admin_index');
         }
+
         return $this->render('admin/add.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
-
 
     /**
      * @Route("/admin/group/add", name="admin_goup_add")
@@ -84,7 +82,7 @@ class AdminController extends AbstractController
      */
     public function addGroupAdmin(Request $request, UserManager $userManager, RoleManager $roleManager): Response
     {
-        $isGroupChoice = in_array("ROLE_SUPERADMIN", $this->getUser()->getRoles());
+        $isGroupChoice = in_array('ROLE_SUPERADMIN', $this->getUser()->getRoles());
         $form = $this->createForm(SuperUserType::class, null, ['isGroupChoice' => $isGroupChoice]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -99,13 +97,14 @@ class AdminController extends AbstractController
             );
 
             $this->addFlash('success', 'votre administrateur a bien été ajouté');
+
             return $this->redirectToRoute('admin_index');
         }
+
         return $this->render('admin/add.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
-
 
     /**
      * @Route("/admin/edit/{id}", name="admin_edit")
@@ -123,11 +122,13 @@ class AdminController extends AbstractController
             );
 
             $this->addFlash('success', 'votre administrateur a bien été modifié');
+
             return $this->redirectToRoute('admin_index');
         }
+
         return $this->render('admin/edit.html.twig', [
             'form' => $form->createView(),
-            'user' => $user
+            'user' => $user,
         ]);
     }
 
@@ -139,12 +140,14 @@ class AdminController extends AbstractController
     {
         if ($this->getUser()->getid() == $user->getId()) {
             $this->addFlash('error', 'Impossible de supprimer son propre utilisateur');
+
             return $this->redirectToRoute('admin_index');
         }
         $userManager->delete($user);
         $this->addFlash('success', 'l\'utilisateur a bien été supprimé');
+
         return $this->redirectToRoute('admin_index', [
-            'page' => $request->get('page')
+            'page' => $request->get('page'),
         ]);
     }
 }

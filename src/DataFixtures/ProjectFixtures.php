@@ -32,7 +32,6 @@ class ProjectFixtures extends Fixture implements DependentFixtureInterface
         /** @var User $actorLibriciel1 */
         $actorLibriciel1 = $this->getReference(UserFixtures::REFERENCE . 'actorLibriciel1');
 
-
         $project1 = new Project();
         $project1->setRank(0)
             ->setFile($fileProject1)
@@ -44,7 +43,6 @@ class ProjectFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($project1);
         $this->addReference(self::REFERENCE . 'project1', $project1);
 
-
         $project2 = new Project();
         $project2->setRank(1)
             ->setFile($fileProject2)
@@ -53,7 +51,6 @@ class ProjectFixtures extends Fixture implements DependentFixtureInterface
 
         $manager->persist($project2);
         $this->addReference(self::REFERENCE . 'project2', $project2);
-
 
         $manager->flush();
     }
@@ -65,7 +62,7 @@ class ProjectFixtures extends Fixture implements DependentFixtureInterface
             TypeFixtures::class,
             ThemeFixtures::class,
             FileFixtures::class,
-            UserFixtures::class
+            UserFixtures::class,
         ];
     }
 }

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\Gdpr;
 
 use App\Entity\Gdpr;

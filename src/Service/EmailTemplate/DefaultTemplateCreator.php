@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\EmailTemplate;
 
 use App\Entity\EmailTemplate;
@@ -16,7 +15,6 @@ class DefaultTemplateCreator
         $this->em = $em;
     }
 
-
     public function initDefaultTemplates(Structure $structure)
     {
         $this->initResetPassword($structure);
@@ -24,52 +22,39 @@ class DefaultTemplateCreator
         $this->initDefaultInvitationTemplates($structure);
     }
 
-
     private function initResetPassword(Structure $structure)
     {
-        $forgetMsg = 'Bonjour, <br>
-    Vous avez effectué une demande de remise à zéro de mot de passe <br>
-    Veuillez Cliquer ici pour le réinitialiser #reinitLink#';
-
         $forgetTemplate = new EmailTemplate();
         $forgetTemplate->setName('Mot de passe oublié')
             ->setSubject('Mot de passe oublié')
             ->setStructure($structure)
             ->setIsDefault(true)
-            ->setCategory(EmailTemplate::RESET_PASSWORD)
-            ->setContent($forgetMsg);
+            ->setCategory(EmailTemplate::CATEGORY_RESET_PASSWORD)
+            ->setContent(DefaultTemplate::FORGET_PASSWORD);
         $this->em->persist($forgetTemplate);
     }
 
-
     private function initDefaultConvocationTemplates(Structure $structure): void
     {
-        $convocationMsg = 'Bonjour, <br>
-        Vous êtes convoqué à la séance ... <br> ';
-
         $convocationTemplate = new EmailTemplate();
         $convocationTemplate->setName('Convocation par défaut')
             ->setStructure($structure)
             ->setSubject('Convocation à la séance')
-            ->setContent($convocationMsg)
+            ->setContent(DefaultTemplate::CONVOCATION)
             ->setIsDefault(true)
-            ->setCategory(EmailTemplate::CONVOCATION);
+            ->setCategory(EmailTemplate::CATEGORY_CONVOCATION);
         $this->em->persist($convocationTemplate);
     }
 
-
     private function initDefaultInvitationTemplates(Structure $structure): void
     {
-        $invitationMsg = 'Bonjour, <br>
-        Vous êtes invité à la séance ... <br>';
-
         $invitationTemplate = new EmailTemplate();
         $invitationTemplate->setName('Invitation par défaut')
             ->setStructure($structure)
             ->setSubject('Invitation à la séance')
-            ->setContent($invitationMsg)
+            ->setContent(DefaultTemplate::INVITATION)
             ->setIsDefault(true)
-            ->setCategory(EmailTemplate::INVITATION);
+            ->setCategory(EmailTemplate::CATEGORY_INVITATION);
         $this->em->persist($invitationTemplate);
     }
 }

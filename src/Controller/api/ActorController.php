@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Controller\api;
 
 use App\Entity\Sitting;
@@ -11,7 +10,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ActorController extends AbstractController
@@ -30,7 +28,6 @@ class ActorController extends AbstractController
         );
     }
 
-
     /**
      * @Route("/api/actors/sittings/{id}", name="api_actor_sitting", methods={"GET"})
      * @IsGranted("MANAGE_SITTINGS", subject="sitting")
@@ -45,7 +42,6 @@ class ActorController extends AbstractController
         );
     }
 
-
     /**
      * @Route("/api/actors/sittings/{id}/not", name="api_actor_not_sitting", methods={"GET"})
      * @IsGranted("MANAGE_SITTINGS", subject="sitting")
@@ -59,7 +55,6 @@ class ActorController extends AbstractController
             ['groups' => ['user']]
         );
     }
-
 
     /**
      * @Route("/api/actors/sittings/{id}", name="api_actor_sitting_modify", methods={"PUT"})

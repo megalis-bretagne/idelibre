@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service;
 
 use Symfony\Component\Form\FormError;
@@ -9,10 +8,6 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 trait ValidationTrait
 {
-    /**
-     * @param FormInterface $form
-     * @param ConstraintViolationListInterface $violationList
-     */
     private function addErrorToForm(FormInterface $form, ConstraintViolationListInterface $violationList): void
     {
         foreach ($violationList as $error) {

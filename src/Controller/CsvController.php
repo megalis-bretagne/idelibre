@@ -31,17 +31,18 @@ class CsvController extends AbstractController
             $errors = $csvManager->importUsers($form->get('csv')->getData(), $this->getUser()->getStructure());
             if (empty($errors)) {
                 $this->addFlash('success', 'Fichier csv importé avec succès');
+
                 return $this->redirectToRoute('user_index');
             }
             $session->set('errors_csv', $errors);
+
             return $this->redirectToRoute('user_csv_error');
         }
 
         return $this->render('csv/importCsv.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
-
 
     /**
      * @Route("/csv/errors", name="user_csv_error")
@@ -57,8 +58,9 @@ class CsvController extends AbstractController
         }
 
         $session->remove('errors_csv');
+
         return $this->render('csv/importCsvErrors.html.twig', [
-            'errors' => $errors
+            'errors' => $errors,
         ]);
     }
 }

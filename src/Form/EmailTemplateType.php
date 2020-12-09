@@ -16,7 +16,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class EmailTemplateType extends AbstractType
 {
-
     private TypeRepository $typeRepository;
 
     public function __construct(TypeRepository $typeRepository)
@@ -31,12 +30,12 @@ class EmailTemplateType extends AbstractType
         if (!$isDefaultTemplate) {
             $builder->add('category', ChoiceType::class, [
                 'choices' => [
-                    'Convocation' => EmailTemplate::CONVOCATION,
-                    'Invitation' => EmailTemplate::INVITATION
-                ]
+                    'Convocation' => EmailTemplate::CATEGORY_CONVOCATION,
+                    'Invitation' => EmailTemplate::CATEGORY_INVITATION,
+                ],
             ])
                 ->add('name', TextType::class, [
-                    'label' => 'Intitulé'
+                    'label' => 'Intitulé',
                 ])
                 ->add('type', EntityType::class, [
                     'label' => 'Type de séance',
@@ -52,17 +51,17 @@ class EmailTemplateType extends AbstractType
         }
 
         $builder->add('subject', TextType::class, [
-            'label' => 'Objet'
+            'label' => 'Objet',
         ])
             ->add('content', TextareaType::class, [
                 'label' => 'Contenu',
-                'attr' => ['rows' => 15]
+                'attr' => ['rows' => 15],
             ]);
 
         if (!$this->isForgetPassword($options['data'] ?? null)) {
             $builder->add('isAttachment', CheckboxType::class, [
                 'required' => false,
-                'label' => 'Joindre le fichier de convocation'
+                'label' => 'Joindre le fichier de convocation',
             ]);
         }
     }
@@ -71,7 +70,7 @@ class EmailTemplateType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => EmailTemplate::class,
-            'structure' => null
+            'structure' => null,
         ]);
     }
 
@@ -82,6 +81,6 @@ class EmailTemplateType extends AbstractType
 
     private function isForgetPassword(?EmailTemplate $emailTemplate)
     {
-        return $emailTemplate && $emailTemplate->getCategory() === EmailTemplate::RESET_PASSWORD;
+        return $emailTemplate && EmailTemplate::CATEGORY_RESET_PASSWORD === $emailTemplate->getCategory();
     }
 }

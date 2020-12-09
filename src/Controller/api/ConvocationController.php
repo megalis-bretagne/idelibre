@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Controller\api;
 
 use App\Entity\Convocation;
@@ -10,7 +9,6 @@ use App\Service\Convocation\ConvocationManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ConvocationController extends AbstractController
@@ -28,7 +26,6 @@ class ConvocationController extends AbstractController
             ['groups' => ['convocation', 'user']]
         );
     }
-
 
     /**
      * @Route("/api/convocations/{id}/send", name="api_convocation_send", methods={"POST"})

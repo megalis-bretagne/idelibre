@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\Email;
 
 use App\Entity\User;

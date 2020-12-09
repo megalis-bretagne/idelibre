@@ -30,7 +30,6 @@ class Project
      */
     private $rank;
 
-
     /**
      * @ORM\OneToOne(targetEntity=File::class, cascade={"persist", "remove"}, inversedBy="project")
      * @ORM\JoinColumn(nullable=false)
@@ -98,7 +97,6 @@ class Project
 
         return $this;
     }
-
 
     public function getFile(): ?File
     {
@@ -179,9 +177,9 @@ class Project
         foreach ($annexes as $annex) {
             $this->addAnnex($annex);
         }
+
         return $this;
     }
-
 
     public function removeAnnex(Annex $annex): self
     {

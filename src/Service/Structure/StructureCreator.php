@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\Structure;
 
 use App\Entity\Connector\Exception\ComelusConnectorException;
@@ -58,6 +57,7 @@ class StructureCreator
 
         if (!empty($errors)) {
             $this->em->getConnection()->rollBack();
+
             return $errors;
         }
 

@@ -43,25 +43,22 @@ class CreateSuperAdminCommand extends Command
             '',
         ]);
 
-        $io->title("Voici la nouvelle commande symfony");
-        $io->text("Text simple");
+        $io->title('Voici la nouvelle commande symfony');
+        $io->text('Text simple');
         $io->text(['superadmin', 'admin', 'user']);
 
-        $res = $io->choice("choississez un groupe :", ['superadmin', 'admin', 'user']);
+        $res = $io->choice('choississez un groupe :', ['superadmin', 'admin', 'user']);
 
         $io->text($res);
 
         $io->horizontalTable(['name', 'size', 'number'], [['toto', 'tata', 'tutu'], ['toto', 'tata', 'tutu']]);
         $io->table(['name', 'size', 'number'], [['toto', 'tata', 'tutu'], ['toto', 'tata', 'tutu']]);
 
-
         $io->listing(['name', 'size', 'number']);
 
         $io->block('TOTO');
 
-
-        $io->caution("Be careful");
-
+        $io->caution('Be careful');
 
         $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
 

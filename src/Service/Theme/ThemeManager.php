@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\Theme;
 
 use App\Entity\Structure;
@@ -58,20 +57,21 @@ class ThemeManager
     {
         $fullPath = $this->themeRepository->getPath($theme);
         $pathWithoutRoot = $this->removeRootFromArray($fullPath);
-        $fullName = "";
+        $fullName = '';
         foreach ($pathWithoutRoot as $key => $theme) {
             $fullName .= $theme->getName();
             if ($key !== array_key_last($pathWithoutRoot)) {
-                $fullName .= ", ";
+                $fullName .= ', ';
             }
         }
+
         return $fullName;
     }
-
 
     private function removeRootFromArray(array $path): array
     {
         array_splice($path, 0, 1);
+
         return $path;
     }
 

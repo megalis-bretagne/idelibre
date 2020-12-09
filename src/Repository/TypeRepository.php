@@ -22,14 +22,12 @@ class TypeRepository extends ServiceEntityRepository
         parent::__construct($registry, Type::class);
     }
 
-
     public function findByStructure(Structure $structure): QueryBuilder
     {
         return $this->createQueryBuilder('t')
             ->andWhere('t.structure =:structure')
             ->setParameter('structure', $structure);
     }
-
 
     public function findNotAssociatedWithOtherTemplateByStructure(Structure $structure, ?EmailTemplate $emailTemplate): QueryBuilder
     {
@@ -40,7 +38,6 @@ class TypeRepository extends ServiceEntityRepository
             ->andWhere('et is null or et =:emailTemplate')
             ->setParameter('emailTemplate', $emailTemplate);
     }
-
 
     public function exists(string $typeName, Structure $structure)
     {

@@ -14,7 +14,7 @@ class ThemeType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label' => 'Intitulé'
+                'label' => 'Intitulé',
             ])
         ;
     }

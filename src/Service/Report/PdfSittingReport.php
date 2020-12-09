@@ -17,15 +17,14 @@ class PdfSittingReport
         $this->twig = $twig;
     }
 
-
     public function generate(Sitting $sitting): string
     {
         $html = $this->twig->render('generate/sitting_report_pdf.html.twig', [
             'convocations' => $sitting->getConvocations(),
-            'sitting' => $sitting
+            'sitting' => $sitting,
         ]);
 
-        $generatedPdfPath = "/tmp/" . uniqid("pdf_report");
+        $generatedPdfPath = '/tmp/' . uniqid('pdf_report');
         $this->pdf->generateFromHtml($html, $generatedPdfPath, ['orientation' => 'landscape']);
 
         return $generatedPdfPath;

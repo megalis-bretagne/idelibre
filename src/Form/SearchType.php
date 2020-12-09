@@ -17,7 +17,7 @@ class SearchType extends AbstractType
                 'label' => false,
                 'attr' => [
                     'placeholder' => 'Rechercher ...',
-                ]
+                ],
             ])
         ;
     }
@@ -26,7 +26,6 @@ class SearchType extends AbstractType
     {
         return '';
     }
-
 
     public function configureOptions(OptionsResolver $resolver)
     {

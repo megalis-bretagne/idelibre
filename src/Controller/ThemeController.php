@@ -30,11 +30,11 @@ class ThemeController extends AbstractController
         if (!empty($root)) {
             $themes = $themeRepository->getChildren($root, false, ['fullName']);
         }
+
         return $this->render('theme/index.html.twig', [
             'themes' => $themes ?? null,
         ]);
     }
-
 
     /**
      * @Route("/theme/add", name="theme_add")
@@ -43,19 +43,20 @@ class ThemeController extends AbstractController
      */
     public function add(ThemeManager $themeManager, Request $request): Response
     {
-        $form = $this->createForm(ThemeWithParentType::class, null, ["structure" => $this->getUser()->getStructure()]);
+        $form = $this->createForm(ThemeWithParentType::class, null, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $themeManager->save($form->getData(), $this->getUser()->getStructure(), $form->get('parentTheme')->getData());
 
             $this->addFlash('success', 'Votre thème a bien été ajouté');
+
             return $this->redirectToRoute('theme_index');
         }
+
         return $this->render('theme/add.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
-
 
     /**
      * @Route("/theme/edit/{id}", name="theme_edit")
@@ -70,10 +71,12 @@ class ThemeController extends AbstractController
             $themeManager->update($form->getData());
 
             $this->addFlash('success', 'Votre thème a bien été modifié');
+
             return $this->redirectToRoute('theme_index');
         }
+
         return $this->render('theme/edit.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 
@@ -85,6 +88,7 @@ class ThemeController extends AbstractController
     {
         $themeManager->delete($theme);
         $this->addFlash('success', 'Le thème a bien été supprimé');
+
         return $this->redirectToRoute('theme_index');
     }
 }

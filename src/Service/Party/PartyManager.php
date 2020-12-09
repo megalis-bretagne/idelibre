@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\Party;
 
 use App\Entity\Party;
@@ -28,7 +27,6 @@ class PartyManager
         $this->em->flush();
     }
 
-
     public function update(Party $party, Structure $structure): void
     {
         $party->setStructure($structure);
@@ -42,7 +40,6 @@ class PartyManager
 
     /**
      * @param User[] $selectedUsers
-     *
      */
     private function dissociateUsers(array $selectedUsers, Party $party): void
     {

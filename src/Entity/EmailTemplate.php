@@ -12,9 +12,9 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  */
 class EmailTemplate
 {
-    public const CONVOCATION = 'convocation';
-    public const INVITATION = 'invitation';
-    public const RESET_PASSWORD = 'reset_password';
+    public const CATEGORY_CONVOCATION = 'convocation';
+    public const CATEGORY_INVITATION = 'invitation';
+    public const CATEGORY_RESET_PASSWORD = 'reset_password';
 
     /**
      * @ORM\Id
@@ -58,13 +58,12 @@ class EmailTemplate
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $category = self::CONVOCATION;
+    private $category = self::CATEGORY_CONVOCATION;
 
     /**
      * @ORM\Column(type="boolean")
      */
     private $isAttachment = false;
-
 
     public function getId(): ?string
     {

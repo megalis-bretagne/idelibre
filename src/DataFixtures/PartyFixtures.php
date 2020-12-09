@@ -21,29 +21,25 @@ class PartyFixtures extends Fixture implements DependentFixtureInterface
         $structureMontpellier = $this->getReference(StructureFixtures::REFERENCE . 'montpellier');
 
         $partyMajority = new Party();
-        $partyMajority->setName("Majorité")
+        $partyMajority->setName('Majorité')
             ->setStructure($structureLibriciel);
 
         $manager->persist($partyMajority);
         $this->addReference(self::REFERENCE . 'majorite', $partyMajority);
 
-
         $partyOpposition = new Party();
-        $partyOpposition->setName("Opposition")
+        $partyOpposition->setName('Opposition')
             ->setStructure($structureLibriciel);
 
         $manager->persist($partyOpposition);
         $this->addReference(self::REFERENCE . 'opposition', $partyOpposition);
 
-
         $partyMontpellier = new Party();
-        $partyMontpellier->setName("Montpellier")
+        $partyMontpellier->setName('Montpellier')
             ->setStructure($structureMontpellier);
 
         $manager->persist($partyMontpellier);
         $this->addReference(self::REFERENCE . 'montpellier', $partyMontpellier);
-
-
 
         $manager->flush();
     }
@@ -51,7 +47,7 @@ class PartyFixtures extends Fixture implements DependentFixtureInterface
     public function getDependencies()
     {
         return [
-           StructureFixtures::class
+           StructureFixtures::class,
        ];
     }
 }

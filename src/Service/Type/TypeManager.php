@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\Type;
 
 use App\Entity\Structure;
@@ -21,14 +20,12 @@ class TypeManager
         $this->em = $em;
     }
 
-
     public function save(Type $type, Structure $structure): void
     {
         $type->setStructure($structure);
         $this->em->persist($type);
         $this->em->flush();
     }
-
 
     public function delete(Type $type): void
     {

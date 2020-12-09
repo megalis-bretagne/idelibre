@@ -19,6 +19,7 @@ class GroupRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Group::class);
     }
+
     public function findAllQuery(): Query
     {
         $qb = $this->createQueryBuilder('g')

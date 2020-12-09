@@ -11,9 +11,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class ManagePartiesVoter extends Voter
 {
-    /**
-     * @var Security
-     */
     private Security $security;
 
     public function __construct(Security $security)
@@ -27,7 +24,6 @@ class ManagePartiesVoter extends Voter
             && ($subject instanceof Party);
     }
 
-
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
     {
         /** @var User $loggedInUser */
@@ -38,7 +34,7 @@ class ManagePartiesVoter extends Voter
         }
 
         if ($this->isSameStructure($loggedInUser, $subject)) {
-            return $this->security->isGranted("ROLE_MANAGE_PARTIES");
+            return $this->security->isGranted('ROLE_MANAGE_PARTIES');
         }
 
         return false;

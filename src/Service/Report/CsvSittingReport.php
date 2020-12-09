@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\Report;
 
 use App\Entity\Convocation;
@@ -12,7 +11,7 @@ class CsvSittingReport
 {
     public function generate(Sitting $sitting): string
     {
-        $csvPath = "/tmp/" . uniqid("csv_report");
+        $csvPath = '/tmp/' . uniqid('csv_report');
         $writer = Writer::createFromPath($csvPath, 'w+');
 
         foreach ($sitting->getConvocations() as $convocation) {
@@ -22,17 +21,15 @@ class CsvSittingReport
         return $csvPath;
     }
 
-
     private function getConvocationData(Convocation $convocation): array
     {
         return [
             $convocation->getActor()->getFirstName(),
             $convocation->getActor()->getLastName(),
             $this->getDateFormattedTimeStamp($convocation->getSentTimestamp()),
-            $this->getDateFormattedTimeStamp($convocation->getReceivedTimestamp())
+            $this->getDateFormattedTimeStamp($convocation->getReceivedTimestamp()),
         ];
     }
-
 
     private function getDateFormattedTimeStamp(?Timestamp $timestamp): string
     {

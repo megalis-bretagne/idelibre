@@ -48,8 +48,6 @@ class Convocation
      */
     private $sitting;
 
-
-
     /**
      * @ORM\ManyToOne(targetEntity=User::class)
      * @ORM\JoinColumn(nullable=false)
@@ -70,7 +68,6 @@ class Convocation
      * @Groups({"convocation"})
      */
     private $receivedTimestamp;
-
 
     public function __construct()
     {
@@ -123,7 +120,6 @@ class Convocation
         return $this;
     }
 
-
     public function getSitting(): ?Sitting
     {
         return $this->sitting;
@@ -135,10 +131,6 @@ class Convocation
 
         return $this;
     }
-
-
-
-
 
     public function getActor(): ?User
     {

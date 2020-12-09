@@ -44,7 +44,6 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->_em->flush();
     }
 
-
     public function findByStructure(Structure $structure, ?string $search = null): QueryBuilder
     {
         $qb = $this->createQueryBuilder('u')
@@ -59,14 +58,13 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->setParameter('groupAdmin', 'GroupAdmin')
             ->addSelect('r');
 
-
         if (!empty($search)) {
             $qb->andWhere('LOWER(u.lastName) like :search OR LOWER(u.username) like :search')
                 ->setParameter('search', mb_strtolower("%${search}%"));
         }
+
         return $qb;
     }
-
 
     public function findSuperAdminAndGroupAdmin(?Group $group, ?string $search = null): QueryBuilder
     {
@@ -90,7 +88,6 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
         return $qb;
     }
-
 
     public function findSuperAdminAndGroupAdminInStructure(Structure $structure): Query
     {
@@ -148,7 +145,6 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         return $qb;
     }
 
-
     public function findActorIdsConvocationSent(Sitting $sitting): array
     {
         $qb = $this->findActorsInSitting($sitting, $sitting->getStructure())
@@ -156,6 +152,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->select('u.id');
 
         $associatedArrayIds = $qb->getQuery()->getScalarResult();
+
         return array_map(fn ($el) => $el['id'], $associatedArrayIds);
     }
 }

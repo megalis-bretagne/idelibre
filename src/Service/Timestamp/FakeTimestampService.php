@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\Timestamp;
 
 use App\Entity\Timestamp;
@@ -13,7 +12,7 @@ class FakeTimestampService implements TimestampServiceInterface
             throw new TimestampException('missing timestamp content path');
         }
 
-        $pathTsa = $timestamp->getFilePathContent() . ".tsa";
+        $pathTsa = $timestamp->getFilePathContent() . '.tsa';
         file_put_contents($pathTsa, 'signed');
 
         return $pathTsa;

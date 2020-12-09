@@ -1,13 +1,11 @@
 <?php
 
-
 namespace App\Service\Timestamp;
 
 use App\Entity\Convocation;
 use App\Entity\Sitting;
 use App\Entity\Timestamp;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -35,7 +33,7 @@ class TimestampManager
 
     /**
      * @param Convocation[] $convocations
-     * @return Timestamp
+     *
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError

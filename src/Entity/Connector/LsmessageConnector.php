@@ -38,9 +38,8 @@ class LsmessageConnector extends Connector
         'api_key' => null,
         'sender' => null,
         'content' => null,
-        'active' => false
+        'active' => false,
     ];
-
 
     /**
      * @ORM\ManyToOne(targetEntity=Structure::class)
@@ -48,12 +47,10 @@ class LsmessageConnector extends Connector
      */
     protected $structure;
 
-
     public function __construct(Structure $structure)
     {
         $this->structure = $structure;
     }
-
 
     public function getId(): ?int
     {
@@ -65,12 +62,10 @@ class LsmessageConnector extends Connector
         return $this->name;
     }
 
-
     public function getStructure(): ?Structure
     {
         return $this->structure;
     }
-
 
     public function getUrl(): ?string
     {
@@ -84,7 +79,6 @@ class LsmessageConnector extends Connector
 
         return $this;
     }
-
 
     public function getApiKey(): ?string
     {
@@ -112,7 +106,6 @@ class LsmessageConnector extends Connector
         return $this;
     }
 
-
     public function getSender(): ?string
     {
         return $this->fields['sender'];
@@ -137,8 +130,6 @@ class LsmessageConnector extends Connector
 
         return $this;
     }
-
-
 
     /**
      * @throws LsmessageConnectorException
