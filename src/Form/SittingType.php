@@ -50,7 +50,7 @@ class SittingType extends AbstractType
                     'accept' => '.pdf,.PDF',
                 ],
                 'mapped' => false,
-                'required' => $isNew,
+                'required' =>  $isNew,
             ]);
     }
 
