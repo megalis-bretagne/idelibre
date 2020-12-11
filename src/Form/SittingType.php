@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Sitting;
+use App\Entity\Structure;
 use App\Entity\Type;
 use App\Repository\TypeRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -36,6 +37,7 @@ class SittingType extends AbstractType
                 'label' => 'Date et heure',
                 'required' => true,
                 'widget' => 'single_text',
+                'view_timezone' => $this->getTimeZone($options['structure']),
             ])
             ->add('place', TextType::class, [
                 'label' => 'Lieu',
@@ -49,8 +51,7 @@ class SittingType extends AbstractType
                 ],
                 'mapped' => false,
                 'required' => $isNew,
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -59,5 +60,10 @@ class SittingType extends AbstractType
             'data_class' => Sitting::class,
             'structure' => null,
         ]);
+    }
+
+    private function getTimeZone(Structure $structure): string
+    {
+        return $structure->getTimezone()->getName();
     }
 }

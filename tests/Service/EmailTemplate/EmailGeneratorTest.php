@@ -67,7 +67,7 @@ class EmailGeneratorTest extends WebTestCase
         $expected = [
             '#typeseance#' => 'Conseil Libriciel',
             '#dateseance#' => '22/10/2020',
-            '#heureseance#' => '00:00',
+            '#heureseance#' => '02:00',
             '#lieuseance#' => 'Salle du conseil',
             '#prenom#' => 'actor_1',
             '#nom#' => 'libriciel',

@@ -6,7 +6,7 @@
          backupGlobals="false"
          colors="true"
          bootstrap="tests/bootstrap.php"
-         processIsolation="true"
+         processIsolation="false"
 >
     <php>
         <ini name="error_reporting" value="-1" />
