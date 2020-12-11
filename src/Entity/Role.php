@@ -16,14 +16,12 @@ class Role
     public const STRUCTURE_ADMIN = 2;
     public const ACTOR = 3;
 
-
     /**
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid")
      */
     private $id;
-
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
@@ -48,12 +46,10 @@ class Role
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     */
     public function setName(string $name): self
     {
         $this->name = $name;
+
         return $this;
     }
 

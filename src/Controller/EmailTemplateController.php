@@ -5,8 +5,8 @@ namespace App\Controller;
 use App\Entity\EmailTemplate;
 use App\Form\EmailTemplateType;
 use App\Repository\EmailTemplateRepository;
-use App\Service\Email\EmailGenerator;
-use App\Service\Email\EmailTemplateManager;
+use App\Service\EmailTemplate\EmailGenerator;
+use App\Service\EmailTemplate\EmailTemplateManager;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Breadcrumb("Modèle d\'email", routeName="email_template_index")
+ * @Breadcrumb("Modèle d'email", routeName="email_template_index")
  */
 class EmailTemplateController extends AbstractController
 {
@@ -54,6 +54,7 @@ class EmailTemplateController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $templateManager->save($form->getData(), $this->getUser()->getStructure());
             $this->addFlash('success', 'Votre modèle d\'email a été enregistré');
+
             return $this->redirectToRoute('email_template_index');
         }
 
@@ -75,6 +76,7 @@ class EmailTemplateController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $templateManager->save($form->getData(), $this->getUser()->getStructure());
             $this->addFlash('success', 'Votre template d\'email a été modifié');
+
             return $this->redirectToRoute('email_template_index');
         }
 
@@ -84,7 +86,6 @@ class EmailTemplateController extends AbstractController
         ]);
     }
 
-
     /**
      * @Route("/emailTemplate/delete/{id}", name="email_template_delete", methods={"DELETE"})
      * @IsGranted("MANAGE_EMAIL_TEMPLATES", subject="emailTemplate")
@@ -93,8 +94,9 @@ class EmailTemplateController extends AbstractController
     {
         $emailTemplateManager->delete($emailTemplate);
         $this->addFlash('success', 'Le modèle d\'email a bien été supprimé');
+
         return $this->redirectToRoute('email_template_index', [
-            'page' => $request->get('page')
+            'page' => $request->get('page'),
         ]);
     }
 
@@ -116,10 +118,19 @@ class EmailTemplateController extends AbstractController
      */
     public function iframePreview(EmailTemplate $emailTemplate, EmailGenerator $generator): Response
     {
-        $emailData = $generator->generateNotification($emailTemplate, [
-            "#linkUrl#" => '<a href="#">Accéder aux dossiers</a>',
-            "#reinitLink#" => '<a href="#">Réinitialiser le mot de passe</a>'
+        $emailData = $generator->generateFromTemplate($emailTemplate, [
+            '#linkUrl#' => '<a href="#">Accéder aux dossiers</a>',
+            '#reinitLink#' => '<a href="#">Réinitialiser le mot de passe</a>',
+            '#typeseance#' => 'Conseil municipal',
+            '#dateseance#' => '05/12/2020',
+            '#heureseance#' => '20h30',
+            '#lieuseance#' => 'Salle du conseil',
+            '#prenom#' => 'Thomas',
+            '#nom#' => 'Dupont',
+            '#titre#' => 'Monsieur le Maire',
+            '#civilite#' => 'Monsieur',
         ]);
+
         return new Response($emailData->getContent());
     }
 }

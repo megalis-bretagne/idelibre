@@ -22,7 +22,6 @@ class EmailTemplateRepository extends ServiceEntityRepository
         parent::__construct($registry, EmailTemplate::class);
     }
 
-
     public function findAllByStructure(Structure $structure): QueryBuilder
     {
         return $this->createQueryBuilder('et')
@@ -32,7 +31,6 @@ class EmailTemplateRepository extends ServiceEntityRepository
             ->addSelect('t')
             ->orderBy('et.name');
     }
-
 
     public function findOneByType(Type $type): ?EmailTemplate
     {
@@ -44,6 +42,7 @@ class EmailTemplateRepository extends ServiceEntityRepository
         if (!empty($templates)) {
             return $templates[0];
         }
+
         return null;
     }
 }

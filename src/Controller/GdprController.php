@@ -22,10 +22,9 @@ class GdprController extends AbstractController
     public function notice(GdprManager $gdprManager): Response
     {
         return $this->render('gdpr/notice.html.twig', [
-            'gdpr' => $gdprManager->getGdpr()
+            'gdpr' => $gdprManager->getGdpr(),
         ]);
     }
-
 
     /**
      * @Route("/gdpr/edit", name="gdpr_edit")
@@ -40,11 +39,12 @@ class GdprController extends AbstractController
             $gdprManager->save($form->getData());
 
             $this->addFlash('success', 'Vos informations RGPD ont été mises à jour');
+
             return $this->redirectToRoute('gdpr_notice');
         }
 
         return $this->render('gdpr/edit.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 }

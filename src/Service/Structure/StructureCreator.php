@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\Structure;
 
 use App\Entity\Connector\Exception\ComelusConnectorException;
@@ -10,6 +9,7 @@ use App\Entity\Structure;
 use App\Entity\User;
 use App\Service\Connector\ComelusConnectorManager;
 use App\Service\Connector\LsmessageConnectorManager;
+use App\Service\EmailTemplate\DefaultTemplateCreator;
 use App\Service\Theme\ThemeManager;
 use App\Service\User\UserManager;
 use Doctrine\DBAL\ConnectionException;
@@ -23,19 +23,22 @@ class StructureCreator
     private ThemeManager $themeManager;
     private ComelusConnectorManager $comelusConnectorManager;
     private LsmessageConnectorManager $lsmessageConnectorManager;
+    private DefaultTemplateCreator $defaultTemplateCreator;
 
     public function __construct(
         UserManager $userManager,
         EntityManagerInterface $em,
         ThemeManager $themeManager,
         ComelusConnectorManager $comelusConnectorManager,
-        LsmessageConnectorManager $lsmessageConnectorManager
+        LsmessageConnectorManager $lsmessageConnectorManager,
+        DefaultTemplateCreator $defaultTemplateCreator
     ) {
         $this->userManager = $userManager;
         $this->em = $em;
         $this->themeManager = $themeManager;
         $this->comelusConnectorManager = $comelusConnectorManager;
         $this->lsmessageConnectorManager = $lsmessageConnectorManager;
+        $this->defaultTemplateCreator = $defaultTemplateCreator;
     }
 
     /**
@@ -54,6 +57,7 @@ class StructureCreator
 
         if (!empty($errors)) {
             $this->em->getConnection()->rollBack();
+
             return $errors;
         }
 
@@ -73,5 +77,6 @@ class StructureCreator
         $this->themeManager->createStructureRootNode($structure);
         $this->comelusConnectorManager->createConnector($structure);
         $this->lsmessageConnectorManager->createConnector($structure);
+        $this->defaultTemplateCreator->initDefaultTemplates($structure);
     }
 }

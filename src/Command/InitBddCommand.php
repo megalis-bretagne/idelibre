@@ -36,9 +36,6 @@ class InitBddCommand extends Command
     }
 
     /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     * @return int
      * @throws Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -46,6 +43,7 @@ class InitBddCommand extends Command
         $io = new SymfonyStyle($input, $output);
         if ($this->isAlreadyInit()) {
             $io->text('already init bdd');
+
             return 0;
         }
 

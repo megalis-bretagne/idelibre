@@ -19,25 +19,23 @@ class UserType extends AbstractType
     {
         $builder
             ->add('firstName', TextType::class, [
-                'label' => 'Prénom'
+                'label' => 'Prénom',
             ])
             ->add('lastName', TextType::class, [
-                'label' => 'Nom'])
+                'label' => 'Nom', ])
             ->add('username', TextType::class, [
-                'label' => 'Nom d\'utilisateur'])
+                'label' => 'Nom d\'utilisateur', ])
             ->add('email', EmailType::class, [
-                'label' => 'Email']);
-
+                'label' => 'Email', ]);
 
         if (!$options['isEditMode']) {
             $builder->add('role', EntityType::class, [
                 'required' => true,
                 'label' => 'Profil',
                 'class' => Role::class,
-                'choice_label' => 'name'
+                'choice_label' => 'name',
             ]);
         }
-
 
         $builder->add('plainPassword', RepeatedType::class, [
             'mapped' => false,

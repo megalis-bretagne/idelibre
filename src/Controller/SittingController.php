@@ -25,7 +25,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Breadcrumb("Seance", routeName="sitting_index")
- *
  */
 class SittingController extends AbstractController
 {
@@ -51,7 +50,7 @@ class SittingController extends AbstractController
             'sittings' => $sittings,
             'formSearch' => $formSearch->createView(),
             'searchTerm' => $request->query->get('search') ?? '',
-            'timezone' => $this->getUser()->getStructure()->getTimezone()->getName()
+            'timezone' => $this->getUser()->getStructure()->getTimezone()->getName(),
         ]);
     }
 
@@ -73,8 +72,9 @@ class SittingController extends AbstractController
 
             return $this->redirectToRoute('edit_sitting_actor', ['id' => $sittingId]);
         }
+
         return $this->render('sitting/add.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 
@@ -86,7 +86,7 @@ class SittingController extends AbstractController
     public function editUsers(Sitting $sitting, Request $request, ActorManager $actorManager, ConvocationManager $convocationManager): Response
     {
         return $this->render('sitting/edit_actors.html.twig', [
-            'sitting' => $sitting
+            'sitting' => $sitting,
         ]);
     }
 
@@ -98,10 +98,9 @@ class SittingController extends AbstractController
     public function editProjects(Sitting $sitting): Response
     {
         return $this->render('sitting/edit_projects.html.twig', [
-            'sitting' => $sitting
+            'sitting' => $sitting,
         ]);
     }
-
 
     /**
      * @Route("/sitting/edit/{id}", name="edit_sitting_information")
@@ -119,14 +118,15 @@ class SittingController extends AbstractController
             );
 
             $this->addFlash('success', 'votre séance a bien été modifiée');
+
             return $this->redirectToRoute('edit_sitting_information', ['id' => $sitting->getId()]);
         }
+
         return $this->render('sitting/edit_information.html.twig', [
             'form' => $form->createView(),
-            'sitting' => $sitting
+            'sitting' => $sitting,
         ]);
     }
-
 
     /**
      * @Route("/sitting/delete/{id}", name="sitting_delete", methods={"DELETE"})
@@ -136,11 +136,11 @@ class SittingController extends AbstractController
     {
         $sittingManager->delete($sitting);
         $this->addFlash('success', 'la séance a bien été supprimée');
+
         return $this->redirectToRoute('sitting_index', [
-            'page' => $request->get('page')
+            'page' => $request->get('page'),
         ]);
     }
-
 
     /**
      * @Route("/sitting/show/{id}/information", name="sitting_show_information", methods={"GET"})
@@ -151,10 +151,9 @@ class SittingController extends AbstractController
     {
         return $this->render('sitting/details_information.html.twig', [
             'sitting' => $sitting,
-            'timezone' => $sitting->getStructure()->getTimezone()->getName()
+            'timezone' => $sitting->getStructure()->getTimezone()->getName(),
         ]);
     }
-
 
     /**
      * @Route("/sitting/show/{id}/actors", name="sitting_show_actors", methods={"GET"})
@@ -167,7 +166,6 @@ class SittingController extends AbstractController
             'sitting' => $sitting,
         ]);
     }
-
 
     /**
      * @Route("/sitting/show/{id}/projects", name="sitting_show_projects", methods={"GET"})
@@ -197,7 +195,6 @@ class SittingController extends AbstractController
         return $response;
     }
 
-
     /**
      * @Route("/sitting/pdf/{id}", name="sitting_full_pdf", methods={"GET"})
      * @IsGranted("MANAGE_SITTINGS", subject="sitting")
@@ -221,6 +218,7 @@ class SittingController extends AbstractController
     {
         $sittingManager->archive($sitting);
         $this->addFlash('success', 'La séance a été classée');
+
         return $this->redirectToRoute('sitting_index');
     }
 }

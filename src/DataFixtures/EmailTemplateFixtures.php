@@ -29,27 +29,25 @@ class EmailTemplateFixtures extends Fixture implements DependentFixtureInterface
             ->setType($typeConseilLibriciel)
             ->setName('Conseil Libriciel')
             ->setSubject('idelibre : une nouvelle convocation ...')
-            ->setContent("Voici mon template pour les seance de type conseil de la struture libriciel");
+            ->setContent('Voici mon template pour les seance de type conseil de la struture libriciel');
 
         $manager->persist($emailTemplateConseilLs);
         $this->addReference(self::REFERENCE . 'emailTemplateConseilLs', $emailTemplateConseilLs);
-
 
         $emailTemplateSansTypeLs = new EmailTemplate();
         $emailTemplateSansTypeLs->setStructure($structureLibriciel)
             ->setName('Sans type Libriciel')
             ->setSubject('idelibre : une nouvelle convocation ...')
-            ->setContent("Voici un template sans type associé appartenant à libriciel");
+            ->setContent('Voici un template sans type associé appartenant à libriciel');
 
         $manager->persist($emailTemplateSansTypeLs);
         $this->addReference(self::REFERENCE . 'emailTemplateSansTypeLs', $emailTemplateSansTypeLs);
-
 
         $emailTemplateMtp = new EmailTemplate();
         $emailTemplateMtp->setStructure($structureMontpellier)
             ->setName('Sans type Montpellier')
             ->setSubject('idelibre : une nouvelle convocation ...')
-            ->setContent("Voici un template sans type associé apartenant à Montpellier");
+            ->setContent('Voici un template sans type associé apartenant à Montpellier');
 
         $manager->persist($emailTemplateMtp);
         $this->addReference(self::REFERENCE . 'emailTemplateMtp', $emailTemplateMtp);
@@ -57,15 +55,14 @@ class EmailTemplateFixtures extends Fixture implements DependentFixtureInterface
         $manager->flush();
     }
 
-
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getDependencies()
     {
         return [
             StructureFixtures::class,
-            TypeFixtures::class
+            TypeFixtures::class,
         ];
     }
 }

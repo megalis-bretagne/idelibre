@@ -21,7 +21,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *          @Index(name="lvl_ix", columns={"lvl"})
  *     })
  * @ORM\Entity(repositoryClass=ThemeRepository::class)
- *
  */
 class Theme
 {
@@ -32,7 +31,6 @@ class Theme
      * @Groups({"theme"})
      */
     private $id;
-
 
     /**
      * @ORM\Column(type="string")
@@ -46,7 +44,6 @@ class Theme
      */
     private $lft;
 
-
     /**
      * @Gedmo\TreeLevel()
      * @ORM\Column(type="integer")
@@ -54,13 +51,11 @@ class Theme
      */
     private $lvl;
 
-
     /**
      * @Gedmo\TreeRight()
      * @ORM\Column(type="integer")
      */
     private $rgt;
-
 
     /**
      * @Gedmo\TreeRoot()
@@ -69,14 +64,12 @@ class Theme
      */
     private $root;
 
-
     /**
      * @Gedmo\TreeParent()
      * @ORM\ManyToOne(targetEntity="App\Entity\Theme", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="cascade")
      */
     private $parent;
-
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Theme", mappedBy="parent")
@@ -95,7 +88,6 @@ class Theme
      * @Groups({"theme"})
      */
     private $fullName;
-
 
     public function getId(): string
     {
@@ -116,22 +108,21 @@ class Theme
     public function setName($name): self
     {
         $this->name = $name;
+
         return $this;
     }
-
 
     public function getParent(): Theme
     {
         return $this->parent;
     }
 
-
     public function setParent(Theme $parent): self
     {
         $this->parent = $parent;
+
         return $this;
     }
-
 
     public function getRoot(): Theme
     {
@@ -150,18 +141,15 @@ class Theme
         return $this;
     }
 
-
     public function getLvl(): int
     {
         return $this->lvl;
     }
 
-
     public function getLft(): int
     {
         return $this->lft;
     }
-
 
     public function getRgt(): int
     {

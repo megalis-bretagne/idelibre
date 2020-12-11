@@ -1,10 +1,8 @@
 <?php
 
-
 namespace App\Controller\api;
 
 use App\Entity\Sitting;
-use App\Repository\ConvocationRepository;
 use App\Service\Convocation\ConvocationManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -18,6 +16,7 @@ class SittingController extends AbstractController
     public function sendConvocations(Sitting $sitting, ConvocationManager $convocationManager): JsonResponse
     {
         $convocationManager->sendAllConvocations($sitting);
+
         return $this->json(['success' => true]);
     }
 }

@@ -36,11 +36,8 @@ class SecurityController extends AbstractController
         return $this->redirectToRoute('user_index');
     }
 
-
     /**
      * @Route("/login", name="app_login")
-     * @param AuthenticationUtils $authenticationUtils
-     * @return Response
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
@@ -75,9 +72,9 @@ class SecurityController extends AbstractController
     {
         $impersonateStructure->logInStructure($structure);
         $this->addFlash('success', 'Vous êtes connecté dans la structure ' . $structure->getName());
+
         return $this->redirectToRoute('structure_index');
     }
-
 
     /**
      * @Route("/security/impersonateExit", name="security_impersonate_exit")
@@ -87,15 +84,13 @@ class SecurityController extends AbstractController
     {
         $impersonateStructure->logoutStructure();
         $this->addFlash('success', 'Vous n\'êtes plus connecté dans une structure');
+
         return $this->redirectToRoute('structure_index');
     }
 
-
     /**
      * @Route("/forget", name="app_forget")
-     * @param Request $request
-     * @param ResetPassword $resetPassword
-     * @return Response
+     *
      * @throws EntityNotFoundException
      */
     public function forgetPassword(Request $request, ResetPassword $resetPassword, LoggerInterface $logger): Response
@@ -108,6 +103,7 @@ class SecurityController extends AbstractController
                 $logger->info('this username does not exist : ' . $username);
             }
             $this->addFlash('success', 'Un email vous a été envoyé si un compte lui est associé');
+
             return $this->redirectToRoute('app_login');
         }
 
@@ -117,6 +113,7 @@ class SecurityController extends AbstractController
 
     /**
      * @Route("/reset/{token}", name="app_reset")
+     *
      * @throws Exception
      */
     public function resetPassword(string $token, ResetPassword $resetPassword, Request $request): Response
@@ -124,7 +121,7 @@ class SecurityController extends AbstractController
         try {
             $user = $resetPassword->getUserFromToken($token);
         } catch (TimeoutException $e) {
-            throw new TimeoutException("expired TOKEN", 400);
+            throw new TimeoutException('expired TOKEN', 400);
         } catch (EntityNotFoundException $e) {
             throw new NotFoundHttpException('this token does not exist');
         }
@@ -140,7 +137,7 @@ class SecurityController extends AbstractController
         }
 
         return $this->render('security/reset_ls.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 }

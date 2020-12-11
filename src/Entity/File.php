@@ -28,7 +28,6 @@ class File
      */
     private $size;
 
-
     /**
      * @ORM\Column(type="string", length=255)
      */
@@ -41,24 +40,24 @@ class File
 
     /**
      * @ORM\OneToOne(targetEntity=Project::class, mappedBy="file")
+     *
      * @var Project | null
      */
     private $project;
 
-
     /**
      * @ORM\OneToOne(targetEntity=Annex::class, mappedBy="file")
+     *
      * @var Annex | null
      */
     private $annex;
 
-
     /**
      * @ORM\OneToOne(targetEntity=Sitting::class, mappedBy="file")
+     *
      * @var Sitting | null
      */
     private $sitting;
-
 
     public function __construct()
     {
@@ -94,7 +93,6 @@ class File
         return $this;
     }
 
-
     public function getName(): ?string
     {
         return $this->name;
@@ -111,7 +109,6 @@ class File
     {
         return $this->createdAt;
     }
-
 
     public function getStructure(): Structure
     {

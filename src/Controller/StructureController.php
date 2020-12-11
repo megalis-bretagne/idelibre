@@ -35,7 +35,6 @@ class StructureController extends AbstractController
     {
         $formSearch = $this->createForm(SearchType::class);
 
-
         if ($this->isSuperAdmin($this->getUser())) {
             $structureQueryList = $structureRepository->findAllQueryBuilder($request->query->get('search'));
         } else {
@@ -55,7 +54,7 @@ class StructureController extends AbstractController
         return $this->render('structure/index.html.twig', [
             'structures' => $structures,
             'formSearch' => $formSearch->createView(),
-            'searchTerm' => $request->query->get('search') ?? ''
+            'searchTerm' => $request->query->get('search') ?? '',
         ]);
     }
 
@@ -79,8 +78,9 @@ class StructureController extends AbstractController
 
             if (!empty($errors)) {
                 $this->addErrorToForm($form->get('user'), $errors);
+
                 return $this->render('structure/add.html.twig', [
-                    'form' => $form->createView()
+                    'form' => $form->createView(),
                 ]);
             }
             $this->addFlash('success', 'La structure a été créée');
@@ -89,10 +89,9 @@ class StructureController extends AbstractController
         }
 
         return $this->render('structure/add.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
-
 
     /**
      * @Route("/structure/edit/{id}", name="structure_edit")
@@ -107,14 +106,14 @@ class StructureController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $structureManager->save($form->getData());
             $this->addFlash('success', 'La structure a été modifiée');
+
             return $this->redirectToRoute('structure_index');
         }
 
         return $this->render('structure/edit.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
-
 
     /**
      * @Route("/structure/delete/{id}", name="structure_delete", methods={"DELETE"})
@@ -126,10 +125,9 @@ class StructureController extends AbstractController
         $this->addFlash('success', 'La structure a bien été supprimée');
 
         return $this->redirectToRoute('structure_index', [
-            'page' => $request->get('page')
+            'page' => $request->get('page'),
         ]);
     }
-
 
     /**
      * @Route("/structure/preferences", name="structure_preferences")
@@ -144,11 +142,12 @@ class StructureController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $structureManager->save($form->getData());
             $this->addFlash('success', 'Les informations de la structure ont été mises à jour');
+
             return $this->redirectToRoute('app_entrypoint');
         }
 
         return $this->render('structure/preferences.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 }

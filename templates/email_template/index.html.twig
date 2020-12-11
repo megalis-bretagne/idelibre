@@ -13,8 +13,9 @@
     <table class="table table-striped mt-3 bg-white">
         <thead>
         <tr class="d-flex">
-            <th class="col-5">{{ knp_pagination_sortable(templates, 'Intitulé', 'et.name') }}</th>
-            <th class="col-5">{{ knp_pagination_sortable(templates, 'Type de séance', 't.name') }}</th>
+            <th class="col-4">{{ knp_pagination_sortable(templates, 'Intitulé', 'et.name') }}</th>
+            <th class="col-4">{{ knp_pagination_sortable(templates, 'Type de séance', 't.name') }}</th>
+            <th class="col-2">{{ knp_pagination_sortable(templates, 'Catégorie', 't.category') }}</th>
             <th class="col-2">Actions</th>
         </tr>
         </thead>
@@ -22,19 +23,27 @@
 
         {% for template in templates %}
             <tr class="d-flex">
-                <td class="col-5">{{ template.name }} </td>
-                <td class="col-5">{{ template.type ? template.type.name : '' }} </td>
+                <td class="col-4">{{ template.name }} </td>
+                <td class="col-4">{{ template.type ? template.type.name : '' }} </td>
+                <td class="col-2">
+                    {% if template.category == 'convocation' %} Convocation {% endif %}
+                    {% if template.category == 'invitation'%} Invitation {% endif %}
+                    {% if template.category == 'reset_password' %} Mot de passe oublié{% endif %}
+
+                </td>
                 <td class="col-2">
                     {{ macros.editButton('email_template_edit', template.id) }}
                     {{ macros.showButton('email_template_preview', template.id) }}
 
-                    {{ macros.button_open_modal_delete(
-                        template.id,
-                        "Confirmer suppression du modèle.",
-                        "email_template_delete",
-                        "Confirmer la suppression de " ~ template.name,
-                        templates.currentPageNumber
-                    ) }}
+                    {% if not template.isDefault %}
+                        {{ macros.button_open_modal_delete(
+                            template.id,
+                            "Confirmer suppression du modèle.",
+                            "email_template_delete",
+                            "Confirmer la suppression de " ~ template.name,
+                            templates.currentPageNumber
+                        ) }}
+                    {% endif %}
 
                 </td>
             </tr>

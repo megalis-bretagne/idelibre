@@ -54,7 +54,7 @@ class PartyController extends AbstractController
             $partyManager->save($form->getData(), $this->getUser()->getStructure());
             $this->addFlash('success', 'Votre groupe politique a été ajouté');
 
-            return $this->redirectToRoute("party_index");
+            return $this->redirectToRoute('party_index');
         }
 
         return $this->render('party/add.html.twig', [
@@ -76,7 +76,7 @@ class PartyController extends AbstractController
             $partyManager->update($form->getData(), $this->getUser()->getStructure());
             $this->addFlash('success', 'Votre groupe politique a été modifié');
 
-            return $this->redirectToRoute("party_index");
+            return $this->redirectToRoute('party_index');
         }
 
         return $this->render('party/edit.html.twig', [
@@ -92,8 +92,9 @@ class PartyController extends AbstractController
     {
         $partyManager->delete($party);
         $this->addFlash('success', 'le groupe politique a bien été supprimé');
+
         return $this->redirectToRoute('party_index', [
-            'page' => $request->get('page')
+            'page' => $request->get('page'),
         ]);
     }
 }

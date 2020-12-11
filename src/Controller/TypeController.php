@@ -3,14 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Type;
-use App\Entity\User;
 use App\Form\SearchType;
-use App\Form\SuperUserType;
 use App\Form\TypeType;
 use App\Repository\TypeRepository;
-use App\Service\role\RoleManager;
 use App\Service\Type\TypeManager;
-use App\Service\User\UserManager;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -27,7 +23,6 @@ class TypeController extends AbstractController
     /**
      * @Route("/type", name="type_index", methods={"GET"})
      * @IsGranted("ROLE_MANAGE_TYPES")
-     *
      */
     public function index(TypeRepository $typeRepository, PaginatorInterface $paginator, Request $request): Response
     {
@@ -46,7 +41,7 @@ class TypeController extends AbstractController
         return $this->render('type/index.html.twig', [
             'types' => $types,
             'formSearch' => $formSearch->createView(),
-            'searchTerm' => $request->query->get('search') ?? ''
+            'searchTerm' => $request->query->get('search') ?? '',
         ]);
     }
 
@@ -57,16 +52,18 @@ class TypeController extends AbstractController
      */
     public function add(Request $request, TypeManager $typeManager): Response
     {
-        $form = $this->createForm(TypeType::class, null, ["structure" => $this->getUser()->getStructure()]);
+        $form = $this->createForm(TypeType::class, null, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $typeManager->save($form->getData(), $this->getUser()->getStructure());
 
             $this->addFlash('success', 'Votre type a bien été ajouté');
+
             return $this->redirectToRoute('type_index');
         }
+
         return $this->render('type/add.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 
@@ -83,11 +80,13 @@ class TypeController extends AbstractController
             $typeManager->save($form->getData(), $this->getUser()->getStructure());
 
             $this->addFlash('success', 'Votre type a bien été modifié');
+
             return $this->redirectToRoute('type_index');
         }
+
         return $this->render('type/edit.html.twig', [
             'form' => $form->createView(),
-            'user' => $type
+            'user' => $type,
         ]);
     }
 
@@ -99,8 +98,9 @@ class TypeController extends AbstractController
     {
         $typeManager->delete($type);
         $this->addFlash('success', 'Le type a bien été supprimé');
+
         return $this->redirectToRoute('type_index', [
-            'page' => $request->get('page')
+            'page' => $request->get('page'),
         ]);
     }
 }

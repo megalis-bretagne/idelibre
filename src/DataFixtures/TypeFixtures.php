@@ -15,7 +15,6 @@ class TypeFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager): void
     {
-
         /** @var Structure $structureLibriciel */
         $structureLibriciel = $this->getReference(StructureFixtures::REFERENCE . 'libriciel');
 
@@ -28,9 +27,6 @@ class TypeFixtures extends Fixture implements DependentFixtureInterface
         /** @var User $actor2Libriciel */
         $actor2Libriciel = $this->getReference(UserFixtures::REFERENCE . 'actorLibriciel1');
 
-
-
-
         $typeConseilLibriciel = new Type();
         $typeConseilLibriciel->setName('Conseil Communautaire Libriciel')
             ->setStructure($structureLibriciel)
@@ -38,7 +34,6 @@ class TypeFixtures extends Fixture implements DependentFixtureInterface
             ->addAssociatedUser($actor2Libriciel);
         $manager->persist($typeConseilLibriciel);
         $this->addReference(self::REFERENCE . 'conseilLibriciel', $typeConseilLibriciel);
-
 
         $typeBureauLibriciel = new Type();
         $typeBureauLibriciel->setName('Bureau Communautaire Libriciel')
@@ -48,14 +43,11 @@ class TypeFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($typeBureauLibriciel);
         $this->addReference(self::REFERENCE . 'bureauLibriciel', $typeBureauLibriciel);
 
-
-
         $typeConseilMontpellier = new Type();
         $typeConseilMontpellier->setName('Conseil Municipal Montpellier')
             ->setStructure($structureMontpellier);
         $manager->persist($typeConseilMontpellier);
         $this->addReference(self::REFERENCE . 'conseilMontpellier', $typeConseilMontpellier);
-
 
         $testTypeLS = new Type();
         $testTypeLS->setName('unUsedType')
@@ -65,16 +57,14 @@ class TypeFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($testTypeLS);
         $this->addReference(self::REFERENCE . 'unUsedType', $testTypeLS);
 
-
         $manager->flush();
     }
-
 
     public function getDependencies()
     {
         return [
            StructureFixtures::class,
-           UserFixtures::class
+           UserFixtures::class,
        ];
     }
 }

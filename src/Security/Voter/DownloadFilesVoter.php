@@ -11,9 +11,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class DownloadFilesVoter extends Voter
 {
-    /**
-     * @var Security
-     */
     private Security $security;
 
     public function __construct(Security $security)
@@ -27,7 +24,6 @@ class DownloadFilesVoter extends Voter
             && ($subject instanceof File);
     }
 
-
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
     {
         /** @var User $loggedInUser */
@@ -39,7 +35,7 @@ class DownloadFilesVoter extends Voter
 
         return $this->isSameStructure($loggedInUser, $subject);
     }
-    
+
     private function isSameStructure(User $loggedInUser, File $subject)
     {
         return $loggedInUser->getStructure()->getId() === $subject->getStructure()->getId();

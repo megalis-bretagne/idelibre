@@ -7,6 +7,7 @@ use App\Entity\Party;
 use App\Entity\Role;
 use App\Entity\Structure;
 use App\Entity\User;
+use App\Service\Util\GenderConverter;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -23,10 +24,8 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $this->passwordEncoder = $passwordEncoder;
     }
 
-
     public function load(ObjectManager $manager): void
     {
-
         /** @var Structure $structureLibriciel */
         $structureLibriciel = $this->getReference(StructureFixtures::REFERENCE . 'libriciel');
 
@@ -64,7 +63,6 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($superAdmin);
         $this->addReference(self::REFERENCE . 'superadmin', $superAdmin);
 
-
         $otherSuperAdmin = new User();
         $otherSuperAdmin->setEmail('otherSuperadmin@example.org')
             ->setRole($roleSuperAdmin)
@@ -75,7 +73,6 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
 
         $manager->persist($otherSuperAdmin);
         $this->addReference(self::REFERENCE . 'otherSuperadmin', $otherSuperAdmin);
-
 
         //////  user structure ///////
 
@@ -91,7 +88,6 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($adminLibriciel);
         $this->addReference(self::REFERENCE . 'adminLibriciel', $adminLibriciel);
 
-
         $otherUserLibriciel = new User();
         $otherUserLibriciel->setEmail('otherUserLibriciel@example.org')
             ->setUsername('otherUser@libriciel')
@@ -102,7 +98,6 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
 
         $manager->persist($otherUserLibriciel);
         $this->addReference(self::REFERENCE . 'otherUserLibriciel', $otherUserLibriciel);
-
 
         $userMontpellier = new User();
         $userMontpellier->setEmail('userMontpellier@example.org')
@@ -115,9 +110,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($userMontpellier);
         $this->addReference(self::REFERENCE . 'userMontpellier', $userMontpellier);
 
-
         ////// admin group ////////////
-
 
         $userGroupRecia = new User();
         $userGroupRecia->setEmail('userGroupRecia@example.org')
@@ -131,7 +124,6 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($userGroupRecia);
         $this->addReference(self::REFERENCE . 'userGroupRecia', $userGroupRecia);
 
-        
         // Actors
         $actorLibriciel1 = new User();
         $actorLibriciel1->setEmail('actor1@example.org')
@@ -141,11 +133,12 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             ->setLastname('libriciel')
             ->setParty($partyMajority)
             ->setStructure($structureLibriciel)
+            ->setGender(GenderConverter::MALE)
+            ->setTitle('Madame le maire')
             ->setPassword($this->passwordEncoder->encodePassword($actorLibriciel1, 'password'));
 
         $manager->persist($actorLibriciel1);
         $this->addReference(self::REFERENCE . 'actorLibriciel1', $actorLibriciel1);
-
 
         $actorLibriciel2 = new User();
         $actorLibriciel2->setEmail('actor2@example.org')
@@ -158,7 +151,6 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
 
         $manager->persist($actorLibriciel2);
         $this->addReference(self::REFERENCE . 'actorLibriciel2', $actorLibriciel2);
-
 
         $actorLibriciel3 = new User();
         $actorLibriciel3->setEmail('actor3@example.org')
@@ -176,7 +168,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getDependencies()
     {
@@ -184,7 +176,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             StructureFixtures::class,
             GroupFixtures::class,
             RoleFixtures::class,
-            PartyFixtures::class
+            PartyFixtures::class,
         ];
     }
 }

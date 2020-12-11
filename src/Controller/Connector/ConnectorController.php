@@ -25,7 +25,7 @@ class ConnectorController extends AbstractController
     ): Response {
         return $this->render('connector/connector_index.html.twig', [
             'comelus' => $comelusConnectorRepository->findOneBy(['structure' => $this->getUser()->getStructure()]),
-            'lsmessage' => $lsmessageConnectorRepository->findOneBy(['structure' => $this->getUser()->getStructure()])
+            'lsmessage' => $lsmessageConnectorRepository->findOneBy(['structure' => $this->getUser()->getStructure()]),
         ]);
     }
 }

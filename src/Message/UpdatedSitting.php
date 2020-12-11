@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Message;
 
 class UpdatedSitting
@@ -11,7 +10,6 @@ class UpdatedSitting
     {
         $this->sittingId = $sittingId;
     }
-
 
     public function getSittingId(): string
     {

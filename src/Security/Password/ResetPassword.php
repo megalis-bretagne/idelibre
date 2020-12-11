@@ -1,13 +1,12 @@
 <?php
 
-
 namespace App\Security\Password;
 
 use App\Entity\ForgetToken;
 use App\Entity\User;
 use App\Repository\ForgetTokenRepository;
 use App\Repository\UserRepository;
-use App\Service\Email\IEmail;
+use App\Service\Email\EmailInterface;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
@@ -37,12 +36,12 @@ class ResetPassword
      */
     private $passwordEncoder;
     /**
-     * @var IEmail
+     * @var EmailInterface
      */
     private $email;
 
     public function __construct(
-        IEmail $email,
+        EmailInterface $email,
         EntityManagerInterface $em,
         RouterInterface $router,
         UserRepository $userRepository,
@@ -58,24 +57,22 @@ class ResetPassword
     }
 
     /**
-     * @param string $username
      * @throws EntityNotFoundException
-     *
      */
     public function reset(string $username)
     {
         $user = $this->userRepository->findOneBy(['username' => $username]);
         if (empty($user)) {
-            throw new EntityNotFoundException("no user with username : " . $username, 404);
+            throw new EntityNotFoundException('no user with username : ' . $username, 404);
         }
 
         $token = $this->createToken($user);
-        $this->email->sendReinitPassword($user, $token);
+        $this->email->sendReInitPassword($user, $token);
     }
 
     /**
-     * @param string $token
      * @return User
+     *
      * @throws EntityNotFoundException
      * @throws TimeoutException
      */
@@ -83,18 +80,16 @@ class ResetPassword
     {
         $token = $this->tokenRepository->findOneBy(['token' => $token]);
         if (empty($token)) {
-            throw new EntityNotFoundException("this token does not exist", 400);
+            throw new EntityNotFoundException('this token does not exist', 400);
         }
         if (new DateTime() > $token->getExpireAt()) {
-            throw new TimeoutException("this token has expired", 400);
+            throw new TimeoutException('this token has expired', 400);
         }
+
         return $token->getUser();
     }
 
-
     /**
-     * @param User $user
-     * @return string
      * @throws EntityNotFoundException
      */
     private function createToken(User $user): string
@@ -103,9 +98,9 @@ class ResetPassword
         $token = new ForgetToken($user);
         $this->em->persist($token);
         $this->em->flush();
+
         return $token->getToken();
     }
-
 
     private function removeTokenIfExists(User $user)
     {
@@ -116,7 +111,6 @@ class ResetPassword
         $this->em->remove($token);
         $this->em->flush();
     }
-
 
     public function setNewPassword(User $user, string $plainPassword)
     {

@@ -10,6 +10,8 @@ parameters:
   document_full_pdf_directory: '/tmp/'
   token_directory: '/tmp/'
 
+  max_batch_email: 50
+
 services:
     # default configuration for services in *this* file
     _defaults:

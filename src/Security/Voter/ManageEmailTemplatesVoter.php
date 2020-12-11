@@ -11,9 +11,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class ManageEmailTemplatesVoter extends Voter
 {
-    /**
-     * @var Security
-     */
     private Security $security;
 
     public function __construct(Security $security)
@@ -27,7 +24,6 @@ class ManageEmailTemplatesVoter extends Voter
             && ($subject instanceof EmailTemplate);
     }
 
-
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
     {
         /** @var User $loggedInUser */
@@ -38,12 +34,12 @@ class ManageEmailTemplatesVoter extends Voter
         }
 
         if ($this->isSameStructure($loggedInUser, $subject)) {
-            return $this->security->isGranted("ROLE_MANAGE_EMAIL_TEMPLATES");
+            return $this->security->isGranted('ROLE_MANAGE_EMAIL_TEMPLATES');
         }
 
         return false;
     }
-    
+
     private function isSameStructure(User $loggedInUser, EmailTemplate $subject)
     {
         return $loggedInUser->getStructure()->getId() === $subject->getStructure()->getId();

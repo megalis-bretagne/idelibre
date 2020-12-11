@@ -2,12 +2,8 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Convocation;
-use App\Entity\Sitting;
 use App\Entity\Timestamp;
-use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
 class TimestampFixtures extends Fixture

@@ -26,7 +26,7 @@ class GroupStructureType extends AbstractType
                 'class' => Structure::class,
                 'multiple' => true,
                 'required' => false,
-                'choice_label' => 'name'
+                'choice_label' => 'name',
             ])
         ;
     }
@@ -35,7 +35,7 @@ class GroupStructureType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Group::class,
-            'isNew' => false
+            'isNew' => false,
         ]);
     }
 }

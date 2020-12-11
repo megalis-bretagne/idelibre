@@ -22,6 +22,9 @@ SI NON JE ME RETROUVE AVEC  DES NULLABLES A TESTER !
 
 CHANGER LE USERINTERFACE du l'utilisateur pour avoir des methodes en plus !!
 
+DEFINIR les templates email par defaut. ET mettre les blise HTML aux propre dans les message sinon on va passer pour des spammeurs
+Idem quand on crre un nouveau type de message. on met les balises. on est pas des porcs !
+
 configuration snappy
 
 $pdf = $snappy->getOutputFromHtml($html, array(

@@ -21,7 +21,6 @@ class ThemeRepository extends \Gedmo\Tree\Entity\Repository\NestedTreeRepository
         parent::__construct($em, new  ClassMetadata(Theme::class));
     }
 
-
     public function findChildrenFromStructure(Structure $structure): QueryBuilder
     {
         $rootNode = $this->findOneBy(['name' => 'ROOT', 'structure' => $structure]);

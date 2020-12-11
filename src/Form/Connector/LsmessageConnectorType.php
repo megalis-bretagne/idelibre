@@ -20,29 +20,29 @@ class LsmessageConnectorType extends AbstractType
             ->add('url', UrlType::class, [
                 'required' => false,
                 'label' => 'Url',
-                'constraints' => [new Length(['max' => LsmessageConnector::MAX_URL_LENGTH])]
+                'constraints' => [new Length(['max' => LsmessageConnector::MAX_URL_LENGTH])],
             ])
             ->add('apiKey', TextType::class, [
                 'required' => false,
                 'label' => 'Clé d\'api',
-                'constraints' => [new Length(['max' => LsmessageConnector::MAX_API_KEY_LENGTH])]
+                'constraints' => [new Length(['max' => LsmessageConnector::MAX_API_KEY_LENGTH])],
             ])
             ->add('sender', TextType::class, [
                 'required' => false,
                 'label' => 'Expéditeur',
-                'constraints' => [new Length(['max' => LsmessageConnector::MAX_SENDER_LENGTH])]
+                'constraints' => [new Length(['max' => LsmessageConnector::MAX_SENDER_LENGTH])],
             ])
             ->add('content', TextareaType::class, [
                 'required' => false,
                 'label' => 'Contenu du message',
                 'attr' => [
-                    'rows' => 3
+                    'rows' => 3,
                 ],
-                'constraints' => [new Length(['max' => LsmessageConnector::MAX_CONTENT_LENGTH])]
+                'constraints' => [new Length(['max' => LsmessageConnector::MAX_CONTENT_LENGTH])],
             ])
             ->add('active', CheckboxType::class, [
                 'required' => false,
-                'label' => 'Activer'
+                'label' => 'Activer',
             ]);
     }
 

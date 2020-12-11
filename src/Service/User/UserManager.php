@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\User;
 
 use App\Entity\Group;
@@ -18,9 +17,7 @@ class UserManager
     private EntityManagerInterface $em;
     private UserPasswordEncoderInterface $passwordEncoder;
     private ValidatorInterface $validator;
-    /**
-     * @var RoleManager
-     */
+
     private RoleManager $roleManager;
 
     public function __construct(
@@ -47,7 +44,6 @@ class UserManager
         $this->em->flush();
     }
 
-
     public function saveStructureAdmin(User $user, ?string $plainPassword, Structure $structure): ?ConstraintViolationListInterface
     {
         if ($plainPassword) {
@@ -67,7 +63,6 @@ class UserManager
         return null;
     }
 
-
     public function saveAdmin(User $user, ?string $plainPassword, Role $role = null, ?Group $group = null): void
     {
         if ($plainPassword) {
@@ -80,11 +75,9 @@ class UserManager
             $user->setGroup($group);
         }
 
-
         $this->em->persist($user);
         $this->em->flush();
     }
-
 
     public function delete(User $user): void
     {

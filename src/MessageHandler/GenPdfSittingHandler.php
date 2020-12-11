@@ -1,12 +1,10 @@
 <?php
 
-
 namespace App\MessageHandler;
 
 use App\Message\UpdatedSitting;
 use App\Repository\SittingRepository;
 use App\Service\Pdf\PdfSittingGenerator;
-use App\Service\Zip\ZipSittingGenerator;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\File;
 
 use App\Entity\File;
@@ -17,14 +16,12 @@ class FileManager
     private EntityManagerInterface $em;
     private ParameterBagInterface $bag;
 
-
     public function __construct(Filesystem $filesystem, EntityManagerInterface $em, ParameterBagInterface $bag)
     {
         $this->filesystem = $filesystem;
         $this->em = $em;
         $this->bag = $bag;
     }
-
 
     public function save(UploadedFile $uploadedFile, Structure $structure): File
     {
@@ -41,7 +38,6 @@ class FileManager
         return $file;
     }
 
-
     private function sanitizeAndUniqueFileName(UploadedFile $file): string
     {
         $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
@@ -53,14 +49,13 @@ class FileManager
         return $safeFilename . '-' . uniqid() . $this->getExtension($file);
     }
 
-
     private function getAndCreateDestinationDirectory(Structure $structure): string
     {
         $directoryPath = $this->bag->get('document_files_directory') . $structure->getId() . '/' . date('y') . '/' . date('m');
         $this->filesystem->mkdir($directoryPath);
+
         return $directoryPath;
     }
-
 
     private function getExtension(UploadedFile $file): string
     {
@@ -76,10 +71,10 @@ class FileManager
         $this->em->remove($file);
     }
 
-
     public function replace(UploadedFile $uploadedFile, Sitting $sitting): File
     {
         $this->delete($sitting->getFile());
+
         return $this->save($uploadedFile, $sitting->getStructure());
     }
 }

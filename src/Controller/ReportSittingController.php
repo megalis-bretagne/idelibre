@@ -31,7 +31,6 @@ class ReportSittingController extends AbstractController
         return $response;
     }
 
-
     /**
      * @Route("/reportSitting/csv/{id}", name="sitting_report_csv")
      * @IsGranted("MANAGE_SITTINGS", subject="sitting")
@@ -47,7 +46,6 @@ class ReportSittingController extends AbstractController
 
         return $response;
     }
-
 
     /**
      * @Route("/reportSitting/token/{id}", name="sitting_report_token")

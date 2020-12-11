@@ -24,7 +24,6 @@ class UserController extends AbstractController
     /**
      * @Route("/user", name="user_index")
      * @IsGranted("ROLE_MANAGE_USERS")
-     *
      */
     public function index(UserRepository $userRepository, PaginatorInterface $paginator, Request $request): Response
     {
@@ -43,10 +42,9 @@ class UserController extends AbstractController
         return $this->render('user/index.html.twig', [
             'users' => $users,
             'formSearch' => $formSearch->createView(),
-            'searchTerm' => $request->query->get('search')
+            'searchTerm' => $request->query->get('search'),
         ]);
     }
-
 
     /**
      * @Route("/user/add", name="user_add")
@@ -65,10 +63,12 @@ class UserController extends AbstractController
             );
 
             $this->addFlash('success', 'votre utilisateur a bien été ajouté');
+
             return $this->redirectToRoute('user_index');
         }
+
         return $this->render('user/add.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 
@@ -89,10 +89,12 @@ class UserController extends AbstractController
             );
 
             $this->addFlash('success', 'votre utilisateur a bien été modifié');
+
             return $this->redirectToRoute('user_index');
         }
+
         return $this->render('user/edit.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 
@@ -104,15 +106,16 @@ class UserController extends AbstractController
     {
         if ($this->getUser()->getid() == $user->getId()) {
             $this->addFlash('error', 'Impossible de supprimer son propre utilisateur');
+
             return $this->redirectToRoute('user_index');
         }
         $manageUser->delete($user);
         $this->addFlash('success', 'l\'utilisateur a bien été supprimé');
+
         return $this->redirectToRoute('user_index', [
-            'page' => $request->get('page')
+            'page' => $request->get('page'),
         ]);
     }
-
 
     /**
      * @Route("/user/preferences", name="user_preferences")
@@ -132,11 +135,12 @@ class UserController extends AbstractController
             );
 
             $this->addFlash('success', 'Vos préférences utilisateur ont bien été modifiées');
+
             return $this->redirectToRoute('app_entrypoint');
         }
 
         return $this->render('user/preferences.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 }

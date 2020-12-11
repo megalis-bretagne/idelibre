@@ -3,7 +3,6 @@
 namespace App\Form;
 
 use App\Entity\User;
-
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
@@ -17,16 +16,16 @@ class UserPreferenceType extends AbstractType
     {
         $builder
             ->add('firstName', TextType::class, [
-                'label' => 'Prénom'
+                'label' => 'Prénom',
             ])
             ->add('lastName', TextType::class, [
-                'label' => 'Nom'
+                'label' => 'Nom',
             ])
             ->add('username', TextType::class, [
-                'label' => 'Nom d\'utilisateur'
+                'label' => 'Nom d\'utilisateur',
             ])
             ->add('email', TextType::class, [
-                'label' => 'Adresse email'
+                'label' => 'Adresse email',
             ])
             ->add('plainPassword', RepeatedType::class, [
                 'mapped' => false,

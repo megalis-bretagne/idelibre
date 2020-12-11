@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\Timestamp;
 
 use App\Entity\Timestamp;

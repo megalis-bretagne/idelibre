@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\Group;
 
 use App\Entity\Group;
@@ -39,7 +38,6 @@ class GroupManager
         $this->em->persist($group);
         $this->em->flush();
     }
-
 
     public function associateStructure(Group $group): void
     {

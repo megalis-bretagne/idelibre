@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\Connector;
 
 use App\Entity\Connector\Exception\LsmessageConnectorException;
@@ -26,7 +25,7 @@ class LsmessageConnectorManager
     public function createConnector(Structure $structure): void
     {
         if ($this->isAlreadyCreated($structure)) {
-            throw new LsmessageConnectorException("Already created lsmessageConnector");
+            throw new LsmessageConnectorException('Already created lsmessageConnector');
         }
         $connector = new LsmessageConnector($structure);
         $this->em->persist($connector);

@@ -2,11 +2,8 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Connector\ComelusConnector;
 use App\Entity\Connector\LsmessageConnector;
-use App\Entity\EmailTemplate;
 use App\Entity\Structure;
-use App\Entity\Type;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -21,10 +18,10 @@ class LsMessageConnectorFixtures extends Fixture implements DependentFixtureInte
         $structureLibriciel = $this->getReference(StructureFixtures::REFERENCE . 'libriciel');
 
         $lsmessageConnectorLibriciel = new LsmessageConnector($structureLibriciel);
-        $lsmessageConnectorLibriciel->setApiKey("apikey")
+        $lsmessageConnectorLibriciel->setApiKey('apikey')
         ->setUrl('https://url.fr')
-        ->setSender("sender")
-        ->setContent("my content")
+        ->setSender('sender')
+        ->setContent('my content')
         ->setActive(true);
 
         $manager->persist($lsmessageConnectorLibriciel);
@@ -32,9 +29,8 @@ class LsMessageConnectorFixtures extends Fixture implements DependentFixtureInte
         $manager->flush();
     }
 
-
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getDependencies()
     {

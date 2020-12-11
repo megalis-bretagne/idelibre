@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\Annex;
 
 use App\Entity\Annex;
@@ -14,9 +13,7 @@ class AnnexManager
 {
     private EntityManagerInterface $em;
     private FileManager $fileManager;
-    /**
-     * @var AnnexRepository
-     */
+
     private AnnexRepository $annexRepository;
 
     public function __construct(EntityManagerInterface $em, FileManager $fileManager, AnnexRepository $annexRepository)
@@ -48,6 +45,7 @@ class AnnexManager
 
     /**
      * @param ProjectApi[] $clientProjects
+     *
      * @return string[]
      */
     private function listClientAnnexeIds(array $clientProjects): array
@@ -62,6 +60,7 @@ class AnnexManager
                 }
             }
         }
+
         return $annexIds;
     }
 }

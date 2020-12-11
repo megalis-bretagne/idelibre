@@ -24,14 +24,13 @@ class ForgetTokenFixtures extends Fixture implements DependentFixtureInterface
         $manager->flush();
     }
 
-
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getDependencies()
     {
         return [
-            UserFixtures::class
+            UserFixtures::class,
         ];
     }
 }

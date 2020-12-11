@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\MessageHandler;
 
 use App\Message\UpdatedSitting;
@@ -11,13 +10,8 @@ use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 class GenZipSittingHandler implements MessageHandlerInterface
 {
-    /**
-     * @var ZipSittingGenerator
-     */
     private ZipSittingGenerator $zipSittingGenerator;
-    /**
-     * @var SittingRepository
-     */
+
     private SittingRepository $sittingRepository;
 
     public function __construct(ZipSittingGenerator $zipSittingGenerator, SittingRepository $sittingRepository)

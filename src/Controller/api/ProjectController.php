@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Controller\api;
 
 use App\Entity\Sitting;

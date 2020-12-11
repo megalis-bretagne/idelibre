@@ -20,25 +20,24 @@ class ComelusConnectorType extends AbstractType
             ->add('url', UrlType::class, [
                 'required' => false,
                 'label' => 'Url',
-                'constraints' => [new Length(['max' => ComelusConnector::MAX_URL_LENGTH])]
-
+                'constraints' => [new Length(['max' => ComelusConnector::MAX_URL_LENGTH])],
             ])
             ->add('apiKey', TextType::class, [
                 'required' => false,
                 'label' => 'Clé d\'api',
-                'constraints' => [new Length(['max' => ComelusConnector::MAX_API_KEY_LENGTH])]
+                'constraints' => [new Length(['max' => ComelusConnector::MAX_API_KEY_LENGTH])],
             ])
             ->add('description', TextareaType::class, [
                 'required' => false,
                 'label' => 'Texte d\'accompagnement',
                 'attr' => [
-                    'rows' => 5
+                    'rows' => 5,
                 ],
-                'constraints' => [new Length(['max' => ComelusConnector::MAX_DESCRIPTION_LENGTH])]
+                'constraints' => [new Length(['max' => ComelusConnector::MAX_DESCRIPTION_LENGTH])],
             ])
             ->add('active', CheckboxType::class, [
                 'required' => false,
-                'label' => 'Activer'
+                'label' => 'Activer',
             ]);
     }
 

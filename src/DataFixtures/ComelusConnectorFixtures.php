@@ -3,9 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Connector\ComelusConnector;
-use App\Entity\EmailTemplate;
 use App\Entity\Structure;
-use App\Entity\Type;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -20,9 +18,9 @@ class ComelusConnectorFixtures extends Fixture implements DependentFixtureInterf
         $structureLibriciel = $this->getReference(StructureFixtures::REFERENCE . 'libriciel');
 
         $comelusConnectorLibriciel = new ComelusConnector($structureLibriciel);
-        $comelusConnectorLibriciel->setApiKey("apikey")
+        $comelusConnectorLibriciel->setApiKey('apikey')
         ->setUrl('https://url.fr')
-        ->setDescription("my description")
+        ->setDescription('my description')
         ->setActive(true);
 
         $manager->persist($comelusConnectorLibriciel);
@@ -30,9 +28,8 @@ class ComelusConnectorFixtures extends Fixture implements DependentFixtureInterf
         $manager->flush();
     }
 
-
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getDependencies()
     {

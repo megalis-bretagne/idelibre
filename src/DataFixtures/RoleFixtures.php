@@ -28,7 +28,6 @@ class RoleFixtures extends Fixture
         $manager->persist($roleGroupAdmin);
         $this->addReference(self::REFERENCE . 'groupAdmin', $roleGroupAdmin);
 
-
         $roleStructureAdmin = new Role();
         $roleStructureAdmin->setName('Admin')
             ->addComposite('ROLE_STRUCTURE_ADMIN')
@@ -36,13 +35,11 @@ class RoleFixtures extends Fixture
         $manager->persist($roleStructureAdmin);
         $this->addReference(self::REFERENCE . 'structureAdmin', $roleStructureAdmin);
 
-
         $roleSecretary = new Role();
         $roleSecretary->setName('Secretary');
 
         $manager->persist($roleSecretary);
         $this->addReference(self::REFERENCE . 'secretary', $roleSecretary);
-
 
         $roleActor = new Role();
         $roleActor->setName('Actor')
@@ -50,7 +47,6 @@ class RoleFixtures extends Fixture
 
         $manager->persist($roleActor);
         $this->addReference(self::REFERENCE . 'actor', $roleActor);
-
 
         $manager->flush();
     }

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\Timestamp;
 
 use App\Entity\Convocation;
@@ -28,6 +27,7 @@ class TimestampContentFileGenerator
 
     /**
      * @param Convocation[] $convocations
+     *
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
@@ -36,7 +36,7 @@ class TimestampContentFileGenerator
     {
         $txt = $this->twig->render('generate/sent_timestamp_template.txt.twig', [
             'sitting' => $sitting,
-            'convocations' => $convocations
+            'convocations' => $convocations,
         ]);
 
         $path = $this->getAndCreateTokenDirectory($sitting) . Uuid::uuid4();
@@ -45,12 +45,12 @@ class TimestampContentFileGenerator
         return $path;
     }
 
-
     private function getAndCreateTokenDirectory(Sitting $sitting): string
     {
-        $year = $sitting->getDate()->format("Y");
+        $year = $sitting->getDate()->format('Y');
         $tokenDirectory = "{$this->bag->get('token_directory')}{$sitting->getStructure()->getId()}/$year/{$sitting->getId()}/";
         $this->filesystem->mkdir($tokenDirectory);
+
         return $tokenDirectory;
     }
 }

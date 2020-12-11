@@ -27,14 +27,14 @@ class SittingFixtures extends Fixture implements DependentFixtureInterface
 
         $sittingConseilLibriciel = new Sitting();
         $sittingConseilLibriciel->setName('Conseil Libriciel')
-            ->setDate(new \DateTimeImmutable())
+            ->setDate(new \DateTimeImmutable('2020-10-22'))
             ->setStructure($structureLibriciel)
             ->setFile($fileConvocationConseilLs)
+            ->setPlace('Salle du conseil')
             ->setType($typeConseilLibriciel);
 
         $manager->persist($sittingConseilLibriciel);
         $this->addReference(self::REFERENCE . 'sittingConseilLibriciel', $sittingConseilLibriciel);
-
 
         $manager->flush();
     }
@@ -44,7 +44,7 @@ class SittingFixtures extends Fixture implements DependentFixtureInterface
         return [
             StructureFixtures::class,
             TypeFixtures::class,
-            FileFixtures::class
+            FileFixtures::class,
         ];
     }
 }

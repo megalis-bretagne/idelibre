@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\Convocation;
 
 use App\Entity\Convocation;
@@ -12,6 +11,7 @@ use Doctrine\DBAL\ConnectionException;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class ConvocationManager
 {
@@ -19,18 +19,20 @@ class ConvocationManager
     private ConvocationRepository $convocationRepository;
     private TimestampManager $timestampManager;
     private LoggerInterface $logger;
-
+    private ParameterBagInterface $bag;
 
     public function __construct(
         EntityManagerInterface $em,
         ConvocationRepository $convocationRepository,
         TimestampManager $timestampManager,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        ParameterBagInterface $bag
     ) {
         $this->em = $em;
         $this->convocationRepository = $convocationRepository;
         $this->timestampManager = $timestampManager;
         $this->logger = $logger;
+        $this->bag = $bag;
     }
 
     public function createConvocations(Sitting $sitting): void
@@ -60,7 +62,6 @@ class ConvocationManager
         $this->em->flush();
     }
 
-
     /**
      * @param Convocation[] $convocations
      */
@@ -75,26 +76,28 @@ class ConvocationManager
         $this->em->flush();
     }
 
-
     private function alreadyHasConvocation(User $actor, Sitting $sitting): bool
     {
         $convocation = $this->convocationRepository->findOneBy(['actor' => $actor, 'sitting' => $sitting]);
+
         return !empty($convocation);
     }
 
-
     /**
-     * @param Sitting $sitting
+     * NB le processe d'envoi et d'hrodatage pourrait (devrait) ce faire en async.
+     *
      * @throws ConnectionException
      */
     public function sendAllConvocations(Sitting $sitting): void
     {
-        // TODO loop by Max message mailjet or timestamp !
-        $this->timestampAndActiveConvocations($sitting, $sitting->getConvocations());
+        $convocations = $sitting->getConvocations()->toArray();
+        while (count($convocations)) {
+            $convocationBatch = array_splice($convocations, 0, $this->bag->get('max_batch_email'));
+            $this->timestampAndActiveConvocations($sitting, $convocationBatch);
 
-        // TODO send email !
+            // TODO send email !
+        }
     }
-
 
     public function sendConvocation(Convocation $convocation)
     {
@@ -103,9 +106,7 @@ class ConvocationManager
         // TODO send email !
     }
 
-
     /**
-     * @param iterable $convocations
      * @throws ConnectionException
      */
     private function timestampAndActiveConvocations(Sitting $sitting, iterable $convocations): bool
@@ -126,15 +127,13 @@ class ConvocationManager
         } catch (Exception $e) {
             $this->em->getConnection()->rollBack();
             $this->logger->error($e->getMessage());
+
             return false;
         }
 
         return true;
     }
 
-    /**
-     * @param iterable $convocations
-     */
     private function filterNotSentConvocations(iterable $convocations): array
     {
         $notSent = [];
@@ -149,7 +148,7 @@ class ConvocationManager
 
     private function isAlreadySent(Convocation $convocation): bool
     {
-        return !!$convocation->getSentTimestamp();
+        return (bool) $convocation->getSentTimestamp();
     }
 
     /**

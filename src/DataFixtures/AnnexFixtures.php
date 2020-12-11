@@ -24,7 +24,6 @@ class AnnexFixtures extends Fixture implements DependentFixtureInterface
         /** @var Project $project1 */
         $project1 = $this->getReference(ProjectFixtures::REFERENCE . 'project1');
 
-
         $annex1 = new Annex();
         $annex1->setFile($fileAnnex1)
             ->setRank(0)
@@ -32,7 +31,6 @@ class AnnexFixtures extends Fixture implements DependentFixtureInterface
 
         $manager->persist($annex1);
         $this->addReference(self::REFERENCE . 'annex1', $annex1);
-
 
         $annex2 = new Annex();
         $annex2->setFile($fileAnnex2)
@@ -42,7 +40,6 @@ class AnnexFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($annex2);
         $this->addReference(self::REFERENCE . 'annex2', $annex2);
 
-
         $manager->flush();
     }
 
@@ -50,7 +47,7 @@ class AnnexFixtures extends Fixture implements DependentFixtureInterface
     {
         return [
             FileFixtures::class,
-            ProjectFixtures::class
+            ProjectFixtures::class,
         ];
     }
 }

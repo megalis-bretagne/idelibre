@@ -23,7 +23,6 @@ class Party
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
-     *
      */
     private $name;
 
@@ -37,7 +36,6 @@ class Party
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $structure;
-
 
     public function __construct()
     {

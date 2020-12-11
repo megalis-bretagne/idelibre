@@ -19,12 +19,11 @@ class ThemeWithParentType extends AbstractType
         $this->themeRepository = $themeRepository;
     }
 
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('name', TextType::class, [
-                'label' => 'Intitulé'
+                'label' => 'Intitulé',
             ])
             ->add('parentTheme', EntityType::class, [
                 'mapped' => false,
@@ -33,10 +32,11 @@ class ThemeWithParentType extends AbstractType
                 'class' => Theme::class,
                 'choice_label' => function (Theme $theme) {
                     $margin = '';
-                    for ($i = 1; $i < $theme->getLvl(); $i++) {
+                    for ($i = 1; $i < $theme->getLvl(); ++$i) {
                         $margin .= '--';
                     }
-                    return $margin . " " . $theme->getName();
+
+                    return $margin . ' ' . $theme->getName();
                 },
 
                 'multiple' => false,
@@ -48,7 +48,7 @@ class ThemeWithParentType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Theme::class,
-            'structure' => null
+            'structure' => null,
         ]);
     }
 }

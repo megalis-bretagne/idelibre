@@ -24,7 +24,7 @@ class PartyType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label' => 'Intitulé'
+                'label' => 'Intitulé',
             ])
             ->add('actors', EntityType::class, [
                 'label' => 'Acteurs associés',
@@ -32,7 +32,7 @@ class PartyType extends AbstractType
                 'class' => User::class,
                 'choice_label' => fn (User $user) => $user->getFirstName() . ' ' . $user->getLastName(),
                 'multiple' => true,
-                'query_builder' => $this->userRepository->findActorByStructure($options['structure'])
+                'query_builder' => $this->userRepository->findActorByStructure($options['structure']),
             ])
 
         ;
@@ -42,7 +42,7 @@ class PartyType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Party::class,
-            'structure' => null
+            'structure' => null,
         ]);
     }
 }

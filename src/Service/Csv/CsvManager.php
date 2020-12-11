@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\Csv;
 
 use App\Entity\Role;
@@ -64,7 +63,7 @@ class CsvManager
             if (!$this->isExistUsername($username, $structure)) {
                 $user = $this->createUserFromRecord($structure, $record);
 
-                if ($this->validator->validate($user)->count() !== 0) {
+                if (0 !== $this->validator->validate($user)->count()) {
                     $errors[] = $this->validator->validate($user);
                     continue;
                 }
@@ -83,10 +82,9 @@ class CsvManager
         return $errors;
     }
 
-
     private function associateActorToTypeSeances(User $user, ?string $typeNamesString, Structure $structure): void
     {
-        if (!$typeNamesString || $user->getRole()->getName() != 'Actor') {
+        if (!$typeNamesString || 'Actor' != $user->getRole()->getName()) {
             return;
         }
         $typeNames = explode(self::TYPE_SEPARATOR, $typeNamesString);
@@ -100,10 +98,9 @@ class CsvManager
         }
     }
 
-
     private function getRoleFromCode(int $roleId): ?Role
     {
-        if ($roleId === 0) {
+        if (0 === $roleId) {
             return null;
         }
         $role = null;
@@ -135,15 +132,16 @@ class CsvManager
                 'username',
                 $user->getEmail()
             );
+
             return new ConstraintViolationList([$violation]);
         }
+
         return null;
     }
 
-
     private function isExistUsername(string $username, Structure $structure): bool
     {
-        return $this->userRepository->count(['username' => $username, 'structure' => $structure]) !== 0;
+        return 0 !== $this->userRepository->count(['username' => $username, 'structure' => $structure]);
     }
 
     private function sanitize(string $content): string
@@ -153,16 +151,15 @@ class CsvManager
         return Encoding::toUTF8($trim_content);
     }
 
-
     private function createNewType(string $typeName, Structure $structure): Type
     {
         $type = new Type();
         $type->setName($this->sanitize($typeName))
             ->setStructure($structure);
         $this->em->persist($type);
+
         return $type;
     }
-
 
     private function createUserFromRecord(Structure $structure, array $record): User
     {
@@ -174,6 +171,7 @@ class CsvManager
             ->setPassword($this->passwordEncoder->encodePassword($user, $this->sanitize($record[4] ?? '')))
             ->setRole($this->getRoleFromCode(intval($record[5] ?? 0)))
             ->setStructure($structure);
+
         return $user;
     }
 }

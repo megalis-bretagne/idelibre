@@ -28,7 +28,6 @@ class ThemeFixtures extends Fixture implements DependentFixtureInterface
         /** @var Structure $structureMontpellier */
         $structureMontpellier = $this->getReference(StructureFixtures::REFERENCE . 'montpellier');
 
-
         // --- ROOT lvl -----
         $rootTheme = new Theme();
         $rootTheme->setName('ROOT')
@@ -58,7 +57,6 @@ class ThemeFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($ecoleTheme);
         $this->addReference(self::REFERENCE . 'ecoleLibriciel', $ecoleTheme);
 
-
         $rhTheme = new Theme();
         $rhTheme->setName('rh')
             ->setFullName('rh')
@@ -78,7 +76,6 @@ class ThemeFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($budgetTheme);
         $this->addReference(self::REFERENCE . 'budgetLibriciel', $budgetTheme);
 
-
         // ----Montpellier
         $rootThemeMtp = new Theme();
         $rootThemeMtp->setName('ROOT')
@@ -87,7 +84,6 @@ class ThemeFixtures extends Fixture implements DependentFixtureInterface
 
         $manager->persist($rootThemeMtp);
         $this->addReference(self::REFERENCE . 'rootMontpellier', $rootThemeMtp);
-
 
         $urbanismeThemeMtp = new Theme();
         $urbanismeThemeMtp->setName('Urbanisme Montpellier')
@@ -101,11 +97,10 @@ class ThemeFixtures extends Fixture implements DependentFixtureInterface
         $manager->flush();
     }
 
-
     public function getDependencies()
     {
         return [
-            StructureFixtures::class
+            StructureFixtures::class,
         ];
     }
 }

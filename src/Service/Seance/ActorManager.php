@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\Seance;
 
 use App\Entity\Sitting;

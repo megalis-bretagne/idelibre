@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\Seance;
 
 use App\Entity\Sitting;
@@ -18,13 +17,9 @@ class SittingManager
     private ConvocationManager $convocationManager;
     private FileManager $fileManager;
     private EntityManagerInterface $em;
-    /**
-     * @var MessageBusInterface
-     */
+
     private MessageBusInterface $messageBus;
-    /**
-     * @var ProjectManager
-     */
+
     private ProjectManager $projectManager;
 
     public function __construct(

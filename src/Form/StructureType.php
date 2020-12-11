@@ -16,30 +16,30 @@ class StructureType extends AbstractType
     {
         /** @var Structure | null $entity */
         $entity = $builder->getData();
-        $isNew = !$entity || $entity->getId() === null;
+        $isNew = !$entity || null === $entity->getId();
 
         $builder
             ->add('name', TextType::class, [
-                'label' => 'Dénomination'
+                'label' => 'Dénomination',
             ])
             ->add('suffix', TextType::class, [
-                'label' => 'Suffixe'
+                'label' => 'Suffixe',
             ])
             ->add('replyTo', TextType::class, [
-                'label' => 'Email de réponse'
+                'label' => 'Email de réponse',
             ])
             ->add('timezone', EntityType::class, [
                 'class' => Timezone::class,
                 'choice_label' => 'name',
                 'multiple' => false,
-                'label' => 'Fuseau horaire'
+                'label' => 'Fuseau horaire',
             ])
         ;
 
         if ($isNew) {
             $builder->add('user', SuperUserType::class, [
                 'mapped' => false,
-                'label' => false
+                'label' => false,
             ]);
         }
     }

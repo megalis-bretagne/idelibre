@@ -34,7 +34,6 @@ class ForgetToken
      */
     private $user;
 
-
     public function __construct(User $user)
     {
         $this->user = $user;
@@ -52,12 +51,10 @@ class ForgetToken
         return $this->token;
     }
 
-
     public function getExpireAt(): ?DateTimeInterface
     {
         return $this->expireAt;
     }
-
 
     public function getUser(): ?User
     {

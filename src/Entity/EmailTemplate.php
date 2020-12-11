@@ -12,6 +12,10 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  */
 class EmailTemplate
 {
+    public const CATEGORY_CONVOCATION = 'convocation';
+    public const CATEGORY_INVITATION = 'invitation';
+    public const CATEGORY_RESET_PASSWORD = 'reset_password';
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="UUID")
@@ -45,6 +49,21 @@ class EmailTemplate
      * @ORM\Column(type="string", length=255)
      */
     private $subject;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isDefault = false;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $category = self::CATEGORY_CONVOCATION;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isAttachment = false;
 
     public function getId(): ?string
     {
@@ -107,6 +126,42 @@ class EmailTemplate
     public function setSubject(string $subject): self
     {
         $this->subject = $subject;
+
+        return $this;
+    }
+
+    public function getIsDefault(): bool
+    {
+        return $this->isDefault;
+    }
+
+    public function setIsDefault(bool $isDefault): self
+    {
+        $this->isDefault = $isDefault;
+
+        return $this;
+    }
+
+    public function getCategory(): string
+    {
+        return $this->category;
+    }
+
+    public function setCategory(string $category): self
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    public function getIsAttachment(): bool
+    {
+        return $this->isAttachment;
+    }
+
+    public function setIsAttachment(bool $isAttachment): self
+    {
+        $this->isAttachment = $isAttachment;
 
         return $this;
     }

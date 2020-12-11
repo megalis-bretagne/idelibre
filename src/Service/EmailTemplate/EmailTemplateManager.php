@@ -1,7 +1,6 @@
 <?php
 
-
-namespace App\Service\Email;
+namespace App\Service\EmailTemplate;
 
 use App\Entity\EmailTemplate;
 use App\Entity\Structure;
@@ -13,13 +12,11 @@ class EmailTemplateManager
     private EmailTemplateRepository $templateRepository;
     private EntityManagerInterface $em;
 
-
     public function __construct(EmailTemplateRepository $templateRepository, EntityManagerInterface $em)
     {
         $this->templateRepository = $templateRepository;
         $this->em = $em;
     }
-
 
     public function initDefaultTemplates(Structure $structure): void
     {
@@ -43,7 +40,6 @@ Un dossier a été mis à votre disposition. veuillez cliquez sur le lien pour l
 
         $this->em->flush();
     }
-
 
     public function save(EmailTemplate $template, Structure $structure): void
     {

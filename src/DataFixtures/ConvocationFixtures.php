@@ -34,7 +34,6 @@ class ConvocationFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($convocationActor1);
         $this->addReference(self::REFERENCE . 'convocationActor1Conseil', $convocationActor1);
 
-
         $convocationActor2Sent = (new Convocation())
             ->setSitting($sittingConseilLibriciel)
             ->setActor($actor2Libriciel)
@@ -43,10 +42,8 @@ class ConvocationFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($convocationActor2Sent);
         $this->addReference(self::REFERENCE . 'convocationActor2Conseil', $convocationActor2Sent);
 
-
         $manager->flush();
     }
-
 
     public function getDependencies()
     {
@@ -54,7 +51,7 @@ class ConvocationFixtures extends Fixture implements DependentFixtureInterface
             StructureFixtures::class,
             UserFixtures::class,
             SittingFixtures::class,
-            TimestampFixtures::class
+            TimestampFixtures::class,
         ];
     }
 }

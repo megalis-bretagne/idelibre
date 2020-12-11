@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\Connector;
 
 use App\Entity\Connector\ComelusConnector;
@@ -26,7 +25,7 @@ class ComelusConnectorManager
     public function createConnector(Structure $structure): void
     {
         if ($this->isAlreadyCreated($structure)) {
-            throw new ComelusConnectorException("Already created lsmessageConnector");
+            throw new ComelusConnectorException('Already created lsmessageConnector');
         }
         $connector = new ComelusConnector($structure);
         $this->em->persist($connector);
@@ -37,7 +36,6 @@ class ComelusConnectorManager
     {
         return null !== $this->comelusConnectorRepository->findOneBy(['structure' => $structure]);
     }
-
 
     public function save(ComelusConnector $comelusConnector): void
     {

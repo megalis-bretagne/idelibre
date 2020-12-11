@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\Project;
 
 use App\Entity\Annex;
@@ -50,7 +49,7 @@ class ProjectManager
     }
 
     /**
-     * @param ProjectApi[] $clientProjects
+     * @param ProjectApi[]   $clientProjects
      * @param UploadedFile[] $uploadedFiles
      */
     public function update(array $clientProjects, array $uploadedFiles, Sitting $sitting): void
@@ -100,21 +99,21 @@ class ProjectManager
         return $project;
     }
 
-
     private function getReporter(?string $reporterId): ?User
     {
         if (!$reporterId) {
             return null;
         }
+
         return $this->userRepository->findOneBy(['id' => $reporterId]);
     }
-
 
     private function getTheme(?string $themeId): ?Theme
     {
         if (!$themeId) {
             return null;
         }
+
         return $this->themeRepository->findOneBy(['id' => $themeId]);
     }
 
@@ -142,7 +141,7 @@ class ProjectManager
 
     /**
      * @param UploadedFile[] $uploadedFiles
-     * @param AnnexApi[] $clientAnnexes
+     * @param AnnexApi[]     $clientAnnexes
      */
     private function createAndAddAnnexesToProject(Project $project, array $clientAnnexes, array $uploadedFiles, Structure $structure): void
     {
@@ -155,9 +154,7 @@ class ProjectManager
         }
     }
 
-
     /**
-     * @param Sitting $sitting
      * @return Project[]
      */
     public function getProjectsFromSitting(Sitting $sitting): iterable
@@ -167,6 +164,7 @@ class ProjectManager
 
     /**
      * @param project[] $projects
+     *
      * @return ProjectApi[]
      */
     public function getApiProjectsFromProjects(iterable $projects): array
@@ -187,9 +185,9 @@ class ProjectManager
         return $apiProjects;
     }
 
-
     /**
      * @param annex[] $annexes
+     *
      * @return AnnexApi[]
      */
     public function getApiAnnexesFromAnnexes(iterable $annexes): array
@@ -207,7 +205,7 @@ class ProjectManager
     }
 
     /**
-     * @param AnnexApi[] $clientAnnexes
+     * @param AnnexApi[]     $clientAnnexes
      * @param UploadedFile[] $uploadedFiles
      */
     private function createOrUpdateAnnexes(Project $project, array $clientAnnexes, array $uploadedFiles, Structure $structure): void
@@ -220,7 +218,6 @@ class ProjectManager
             $this->updateAnnex($clientAnnex);
         }
     }
-
 
     private function updateAnnex(AnnexApi $clientAnnex): void
     {
@@ -254,8 +251,6 @@ class ProjectManager
         $this->deleteProjects($toDeleteProjects);
     }
 
-
-
     /**
      * @param Project[] $projects
      */
@@ -268,9 +263,9 @@ class ProjectManager
         }
     }
 
-
     /**
      * @param ProjectApi[] $clientProjects
+     *
      * @return string[]
      */
     private function listClientProjectIds(array $clientProjects): array

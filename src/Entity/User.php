@@ -34,7 +34,6 @@ class User implements UserInterface
      */
     private $username;
 
-
     /**
      * @ORM\Column(type="string", length=180)
      * @Assert\NotBlank()
@@ -69,7 +68,6 @@ class User implements UserInterface
     /**
      * @ORM\ManyToOne(targetEntity=Structure::class, inversedBy="users")
      * @ORM\JoinColumn(onDelete="CASCADE")
-     *
      */
     private $structure;
 
@@ -96,12 +94,20 @@ class User implements UserInterface
      */
     private $party;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $title;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $gender;
 
     public function __construct()
     {
         $this->associatedTypes = new ArrayCollection();
     }
-
 
     public function getId(): ?string
     {
@@ -127,15 +133,15 @@ class User implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string)$this->username;
+        return (string) $this->username;
     }
 
     public function setUsername(string $username): self
     {
         $this->username = $username;
+
         return $this;
     }
-
 
     /**
      * @see UserInterface
@@ -145,16 +151,16 @@ class User implements UserInterface
         $roles = $this->getRole() ? $this->getRole()->getComposites() : [];
         // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_DEFAULT';
+
         return array_unique($roles);
     }
-
 
     /**
      * @see UserInterface
      */
     public function getPassword(): string
     {
-        return (string)$this->password;
+        return (string) $this->password;
     }
 
     public function setPassword(string $password): self
@@ -180,7 +186,6 @@ class User implements UserInterface
         // If you store any temporary, sensitive data on the user, clear it here
     }
 
-
     public function getFirstName(): ?string
     {
         return $this->firstName;
@@ -204,7 +209,6 @@ class User implements UserInterface
 
         return $this;
     }
-
 
     public function getStructure(): ?Structure
     {
@@ -278,6 +282,30 @@ class User implements UserInterface
     public function setParty(?Party $party): self
     {
         $this->party = $party;
+
+        return $this;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(?string $title): self
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    public function getGender(): ?int
+    {
+        return $this->gender;
+    }
+
+    public function setGender(?int $gender): self
+    {
+        $this->gender = $gender;
 
         return $this;
     }

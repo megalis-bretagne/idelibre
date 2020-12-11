@@ -25,7 +25,6 @@ class Structure
      */
     private $name;
 
-
     /**
      * @ORM\Column(type="string", length=255, nullable=false)
      */
@@ -57,7 +56,6 @@ class Structure
     {
         $this->users = new ArrayCollection();
     }
-
 
     public function getId(): ?string
     {

@@ -14,7 +14,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Breadcrumb("Configuration des connecteurs", routeName="connector_index")
- *
  */
 class ComelusConnectorController extends AbstractController
 {
@@ -36,6 +35,7 @@ class ComelusConnectorController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $comelusConnectorManager->save($form->getData());
             $this->addFlash('success', 'Le connecteur a bien été modifié');
+
             return $this->redirectToRoute('connector_index');
         }
 

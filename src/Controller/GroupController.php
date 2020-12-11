@@ -37,10 +37,9 @@ class GroupController extends AbstractController
         );
 
         return $this->render('group/index.html.twig', [
-            'groups' => $groups
+            'groups' => $groups,
         ]);
     }
-
 
     /**
      * @Route("/group/add", name="group_add")
@@ -61,20 +60,21 @@ class GroupController extends AbstractController
 
             if (!empty($errors)) {
                 $this->addErrorToForm($form->get('user'), $errors);
+
                 return $this->render('group/add.html.twig', [
-                    'form' => $form->createView()
+                    'form' => $form->createView(),
                 ]);
             }
 
             $this->addFlash('success', 'Le groupe a bien été créé');
+
             return $this->redirectToRoute('group_index');
         }
 
         return $this->render('group/add.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
-
 
     /**
      * @Route("/group/manage/{id}", name="group_manage")
@@ -89,14 +89,14 @@ class GroupController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $groupManager->associateStructure($form->getData());
             $this->addFlash('success', 'Les structures ont bien été mises à jour');
+
             return $this->redirectToRoute('group_index');
         }
 
         return $this->render('group/manage.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
-
 
     /**
      * @Route("/group/edit/{id}", name="group_edit")
@@ -111,14 +111,14 @@ class GroupController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $groupManager->save($form->getData());
             $this->addFlash('success', 'Le groupe a bien été modifié');
+
             return $this->redirectToRoute('group_index');
         }
 
         return $this->render('group/edit.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
-
 
     /**
      * @Route("/group/delete/{id}", name="group_delete", methods={"DELETE"})
@@ -130,7 +130,7 @@ class GroupController extends AbstractController
         $this->addFlash('success', 'Le groupe a bien été supprimée');
 
         return $this->redirectToRoute('group_index', [
-            'page' => $request->get('page')
+            'page' => $request->get('page'),
         ]);
     }
 }
