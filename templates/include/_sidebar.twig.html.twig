@@ -1,0 +1,142 @@
+<!-- <ls-lib-sidebar class="collapsed"> -->
+<ls-lib-sidebar>
+    <section class="ls-sidebar-coll-logo">
+        {% if  app.user.structure %}
+            {# idelibre ne gere pas encore les logos par collectivités#}
+            {# <img alt="Logo de la ville" src="{{ asset('assets/img/logo_Libriciel.png') }}">#}
+            <span>{{ app.user.structure.name }}</span>
+        {% else %}
+            <span>Administration</span>
+        {% endif %}
+    </section>
+    <section class="ls-sidebar-menu">
+        <ul class="main-menu">
+
+            {% if  app.user.structure %}
+                {% if is_granted('ROLE_MANAGE_TYPES') %}
+                    <li>
+                        <a href="{{ path('type_index') }}">
+                            <i class="fas fa-tag"> </i>
+                            <span>&ensp; Type de séance</span>
+                        </a>
+                    </li>
+                {% endif %}
+
+                {% if is_granted('ROLE_MANAGE_USERS') %}
+                    <li>
+                        <a href="{{ path('user_index') }}">
+                            <i class="fas fa-user"></i>
+                            <span>&ensp; Utilisateurs</span>
+                        </a>
+                        <ul class="sub-menu">
+                        </ul>
+                    </li>
+                {% endif %}
+
+
+                {% if is_granted('ROLE_MANAGE_PARTIES') %}
+                    <li>
+                        <a href="{{ path('party_index') }}">
+                            <i class="fas fa-users"></i>
+                            <span>&ensp; Groupes politiques</span>
+                        </a>
+                        <ul class="sub-menu">
+                        </ul>
+                    </li>
+                {% endif %}
+
+                {% if is_granted('ROLE_MANAGE_EMAIL_TEMPLATES') %}
+                    <li>
+                        <a href="{{ path('email_template_index') }}">
+                            <i class="fas fa-envelope"></i>
+                            <span>&ensp; Modèles d'email</span>
+                        </a>
+                        <ul class="sub-menu">
+                        </ul>
+                    </li>
+                {% endif %}
+
+
+                {% if is_granted('ROLE_MANAGE_THEMES') %}
+                    <li>
+                        <a href="{{ path('theme_index') }}">
+                            <i class="fas fa-book"></i>
+                            <span>&ensp; Thèmes</span>
+                        </a>
+                        <ul class="sub-menu">
+                        </ul>
+                    </li>
+                {% endif %}
+
+                {% if is_granted('ROLE_MANAGE_SITTINGS') %}
+                    <li>
+                        <a href="{{ path('sitting_index') }}">
+                            <i class="ls-font ls-seance" style="font-size: 0.8em; margin-right: -20px"></i>
+                            <span>&ensp; Séances</span>
+                        </a>
+                        <ul class="sub-menu">
+                        </ul>
+                    </li>
+                {% endif %}
+
+                {% if is_granted('ROLE_STRUCTURE_ADMIN') %}
+                    <li>
+                    <a href="{{ path('structure_preferences') }}">
+                        <i class="fas fa-info-circle"></i>
+                        <span>&ensp; Informations</span>
+                    </a>
+                    <ul class="sub-menu">
+                    </ul>
+                {% endif %}</li>
+
+
+                {% if is_granted('ROLE_MANAGE_CONNECTORS') %}
+                    <li>
+                        <a href="{{ path('connector_index') }}">
+                            <i class="fas fa-cog"></i>
+                            <span>&ensp; Connecteurs</span>
+                        </a>
+                        <ul class="sub-menu">
+                        </ul>
+                    </li>
+                {% endif %}
+            {% endif %}
+
+
+            {% if is_granted('ROLE_MANAGE_STRUCTURES') %}
+                <li>
+                    <a href="#">
+                        <i class="fas fa-cogs"> </i>
+                        <span>&ensp; Plateforme</span>
+                    </a>
+                    <ul class="sub-menu">
+
+                        {% if is_granted('ROLE_SUPERADMIN') %}
+                            <li>
+                                <a href="{{ path('group_index') }}">
+                                    Groupes
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ path('structure_index') }}">
+                                    Structures
+                                </a>
+                            </li>
+                        {% endif %}
+                        <li>
+                            <a href="{{ path('admin_index') }}">
+                                Administrateurs
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ path('gdpr_edit') }}">
+                                RGPD
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            {% endif %}
+
+        </ul>
+    </section>
+</ls-lib-sidebar>

@@ -9,16 +9,22 @@
     <link rel="stylesheet" href="{{ asset('assets/general.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/select2/select2.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/flatpickr/flatpickr.css') }}">
-</head>
+    <link rel="stylesheet" href="{{ asset('assets/Libriciel-font.css') }}">
+</head>ss
 <body>
 
 {% block navigation %}
     {{ include('include/_navbar.html.twig') }}
 {% endblock %}
 
-<div class="container-fluid" style="margin-bottom: 150px">
-    {% block body %}{% endblock %}
-</div>
+
+{{ include('include/_sidebar.twig.html.twig') }}
+
+<ls-lib-content>
+    <div class="container-fluid" style="margin-bottom: 150px">
+        {% block body %}{% endblock %}
+    </div>
+</ls-lib-content>
 
 
 {{ include('include/_footer.html.twig') }}
@@ -31,6 +37,8 @@
 <script src="{{ asset('assets/fontawesome-free-5.12.1-web/js/all.js') }}"></script>
 <script src="{{ asset('assets/flatpickr/flatpickr.js') }}"></script>
 <script src="{{ asset('assets/flatpickr/flatpickr_fr.js') }}"></script>
+
+<script src="{{ asset('node_modules/@libriciel/ls-composants/ls-elements.js') }}"></script>
 
 {% block javascripts %}{% endblock %}
 </body>
