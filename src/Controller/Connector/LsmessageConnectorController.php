@@ -2,6 +2,7 @@
 
 namespace App\Controller\Connector;
 
+use App\Annotation\Sidebar;
 use App\Form\Connector\LsmessageConnectorType;
 use App\Repository\Connector\LsmessageConnectorRepository;
 use App\Service\Connector\LsmessageConnectorManager;
@@ -14,6 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Breadcrumb("Configuration des connecteurs", routeName="connector_index")
+ * @Sidebar(active={"connector-nav"})
  */
 class LsmessageConnectorController extends AbstractController
 {

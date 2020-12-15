@@ -4,7 +4,7 @@
             {% if loop.last %}
                 <a href="#" style="text-decoration: none;"><b>{{ breadcrumb.title }} </b></a>
             {% else %}
-                <a href="{{ breadcrumb.url }}" style="text-decoration: none;">{{ breadcrumb.title }}</a> \
+                <a href="{{ breadcrumb.url }}" style="text-decoration: none;">{{ breadcrumb.title }}</a> /
             {% endif %}
         {% endfor %}
     </div>

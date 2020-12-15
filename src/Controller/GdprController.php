@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Annotation\Sidebar;
 use App\Form\GdprType;
 use App\Service\Gdpr\GdprManager;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
@@ -13,11 +14,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Breadcrumb("Notice RGPD")
+ * @Sidebar(active={"platform-nav","gdpr-nav"})
  */
 class GdprController extends AbstractController
 {
     /**
      * @Route("/gdpr/notice", name="gdpr_notice")
+     * @Sidebar(reset=true)
      */
     public function notice(GdprManager $gdprManager): Response
     {

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Annotation\Sidebar;
 use App\Entity\Type;
 use App\Form\SearchType;
 use App\Form\TypeType;
@@ -17,6 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Breadcrumb("Types de séance", routeName="type_index")
+ * @Sidebar(active={"type-nav"})
  */
 class TypeController extends AbstractController
 {

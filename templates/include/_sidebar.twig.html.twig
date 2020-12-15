@@ -4,7 +4,7 @@
         {% if  app.user.structure %}
             {# idelibre ne gere pas encore les logos par collectivités#}
             {# <img alt="Logo de la ville" src="{{ asset('assets/img/logo_Libriciel.png') }}">#}
-            <span>{{ app.user.structure.name }}</span>
+            <b>{{ app.user.structure.name }}</b>
         {% else %}
             <span>Administration</span>
         {% endif %}
@@ -14,7 +14,7 @@
 
             {% if  app.user.structure %}
                 {% if is_granted('ROLE_MANAGE_TYPES') %}
-                    <li>
+                    <li class="{{ 'type-nav' in sidebar ? 'active' : '' }}">
                         <a href="{{ path('type_index') }}">
                             <i class="fas fa-tag"> </i>
                             <span>&ensp; Type de séance</span>
@@ -25,7 +25,7 @@
                 {% endif %}
 
                 {% if is_granted('ROLE_MANAGE_USERS') %}
-                    <li>
+                    <li class="{{ 'user-nav' in sidebar ? 'active' : '' }}">
                         <a href="{{ path('user_index') }}">
                             <i class="fas fa-user"></i>
                             <span>&ensp; Utilisateurs</span>
@@ -37,7 +37,7 @@
 
 
                 {% if is_granted('ROLE_MANAGE_PARTIES') %}
-                    <li>
+                    <li class="{{ 'party-nav' in sidebar ? 'active' : '' }}">
                         <a href="{{ path('party_index') }}">
                             <i class="fas fa-users"></i>
                             <span>&ensp; Groupes politiques</span>
@@ -48,7 +48,7 @@
                 {% endif %}
 
                 {% if is_granted('ROLE_MANAGE_EMAIL_TEMPLATES') %}
-                    <li>
+                    <li class="{{ 'email-template-nav' in sidebar ? 'active' : '' }}">
                         <a href="{{ path('email_template_index') }}">
                             <i class="fas fa-envelope"></i>
                             <span>&ensp; Modèles d'email</span>
@@ -60,7 +60,7 @@
 
 
                 {% if is_granted('ROLE_MANAGE_THEMES') %}
-                    <li>
+                    <li class="{{ 'theme-nav' in sidebar ? 'active' : '' }}">
                         <a href="{{ path('theme_index') }}">
                             <i class="fas fa-book"></i>
                             <span>&ensp; Thèmes</span>
@@ -71,7 +71,7 @@
                 {% endif %}
 
                 {% if is_granted('ROLE_MANAGE_SITTINGS') %}
-                    <li>
+                    <li class="{{ 'sitting-nav' in sidebar ? 'active' : '' }}">
                         <a href="{{ path('sitting_index') }}">
                             <i class="ls-font ls-seance" style="font-size: 0.8em; margin-right: -20px"></i>
                             <span>&ensp; Séances</span>
@@ -82,7 +82,7 @@
                 {% endif %}
 
                 {% if is_granted('ROLE_STRUCTURE_ADMIN') %}
-                    <li>
+                    <li class="{{ 'structure-preference-nav' in sidebar ? 'active' : '' }}">
                     <a href="{{ path('structure_preferences') }}">
                         <i class="fas fa-info-circle"></i>
                         <span>&ensp; Informations</span>
@@ -93,7 +93,7 @@
 
 
                 {% if is_granted('ROLE_MANAGE_CONNECTORS') %}
-                    <li>
+                    <li class="{{ 'connector-nav' in sidebar ? 'active' : '' }}">
                         <a href="{{ path('connector_index') }}">
                             <i class="fas fa-cog"></i>
                             <span>&ensp; Connecteurs</span>
@@ -106,7 +106,7 @@
 
 
             {% if is_granted('ROLE_MANAGE_STRUCTURES') %}
-                <li>
+                <li class="{{ 'platform-nav' in sidebar ? 'active' : '' }}">
                     <a href="#">
                         <i class="fas fa-cogs"> </i>
                         <span>&ensp; Plateforme</span>
@@ -114,23 +114,23 @@
                     <ul class="sub-menu">
 
                         {% if is_granted('ROLE_SUPERADMIN') %}
-                            <li>
+                            <li class="{{ 'group-nav' in sidebar ? 'active' : '' }}">
                                 <a href="{{ path('group_index') }}">
                                     Groupes
                                 </a>
                             </li>
-                            <li>
+                            <li class="{{ 'structure-nav' in sidebar ? 'active' : '' }}">
                                 <a href="{{ path('structure_index') }}">
                                     Structures
                                 </a>
                             </li>
                         {% endif %}
-                        <li>
+                        <li class="{{ 'admin-nav' in sidebar ? 'active' : '' }}">
                             <a href="{{ path('admin_index') }}">
                                 Administrateurs
                             </a>
                         </li>
-                        <li>
+                        <li class="{{ 'gdpr-nav' in sidebar ? 'active' : '' }}">
                             <a href="{{ path('gdpr_edit') }}">
                                 RGPD
                             </a>

@@ -7,9 +7,23 @@
     {{ macro.backButton('email_template_index') }}
 {% endblock %}
 
+
+{% block pageForm %}
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <div class="float-right">
+        {% block pageSaveReturn %}{% endblock %}
+    </div>
+    {{ form_end(form) }}
+
+{% endblock %}
+
+{#
 {% block pageSaveReturn %}
     {{ macro.save('email_template_index') }}
 {% endblock %}
+#}
 
 {% block bottomPage %}
     {{ include('include/_mailing_info.html.twig') }}

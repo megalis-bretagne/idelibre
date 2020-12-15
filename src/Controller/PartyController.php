@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Annotation\Sidebar;
 use App\Entity\Party;
 use App\Form\PartyType;
 use App\Repository\PartyRepository;
@@ -16,6 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Breadcrumb("Groupes politiques")
+ * @Sidebar(active={"party-nav"})
  */
 class PartyController extends AbstractController
 {

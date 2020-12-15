@@ -41,23 +41,6 @@
 <script src="{{ asset('node_modules/@libriciel/ls-composants/ls-elements.js') }}"></script>
 
 
-
-<script>
-
-$('document').ready(function() {
-    let path = window.location.pathname;
-    let mainpath = path.split("/")[1];
-
-    let href = ("ls-lib-sidebar a[href*='" + mainpath +"']");
-
-    let selector = document.querySelectorAll(href);
-    let parent =selector[0].parentElement;
-    parent.classList.add('active');
-});
-
-
-</script>
-
 {% block javascripts %}{% endblock %}
 </body>
 </html>
