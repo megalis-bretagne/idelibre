@@ -27,7 +27,6 @@ class CheckListener
             return;
         }
 
-
         // retourne un callable dnc un tableau sous cette forme [class, methode]
         $controllers = $event->getController();
         if (!is_array($controllers)) {
@@ -35,7 +34,6 @@ class CheckListener
         }
 
         $this->handleAnnotation($controllers);
-
 
         $myVar = 'foo'; // Process data
         $this->twig->addGlobal('myVar', $myVar);
@@ -55,7 +53,6 @@ class CheckListener
         $this->handleMethodAnnotation($controller, $method);
 
         dd('over');
-
     }
 
     private function handleClassAnnotation(ReflectionClass $controller)
