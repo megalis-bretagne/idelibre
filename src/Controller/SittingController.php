@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Annotation\Sidebar;
 use App\Entity\Sitting;
 use App\Form\SearchType;
 use App\Form\SittingType;
@@ -25,6 +26,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Breadcrumb("Seance", routeName="sitting_index")
+ * @Sidebar(active={"sitting-nav"})
  */
 class SittingController extends AbstractController
 {

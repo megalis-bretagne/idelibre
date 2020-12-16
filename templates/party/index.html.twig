@@ -14,16 +14,16 @@
     <table class="table table-striped bg-white">
         <thead>
         <tr class="d-flex">
-            <th class="col-9">Intitulé</th>
-            <th class="col-3">Actions</th>
+            <th class="col-10">Intitulé</th>
+            <th class="col-2">Actions</th>
         </tr>
         </thead>
         <tbody>
 
         {% for party in parties %}
             <tr class="d-flex">
-                <td class="col-9">{{ party.name }} </td>
-                <td class="col-3">
+                <td class="col-10">{{ party.name }} </td>
+                <td class="col-2">
                     {{ macros.editButton('party_edit', party.id) }}
 
                     {{ macros.button_open_modal_delete(

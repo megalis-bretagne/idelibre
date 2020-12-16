@@ -1,0 +1,142 @@
+@font-face {
+    font-family: 'Libriciel-font';
+    src: url('./webfonts/Libriciel-font.eot?dxb4p6');
+    src: url('./webfonts/Libriciel-font.eot?dxb4p6#iefix') format('embedded-opentype'),
+    url('./webfonts/Libriciel-font.ttf?dxb4p6') format('truetype'),
+    url('./webfonts/Libriciel-font.woff?dxb4p6') format('woff'),
+    url('./webfonts/Libriciel-font.svg?dxb4p6#Libriciel-font') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.ls-font {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'Libriciel-font' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.ls-stamp:before {
+    content: "\e917";
+}
+
+.ls-seance:before {
+    content: "\e900";
+}
+
+.ls-modele:before {
+    content: "\e901";
+}
+
+.ls-theme:before {
+    content: "\e902";
+}
+
+.ls-fusion:before {
+    content: "\e903";
+}
+
+.ls-cachet-o:before {
+    content: "\e904";
+}
+
+.ls-web-GFC:before {
+    content: "\e905";
+}
+
+.ls-asalae:before {
+    content: "\e906";
+}
+
+.ls-cachet:before {
+    content: "\e907";
+}
+
+.ls-i_Parapheur .path1:before {
+    content: "\e908";
+    color: rgb(0, 0, 0);
+    opacity: 0.3373;
+}
+
+.ls-i_Parapheur .path2:before {
+    content: "\e909";
+    margin-left: -1.25em;
+    color: rgb(0, 0, 0);
+}
+
+.ls-i_Parapheur .path3:before {
+    content: "\e90a";
+    margin-left: -1.25em;
+    color: rgb(0, 0, 0);
+}
+
+.ls-i-delibRE .path1:before {
+    content: "\e90b";
+    color: rgb(0, 0, 0);
+}
+
+.ls-i-delibRE .path2:before {
+    content: "\e90c";
+    margin-left: -1.0419921875em;
+    color: rgb(0, 0, 0);
+    opacity: 0.5020;
+}
+
+.ls-i-delibRE .path3:before {
+    content: "\e90d";
+    margin-left: -1.0419921875em;
+    color: rgb(0, 0, 0);
+}
+
+.ls-i-delibRE .path4:before {
+    content: "\e90e";
+    margin-left: -1.0419921875em;
+    color: rgb(0, 0, 0);
+}
+
+.ls-Pastell:before {
+    content: "\e90f";
+}
+
+.ls-S2low:before {
+    content: "\e910";
+}
+
+.ls-signature:before {
+    content: "\e911";
+}
+
+.ls-signature-o:before {
+    content: "\e912";
+}
+
+.ls-web-CIL:before {
+    content: "\e913";
+}
+
+.ls-web-delib .path1:before {
+    content: "\e914";
+    color: rgb(0, 0, 0);
+}
+
+.ls-web-delib .path2:before {
+    content: "\e915";
+    margin-left: -1.25em;
+    color: rgb(0, 0, 0);
+    opacity: 0.7216;
+}
+
+.ls-web-delib .path3:before {
+    content: "\e916";
+    margin-left: -1.25em;
+    color: rgb(0, 0, 0);
+    opacity: 0.5020;
+}

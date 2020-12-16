@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Annotation\Sidebar;
 use App\Form\CsvType;
 use App\Service\Csv\CsvManager;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
@@ -14,6 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Breadcrumb("Utilisateurs", routeName="user_index")
+ * @Sidebar(active={"user-nav"})
  */
 class CsvController extends AbstractController
 {

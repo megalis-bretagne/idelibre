@@ -2,6 +2,7 @@
 
 namespace App\Controller\Connector;
 
+use App\Annotation\Sidebar;
 use App\Form\Connector\ComelusConnectorType;
 use App\Repository\Connector\ComelusConnectorRepository;
 use App\Service\Connector\ComelusConnectorManager;
@@ -14,6 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Breadcrumb("Configuration des connecteurs", routeName="connector_index")
+ * @Sidebar(active={"connector-nav"})
  */
 class ComelusConnectorController extends AbstractController
 {

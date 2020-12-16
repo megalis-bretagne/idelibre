@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Annotation\Sidebar;
 use App\Entity\EmailTemplate;
 use App\Form\EmailTemplateType;
 use App\Repository\EmailTemplateRepository;
@@ -17,6 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Breadcrumb("Modèle d'email", routeName="email_template_index")
+ * @Sidebar(active={"email-template-nav"})
  */
 class EmailTemplateController extends AbstractController
 {

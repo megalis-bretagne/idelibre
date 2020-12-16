@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Annotation\Sidebar;
 use App\Entity\Theme;
 use App\Form\ThemeType;
 use App\Form\ThemeWithParentType;
@@ -16,6 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Breadcrumb("Thèmes", routeName="theme_index")
+ * @Sidebar(active={"theme-nav"})
  */
 class ThemeController extends AbstractController
 {

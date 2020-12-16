@@ -2,6 +2,7 @@
 
 namespace App\Controller\Connector;
 
+use App\Annotation\Sidebar;
 use App\Repository\Connector\ComelusConnectorRepository;
 use App\Repository\Connector\LsmessageConnectorRepository;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
@@ -12,6 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Breadcrumb("Configuration des connecteurs")
+ * @Sidebar(active={"connector-nav"})
  */
 class ConnectorController extends AbstractController
 {

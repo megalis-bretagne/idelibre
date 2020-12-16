@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Annotation\Sidebar;
 use App\Entity\Group;
 use App\Form\GroupStructureType;
 use App\Form\GroupType;
@@ -18,6 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Breadcrumb("Groupe", routeName="group_index")
+ * @Sidebar(active={"platform-nav","group-nav"})
  */
 class GroupController extends AbstractController
 {

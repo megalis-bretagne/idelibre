@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Annotation\Sidebar;
 use App\Entity\Structure;
 use App\Form\SearchType;
 use App\Form\StructureInformationType;
@@ -21,6 +22,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Breadcrumb("Structure", routeName="structure_index")
+ * @Sidebar(active={"platform-nav","structure-nav"})
  */
 class StructureController extends AbstractController
 {
@@ -133,6 +135,7 @@ class StructureController extends AbstractController
      * @Route("/structure/preferences", name="structure_preferences")
      * @IsGranted("ROLE_STRUCTURE_ADMIN")
      * @Breadcrumb("Préférences")
+     * @Sidebar(reset=true, active={"structure-preference-nav"})
      */
     public function preferences(Request $request, StructureManager $structureManager): Response
     {

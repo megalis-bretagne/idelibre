@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-md navbar-dark bg-ls-dark">
+<nav class="navbar navbar-expand-md navbar-dark bg-ls-dark fixed-top" style="height: 30px">
     <a class="nav-item mr-3" href="#"><img style="height: 22px; padding-bottom: 2px;"
                                            src="{{ asset('assets/img/id-color-white.svg') }}"
                                            alt="idelibre" class="img-fluid"></a>
@@ -10,70 +10,6 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-
-            {% if app.user %}
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                       data-toggle="dropdown"
-                       aria-haspopup="true" aria-expanded="false">
-                        Administration
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        {% if is_granted('ROLE_SUPERADMIN') %}
-                            <a class="dropdown-item" href="{{ path('group_index') }}">Groupes</a>
-                            <a class="dropdown-item" href="{{ path('gdpr_edit') }}">Rgpd</a>
-                        {% endif %}
-                        {% if is_granted('ROLE_MANAGE_STRUCTURES') %}
-                            <a class="dropdown-item" href="{{ path('structure_index') }}">Structures</a>
-                            <a class="dropdown-item" href="{{ path('admin_index') }}">Administrateurs</a>
-                        {% endif %}
-                        {% if is_granted('ROLE_STRUCTURE_ADMIN') %}
-                            <a class="dropdown-item" href="{{ path('structure_preferences') }}">Informations</a>
-                        {% endif %}
-
-
-                    </div>
-                </li>
-
-                {% if  app.user.structure %}
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                           data-toggle="dropdown"
-                           aria-haspopup="true" aria-expanded="false">
-                            Utilisation
-                        </a>
-
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            {% if is_granted('ROLE_MANAGE_TYPES') %}
-                                <a class="dropdown-item" href="{{ path('type_index') }}">Types de séance</a>
-                            {% endif %}
-
-                            {% if is_granted('ROLE_MANAGE_USERS') %}
-                                <a class="dropdown-item" href="{{ path('user_index') }}">Utilisateurs</a>
-                            {% endif %}
-
-                            {% if is_granted('ROLE_MANAGE_PARTIES') %}
-                                <a class="dropdown-item" href="{{ path('party_index') }}">Groupes politique</a>
-                            {% endif %}
-
-                            {% if is_granted('ROLE_MANAGE_EMAIL_TEMPLATES') %}
-                                <a class="dropdown-item" href="{{ path('email_template_index') }}">Modèles d'email</a>
-                            {% endif %}
-
-                            {% if is_granted('ROLE_MANAGE_THEMES') %}
-                                <a class="dropdown-item" href="{{ path('theme_index') }}">Thèmes</a>
-                            {% endif %}
-                            {% if is_granted('ROLE_MANAGE_SITTINGS') %}
-                                <a class="dropdown-item" href="{{ path('sitting_index') }}">Séances</a>
-                            {% endif %}
-                            {% if is_granted('ROLE_MANAGE_CONNECTORS') %}
-                                <a class="dropdown-item" href="{{ path('connector_index') }}">Connecteurs</a>
-                            {% endif %}
-                        </div>
-                    </li>
-                {% endif %}
-
-            {% endif %}
         </ul>
         {% if app.user %}
             <ul class="navbar-nav">
@@ -84,25 +20,26 @@
                         {{ app.user.username }}
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="{{ path('app_logout') }}">
-                            <span class="fas fa-sign-out-alt"></span> Se déconnecter
+
+                        <a href="{{ path('user_preferences') }}" class="dropdown-item">
+                            <span class="fas fa-user-cog"></span> Préférences utilisateur
                         </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="{{ path('gdpr_notice') }}" class="dropdown-item">
+                            <span class="fas fa-user-secret"></span> Politique de confidentialité
+                        </a>
+
                         {% if (is_granted('ROLE_MANAGE_STRUCTURES') and app.user.structure) %}
                             <div class="dropdown-divider"></div>
                             <a href="{{ path('security_impersonate_exit') }}" class="dropdown-item">
                                 <span class="fas fa-sign-out-alt"></span> {{ app.user.structure.name }}
                             </a>
                         {% endif %}
-                        <div class="dropdown-divider"></div>
-                        <a href="{{ path('user_preferences') }}" class="dropdown-item">
-                            <span class="fas fa-user-cog"></span> Préférences utilisateur
-                        </a>
 
                         <div class="dropdown-divider"></div>
-                        <a href="{{ path('gdpr_notice') }}" class="dropdown-item">
-                            <span class="fas fa-user-secret"></span> Notice rgpd
+                        <a class="dropdown-item" href="{{ path('app_logout') }}">
+                            <span class="fas fa-sign-out-alt"></span> Se déconnecter
                         </a>
-
                     </div>
 
                 </li>

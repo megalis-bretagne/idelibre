@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Annotation\Sidebar;
 use App\Entity\User;
 use App\Form\SearchType;
 use App\Form\UserPreferenceType;
@@ -18,6 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Breadcrumb("Utilisateurs", routeName="user_index")
+ * @Sidebar(active={"user-nav"})
  */
 class UserController extends AbstractController
 {

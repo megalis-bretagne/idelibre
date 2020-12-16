@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Annotation\Sidebar;
 use App\Entity\User;
 use App\Form\SearchType;
 use App\Form\SuperUserType;
@@ -18,6 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Breadcrumb("Administrateurs", routeName="admin_index" )
+ * @Sidebar(active={"platform-nav","admin-nav"})
  */
 class AdminController extends AbstractController
 {
