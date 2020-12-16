@@ -7,6 +7,40 @@
     {{ macro.backButton('email_template_index') }}
 {% endblock %}
 
-{% block pageSaveReturn %}
-    {{ macro.save('email_template_index') }}
+
+{% block pageForm %}
+
+    {{ form_start(form) }}
+
+    {{ form.category is defined ? form_row(form.category) : '' }}
+    {{ form.name is defined ? form_row(form.name) : '' }}
+    {{ form.type is defined ? form_row(form.type) : '' }}
+    {{ form.subject is defined ? form_row(form.subject) : '' }}
+
+
+    {{ form_label(form.content) }}
+    <button type="button"
+            class="btn btn-outline-info borderless float-right"
+            data-toggle="popover"
+            title="Liste des balises"
+            data-html="true"
+            data-content="{{ include('include/_mailing_info.html.twig') }}">Balises
+    </button>
+    {{ form_errors(form.content) }}
+    {{ form_widget(form.content) }}
+
+    {% if form.isAttachment is defined %}
+        {{ form_row(form.isAttachment) }}
+        {{ include('include/_attachment_warning.html.twig') }}
+    {% endif %}
+    <div class="float-right">
+        {% block pageSaveReturn %}{{ macro.save('email_template_index') }}{% endblock %}
+    </div>
+    {{ form_end(form) }}
+
+{% endblock %}
+
+
+{% block javascripts %}
+    <script src="{{ asset('assets/enablePopover.js') }}"></script>
 {% endblock %}

@@ -37,11 +37,7 @@ class SidebarListener
         $this->handleAnnotation($controllers);
 
         $this->twig->addGlobal('sidebar', $this->activeNavs);
-
-        //$myVar = 'foo'; // Process data
-        //$this->twig->addGlobal('myVar', $myVar);
     }
-
 
     private function handleAnnotation(iterable $controllers)
     {
@@ -53,15 +49,12 @@ class SidebarListener
             throw new RuntimeException('Failed to read annotation!');
         }
 
-
         $this->setActiveNav($this->annotationReader->getClassAnnotations($controller));
 
         $method = $controller->getMethod($method);
         $this->setActiveNav($this->annotationReader->getMethodAnnotations($method));
 
-       // dd($this->activeNavs);
     }
-
 
     private function setActiveNav(array $annotations)
     {
@@ -76,7 +69,6 @@ class SidebarListener
         }
     }
 
-
     private function handleClassAnnotation(ReflectionClass $controller)
     {
         $annotation = $this->annotationReader->getClassAnnotation($controller, Sidebar::class);
@@ -85,10 +77,6 @@ class SidebarListener
             $this->activeNavs = array_merge($this->activeNavs, $annotation->active);
         }
     }
-
-
-
-
 
     private function handleMethodAnnotation(ReflectionClass $controller, $method)
     {
@@ -105,8 +93,6 @@ class SidebarListener
             $this->activeNavs = array_merge($this->activeNavs, $annotation->active);
         }
 
-
         dd($this->activeNavs);
-
     }
 }

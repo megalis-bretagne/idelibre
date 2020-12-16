@@ -47,21 +47,10 @@ $pdf = $snappy->getOutputFromHtml($html, array(
     'enable-internal-links' => true
 
 
-
-Passer dans un header l'etat dans un header pour le recupérer  apres
-
-
 ANOUK
-
-
+-----------------------
 Supprimer
 Suppression de la séance
 dans le modal preciser le nom de l'object nom se la seance par exemple
 
 selectOrButton s'il y a peu d'element (a voir)
-
-btn afficher les balises  close onclick  plutot que d'avoir un gros text en bas
-
-
-Le fichier de convocation ne sera joint que si sa taille est < 500 ko   mettre sous le case à cocher
-
