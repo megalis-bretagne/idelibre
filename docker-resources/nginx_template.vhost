@@ -1,0 +1,56 @@
+server {
+    listen 80 default_server;
+    server_name URL;
+
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+    }
+
+    location / {
+        return 301 https://$host$request_uri;
+    }
+}
+
+
+server {
+    listen      443 ssl default_server;
+    server_name URL;
+
+
+    ssl_certificate /etc/letsencrypt/live/URL/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/URL/privkey.pem;
+
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+
+
+    root   /app/public;
+    index  index.php index.html;
+
+    access_log /var/log/nginx/idelibre.local_ssl-access.log;
+    error_log /var/log/nginx/idelibre.local_ssl-error.log;
+
+    location ~* \.(?:js|css|html)$ {
+        expires    -1;
+    }
+
+    location / {
+        try_files $uri $uri/ /index.php?$args;
+    }
+
+    location ~ \.php$ {
+        try_files $uri =404;
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        fastcgi_pass   fpm-idelibre:9000;
+        include fastcgi_params;
+        fastcgi_index   index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param PATH_INFO $fastcgi_path_info;
+            fastcgi_read_timeout 300;
+    }
+
+    client_body_temp_path /dataTmp;
+    client_max_body_size 2048M;
+
+}
