@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Subscriber;
+namespace App\Listener;
 
 use App\Annotation\Sidebar;
 use Doctrine\Common\Annotations\Reader;
@@ -53,7 +53,6 @@ class SidebarListener
 
         $method = $controller->getMethod($method);
         $this->setActiveNav($this->annotationReader->getMethodAnnotations($method));
-
     }
 
     private function setActiveNav(array $annotations)
