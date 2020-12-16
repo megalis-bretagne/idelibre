@@ -1,0 +1,38 @@
+version: '3.4'
+
+services:
+  fpm-idelibre:
+    container_name: fpm-idelibre
+    image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/idelibre/idelibre:dockerization
+
+    env_file:
+      - .env.docker
+    volumes:
+      - data-public:/app/public
+      - ./docker-resources/zz-idelibre.conf:/usr/local/etc/php-fpm.d/zz-idelibre.conf
+    command: ["/app/docker-resources/initApp.sh"]
+
+  nginx-comelus:
+    container_name: nginx-idelibre
+    image: nginx:1.17
+    depends_on:
+      - fpm-idelibre
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./docker-resources/nginx.vhost:/etc/nginx/conf.d/default.conf
+      - ./docker-resources/nginx.conf:/etc/nginx/nginx.conf
+      - ./docker-resources/options-ssl-nginx.conf:/etc/letsencrypt/options-ssl-nginx.conf
+      - /data/certbot/conf:/etc/letsencrypt
+      - /data/certbot/www:/var/www/certbot
+      - data-public:/app/public:ro
+
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - /data/certbot/conf:/etc/letsencrypt
+      - /data/certbot/www:/var/www/certbot
+
+volumes:
+  data-public:
