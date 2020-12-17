@@ -47,7 +47,6 @@ class TypeType extends AbstractType
                 },
                 'multiple' => true,
             ]);
-
     }
 
     public function configureOptions(OptionsResolver $resolver)

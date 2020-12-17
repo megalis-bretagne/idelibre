@@ -28,10 +28,11 @@
     </button>
     {{ form_errors(form.content) }}
     {{ form_widget(form.content) }}
-
-    {{ form_row(form.isAttachment) }}
-    {{ include('include/_attachment_warning.html.twig') }}
-
+    {{ form_help(form.content) }}
+    <div class="mt-2">
+        {{ form_row(form.isAttachment) }}
+        {{ include('include/_attachment_warning.html.twig') }}
+    </div>
     <div class="float-right">
         {% block pageSaveReturn %}{{ macro.save('email_template_index') }}{% endblock %}
     </div>

@@ -61,6 +61,7 @@ class EmailTemplateType extends AbstractType
         if (!$this->isForgetPassword($options['data'] ?? null)) {
             $builder->add('isAttachment', CheckboxType::class, [
                 'required' => false,
+                'label_attr' => ['class' => 'switch-custom'],
                 'label' => 'Joindre le fichier de convocation',
             ]);
         }

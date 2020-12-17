@@ -30,7 +30,9 @@
     {{ form_widget(form.content) }}
 
     {% if form.isAttachment is defined %}
-        {{ form_row(form.isAttachment) }}
+        <div class="mt-2">
+            {{ form_row(form.isAttachment) }}
+        </div>
         {{ include('include/_attachment_warning.html.twig') }}
     {% endif %}
     <div class="float-right">
