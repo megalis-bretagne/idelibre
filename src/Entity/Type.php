@@ -50,9 +50,16 @@ class Type
      */
     private $structure;
 
+    /**
+     * @ORM\JoinTable(name="type_secretary")
+     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="authorizedTypes")
+     */
+    private $authorizedSecretaries;
+
     public function __construct()
     {
         $this->associatedUsers = new ArrayCollection();
+        $this->authorizedSecretaries = new ArrayCollection();
     }
 
     public function getId(): ?string
@@ -116,5 +123,29 @@ class Type
     public function getEmailTemplate()
     {
         return $this->emailTemplate;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getAuthorizedSecretaries(): Collection
+    {
+        return $this->authorizedSecretaries;
+    }
+
+    public function addAuthorizedSecretary(User $authorizedSecretary): self
+    {
+        if (!$this->authorizedSecretaries->contains($authorizedSecretary)) {
+            $this->authorizedSecretaries[] = $authorizedSecretary;
+        }
+
+        return $this;
+    }
+
+    public function removeAuthorizedSecretary(User $authorizedSecretary): self
+    {
+        $this->authorizedSecretaries->removeElement($authorizedSecretary);
+
+        return $this;
     }
 }

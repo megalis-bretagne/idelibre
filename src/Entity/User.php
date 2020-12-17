@@ -104,9 +104,15 @@ class User implements UserInterface
      */
     private $gender;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Type::class, mappedBy="authorizedSecretaries")
+     */
+    private $authorizedTypes;
+
     public function __construct()
     {
         $this->associatedTypes = new ArrayCollection();
+        $this->authorizedTypes = new ArrayCollection();
     }
 
     public function getId(): ?string
@@ -306,6 +312,33 @@ class User implements UserInterface
     public function setGender(?int $gender): self
     {
         $this->gender = $gender;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Type[]
+     */
+    public function getAuthorizedTypes(): Collection
+    {
+        return $this->authorizedTypes;
+    }
+
+    public function addAuthorizedType(Type $authorizedType): self
+    {
+        if (!$this->authorizedTypes->contains($authorizedType)) {
+            $this->authorizedTypes[] = $authorizedType;
+            $authorizedType->addAuthorizedSecretary($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAuthorizedType(Type $authorizedType): self
+    {
+        if ($this->authorizedTypes->removeElement($authorizedType)) {
+            $authorizedType->removeAuthorizedSecretary($this);
+        }
 
         return $this;
     }

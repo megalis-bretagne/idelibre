@@ -31,10 +31,23 @@ class TypeType extends AbstractType
                 'query_builder' => $this->userRepository
                     ->findActorByStructure($options['structure']),
                 'choice_label' => function (User $user) {
-                    return  sprintf('%s %s <%s>', $user->getFirstName(), $user->getLastName(), $user->getUsername());
+                    return sprintf('%s %s <%s>', $user->getFirstName(), $user->getLastName(), $user->getUsername());
+                },
+                'multiple' => true,
+            ])
+            ->add('authorizedSecretaries', EntityType::class, [
+                'placeholder' => 'Sélectionner les secretaires autorisées',
+                'required' => false,
+                'label' => 'Secretaires autorisées',
+                'class' => User::class,
+                'query_builder' => $this->userRepository
+                    ->findSecretariesByStructure($options['structure']),
+                'choice_label' => function (User $user) {
+                    return sprintf('%s %s <%s>', $user->getFirstName(), $user->getLastName(), $user->getUsername());
                 },
                 'multiple' => true,
             ]);
+
     }
 
     public function configureOptions(OptionsResolver $resolver)
