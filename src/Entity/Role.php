@@ -33,6 +33,16 @@ class Role
      */
     private $composites = [];
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=false)
+     */
+    private $prettyName;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=false)
+     */
+    private $isInStructureRole;
+
     public function getId(): ?string
     {
         return $this->id;
@@ -70,6 +80,30 @@ class Role
         if (!in_array($composite, $this->composites)) {
             $this->composites[] = $composite;
         }
+
+        return $this;
+    }
+
+    public function getPrettyName(): ?string
+    {
+        return $this->prettyName;
+    }
+
+    public function setPrettyName(?string $prettyName): self
+    {
+        $this->prettyName = $prettyName;
+
+        return $this;
+    }
+
+    public function getIsInStructureRole(): ?bool
+    {
+        return $this->isInStructureRole;
+    }
+
+    public function setIsInStructureRole(?bool $isInStructureRole): self
+    {
+        $this->isInStructureRole = $isInStructureRole;
 
         return $this;
     }
