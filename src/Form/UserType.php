@@ -2,9 +2,12 @@
 
 namespace App\Form;
 
+use App\Entity\Party;
 use App\Entity\Role;
 use App\Entity\User;
+use App\Repository\PartyRepository;
 use App\Repository\RoleRepository;
+use App\Service\role\RoleManager;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -17,10 +20,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class UserType extends AbstractType
 {
     private RoleRepository $roleRepository;
+    private PartyRepository $partyRepository;
+    private RoleManager $roleManager;
 
-    public function __construct(RoleRepository $roleRepository)
+    public function __construct(RoleRepository $roleRepository, PartyRepository $partyRepository, RoleManager $roleManager)
     {
         $this->roleRepository = $roleRepository;
+        $this->partyRepository = $partyRepository;
+        $this->roleManager = $roleManager;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -36,7 +43,7 @@ class UserType extends AbstractType
             ->add('email', EmailType::class, [
                 'label' => 'Email', ]);
 
-        if (!$options['isEditMode']) {
+        if ($this->isNew($options)) {
             $builder->add('role', EntityType::class, [
                 'required' => true,
                 'label' => 'Profil',
@@ -46,12 +53,27 @@ class UserType extends AbstractType
             ]);
         }
 
+        if ($this->isNewOrActor($options)) {
+            $builder
+                ->add('title', TextType::class, [
+                    'required' => false,
+                    'label' => 'Titre',
+                ])
+                ->add('party', EntityType::class, [
+                    'required' => false,
+                    'label' => 'Groupe politique',
+                    'class' => Party::class,
+                    'query_builder' => $this->partyRepository->findByStructure($options['structure']),
+                    'choice_label' => 'name',
+                ]);
+        }
+
         $builder->add('plainPassword', RepeatedType::class, [
             'mapped' => false,
             'type' => PasswordType::class,
             'invalid_message' => 'Les mots de passes ne sont pas identiques',
             'options' => ['attr' => ['class' => 'password-field']],
-            'required' => !$options['isEditMode'],
+            'required' => $this->isNew($options),
             'first_options' => ['label' => 'Mot de passe'],
             'second_options' => ['label' => 'Confirmer'],
         ]);
@@ -61,7 +83,30 @@ class UserType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
-            'isEditMode' => false,
+            'structure' => null,
         ]);
+    }
+
+    private function isNew(array $options): bool
+    {
+        if (!isset($options['data'])) {
+            return true;
+        }
+        /** @var User $user */
+        $user = $options['data'];
+
+        return !$user->getId();
+    }
+
+    private function isNewOrActor(array $options): bool
+    {
+        if ($this->isNew($options)) {
+            return true;
+        }
+
+        /** @var User $user */
+        $user = $options['data'];
+
+        return $user->getRole()->getId() === $this->roleManager->getActorRole()->getId();
     }
 }

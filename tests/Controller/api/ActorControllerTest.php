@@ -57,7 +57,7 @@ class ActorControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(200);
 
         $actors = json_decode($this->client->getResponse()->getContent(), true);
-        $this->assertCount(3, $actors);
+        $this->assertCount(4, $actors);
         $this->assertSame('libriciel', $actors[0]['lastName']);
     }
 
@@ -81,7 +81,7 @@ class ActorControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(200);
 
         $actorsNotInSitting = json_decode($this->client->getResponse()->getContent(), true);
-        $this->assertCount(1, $actorsNotInSitting);
+        $this->assertCount(2, $actorsNotInSitting);
     }
 
 
