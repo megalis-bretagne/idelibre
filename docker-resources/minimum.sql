@@ -2,23 +2,22 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 --peut etre faire un minimum_test.sql pour eviter les collisions de nom
 
-INSERT INTO role (id, name, composites)
-VALUES ('94663bed-16e9-4990-8493-323c3d5e5565', 'SuperAdmin', '["ROLE_SUPERADMIN", "ROLE_MANAGE_STRUCTURES"]');
+INSERT INTO role (id, name, composites, is_in_structure_role, pretty_name)
+VALUES ('94663bed-16e9-4990-8493-323c3d5e5565', 'SuperAdmin', '["ROLE_SUPERADMIN", "ROLE_MANAGE_STRUCTURES"]', false, 'Super administrateur');
 
-INSERT INTO role (id, name, composites)
-VALUES ('306ed58f-7219-49ce-b269-7b7bce7ed3aa', 'GroupAdmin', '["ROLE_GROUP_ADMIN", "ROLE_MANAGE_STRUCTURES"]');
+INSERT INTO role (id, name, composites, is_in_structure_role, pretty_name)
+VALUES ('306ed58f-7219-49ce-b269-7b7bce7ed3aa', 'GroupAdmin', '["ROLE_GROUP_ADMIN", "ROLE_MANAGE_STRUCTURES"]', false, 'Administrateur de groupe');
 
-INSERT INTO role (id, name, composites)
-VALUES ('160e7561-7ffa-459c-ae9b-4da32b49e1b1', 'Secretary', '["ROLE_SECRETARY"]');
+INSERT INTO role (id, name, composites, is_in_structure_role, pretty_name)
+VALUES ('160e7561-7ffa-459c-ae9b-4da32b49e1b1', 'Secretary', '["ROLE_SECRETARY"]', true, 'Secrétaire');
 
-INSERT INTO role (id, name, composites)
-VALUES ('230a1c1d-eaec-4fb7-9ba7-d7ac47dc97bb', 'Actor', '["ROLE_ACTOR"]');
+INSERT INTO role (id, name, composites, is_in_structure_role, pretty_name)
+VALUES ('230a1c1d-eaec-4fb7-9ba7-d7ac47dc97bb', 'Actor', '["ROLE_ACTOR"]', true, 'Elu');
+
+INSERT INTO role (id, name, composites, is_in_structure_role, pretty_name)
+VALUES ('17f4b8ba-7a34-4463-9901-88b619a64be3', 'Admin', '["ROLE_STRUCTURE_ADMIN"]', true, 'Administrateur');
 
 
-
-
-INSERT INTO role (id, name, composites)
-VALUES ('17f4b8ba-7a34-4463-9901-88b619a64be3', 'Admin', '["ROLE_STRUCTURE_ADMIN"]');
 
 INSERT INTO "user" (id, structure_id, email, username, role_id, password, first_name, last_name)
 values (UUID_GENERATE_V4(), NULL, 'superadmin@exemple.org', 'superadminprov', '94663bed-16e9-4990-8493-323c3d5e5565',
