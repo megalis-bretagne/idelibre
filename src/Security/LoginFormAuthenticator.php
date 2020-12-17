@@ -34,8 +34,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         ImpersonateStructure $impersonateStructure,
         UserPasswordEncoderInterface $passwordEncoder,
         Security $security
-    )
-    {
+    ) {
         $this->userRepository = $userRepository;
         $this->router = $router;
         $this->csrfTokenManager = $csrfTokenManager;

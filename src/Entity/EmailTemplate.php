@@ -14,6 +14,7 @@ class EmailTemplate
 {
     public const CATEGORY_CONVOCATION = 'convocation';
     public const CATEGORY_INVITATION = 'invitation';
+    /** @suppressWarnings("squid:S2068") */ // This is not an hardcoded password
     public const CATEGORY_RESET_PASSWORD = 'reset_password';
 
     /**

@@ -4,6 +4,7 @@ namespace App\Service\EmailTemplate;
 
 class DefaultTemplate
 {
+    /** @suppressWarnings("squid:S2068") */ // This is not an hardcoded password
     public const FORGET_PASSWORD = 'Bonjour, <br>
 Vous avez effectué une demande de remise à zéro de mot de passe <br>
 Veuillez Cliquer ici pour le réinitialiser #reinitLink#';
