@@ -30,11 +30,11 @@ class UserType extends AbstractType
                 'label' => 'Prénom',
             ])
             ->add('lastName', TextType::class, [
-                'label' => 'Nom',])
+                'label' => 'Nom', ])
             ->add('username', TextType::class, [
-                'label' => 'Nom d\'utilisateur',])
+                'label' => 'Nom d\'utilisateur', ])
             ->add('email', EmailType::class, [
-                'label' => 'Email',]);
+                'label' => 'Email', ]);
 
         if (!$options['isEditMode']) {
             $builder->add('role', EntityType::class, [
@@ -42,7 +42,7 @@ class UserType extends AbstractType
                 'label' => 'Profil',
                 'class' => Role::class,
                 'choice_label' => 'prettyName',
-                'query_builder' => $this->roleRepository->findInStructureQueryBuilder()
+                'query_builder' => $this->roleRepository->findInStructureQueryBuilder(),
             ]);
         }
 

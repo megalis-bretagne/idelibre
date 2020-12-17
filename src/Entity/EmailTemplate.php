@@ -15,8 +15,6 @@ class EmailTemplate
     public const CATEGORY_CONVOCATION = 'convocation';
     public const CATEGORY_INVITATION = 'invitation';
 
-
-
     /**
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="UUID")
