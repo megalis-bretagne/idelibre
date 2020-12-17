@@ -93,6 +93,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             ->setUsername('otherUser@libriciel')
             ->setFirstName('otherUser')
             ->setLastname('libriciel')
+            ->setRole($roleActor)
             ->setStructure($structureLibriciel)
             ->setPassword($this->passwordEncoder->encodePassword($otherUserLibriciel, 'password'));
 

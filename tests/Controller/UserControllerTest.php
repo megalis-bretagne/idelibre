@@ -3,6 +3,7 @@
 namespace App\Tests\Controller;
 
 use App\Controller\UserController;
+use App\DataFixtures\RoleFixtures;
 use App\DataFixtures\UserFixtures;
 use App\Entity\Role;
 use App\Entity\User;
@@ -42,6 +43,7 @@ class UserControllerTest extends WebTestCase
 
         $this->loadFixtures([
             UserFixtures::class,
+            RoleFixtures::class
         ]);
     }
 

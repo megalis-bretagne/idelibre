@@ -7,7 +7,31 @@
     {{ macro.backButton('user_index') }}
 {% endblock %}
 
-{% block pageSaveReturn %}
-    {{ macro.save('user_index') }}
+{% block pageForm %}
+
+    {{ form_start(form) }}
+
+    {{ form_row(form.firstName) }}
+    {{ form_row(form.lastName) }}
+    {{ form_row(form.username) }}
+    {{ form_row(form.email) }}
+    {{ form_row(form.role) }}
+
+    <div id="actor-info" style="display: none" >
+        {{ form_row(form.party) }}
+        {{ form_row(form.title) }}
+    </div>
+
+    {{ form_widget(form) }}
+    <div class="float-right">
+        {% block pageSaveReturn %}{{ macro.save('user_index') }}{% endblock %}
+    </div>
+    {{ form_end(form) }}
+
 {% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('assets/createUser.js') }}"></script>
+{% endblock %}
+
 

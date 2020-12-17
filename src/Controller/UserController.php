@@ -55,7 +55,7 @@ class UserController extends AbstractController
      */
     public function add(Request $request, UserManager $manageUser): Response
     {
-        $form = $this->createForm(UserType::class);
+        $form = $this->createForm(UserType::class, null, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $manageUser->save(
@@ -81,7 +81,7 @@ class UserController extends AbstractController
      */
     public function edit(User $user, Request $request, UserManager $manageUser): Response
     {
-        $form = $this->createForm(UserType::class, $user, ['isEditMode' => true]);
+        $form = $this->createForm(UserType::class, $user, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $manageUser->save(

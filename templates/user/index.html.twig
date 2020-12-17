@@ -28,7 +28,7 @@
         <tr class="d-flex">
             <th class="col-3">{{ knp_pagination_sortable(users, 'Nom', 'u.lastName') }}</th>
             <th class="col-4">{{ knp_pagination_sortable(users, 'Nom d\'utilisateur', 'u.username') }}</th>
-            <th class="col-3">{{ knp_pagination_sortable(users, 'Role', 'r.name') }}</th>
+            <th class="col-3">{{ knp_pagination_sortable(users, 'Role', 'r.prettyName') }}</th>
             <th class="col-2">Actions</th>
         </tr>
         </thead>
@@ -38,7 +38,7 @@
             <tr class="d-flex">
                 <td class="col-3">{{ user.lastName }} </td>
                 <td class="col-4">{{ user.username }} </td>
-                <td class="col-3">{{ user.role ? user.role.name : '' }} </td>
+                <td class="col-3">{{ user.role ? user.role.prettyName : '' }} </td>
                 <td class="col-2">
                     {{ macros.editButton('user_edit', user.id) }}
                     {{ macros.button_open_modal_delete(
