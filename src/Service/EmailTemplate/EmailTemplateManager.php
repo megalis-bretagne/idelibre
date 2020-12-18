@@ -6,6 +6,7 @@ use App\Entity\EmailTemplate;
 use App\Entity\Structure;
 use App\Repository\EmailTemplateRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\MakerBundle\Str;
 
 class EmailTemplateManager
 {
@@ -52,5 +53,15 @@ Un dossier a été mis à votre disposition. veuillez cliquez sur le lien pour l
     {
         $this->em->remove($emailTemplate);
         $this->em->flush();
+    }
+
+    public function getDefaultConvocationTemplate(Structure $structure): EmailTemplate
+    {
+       return $this->templateRepository->findOneBy(['category' => EmailTemplate::CATEGORY_CONVOCATION, 'structure' => $structure]);
+    }
+
+    public function getDefaultInvitationTemplate(Structure $structure): EmailTemplate
+    {
+        return $this->templateRepository->findOneBy(['category' => EmailTemplate::CATEGORY_INVITATION, 'structure' => $structure]);
     }
 }

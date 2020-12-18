@@ -9,6 +9,7 @@ parameters:
   document_zip_directory: '/tmp/'
   document_full_pdf_directory: '/tmp/'
   token_directory: '/tmp/'
+  email_from: 'email@exemple.org'
 
   max_batch_email: 50
 
@@ -40,3 +41,5 @@ services:
     App\Listener\SidebarListener:
       tags:
         - {name: kernel.event_listener, event: kernel.controller, method: onKernelRequest}
+
+    App\Service\Email\EmailServiceInterface: '@App\Service\Email\SimpleEmailService'

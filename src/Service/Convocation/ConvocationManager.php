@@ -6,6 +6,8 @@ use App\Entity\Convocation;
 use App\Entity\Sitting;
 use App\Entity\User;
 use App\Repository\ConvocationRepository;
+use App\Service\Email\EmailServiceInterface;
+use App\Service\EmailTemplate\EmailGenerator;
 use App\Service\Timestamp\TimestampManager;
 use Doctrine\DBAL\ConnectionException;
 use Doctrine\ORM\EntityManagerInterface;
@@ -20,19 +22,27 @@ class ConvocationManager
     private TimestampManager $timestampManager;
     private LoggerInterface $logger;
     private ParameterBagInterface $bag;
+    private EmailServiceInterface $emailService;
+    private EmailGenerator $emailGenerator;
 
     public function __construct(
         EntityManagerInterface $em,
         ConvocationRepository $convocationRepository,
         TimestampManager $timestampManager,
         LoggerInterface $logger,
-        ParameterBagInterface $bag
-    ) {
+        ParameterBagInterface $bag,
+        EmailServiceInterface $emailService,
+        EmailGenerator $emailGenerator
+
+    )
+    {
         $this->em = $em;
         $this->convocationRepository = $convocationRepository;
         $this->timestampManager = $timestampManager;
         $this->logger = $logger;
         $this->bag = $bag;
+        $this->emailService = $emailService;
+        $this->emailGenerator = $emailGenerator;
     }
 
     public function createConvocations(Sitting $sitting): void
@@ -95,7 +105,8 @@ class ConvocationManager
             $convocationBatch = array_splice($convocations, 0, $this->bag->get('max_batch_email'));
             $this->timestampAndActiveConvocations($sitting, $convocationBatch);
 
-            // TODO send email !
+            $emails = $this->generateEmailsData($sitting, $convocationBatch);
+            $this->emailService->sendBatch($emails);
         }
     }
 
@@ -148,7 +159,7 @@ class ConvocationManager
 
     private function isAlreadySent(Convocation $convocation): bool
     {
-        return (bool) $convocation->getSentTimestamp();
+        return (bool)$convocation->getSentTimestamp();
     }
 
     /**
@@ -181,5 +192,18 @@ class ConvocationManager
             $convocation->setIsActive(false);
             $this->em->persist($convocation);
         }
+    }
+
+    /**
+     * @param Convocation[] $convocations
+     */
+    private function generateEmailsData(Sitting $sitting, array $convocations): array
+    {
+        $emails = [];
+        foreach ($convocations as $convocation) {
+            $emails[] = $this->emailGenerator->generateFromTemplateAndConvocation($sitting->getType()->getEmailTemplate(), $convocation);
+        }
+
+        return $emails;
     }
 }
