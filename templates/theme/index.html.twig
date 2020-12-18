@@ -19,6 +19,8 @@
         </thead>
         <tbody>
 
+        {{ macros.emptyList(themes, "Aucun thème à afficher") }}
+
         {% for theme in themes %}
             <tr class="d-flex">
                 <td class="col-10">

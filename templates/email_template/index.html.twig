@@ -21,6 +21,8 @@
         </thead>
         <tbody>
 
+        {{ macros.emptyList(templates, "Aucun modèle à afficher") }}
+
         {% for template in templates %}
             <tr class="d-flex">
                 <td class="col-4">{{ template.name }} </td>

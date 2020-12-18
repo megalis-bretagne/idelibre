@@ -39,6 +39,8 @@
         </thead>
         <tbody>
 
+        {{ macros.emptyList(types, "Aucun type à afficher") }}
+
         {% for type in types %}
             <tr class="d-flex">
                 <td class="col-10">{{ type.name }} </td>

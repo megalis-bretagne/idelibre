@@ -20,6 +20,8 @@
         </thead>
         <tbody>
 
+        {{ macros.emptyList(parties, "Aucun groupe politique à afficher") }}
+
         {% for party in parties %}
             <tr class="d-flex">
                 <td class="col-10">{{ party.name }} </td>

@@ -39,6 +39,8 @@
         </thead>
         <tbody>
 
+        {{ macros.emptyList(structures, "Aucune structure à afficher") }}
+
         {% for structure in structures %}
             <tr class="d-flex">
                 <td class="col-4">{{ structure.name }} </td>

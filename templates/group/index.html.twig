@@ -20,6 +20,8 @@
         </thead>
         <tbody>
 
+        {{ macros.emptyList(groups, "Aucun groupe à afficher") }}
+
         {% for group in groups %}
             <tr class="d-flex">
                 <td class="col-9">{{ group.name }} </td>
