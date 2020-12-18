@@ -4,7 +4,6 @@ namespace App\Service\Email;
 
 use App\Entity\EmailTemplate;
 use App\Entity\User;
-use Exception;
 use Swift_Mailer;
 use Swift_Message;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -23,8 +22,9 @@ class SimpleEmailService implements EmailServiceInterface
     /**
      * @param EmailData[] $emails
      */
-    public function sendBatch(array $emails): void {
-        foreach ($emails as $email){
+    public function sendBatch(array $emails): void
+    {
+        foreach ($emails as $email) {
             $message = (new Swift_Message($email->getSubject()))
                 ->setFrom($this->bag->get('email_from'))
                 ->setTo($email->getTo())
@@ -36,7 +36,6 @@ class SimpleEmailService implements EmailServiceInterface
             $this->mailer->send($message);
         }
     }
-
 
     public function sendReInitPassword(User $user, string $token): void
     {

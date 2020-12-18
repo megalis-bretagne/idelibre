@@ -33,9 +33,7 @@ class EmailData
     public function setTo(string $to): EmailData
     {
         $this->to = $to;
+
         return $this;
     }
-
-
-
 }

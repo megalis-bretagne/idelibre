@@ -18,6 +18,7 @@ class EmailServiceInterfaceFake implements EmailServiceInterface
     /**
      * @param EmailData[] $emails
      */
-    public function sendBatch(array $emails): void {
+    public function sendBatch(array $emails): void
+    {
     }
 }
