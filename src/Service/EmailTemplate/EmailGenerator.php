@@ -12,11 +12,13 @@ class EmailGenerator
 {
     private DateUtil $dateUtil;
     private GenderConverter $genderConverter;
+    private EmailTemplateManager $emailTemplateManager;
 
-    public function __construct(DateUtil $dateUtil, GenderConverter $genderConverter)
+    public function __construct(DateUtil $dateUtil, GenderConverter $genderConverter, EmailTemplateManager $emailTemplateManager)
     {
         $this->dateUtil = $dateUtil;
         $this->genderConverter = $genderConverter;
+        $this->emailTemplateManager = $emailTemplateManager;
     }
 
     /**
@@ -38,8 +40,12 @@ class EmailGenerator
         return strtr($content, $params);
     }
 
-    public function generateFromTemplateAndConvocation(EmailTemplate $emailTemplate, Convocation $convocation): EmailData
+    public function generateFromTemplateAndConvocation(?EmailTemplate $emailTemplate, Convocation $convocation): EmailData
     {
+        if (null === $emailTemplate) {
+            $emailTemplate = $this->emailTemplateManager->getDefaultConvocationTemplate($convocation->getSitting()->getStructure());
+        }
+
         return $this->generateFromTemplate($emailTemplate, $this->generateParams($convocation));
     }
 

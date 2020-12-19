@@ -4,6 +4,7 @@ namespace App\Tests\Controller\api;
 
 use App\Controller\api\SittingController;
 use App\DataFixtures\ConvocationFixtures;
+use App\DataFixtures\EmailTemplateFixtures;
 use App\DataFixtures\SittingFixtures;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
@@ -39,6 +40,7 @@ class SittingControllerTest extends WebTestCase
         $this->loadFixtures([
             SittingFixtures::class,
             ConvocationFixtures::class,
+            EmailTemplateFixtures::class
         ]);
     }
 
