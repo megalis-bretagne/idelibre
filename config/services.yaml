@@ -5,12 +5,12 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
   version: '%env(VERSION)%'
-  document_files_directory: '/tmp/'
-  document_zip_directory: '/tmp/'
-  document_full_pdf_directory: '/tmp/'
-  token_directory: '/tmp/'
-  email_from: 'email@exemple.org'
-  email_alias: 'idelibre'
+  document_files_directory: '%env(DOCUMENT_FILES_DIRECTORY)%'
+  document_zip_directory: '%env(DOCUMENT_ZIP_DIRECTORY)%'
+  document_full_pdf_directory: '%env(DOCUMENT_FULL_PDF_DIRECTORY)%'
+  token_directory: '%env(TOKEN_DIRECTORY)%'
+  email_from: '%env(EMAIL_FROM)%'
+  email_alias: '%env(EMAIL_ALIAS)%'
 
   max_batch_email: 50
 
