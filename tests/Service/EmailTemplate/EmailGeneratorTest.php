@@ -23,6 +23,10 @@ class EmailGeneratorTest extends WebTestCase
 
 
     private EntityManagerInterface $entityManager;
+    /**
+     * @var \App\Service\EmailTemplate\EmailTemplateManager|object|null
+     */
+    private $emailTemplateManager;
 
 
     protected function setUp(): void
@@ -31,6 +35,9 @@ class EmailGeneratorTest extends WebTestCase
         $this->entityManager = $kernel->getContainer()
             ->get('doctrine')
             ->getManager();
+
+        $container = self::$container;
+        $this->emailTemplateManager = $container->get('App\Service\EmailTemplate\EmailTemplateManager');
 
         $this->loadFixtures([
             UserFixtures::class,
@@ -44,7 +51,7 @@ class EmailGeneratorTest extends WebTestCase
         $emailTemplate = new EmailTemplate();
         $emailTemplate->setContent('test de génération de message : #variable#');
         $emailTemplate->setSubject('test de génération de titre : #variable#');
-        $generator = new EmailGenerator(new DateUtil(), new GenderConverter());
+        $generator = new EmailGenerator(new DateUtil(), new GenderConverter(), $this->emailTemplateManager);
         $emailData = $generator->generateFromTemplate($emailTemplate, ['#variable#' => 'test']);
         $this->assertEquals(
             HtmlTag::START_HTML . 'test de génération de message : test' . HtmlTag::END_HTML,
@@ -62,7 +69,7 @@ class EmailGeneratorTest extends WebTestCase
         $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
         $actor = $this->getOneUserBy(['username' => 'actor1@libriciel.coop']);
         $convocation = $this->getOneConvocationBy(['sitting' => $sitting, 'actor' => $actor]);
-        $generator = new EmailGenerator(new DateUtil(), new GenderConverter());
+        $generator = new EmailGenerator(new DateUtil(), new GenderConverter(), $this->emailTemplateManager);
 
         $expected = [
             '#typeseance#' => 'Conseil Libriciel',

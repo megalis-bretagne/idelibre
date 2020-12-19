@@ -29,6 +29,7 @@ class EmailTemplateFixtures extends Fixture implements DependentFixtureInterface
             ->setType($typeConseilLibriciel)
             ->setName('Conseil Libriciel')
             ->setSubject('idelibre : une nouvelle convocation ...')
+            ->setCategory(EmailTemplate::CATEGORY_CONVOCATION)
             ->setContent('Voici mon template pour les seance de type conseil de la struture libriciel');
 
         $manager->persist($emailTemplateConseilLs);
@@ -38,6 +39,7 @@ class EmailTemplateFixtures extends Fixture implements DependentFixtureInterface
         $emailTemplateSansTypeLs->setStructure($structureLibriciel)
             ->setName('Sans type Libriciel')
             ->setSubject('idelibre : une nouvelle convocation ...')
+            ->setCategory(EmailTemplate::CATEGORY_CONVOCATION)
             ->setContent('Voici un template sans type associé appartenant à libriciel');
 
         $manager->persist($emailTemplateSansTypeLs);
@@ -47,6 +49,7 @@ class EmailTemplateFixtures extends Fixture implements DependentFixtureInterface
         $emailTemplateMtp->setStructure($structureMontpellier)
             ->setName('Sans type Montpellier')
             ->setSubject('idelibre : une nouvelle convocation ...')
+            ->setCategory(EmailTemplate::CATEGORY_CONVOCATION)
             ->setContent('Voici un template sans type associé apartenant à Montpellier');
 
         $manager->persist($emailTemplateMtp);

@@ -47,7 +47,6 @@ class EmailGenerator
         }
 
         return $this->generateFromTemplate($emailTemplate, $this->generateParams($convocation));
-        //$email->setTo($convocation->getActor()->getEmail());
     }
 
     public function generateParams(Convocation $convocation): array

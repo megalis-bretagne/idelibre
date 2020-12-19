@@ -43,4 +43,12 @@ services:
       tags:
         - {name: kernel.event_listener, event: kernel.controller, method: onKernelRequest}
 
-    App\Service\Email\EmailServiceInterface: '@App\Service\Email\SimpleEmailService'
+    Mailjet\Client:
+      arguments:
+        $key: '%env(MAILJET_KEY)%'
+        $secret: '%env(MAILJET_SECRET)%'
+        $call: true
+        $settings: { 'version': 'v3.1' }
+
+    App\Service\Email\EmailServiceInterface:
+      factory: ['@App\Service\Email\EmailServiceFactory', 'chooseImplementation']
