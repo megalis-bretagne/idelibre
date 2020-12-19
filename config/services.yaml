@@ -10,6 +10,7 @@ parameters:
   document_full_pdf_directory: '/tmp/'
   token_directory: '/tmp/'
   email_from: 'email@exemple.org'
+  email_alias: 'idelibre'
 
   max_batch_email: 50
 

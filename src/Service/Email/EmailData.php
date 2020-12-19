@@ -7,12 +7,14 @@ class EmailData
     private string $subject;
     private string $content;
     private ?string $to;
+    private ?string $replyTo;
 
-    public function __construct(string $subject, string $content, ?string $to = null)
+    public function __construct(string $subject, string $content, ?string $to = null, ?string $replyTo = null)
     {
         $this->subject = $subject;
         $this->content = $content;
         $this->to = $to;
+        $this->replyTo = $replyTo;
     }
 
     public function getSubject(): string
@@ -36,4 +38,18 @@ class EmailData
 
         return $this;
     }
+
+    public function getReplyTo(): ?string
+    {
+        return $this->replyTo;
+    }
+
+    public function setReplyTo(?string $replyTo): EmailData
+    {
+        $this->replyTo = $replyTo;
+        return $this;
+    }
+
+
+
 }
