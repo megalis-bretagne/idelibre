@@ -47,9 +47,7 @@ class EmailData
     public function setReplyTo(?string $replyTo): EmailData
     {
         $this->replyTo = $replyTo;
+
         return $this;
     }
-
-
-
 }

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service\Email;
 
 use App\Entity\User;
@@ -11,7 +10,6 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class MailjetService implements EmailServiceInterface
 {
-
     private Client $mailjetClient;
     private ParameterBagInterface $bag;
     private LoggerInterface $logger;
@@ -23,9 +21,9 @@ class MailjetService implements EmailServiceInterface
         $this->logger = $logger;
     }
 
-
     /**
      * @param EmailData[] $emails
+     *
      * @throws EmailNotSendException
      */
     public function sendBatch(array $emails): void
@@ -38,7 +36,6 @@ class MailjetService implements EmailServiceInterface
 
             throw new EmailNotSendException($response->getReasonPhrase(), $response->getStatus());
         }
-
     }
 
     /**
@@ -51,21 +48,21 @@ class MailjetService implements EmailServiceInterface
             $message = [
                 'From' => [
                     'Email' => $this->bag->get('email_from'),
-                    'Name' => $this->bag->get('email_alias')
+                    'Name' => $this->bag->get('email_alias'),
                 ],
                 'To' => [
                     [
                         'Email' => $email->getTo(),
-                    ]
+                    ],
                 ],
                 'Subject' => $email->getSubject(),
-                'HTMLPart' => $email->getContent()
+                'HTMLPart' => $email->getContent(),
             ];
 
             if ($email->getReplyTo()) {
                 $message['ReplyTo'] = [
                     'Email' => $email->getReplyTo(),
-                    'Name' => "Repondre"
+                    'Name' => 'Repondre',
                 ];
             }
             $messages[] = $message;
@@ -74,10 +71,8 @@ class MailjetService implements EmailServiceInterface
         return $messages;
     }
 
-
     public function sendReInitPassword(User $user, string $token): void
     {
         // TODO: Implement sendReInitPassword() method.
     }
-
 }

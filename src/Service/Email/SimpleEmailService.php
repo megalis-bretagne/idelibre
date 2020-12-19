@@ -2,7 +2,6 @@
 
 namespace App\Service\Email;
 
-use App\Entity\EmailTemplate;
 use App\Entity\User;
 use Exception;
 use Swift_Mailer;
@@ -22,6 +21,7 @@ class SimpleEmailService implements EmailServiceInterface
 
     /**
      * @param EmailData[] $emails
+     *
      * @throws EmailNotSendException
      */
     public function sendBatch(array $emails): void
@@ -39,7 +39,7 @@ class SimpleEmailService implements EmailServiceInterface
                 if ($email->getReplyTo()) {
                     $message->setReplyTo($email->getReplyTo());
                 }
-            }catch (Exception $e) {
+            } catch (Exception $e) {
                 throw new EmailNotSendException($e->getMessage());
             }
 
@@ -51,5 +51,4 @@ class SimpleEmailService implements EmailServiceInterface
     {
         // TODO: Implement sendReInitPassword() method.
     }
-
 }

@@ -33,8 +33,7 @@ class ConvocationManager
         ParameterBagInterface $bag,
         EmailServiceInterface $emailService,
         EmailGenerator $emailGenerator
-    )
-    {
+    ) {
         $this->em = $em;
         $this->convocationRepository = $convocationRepository;
         $this->timestampManager = $timestampManager;
@@ -158,7 +157,7 @@ class ConvocationManager
 
     private function isAlreadySent(Convocation $convocation): bool
     {
-        return (bool)$convocation->getSentTimestamp();
+        return (bool) $convocation->getSentTimestamp();
     }
 
     /**
