@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Annotation\Sidebar;
 use App\Entity\Sitting;
 use App\Form\SearchType;
 use App\Form\SittingType;
@@ -14,6 +13,7 @@ use App\Service\Pdf\PdfSittingGenerator;
 use App\Service\Seance\ActorManager;
 use App\Service\Seance\SittingManager;
 use App\Service\Zip\ZipSittingGenerator;
+use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -113,11 +113,16 @@ class SittingController extends AbstractController
     {
         $form = $this->createForm(SittingType::class, $sitting, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
-            $sittingManager->update(
-                $form->getData(),
-                $form->get('convocationFile')->getData()
-            );
+            try {
+                $sittingManager->update(
+                    $form->getData(),
+                    $form->get('convocationFile')->getData()
+                );
+            } catch (\Exception $exception) {
+                dd($exception->getMessage());
+            }
 
             $this->addFlash('success', 'votre séance a bien été modifiée');
 

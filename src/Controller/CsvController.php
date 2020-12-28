@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use App\Annotation\Sidebar;
 use App\Form\CsvType;
 use App\Service\Csv\CsvManager;
+use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

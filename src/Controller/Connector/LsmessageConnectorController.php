@@ -2,10 +2,10 @@
 
 namespace App\Controller\Connector;
 
-use App\Annotation\Sidebar;
 use App\Form\Connector\LsmessageConnectorType;
 use App\Repository\Connector\LsmessageConnectorRepository;
 use App\Service\Connector\LsmessageConnectorManager;
+use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

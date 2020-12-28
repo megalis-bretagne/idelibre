@@ -54,3 +54,6 @@ Suppression de la séance
 dans le modal preciser le nom de l'object nom se la seance par exemple
 
 selectOrButton s'il y a peu d'element (a voir)
+
+
+Faire tourner la CI avec sqlite pour les test sauf pour les merges  (3 fois plus rapide !)

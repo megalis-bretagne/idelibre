@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use App\Annotation\Sidebar;
 use App\Form\GdprType;
 use App\Service\Gdpr\GdprManager;
+use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

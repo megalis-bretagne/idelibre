@@ -224,18 +224,20 @@ class SittingControllerTest extends WebTestCase
 
     public function testEditInformation()
     {
+
         $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
         $this->loginAsAdminLibriciel();
         $crawler = $this->client->request(Request::METHOD_GET, '/sitting/edit/' . $sitting->getId());
         $this->assertResponseStatusCodeSame(200);
 
-
         $item = $crawler->filter('html:contains("Modifier les informations d\'une séance")');
         $this->assertCount(1, $item);
+
 
         $form = $crawler->selectButton('Enregistrer')->form();
 
         $form['sitting[place]'] = 'MyUniquePlace';
+
 
         $this->client->submit($form);
 

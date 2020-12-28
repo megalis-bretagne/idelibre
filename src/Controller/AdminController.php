@@ -2,13 +2,13 @@
 
 namespace App\Controller;
 
-use App\Annotation\Sidebar;
 use App\Entity\User;
 use App\Form\SearchType;
 use App\Form\SuperUserType;
 use App\Repository\UserRepository;
 use App\Service\role\RoleManager;
 use App\Service\User\UserManager;
+use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;

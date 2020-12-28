@@ -22,12 +22,18 @@ class ZipSittingGenerator
     {
         $zip = new ZipArchive();
         $zipPath = $this->getAndCreateZipPath($sitting);
+        $this->deleteZipIfAlreadyExists($zipPath);
         $zip->open($zipPath, ZipArchive::CREATE);
         $zip->addFile($sitting->getFile()->getPath(), $sitting->getFile()->getName());
         $this->addProjectAndAnnexesFiles($zip, $sitting);
         $zip->close();
 
         return $zipPath;
+    }
+
+    private function deleteZipIfAlreadyExists(string $path)
+    {
+        $this->filesystem->remove($path);
     }
 
     public function getAndCreateZipPath(Sitting $sitting): string
