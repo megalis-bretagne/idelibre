@@ -31,7 +31,6 @@ class EmailTemplate
      * @ORM\Column(type="string", length=255, unique=true)
      * @Assert\NotBlank
      * @Assert\Length(max="255")
-     *
      */
     private $name;
 
@@ -58,7 +57,6 @@ class EmailTemplate
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
      * @Assert\Length(max="255")
-     *
      */
     private $subject;
 
