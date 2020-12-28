@@ -1,0 +1,20 @@
+version: '3.4'
+
+services:
+  fpm-idelibre_test:
+    container_name: fpm-idelibre_test
+    build:
+      context: .
+      dockerfile: DockerfileTest
+    env_file:
+      - .env.test.docker
+    volumes:
+      #- /tmp/var:/app/var
+      - ./.env:/app/.env
+      - ./config:/app/config
+      - ./src:/app/src
+      - ./templates:/app/templates
+      - ./tests:/app/tests
+      - ./docker-resources/zz-idelibre.conf:/usr/local/etc/php-fpm.d/zz-idelibre.conf
+    command: ["/app/docker-resources/initApp.sh"]
+

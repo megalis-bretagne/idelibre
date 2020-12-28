@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Annotation\Sidebar;
 use App\Entity\Structure;
 use App\Form\SearchType;
 use App\Form\StructureInformationType;
@@ -12,6 +11,7 @@ use App\Service\RoleTrait;
 use App\Service\Structure\StructureCreator;
 use App\Service\Structure\StructureManager;
 use App\Service\ValidationTrait;
+use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;

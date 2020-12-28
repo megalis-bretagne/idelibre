@@ -2,12 +2,12 @@
 
 namespace App\Controller;
 
-use App\Annotation\Sidebar;
 use App\Entity\Type;
 use App\Form\SearchType;
 use App\Form\TypeType;
 use App\Repository\TypeRepository;
 use App\Service\Type\TypeManager;
+use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;

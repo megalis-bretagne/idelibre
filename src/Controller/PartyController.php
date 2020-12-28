@@ -2,11 +2,11 @@
 
 namespace App\Controller;
 
-use App\Annotation\Sidebar;
 use App\Entity\Party;
 use App\Form\PartyType;
 use App\Repository\PartyRepository;
 use App\Service\Party\PartyManager;
+use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;

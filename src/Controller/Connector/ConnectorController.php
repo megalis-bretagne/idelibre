@@ -2,9 +2,9 @@
 
 namespace App\Controller\Connector;
 
-use App\Annotation\Sidebar;
 use App\Repository\Connector\ComelusConnectorRepository;
 use App\Repository\Connector\LsmessageConnectorRepository;
+use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

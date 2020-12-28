@@ -2,13 +2,13 @@
 
 namespace App\Controller;
 
-use App\Annotation\Sidebar;
 use App\Entity\Group;
 use App\Form\GroupStructureType;
 use App\Form\GroupType;
 use App\Repository\GroupRepository;
 use App\Service\Group\GroupManager;
 use App\Service\ValidationTrait;
+use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;

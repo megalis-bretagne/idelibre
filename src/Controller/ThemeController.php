@@ -2,12 +2,12 @@
 
 namespace App\Controller;
 
-use App\Annotation\Sidebar;
 use App\Entity\Theme;
 use App\Form\ThemeType;
 use App\Form\ThemeWithParentType;
 use App\Repository\ThemeRepository;
 use App\Service\Theme\ThemeManager;
+use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

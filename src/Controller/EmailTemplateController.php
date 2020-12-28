@@ -2,12 +2,12 @@
 
 namespace App\Controller;
 
-use App\Annotation\Sidebar;
 use App\Entity\EmailTemplate;
 use App\Form\EmailTemplateType;
 use App\Repository\EmailTemplateRepository;
 use App\Service\EmailTemplate\EmailGenerator;
 use App\Service\EmailTemplate\EmailTemplateManager;
+use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
