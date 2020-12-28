@@ -7,6 +7,7 @@ use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ProjectRepository::class)
@@ -22,17 +23,21 @@ class Project
 
     /**
      * @ORM\Column(type="string", length=512)
+     * @Assert\Length(max="512")
+     * @Assert\NotBlank
      */
     private $name;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotNull
      */
     private $rank;
 
     /**
      * @ORM\OneToOne(targetEntity=File::class, cascade={"persist", "remove"}, inversedBy="project")
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotNull
      */
     private $file;
 
@@ -54,6 +59,7 @@ class Project
     /**
      * @ORM\ManyToOne(targetEntity=Sitting::class, inversedBy="projects")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     * @Assert\NotNull
      */
     private $sitting;
 

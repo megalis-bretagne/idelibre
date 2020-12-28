@@ -5,10 +5,14 @@ namespace App\Entity;
 use App\Repository\EmailTemplateRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=EmailTemplateRepository::class)
- * @UniqueEntity("name")
+ * @UniqueEntity(
+ *     fields={"name", "structure"},
+ *     errorPath="name",
+ *     message="l'intitulé doit être unique")
  */
 class EmailTemplate
 {
@@ -25,17 +29,22 @@ class EmailTemplate
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
+     * @Assert\NotBlank
+     * @Assert\Length(max="255")
+     *
      */
     private $name;
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank
      */
     private $content;
 
     /**
      * @ORM\ManyToOne(targetEntity=Structure::class)
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     * @Assert\NotNull
      */
     private $structure;
 
@@ -47,6 +56,9 @@ class EmailTemplate
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
+     * @Assert\Length(max="255")
+     *
      */
     private $subject;
 
