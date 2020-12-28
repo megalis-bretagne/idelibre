@@ -9,7 +9,6 @@ use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-
 class RoleTest extends WebTestCase
 {
     use FixturesTrait;
@@ -18,7 +17,6 @@ class RoleTest extends WebTestCase
     private ValidatorInterface $validator;
     private $entityManager;
 
-
     protected function setUp(): void
     {
         self::bootKernel();
@@ -26,9 +24,8 @@ class RoleTest extends WebTestCase
         $this->entityManager = self::$container->get('doctrine')->getManager();
 
         $this->loadFixtures([
-            RoleFixtures::class
+            RoleFixtures::class,
         ]);
-
     }
 
     public function testValid()
@@ -60,7 +57,6 @@ class RoleTest extends WebTestCase
         $this->assertHasValidationErrors($role, 1);
     }
 
-
     public function testInvalidNameAlreadyExists()
     {
         $role = (new Role())
@@ -69,8 +65,6 @@ class RoleTest extends WebTestCase
 
         $this->assertHasValidationErrors($role, 1);
     }
-
-
 
     public function testInvalidNoName()
     {
@@ -97,7 +91,6 @@ class RoleTest extends WebTestCase
         $this->assertHasValidationErrors($role, 1);
     }
 
-
     public function testInvalidPrettyNameTooLong()
     {
         $role = (new Role())
@@ -117,7 +110,4 @@ class RoleTest extends WebTestCase
 
         $this->assertHasValidationErrors($role, 1);
     }
-
-
-
 }

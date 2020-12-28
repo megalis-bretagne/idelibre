@@ -3,11 +3,6 @@
 namespace App\Tests\Service\Util;
 
 use App\Service\Util\GenderConverter;
-use App\Tests\FindEntityTrait;
-use App\Tests\LoginTrait;
-use Doctrine\Persistence\ObjectManager;
-use Liip\TestFixturesBundle\Test\FixturesTrait;
-use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class GenderConverterTest extends WebTestCase
@@ -41,5 +36,4 @@ class GenderConverterTest extends WebTestCase
         $converter = new GenderConverter();
         $this->assertEquals('', $converter->format(99));
     }
-
 }

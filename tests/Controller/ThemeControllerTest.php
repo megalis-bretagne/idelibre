@@ -20,13 +20,11 @@ class ThemeControllerTest extends WebTestCase
     use FindEntityTrait;
     use LoginTrait;
 
-
     private ?KernelBrowser $client;
     /**
      * @var ObjectManager
      */
     private $entityManager;
-
 
     protected function setUp(): void
     {
@@ -40,7 +38,7 @@ class ThemeControllerTest extends WebTestCase
         $this->loadFixtures([
             UserFixtures::class,
             StructureFixtures::class,
-            ThemeFixtures::class
+            ThemeFixtures::class,
         ]);
     }
 
@@ -60,7 +58,6 @@ class ThemeControllerTest extends WebTestCase
         $item = $crawler->filter('html:contains("Themes")');
         $this->assertCount(1, $item);
     }
-
 
     public function testAdd()
     {
@@ -111,7 +108,6 @@ class ThemeControllerTest extends WebTestCase
 
         $this->assertNotEmpty($this->getOneEntityBy(Theme::class, ['name' => 'Change name']));
     }
-
 
     public function testDelete()
     {

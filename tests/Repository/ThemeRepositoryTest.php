@@ -2,17 +2,11 @@
 
 namespace App\Tests\Repository;
 
-use App\DataFixtures\EmailTemplateFixtures;
 use App\DataFixtures\StructureFixtures;
 use App\DataFixtures\ThemeFixtures;
-use App\DataFixtures\TypeFixtures;
-use App\DataFixtures\UserFixtures;
-use App\Entity\EmailTemplate;
 use App\Entity\Structure;
 use App\Entity\Theme;
-use App\Entity\Type;
 use App\Repository\ThemeRepository;
-use App\Repository\TypeRepository;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
 use Doctrine\Persistence\ObjectManager;
@@ -26,7 +20,6 @@ class ThemeRepositoryTest extends WebTestCase
     use FindEntityTrait;
     use LoginTrait;
 
-
     private ?KernelBrowser $client;
     /**
      * @var ObjectManager
@@ -36,7 +29,6 @@ class ThemeRepositoryTest extends WebTestCase
      * @var THemeRepository
      */
     private $themeRepository;
-
 
     protected function setUp(): void
     {
@@ -51,7 +43,7 @@ class ThemeRepositoryTest extends WebTestCase
 
         $this->loadFixtures([
             StructureFixtures::class,
-            ThemeFixtures::class
+            ThemeFixtures::class,
         ]);
     }
 

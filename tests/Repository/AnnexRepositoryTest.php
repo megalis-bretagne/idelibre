@@ -6,11 +6,8 @@ use App\DataFixtures\AnnexFixtures;
 use App\DataFixtures\FileFixtures;
 use App\DataFixtures\ProjectFixtures;
 use App\DataFixtures\SittingFixtures;
-use App\DataFixtures\ThemeFixtures;
 use App\Entity\Annex;
-use App\Entity\Project;
 use App\Repository\AnnexRepository;
-use App\Repository\ProjectRepository;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
 use Doctrine\Persistence\ObjectManager;
@@ -24,7 +21,6 @@ class AnnexRepositoryTest extends WebTestCase
     use FindEntityTrait;
     use LoginTrait;
 
-
     private ?KernelBrowser $client;
     /**
      * @var ObjectManager
@@ -34,7 +30,6 @@ class AnnexRepositoryTest extends WebTestCase
      * @var AnnexRepository
      */
     private $annexRepository;
-
 
     protected function setUp(): void
     {
@@ -51,7 +46,7 @@ class AnnexRepositoryTest extends WebTestCase
             ProjectFixtures::class,
             AnnexFixtures::class,
             FileFixtures::class,
-            SittingFixtures::class
+            SittingFixtures::class,
         ]);
     }
 
@@ -61,7 +56,6 @@ class AnnexRepositoryTest extends WebTestCase
         $this->client = null;
         $this->entityManager->close();
     }
-
 
     public function testFindNotInListProjects()
     {

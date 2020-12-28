@@ -37,10 +37,9 @@ class SecurityControllerTest extends WebTestCase
 
         $this->loadFixtures([
             UserFixtures::class,
-            ForgetTokenFixtures::class
+            ForgetTokenFixtures::class,
         ]);
     }
-
 
     protected function tearDown(): void
     {
@@ -71,7 +70,6 @@ class SecurityControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(403);
     }
 
-
     public function testResetPasswordwrongToken()
     {
         $this->client->request(Request::METHOD_GET, '/reset/aqwx');
@@ -84,20 +82,17 @@ class SecurityControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(200);
     }
 
-
     public function testForgetPasswordGet()
     {
         $this->client->request(Request::METHOD_GET, '/forget');
         $this->assertResponseStatusCodeSame(200);
     }
 
-
     public function testForgetPasswordWrongEmail()
     {
         $this->client->request(Request::METHOD_POST, '/forget', ['username' => 'notexist']);
         $this->assertResponseStatusCodeSame(302);
     }
-
 
     public function testForgetPassword()
     {
@@ -109,7 +104,6 @@ class SecurityControllerTest extends WebTestCase
         $flash = $crawler->filter('html:contains(" Un email vous a été envoyé si un compte lui est associé")');
         $this->assertCount(1, $flash);
     }
-
 
     public function testLogout()
     {

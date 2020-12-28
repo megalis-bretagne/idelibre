@@ -17,17 +17,14 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class EmailGeneratorTest extends WebTestCase
 {
-
     use FixturesTrait;
     use FindEntityTrait;
-
 
     private EntityManagerInterface $entityManager;
     /**
      * @var \App\Service\EmailTemplate\EmailTemplateManager|object|null
      */
     private $emailTemplateManager;
-
 
     protected function setUp(): void
     {
@@ -42,7 +39,7 @@ class EmailGeneratorTest extends WebTestCase
         $this->loadFixtures([
             UserFixtures::class,
             SittingFixtures::class,
-            ConvocationFixtures::class
+            ConvocationFixtures::class,
         ]);
     }
 
@@ -63,7 +60,6 @@ class EmailGeneratorTest extends WebTestCase
         );
     }
 
-
     public function testGenerateParams()
     {
         $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
@@ -80,9 +76,8 @@ class EmailGeneratorTest extends WebTestCase
             '#nom#' => 'libriciel',
             '#username#' => 'actor1@libriciel.coop',
             '#titre#' => 'Madame le maire',
-            '#civilite#' => 'Monsieur'];
+            '#civilite#' => 'Monsieur', ];
 
         $this->assertEquals($expected, $generator->generateParams($convocation));
-
     }
 }

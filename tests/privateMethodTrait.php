@@ -11,6 +11,7 @@ trait privateMethodTrait
         $class = new ReflectionClass($className);
         $method = $class->getMethod($name);
         $method->setAccessible(true);
+
         return $method;
     }
 }

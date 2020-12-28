@@ -8,10 +8,8 @@ use App\Entity\Project;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-
 class AnnexTest extends WebTestCase
 {
-
     private ValidatorInterface $validator;
 
     protected function setUp(): void
@@ -20,11 +18,11 @@ class AnnexTest extends WebTestCase
         $this->validator = self::$container->get('validator');
     }
 
-    private function assertHasError(Annex $annex, int $number){
+    private function assertHasError(Annex $annex, int $number)
+    {
         $errors = $this->validator->validate($annex);
         $this->assertCount($number, $errors);
     }
-
 
     public function testValid()
     {
@@ -61,8 +59,4 @@ class AnnexTest extends WebTestCase
 
         $this->assertHasError($annex, 1);
     }
-
-
-
-
 }

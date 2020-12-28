@@ -21,7 +21,6 @@ class EmailTemplateControllerTest extends WebTestCase
     use FindEntityTrait;
     use LoginTrait;
 
-
     private ?KernelBrowser $client;
     /**
      * @var ObjectManager
@@ -39,7 +38,7 @@ class EmailTemplateControllerTest extends WebTestCase
 
         $this->loadFixtures([
             EmailTemplateFixtures::class,
-            TypeFixtures::class
+            TypeFixtures::class,
         ]);
     }
 
@@ -49,7 +48,6 @@ class EmailTemplateControllerTest extends WebTestCase
         $this->client = null;
         $this->entityManager->close();
     }
-
 
     public function testIndex()
     {
@@ -96,8 +94,6 @@ class EmailTemplateControllerTest extends WebTestCase
         $this->assertSame($added->getType(), $typeBureau);
     }
 
-
-
     public function testAddNonAuthorizedType()
     {
         $this->expectException(InvalidArgumentException::class);
@@ -118,7 +114,6 @@ class EmailTemplateControllerTest extends WebTestCase
         $form['email_template[type]'] = $typeConseil->getId();
         $this->client->submit($form);
     }
-
 
     public function testEdit()
     {
@@ -144,8 +139,6 @@ class EmailTemplateControllerTest extends WebTestCase
         $this->assertNotEmpty($this->getOneEntityBy(EmailTemplate::class, ['name' => 'New name']));
     }
 
-
-
     public function testDelete()
     {
         $this->loginAsAdminLibriciel();
@@ -164,7 +157,6 @@ class EmailTemplateControllerTest extends WebTestCase
         $this->assertEmpty($this->getOneEntityBy(EmailTemplate::class, ['id' => $emailTemplate->getId()]));
         $this->assertNotEmpty($this->getOneEntityBy(Type::class, ['id' => $associatedTypeId]));
     }
-
 
     public function testPreviewTemplate()
     {

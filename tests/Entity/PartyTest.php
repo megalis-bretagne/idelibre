@@ -3,7 +3,6 @@
 namespace App\Tests\Entity;
 
 use App\DataFixtures\PartyFixtures;
-use App\Entity\Group;
 use App\Entity\Party;
 use App\Entity\Structure;
 use App\Tests\FindEntityTrait;
@@ -11,7 +10,6 @@ use App\Tests\HasValidationError;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-
 
 class PartyTest extends WebTestCase
 {
@@ -22,7 +20,6 @@ class PartyTest extends WebTestCase
     private ValidatorInterface $validator;
     private $entityManager;
 
-
     protected function setUp(): void
     {
         self::bootKernel();
@@ -30,11 +27,9 @@ class PartyTest extends WebTestCase
         $this->entityManager = self::$container->get('doctrine')->getManager();
 
         $this->loadFixtures([
-            PartyFixtures::class
+            PartyFixtures::class,
         ]);
-
     }
-
 
     public function testValid()
     {
@@ -44,7 +39,6 @@ class PartyTest extends WebTestCase
 
         $this->assertHasValidationErrors($party, 0);
     }
-
 
     public function testValidSameNameOtherStructure()
     {
@@ -83,7 +77,6 @@ class PartyTest extends WebTestCase
         $this->assertHasValidationErrors($party, 1);
     }
 
-
     public function testInvalidNameTooLong()
     {
         $party = (new Party())
@@ -94,7 +87,4 @@ class PartyTest extends WebTestCase
 
         $this->assertHasValidationErrors($party, 1);
     }
-
-
-
 }

@@ -8,7 +8,6 @@ use App\Tests\HasValidationError;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-
 class ForgetTokenTest extends WebTestCase
 {
     use HasValidationError;
@@ -32,12 +31,10 @@ class ForgetTokenTest extends WebTestCase
     {
         $forgetToken = (new ForgetToken(new User()));
 
-        $forgetToken->setToken("tokentoolongtokentoolongtokentoolongtokentoolongtokentoolongtokentoolong
+        $forgetToken->setToken('tokentoolongtokentoolongtokentoolongtokentoolongtokentoolongtokentoolong
         tokentoolongtokentoolongtokentoolongtokentoolongtokentoolongtokentoolongtokentoolongtokentoolong
-        tokentoolongtokentoolongtokentoolongtokentoolongtokentoolongtokentoolongtokentoolongtokentoolong");
+        tokentoolongtokentoolongtokentoolongtokentoolongtokentoolongtokentoolongtokentoolongtokentoolong');
 
         $this->assertHasValidationErrors($forgetToken, 1);
     }
-
-
 }

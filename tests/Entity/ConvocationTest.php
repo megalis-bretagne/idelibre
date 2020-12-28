@@ -8,10 +8,8 @@ use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-
 class ConvocationTest extends WebTestCase
 {
-
     private ValidatorInterface $validator;
 
     protected function setUp(): void
@@ -25,7 +23,6 @@ class ConvocationTest extends WebTestCase
         $errors = $this->validator->validate($convocation);
         $this->assertCount($number, $errors);
     }
-
 
     public function testValid()
     {
@@ -42,12 +39,10 @@ class ConvocationTest extends WebTestCase
         $this->assertHasError($convocation, 1);
     }
 
-
     public function testInValidNoSitting()
     {
         $convocation = (new Convocation())
             ->setSitting(new Sitting());
         $this->assertHasError($convocation, 1);
     }
-
 }

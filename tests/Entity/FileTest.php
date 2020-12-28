@@ -7,7 +7,6 @@ use App\Tests\HasValidationError;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-
 class FileTest extends WebTestCase
 {
     use HasValidationError;
@@ -29,7 +28,6 @@ class FileTest extends WebTestCase
         $this->assertHasValidationErrors($file, 0);
     }
 
-
     public function testInvalidEmptyName()
     {
         $file = (new File())
@@ -47,7 +45,6 @@ class FileTest extends WebTestCase
         $this->assertHasValidationErrors($file, 1);
     }
 
-
     public function testInvalidNameTooLong()
     {
         $file = (new File())
@@ -58,7 +55,6 @@ class FileTest extends WebTestCase
 
         $this->assertHasValidationErrors($file, 1);
     }
-
 
     public function testInvalidEmptyPath()
     {
@@ -77,7 +73,6 @@ class FileTest extends WebTestCase
         $this->assertHasValidationErrors($file, 1);
     }
 
-
     public function testInvalidPathTooLong()
     {
         $file = (new File())
@@ -88,5 +83,4 @@ class FileTest extends WebTestCase
 
         $this->assertHasValidationErrors($file, 1);
     }
-
 }

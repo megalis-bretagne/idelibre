@@ -21,7 +21,6 @@ class ThemeManagerTest extends WebTestCase
     use LoginTrait;
     use privateMethodTrait;
 
-
     private ?KernelBrowser $client;
     /**
      * @var EntityManagerInterface
@@ -31,7 +30,6 @@ class ThemeManagerTest extends WebTestCase
      * @var ThemeRepository
      */
     private $themeRepository;
-
 
     protected function setUp(): void
     {
@@ -45,7 +43,7 @@ class ThemeManagerTest extends WebTestCase
         $this->themeRepository = $this->entityManager->getRepository(Theme::class);
 
         $this->loadFixtures([
-            ThemeFixtures::class
+            ThemeFixtures::class,
         ]);
     }
 
@@ -63,6 +61,6 @@ class ThemeManagerTest extends WebTestCase
         $themeManager = new ThemeManager($this->themeRepository, $this->entityManager);
         $generateFullNameFct = $this->getPrivateMethod(ThemeManager::class, 'generateFullName');
         $actual = $generateFullNameFct->invokeArgs($themeManager, [$themeBudget]);
-        $this->assertEquals("Finance, budget", $actual);
+        $this->assertEquals('Finance, budget', $actual);
     }
 }

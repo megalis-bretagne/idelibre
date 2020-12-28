@@ -22,8 +22,6 @@ class TimestampContentFileGeneratorTest extends WebTestCase
     use LoginTrait;
     use FileTrait;
 
-
-
     /**
      * @var ObjectManager
      */
@@ -38,10 +36,8 @@ class TimestampContentFileGeneratorTest extends WebTestCase
      */
     private $fileSystem;
 
-
     protected function setUp(): void
     {
-
         self::bootKernel();
         $container = self::$container;
 
@@ -55,7 +51,7 @@ class TimestampContentFileGeneratorTest extends WebTestCase
             ConvocationFixtures::class,
             ProjectFixtures::class,
             AnnexFixtures::class,
-            FileFixtures::class
+            FileFixtures::class,
         ]);
     }
 
@@ -67,13 +63,9 @@ class TimestampContentFileGeneratorTest extends WebTestCase
 
     public function testGenerateFile()
     {
-        $sitting = $this->getOneSittingBy(['name' =>'Conseil Libriciel']) ;
+        $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
         $timestampGenerator = new TimestampContentFileGenerator($this->environment, $this->bag, $this->fileSystem);
         $path = $timestampGenerator->generateFile($sitting, $sitting->getConvocations());
         $this->assertSame(51, $this->countFileLines($path));
-
     }
-
-
-
 }

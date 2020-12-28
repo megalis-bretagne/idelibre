@@ -2,12 +2,10 @@
 
 namespace App\Tests\Entity;
 
-use App\Entity\File;
 use App\Entity\Gdpr;
 use App\Tests\HasValidationError;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-
 
 class GdprTest extends WebTestCase
 {
@@ -28,15 +26,14 @@ class GdprTest extends WebTestCase
         $this->assertHasValidationErrors($file, 0);
     }
 
-
     public function testInvalidAddressTooLong()
     {
         $file = (new Gdpr())
-            ->setAddress("addressTooLong addressTooLong addressTooLong addressTooLong addressTooLong addressTooLong 
+            ->setAddress('addressTooLong addressTooLong addressTooLong addressTooLong addressTooLong addressTooLong 
             addressTooLong addressTooLong addressTooLong addressTooLong addressTooLong addressTooLong addressTooLong addressTooLong 
             addressTooLong addressTooLong addressTooLong addressTooLong addressTooLong addressTooLong addressTooLong addressTooLong 
             addressTooLong addressTooLong addressTooLong addressTooLong addressTooLong addressTooLong addressTooLong addressTooLong 
-            addressTooLong addressTooLong addressTooLong addressTooLong addressTooLong addressTooLong ");
+            addressTooLong addressTooLong addressTooLong addressTooLong addressTooLong addressTooLong ');
 
         $this->assertHasValidationErrors($file, 1);
     }
@@ -44,9 +41,9 @@ class GdprTest extends WebTestCase
     public function testInvalidApeTooLong()
     {
         $file = (new Gdpr())
-            ->setApe("12345678919123456789191234567891912345678919123456789191234567891912345678919
+            ->setApe('12345678919123456789191234567891912345678919123456789191234567891912345678919
             123456789191234567891912345678919123456789191234567891912345678919123456789191234567891912345678919
-            12345678919123456789191234567891912345678919123456789191234567891912345678919");
+            12345678919123456789191234567891912345678919123456789191234567891912345678919');
 
         $this->assertHasValidationErrors($file, 1);
     }
@@ -54,18 +51,17 @@ class GdprTest extends WebTestCase
     public function testInvalidPhoneTooLong()
     {
         $file = (new Gdpr())
-            ->setCompanyPhone("12345678919123456789191234567891912345678919123456789191234567891912345678919
+            ->setCompanyPhone('12345678919123456789191234567891912345678919123456789191234567891912345678919
             123456789191234567891912345678919123456789191234567891912345678919123456789191234567891912345678919
-            12345678919123456789191234567891912345678919123456789191234567891912345678919");
+            12345678919123456789191234567891912345678919123456789191234567891912345678919');
 
         $this->assertHasValidationErrors($file, 1);
     }
 
-
     public function testCompanyEmailWrongFormat()
     {
         $file = (new Gdpr())
-            ->setCompanyEmail("email.toto.fr");
+            ->setCompanyEmail('email.toto.fr');
 
         $this->assertHasValidationErrors($file, 1);
     }
@@ -73,9 +69,8 @@ class GdprTest extends WebTestCase
     public function testDpoEmailWrongFormat()
     {
         $file = (new Gdpr())
-            ->setDpoEmail("email.toto.fr");
+            ->setDpoEmail('email.toto.fr');
 
         $this->assertHasValidationErrors($file, 1);
     }
-
 }

@@ -2,7 +2,6 @@
 
 namespace App\Tests\Controller\api;
 
-use App\Controller\api\SittingController;
 use App\DataFixtures\ConvocationFixtures;
 use App\DataFixtures\EmailTemplateFixtures;
 use App\DataFixtures\SittingFixtures;
@@ -20,13 +19,11 @@ class SittingControllerTest extends WebTestCase
     use FindEntityTrait;
     use LoginTrait;
 
-
     private ?KernelBrowser $client;
     /**
      * @var ObjectManager
      */
     private $entityManager;
-
 
     protected function setUp(): void
     {
@@ -40,7 +37,7 @@ class SittingControllerTest extends WebTestCase
         $this->loadFixtures([
             SittingFixtures::class,
             ConvocationFixtures::class,
-            EmailTemplateFixtures::class
+            EmailTemplateFixtures::class,
         ]);
     }
 
@@ -68,7 +65,4 @@ class SittingControllerTest extends WebTestCase
 
         // TODO CHECK GENERATED FILES !
     }
-
-
-
 }

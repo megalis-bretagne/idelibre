@@ -5,7 +5,6 @@ namespace App\Tests\Controller\Connector;
 use App\DataFixtures\ComelusConnectorFixtures;
 use App\DataFixtures\LsMessageConnectorFixtures;
 use App\DataFixtures\UserFixtures;
-use App\Entity\Connector\ComelusConnector;
 use App\Entity\Connector\LsmessageConnector;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
@@ -21,13 +20,11 @@ class LsmessageConnectorControllerTest extends WebTestCase
     use FindEntityTrait;
     use LoginTrait;
 
-
     private ?KernelBrowser $client;
     /**
      * @var ObjectManager
      */
     private $entityManager;
-
 
     protected function setUp(): void
     {
@@ -41,7 +38,7 @@ class LsmessageConnectorControllerTest extends WebTestCase
         $this->loadFixtures([
             UserFixtures::class,
             ComelusConnectorFixtures::class,
-            LsMessageConnectorFixtures::class
+            LsMessageConnectorFixtures::class,
         ]);
     }
 
@@ -51,7 +48,6 @@ class LsmessageConnectorControllerTest extends WebTestCase
         $this->client = null;
         $this->entityManager->close();
     }
-
 
     public function testEdit()
     {
@@ -81,5 +77,4 @@ class LsmessageConnectorControllerTest extends WebTestCase
         $lsmessageConnector = $this->getOneEntityBy(LsmessageConnector::class, ['structure' => $structure]);
         $this->assertSame('new api key', $lsmessageConnector->getApiKey());
     }
-
 }

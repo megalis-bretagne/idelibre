@@ -29,7 +29,6 @@ class GroupControllerTest extends WebTestCase
      */
     private $entityManager;
 
-
     protected function setUp(): void
     {
         $this->client = static::createClient();
@@ -41,7 +40,7 @@ class GroupControllerTest extends WebTestCase
 
         $this->loadFixtures([
             UserFixtures::class,
-            GroupFixtures::class
+            GroupFixtures::class,
         ]);
     }
 
@@ -115,7 +114,6 @@ class GroupControllerTest extends WebTestCase
         $this->assertCount(1, $successMsg);
     }
 
-
     public function testManage()
     {
         $this->loginAsSuperAdmin();
@@ -125,9 +123,6 @@ class GroupControllerTest extends WebTestCase
         $item = $crawler->filter('html:contains("Associer des structures")');
         $this->assertCount(1, $item);
     }
-
-
-
 
     public function testDelete()
     {

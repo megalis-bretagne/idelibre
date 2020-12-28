@@ -22,12 +22,10 @@ trait FindEntityTrait
         return $repository->findOneBy($criteria);
     }
 
-
     public function getOneSittingBy(array $criteria): ?Sitting
     {
         return $this->getOneEntityBy(Sitting::class, $criteria);
     }
-
 
     public function getOneProjectBy(array $criteria): ?Project
     {

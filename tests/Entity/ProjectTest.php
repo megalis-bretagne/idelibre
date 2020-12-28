@@ -9,7 +9,6 @@ use App\Tests\HasValidationError;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-
 class ProjectTest extends WebTestCase
 {
     use HasValidationError;
@@ -25,14 +24,13 @@ class ProjectTest extends WebTestCase
     public function testValid()
     {
         $project = (new Project())
-            ->setName("My awesome project")
+            ->setName('My awesome project')
             ->setSitting(new Sitting())
             ->setRank(1)
             ->setFile(new File());
 
         $this->assertHasValidationErrors($project, 0);
     }
-
 
     public function testInvalidEmptyName()
     {
@@ -72,7 +70,6 @@ class ProjectTest extends WebTestCase
         $this->assertHasValidationErrors($project, 1);
     }
 
-
     public function testInvalidNoRank()
     {
         $project = (new Project())
@@ -83,31 +80,23 @@ class ProjectTest extends WebTestCase
         $this->assertHasValidationErrors($project, 1);
     }
 
-
     public function testInvalidNoSitting()
     {
         $project = (new Project())
-            ->setName("My awesome project")
+            ->setName('My awesome project')
             ->setRank(1)
             ->setFile(new File());
 
         $this->assertHasValidationErrors($project, 1);
     }
 
-
     public function testInvalidNoFile()
     {
         $project = (new Project())
-            ->setName("My awesome project")
+            ->setName('My awesome project')
             ->setSitting(new Sitting())
             ->setRank(1);
 
-
         $this->assertHasValidationErrors($project, 1);
     }
-
-
-
-
-
 }

@@ -13,7 +13,6 @@ use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-
 class SittingTest extends WebTestCase
 {
     use FixturesTrait;
@@ -23,7 +22,6 @@ class SittingTest extends WebTestCase
     private ValidatorInterface $validator;
     private $entityManager;
 
-
     protected function setUp(): void
     {
         self::bootKernel();
@@ -31,11 +29,9 @@ class SittingTest extends WebTestCase
         $this->entityManager = self::$container->get('doctrine')->getManager();
 
         $this->loadFixtures([
-            SittingFixtures::class
+            SittingFixtures::class,
         ]);
-
     }
-
 
     public function testValid()
     {
@@ -48,7 +44,6 @@ class SittingTest extends WebTestCase
 
         $this->assertHasValidationErrors($sitting, 0);
     }
-
 
     public function testInvalidNoStructure()
     {
@@ -73,7 +68,6 @@ class SittingTest extends WebTestCase
         $this->assertHasValidationErrors($sitting, 1);
     }
 
-
     public function testInvalidNameTooLong()
     {
         $sitting = (new Sitting())
@@ -88,7 +82,6 @@ class SittingTest extends WebTestCase
         $this->assertHasValidationErrors($sitting, 1);
     }
 
-
     public function testInvalidNoName()
     {
         $sitting = (new Sitting())
@@ -100,7 +93,6 @@ class SittingTest extends WebTestCase
         $this->assertHasValidationErrors($sitting, 1);
     }
 
-
     public function testInvalidNoFile()
     {
         $sitting = (new Sitting())
@@ -111,7 +103,6 @@ class SittingTest extends WebTestCase
 
         $this->assertHasValidationErrors($sitting, 1);
     }
-
 
     public function testInvalidNoDate()
     {
@@ -138,8 +129,6 @@ class SittingTest extends WebTestCase
         $this->assertHasValidationErrors($sitting, 1);
     }
 
-
-
     public function testInvalidAlreadyExistSameNameSameDateTimeSameStructure()
     {
         $dbSitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
@@ -153,7 +142,6 @@ class SittingTest extends WebTestCase
 
         $this->assertHasValidationErrors($sitting, 1);
     }
-
 
     public function testValidAlreadyExistSameNameSameDateTimeOtherStructure()
     {
@@ -169,7 +157,6 @@ class SittingTest extends WebTestCase
         $this->assertHasValidationErrors($sitting, 0);
     }
 
-
     public function testValidAlreadyExistSameNameSameStructureOtherDateTime()
     {
         $dbSitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
@@ -183,5 +170,4 @@ class SittingTest extends WebTestCase
 
         $this->assertHasValidationErrors($sitting, 0);
     }
-
 }

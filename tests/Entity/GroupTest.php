@@ -2,17 +2,12 @@
 
 namespace App\Tests\Entity;
 
-use App\DataFixtures\EmailTemplateFixtures;
 use App\DataFixtures\GroupFixtures;
-use App\Entity\EmailTemplate;
 use App\Entity\Group;
-use App\Entity\Structure;
-use App\Tests\FindEntityTrait;
 use App\Tests\HasValidationError;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-
 
 class GroupTest extends WebTestCase
 {
@@ -22,7 +17,6 @@ class GroupTest extends WebTestCase
     private ValidatorInterface $validator;
     private $entityManager;
 
-
     protected function setUp(): void
     {
         self::bootKernel();
@@ -30,12 +24,9 @@ class GroupTest extends WebTestCase
         $this->entityManager = self::$container->get('doctrine')->getManager();
 
         $this->loadFixtures([
-            GroupFixtures::class
+            GroupFixtures::class,
         ]);
-
     }
-
-
 
     public function testValid()
     {
@@ -72,5 +63,4 @@ class GroupTest extends WebTestCase
             ->setName('Recia');
         $this->assertHasValidationErrors($group, 1);
     }
-
 }

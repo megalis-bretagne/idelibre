@@ -20,13 +20,11 @@ class ComelusConnectorControllerTest extends WebTestCase
     use FindEntityTrait;
     use LoginTrait;
 
-
     private ?KernelBrowser $client;
     /**
      * @var ObjectManager
      */
     private $entityManager;
-
 
     protected function setUp(): void
     {
@@ -40,7 +38,7 @@ class ComelusConnectorControllerTest extends WebTestCase
         $this->loadFixtures([
             UserFixtures::class,
             ComelusConnectorFixtures::class,
-            LsMessageConnectorFixtures::class
+            LsMessageConnectorFixtures::class,
         ]);
     }
 
@@ -50,7 +48,6 @@ class ComelusConnectorControllerTest extends WebTestCase
         $this->client = null;
         $this->entityManager->close();
     }
-
 
     public function testEdit()
     {
@@ -80,5 +77,4 @@ class ComelusConnectorControllerTest extends WebTestCase
         $comelusConnector = $this->getOneEntityBy(ComelusConnector::class, ['structure' => $structure]);
         $this->assertSame('new api key', $comelusConnector->getApiKey());
     }
-
 }

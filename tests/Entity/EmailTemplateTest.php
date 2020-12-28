@@ -10,7 +10,6 @@ use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-
 class EmailTemplateTest extends WebTestCase
 {
     use FixturesTrait;
@@ -19,7 +18,6 @@ class EmailTemplateTest extends WebTestCase
     private ValidatorInterface $validator;
     private $entityManager;
 
-
     protected function setUp(): void
     {
         self::bootKernel();
@@ -27,9 +25,8 @@ class EmailTemplateTest extends WebTestCase
         $this->entityManager = self::$container->get('doctrine')->getManager();
 
         $this->loadFixtures([
-            EmailTemplateFixtures::class
+            EmailTemplateFixtures::class,
         ]);
-
     }
 
     private function assertHasError(EmailTemplate $emailTemplate, int $number)
@@ -37,7 +34,6 @@ class EmailTemplateTest extends WebTestCase
         $errors = $this->validator->validate($emailTemplate);
         $this->assertCount($number, $errors);
     }
-
 
     public function testValid()
     {
@@ -48,7 +44,6 @@ class EmailTemplateTest extends WebTestCase
             ->setStructure(new Structure());
         $this->assertHasError($emailTemplate, 0);
     }
-
 
     public function testValidNameAlreadyExistsInOtherStructure()
     {
@@ -70,7 +65,6 @@ class EmailTemplateTest extends WebTestCase
             ->setStructure($structure);
         $this->assertHasError($emailTemplate, 1);
     }
-
 
     public function testInvalidNameTooLong()
     {
@@ -112,7 +106,6 @@ class EmailTemplateTest extends WebTestCase
         $this->assertHasError($emailTemplate, 1);
     }
 
-
     public function testInvalidNoContent()
     {
         $emailTemplate = (new EmailTemplate())
@@ -141,7 +134,6 @@ class EmailTemplateTest extends WebTestCase
         $this->assertHasError($emailTemplate, 1);
     }
 
-
     public function testInvalidEmptySubject()
     {
         $emailTemplate = (new EmailTemplate())
@@ -163,6 +155,4 @@ class EmailTemplateTest extends WebTestCase
             ->setStructure(new Structure());
         $this->assertHasError($emailTemplate, 1);
     }
-
-
 }
