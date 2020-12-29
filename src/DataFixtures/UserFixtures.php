@@ -156,6 +156,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $this->addReference(self::REFERENCE . 'actorLibriciel3', $actorLibriciel3);
 
         ////// Secretary ////
+
         $secretaryLibriciel1 = new User();
         $secretaryLibriciel1->setEmail('secretary1@example.org')
             ->setRole($roleSecretary)
