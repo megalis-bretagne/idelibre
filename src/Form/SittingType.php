@@ -56,11 +56,11 @@ class SittingType extends AbstractType
             ])
             ->add('structure', HiddenType::class, [
                 'data' => $options['structure'],
-                'data_class' => null
+                'data_class' => null,
             ])
-            ->get("structure")->addModelTransformer(new CallbackTransformer(
-                fn() => '',
-                fn() => $options['structure']
+            ->get('structure')->addModelTransformer(new CallbackTransformer(
+                fn () => '',
+                fn () => $options['structure']
             ));
     }
 

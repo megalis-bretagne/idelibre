@@ -32,20 +32,18 @@ class PartyType extends AbstractType
                 'label' => 'Acteurs associés',
                 'required' => false,
                 'class' => User::class,
-                'choice_label' => fn(User $user) => $user->getFirstName() . ' ' . $user->getLastName(),
+                'choice_label' => fn (User $user) => $user->getFirstName() . ' ' . $user->getLastName(),
                 'multiple' => true,
                 'query_builder' => $this->userRepository->findActorByStructure($options['structure']),
             ])
             ->add('structure', HiddenType::class, [
                 'data' => $options['structure'],
-                'data_class' => null
+                'data_class' => null,
             ])
-            ->get("structure")->addModelTransformer(new CallbackTransformer(
-                fn() => '',
-                fn() => $options['structure']
+            ->get('structure')->addModelTransformer(new CallbackTransformer(
+                fn () => '',
+                fn () => $options['structure']
             ));
-
-
     }
 
     public function configureOptions(OptionsResolver $resolver)

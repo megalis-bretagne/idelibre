@@ -3,9 +3,7 @@
 namespace App\Form;
 
 use App\Entity\EmailTemplate;
-use App\Entity\Structure;
 use App\Entity\Type;
-use App\Form\DataTransformer\EntityHiddenType;
 use App\Repository\TypeRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -72,14 +70,13 @@ class EmailTemplateType extends AbstractType
 
         $builder->add('structure', HiddenType::class, [
             'data' => $options['structure'],
-            'data_class' => null
+            'data_class' => null,
         ]);
 
-        $builder->get("structure")->addModelTransformer(new CallbackTransformer(
-            fn () =>  '',
-            fn () =>  $options['structure']
+        $builder->get('structure')->addModelTransformer(new CallbackTransformer(
+            fn () => '',
+            fn () => $options['structure']
         ));
-
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -89,8 +86,6 @@ class EmailTemplateType extends AbstractType
             'structure' => null,
         ]);
     }
-
-
 
     private function isDefaultTemplate(?EmailTemplate $emailTemplate): bool
     {
