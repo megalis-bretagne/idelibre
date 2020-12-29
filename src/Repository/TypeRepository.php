@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\EmailTemplate;
 use App\Entity\Structure;
 use App\Entity\Type;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -39,8 +40,23 @@ class TypeRepository extends ServiceEntityRepository
             ->setParameter('emailTemplate', $emailTemplate);
     }
 
-    public function exists(string $typeName, Structure $structure)
+    public function exists(string $typeName, Structure $structure): bool
     {
         return $this->count(['name' => $typeName, 'structure' => $structure]) > 0;
+    }
+
+    /**
+     * @return Type[]
+     */
+    public function findAuthorizedTypeNotInList(User $user, iterable $types): array
+    {
+        return $this->createQueryBuilder('t')
+            ->Join('t.authorizedSecretaries', 's')
+            ->andWhere('s.id = :userId')
+            ->setParameter('userId', $user->getId())
+            ->andWhere('t not in ( :types )')
+            ->setParameter('types', $types)
+            ->getQuery()
+            ->getResult();
     }
 }

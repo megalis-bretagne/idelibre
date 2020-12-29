@@ -5,7 +5,9 @@ namespace App\Service\User;
 use App\Entity\Group;
 use App\Entity\Role;
 use App\Entity\Structure;
+use App\Entity\Type;
 use App\Entity\User;
+use App\Repository\TypeRepository;
 use App\Service\role\RoleManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -17,19 +19,21 @@ class UserManager
     private EntityManagerInterface $em;
     private UserPasswordEncoderInterface $passwordEncoder;
     private ValidatorInterface $validator;
-
     private RoleManager $roleManager;
+    private TypeRepository $typeRepository;
 
     public function __construct(
         EntityManagerInterface $em,
         UserPasswordEncoderInterface $passwordEncoder,
         ValidatorInterface $validator,
-        RoleManager $roleManager
+        RoleManager $roleManager,
+        TypeRepository $typeRepository
     ) {
         $this->em = $em;
         $this->passwordEncoder = $passwordEncoder;
         $this->validator = $validator;
         $this->roleManager = $roleManager;
+        $this->typeRepository = $typeRepository;
     }
 
     public function save(User $user, ?string $plainPassword, Structure $structure): void
@@ -39,6 +43,8 @@ class UserManager
         }
 
         $user->setStructure($structure);
+        $this->updateAuthorizedType($user);
+
         $this->em->persist($user);
 
         $this->em->flush();
@@ -83,5 +89,28 @@ class UserManager
     {
         $this->em->remove($user);
         $this->em->flush();
+    }
+
+
+    private function updateAuthorizedType(User $user)
+    {
+        $this->removeNoMoreAuthorizedType($user);
+        $this->addAuthorizedType($user);
+    }
+
+    private function addAuthorizedType(User $user)
+    {
+        foreach ($user->getAuthorizedTypes() as $type) {
+            $type->addAuthorizedSecretary($user);
+        }
+    }
+
+    private function removeNoMoreAuthorizedType(User $user)
+    {
+        $noMoreAuthorizedTypes = $this->typeRepository->findAuthorizedTypeNotInList($user, $user->getAuthorizedTypes());
+
+        foreach ($noMoreAuthorizedTypes as $noMoreAuthorizedType) {
+            $noMoreAuthorizedType->removeAuthorizedSecretary($user);
+        }
     }
 }

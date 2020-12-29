@@ -64,7 +64,7 @@ class UserRepositoryTest extends WebTestCase
         /** @var Structure $structure */
         $structure = $this->getOneEntityBy(Structure::class, ['name' => 'Libriciel']);
 
-        $this->assertCount(5, $this->userRepository->findByStructure($structure)->getQuery()->getResult());
+        $this->assertCount(7, $this->userRepository->findByStructure($structure)->getQuery()->getResult());
     }
 
     public function testFindSuperAdminAndGroupAdmin()

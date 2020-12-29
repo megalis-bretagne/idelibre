@@ -26,29 +26,31 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager): void
     {
-        /** @var Structure $structureLibriciel */
-        $structureLibriciel = $this->getReference(StructureFixtures::REFERENCE . 'libriciel');
+        /**
+         * @var Structure $structureLibriciel
+         * @var Structure $structureMontpellier
+         * @var Group $groupRecia
+         * @var Role $roleSuperAdmin
+         * @var Role $roleGroupAdmin
+         * @var Role $roleStructureAdminLibriciel
+         * @var Role $roleActor
+         * @var Role $roleSecretary
+         * @var Party $partyMajority
+         */
 
-        /** @var Structure $structureMontpellier */
+        $structureLibriciel = $this->getReference(StructureFixtures::REFERENCE . 'libriciel');
         $structureMontpellier = $this->getReference(StructureFixtures::REFERENCE . 'montpellier');
 
-        /** @var Group $groupRecia */
         $groupRecia = $this->getReference(GroupFixtures::REFERENCE . 'recia');
-
-        /** @var Role $roleSuperAdmin */
         $roleSuperAdmin = $this->getReference(RoleFixtures::REFERENCE . 'superAdmin');
-
-        /** @var Role $roleGroupAdmin */
         $roleGroupAdmin = $this->getReference(RoleFixtures::REFERENCE . 'groupAdmin');
+        $roleSecretary = $this->getReference(RoleFixtures::REFERENCE . 'secretary');
 
-        /** @var Role $roleStructureAdminLibriciel */
+
         $roleStructureAdminLibriciel = $this->getReference(RoleFixtures::REFERENCE . 'structureAdmin');
-
-        /** @var Role $roleActor */
         $roleActor = $this->getReference(RoleFixtures::REFERENCE . 'actor');
-
-        /** @var Party $partyMajority */
         $partyMajority = $this->getReference(PartyFixtures::REFERENCE . 'majorite');
+
 
         ///////// SuperAdmin  ////////////////////
 
@@ -59,7 +61,6 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             ->setPassword($this->passwordEncoder->encodePassword($superAdmin, 'password'))
             ->setFirstName('super')
             ->setLastName('admin');
-
         $manager->persist($superAdmin);
         $this->addReference(self::REFERENCE . 'superadmin', $superAdmin);
 
@@ -70,7 +71,6 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             ->setPassword($this->passwordEncoder->encodePassword($otherSuperAdmin, 'password'))
             ->setFirstName('otherSuper')
             ->setLastName('admin');
-
         $manager->persist($otherSuperAdmin);
         $this->addReference(self::REFERENCE . 'otherSuperadmin', $otherSuperAdmin);
 
@@ -84,7 +84,6 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             ->setLastname('libriciel')
             ->setStructure($structureLibriciel)
             ->setPassword($this->passwordEncoder->encodePassword($adminLibriciel, 'password'));
-
         $manager->persist($adminLibriciel);
         $this->addReference(self::REFERENCE . 'adminLibriciel', $adminLibriciel);
 
@@ -96,7 +95,6 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             ->setRole($roleActor)
             ->setStructure($structureLibriciel)
             ->setPassword($this->passwordEncoder->encodePassword($otherUserLibriciel, 'password'));
-
         $manager->persist($otherUserLibriciel);
         $this->addReference(self::REFERENCE . 'otherUserLibriciel', $otherUserLibriciel);
 
@@ -107,7 +105,6 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             ->setLastname('montpellier')
             ->setStructure($structureMontpellier)
             ->setPassword($this->passwordEncoder->encodePassword($userMontpellier, 'password'));
-
         $manager->persist($userMontpellier);
         $this->addReference(self::REFERENCE . 'userMontpellier', $userMontpellier);
 
@@ -121,11 +118,10 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             ->setLastname('Recia')
             ->setGroup($groupRecia)
             ->setPassword($this->passwordEncoder->encodePassword($userGroupRecia, 'password'));
-
         $manager->persist($userGroupRecia);
         $this->addReference(self::REFERENCE . 'userGroupRecia', $userGroupRecia);
 
-        // Actors
+        ///////// Actors  /////////////////////
         $actorLibriciel1 = new User();
         $actorLibriciel1->setEmail('actor1@example.org')
             ->setRole($roleActor)
@@ -137,7 +133,6 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             ->setGender(GenderConverter::MALE)
             ->setTitle('Madame le maire')
             ->setPassword($this->passwordEncoder->encodePassword($actorLibriciel1, 'password'));
-
         $manager->persist($actorLibriciel1);
         $this->addReference(self::REFERENCE . 'actorLibriciel1', $actorLibriciel1);
 
@@ -149,7 +144,6 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             ->setLastname('libriciel')
             ->setStructure($structureLibriciel)
             ->setPassword($this->passwordEncoder->encodePassword($actorLibriciel2, 'password'));
-
         $manager->persist($actorLibriciel2);
         $this->addReference(self::REFERENCE . 'actorLibriciel2', $actorLibriciel2);
 
@@ -161,12 +155,37 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             ->setLastname('libriciel')
             ->setStructure($structureLibriciel)
             ->setPassword($this->passwordEncoder->encodePassword($actorLibriciel3, 'password'));
-
         $manager->persist($actorLibriciel3);
         $this->addReference(self::REFERENCE . 'actorLibriciel3', $actorLibriciel3);
 
+        ////// Secretary ////
+        $secretaryLibriciel1 = new User();
+        $secretaryLibriciel1->setEmail('secretary1@example.org')
+            ->setRole($roleSecretary)
+            ->setUsername('secretary1@libriciel.coop')
+            ->setFirstName('secretary_1')
+            ->setLastname('libriciel')
+            ->setStructure($structureLibriciel)
+            ->setPassword($this->passwordEncoder->encodePassword($secretaryLibriciel1, 'password'));
+        $manager->persist($secretaryLibriciel1);
+        $this->addReference(self::REFERENCE . 'secretaryLibriciel1', $secretaryLibriciel1);
+
+
+        $secretaryLibriciel2 = new User();
+        $secretaryLibriciel2->setEmail('secretary2@example.org')
+            ->setRole($roleSecretary)
+            ->setUsername('secretary2@libriciel.coop')
+            ->setFirstName('secretary_2')
+            ->setLastname('libriciel')
+            ->setStructure($structureLibriciel)
+            ->setPassword($this->passwordEncoder->encodePassword($secretaryLibriciel2, 'password'));
+        $manager->persist($secretaryLibriciel2);
+        $this->addReference(self::REFERENCE . 'secretaryLibriciel2', $secretaryLibriciel2);
+
         $manager->flush();
     }
+
+
 
     /**
      * {@inheritdoc}

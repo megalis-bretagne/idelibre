@@ -4,9 +4,11 @@ namespace App\Form;
 
 use App\Entity\Party;
 use App\Entity\Role;
+use App\Entity\Type;
 use App\Entity\User;
 use App\Repository\PartyRepository;
 use App\Repository\RoleRepository;
+use App\Repository\TypeRepository;
 use App\Service\role\RoleManager;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -22,12 +24,18 @@ class UserType extends AbstractType
     private RoleRepository $roleRepository;
     private PartyRepository $partyRepository;
     private RoleManager $roleManager;
+    private TypeRepository $typeRepository;
 
-    public function __construct(RoleRepository $roleRepository, PartyRepository $partyRepository, RoleManager $roleManager)
-    {
+    public function __construct(
+        RoleRepository $roleRepository,
+        PartyRepository $partyRepository,
+        RoleManager $roleManager,
+        TypeRepository $typeRepository
+    ) {
         $this->roleRepository = $roleRepository;
         $this->partyRepository = $partyRepository;
         $this->roleManager = $roleManager;
+        $this->typeRepository = $typeRepository;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -66,6 +74,17 @@ class UserType extends AbstractType
                     'query_builder' => $this->partyRepository->findByStructure($options['structure']),
                     'choice_label' => 'name',
                 ]);
+        }
+
+        if ($this->IsSecretary($options)) {
+            $builder->add('authorizedTypes', EntityType::class, [
+                'required' => false,
+                'label' => 'Types Autorisés',
+                'class' => Type::class,
+                'query_builder' => $this->typeRepository->findByStructure($options['structure']),
+                'choice_label' => 'name',
+                'multiple' => true,
+            ]);
         }
 
         $builder->add('plainPassword', RepeatedType::class, [
@@ -108,5 +127,16 @@ class UserType extends AbstractType
         $user = $options['data'];
 
         return $user->getRole()->getId() === $this->roleManager->getActorRole()->getId();
+    }
+
+    private function IsSecretary(array $options): bool
+    {
+        if ($this->isNew($options)) {
+            return false;
+        }
+        /** @var User $user */
+        $user = $options['data'];
+
+        return $user->getRole()->getId() === $this->roleManager->getSecretaryRole()->getId();
     }
 }
