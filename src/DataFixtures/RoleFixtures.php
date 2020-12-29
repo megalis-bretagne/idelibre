@@ -12,8 +12,8 @@ class RoleFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-        $roleSuperAdmin = new Role();
-        $roleSuperAdmin->setName('SuperAdmin')
+        $roleSuperAdmin = (new Role())
+            ->setName('SuperAdmin')
             ->setPrettyName('Super administrateur')
             ->setIsInStructureRole(false)
             ->addComposite('ROLE_SUPERADMIN')
@@ -22,8 +22,8 @@ class RoleFixtures extends Fixture
         $manager->persist($roleSuperAdmin);
         $this->addReference(self::REFERENCE . 'superAdmin', $roleSuperAdmin);
 
-        $roleGroupAdmin = new Role();
-        $roleGroupAdmin->setName('GroupAdmin')
+        $roleGroupAdmin = (new Role())
+            ->setName('GroupAdmin')
             ->setPrettyName('Administrateur de groupe')
             ->setIsInStructureRole(false)
             ->addComposite('ROLE_GROUP_ADMIN')
@@ -32,8 +32,8 @@ class RoleFixtures extends Fixture
         $manager->persist($roleGroupAdmin);
         $this->addReference(self::REFERENCE . 'groupAdmin', $roleGroupAdmin);
 
-        $roleStructureAdmin = new Role();
-        $roleStructureAdmin->setName('Admin')
+        $roleStructureAdmin = (new Role())
+            ->setName('Admin')
             ->setPrettyName('Administrateur')
             ->setIsInStructureRole(true)
             ->addComposite('ROLE_STRUCTURE_ADMIN')
@@ -41,21 +41,18 @@ class RoleFixtures extends Fixture
         $manager->persist($roleStructureAdmin);
         $this->addReference(self::REFERENCE . 'structureAdmin', $roleStructureAdmin);
 
-        $roleSecretary = new Role();
-
-        $roleSecretary->setName('Secretary')
+        $roleSecretary = (new Role())
+        ->setName('Secretary')
             ->setPrettyName('Secretaire')
             ->setIsInStructureRole(true);
-
         $manager->persist($roleSecretary);
         $this->addReference(self::REFERENCE . 'secretary', $roleSecretary);
 
-        $roleActor = new Role();
-        $roleActor->setName('Actor')
+        $roleActor = (new Role())
+            ->setName('Actor')
             ->setPrettyName('Elu')
             ->setIsInStructureRole(true)
             ->addComposite('ROLE_ACTOR');
-
         $manager->persist($roleActor);
         $this->addReference(self::REFERENCE . 'actor', $roleActor);
 

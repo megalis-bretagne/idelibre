@@ -15,56 +15,56 @@ class TypeFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager): void
     {
-        /** @var Structure $structureLibriciel */
+        /** @var Structure $structureLibriciel
+         * @var Structure $structureMontpellier
+         * @var User      $actorLibriciel1
+         * @var User      $actorLibriciel2
+         * @var User      $secretaryLibriciel1
+         */
         $structureLibriciel = $this->getReference(StructureFixtures::REFERENCE . 'libriciel');
-
-        /** @var Structure $structureMontpellier */
         $structureMontpellier = $this->getReference(StructureFixtures::REFERENCE . 'montpellier');
+        $actorLibriciel1 = $this->getReference(UserFixtures::REFERENCE . 'actorLibriciel1');
+        $actorLibriciel2 = $this->getReference(UserFixtures::REFERENCE . 'actorLibriciel2');
+        $secretaryLibriciel1 = $this->getReference(UserFixtures::REFERENCE . 'secretaryLibriciel1');
 
-        /** @var User $actor1Libriciel */
-        $actor1Libriciel = $this->getReference(UserFixtures::REFERENCE . 'actorLibriciel2');
-
-        /** @var User $actor2Libriciel */
-        $actor2Libriciel = $this->getReference(UserFixtures::REFERENCE . 'actorLibriciel1');
-
-        $typeConseilLibriciel = new Type();
-        $typeConseilLibriciel->setName('Conseil Communautaire Libriciel')
+        $typeConseilLibriciel = (new Type())
+            ->setName('Conseil Communautaire Libriciel')
             ->setStructure($structureLibriciel)
-            ->addAssociatedUser($actor1Libriciel)
-            ->addAssociatedUser($actor2Libriciel);
+            ->addAssociatedUser($actorLibriciel1)
+            ->addAssociatedUser($actorLibriciel2)
+            ->addAuthorizedSecretary($secretaryLibriciel1);
         $manager->persist($typeConseilLibriciel);
         $this->addReference(self::REFERENCE . 'conseilLibriciel', $typeConseilLibriciel);
 
-        $typeBureauLibriciel = new Type();
-        $typeBureauLibriciel->setName('Bureau Communautaire Libriciel')
+        $typeBureauLibriciel = (new Type())
+            ->setName('Bureau Communautaire Libriciel')
             ->setStructure($structureLibriciel)
-            ->addAssociatedUser($actor1Libriciel);
-
+            ->addAssociatedUser($actorLibriciel2);
         $manager->persist($typeBureauLibriciel);
         $this->addReference(self::REFERENCE . 'bureauLibriciel', $typeBureauLibriciel);
 
-        $typeConseilMontpellier = new Type();
-        $typeConseilMontpellier->setName('Conseil Municipal Montpellier')
+        $typeConseilMontpellier = (new Type())
+            ->setName('Conseil Municipal Montpellier')
             ->setStructure($structureMontpellier);
         $manager->persist($typeConseilMontpellier);
         $this->addReference(self::REFERENCE . 'conseilMontpellier', $typeConseilMontpellier);
 
-        $testTypeLS = new Type();
-        $testTypeLS->setName('unUsedType')
+        $testTypeLS = (new Type())
+            ->setName('unUsedType')
             ->setStructure($structureLibriciel)
-            ->addAssociatedUser($actor1Libriciel)
-            ->addAssociatedUser($actor2Libriciel);
+            ->addAssociatedUser($actorLibriciel1)
+            ->addAssociatedUser($actorLibriciel2);
         $manager->persist($testTypeLS);
         $this->addReference(self::REFERENCE . 'unUsedType', $testTypeLS);
 
         $manager->flush();
     }
 
-    public function getDependencies()
+    public function getDependencies(): array
     {
         return [
-           StructureFixtures::class,
-           UserFixtures::class,
-       ];
+            StructureFixtures::class,
+            UserFixtures::class,
+        ];
     }
 }

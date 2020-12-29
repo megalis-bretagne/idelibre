@@ -77,3 +77,15 @@ Commit de pre merge qui foctionne avec postgresql ?
 
 
 Tous les path dans la bd devrait etre a partir d'un chemin donnée. Conseil Epommateau !
+
+
+liip cache
+Creer le cache pour postgres (bénéfique à tous)
+
+pg_dump --dbname=postgresql://idelibre:idelibre@127.0.0.1:5432/idelibre_docker --schema-only --file "/tmp/docker2.sql"
+
+SET CONSTRAINTS ALL DEFERRED
+
+SET CONSTRAINTS ALL IMMEDIATE
+
+

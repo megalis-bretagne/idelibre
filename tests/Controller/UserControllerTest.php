@@ -3,6 +3,7 @@
 namespace App\Tests\Controller;
 
 use App\DataFixtures\RoleFixtures;
+use App\DataFixtures\TypeFixtures;
 use App\DataFixtures\UserFixtures;
 use App\Entity\Role;
 use App\Entity\User;
@@ -41,6 +42,7 @@ class UserControllerTest extends WebTestCase
         $this->loadFixtures([
             UserFixtures::class,
             RoleFixtures::class,
+            TypeFixtures::class
         ]);
     }
 
@@ -144,6 +146,35 @@ class UserControllerTest extends WebTestCase
         $successMsg = $crawler->filter('html:contains("votre utilisateur a bien été modifié")');
         $this->assertCount(1, $successMsg);
     }
+
+    public function testEditSecretary()
+    {
+        $this->loginAsAdminLibriciel();
+
+        $user = $this->getOneUserBy(['username' => 'secretary1@libriciel.coop']);
+        $type =$this->getOneTypeBy(['name' => 'Bureau Communautaire Libriciel']);
+
+        $crawler = $this->client->request(Request::METHOD_GET, '/user/edit/' . $user->getId());
+        $this->assertResponseStatusCodeSame(200);
+        $item = $crawler->filter('html:contains("Modifier un utilisateur")');
+        $this->assertCount(1, $item);
+
+        $form = $crawler->selectButton('Enregistrer')->form();
+
+        $form['user[authorizedTypes]'] = [$type->getId()];
+        $this->client->submit($form);
+
+        $this->assertTrue($this->client->getResponse()->isRedirect());
+
+        $crawler = $this->client->followRedirect();
+        $this->assertResponseStatusCodeSame(200);
+        $successMsg = $crawler->filter('html:contains("votre utilisateur a bien été modifié")');
+        $this->assertCount(1, $successMsg);
+
+        $this->entityManager->refresh($user);
+        $this->assertSame($user->getAuthorizedTypes()->first()->getId(), $type->getId());
+    }
+
 
     public function testIndex()
     {
