@@ -6,7 +6,7 @@ trait FileTrait
 {
     public function countFileInDirectory(string $dirPath): int
     {
-        $files = glob($dirPath . "/*");
+        $files = glob($dirPath . '/*');
 
         if ($files) {
             return count($files);
@@ -15,8 +15,8 @@ trait FileTrait
         return 0;
     }
 
-
-    public function countFileLines(string $path){
+    public function countFileLines(string $path)
+    {
         $file = new \SplFileObject($path, 'r');
         $file->seek(PHP_INT_MAX);
 

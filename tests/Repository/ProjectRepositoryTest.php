@@ -21,7 +21,6 @@ class ProjectRepositoryTest extends WebTestCase
     use FindEntityTrait;
     use LoginTrait;
 
-
     private ?KernelBrowser $client;
     /**
      * @var ObjectManager
@@ -31,7 +30,6 @@ class ProjectRepositoryTest extends WebTestCase
      * @var ProjectRepository
      */
     private $projectRepository;
-
 
     protected function setUp(): void
     {
@@ -48,7 +46,7 @@ class ProjectRepositoryTest extends WebTestCase
             ProjectFixtures::class,
             AnnexFixtures::class,
             ThemeFixtures::class,
-            FileFixtures::class
+            FileFixtures::class,
         ]);
     }
 

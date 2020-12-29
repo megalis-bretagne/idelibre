@@ -20,13 +20,11 @@ class PartyControllerTest extends WebTestCase
     use FindEntityTrait;
     use LoginTrait;
 
-
     private ?KernelBrowser $client;
     /**
      * @var ObjectManager
      */
     private $entityManager;
-
 
     protected function setUp(): void
     {
@@ -39,7 +37,7 @@ class PartyControllerTest extends WebTestCase
 
         $this->loadFixtures([
             PartyFixtures::class,
-            UserFixtures::class
+            UserFixtures::class,
         ]);
     }
 
@@ -49,7 +47,6 @@ class PartyControllerTest extends WebTestCase
         $this->client = null;
         $this->entityManager->close();
     }
-
 
     public function testIndex()
     {
@@ -136,7 +133,6 @@ class PartyControllerTest extends WebTestCase
         $this->assertEmpty($this->getOneEntityBy(User::class, ['id' => $currentUserId, 'party' => $party]));
     }
 
-
     public function testDeleteNotMyParty()
     {
         $this->loginAsAdminLibriciel();
@@ -148,7 +144,7 @@ class PartyControllerTest extends WebTestCase
     public function testDelete()
     {
         $this->loginAsAdminLibriciel();
-        /** @var $party Party  */
+        /** @var $party Party */
         $party = $this->getOneEntityBy(Party::class, ['name' => 'Majorité']);
         $crawler = $this->client->request(Request::METHOD_DELETE, '/party/delete/' . $party->getId());
         $this->assertTrue($this->client->getResponse()->isRedirect());

@@ -29,7 +29,6 @@ class ProjectControllerTest extends WebTestCase
     use FindEntityTrait;
     use LoginTrait;
 
-
     private ?KernelBrowser $client;
     /**
      * @var ObjectManager
@@ -39,7 +38,6 @@ class ProjectControllerTest extends WebTestCase
      * @var object|Serializer|null
      */
     private $serializer;
-
 
     protected function setUp(): void
     {
@@ -59,7 +57,7 @@ class ProjectControllerTest extends WebTestCase
             AnnexFixtures::class,
             FileFixtures::class,
             ThemeFixtures::class,
-            SittingFixtures::class
+            SittingFixtures::class,
         ]);
     }
 
@@ -69,7 +67,6 @@ class ProjectControllerTest extends WebTestCase
         $this->client = null;
         $this->entityManager->close();
     }
-
 
     public function testEditAddProjects()
     {
@@ -85,24 +82,22 @@ class ProjectControllerTest extends WebTestCase
         $fileProject2 = new UploadedFile(__DIR__ . '/../../resources/project2.pdf', 'fichier.pdf', 'application/pdf');
         $fileAnnex1 = new UploadedFile(__DIR__ . '/../../resources/annex1.pdf', 'fichier.pdf', 'application/pdf');
 
-
         $annex = new AnnexApi();
         $annex->setLinkedFileKey('annex1')
             ->setRank(0);
 
         $project1 = new ProjectApi();
-        $project1->setName("first Project")
+        $project1->setName('first Project')
             ->setRank(0)
             ->setLinkedFileKey('project1')
             ->setAnnexes([$annex]);
 
         $project2 = new ProjectApi();
-        $project2->setName("second project")
+        $project2->setName('second project')
             ->setRank(1)
             ->setLinkedFileKey('project2');
 
         $serializedProjects = $this->serializer->serialize([$project1, $project2], 'json');
-
 
         $this->client->request(
             Request::METHOD_POST,
@@ -124,7 +119,6 @@ class ProjectControllerTest extends WebTestCase
         $this->assertNotEmpty($project->getAnnexes());
     }
 
-
     public function testEditDeleteProjects()
     {
         $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
@@ -133,7 +127,7 @@ class ProjectControllerTest extends WebTestCase
         $this->loginAsAdminLibriciel();
 
         $project2 = new ProjectApi();
-        $project2->setName("Project 2")
+        $project2->setName('Project 2')
             ->setRank(0)
             ->setId($projectId);
 
@@ -165,13 +159,13 @@ class ProjectControllerTest extends WebTestCase
             ->setId($annexId);
 
         $project1Client = new ProjectApi();
-        $project1Client->setName("Project 1")
+        $project1Client->setName('Project 1')
             ->setRank(0)
             ->setId($project1->getId())
             ->setAnnexes([$annex]);
 
         $project2Client = new ProjectApi();
-        $project2Client->setName("Project 2")
+        $project2Client->setName('Project 2')
             ->setRank(1)
             ->setId($project2->getId());
 
@@ -191,7 +185,6 @@ class ProjectControllerTest extends WebTestCase
         $this->assertCount(1, $project1->getAnnexes());
     }
 
-
     public function testGetProjectsFromSitting()
     {
         $this->loginAsAdminLibriciel();
@@ -203,7 +196,7 @@ class ProjectControllerTest extends WebTestCase
         $projectsArray = json_decode($this->client->getResponse()->getContent(), true);
 
         $this->assertCount(2, $projectsArray);
-        $this->assertEquals("Project 1", $projectsArray[0]['name']);
+        $this->assertEquals('Project 1', $projectsArray[0]['name']);
         $this->assertNotEmpty($projectsArray[0]['themeId']);
         $this->assertNotEmpty($projectsArray[0]['reporterId']);
         $this->assertCount(2, $projectsArray[0]['annexes']);

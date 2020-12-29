@@ -5,6 +5,7 @@ namespace App\Entity;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\FileRepository")
@@ -20,6 +21,8 @@ class File
 
     /**
      * @ORM\Column(type="string", length=512)
+     * @Assert\NotBlank
+     * @Assert\Length(max="512")
      */
     private $path;
 
@@ -29,7 +32,9 @@ class File
     private $size;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=125)
+     * @Assert\NotBlank
+     * @Assert\Length(max="125")
      */
     private $name;
 

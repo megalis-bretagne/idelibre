@@ -23,7 +23,6 @@ class TypeRepositoryTest extends WebTestCase
     use FindEntityTrait;
     use LoginTrait;
 
-
     private ?KernelBrowser $client;
     /**
      * @var ObjectManager
@@ -33,7 +32,6 @@ class TypeRepositoryTest extends WebTestCase
      * @var TypeRepository
      */
     private $typeRepository;
-
 
     protected function setUp(): void
     {
@@ -50,7 +48,7 @@ class TypeRepositoryTest extends WebTestCase
             StructureFixtures::class,
             UserFixtures::class,
             TypeFixtures::class,
-            EmailTemplateFixtures::class
+            EmailTemplateFixtures::class,
         ]);
     }
 
@@ -68,7 +66,6 @@ class TypeRepositoryTest extends WebTestCase
 
         $this->assertCount(3, $this->typeRepository->findByStructure($structure)->getQuery()->getResult());
     }
-
 
     public function testFindNotAssociatedWithOtherTemplateByStructure()
     {

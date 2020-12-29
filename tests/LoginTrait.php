@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Tests;
 
 use App\Entity\User;
@@ -29,7 +28,6 @@ trait LoginTrait
         $this->client->getCookieJar()->set($cookie);
     }
 
-
     public function loginAsAdminLibriciel()
     {
         $this->login('admin@libriciel');
@@ -39,9 +37,6 @@ trait LoginTrait
     {
         $this->login('user@montpellier');
     }
-
-
-
 
     public function loginAsSuperAdmin()
     {

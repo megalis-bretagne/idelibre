@@ -30,7 +30,6 @@ class AdminControllerTest extends WebTestCase
      */
     private $entityManager;
 
-
     protected function setUp(): void
     {
         $this->client = static::createClient();
@@ -42,7 +41,7 @@ class AdminControllerTest extends WebTestCase
 
         $this->loadFixtures([
             UserFixtures::class,
-            GroupFixtures::class
+            GroupFixtures::class,
         ]);
     }
 
@@ -52,7 +51,6 @@ class AdminControllerTest extends WebTestCase
         $this->client = null;
         $this->entityManager->getConnection()->close();
     }
-
 
     public function testDelete()
     {
@@ -90,7 +88,6 @@ class AdminControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(200);
         $item = $crawler->filter('html:contains("Ajouter un administrateur")');
         $this->assertCount(1, $item);
-
 
         $form = $crawler->selectButton('Enregistrer')->form();
 
@@ -142,8 +139,6 @@ class AdminControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(200);
         $item = $crawler->filter('html:contains("Ajouter un administrateur")');
         $this->assertCount(1, $item);
-
-        ;
 
         $form = $crawler->selectButton('Enregistrer')->form();
 

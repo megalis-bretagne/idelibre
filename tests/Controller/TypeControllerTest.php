@@ -30,7 +30,6 @@ class TypeControllerTest extends WebTestCase
      */
     private $entityManager;
 
-
     protected function setUp(): void
     {
         $this->client = static::createClient();
@@ -42,7 +41,7 @@ class TypeControllerTest extends WebTestCase
 
         $this->loadFixtures([
             UserFixtures::class,
-            TypeFixtures::class
+            TypeFixtures::class,
         ]);
     }
 
@@ -52,7 +51,6 @@ class TypeControllerTest extends WebTestCase
         $this->client = null;
         $this->entityManager->getConnection()->close();
     }
-
 
     public function testIndex()
     {
@@ -79,7 +77,6 @@ class TypeControllerTest extends WebTestCase
 
         $this->assertEmpty($this->getOneEntityBy(Type::class, ['id' => $type->getId()]));
     }
-
 
     public function testDeleteNotMyType()
     {
@@ -114,7 +111,6 @@ class TypeControllerTest extends WebTestCase
 
         $this->assertNotEmpty($this->getOneEntityBy(Type::class, ['name' => 'New type']));
     }
-
 
     public function testAddWithAssociatedUsers()
     {

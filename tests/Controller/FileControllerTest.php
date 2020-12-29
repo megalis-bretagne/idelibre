@@ -19,7 +19,6 @@ class FileControllerTest extends WebTestCase
     use FindEntityTrait;
     use LoginTrait;
 
-
     private ?KernelBrowser $client;
     /**
      * @var ObjectManager
@@ -37,7 +36,7 @@ class FileControllerTest extends WebTestCase
 
         $this->loadFixtures([
             FileFixtures::class,
-            ProjectFixtures::class
+            ProjectFixtures::class,
         ]);
     }
 
@@ -66,7 +65,6 @@ class FileControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(200);
     }
 
-
     public function testDownloadLoginWrongStructure()
     {
         $fileId = $this->prepareFile();
@@ -75,7 +73,6 @@ class FileControllerTest extends WebTestCase
         $this->client->request(Request::METHOD_GET, '/file/download/' . $fileId);
         $this->assertResponseStatusCodeSame(403);
     }
-
 
     protected function tearDown(): void
     {

@@ -2,7 +2,6 @@
 
 namespace App\Tests\Controller\Connector;
 
-use App\Controller\Connector\ConnectorController;
 use App\DataFixtures\ComelusConnectorFixtures;
 use App\DataFixtures\LsMessageConnectorFixtures;
 use App\DataFixtures\UserFixtures;
@@ -20,13 +19,11 @@ class ConnectorControllerTest extends WebTestCase
     use FindEntityTrait;
     use LoginTrait;
 
-
     private ?KernelBrowser $client;
     /**
      * @var ObjectManager
      */
     private $entityManager;
-
 
     protected function setUp(): void
     {
@@ -40,7 +37,7 @@ class ConnectorControllerTest extends WebTestCase
         $this->loadFixtures([
             UserFixtures::class,
             ComelusConnectorFixtures::class,
-            LsMessageConnectorFixtures::class
+            LsMessageConnectorFixtures::class,
         ]);
     }
 
@@ -51,7 +48,6 @@ class ConnectorControllerTest extends WebTestCase
         $this->entityManager->close();
     }
 
-
     public function testIndex()
     {
         $this->loginAsAdminLibriciel();
@@ -61,5 +57,4 @@ class ConnectorControllerTest extends WebTestCase
         $item = $crawler->filter('html:contains("Connecteurs")');
         $this->assertCount(1, $item);
     }
-
 }

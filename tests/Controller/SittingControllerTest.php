@@ -20,13 +20,11 @@ class SittingControllerTest extends WebTestCase
     use FindEntityTrait;
     use LoginTrait;
 
-
     private ?KernelBrowser $client;
     /**
      * @var ObjectManager
      */
     private $entityManager;
-
 
     protected function setUp(): void
     {
@@ -38,7 +36,7 @@ class SittingControllerTest extends WebTestCase
             ->getManager();
 
         $this->loadFixtures([
-            SittingFixtures::class
+            SittingFixtures::class,
         ]);
     }
 
@@ -48,7 +46,6 @@ class SittingControllerTest extends WebTestCase
         $this->client = null;
         $this->entityManager->close();
     }
-
 
     public function testIndex()
     {
@@ -82,7 +79,6 @@ class SittingControllerTest extends WebTestCase
         $form['sitting[place]'] = 'place';
         $form['sitting[convocationFile]'] = $fileConvocation;
 
-
         $this->client->submit($form);
 
         $this->assertTrue($this->client->getResponse()->isRedirect());
@@ -96,7 +92,6 @@ class SittingControllerTest extends WebTestCase
         $this->assertNotEmpty($this->getOneEntityBy(Sitting::class, ['name' => 'unUsedType']));
     }
 
-
     public function testEditUsers()
     {
         $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
@@ -108,7 +103,6 @@ class SittingControllerTest extends WebTestCase
         $this->assertCount(1, $item);
     }
 
-
     public function testEditProjects()
     {
         $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
@@ -119,7 +113,6 @@ class SittingControllerTest extends WebTestCase
         $item = $crawler->filter('html:contains("Gérer les projets")');
         $this->assertCount(1, $item);
     }
-
 
     public function testDelete()
     {
@@ -136,7 +129,6 @@ class SittingControllerTest extends WebTestCase
 
         $this->assertEmpty($this->getOneSittingBy(['name' => 'Conseil Libriciel']));
     }
-
 
     public function testShowInformation()
     {
@@ -160,7 +152,6 @@ class SittingControllerTest extends WebTestCase
         $this->assertCount(1, $item);
     }
 
-
     public function testShowProjects()
     {
         $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
@@ -171,7 +162,6 @@ class SittingControllerTest extends WebTestCase
         $item = $crawler->filter('html:contains("Ordre du jour")');
         $this->assertCount(1, $item);
     }
-
 
     public function testGetZipSeances()
     {
@@ -184,7 +174,6 @@ class SittingControllerTest extends WebTestCase
 
         $filesystem = new FileSystem();
         $filesystem->copy(__DIR__ . '/../resources/fichier.pdf', $zipDirectory . $sitting->getId() . '.zip');
-
 
         $this->loginAsAdminLibriciel();
 
@@ -201,7 +190,6 @@ class SittingControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(403);
     }
 
-
     public function testGetPdfSeances()
     {
         $container = self::$container;
@@ -214,17 +202,14 @@ class SittingControllerTest extends WebTestCase
         $filesystem = new FileSystem();
         $filesystem->copy(__DIR__ . '/../resources/fichier.pdf', $zipDirectory . $sitting->getId() . '.pdf');
 
-
         $this->loginAsAdminLibriciel();
 
         $this->client->request(Request::METHOD_GET, '/sitting/pdf/' . $sitting->getId());
         $this->assertResponseStatusCodeSame(200);
     }
 
-
     public function testEditInformation()
     {
-
         $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
         $this->loginAsAdminLibriciel();
         $crawler = $this->client->request(Request::METHOD_GET, '/sitting/edit/' . $sitting->getId());
@@ -233,11 +218,9 @@ class SittingControllerTest extends WebTestCase
         $item = $crawler->filter('html:contains("Modifier les informations d\'une séance")');
         $this->assertCount(1, $item);
 
-
         $form = $crawler->selectButton('Enregistrer')->form();
 
         $form['sitting[place]'] = 'MyUniquePlace';
-
 
         $this->client->submit($form);
 
@@ -251,7 +234,6 @@ class SittingControllerTest extends WebTestCase
 
         $this->assertNotEmpty($this->getOneEntityBy(Sitting::class, ['place' => 'MyUniquePlace']));
     }
-
 
     public function testArchiveSeance()
     {

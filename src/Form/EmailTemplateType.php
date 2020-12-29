@@ -7,8 +7,10 @@ use App\Entity\Type;
 use App\Repository\TypeRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -65,6 +67,16 @@ class EmailTemplateType extends AbstractType
                 'label' => 'Joindre le fichier de convocation',
             ]);
         }
+
+        $builder->add('structure', HiddenType::class, [
+            'data' => $options['structure'],
+            'data_class' => null,
+        ]);
+
+        $builder->get('structure')->addModelTransformer(new CallbackTransformer(
+            fn () => '',
+            fn () => $options['structure']
+        ));
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -75,12 +87,12 @@ class EmailTemplateType extends AbstractType
         ]);
     }
 
-    private function isDefaultTemplate(?EmailTemplate $emailTemplate)
+    private function isDefaultTemplate(?EmailTemplate $emailTemplate): bool
     {
         return $emailTemplate && $emailTemplate->getIsDefault();
     }
 
-    private function isForgetPassword(?EmailTemplate $emailTemplate)
+    private function isForgetPassword(?EmailTemplate $emailTemplate): bool
     {
         return $emailTemplate && EmailTemplate::CATEGORY_RESET_PASSWORD === $emailTemplate->getCategory();
     }

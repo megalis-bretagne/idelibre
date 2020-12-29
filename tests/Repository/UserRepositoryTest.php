@@ -23,7 +23,6 @@ class UserRepositoryTest extends WebTestCase
     use FindEntityTrait;
     use LoginTrait;
 
-
     private ?KernelBrowser $client;
     /**
      * @var ObjectManager
@@ -49,7 +48,7 @@ class UserRepositoryTest extends WebTestCase
             StructureFixtures::class,
             UserFixtures::class,
             RoleFixtures::class,
-            GroupFixtures::class
+            GroupFixtures::class,
         ]);
     }
 
@@ -73,14 +72,12 @@ class UserRepositoryTest extends WebTestCase
         $this->assertCount(3, $this->userRepository->findSuperAdminAndGroupAdmin(null)->getQuery()->getResult());
     }
 
-
     public function testFindSuperAdminAndGroupAdminLimitedRecia()
     {
         /** @var Group $group */
         $groupRecia = $this->getOneEntityBy(Group::class, ['name' => 'Recia']);
         $this->assertCount(1, $this->userRepository->findSuperAdminAndGroupAdmin($groupRecia)->getQuery()->getResult());
     }
-
 
     public function testFindSuperAdminAndGroupInStructure()
     {

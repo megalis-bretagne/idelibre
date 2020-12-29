@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\GdprRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=GdprRepository::class)
@@ -19,46 +20,57 @@ class Gdpr
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Length(max="255")
      */
     private $companyName;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=512)
+     * @Assert\Length(max="512")
      */
     private $address;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Length(max="255")
      */
     private $representative;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Length(max="255")
      */
     private $quality;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Length(max="255")
      */
     private $siret;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Length(max="255")
      */
     private $ape;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Length(max="255")
      */
     private $companyPhone;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Length(max="255")
+     * @Assert\Email
      */
     private $companyEmail;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Length(max="255")
+     * @Assert\Email
      */
     private $dpoEmail;
 

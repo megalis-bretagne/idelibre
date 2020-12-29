@@ -11,7 +11,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Bundle\MakerBundle\Str;
 use Symfony\Component\HttpFoundation\Request;
 
 // TODO improve TESTS STRUCTURE CREATION (ie connectors, templates ...)
@@ -31,7 +30,6 @@ class StructureControllerTest extends WebTestCase
      * @var EntityManagerInterface
      */
     private $entityManager;
-
 
     protected function setUp(): void
     {
@@ -54,7 +52,6 @@ class StructureControllerTest extends WebTestCase
         $this->entityManager->close();
     }
 
-
     public function testIndex()
     {
         $this->loginAsSuperAdmin();
@@ -64,7 +61,6 @@ class StructureControllerTest extends WebTestCase
         $item = $crawler->filter('html:contains("Structures")');
         $this->assertCount(1, $item);
     }
-
 
     public function testIndexNotAuth()
     {
@@ -108,7 +104,6 @@ class StructureControllerTest extends WebTestCase
         $this->assertNotEmpty($this->getOneEntityBy(Structure::class, ['name' => 'New structure']));
     }
 
-
     public function testEdit()
     {
         $structure = $this->getOneEntityBy(Structure::class, ['name' => 'Libriciel']);
@@ -135,7 +130,6 @@ class StructureControllerTest extends WebTestCase
         $this->assertNotEmpty($this->getOneEntityBy(Structure::class, ['name' => 'New structure name']));
     }
 
-
     public function testDelete()
     {
         $structure = $this->getOneEntityBy(Structure::class, ['name' => 'Libriciel']);
@@ -152,7 +146,6 @@ class StructureControllerTest extends WebTestCase
 
         $this->assertEmpty($this->getOneEntityBy(Structure::class, ['id' => $structure->getId()]));
     }
-
 
     public function testPreferences()
     {

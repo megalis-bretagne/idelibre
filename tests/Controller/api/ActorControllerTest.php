@@ -19,13 +19,11 @@ class ActorControllerTest extends WebTestCase
     use FindEntityTrait;
     use LoginTrait;
 
-
     private ?KernelBrowser $client;
     /**
      * @var ObjectManager
      */
     private $entityManager;
-
 
     protected function setUp(): void
     {
@@ -39,7 +37,7 @@ class ActorControllerTest extends WebTestCase
         $this->loadFixtures([
             UserFixtures::class,
             SittingFixtures::class,
-            ConvocationFixtures::class
+            ConvocationFixtures::class,
         ]);
     }
 
@@ -72,7 +70,6 @@ class ActorControllerTest extends WebTestCase
         $this->assertCount(2, $actorsInSitting);
     }
 
-
     public function testGetActorsNotInSitting()
     {
         $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
@@ -83,7 +80,6 @@ class ActorControllerTest extends WebTestCase
         $actorsNotInSitting = json_decode($this->client->getResponse()->getContent(), true);
         $this->assertCount(2, $actorsNotInSitting);
     }
-
 
     public function testUpdateActorsInSittingAddActor()
     {

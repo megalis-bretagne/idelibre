@@ -8,7 +8,9 @@ use App\Entity\Type;
 use App\Repository\TypeRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -51,7 +53,15 @@ class SittingType extends AbstractType
                 ],
                 'mapped' => false,
                 'required' => $isNew,
-            ]);
+            ])
+            ->add('structure', HiddenType::class, [
+                'data' => $options['structure'],
+                'data_class' => null,
+            ])
+            ->get('structure')->addModelTransformer(new CallbackTransformer(
+                fn () => '',
+                fn () => $options['structure']
+            ));
     }
 
     public function configureOptions(OptionsResolver $resolver)

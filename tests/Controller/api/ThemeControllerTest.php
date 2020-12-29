@@ -2,7 +2,6 @@
 
 namespace App\Tests\Controller\api;
 
-use App\Controller\api\ThemeController;
 use App\DataFixtures\ThemeFixtures;
 use App\DataFixtures\UserFixtures;
 use App\Tests\FindEntityTrait;
@@ -19,13 +18,11 @@ class ThemeControllerTest extends WebTestCase
     use FindEntityTrait;
     use LoginTrait;
 
-
     private ?KernelBrowser $client;
     /**
      * @var ObjectManager
      */
     private $entityManager;
-
 
     protected function setUp(): void
     {
@@ -38,7 +35,7 @@ class ThemeControllerTest extends WebTestCase
 
         $this->loadFixtures([
             ThemeFixtures::class,
-            UserFixtures::class
+            UserFixtures::class,
         ]);
     }
 

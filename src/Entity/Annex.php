@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\AnnexRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=AnnexRepository::class)
@@ -19,18 +20,21 @@ class Annex
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank
      */
     private $rank;
 
     /**
      * @ORM\OneToOne(targetEntity=File::class, cascade={"persist", "remove"}, inversedBy="annex")
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotNull
      */
     private $file;
 
     /**
      * @ORM\ManyToOne(targetEntity=Project::class, inversedBy="annexes")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     * @Assert\NotNull
      */
     private $project;
 

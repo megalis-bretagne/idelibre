@@ -2,7 +2,6 @@
 
 namespace App\Tests\Controller\api;
 
-use App\Controller\api\ConvocationController;
 use App\DataFixtures\ConvocationFixtures;
 use App\Tests\FileTrait;
 use App\Tests\FindEntityTrait;
@@ -11,7 +10,6 @@ use Doctrine\Persistence\ObjectManager;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 
 class ConvocationControllerTest extends WebTestCase
@@ -21,13 +19,11 @@ class ConvocationControllerTest extends WebTestCase
     use LoginTrait;
     use FileTrait;
 
-
     private ?KernelBrowser $client;
     /**
      * @var ObjectManager
      */
     private $entityManager;
-
 
     protected function setUp(): void
     {
@@ -39,7 +35,7 @@ class ConvocationControllerTest extends WebTestCase
             ->getManager();
 
         $this->loadFixtures([
-            ConvocationFixtures::class
+            ConvocationFixtures::class,
         ]);
     }
 
@@ -61,7 +57,6 @@ class ConvocationControllerTest extends WebTestCase
         $this->assertCount(2, $convocations);
     }
 
-
     public function testSendConvocation()
     {
         $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
@@ -77,7 +72,7 @@ class ConvocationControllerTest extends WebTestCase
 
         $bag = self::$container->get('parameter_bag');
 
-        $year = $sitting->getDate()->format("Y");
+        $year = $sitting->getDate()->format('Y');
         $tokenPath = "{$bag->get('token_directory')}{$sitting->getStructure()->getId()}/$year/{$sitting->getId()}";
         $this->assertEquals(2, $this->countFileInDirectory($tokenPath));
     }

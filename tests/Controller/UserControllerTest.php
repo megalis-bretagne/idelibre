@@ -2,7 +2,6 @@
 
 namespace App\Tests\Controller;
 
-use App\Controller\UserController;
 use App\DataFixtures\RoleFixtures;
 use App\DataFixtures\UserFixtures;
 use App\Entity\Role;
@@ -11,7 +10,6 @@ use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
-use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -31,7 +29,6 @@ class UserControllerTest extends WebTestCase
      */
     private $entityManager;
 
-
     protected function setUp(): void
     {
         $this->client = static::createClient();
@@ -43,7 +40,7 @@ class UserControllerTest extends WebTestCase
 
         $this->loadFixtures([
             UserFixtures::class,
-            RoleFixtures::class
+            RoleFixtures::class,
         ]);
     }
 
@@ -79,7 +76,6 @@ class UserControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(403);
     }
 
-
     public function testDeleteMyself()
     {
         $this->loginAsAdminLibriciel();
@@ -92,7 +88,6 @@ class UserControllerTest extends WebTestCase
         $successMsg = $crawler->filter('html:contains("Impossible de supprimer son propre utilisateur")');
         $this->assertCount(1, $successMsg);
     }
-
 
     public function testAdd()
     {
@@ -160,7 +155,6 @@ class UserControllerTest extends WebTestCase
         $this->assertCount(1, $item);
     }
 
-
     public function testPreferences()
     {
         $this->loginAsAdminLibriciel();
@@ -170,19 +164,15 @@ class UserControllerTest extends WebTestCase
         $item = $crawler->filter('html:contains("Préférences utilisateur")');
         $this->assertCount(1, $item);
 
-
-
         $form = $crawler->selectButton('Enregistrer')->form();
         $form['user_preference[username]'] = 'New username';
-
 
         $this->client->submit($form);
 
         $this->assertTrue($this->client->getResponse()->isRedirect());
 
-
         $this->client->followRedirect();
-        $crawler =$this->client->followRedirect();
+        $crawler = $this->client->followRedirect();
 
         $this->assertResponseStatusCodeSame(200);
 

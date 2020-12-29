@@ -2,7 +2,6 @@
 
 namespace App\Tests\Controller;
 
-use App\Controller\ReportSittingController;
 use App\DataFixtures\ConvocationFixtures;
 use App\DataFixtures\SittingFixtures;
 use App\DataFixtures\TimestampFixtures;
@@ -21,13 +20,11 @@ class ReportSittingControllerTest extends WebTestCase
     use FindEntityTrait;
     use LoginTrait;
 
-
     private ?KernelBrowser $client;
     /**
      * @var ObjectManager
      */
     private $entityManager;
-
 
     protected function setUp(): void
     {
@@ -41,7 +38,7 @@ class ReportSittingControllerTest extends WebTestCase
         $this->loadFixtures([
             SittingFixtures::class,
             ConvocationFixtures::class,
-            TimestampFixtures::class
+            TimestampFixtures::class,
         ]);
     }
 
@@ -62,7 +59,7 @@ class ReportSittingControllerTest extends WebTestCase
         $response = $this->client->getResponse();
         $this->assertTrue($response->headers->has('content-disposition'));
         $this->assertSame('attachment; filename="Conseil Libriciel_rapport.pdf"', $response->headers->get('content-disposition'));
-        $this->assertSame("application/pdf", $response->headers->get('content-type'));
+        $this->assertSame('application/pdf', $response->headers->get('content-type'));
         $this->assertGreaterThan(5000, intval($response->headers->get('content-length')));
     }
 
@@ -76,7 +73,7 @@ class ReportSittingControllerTest extends WebTestCase
         $response = $this->client->getResponse();
         $this->assertTrue($response->headers->has('content-disposition'));
         $this->assertSame('attachment; filename="Conseil Libriciel_rapport.csv"', $response->headers->get('content-disposition'));
-        $this->assertSame("text/plain", $response->headers->get('content-type'));
+        $this->assertSame('text/plain', $response->headers->get('content-type'));
         $this->assertGreaterThan(20, intval($response->headers->get('content-length')));
     }
 
@@ -84,7 +81,7 @@ class ReportSittingControllerTest extends WebTestCase
     {
         $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
         $bag = self::$container->get('parameter_bag');
-        $year = $sitting->getDate()->format("Y");
+        $year = $sitting->getDate()->format('Y');
         $tokenPath = "{$bag->get('token_directory')}{$sitting->getStructure()->getId()}/$year/{$sitting->getId()}";
 
         $filesystem = new FileSystem();
@@ -100,8 +97,7 @@ class ReportSittingControllerTest extends WebTestCase
 
         $this->assertTrue($response->headers->has('content-disposition'));
         $this->assertSame('attachment; filename="Conseil Libriciel_jetons.zip"', $response->headers->get('content-disposition'));
-        $this->assertSame("application/zip", $response->headers->get('content-type'));
+        $this->assertSame('application/zip', $response->headers->get('content-type'));
         $this->assertGreaterThan(100, intval($response->headers->get('content-length')));
     }
-
 }

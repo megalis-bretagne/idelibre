@@ -17,15 +17,11 @@ class GdprControllerTest extends WebTestCase
     use FindEntityTrait;
     use LoginTrait;
 
-
     private ?KernelBrowser $client;
     /**
      * @var ObjectManager
      */
     private $entityManager;
-
-
-
 
     protected function setUp(): void
     {
@@ -37,7 +33,7 @@ class GdprControllerTest extends WebTestCase
             ->getManager();
 
         $this->loadFixtures([
-            UserFixtures::class
+            UserFixtures::class,
         ]);
     }
 
@@ -55,16 +51,15 @@ class GdprControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(200);
         $item = $crawler->filter('html:contains("Modifier les informations RGPD")');
         $this->assertCount(1, $item);
-        ;
 
         $form = $crawler->selectButton('Enregistrer')->form();
 
-        $form['gdpr[companyName]'] = "Libriciel";
+        $form['gdpr[companyName]'] = 'Libriciel';
         $form['gdpr[address]'] = '836 rue du mas de verchant';
         $form['gdpr[companyPhone]'] = '0102030405';
         $form['gdpr[companyEmail]'] = 'email@exemple.org';
         $form['gdpr[representative]'] = 'el presidente';
-        $form['gdpr[quality]'] = "president";
+        $form['gdpr[quality]'] = 'president';
         $form['gdpr[siret]'] = '1234544';
         $form['gdpr[ape]'] = '345';
         $form['gdpr[dpoEmail]'] = 'dpo@example.org';

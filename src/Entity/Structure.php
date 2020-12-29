@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\StructureRepository")
@@ -22,11 +23,16 @@ class Structure
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
+     * @Assert\NotBlank
+     * @Assert\Length(max="255")
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=false)
+     * @Assert\NotBlank
+     * @Assert\Length(max="255")
+     * @Assert\Email
      */
     private $replyTo;
 
@@ -44,11 +50,14 @@ class Structure
     /**
      * @ORM\ManyToOne(targetEntity=Timezone::class)
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotNull
      */
     private $timezone;
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
+     * @Assert\NotBlank
+     * @Assert\Length(max="255")
      */
     private $suffix;
 

@@ -5,10 +5,12 @@ namespace App\Entity;
 use App\Repository\RoleRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=RoleRepository::class)
  * @UniqueEntity("name")
+ * @UniqueEntity("prettyName")
  */
 class Role
 {
@@ -25,6 +27,8 @@ class Role
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
+     * @Assert\NotBlank
+     * @Assert\Length(max="255")
      */
     private $name;
 
@@ -35,13 +39,15 @@ class Role
 
     /**
      * @ORM\Column(type="string", length=255, nullable=false)
+     * @Assert\NotBlank
+     * @Assert\Length(max="255")
      */
     private $prettyName;
 
     /**
      * @ORM\Column(type="boolean", nullable=false)
      */
-    private $isInStructureRole;
+    private $isInStructureRole = true;
 
     public function getId(): ?string
     {
@@ -101,7 +107,7 @@ class Role
         return $this->isInStructureRole;
     }
 
-    public function setIsInStructureRole(?bool $isInStructureRole): self
+    public function setIsInStructureRole(bool $isInStructureRole): self
     {
         $this->isInStructureRole = $isInStructureRole;
 

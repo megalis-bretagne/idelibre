@@ -2,7 +2,6 @@
 
 namespace App\Tests\Controller;
 
-use App\Controller\CsvController;
 use App\DataFixtures\RoleFixtures;
 use App\DataFixtures\TypeFixtures;
 use App\DataFixtures\UserFixtures;
@@ -23,13 +22,11 @@ class CsvControllerTest extends WebTestCase
     use FindEntityTrait;
     use LoginTrait;
 
-
     private ?KernelBrowser $client;
     /**
      * @var ObjectManager
      */
     private $entityManager;
-
 
     protected function setUp(): void
     {
@@ -43,7 +40,7 @@ class CsvControllerTest extends WebTestCase
         $this->loadFixtures([
             UserFixtures::class,
             RoleFixtures::class,
-            TypeFixtures::class
+            TypeFixtures::class,
         ]);
     }
 
@@ -53,7 +50,6 @@ class CsvControllerTest extends WebTestCase
         $this->client = null;
         $this->entityManager->close();
     }
-
 
     public function testImportUsers()
     {
@@ -87,8 +83,6 @@ class CsvControllerTest extends WebTestCase
         $this->assertNotEmpty($this->getOneEntityBy(Type::class, ['name' => 'New type']));
     }
 
-
-
     public function testImportUsersMissingEmail()
     {
         $csvFile = new UploadedFile(__DIR__ . '/../resources/user_email_missing.csv', 'user.csv');
@@ -119,7 +113,6 @@ class CsvControllerTest extends WebTestCase
 
         $this->assertNotEmpty($this->getOneEntityBy(User::class, ['username' => 'e.dupont']));
     }
-
 
     public function testCsvErrorWithNoError()
     {
