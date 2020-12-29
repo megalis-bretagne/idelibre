@@ -29,15 +29,14 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         /**
          * @var Structure $structureLibriciel
          * @var Structure $structureMontpellier
-         * @var Group $groupRecia
-         * @var Role $roleSuperAdmin
-         * @var Role $roleGroupAdmin
-         * @var Role $roleStructureAdminLibriciel
-         * @var Role $roleActor
-         * @var Role $roleSecretary
-         * @var Party $partyMajority
+         * @var Group     $groupRecia
+         * @var Role      $roleSuperAdmin
+         * @var Role      $roleGroupAdmin
+         * @var Role      $roleStructureAdminLibriciel
+         * @var Role      $roleActor
+         * @var Role      $roleSecretary
+         * @var Party     $partyMajority
          */
-
         $structureLibriciel = $this->getReference(StructureFixtures::REFERENCE . 'libriciel');
         $structureMontpellier = $this->getReference(StructureFixtures::REFERENCE . 'montpellier');
 
@@ -46,11 +45,9 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $roleGroupAdmin = $this->getReference(RoleFixtures::REFERENCE . 'groupAdmin');
         $roleSecretary = $this->getReference(RoleFixtures::REFERENCE . 'secretary');
 
-
         $roleStructureAdminLibriciel = $this->getReference(RoleFixtures::REFERENCE . 'structureAdmin');
         $roleActor = $this->getReference(RoleFixtures::REFERENCE . 'actor');
         $partyMajority = $this->getReference(PartyFixtures::REFERENCE . 'majorite');
-
 
         ///////// SuperAdmin  ////////////////////
 
@@ -170,7 +167,6 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($secretaryLibriciel1);
         $this->addReference(self::REFERENCE . 'secretaryLibriciel1', $secretaryLibriciel1);
 
-
         $secretaryLibriciel2 = new User();
         $secretaryLibriciel2->setEmail('secretary2@example.org')
             ->setRole($roleSecretary)
@@ -184,8 +180,6 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
 
         $manager->flush();
     }
-
-
 
     /**
      * {@inheritdoc}

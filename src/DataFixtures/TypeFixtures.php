@@ -17,17 +17,15 @@ class TypeFixtures extends Fixture implements DependentFixtureInterface
     {
         /** @var Structure $structureLibriciel
          * @var Structure $structureMontpellier
-         * @var User $actorLibriciel1
-         * @var User $actorLibriciel2
-         * @var User $secretaryLibriciel1
+         * @var User      $actorLibriciel1
+         * @var User      $actorLibriciel2
+         * @var User      $secretaryLibriciel1
          */
-
         $structureLibriciel = $this->getReference(StructureFixtures::REFERENCE . 'libriciel');
         $structureMontpellier = $this->getReference(StructureFixtures::REFERENCE . 'montpellier');
         $actorLibriciel1 = $this->getReference(UserFixtures::REFERENCE . 'actorLibriciel1');
         $actorLibriciel2 = $this->getReference(UserFixtures::REFERENCE . 'actorLibriciel2');
         $secretaryLibriciel1 = $this->getReference(UserFixtures::REFERENCE . 'secretaryLibriciel1');
-
 
         $typeConseilLibriciel = (new Type())
             ->setName('Conseil Communautaire Libriciel')
@@ -59,11 +57,7 @@ class TypeFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($testTypeLS);
         $this->addReference(self::REFERENCE . 'unUsedType', $testTypeLS);
 
-
-
         $manager->flush();
-
-
     }
 
     public function getDependencies(): array
