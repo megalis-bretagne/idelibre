@@ -6,12 +6,14 @@ use App\Entity\File;
 use App\Entity\Project;
 use App\Entity\Sitting;
 use App\Tests\HasValidationError;
+use App\Tests\StringTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ProjectTest extends WebTestCase
 {
     use HasValidationError;
+    use StringTrait;
 
     private ValidatorInterface $validator;
 
@@ -46,13 +48,7 @@ class ProjectTest extends WebTestCase
     public function testInvalidNameTooLong()
     {
         $project = (new Project())
-            ->setName('name Too Long name Too Long name Too Long name Too Long name Too Long 
-            name Too Long name Too Long name Too Long name Too Long name Too Long name Too Long name Too Long 
-            name Too Long name Too Long name Too Long name Too Long Long name Too Long name Too Long name Too Long 
-            name Too Long name Too Long name Too Long name Too Long Long name Too Long name Too Long name Too Long 
-            name Too Long name Too Long name Too Long name Too Long Too Long name Too Long name Too Long Long name Too Long name Too Long name Too Long 
-            name Too Long name Too Long name Too Long name Too Long Long name Too Long name Too Long name Too Long 
-            name Too Long name Too Long name Too Long name Too Long ')
+            ->setName($this->genString(515))
             ->setSitting(new Sitting())
             ->setRank(1)
             ->setFile(new File());

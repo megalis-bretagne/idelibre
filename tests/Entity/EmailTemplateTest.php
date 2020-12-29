@@ -6,6 +6,8 @@ use App\DataFixtures\EmailTemplateFixtures;
 use App\Entity\EmailTemplate;
 use App\Entity\Structure;
 use App\Tests\FindEntityTrait;
+use App\Tests\HasValidationError;
+use App\Tests\StringTrait;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -14,6 +16,8 @@ class EmailTemplateTest extends WebTestCase
 {
     use FixturesTrait;
     use FindEntityTrait;
+    use HasValidationError;
+    use StringTrait;
 
     private ValidatorInterface $validator;
     private $entityManager;
@@ -29,11 +33,6 @@ class EmailTemplateTest extends WebTestCase
         ]);
     }
 
-    private function assertHasError(EmailTemplate $emailTemplate, int $number)
-    {
-        $errors = $this->validator->validate($emailTemplate);
-        $this->assertCount($number, $errors);
-    }
 
     public function testValid()
     {
@@ -42,7 +41,7 @@ class EmailTemplateTest extends WebTestCase
             ->setContent('my new email content')
             ->setSubject('my new subject')
             ->setStructure(new Structure());
-        $this->assertHasError($emailTemplate, 0);
+        $this->assertHasValidationErrors($emailTemplate, 0);
     }
 
     public function testValidNameAlreadyExistsInOtherStructure()
@@ -52,7 +51,7 @@ class EmailTemplateTest extends WebTestCase
             ->setContent('my new email content')
             ->setSubject('my new subject')
             ->setStructure(new Structure());
-        $this->assertHasError($emailTemplate, 0);
+        $this->assertHasValidationErrors($emailTemplate, 0);
     }
 
     public function testInValidNameAlreadyExistsInSameStructure()
@@ -63,19 +62,17 @@ class EmailTemplateTest extends WebTestCase
             ->setContent('my new email content')
             ->setSubject('my new subject')
             ->setStructure($structure);
-        $this->assertHasError($emailTemplate, 1);
+        $this->assertHasValidationErrors($emailTemplate, 1);
     }
 
     public function testInvalidNameTooLong()
     {
         $emailTemplate = (new EmailTemplate())
-            ->setName('My new name way too long ! My new name way too long ! My new name way too long ! My new name way too long ! 
-            My new name way too long ! My new name way too long ! My new name way too long ! My new name way too long ! 
-            My new name way too long ! My new name way too long ! My new name way too long ! My new name way too long ! ')
+            ->setName($this->genString(256))
             ->setContent('my new email content')
             ->setSubject('my new subject')
             ->setStructure(new Structure());
-        $this->assertHasError($emailTemplate, 1);
+        $this->assertHasValidationErrors($emailTemplate, 1);
     }
 
     public function testInvalidNoName()
@@ -84,7 +81,7 @@ class EmailTemplateTest extends WebTestCase
             ->setContent('my new email content')
             ->setSubject('my new subject')
             ->setStructure(new Structure());
-        $this->assertHasError($emailTemplate, 1);
+        $this->assertHasValidationErrors($emailTemplate, 1);
     }
 
     public function testInvalidEmptyName()
@@ -94,7 +91,7 @@ class EmailTemplateTest extends WebTestCase
             ->setContent('my new email content')
             ->setSubject('my new subject')
             ->setStructure(new Structure());
-        $this->assertHasError($emailTemplate, 1);
+        $this->assertHasValidationErrors($emailTemplate, 1);
     }
 
     public function testInvalidNoStructure()
@@ -103,7 +100,7 @@ class EmailTemplateTest extends WebTestCase
             ->setName('My new name')
             ->setContent('my new email content')
             ->setSubject('my new subject');
-        $this->assertHasError($emailTemplate, 1);
+        $this->assertHasValidationErrors($emailTemplate, 1);
     }
 
     public function testInvalidNoContent()
@@ -112,7 +109,7 @@ class EmailTemplateTest extends WebTestCase
             ->setName('My new name')
             ->setSubject('my new subject')
             ->setStructure(new Structure());
-        $this->assertHasError($emailTemplate, 1);
+        $this->assertHasValidationErrors($emailTemplate, 1);
     }
 
     public function testInvalidEmptyContent()
@@ -122,7 +119,7 @@ class EmailTemplateTest extends WebTestCase
             ->setContent('')
             ->setSubject('my new subject')
             ->setStructure(new Structure());
-        $this->assertHasError($emailTemplate, 1);
+        $this->assertHasValidationErrors($emailTemplate, 1);
     }
 
     public function testInvalidNoSubject()
@@ -131,7 +128,7 @@ class EmailTemplateTest extends WebTestCase
             ->setName('My new name')
             ->setContent('my content')
             ->setStructure(new Structure());
-        $this->assertHasError($emailTemplate, 1);
+        $this->assertHasValidationErrors($emailTemplate, 1);
     }
 
     public function testInvalidEmptySubject()
@@ -141,7 +138,7 @@ class EmailTemplateTest extends WebTestCase
             ->setContent('my content')
             ->setSubject('')
             ->setStructure(new Structure());
-        $this->assertHasError($emailTemplate, 1);
+        $this->assertHasValidationErrors($emailTemplate, 1);
     }
 
     public function testInvalidSubjectTooLong()
@@ -149,10 +146,8 @@ class EmailTemplateTest extends WebTestCase
         $emailTemplate = (new EmailTemplate())
             ->setName('My new name')
             ->setContent('my content')
-            ->setSubject('My way too long subject ! My way too long subject ! My way too long subject ! 
-            My way too long subject ! My way too long subject ! My way too long subject ! My way too long subject ! 
-            My way too long subject ! My way too long subject ! My way too long subject ! My way too long subject ! ')
+            ->setSubject($this->genString(256))
             ->setStructure(new Structure());
-        $this->assertHasError($emailTemplate, 1);
+        $this->assertHasValidationErrors($emailTemplate, 1);
     }
 }

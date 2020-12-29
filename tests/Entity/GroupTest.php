@@ -5,6 +5,7 @@ namespace App\Tests\Entity;
 use App\DataFixtures\GroupFixtures;
 use App\Entity\Group;
 use App\Tests\HasValidationError;
+use App\Tests\StringTrait;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -13,6 +14,7 @@ class GroupTest extends WebTestCase
 {
     use FixturesTrait;
     use HasValidationError;
+    use StringTrait;
 
     private ValidatorInterface $validator;
     private $entityManager;
@@ -51,9 +53,7 @@ class GroupTest extends WebTestCase
     public function testInvalidNameTooLong()
     {
         $group = (new Group())
-            ->setName('nametoolong nametoolong nametoolong nametoolong nametoolong nametoolong 
-            nametoolong nametoolong nametoolong nametoolong nametoolong nametoolong nametoolong nametoolong 
-            nametoolong nametoolong nametoolong nametoolong nametoolong nametoolong ');
+            ->setName($this->genString(256));
         $this->assertHasValidationErrors($group, 1);
     }
 

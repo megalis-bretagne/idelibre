@@ -33,7 +33,6 @@ class Sitting
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank
      * @Assert\Length(max="255")
      */
     private $name;
@@ -85,7 +84,6 @@ class Sitting
 
     /**
      * @ORM\OneToOne(targetEntity=File::class, cascade={"persist", "remove"}, inversedBy="sitting")
-     * @Assert\NotNull
      */
     private $file;
 

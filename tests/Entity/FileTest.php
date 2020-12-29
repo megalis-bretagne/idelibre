@@ -4,12 +4,14 @@ namespace App\Tests\Entity;
 
 use App\Entity\File;
 use App\Tests\HasValidationError;
+use App\Tests\StringTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class FileTest extends WebTestCase
 {
     use HasValidationError;
+    use StringTrait;
 
     private ValidatorInterface $validator;
 
@@ -48,10 +50,8 @@ class FileTest extends WebTestCase
     public function testInvalidNameTooLong()
     {
         $file = (new File())
-            ->setName('NameTooLongNameTooLongNameTooLongNameTooLongNameTooLongNameTooLongNameTooLong
-            NameTooLongNameTooLongNameTooLongNameTooLongNameTooLongNameTooLongNameTooLongNameTooLongNameTooLong
-            NameTooLongNameTooLongNameTooLongNameTooLongNameTooLongNameTooLongNameTooLongNameTooLong.pdf')
-            ->setPath('/tmp/strucutre/file.pdf');
+            ->setPath('/tmp/file.pdf')
+            ->setName($this->genString(126));
 
         $this->assertHasValidationErrors($file, 1);
     }
@@ -76,9 +76,7 @@ class FileTest extends WebTestCase
     public function testInvalidPathTooLong()
     {
         $file = (new File())
-            ->setPath('/tmp/toto/NameTooLongNameTooLongNameTooLongNameTooLongNameTooLongNameTooLongNameTooLong
-            NameTooLongNameTooLongNameTooLongNameTooLongNameTooLongNameTooLongNameTooLongNameTooLongNameTooLong
-            NameTooLongNameTooLongNameTooLongNameTooLongNameTooLongNameTooLongNameTooLongNameTooLong.pdf')
+            ->setPath($this->genString(256))
             ->setPath('file.pdf');
 
         $this->assertHasValidationErrors($file, 1);

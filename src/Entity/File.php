@@ -32,9 +32,9 @@ class File
     private $size;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=125)
      * @Assert\NotBlank
-     * @Assert\Length(max="255")
+     * @Assert\Length(max="125")
      */
     private $name;
 

@@ -7,6 +7,7 @@ use App\Entity\Party;
 use App\Entity\Structure;
 use App\Tests\FindEntityTrait;
 use App\Tests\HasValidationError;
+use App\Tests\StringTrait;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -16,6 +17,7 @@ class PartyTest extends WebTestCase
     use FixturesTrait;
     use FindEntityTrait;
     use HasValidationError;
+    use StringTrait;
 
     private ValidatorInterface $validator;
     private $entityManager;
@@ -80,9 +82,7 @@ class PartyTest extends WebTestCase
     public function testInvalidNameTooLong()
     {
         $party = (new Party())
-            ->setName('name too long name too long name too long name too long name too long name too long 
-            name too long name too long name too long name too long name too long name too long name too long name too long 
-            name too long name too long name too long ')
+            ->setName($this->genString(256))
             ->setStructure(new Structure());
 
         $this->assertHasValidationErrors($party, 1);

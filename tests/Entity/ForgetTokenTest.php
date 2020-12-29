@@ -5,12 +5,14 @@ namespace App\Tests\Entity;
 use App\Entity\ForgetToken;
 use App\Entity\User;
 use App\Tests\HasValidationError;
+use App\Tests\StringTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ForgetTokenTest extends WebTestCase
 {
     use HasValidationError;
+    use StringTrait;
 
     private ValidatorInterface $validator;
 
@@ -31,9 +33,7 @@ class ForgetTokenTest extends WebTestCase
     {
         $forgetToken = (new ForgetToken(new User()));
 
-        $forgetToken->setToken('tokentoolongtokentoolongtokentoolongtokentoolongtokentoolongtokentoolong
-        tokentoolongtokentoolongtokentoolongtokentoolongtokentoolongtokentoolongtokentoolongtokentoolong
-        tokentoolongtokentoolongtokentoolongtokentoolongtokentoolongtokentoolongtokentoolongtokentoolong');
+        $forgetToken->setToken($this->genString(256));
 
         $this->assertHasValidationErrors($forgetToken, 1);
     }

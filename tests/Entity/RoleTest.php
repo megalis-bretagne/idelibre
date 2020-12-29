@@ -5,6 +5,7 @@ namespace App\Tests\Entity;
 use App\DataFixtures\RoleFixtures;
 use App\Entity\Role;
 use App\Tests\HasValidationError;
+use App\Tests\StringTrait;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -13,6 +14,7 @@ class RoleTest extends WebTestCase
 {
     use FixturesTrait;
     use HasValidationError;
+    use StringTrait;
 
     private ValidatorInterface $validator;
     private $entityManager;
@@ -49,9 +51,7 @@ class RoleTest extends WebTestCase
     public function testInvalidNameTooLong()
     {
         $role = (new Role())
-            ->setName('Name Too long Name Too long Name Too long Name Too long Name Too long 
-            Name Too long Name Too long Name Too long Name Too long Name Too long Name Too long 
-            Name Too long Name Too long Name Too long Name Too long Name Too long Name Too long ')
+            ->setName($this->genString(256))
             ->setPrettyName('My Role Name');
 
         $this->assertHasValidationErrors($role, 1);
@@ -95,9 +95,7 @@ class RoleTest extends WebTestCase
     {
         $role = (new Role())
             ->setName('myRoleName')
-            ->setPrettyName('pretty Name Too Long pretty Name Too Long pretty Name Too Long pretty Name Too Long 
-            pretty Name Too Long pretty Name Too Long pretty Name Too Long pretty Name Too Long pretty Name Too Long 
-            pretty Name Too Long pretty Name Too Long pretty Name Too Long pretty Name Too Long pretty Name Too Long ');
+            ->setPrettyName($this->genString(256));
 
         $this->assertHasValidationErrors($role, 1);
     }

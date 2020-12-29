@@ -7,6 +7,8 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\CallbackTransformer;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -30,12 +32,20 @@ class PartyType extends AbstractType
                 'label' => 'Acteurs associés',
                 'required' => false,
                 'class' => User::class,
-                'choice_label' => fn (User $user) => $user->getFirstName() . ' ' . $user->getLastName(),
+                'choice_label' => fn(User $user) => $user->getFirstName() . ' ' . $user->getLastName(),
                 'multiple' => true,
                 'query_builder' => $this->userRepository->findActorByStructure($options['structure']),
             ])
+            ->add('structure', HiddenType::class, [
+                'data' => $options['structure'],
+                'data_class' => null
+            ])
+            ->get("structure")->addModelTransformer(new CallbackTransformer(
+                fn() => '',
+                fn() => $options['structure']
+            ));
 
-        ;
+
     }
 
     public function configureOptions(OptionsResolver $resolver)

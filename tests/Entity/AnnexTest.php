@@ -5,12 +5,16 @@ namespace App\Tests\Entity;
 use App\Entity\Annex;
 use App\Entity\File;
 use App\Entity\Project;
+use App\Tests\HasValidationError;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class AnnexTest extends WebTestCase
 {
+    use HasValidationError;
+
     private ValidatorInterface $validator;
+
 
     protected function setUp(): void
     {
@@ -18,11 +22,6 @@ class AnnexTest extends WebTestCase
         $this->validator = self::$container->get('validator');
     }
 
-    private function assertHasError(Annex $annex, int $number)
-    {
-        $errors = $this->validator->validate($annex);
-        $this->assertCount($number, $errors);
-    }
 
     public function testValid()
     {
@@ -30,7 +29,7 @@ class AnnexTest extends WebTestCase
             ->setRank(1)
             ->setFile(new File())
             ->setProject(new Project());
-        $this->assertHasError($annex, 0);
+        $this->assertHasValidationErrors($annex, 0);
     }
 
     public function testInvalidNoRank()
@@ -39,7 +38,7 @@ class AnnexTest extends WebTestCase
             ->setFile(new File())
             ->setProject(new Project());
 
-        $this->assertHasError($annex, 1);
+        $this->assertHasValidationErrors($annex, 1);
     }
 
     public function testInvalidNoFile()
@@ -48,7 +47,7 @@ class AnnexTest extends WebTestCase
             ->setRank(1)
             ->setProject(new Project());
 
-        $this->assertHasError($annex, 1);
+        $this->assertHasValidationErrors($annex, 1);
     }
 
     public function testInvalidNoProject()
@@ -57,6 +56,6 @@ class AnnexTest extends WebTestCase
             ->setRank(1)
             ->setFile(new File());
 
-        $this->assertHasError($annex, 1);
+        $this->assertHasValidationErrors($annex, 1);
     }
 }

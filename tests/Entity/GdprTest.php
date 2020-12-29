@@ -4,12 +4,14 @@ namespace App\Tests\Entity;
 
 use App\Entity\Gdpr;
 use App\Tests\HasValidationError;
+use App\Tests\StringTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class GdprTest extends WebTestCase
 {
     use HasValidationError;
+    use StringTrait;
 
     private ValidatorInterface $validator;
 
@@ -29,11 +31,7 @@ class GdprTest extends WebTestCase
     public function testInvalidAddressTooLong()
     {
         $file = (new Gdpr())
-            ->setAddress('addressTooLong addressTooLong addressTooLong addressTooLong addressTooLong addressTooLong 
-            addressTooLong addressTooLong addressTooLong addressTooLong addressTooLong addressTooLong addressTooLong addressTooLong 
-            addressTooLong addressTooLong addressTooLong addressTooLong addressTooLong addressTooLong addressTooLong addressTooLong 
-            addressTooLong addressTooLong addressTooLong addressTooLong addressTooLong addressTooLong addressTooLong addressTooLong 
-            addressTooLong addressTooLong addressTooLong addressTooLong addressTooLong addressTooLong ');
+            ->setAddress($this->genString(515));
 
         $this->assertHasValidationErrors($file, 1);
     }
@@ -41,9 +39,7 @@ class GdprTest extends WebTestCase
     public function testInvalidApeTooLong()
     {
         $file = (new Gdpr())
-            ->setApe('12345678919123456789191234567891912345678919123456789191234567891912345678919
-            123456789191234567891912345678919123456789191234567891912345678919123456789191234567891912345678919
-            12345678919123456789191234567891912345678919123456789191234567891912345678919');
+            ->setApe($this->genString(256));
 
         $this->assertHasValidationErrors($file, 1);
     }
@@ -51,9 +47,7 @@ class GdprTest extends WebTestCase
     public function testInvalidPhoneTooLong()
     {
         $file = (new Gdpr())
-            ->setCompanyPhone('12345678919123456789191234567891912345678919123456789191234567891912345678919
-            123456789191234567891912345678919123456789191234567891912345678919123456789191234567891912345678919
-            12345678919123456789191234567891912345678919123456789191234567891912345678919');
+            ->setCompanyPhone($this->genString(256));
 
         $this->assertHasValidationErrors($file, 1);
     }

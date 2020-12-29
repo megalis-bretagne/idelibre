@@ -8,6 +8,7 @@ use App\Entity\Sitting;
 use App\Entity\Structure;
 use App\Tests\FindEntityTrait;
 use App\Tests\HasValidationError;
+use App\Tests\StringTrait;
 use DateTime;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -18,6 +19,7 @@ class SittingTest extends WebTestCase
     use FixturesTrait;
     use FindEntityTrait;
     use HasValidationError;
+    use StringTrait;
 
     private ValidatorInterface $validator;
     private $entityManager;
@@ -56,10 +58,10 @@ class SittingTest extends WebTestCase
         $this->assertHasValidationErrors($sitting, 1);
     }
 
-    public function testInvalidEmptyName()
+      public function testInvalidNameTooLong()
     {
         $sitting = (new Sitting())
-            ->setName('')
+            ->setName($this->genString(256))
             ->setFile(new File())
             ->setStructure(new Structure())
             ->setDate(new DateTime())
@@ -68,41 +70,6 @@ class SittingTest extends WebTestCase
         $this->assertHasValidationErrors($sitting, 1);
     }
 
-    public function testInvalidNameTooLong()
-    {
-        $sitting = (new Sitting())
-            ->setName('Name Too Long Name Too Long Name Too Long Name Too Long Name Too Long Name Too Long 
-            Name Too Long Name Too Long Name Too Long Name Too Long Name Too Long Name Too Long Name Too Long Name Too Long 
-            Name Too Long Name Too Long Name Too Long Name Too Long Name Too Long ')
-            ->setFile(new File())
-            ->setStructure(new Structure())
-            ->setDate(new DateTime())
-            ->setPlace('ici');
-
-        $this->assertHasValidationErrors($sitting, 1);
-    }
-
-    public function testInvalidNoName()
-    {
-        $sitting = (new Sitting())
-            ->setFile(new File())
-            ->setStructure(new Structure())
-            ->setDate(new DateTime())
-            ->setPlace('ici');
-
-        $this->assertHasValidationErrors($sitting, 1);
-    }
-
-    public function testInvalidNoFile()
-    {
-        $sitting = (new Sitting())
-            ->setName('Sitting Name')
-            ->setStructure(new Structure())
-            ->setDate(new DateTime())
-            ->setPlace('ici');
-
-        $this->assertHasValidationErrors($sitting, 1);
-    }
 
     public function testInvalidNoDate()
     {
@@ -122,9 +89,7 @@ class SittingTest extends WebTestCase
             ->setFile(new File())
             ->setStructure(new Structure())
             ->setDate(new DateTime())
-            ->setPlace('place too long place too long place too long place too long place too long 
-            place too long place too long place too long place too long place too long place too long place too long 
-            place too long place too long place too long place too long place too long place too long ');
+            ->setPlace($this->genString(256));
 
         $this->assertHasValidationErrors($sitting, 1);
     }
