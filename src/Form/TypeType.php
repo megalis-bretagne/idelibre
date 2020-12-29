@@ -7,6 +7,8 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\CallbackTransformer;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -46,7 +48,15 @@ class TypeType extends AbstractType
                     return sprintf('%s %s <%s>', $user->getFirstName(), $user->getLastName(), $user->getUsername());
                 },
                 'multiple' => true,
-            ]);
+            ])
+            ->add('structure', HiddenType::class, [
+                'data' => $options['structure'],
+                'data_class' => null,
+            ])
+            ->get('structure')->addModelTransformer(new CallbackTransformer(
+                fn () => '',
+                fn () => $options['structure']
+            ));
     }
 
     public function configureOptions(OptionsResolver $resolver)

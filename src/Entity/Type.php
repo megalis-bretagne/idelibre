@@ -47,6 +47,7 @@ class Type
     /**
      * @ORM\ManyToOne(targetEntity=Structure::class)
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     * @Assert\NotNull
      */
     private $structure;
 

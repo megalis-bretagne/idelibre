@@ -15,13 +15,11 @@ class AnnexTest extends WebTestCase
 
     private ValidatorInterface $validator;
 
-
     protected function setUp(): void
     {
         self::bootKernel();
         $this->validator = self::$container->get('validator');
     }
-
 
     public function testValid()
     {

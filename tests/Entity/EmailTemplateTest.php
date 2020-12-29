@@ -33,7 +33,6 @@ class EmailTemplateTest extends WebTestCase
         ]);
     }
 
-
     public function testValid()
     {
         $emailTemplate = (new EmailTemplate())

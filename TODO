@@ -74,3 +74,6 @@ $builder->add('structure', HiddenType::class, [
 Questionner eric pour la CI.
 Faire fonctionner avec sqlite sauf pour les merges ?
 Commit de pre merge qui foctionne avec postgresql ?
+
+
+Tous les path dans la bd devrait etre a partir d'un chemin donnée. Conseil Epommateau !

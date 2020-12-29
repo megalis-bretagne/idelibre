@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Tests;
-
 
 trait StringTrait
 {
@@ -10,5 +8,4 @@ trait StringTrait
     {
         return str_repeat('a', $length);
     }
-
 }

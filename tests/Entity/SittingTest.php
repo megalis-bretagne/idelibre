@@ -58,7 +58,7 @@ class SittingTest extends WebTestCase
         $this->assertHasValidationErrors($sitting, 1);
     }
 
-      public function testInvalidNameTooLong()
+    public function testInvalidNameTooLong()
     {
         $sitting = (new Sitting())
             ->setName($this->genString(256))
@@ -69,7 +69,6 @@ class SittingTest extends WebTestCase
 
         $this->assertHasValidationErrors($sitting, 1);
     }
-
 
     public function testInvalidNoDate()
     {

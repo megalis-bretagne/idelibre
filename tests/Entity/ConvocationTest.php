@@ -21,7 +21,6 @@ class ConvocationTest extends WebTestCase
         $this->validator = self::$container->get('validator');
     }
 
-
     public function testValid()
     {
         $convocation = (new Convocation())

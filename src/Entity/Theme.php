@@ -7,9 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
-
-//* @ORM\Entity(repositoryClass=ThemeRepository::class)
-//@ORM\Entity(repositoryClass="Gedmo\Tree\Entity\Repository\NestedTreeRepository")
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @Gedmo\Tree(type="nested")
@@ -33,8 +31,10 @@ class Theme
     private $id;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", length=255)
      * @Groups({"theme"})
+     * @Assert\NotBlank
+     * @Assert\Length(max="255")
      */
     private $name;
 
@@ -80,6 +80,7 @@ class Theme
     /**
      * @ORM\ManyToOne(targetEntity=Structure::class)
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     * @Assert\NotNull
      */
     private $structure;
 
