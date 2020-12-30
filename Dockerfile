@@ -45,11 +45,11 @@ RUN pecl install -o -f redis \
   &&  rm -rf /tmp/pear \
   &&  docker-php-ext-enable redis
 
-COPY . /app
+COPY --chown=www-data:www-data . /app
+
 WORKDIR /app
 
-RUN curl -s https://getcomposer.org/installer | php && php composer.phar install --no-interaction
-RUN chown -R www-data:www-data /app
+RUN curl -s https://getcomposer.org/installer | php && sudo -u www-data php composer.phar install --no-interaction
 
 RUN mkdir -p /data
 RUN chown -R www-data:www-data /data
@@ -58,6 +58,8 @@ RUN chown -R www-data:www-data /data
 COPY ./docker-resources/zz-idelibre.conf /usr/local/etc/php-fpm.d/zz-idelibre.conf
 
 COPY docker-resources/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
+COPY docker-resources/zz-php.ini /usr/local/etc/php/conf.d/zz-php.ini
+
 
 EXPOSE 9000
 CMD ["php-fpm"]

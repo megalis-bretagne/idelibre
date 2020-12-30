@@ -2,6 +2,7 @@ stages:
   - build
   - test
   - quality
+  - testOld
 
 variables:
   CONTAINER_IMAGE: "${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME}"
@@ -21,9 +22,9 @@ build:
     - docker push ${CONTAINER_IMAGE}
     - docker push $CI_REGISTRY_IMAGE:latest
 
-phpTest:
-  stage: test
-  except:
+phpTestOld:
+  stage: testOld
+  only:
     - tags
   image: $CONTAINER_IMAGE
   services:
@@ -56,6 +57,38 @@ phpTest:
     paths:
       - coverage
     expire_in: 1h
+
+
+phpTest:
+  stage: test
+  except:
+    - tags
+  image: $CONTAINER_IMAGE
+
+  variables:
+    XDEBUG_MODE: coverage
+    APP_ENV: test
+    DATABASE_URL: sqlite:///%kernel.project_dir%/var/data.db
+    GIT_STRATEGY: none
+    COMPOSER_PROCESS_TIMEOUT: 1200
+
+  before_script:
+    - cd /app
+    - pecl install xdebug && docker-php-ext-enable xdebug
+    - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+    - php composer-setup.php --install-dir=/usr/local/bin
+    - mv /usr/local/bin/composer.phar /usr/local/bin/composer
+
+  script:
+    - composer install
+    - docker-resources/initAppTest.sh
+    - SYMFONY_DEPRECATIONS_HELPER=disabled bin/phpunit --coverage-text --colors=never --coverage-clover coverage/coverage.xml --log-junit coverage/logfile.xml
+    - cp -rf coverage $CI_PROJECT_DIR
+  artifacts:
+    paths:
+      - coverage
+    expire_in: 1h
+
 
 
 

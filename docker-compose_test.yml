@@ -10,6 +10,7 @@ services:
       - .env.test.docker
     volumes:
       #- /tmp/var:/app/var
+      - ./docker-resources/zz-php.ini:/usr/local/etc/php/conf.d/zz-php.ini
       - ./.env:/app/.env
       - ./config:/app/config
       - ./src:/app/src
