@@ -40,7 +40,6 @@ class SittingController extends AbstractController
 
         $sittings = $paginator->paginate(
             $sittingManager->getListSittingByStructureQuery($this->getUser(), $request->query->get('search')),
-            //$sittingRepository->findByStructure($this->getUser()->getStructure(), $request->query->get('search')),
             $request->query->getInt('page', 1),
             20,
             [
