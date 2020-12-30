@@ -58,6 +58,8 @@ RUN chown -R www-data:www-data /data
 COPY ./docker-resources/zz-idelibre.conf /usr/local/etc/php-fpm.d/zz-idelibre.conf
 
 COPY docker-resources/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
+COPY docker-resources/zz-php.ini /usr/local/etc/php/conf.d/zz-php.ini
+
 
 EXPOSE 9000
 CMD ["php-fpm"]
