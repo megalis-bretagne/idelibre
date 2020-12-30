@@ -57,6 +57,24 @@ class RoleFixtures extends Fixture
         $manager->persist($roleActor);
         $this->addReference(self::REFERENCE . 'actor', $roleActor);
 
+
+        $roleGuest = (new Role())
+            ->setName('Guest')
+            ->setPrettyName('Invité')
+            ->setIsInStructureRole(true)
+            ->addComposite('ROLE_GUEST');
+        $manager->persist($roleGuest);
+        $this->addReference(self::REFERENCE . 'guest', $roleGuest);
+
+
+        $roleAdministrative = (new Role())
+            ->setName('Administrative')
+            ->setPrettyName('Administratif')
+            ->setIsInStructureRole(true)
+            ->addComposite('ROLE_ADMINISTRATIVE');
+        $manager->persist($roleAdministrative);
+        $this->addReference(self::REFERENCE . 'administrative', $roleAdministrative);
+
         $manager->flush();
     }
 }

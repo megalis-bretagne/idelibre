@@ -89,3 +89,4 @@ SET CONSTRAINTS ALL DEFERRED
 SET CONSTRAINTS ALL IMMEDIATE
 
 
+FIXER les ID des roles (cela sera bien plus simple !)

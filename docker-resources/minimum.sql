@@ -17,6 +17,11 @@ VALUES ('230a1c1d-eaec-4fb7-9ba7-d7ac47dc97bb', 'Actor', '["ROLE_ACTOR"]', true,
 INSERT INTO role (id, name, composites, is_in_structure_role, pretty_name)
 VALUES ('17f4b8ba-7a34-4463-9901-88b619a64be3', 'Admin', '["ROLE_STRUCTURE_ADMIN"]', true, 'Administrateur');
 
+INSERT INTO role (id, name, composites, is_in_structure_role, pretty_name)
+VALUES ('e581587e-1694-4b83-9ed7-4994bc792e5b', 'Guest', '["ROLE_GUEST"]', true, 'Invité');
+
+INSERT INTO role (id, name, composites, is_in_structure_role, pretty_name)
+VALUES ('811a1329-0cd0-49e8-b59b-5394219c50dd', 'Administrative', '["ROLE_ADMINISTRATIVE"]', true, 'Administratif');
 
 
 INSERT INTO "user" (id, structure_id, email, username, role_id, password, first_name, last_name)
