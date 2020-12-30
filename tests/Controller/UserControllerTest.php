@@ -42,7 +42,7 @@ class UserControllerTest extends WebTestCase
         $this->loadFixtures([
             UserFixtures::class,
             RoleFixtures::class,
-            TypeFixtures::class
+            TypeFixtures::class,
         ]);
     }
 
@@ -152,7 +152,7 @@ class UserControllerTest extends WebTestCase
         $this->loginAsAdminLibriciel();
 
         $user = $this->getOneUserBy(['username' => 'secretary1@libriciel.coop']);
-        $type =$this->getOneTypeBy(['name' => 'Bureau Communautaire Libriciel']);
+        $type = $this->getOneTypeBy(['name' => 'Bureau Communautaire Libriciel']);
 
         $crawler = $this->client->request(Request::METHOD_GET, '/user/edit/' . $user->getId());
         $this->assertResponseStatusCodeSame(200);
@@ -174,7 +174,6 @@ class UserControllerTest extends WebTestCase
         $this->entityManager->refresh($user);
         $this->assertSame($user->getAuthorizedTypes()->first()->getId(), $type->getId());
     }
-
 
     public function testIndex()
     {

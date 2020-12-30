@@ -4,11 +4,15 @@ namespace App\Service\Seance;
 
 use App\Entity\Sitting;
 use App\Entity\Structure;
+use App\Entity\User;
 use App\Message\UpdatedSitting;
+use App\Repository\SittingRepository;
 use App\Service\Convocation\ConvocationManager;
 use App\Service\File\FileManager;
 use App\Service\Project\ProjectManager;
+use App\Service\role\RoleManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Messenger\MessageBusInterface;
 
@@ -22,18 +26,26 @@ class SittingManager
 
     private ProjectManager $projectManager;
 
+    private RoleManager $roleManager;
+
+    private SittingRepository $sittingRepository;
+
     public function __construct(
         ConvocationManager $convocationManager,
         FileManager $fileManager,
         EntityManagerInterface $em,
         MessageBusInterface $messageBus,
-        ProjectManager $projectManager
+        ProjectManager $projectManager,
+        RoleManager $roleManager,
+        SittingRepository $sittingRepository
     ) {
         $this->convocationManager = $convocationManager;
         $this->fileManager = $fileManager;
         $this->em = $em;
         $this->messageBus = $messageBus;
         $this->projectManager = $projectManager;
+        $this->roleManager = $roleManager;
+        $this->sittingRepository = $sittingRepository;
     }
 
     public function save(Sitting $sitting, UploadedFile $uploadedFile, Structure $structure): string
@@ -82,5 +94,14 @@ class SittingManager
         $this->convocationManager->deactivate($sitting->getConvocations());
         $this->em->persist($sitting);
         $this->em->flush();
+    }
+
+    public function getListSittingByStructureQuery(User $user, ?string $search): QueryBuilder
+    {
+        if ($user->getRole()->getId() === $this->roleManager->getSecretaryRole()->getId()) {
+            return $this->sittingRepository->findWithTypesByStructure($user->getStructure(), $user->getAuthorizedTypes(), $search);
+        }
+
+        return $this->sittingRepository->findByStructure($user->getStructure(), $search);
     }
 }

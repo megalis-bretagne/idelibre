@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Sitting;
 use App\Entity\Structure;
+use App\Entity\Type;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -29,7 +30,27 @@ class SittingRepository extends ServiceEntityRepository
 
         if ($searchTerm) {
             $qb->andWhere('LOWER(s.name) like :search')
-            ->setParameter('search', mb_strtolower("%${searchTerm}%"));
+                ->setParameter('search', mb_strtolower("%${searchTerm}%"));
+        }
+
+        return $qb;
+    }
+
+    /**
+     * @param Type[] $types
+     */
+    public function findWithTypesByStructure(Structure $structure, iterable $types, ?string $searchTerm = null): QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('s')
+            ->andWhere('s.structure =:structure')
+            ->setParameter('structure', $structure)
+            ->join('s.type', 't')
+            ->andWhere('t in (:types)')
+            ->setParameter('types', $types);
+
+        if ($searchTerm) {
+            $qb->andWhere('LOWER(s.name) like :search')
+                ->setParameter('search', mb_strtolower("%${searchTerm}%"));
         }
 
         return $qb;

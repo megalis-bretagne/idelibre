@@ -44,6 +44,7 @@ class RoleFixtures extends Fixture
         $roleSecretary = (new Role())
         ->setName('Secretary')
             ->setPrettyName('Secretaire')
+            ->addComposite('ROLE_SECRETARY')
             ->setIsInStructureRole(true);
         $manager->persist($roleSecretary);
         $this->addReference(self::REFERENCE . 'secretary', $roleSecretary);
