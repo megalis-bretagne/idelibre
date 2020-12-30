@@ -45,11 +45,12 @@ RUN pecl install -o -f redis \
   &&  rm -rf /tmp/pear \
   &&  docker-php-ext-enable redis
 
-COPY . /app
+COPY --chown=www-data:www-data . /app
+#COPY . /app
 WORKDIR /app
 
-RUN curl -s https://getcomposer.org/installer | php && php composer.phar install --no-interaction
-RUN chown -R www-data:www-data /app
+RUN curl -s https://getcomposer.org/installer | php && sudo su www-data php composer.phar install --no-interaction
+#RUN chown -R www-data:www-data /app
 
 RUN mkdir -p /data
 RUN chown -R www-data:www-data /data
