@@ -2,6 +2,7 @@ stages:
   - build
   - test
   - quality
+  - testOld
 
 variables:
   CONTAINER_IMAGE: "${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME}"
@@ -23,7 +24,7 @@ build:
 
 phpTestOld:
   stage: testOld
-  except:
+  only:
     - tags
   image: $CONTAINER_IMAGE
   services:
