@@ -34,12 +34,12 @@ class SittingController extends AbstractController
      * @Route("/sitting", name="sitting_index")
      * @IsGranted("ROLE_MANAGE_SITTINGS")
      */
-    public function index(SittingRepository $sittingRepository, PaginatorInterface $paginator, Request $request): Response
+    public function index(SittingRepository $sittingRepository, PaginatorInterface $paginator, Request $request, SittingManager $sittingManager): Response
     {
         $formSearch = $this->createForm(SearchType::class);
 
         $sittings = $paginator->paginate(
-            $sittingRepository->findByStructure($this->getUser()->getStructure(), $request->query->get('search')),
+            $sittingManager->getListSittingByStructureQuery($this->getUser(), $request->query->get('search')),
             $request->query->getInt('page', 1),
             20,
             [

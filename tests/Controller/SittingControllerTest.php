@@ -57,6 +57,16 @@ class SittingControllerTest extends WebTestCase
         $this->assertCount(1, $item);
     }
 
+    public function testSecretary()
+    {
+        $this->loginAsSecretaryLibriciel();
+        $crawler = $this->client->request(Request::METHOD_GET, '/sitting');
+        $this->assertResponseStatusCodeSame(200);
+
+        $item = $crawler->filter('html:contains("Seances")');
+        $this->assertCount(1, $item);
+    }
+
     public function testAdd()
     {
         $type = $this->getOneTypeBy(['name' => 'unUsedType']);
@@ -119,7 +129,7 @@ class SittingControllerTest extends WebTestCase
         $this->loginAsAdminLibriciel();
         $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
 
-        $crawler = $this->client->request(Request::METHOD_DELETE, '/sitting/delete/' . $sitting->getId());
+        $this->client->request(Request::METHOD_DELETE, '/sitting/delete/' . $sitting->getId());
         $this->assertTrue($this->client->getResponse()->isRedirect());
 
         $crawler = $this->client->followRedirect();
@@ -128,6 +138,15 @@ class SittingControllerTest extends WebTestCase
         $this->assertCount(1, $successMsg);
 
         $this->assertEmpty($this->getOneSittingBy(['name' => 'Conseil Libriciel']));
+    }
+
+    public function testDeleteSecretaryNotAuthorizedType()
+    {
+        $this->loginAsSecretaryLibriciel();
+        $sitting = $this->getOneSittingBy(['name' => 'Bureau Libriciel']);
+
+        $this->client->request(Request::METHOD_DELETE, '/sitting/delete/' . $sitting->getId());
+        $this->assertResponseStatusCodeSame(403);
     }
 
     public function testShowInformation()
