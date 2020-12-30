@@ -49,7 +49,7 @@ COPY --chown=www-data:www-data . /app
 #COPY . /app
 WORKDIR /app
 
-RUN curl -s https://getcomposer.org/installer | php && sudo su www-data php composer.phar install --no-interaction
+RUN curl -s https://getcomposer.org/installer | php && sudo -u www-data php composer.phar install --no-interaction
 #RUN chown -R www-data:www-data /app
 
 RUN mkdir -p /data
