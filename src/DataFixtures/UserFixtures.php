@@ -29,15 +29,15 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         /**
          * @var Structure $structureLibriciel
          * @var Structure $structureMontpellier
-         * @var Group $groupRecia
-         * @var Role $roleSuperAdmin
-         * @var Role $roleGroupAdmin
-         * @var Role $roleStructureAdminLibriciel
-         * @var Role $roleActor
-         * @var Role $roleSecretary
-         * @var Party $partyMajority
-         * @var Role $roleGuest
-         * @var Role $roleAdministrative
+         * @var Group     $groupRecia
+         * @var Role      $roleSuperAdmin
+         * @var Role      $roleGroupAdmin
+         * @var Role      $roleStructureAdminLibriciel
+         * @var Role      $roleActor
+         * @var Role      $roleSecretary
+         * @var Party     $partyMajority
+         * @var Role      $roleGuest
+         * @var Role      $roleAdministrative
          */
         $structureLibriciel = $this->getReference(StructureFixtures::REFERENCE . 'libriciel');
         $structureMontpellier = $this->getReference(StructureFixtures::REFERENCE . 'montpellier');
@@ -50,10 +50,8 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $roleGuest = $this->getReference(RoleFixtures::REFERENCE . 'guest');
         $roleAdministrative = $this->getReference(RoleFixtures::REFERENCE . 'administrative');
 
-
         $roleActor = $this->getReference(RoleFixtures::REFERENCE . 'actor');
         $partyMajority = $this->getReference(PartyFixtures::REFERENCE . 'majorite');
-
 
         ///////// SuperAdmin  ////////////////////
 
@@ -198,7 +196,6 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($guestLibriciel1);
         $this->addReference(self::REFERENCE . 'guestLibriciel1', $guestLibriciel1);
 
-
         $guestLibriciel2 = new User();
         $guestLibriciel2->setEmail('guest2@example.org')
             ->setRole($roleGuest)
@@ -209,7 +206,6 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             ->setPassword($this->passwordEncoder->encodePassword($guestLibriciel2, 'password'));
         $manager->persist($guestLibriciel2);
         $this->addReference(self::REFERENCE . 'guestLibriciel2', $guestLibriciel2);
-
 
         ///// ADMINISTRATIVE //////
 
@@ -224,8 +220,6 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($administrativeLibriciel1);
         $this->addReference(self::REFERENCE . 'administrativeLibriciel1', $administrativeLibriciel1);
 
-
-
         $administrativeLibriciel2 = new User();
         $administrativeLibriciel2->setEmail('administrative2@example.org')
             ->setRole($roleAdministrative)
@@ -236,8 +230,6 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             ->setPassword($this->passwordEncoder->encodePassword($administrativeLibriciel2, 'password'));
         $manager->persist($administrativeLibriciel2);
         $this->addReference(self::REFERENCE . 'administrativeLibriciel2', $administrativeLibriciel2);
-
-
 
         $manager->flush();
     }

@@ -57,7 +57,6 @@ class RoleFixtures extends Fixture
         $manager->persist($roleActor);
         $this->addReference(self::REFERENCE . 'actor', $roleActor);
 
-
         $roleGuest = (new Role())
             ->setName('Guest')
             ->setPrettyName('Invité')
@@ -65,7 +64,6 @@ class RoleFixtures extends Fixture
             ->addComposite('ROLE_GUEST');
         $manager->persist($roleGuest);
         $this->addReference(self::REFERENCE . 'guest', $roleGuest);
-
 
         $roleAdministrative = (new Role())
             ->setName('Administrative')
