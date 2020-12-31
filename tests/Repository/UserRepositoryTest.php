@@ -109,7 +109,7 @@ class UserRepositoryTest extends WebTestCase
     {
         /** @var Structure $structure */
         $structure = $this->getOneEntityBy(Structure::class, ['name' => 'Libriciel']);
-        $actorQB = $this->userRepository->findActorByStructure($structure);
+        $actorQB = $this->userRepository->findActorsByStructure($structure);
         $this->assertCount(4, $actorQB->getQuery()->getResult());
     }
 }

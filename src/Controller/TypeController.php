@@ -57,7 +57,13 @@ class TypeController extends AbstractController
         $form = $this->createForm(TypeType::class, null, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $typeManager->save($form->getData(), $this->getUser()->getStructure());
+            $typeManager->save(
+                $form->getData(),
+                $form->get('associatedActors')->getData(),
+                $form->get('associatedAdministratives')->getData(),
+                $form->get('associatedGuests')->getData(),
+                $this->getUser()->getStructure()
+            );
 
             $this->addFlash('success', 'Votre type a bien été ajouté');
 
@@ -79,7 +85,13 @@ class TypeController extends AbstractController
         $form = $this->createForm(TypeType::class, $type, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $typeManager->save($form->getData(), $this->getUser()->getStructure());
+            $typeManager->save(
+                $form->getData(),
+                $form->get('associatedActors')->getData(),
+                $form->get('associatedAdministratives')->getData(),
+                $form->get('associatedGuests')->getData(),
+                $this->getUser()->getStructure()
+            );
 
             $this->addFlash('success', 'Votre type a bien été modifié');
 

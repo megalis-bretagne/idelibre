@@ -34,7 +34,7 @@ class PartyType extends AbstractType
                 'class' => User::class,
                 'choice_label' => fn (User $user) => $user->getFirstName() . ' ' . $user->getLastName(),
                 'multiple' => true,
-                'query_builder' => $this->userRepository->findActorByStructure($options['structure']),
+                'query_builder' => $this->userRepository->findActorsByStructure($options['structure']),
             ])
             ->add('structure', HiddenType::class, [
                 'data' => $options['structure'],

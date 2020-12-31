@@ -21,7 +21,7 @@ class ActorController extends AbstractController
     public function getActors(UserRepository $userRepository): JsonResponse
     {
         return $this->json(
-            $userRepository->findActorByStructure($this->getUser()->getStructure())->getQuery()->getResult(),
+            $userRepository->findActorsByStructure($this->getUser()->getStructure())->getQuery()->getResult(),
             200,
             [],
             ['groups' => ['user']]

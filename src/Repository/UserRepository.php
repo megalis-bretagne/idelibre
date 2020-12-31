@@ -6,6 +6,7 @@ use App\Entity\Convocation;
 use App\Entity\Group;
 use App\Entity\Sitting;
 use App\Entity\Structure;
+use App\Entity\Type;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query;
@@ -102,12 +103,36 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         return $qb->getQuery();
     }
 
-    public function findActorByStructure($structure): QueryBuilder
+    public function findActorsByStructure($structure): QueryBuilder
     {
         return $this->createQueryBuilder('u')
             ->leftJoin('u.role', 'r')
             ->andWhere(' r.name =:actor')
             ->setParameter('actor', 'Actor')
+            ->andWhere('u.structure = :structure')
+            ->setParameter('structure', $structure)
+            ->orderBy('u.lastName', 'ASC');
+    }
+
+    public function findGuestsByStructure($structure): QueryBuilder
+    {
+        return $this->createQueryBuilder('u')
+            ->leftJoin('u.role', 'r')
+            ->andWhere(' r.name =:actor')
+            ->setParameter('actor', 'Guest')
+            ->andWhere('u.structure = :structure')
+            ->setParameter('structure', $structure)
+            ->orderBy('u.lastName', 'ASC');
+    }
+
+    public function findAdministrativesByStructure($structure): QueryBuilder
+    {
+        return $this->createQueryBuilder('u')
+            ->leftJoin('u.role', 'r')
+            ->andWhere(' r.name =:administrative or r.name=:secretary or r.name=:administrator')
+            ->setParameter('administrative', 'Administrative')
+            ->setParameter('secretary', 'Secretary')
+            ->setParameter('administrator', 'Administrator')
             ->andWhere('u.structure = :structure')
             ->setParameter('structure', $structure)
             ->orderBy('u.lastName', 'ASC');
@@ -165,5 +190,42 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->andWhere('u.structure = :structure')
             ->setParameter('structure', $structure)
             ->orderBy('u.lastName', 'ASC');
+    }
+
+    public function getAssociatedActorsWithType(?Type $type): ?array
+    {
+        return $this->getAssociatedUsersRoleWithType(['Actor'], $type);
+    }
+
+    public function getAssociatedAdministrativesWithType(?Type $type): ?array
+    {
+        return $this->getAssociatedUsersRoleWithType(['Secretary', 'Administrator', 'Administrative'], $type);
+    }
+
+    public function getAssociatedGuestWithType(?Type $type): ?array
+    {
+        return $this->getAssociatedUsersRoleWithType(['Guest'], $type);
+    }
+
+    /**
+     * @param string[] $roleNames
+     *
+     * @return User[]|null
+     */
+    private function getAssociatedUsersRoleWithType(array $roleNames, ?Type $type): ?array
+    {
+        if (!$type) {
+            return null;
+        }
+
+        return $this->createQueryBuilder('u')
+            ->join('u.associatedTypes', 't')
+            ->andWhere(' t =:type')
+            ->setParameter('type', $type)
+            ->leftJoin('u.role', 'r')
+            ->andWhere(' r.name in (:roleCondition)')
+            ->setParameter('roleCondition', $roleNames)
+            ->getQuery()
+            ->getResult();
     }
 }
