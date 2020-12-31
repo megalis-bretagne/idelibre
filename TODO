@@ -89,3 +89,14 @@ SET CONSTRAINTS ALL DEFERRED
 SET CONSTRAINTS ALL IMMEDIATE
 
 
+FIXER les ID des roles (cela sera bien plus simple !)
+
+FAIRE un DTO pour le typetype
+Comme ça on aun object qui as les 3 propriétés : associatedActors, associatedGuests et associatedAdministratives
+
+
+
+ADMINISTRATIVES => EMPLOYEES !
+
+
+Peut etre mettre des tooltips o des popever partout par exemple sur profile la liste des profiles avec explication

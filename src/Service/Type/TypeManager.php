@@ -20,8 +20,14 @@ class TypeManager
         $this->em = $em;
     }
 
-    public function save(Type $type, Structure $structure): void
-    {
+    public function save(
+        Type $type,
+        iterable $associatedActors,
+        iterable $associatedAdministratives,
+        iterable $associatedGuests,
+        Structure $structure
+    ): void {
+        $type->setAssociatedUsers([...$associatedActors, ...$associatedAdministratives, ...$associatedGuests]);
         $type->setStructure($structure);
         $this->em->persist($type);
         $this->em->flush();

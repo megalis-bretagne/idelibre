@@ -5,7 +5,6 @@ namespace App\Tests\Controller;
 use App\DataFixtures\TypeFixtures;
 use App\DataFixtures\UserFixtures;
 use App\Entity\Type;
-use App\Entity\User;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
 use Doctrine\ORM\EntityManagerInterface;
@@ -64,8 +63,7 @@ class TypeControllerTest extends WebTestCase
     public function testDelete()
     {
         $this->loginAsAdminLibriciel();
-        /** @var Type $type */
-        $type = $this->getOneEntityBy(Type::class, ['name' => 'Conseil Communautaire Libriciel']);
+        $type = $this->getOneTypeBy(['name' => 'Conseil Communautaire Libriciel']);
 
         $this->client->request(Request::METHOD_DELETE, '/type/delete/' . $type->getId());
         $this->assertTrue($this->client->getResponse()->isRedirect());
@@ -81,8 +79,7 @@ class TypeControllerTest extends WebTestCase
     public function testDeleteNotMyType()
     {
         $this->loginAsAdminLibriciel();
-        /** @var Type $type */
-        $type = $this->getOneEntityBy(Type::class, ['name' => 'Conseil Municipal Montpellier']);
+        $type = $this->getOneTypeBy(['name' => 'Conseil Municipal Montpellier']);
         $this->client->request(Request::METHOD_DELETE, '/type/delete/' . $type->getId());
         $this->assertResponseStatusCodeSame(403);
     }
@@ -114,8 +111,9 @@ class TypeControllerTest extends WebTestCase
 
     public function testAddWithAssociatedUsers()
     {
-        /** @var User $actorLs */
-        $actorLs = $this->getOneEntityBy(User::class, ['username' => 'actor1@libriciel.coop']);
+        $actorLs = $this->getOneUserBy(['username' => 'actor1@libriciel.coop']);
+        $guestLs = $this->getOneUserBy(['username' => 'guest2@libriciel.coop']);
+        $administrativeLs = $this->getOneUserBy(['username' => 'administrative2@libriciel.coop']);
         $this->loginAsAdminLibriciel();
         $crawler = $this->client->request(Request::METHOD_GET, '/type/add');
         $this->assertResponseStatusCodeSame(200);
@@ -125,7 +123,9 @@ class TypeControllerTest extends WebTestCase
         $form = $crawler->selectButton('Enregistrer')->form();
 
         $form['type[name]'] = 'New type';
-        $form['type[associatedUsers]'] = $actorLs->getId();
+        $form['type[associatedActors]'] = $actorLs->getId();
+        $form['type[associatedAdministratives]'] = $administrativeLs->getId();
+        $form['type[associatedGuests]'] = $guestLs->getId();
 
         $this->client->submit($form);
 
@@ -137,20 +137,17 @@ class TypeControllerTest extends WebTestCase
         $successMsg = $crawler->filter('html:contains("Votre type a bien été ajouté")');
         $this->assertCount(1, $successMsg);
 
-        /** @var Type $addedType */
-        $addedType = $this->getOneEntityBy(Type::class, ['name' => 'New type']);
+        $addedType = $this->getOneTypeBy(['name' => 'New type']);
         $this->assertNotEmpty($addedType);
 
-        $this->assertSame($actorLs, $addedType->getAssociatedUsers()->first());
+        $this->assertCount(3, $addedType->getAssociatedUsers());
     }
 
     public function testEdit()
     {
         $this->loginAsAdminLibriciel();
-        /** @var Type $type */
-        $type = $this->getOneEntityBy(Type::class, ['name' => 'Conseil Communautaire Libriciel']);
-        /** @var User $notAssociatedActor */
-        $notAssociatedActor = $this->getOneEntityBy(User::class, ['username' => 'actor3@libriciel.coop']);
+        $type = $this->getOneTypeBy(['name' => 'Conseil Communautaire Libriciel']);
+        $notAssociatedActor = $this->getOneUserBy(['username' => 'actor3@libriciel.coop']);
         $crawler = $this->client->request(Request::METHOD_GET, '/type/edit/' . $type->getId());
         $this->assertResponseStatusCodeSame(200);
         $item = $crawler->filter('html:contains("Modifier un type de séance")');
@@ -159,7 +156,7 @@ class TypeControllerTest extends WebTestCase
         $form = $crawler->selectButton('Enregistrer')->form();
 
         $form['type[name]'] = 'new name';
-        $form['type[associatedUsers]'] = $notAssociatedActor->getId();
+        $form['type[associatedActors]'] = $notAssociatedActor->getId();
 
         $this->client->submit($form);
 
@@ -171,8 +168,7 @@ class TypeControllerTest extends WebTestCase
         $successMsg = $crawler->filter('html:contains("Votre type a bien été modifié")');
         $this->assertCount(1, $successMsg);
 
-        /** @var Type $modifiedType */
-        $modifiedType = $this->getOneEntityBy(Type::class, ['name' => 'new name']);
+        $modifiedType = $this->getOneTypeBy(['name' => 'new name']);
         $this->assertNotEmpty($modifiedType);
         $this->assertCount(1, $modifiedType->getAssociatedUsers());
         $this->assertSame($notAssociatedActor, $modifiedType->getAssociatedUsers()->first());
