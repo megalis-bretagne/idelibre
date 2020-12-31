@@ -1,5 +1,6 @@
 stages:
   - build
+  - testWithoutCovering
   - test
   - quality
   - testOld
@@ -61,8 +62,8 @@ phpTestOld:
 
 phpTest:
   stage: test
-  except:
-    - tags
+  only:
+    - master
   image: $CONTAINER_IMAGE
 
   variables:
@@ -91,6 +92,29 @@ phpTest:
 
 
 
+phpTestWithoutCovering:
+  stage: testWithoutCovering
+  except:
+    - tags
+    - master
+  image: $CONTAINER_IMAGE
+
+  variables:
+    XDEBUG_MODE: coverage
+    APP_ENV: test
+    DATABASE_URL: sqlite:///%kernel.project_dir%/var/data.db
+    GIT_STRATEGY: none
+    COMPOSER_PROCESS_TIMEOUT: 1200
+
+  before_script:
+    - cd /app
+    - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+    - php composer-setup.php --install-dir=/usr/local/bin
+    - mv /usr/local/bin/composer.phar /usr/local/bin/composer
+
+  script:
+    - composer install
+    - SYMFONY_DEPRECATIONS_HELPER=disabled bin/phpunit --colors=never
 
 quality:
   stage: quality
