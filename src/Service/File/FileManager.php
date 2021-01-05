@@ -73,7 +73,7 @@ class FileManager
 
     public function replace(UploadedFile $uploadedFile, Sitting $sitting): File
     {
-        $this->delete($sitting->getFile());
+        $this->delete($sitting->getConvocationFile());
 
         return $this->save($uploadedFile, $sitting->getStructure());
     }

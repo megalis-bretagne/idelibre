@@ -48,14 +48,12 @@ class TypeRepository extends ServiceEntityRepository
     /**
      * @return Type[]
      */
-    public function findAuthorizedTypeNotInList(User $user, iterable $types): array
+    public function findAuthorizedTypeByUser(User $user): array
     {
         return $this->createQueryBuilder('t')
             ->Join('t.authorizedSecretaries', 's')
             ->andWhere('s.id = :userId')
             ->setParameter('userId', $user->getId())
-            ->andWhere('t not in ( :types )')
-            ->setParameter('types', $types)
             ->getQuery()
             ->getResult();
     }

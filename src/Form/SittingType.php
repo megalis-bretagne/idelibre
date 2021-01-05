@@ -54,6 +54,17 @@ class SittingType extends AbstractType
                 'mapped' => false,
                 'required' => $isNew,
             ])
+
+            ->add('invitationFile', FileType::class, [
+                'label' => $isNew ? 'Fichier d\'invitation' : 'Remplacer le fichier d\'invitation',
+                'attr' => [
+                    'placeholder' => 'Sélectionner un fichier',
+                    'accept' => '.pdf,.PDF',
+                ],
+                'mapped' => false,
+                'required' => false,
+            ])
+
             ->add('structure', HiddenType::class, [
                 'data' => $options['structure'],
                 'data_class' => null,

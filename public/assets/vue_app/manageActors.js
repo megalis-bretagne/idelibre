@@ -5,63 +5,90 @@ let app = new Vue({
     el: "#app",
     data: {
         inSittingActors: [],
+        inSittingEmployees: [],
+        inSittingGuests: [],
         notInSittingActors: [],
-        alreadySentConvocationActorIds : [],
-        removedActors: [],
+        notInSittingEmployees: [],
+        notInSittingGuests: [],
+        alreadySentConvocationActorIds: [],
+        alreadySentConvocationEmployeesIds: [],
+        alreadySentConvocationGuestsIds: [],
+        removedUsers: [],
         addedActors: [],
+        addedEmployees: [],
+        addedGuests: [],
         messageInfo: null
     },
 
     methods: {
 
-        removeActor(actorId) {
-            removeInSittingActor(this.inSittingActors, actorId);
-            this.removedActors.push(actorId);
+        removeActor(userId) {
+            //TODO Faire le remove our tous les type a la suite en ignorant si le champ est absent
+            removeInSittingUser(this.inSittingActors, userId);
+            removeInSittingUser(this.inSittingGuests, userId);
+            removeInSittingUser(this.inSittingEmployees, userId);
+            this.removedUsers.push(userId);
         },
 
         save() {
-            axios.put(`/api/actors/sittings/${getSittingId()}`, {
-                removedActors: this.removedActors,
-                addedActors: this.addedActors
+            axios.put(`/api/users/sittings/${getSittingId()}`, {
+                removedUsers: this.removedUsers,
+                addedActors: this.addedActors,
+                addedEmployees: this.addedEmployees,
+                addedGuests: this.addedGuests
             }).then((response) => {
-                this.removedActors = [];
+                this.removedUsers = [];
                 this.addedActors = [];
-                this.getActors();
+                this.addedEmployees = [];
+                this.addedGuests = [];
+                this.getUsers();
                 this.showMessage('Modifications enregistrées');
             })
         },
 
         cancel() {
-            this.removedActors = [];
+            this.removedUsers = [];
             this.addedActors = [];
-            this.getActors();
+            this.addedEmployees = [];
+            this.addedGuests = [];
+            this.getUsers();
             this.showMessage('Modifications annulées');
         },
 
         showMessage(msg) {
-          this.messageInfo = msg;
-          setTimeout(() => this.messageInfo = null, 3000);
+            this.messageInfo = msg;
+            setTimeout(() => this.messageInfo = null, 3000);
         },
 
-        getActors() {
+        getUsers() {
             Promise.all([
-                axios.get(`/api/actors/sittings/${getSittingId()}`),
-                axios.get(`/api/actors/sittings/${getSittingId()}/not`),
-                axios.get(`/api/actors/sittings/${getSittingId()}/sent`),
+                axios.get(`/api/users/sittings/${getSittingId()}`),
+                axios.get(`/api/users/sittings/${getSittingId()}/not`),
+                axios.get(`/api/users/sittings/${getSittingId()}/sent`),
             ]).then((response) => {
-                this.inSittingActors = response[0].data;
-                this.notInSittingActors = response[1].data;
-                this.alreadySentConvocationActorIds = response[2].data;
+                this.inSittingActors = response[0].data['actors'];
+                this.inSittingEmployees = response[0].data['employees'];
+                this.inSittingGuests = response[0].data['guests'];
+
+                this.notInSittingActors = response[1].data['actors'];
+                this.notInSittingEmployees = response[1].data['employees'];
+                this.notInSittingGuests = response[1].data['guests'];
+
+                this.alreadySentConvocationActorIds = response[2].data['actors'];
+                this.alreadySentConvocationEmployeesIds = response[2].data['employees'];
+                this.alreadySentConvocationGuestsIds = response[2].data['guests'];
             });
         },
 
-        alreadySentConvocation(actorId) {
-            return this.alreadySentConvocationActorIds.indexOf(actorId) > -1;
+        alreadySentConvocation(userId) {
+            return (this.alreadySentConvocationActorIds.indexOf(userId) > -1) ||
+                (this.alreadySentConvocationGuestsIds.indexOf(userId) > -1) ||
+                (this.alreadySentConvocationEmployeesIds.indexOf(userId) > -1);
         }
     },
 
     mounted() {
-        this.getActors();
+        this.getUsers();
     }
 });
 
@@ -78,15 +105,15 @@ function findActorIndex(actors, actorId) {
     return -1;
 }
 
-function removeInSittingActor(actors, actorId) {
+function removeInSittingUser(actors, actorId) {
     const index = findActorIndex(actors, actorId);
     if (index === -1) {
         return;
     }
-    app.$delete(app.inSittingActors, index)
+    app.$delete(actors, index)
 }
 
 
 function isDirty() {
-    return (app.removedActors.length || app.addedActors.length);
+    return (app.removedUsers.length || app.addedActors.length || app.addedEmployees.length || app.addedGuests.length);
 }

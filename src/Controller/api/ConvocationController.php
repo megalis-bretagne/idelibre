@@ -20,7 +20,11 @@ class ConvocationController extends AbstractController
     public function getConvocations(Sitting $sitting, ConvocationRepository $convocationRepository): JsonResponse
     {
         return $this->json(
-            $convocationRepository->getConvocationsBySitting($sitting),
+            [
+                'actors' => $convocationRepository->getActorConvocationsBySitting($sitting),
+                'guests' => $convocationRepository->getGuestConvocationsBySitting($sitting),
+                'employees' => $convocationRepository->getInvitableEmployeeConvocationsBySitting($sitting),
+            ],
             200,
             [],
             ['groups' => ['convocation', 'user']]

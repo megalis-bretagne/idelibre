@@ -83,14 +83,19 @@ class Sitting
     private $structure;
 
     /**
-     * @ORM\OneToOne(targetEntity=File::class, cascade={"persist", "remove"}, inversedBy="sitting")
+     * @ORM\OneToOne(targetEntity=File::class, cascade={"persist", "remove"}, inversedBy="convocationSitting")
      */
-    private $file;
+    private $convocationFile;
 
     /**
      * @ORM\OneToMany(targetEntity=Project::class, mappedBy="sitting")
      */
     private $projects;
+
+    /**
+     * @ORM\OneToOne(targetEntity=File::class, inversedBy="invitationSitting", cascade={"persist", "remove"})
+     */
+    private $invitationFile;
 
     public function __construct()
     {
@@ -224,14 +229,14 @@ class Sitting
         return $this;
     }
 
-    public function getFile(): ?File
+    public function getConvocationFile(): ?File
     {
-        return $this->file;
+        return $this->convocationFile;
     }
 
-    public function setFile(?File $file): self
+    public function setConvocationFile(?File $convocationFile): self
     {
-        $this->file = $file;
+        $this->convocationFile = $convocationFile;
 
         return $this;
     }
@@ -263,6 +268,18 @@ class Sitting
                 $project->setSitting(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getInvitationFile(): ?File
+    {
+        return $this->invitationFile;
+    }
+
+    public function setInvitationFile(?File $invitationFile): self
+    {
+        $this->invitationFile = $invitationFile;
 
         return $this;
     }

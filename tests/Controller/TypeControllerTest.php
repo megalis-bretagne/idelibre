@@ -113,7 +113,7 @@ class TypeControllerTest extends WebTestCase
     {
         $actorLs = $this->getOneUserBy(['username' => 'actor1@libriciel.coop']);
         $guestLs = $this->getOneUserBy(['username' => 'guest2@libriciel.coop']);
-        $administrativeLs = $this->getOneUserBy(['username' => 'administrative2@libriciel.coop']);
+        $employeeLs = $this->getOneUserBy(['username' => 'employee2@libriciel.coop']);
         $this->loginAsAdminLibriciel();
         $crawler = $this->client->request(Request::METHOD_GET, '/type/add');
         $this->assertResponseStatusCodeSame(200);
@@ -124,7 +124,7 @@ class TypeControllerTest extends WebTestCase
 
         $form['type[name]'] = 'New type';
         $form['type[associatedActors]'] = $actorLs->getId();
-        $form['type[associatedAdministratives]'] = $administrativeLs->getId();
+        $form['type[associatedEmployees]'] = $employeeLs->getId();
         $form['type[associatedGuests]'] = $guestLs->getId();
 
         $this->client->submit($form);

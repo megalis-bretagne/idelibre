@@ -92,7 +92,7 @@ class UserManager
 
     private function updateAuthorizedType(User $user)
     {
-        $this->removeNoMoreAuthorizedType($user);
+        $this->removeAuthorizedType($user);
         $this->addAuthorizedType($user);
     }
 
@@ -103,12 +103,12 @@ class UserManager
         }
     }
 
-    private function removeNoMoreAuthorizedType(User $user)
+    private function removeAuthorizedType(User $user)
     {
-        $noMoreAuthorizedTypes = $this->typeRepository->findAuthorizedTypeNotInList($user, $user->getAuthorizedTypes());
+        $authorizedTypes = $this->typeRepository->findAuthorizedTypeByUser($user);
 
-        foreach ($noMoreAuthorizedTypes as $noMoreAuthorizedType) {
-            $noMoreAuthorizedType->removeAuthorizedSecretary($user);
+        foreach ($authorizedTypes as $authorizedType) {
+            $authorizedType->removeAuthorizedSecretary($user);
         }
     }
 }

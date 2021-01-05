@@ -58,11 +58,16 @@ class File
     private $annex;
 
     /**
-     * @ORM\OneToOne(targetEntity=Sitting::class, mappedBy="file")
+     * @ORM\OneToOne(targetEntity=Sitting::class, mappedBy="convocationFile")
      *
      * @var Sitting | null
      */
-    private $sitting;
+    private $convocationSitting;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Sitting::class, mappedBy="invitationFile", cascade={"persist", "remove"})
+     */
+    private $invitationSitting;
 
     public function __construct()
     {
@@ -124,6 +129,11 @@ class File
             return $this->annex->getProject()->getSitting()->getStructure();
         }
 
-        return $this->sitting->getStructure();
+        return $this->convocationSitting->getStructure();
+    }
+
+    public function getInvitationSitting(): ?Sitting
+    {
+        return $this->invitationSitting;
     }
 }

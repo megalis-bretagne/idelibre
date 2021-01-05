@@ -51,7 +51,7 @@ class EmailGenerator
 
     public function generateParams(Convocation $convocation): array
     {
-        $actor = $convocation->getActor();
+        $user = $convocation->getUser();
         $sitting = $convocation->getSitting();
 
         return [
@@ -65,11 +65,11 @@ class EmailGenerator
                 $sitting->getStructure()->getTimezone()->getName()
             ),
             TemplateTag::SITTING_PLACE => $sitting->getPlace() ?? '',
-            TemplateTag::ACTOR_FIRST_NAME => $actor->getFirstName(),
-            TemplateTag::ACTOR_LAST_NAME => $actor->getLastName(),
-            TemplateTag::ACTOR_USERNAME => $actor->getUsername(),
-            TemplateTag::ACTOR_TITLE => $actor->getTitle() ?? '',
-            TemplateTag::ACTOR_GENDER => $this->genderConverter->format($actor->getGender()),
+            TemplateTag::ACTOR_FIRST_NAME => $user->getFirstName(),
+            TemplateTag::ACTOR_LAST_NAME => $user->getLastName(),
+            TemplateTag::ACTOR_USERNAME => $user->getUsername(),
+            TemplateTag::ACTOR_TITLE => $user->getTitle() ?? '',
+            TemplateTag::ACTOR_GENDER => $this->genderConverter->format($user->getGender()),
         ];
     }
 }

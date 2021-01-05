@@ -84,6 +84,11 @@ Creer le cache pour postgres (bénéfique à tous)
 
 pg_dump --dbname=postgresql://idelibre:idelibre@127.0.0.1:5432/idelibre_docker --schema-only --file "/tmp/docker2.sql"
 
+bin/console doctrine:database:create --env test
+bin/console doctrine:migration:migrate --env test
+bin/console doctrine:fixture:load --env test
+
+
 SET CONSTRAINTS ALL DEFERRED
 
 SET CONSTRAINTS ALL IMMEDIATE
@@ -100,3 +105,33 @@ ADMINISTRATIVES => EMPLOYEES !
 
 
 Peut etre mettre des tooltips o des popever partout par exemple sur profile la liste des profiles avec explication
+
+Ajouter l'extenson de l'uilisateur au moment de la creation comme on fait actueleletn pour setter la structure !
+
+Ecrire le <inputfield>  <b>@structre.fr</b>  pour facilité la compréhension
+
+
+https://idelibre-4.recette.libriciel.net
+
+
+pour les enums
+https://github.com/myclabs/php-enum
+sinon un bete splenum ferait peut etre l'affaire ?
+
+
+FAUT Une TYPe peut avoir plusisuer email template.
+Par exemple un pour la convocation et un pour l'invitation !!!!
+Ou alors on decide qu el emessage d'invitaiton est générique à tous les type des séances.
+Possibilité et surment plus simple à gérer (voir ce que font les collectivité sur nos instance !)
+
+
+/**
+     * @ORM\OneToOne(targetEntity=EmailTemplate::class, mappedBy="type")
+     */
+    private $emailTemplate;
+
+
+
+
+Peut etre faire la distinction entre employee et simpleEmployee ?
+ou alors dans l'autre sens faires un convocable employee qui regroupe les 3 type invitable ?

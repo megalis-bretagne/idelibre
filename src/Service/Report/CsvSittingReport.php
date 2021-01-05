@@ -24,8 +24,8 @@ class CsvSittingReport
     private function getConvocationData(Convocation $convocation): array
     {
         return [
-            $convocation->getActor()->getFirstName(),
-            $convocation->getActor()->getLastName(),
+            $convocation->getUser()->getFirstName(),
+            $convocation->getUser()->getLastName(),
             $this->getDateFormattedTimeStamp($convocation->getSentTimestamp()),
             $this->getDateFormattedTimeStamp($convocation->getReceivedTimestamp()),
         ];

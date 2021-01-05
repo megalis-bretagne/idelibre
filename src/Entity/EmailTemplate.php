@@ -9,6 +9,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=EmailTemplateRepository::class)
+ *
+ * @ORM\Table(
+ *     uniqueConstraints={@ORM\UniqueConstraint(
+ *         name="IDX_EMAIL_NAME_STRUCTURE",
+ *         columns={"name", "structure_id"}
+ *     )})
  * @UniqueEntity(
  *     fields={"name", "structure"},
  *     errorPath="name",
@@ -28,7 +34,7 @@ class EmailTemplate
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255, unique=true)
+     * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
      * @Assert\Length(max="255")
      */

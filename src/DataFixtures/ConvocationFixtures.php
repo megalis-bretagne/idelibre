@@ -30,14 +30,16 @@ class ConvocationFixtures extends Fixture implements DependentFixtureInterface
 
         $convocationActor1 = (new Convocation())
             ->setSitting($sittingConseilLibriciel)
-            ->setActor($actor1Libriciel);
+            ->setUser($actor1Libriciel)
+            ->setCategory(Convocation::CATEGORY_CONVOCATION);
         $manager->persist($convocationActor1);
         $this->addReference(self::REFERENCE . 'convocationActor1Conseil', $convocationActor1);
 
         $convocationActor2Sent = (new Convocation())
             ->setSitting($sittingConseilLibriciel)
-            ->setActor($actor2Libriciel)
-            ->setSentTimestamp($timestamp);
+            ->setUser($actor2Libriciel)
+            ->setSentTimestamp($timestamp)
+            ->setCategory(Convocation::CATEGORY_CONVOCATION);
 
         $manager->persist($convocationActor2Sent);
         $this->addReference(self::REFERENCE . 'convocationActor2Conseil', $convocationActor2Sent);

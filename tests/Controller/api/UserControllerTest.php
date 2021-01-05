@@ -13,7 +13,7 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
 
-class ActorControllerTest extends WebTestCase
+class UserControllerTest extends WebTestCase
 {
     use FixturesTrait;
     use FindEntityTrait;
@@ -59,38 +59,44 @@ class ActorControllerTest extends WebTestCase
         $this->assertSame('libriciel', $actors[0]['lastName']);
     }
 
-    public function testGetActorsInSitting()
+    public function testGetUsersInSitting()
     {
         $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
         $this->loginAsAdminLibriciel();
-        $this->client->request(Request::METHOD_GET, '/api/actors/sittings/' . $sitting->getId());
+        $this->client->request(Request::METHOD_GET, '/api/users/sittings/' . $sitting->getId());
         $this->assertResponseStatusCodeSame(200);
 
-        $actorsInSitting = json_decode($this->client->getResponse()->getContent(), true);
-        $this->assertCount(2, $actorsInSitting);
+        $usersInSitting = json_decode($this->client->getResponse()->getContent(), true);
+
+        $this->assertCount(2, $usersInSitting['actors']);
+        $this->assertCount(0, $usersInSitting['employees']);
+        $this->assertCount(0, $usersInSitting['guests']);
     }
 
-    public function testGetActorsNotInSitting()
+    public function testGetUsersNotInSitting()
     {
         $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
         $this->loginAsAdminLibriciel();
-        $this->client->request(Request::METHOD_GET, '/api/actors/sittings/' . $sitting->getId() . '/not');
+        $this->client->request(Request::METHOD_GET, '/api/users/sittings/' . $sitting->getId() . '/not');
         $this->assertResponseStatusCodeSame(200);
 
-        $actorsNotInSitting = json_decode($this->client->getResponse()->getContent(), true);
-        $this->assertCount(2, $actorsNotInSitting);
+        $usersNotInSitting = json_decode($this->client->getResponse()->getContent(), true);
+
+        $this->assertCount(2, $usersNotInSitting['actors']);
+        $this->assertCount(5, $usersNotInSitting['employees']);
+        $this->assertCount(2, $usersNotInSitting['guests']);
     }
 
-    public function testUpdateActorsInSittingAddActor()
+    public function testUpdateUsersInSittingAddActor()
     {
         $actor3 = $this->getOneUserBy(['username' => 'actor3@libriciel.coop']);
         $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
         $this->loginAsAdminLibriciel();
-        $data = json_encode(['addedActors' => [$actor3->getId()], 'removedActors' => []]);
+        $data = json_encode(['addedActors' => [$actor3->getId()], 'addedEmployees' => [], 'addedGuests' => [],  'removedUsers' => []]);
 
         $this->client->request(
             Request::METHOD_PUT,
-            '/api/actors/sittings/' . $sitting->getId(),
+            '/api/users/sittings/' . $sitting->getId(),
             [],
             [],
             [],
@@ -103,16 +109,16 @@ class ActorControllerTest extends WebTestCase
         $this->assertCount(3, $sitting->getConvocations());
     }
 
-    public function testUpdateActorsInSittingRemoveActor()
+    public function testUpdateUsersInSittingRemoveActor()
     {
         $actor1 = $this->getOneUserBy(['username' => 'actor1@libriciel.coop']);
         $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
         $this->loginAsAdminLibriciel();
-        $data = json_encode(['addedActors' => [], 'removedActors' => [$actor1->getId()]]);
+        $data = json_encode(['addedActors' => [], 'addedEmployees' => [], 'addedGuests' => [], 'removedUsers' => [$actor1->getId()]]);
 
         $this->client->request(
             Request::METHOD_PUT,
-            '/api/actors/sittings/' . $sitting->getId(),
+            '/api/users/sittings/' . $sitting->getId(),
             [],
             [],
             [],
@@ -125,13 +131,15 @@ class ActorControllerTest extends WebTestCase
         $this->assertCount(1, $sitting->getConvocations());
     }
 
-    public function testGetActorsConvocationSent()
+    public function testGetUsersConvocationSent()
     {
         $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
         $this->loginAsAdminLibriciel();
-        $this->client->request(Request::METHOD_GET, '/api/actors/sittings/' . $sitting->getId() . '/sent');
+        $this->client->request(Request::METHOD_GET, '/api/users/sittings/' . $sitting->getId() . '/sent');
         $this->assertResponseStatusCodeSame(200);
-        $content = json_decode($this->client->getResponse()->getContent(), true);
-        $this->assertCount(1, $content);
+        $userConvocationsSent = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertCount(1, $userConvocationsSent['actors']);
+        $this->assertCount(0, $userConvocationsSent['employees']);
+        $this->assertCount(0, $userConvocationsSent['guests']);
     }
 }

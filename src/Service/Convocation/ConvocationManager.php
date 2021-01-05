@@ -3,6 +3,7 @@
 namespace App\Service\Convocation;
 
 use App\Entity\Convocation;
+use App\Entity\Role;
 use App\Entity\Sitting;
 use App\Entity\User;
 use App\Repository\ConvocationRepository;
@@ -45,26 +46,38 @@ class ConvocationManager
 
     public function createConvocations(Sitting $sitting): void
     {
-        foreach ($sitting->getType()->getAssociatedUsers() as $actor) {
+        $associatedUsers = $sitting->getType()->getAssociatedUsers();
+        foreach ($associatedUsers as $user) {
             $convocation = new Convocation();
             $convocation->setSitting($sitting)
-                ->setActor($actor);
+                ->setUser($user)
+                ->setCategory($this->getConvocationCategory($user));
             $this->em->persist($convocation);
         }
     }
 
-    /**
-     * @param User[] $actors
-     */
-    public function addConvocations(iterable $actors, Sitting $sitting): void
+    private function getConvocationCategory(User $user): string
     {
-        foreach ($actors as $actor) {
-            if ($this->alreadyHasConvocation($actor, $sitting)) {
+        if (Role::NAME_ROLE_ACTOR === $user->getRole()->getName()) {
+            return Convocation::CATEGORY_CONVOCATION;
+        }
+
+        return Convocation::CATEGORY_INVITATION;
+    }
+
+    /**
+     * @param User[] $users
+     */
+    public function addConvocations(iterable $users, Sitting $sitting): void
+    {
+        foreach ($users as $user) {
+            if ($this->alreadyHasConvocation($user, $sitting)) {
                 continue;
             }
             $convocation = new Convocation();
             $convocation->setSitting($sitting)
-                ->setActor($actor);
+                ->setUser($user)
+                ->setCategory($this->getConvocationCategory($user));
             $this->em->persist($convocation);
         }
         $this->em->flush();
@@ -84,9 +97,9 @@ class ConvocationManager
         $this->em->flush();
     }
 
-    private function alreadyHasConvocation(User $actor, Sitting $sitting): bool
+    private function alreadyHasConvocation(User $user, Sitting $sitting): bool
     {
-        $convocation = $this->convocationRepository->findOneBy(['actor' => $actor, 'sitting' => $sitting]);
+        $convocation = $this->convocationRepository->findOneBy(['user' => $user, 'sitting' => $sitting]);
 
         return !empty($convocation);
     }
@@ -96,9 +109,9 @@ class ConvocationManager
      *
      * @throws ConnectionException
      */
-    public function sendAllConvocations(Sitting $sitting): void
+    public function sendAllConvocations(Sitting $sitting, ?string $userProfile): void
     {
-        $convocations = $sitting->getConvocations()->toArray();
+        $convocations = $this->getConvocationByUserProfile($sitting, $userProfile);
         while (count($convocations)) {
             $convocationBatch = array_splice($convocations, 0, $this->bag->get('max_batch_email'));
             $this->timestampAndActiveConvocations($sitting, $convocationBatch);
@@ -200,10 +213,25 @@ class ConvocationManager
         $emails = [];
         foreach ($convocations as $convocation) {
             $email = $this->emailGenerator->generateFromTemplateAndConvocation($sitting->getType()->getEmailTemplate(), $convocation);
-            $email->setTo($convocation->getActor()->getEmail());
+            $email->setTo($convocation->getUser()->getEmail());
             $email->setReplyTo($sitting->getStructure()->getReplyTo());
         }
 
         return $emails;
+    }
+
+    private function getConvocationByUserProfile(Sitting $sitting, ?string $userProfile): array
+    {
+        if (!$userProfile) {
+            return $sitting->getConvocations()->toArray();
+        }
+
+        switch ($userProfile) {
+            case Role::NAME_ROLE_ACTOR:
+                return $this->convocationRepository->getActorConvocationsBySitting($sitting);
+            case Role::NAME_ROLE_GUEST:
+                return $this->convocationRepository->getGuestConvocationsBySitting($sitting);
+            default: return  $this->convocationRepository->getInvitableEmployeeConvocationsBySitting($sitting);
+        }
     }
 }

@@ -24,22 +24,34 @@ class ConvocationTest extends WebTestCase
     public function testValid()
     {
         $convocation = (new Convocation())
-            ->setActor(new User())
-            ->setSitting(new Sitting());
+            ->setUser(new User())
+            ->setSitting(new Sitting())
+            ->setCategory(Convocation::CATEGORY_CONVOCATION);
         $this->assertHasValidationErrors($convocation, 0);
     }
 
     public function testInValidNoActor()
     {
         $convocation = (new Convocation())
-            ->setSitting(new Sitting());
+            ->setSitting(new Sitting())
+            ->setCategory(Convocation::CATEGORY_CONVOCATION);
         $this->assertHasValidationErrors($convocation, 1);
     }
 
     public function testInValidNoSitting()
     {
         $convocation = (new Convocation())
+            ->setSitting(new Sitting())
+            ->setCategory(Convocation::CATEGORY_CONVOCATION);
+        $this->assertHasValidationErrors($convocation, 1);
+    }
+
+    public function testInvalidNoCategory()
+    {
+        $convocation = (new Convocation())
+            ->setUser(new User())
             ->setSitting(new Sitting());
+
         $this->assertHasValidationErrors($convocation, 1);
     }
 }

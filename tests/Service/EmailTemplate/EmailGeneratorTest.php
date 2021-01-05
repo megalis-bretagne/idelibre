@@ -64,7 +64,7 @@ class EmailGeneratorTest extends WebTestCase
     {
         $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
         $actor = $this->getOneUserBy(['username' => 'actor1@libriciel.coop']);
-        $convocation = $this->getOneConvocationBy(['sitting' => $sitting, 'actor' => $actor]);
+        $convocation = $this->getOneConvocationBy(['sitting' => $sitting, 'user' => $actor]);
         $generator = new EmailGenerator(new DateUtil(), new GenderConverter(), $this->emailTemplateManager);
 
         $expected = [

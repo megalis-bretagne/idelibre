@@ -23,11 +23,11 @@ class TypeManager
     public function save(
         Type $type,
         iterable $associatedActors,
-        iterable $associatedAdministratives,
+        iterable $associatedEmployees,
         iterable $associatedGuests,
         Structure $structure
     ): void {
-        $type->setAssociatedUsers([...$associatedActors, ...$associatedAdministratives, ...$associatedGuests]);
+        $type->setAssociatedUsers([...$associatedActors, ...$associatedEmployees, ...$associatedGuests]);
         $type->setStructure($structure);
         $this->em->persist($type);
         $this->em->flush();
