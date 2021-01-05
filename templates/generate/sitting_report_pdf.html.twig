@@ -28,8 +28,8 @@
         <tbody>
         {% for convocation in convocations %}
             <tr class="d-flex">
-                <td style="width: 15%;">{{ convocation.actor.firstName }} </td>
-                <td style="width: 15%;">{{ convocation.actor.lastName }} </td>
+                <td style="width: 15%;">{{ convocation.user.firstName }} </td>
+                <td style="width: 15%;">{{ convocation.user.lastName }} </td>
                 <td style="width: 15%;">{{ convocation.sentTimestamp ? convocation.sentTimestamp.createAt | date('d/m/Y') : '' }} </td>
                 <td style="width: 15%;">{{ convocation.receivedTimestamp ? convocation.receivedTimestamp.createAt | date('d/m/Y') : '' }} </td>
                 <td style="width: 10%;"></td>

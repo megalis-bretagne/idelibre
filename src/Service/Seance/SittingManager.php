@@ -21,13 +21,9 @@ class SittingManager
     private ConvocationManager $convocationManager;
     private FileManager $fileManager;
     private EntityManagerInterface $em;
-
     private MessageBusInterface $messageBus;
-
     private ProjectManager $projectManager;
-
     private RoleManager $roleManager;
-
     private SittingRepository $sittingRepository;
 
     public function __construct(
@@ -48,15 +44,24 @@ class SittingManager
         $this->sittingRepository = $sittingRepository;
     }
 
-    public function save(Sitting $sitting, UploadedFile $uploadedFile, Structure $structure): string
-    {
+    public function save(
+        Sitting $sitting,
+        UploadedFile $uploadedConvocationFile,
+        ?UploadedFile $uploadedInvitationFile,
+        Structure $structure
+    ): string {
         // TODO remove file if transaction failed
-        $convocationFile = $this->fileManager->save($uploadedFile, $structure);
+        $convocationFile = $this->fileManager->save($uploadedConvocationFile, $structure);
 
         $sitting->setStructure($structure)
             ->setName($sitting->getType()->getName())
-            ->setFile($convocationFile);
+            ->setConvocationFile($convocationFile);
         $this->em->persist($sitting);
+
+        if ($uploadedInvitationFile) {
+            $invitationFile = $this->fileManager->save($uploadedInvitationFile, $structure);
+            $sitting->setInvitationFile($invitationFile);
+        }
 
         $this->convocationManager->createConvocations($sitting);
         $this->em->flush();
@@ -68,7 +73,7 @@ class SittingManager
 
     public function delete(Sitting $sitting): void
     {
-        $this->fileManager->delete($sitting->getFile());
+        $this->fileManager->delete($sitting->getConvocationFile());
         $this->projectManager->deleteProjects($sitting->getProjects());
         $this->convocationManager->deleteConvocations($sitting->getConvocations());
         $this->em->remove($sitting);
@@ -80,7 +85,7 @@ class SittingManager
     {
         if ($uploadedFile) {
             $convocationFile = $this->fileManager->replace($uploadedFile, $sitting);
-            $sitting->setFile($convocationFile);
+            $sitting->setConvocationFile($convocationFile);
         }
         $this->em->persist($sitting);
         $this->em->flush();

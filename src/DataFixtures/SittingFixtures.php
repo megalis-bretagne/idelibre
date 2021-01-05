@@ -32,7 +32,7 @@ class SittingFixtures extends Fixture implements DependentFixtureInterface
             ->setName('Conseil Libriciel')
             ->setDate(new DateTimeImmutable('2020-10-22'))
             ->setStructure($structureLibriciel)
-            ->setFile($fileConvocationConseilLs)
+            ->setConvocationFile($fileConvocationConseilLs)
             ->setPlace('Salle du conseil')
             ->setType($typeConseilLibriciel);
         $manager->persist($sittingConseilLibriciel);
@@ -42,7 +42,7 @@ class SittingFixtures extends Fixture implements DependentFixtureInterface
             ->setName('Bureau Libriciel')
             ->setDate(new DateTimeImmutable('2020-10-22'))
             ->setStructure($structureLibriciel)
-            ->setFile($fileConvocationBureauLs)
+            ->setConvocationFile($fileConvocationBureauLs)
             ->setPlace('Salle du conseil')
             ->setType($typeBureauLibriciel);
         $manager->persist($sittingBureauLibriciel);

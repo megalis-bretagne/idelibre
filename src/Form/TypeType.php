@@ -41,14 +41,14 @@ class TypeType extends AbstractType
                 'data' => $this->userRepository->getAssociatedActorsWithType($options['data'] ?? null),
             ])
 
-            ->add('associatedAdministratives', EntityType::class, [
+            ->add('associatedEmployees', EntityType::class, [
                 'placeholder' => 'Sélectionner les administratifs',
                 'required' => false,
                 'label' => 'Administratifs associés',
                 'class' => User::class,
                 'query_builder' => $this->userRepository
-                    ->findAdministrativesByStructure($options['structure']),
-                'data' => $this->userRepository->getAssociatedAdministrativesWithType($options['data'] ?? null),
+                    ->findInvitableEmployeesByStructure($options['structure']),
+                'data' => $this->userRepository->getAssociatedInvitableEmployeesWithType($options['data'] ?? null),
                 'choice_label' => fn (User $user) => $this->formatUserString($user),
                 'multiple' => true,
                 'mapped' => false,

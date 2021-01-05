@@ -30,7 +30,7 @@ class PdfSittingGenerator
 
     private function addConvocation(Pdf $pdf, Sitting $sitting): void
     {
-        $pdf->addFile($sitting->getFile()->getPath());
+        $pdf->addFile($sitting->getConvocationFile()->getPath());
     }
 
     /**

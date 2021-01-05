@@ -105,13 +105,13 @@ class CsvManager
         }
         $role = null;
         switch ($roleId) {
-            case Role::SECRETARY:
+            case Role::CODE_ROLE_SECRETARY:
                 $role = $this->roleManager->getSecretaryRole();
                 break;
-            case Role::STRUCTURE_ADMIN:
+            case Role::CODE_ROLE_STRUCTURE_ADMIN:
                 $role = $this->roleManager->getStructureAdminRole();
                 break;
-            case Role::ACTOR:
+            case Role::CODE_ROLE_ACTOR:
                 $role = $this->roleManager->getActorRole();
                 break;
             default:

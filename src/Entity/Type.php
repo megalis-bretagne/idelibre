@@ -11,7 +11,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=TypeRepository::class)
- * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="IDX_TYPE_NAME_STRUCTURE", columns={"name", "structure_id"})})
+ * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(
+ *     name="IDX_TYPE_NAME_STRUCTURE",
+ *     columns={"name", "structure_id"} )})
  *
  * @UniqueEntity(
  *     fields={"name", "structure"},

@@ -60,7 +60,7 @@ class TypeController extends AbstractController
             $typeManager->save(
                 $form->getData(),
                 $form->get('associatedActors')->getData(),
-                $form->get('associatedAdministratives')->getData(),
+                $form->get('associatedEmployees')->getData(),
                 $form->get('associatedGuests')->getData(),
                 $this->getUser()->getStructure()
             );
@@ -88,7 +88,7 @@ class TypeController extends AbstractController
             $typeManager->save(
                 $form->getData(),
                 $form->get('associatedActors')->getData(),
-                $form->get('associatedAdministratives')->getData(),
+                $form->get('associatedEmployees')->getData(),
                 $form->get('associatedGuests')->getData(),
                 $this->getUser()->getStructure()
             );

@@ -54,14 +54,17 @@ class ConvocationControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(200);
 
         $convocations = json_decode($this->client->getResponse()->getContent(), true);
-        $this->assertCount(2, $convocations);
+
+        $this->assertCount(2, $convocations['actors']);
+        $this->assertCount(0, $convocations['employees']);
+        $this->assertCount(0, $convocations['guests']);
     }
 
     public function testSendConvocation()
     {
         $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
         $actor = $this->getOneUserBy(['username' => 'actor1@libriciel.coop']);
-        $convocation = $this->getOneConvocationBy(['sitting' => $sitting, 'actor' => $actor]);
+        $convocation = $this->getOneConvocationBy(['sitting' => $sitting, 'user' => $actor]);
         $this->loginAsAdminLibriciel();
         $this->client->request(Request::METHOD_POST, '/api/convocations/' . $convocation->getId() . '/send');
         $this->assertResponseStatusCodeSame(200);

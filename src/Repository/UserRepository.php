@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Convocation;
 use App\Entity\Group;
+use App\Entity\Role;
 use App\Entity\Sitting;
 use App\Entity\Structure;
 use App\Entity\Type;
@@ -108,7 +109,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         return $this->createQueryBuilder('u')
             ->leftJoin('u.role', 'r')
             ->andWhere(' r.name =:actor')
-            ->setParameter('actor', 'Actor')
+            ->setParameter('actor', Role::NAME_ROLE_ACTOR)
             ->andWhere('u.structure = :structure')
             ->setParameter('structure', $structure)
             ->orderBy('u.lastName', 'ASC');
@@ -125,40 +126,71 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->orderBy('u.lastName', 'ASC');
     }
 
-    public function findAdministrativesByStructure($structure): QueryBuilder
+    public function findInvitableEmployeesByStructure($structure): QueryBuilder
     {
         return $this->createQueryBuilder('u')
             ->leftJoin('u.role', 'r')
-            ->andWhere(' r.name =:administrative or r.name=:secretary or r.name=:administrator')
-            ->setParameter('administrative', 'Administrative')
-            ->setParameter('secretary', 'Secretary')
-            ->setParameter('administrator', 'Administrator')
+            ->andWhere(' r.name =:employee or r.name=:secretary or r.name=:administrator')
+            ->setParameter('employee', Role::NAME_ROLE_EMPLOYEE)
+            ->setParameter('secretary', Role::NAME_ROLE_SECRETARY)
+            ->setParameter('administrator', Role::NAME_ROLE_STRUCTURE_ADMINISTRATOR)
             ->andWhere('u.structure = :structure')
             ->setParameter('structure', $structure)
             ->orderBy('u.lastName', 'ASC');
     }
 
-    public function findActorsInSitting(Sitting $sitting, Structure $structure): QueryBuilder
+    public function findActorsInSitting(Sitting $sitting): QueryBuilder
+    {
+        return $this->findWithRoleInSitting($sitting, [Role::NAME_ROLE_ACTOR]);
+    }
+
+    public function findInvitableEmployeesInSitting(Sitting $sitting): QueryBuilder
+    {
+        return $this->findWithRoleInSitting($sitting,Role::INVITABLE_EMPLOYEE);
+    }
+
+    public function findGuestsInSitting(Sitting $sitting): QueryBuilder
+    {
+        return $this->findWithRoleInSitting($sitting, [Role::NAME_ROLE_GUEST]);
+    }
+
+    /**
+     * @param string[] $roleNames
+     */
+    public function findWithRoleInSitting(Sitting $sitting, array $roleNames): QueryBuilder
     {
         return $this->createQueryBuilder('u')
             ->leftJoin('u.role', 'r')
-            ->andWhere(' r.name =:actor')
-            ->setParameter('actor', 'Actor')
-            ->andWhere('u.structure =:structure')
-            ->setParameter('structure', $structure)
-            ->join(Convocation::class, 'c', Join::WITH, 'c.actor = u')
+            ->andWhere(' r.name in (:roleNames)')
+            ->setParameter('roleNames', $roleNames)
+            ->join(Convocation::class, 'c', Join::WITH, 'c.user = u')
             ->andWhere('c.sitting =:sitting')
             ->setParameter('sitting', $sitting);
     }
 
     public function findActorsNotInSitting(Sitting $sitting, Structure $structure): QueryBuilder
     {
-        $actorsInSitting = $this->findActorsInSitting($sitting, $structure)->getQuery()->getResult();
+        return $this->findWithRoleNotInSitting($sitting, $structure, [Role::NAME_ROLE_ACTOR]);
+    }
+
+    public function findInvitableEmployeesNotInSitting(Sitting $sitting, Structure $structure): QueryBuilder
+    {
+        return $this->findWithRoleNotInSitting($sitting, $structure, Role::INVITABLE_EMPLOYEE);
+    }
+
+    public function findGuestNotInSitting(Sitting $sitting, Structure $structure): QueryBuilder
+    {
+        return $this->findWithRoleNotInSitting($sitting, $structure, [Role::NAME_ROLE_GUEST]);
+    }
+
+    private function findWithRoleNotInSitting(Sitting $sitting, Structure $structure, array $roleNames): QueryBuilder
+    {
+        $actorsInSitting = $this->findWithRoleInSitting($sitting, $roleNames)->getQuery()->getResult();
 
         $qb = $this->createQueryBuilder('u')
             ->leftJoin('u.role', 'r')
-            ->andWhere(' r.name =:actor')
-            ->setParameter('actor', 'Actor')
+            ->andWhere(' r.name in (:roleNames)')
+            ->setParameter('roleNames', $roleNames)
             ->andWhere('u.structure =:structure')
             ->setParameter('structure', $structure);
 
@@ -172,13 +204,28 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
     public function findActorIdsConvocationSent(Sitting $sitting): array
     {
-        $qb = $this->findActorsInSitting($sitting, $sitting->getStructure())
+        return $this->findWithRolesIdsConvocationSent($sitting, [Role::NAME_ROLE_ACTOR]);
+    }
+
+    public function findInvitableEmployeesIdsConvocationSent(Sitting $sitting): array
+    {
+        return $this->findWithRolesIdsConvocationSent($sitting, Role::INVITABLE_EMPLOYEE);
+    }
+
+    public function findGuestsIdsConvocationSent(Sitting $sitting): array
+    {
+        return $this->findWithRolesIdsConvocationSent($sitting, [Role::NAME_ROLE_GUEST]);
+    }
+
+    private function findWithRolesIdsConvocationSent(Sitting $sitting, array $roleNames): array
+    {
+        $qb = $this->findWithRoleInSitting($sitting, $roleNames)
             ->andWhere('c.sentTimestamp is not null')
             ->select('u.id');
 
         $associatedArrayIds = $qb->getQuery()->getScalarResult();
 
-        return array_map(fn ($el) => $el['id'], $associatedArrayIds);
+        return array_map(fn($el) => $el['id'], $associatedArrayIds);
     }
 
     public function findSecretariesByStructure($structure): QueryBuilder
@@ -194,17 +241,17 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
     public function getAssociatedActorsWithType(?Type $type): ?array
     {
-        return $this->getAssociatedUsersRoleWithType(['Actor'], $type);
+        return $this->getAssociatedUsersRoleWithType([Role::NAME_ROLE_ACTOR], $type);
     }
 
-    public function getAssociatedAdministrativesWithType(?Type $type): ?array
+    public function getAssociatedInvitableEmployeesWithType(?Type $type): ?array
     {
-        return $this->getAssociatedUsersRoleWithType(['Secretary', 'Administrator', 'Administrative'], $type);
+        return $this->getAssociatedUsersRoleWithType(Role::INVITABLE_EMPLOYEE, $type);
     }
 
     public function getAssociatedGuestWithType(?Type $type): ?array
     {
-        return $this->getAssociatedUsersRoleWithType(['Guest'], $type);
+        return $this->getAssociatedUsersRoleWithType([Role::NAME_ROLE_GUEST], $type);
     }
 
     /**

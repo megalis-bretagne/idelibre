@@ -39,7 +39,7 @@ class SittingTest extends WebTestCase
     {
         $sitting = (new Sitting())
             ->setName('New Sitting Name')
-            ->setFile(new File())
+            ->setConvocationFile(new File())
             ->setStructure(new Structure())
             ->setDate(new DateTime())
             ;
@@ -51,7 +51,7 @@ class SittingTest extends WebTestCase
     {
         $sitting = (new Sitting())
             ->setName('New Sitting Name')
-            ->setFile(new File())
+            ->setConvocationFile(new File())
             ->setDate(new DateTime())
             ->setPlace('ici');
 
@@ -62,7 +62,7 @@ class SittingTest extends WebTestCase
     {
         $sitting = (new Sitting())
             ->setName($this->genString(256))
-            ->setFile(new File())
+            ->setConvocationFile(new File())
             ->setStructure(new Structure())
             ->setDate(new DateTime())
             ->setPlace('ici');
@@ -74,7 +74,7 @@ class SittingTest extends WebTestCase
     {
         $sitting = (new Sitting())
             ->setName('Sitting Name')
-            ->setFile(new File())
+            ->setConvocationFile(new File())
             ->setStructure(new Structure())
             ->setPlace('ici');
 
@@ -85,7 +85,7 @@ class SittingTest extends WebTestCase
     {
         $sitting = (new Sitting())
             ->setName('My Sitting Name')
-            ->setFile(new File())
+            ->setConvocationFile(new File())
             ->setStructure(new Structure())
             ->setDate(new DateTime())
             ->setPlace($this->genString(256));
@@ -99,7 +99,7 @@ class SittingTest extends WebTestCase
 
         $sitting = (new Sitting())
             ->setName($dbSitting->getName())
-            ->setFile(new File())
+            ->setConvocationFile(new File())
             ->setStructure($dbSitting->getStructure())
             ->setDate($dbSitting->getDate())
         ;
@@ -113,7 +113,7 @@ class SittingTest extends WebTestCase
 
         $sitting = (new Sitting())
             ->setName($dbSitting->getName())
-            ->setFile(new File())
+            ->setConvocationFile(new File())
             ->setStructure(new Structure())
             ->setDate($dbSitting->getDate())
         ;
@@ -127,7 +127,7 @@ class SittingTest extends WebTestCase
 
         $sitting = (new Sitting())
             ->setName($dbSitting->getName())
-            ->setFile(new File())
+            ->setConvocationFile(new File())
             ->setStructure($dbSitting->getStructure())
             ->setDate(new DateTime())
         ;

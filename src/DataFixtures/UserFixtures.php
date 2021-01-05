@@ -37,7 +37,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
          * @var Role      $roleSecretary
          * @var Party     $partyMajority
          * @var Role      $roleGuest
-         * @var Role      $roleAdministrative
+         * @var Role      $roleEmployee
          */
         $structureLibriciel = $this->getReference(StructureFixtures::REFERENCE . 'libriciel');
         $structureMontpellier = $this->getReference(StructureFixtures::REFERENCE . 'montpellier');
@@ -48,7 +48,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $roleSecretary = $this->getReference(RoleFixtures::REFERENCE . 'secretary');
         $roleStructureAdminLibriciel = $this->getReference(RoleFixtures::REFERENCE . 'structureAdmin');
         $roleGuest = $this->getReference(RoleFixtures::REFERENCE . 'guest');
-        $roleAdministrative = $this->getReference(RoleFixtures::REFERENCE . 'administrative');
+        $roleEmployee = $this->getReference(RoleFixtures::REFERENCE . 'employee');
 
         $roleActor = $this->getReference(RoleFixtures::REFERENCE . 'actor');
         $partyMajority = $this->getReference(PartyFixtures::REFERENCE . 'majorite');
@@ -207,29 +207,29 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($guestLibriciel2);
         $this->addReference(self::REFERENCE . 'guestLibriciel2', $guestLibriciel2);
 
-        ///// ADMINISTRATIVE //////
+        ///// EMPLOYEE //////
 
-        $administrativeLibriciel1 = new User();
-        $administrativeLibriciel1->setEmail('administrative1@example.org')
-            ->setRole($roleAdministrative)
-            ->setUsername('administrative1@libriciel.coop')
-            ->setFirstName('administrative1')
+        $employeeLibriciel1 = new User();
+        $employeeLibriciel1->setEmail('employee1@example.org')
+            ->setRole($roleEmployee)
+            ->setUsername('employee1@libriciel.coop')
+            ->setFirstName('employee1')
             ->setLastname('libriciel')
             ->setStructure($structureLibriciel)
-            ->setPassword($this->passwordEncoder->encodePassword($administrativeLibriciel1, 'password'));
-        $manager->persist($administrativeLibriciel1);
-        $this->addReference(self::REFERENCE . 'administrativeLibriciel1', $administrativeLibriciel1);
+            ->setPassword($this->passwordEncoder->encodePassword($employeeLibriciel1, 'password'));
+        $manager->persist($employeeLibriciel1);
+        $this->addReference(self::REFERENCE . 'employeeLibriciel1', $employeeLibriciel1);
 
-        $administrativeLibriciel2 = new User();
-        $administrativeLibriciel2->setEmail('administrative2@example.org')
-            ->setRole($roleAdministrative)
-            ->setUsername('administrative2@libriciel.coop')
-            ->setFirstName('administrative2')
+        $employeeLibriciel2 = new User();
+        $employeeLibriciel2->setEmail('employee2@example.org')
+            ->setRole($roleEmployee)
+            ->setUsername('employee2@libriciel.coop')
+            ->setFirstName('employee2')
             ->setLastname('libriciel')
             ->setStructure($structureLibriciel)
-            ->setPassword($this->passwordEncoder->encodePassword($administrativeLibriciel2, 'password'));
-        $manager->persist($administrativeLibriciel2);
-        $this->addReference(self::REFERENCE . 'administrativeLibriciel2', $administrativeLibriciel2);
+            ->setPassword($this->passwordEncoder->encodePassword($employeeLibriciel2, 'password'));
+        $manager->persist($employeeLibriciel2);
+        $this->addReference(self::REFERENCE . 'employeeLibriciel2', $employeeLibriciel2);
 
         $manager->flush();
     }

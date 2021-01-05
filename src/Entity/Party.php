@@ -11,6 +11,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=PartyRepository::class)
+ * @ORM\Table(
+ *     uniqueConstraints={@ORM\UniqueConstraint(
+ *         name="IDX_PARTY_NAME_STRUCTURE",
+ *         columns={"name", "structure_id"}
+ *     )})
  * @UniqueEntity(
  *     fields={"name", "structure"},
  *     errorPath="name",
@@ -26,7 +31,7 @@ class Party
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255, unique=true)
+     * @ORM\Column(type="string", length=255)
      * @Assert\Length(max="255")
      * @Assert\NotBlank
      */

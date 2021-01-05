@@ -5,20 +5,20 @@ Date de la seance : {{ sitting.date | date("d/m/Y à H:i") }}
 Destinataires de cet envoi :
 {% for convocation in convocations %}
 
-Prénom : {{ convocation.actor.firstName}}
-Nom : {{ convocation.actor.lastName}}
-Identifiant : {{ convocation.actor.username}}
-Email : {{ convocation.actor.email}}
-UUID : {{ convocation.actor.id}}
+Prénom : {{ convocation.user.firstName}}
+Nom : {{ convocation.user.lastName}}
+Identifiant : {{ convocation.user.username}}
+Email : {{ convocation.user.email}}
+UUID : {{ convocation.user.id}}
 {% endfor %}
 
 
 Contenu de l'envoi original
 
 convocation :
-Fichier : {{ sitting.file.name}}
-Taille : {{ sitting.file.size }}
-UUID : {{ sitting.file.size }}
+Fichier : {{ sitting.convocationFile.name}}
+Taille : {{ sitting.convocationFile.size }}
+UUID : {{ sitting.convocationFile.size }}
 
 Liste des projets
 {% for project in sitting.projects %}

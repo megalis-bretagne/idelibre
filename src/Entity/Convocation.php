@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ConvocationRepository;
+use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -12,6 +14,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Convocation
 {
+    public const CATEGORY_CONVOCATION = 'convocation';
+    public const CATEGORY_INVITATION = 'invitation';
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="UUID")
@@ -56,7 +61,7 @@ class Convocation
      * @Groups({"convocation"})
      * @Assert\NotNull
      */
-    private $actor;
+    private $user;
 
     /**
      * @ORM\ManyToOne(targetEntity=Timestamp::class, cascade={"persist", "remove"})
@@ -72,9 +77,16 @@ class Convocation
      */
     private $receivedTimestamp;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"convocation"})
+     * @Assert\NotBlank
+     */
+    private $category;
+
     public function __construct()
     {
-        $this->createdAt = new \DateTimeImmutable();
+        $this->createdAt = new DateTimeImmutable();
     }
 
     public function getId(): ?string
@@ -94,7 +106,7 @@ class Convocation
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): ?DateTimeInterface
     {
         return $this->createdAt;
     }
@@ -135,14 +147,14 @@ class Convocation
         return $this;
     }
 
-    public function getActor(): ?User
+    public function getUser(): ?User
     {
-        return $this->actor;
+        return $this->user;
     }
 
-    public function setActor(?User $actor): self
+    public function setUser(?User $user): self
     {
-        $this->actor = $actor;
+        $this->user = $user;
 
         return $this;
     }
@@ -167,6 +179,18 @@ class Convocation
     public function setReceivedTimestamp(?Timestamp $receivedTimestamp): self
     {
         $this->receivedTimestamp = $receivedTimestamp;
+
+        return $this;
+    }
+
+    public function getCategory(): ?string
+    {
+        return $this->category;
+    }
+
+    public function setCategory(string $category): self
+    {
+        $this->category = $category;
 
         return $this;
     }

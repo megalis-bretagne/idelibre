@@ -69,6 +69,7 @@ class SittingController extends AbstractController
             $sittingId = $sittingManager->save(
                 $form->getData(),
                 $form->get('convocationFile')->getData(),
+                $form->get('invitationFile')->getData(),
                 $this->getUser()->getStructure()
             );
 

@@ -20,6 +20,6 @@ class ActorManager
      */
     public function getActorsBySitting(Sitting $sitting): array
     {
-        return $this->userRepository->findActorsInSitting($sitting, $sitting->getStructure())->getQuery()->getResult();
+        return $this->userRepository->findActorsInSitting($sitting)->getQuery()->getResult();
     }
 }

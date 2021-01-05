@@ -14,9 +14,16 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Role
 {
-    public const SECRETARY = 1;
-    public const STRUCTURE_ADMIN = 2;
-    public const ACTOR = 3;
+    public const CODE_ROLE_SECRETARY = 1;
+    public const CODE_ROLE_STRUCTURE_ADMIN = 2;
+    public const CODE_ROLE_ACTOR = 3;
+
+    public const NAME_ROLE_SECRETARY = 'Secretary';
+    public const NAME_ROLE_STRUCTURE_ADMINISTRATOR = 'Admin';
+    public const NAME_ROLE_ACTOR = 'Actor';
+    public const NAME_ROLE_EMPLOYEE = 'Employee';
+    public const NAME_ROLE_GUEST = 'Guest';
+    public const INVITABLE_EMPLOYEE = [self::NAME_ROLE_EMPLOYEE, self:: NAME_ROLE_SECRETARY, self::NAME_ROLE_STRUCTURE_ADMINISTRATOR];
 
     /**
      * @ORM\Id

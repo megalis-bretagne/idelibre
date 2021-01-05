@@ -4,6 +4,7 @@ namespace App\Tests;
 
 use App\Entity\Annex;
 use App\Entity\Convocation;
+use App\Entity\Group;
 use App\Entity\Project;
 use App\Entity\Sitting;
 use App\Entity\Structure;
@@ -55,5 +56,10 @@ trait FindEntityTrait
     public function getOneStructureBy(array $criteria): ?Structure
     {
         return $this->getOneEntityBy(Structure::class, $criteria);
+    }
+
+    public function getOneGroupBy(array $criteria): ?Group
+    {
+        return $this->getOneEntityBy(Group::class, $criteria);
     }
 }

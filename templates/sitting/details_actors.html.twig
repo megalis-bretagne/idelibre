@@ -27,59 +27,181 @@
         </div>
 
 
-        <div v-cloak class="col-10 offset-1 form-white mt-4" id="app">
-            <div class="row">
-                <div class="col-6">
-                    <h2>Acteurs : convocation et présence</h2>
+        <div v-cloak id="app">
+
+            <div class="col-10 offset-1 form-white mt-4">
+                <div class="row">
+                    <div class="col-6">
+                        <h2>Elus</h2>
+                    </div>
+                    <div class="col-6">
+                        <button :disabled="isAlreadySentActors" class="btn btn-primary float-right" title="Envoyer" data-target="#confirm"
+                                data-toggle="modal">
+                            <span class="fa fa-paper-plane"></span> Envoyer toutes les convocations
+                        </button>
+                    </div>
                 </div>
-                <div class="col-6">
-                    <button :disabled="isAlreadySent" class="btn btn-primary float-right" title="Envoyer" data-target="#confirm" data-toggle="modal">
-                        <span class="fa fa-paper-plane"></span> Envoyer toutes les convocations
-                    </button>
+
+                <div class="input-group col-3 float-right pr-0">
+                    <input type="text" class="form-control" placeholder="Rechercher" v-model="filter.actor">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" title="Effacer" @click="resetFilters()">
+                            <span class="fas fa-times"></span>
+                        </button>
+                    </div>
                 </div>
+
+                <table class="table table-striped mt-5 bg-white">
+                    <thead>
+                    <tr class="d-flex">
+                        <th class="col-3">Nom</th>
+                        <th class="col-2">Envoyée</th>
+                        <th class="col-2">Reçue</th>
+                        <th class="col-2">Présence</th>
+                        <th class="col-3">Mandataire</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <tr class="d-flex" v-for="convocation in filteredActorConvocations">
+                        <td class="col-3">
+                            ${convocation.user.firstName} ${convocation.user.lastName}
+                        </td>
+                        <td v-if="convocation.sentTimestamp" class="col-2"> ${convocation.sentTimestamp.createAt | formatDateString }
+                        </td>
+                        <td v-else class="col-2">
+                            <button v-on:click="sendConvocation(convocation.id)" class="btn btn-outline-primary borderless"
+                                    title="Envoyer"><span class="fa fa-paper-plane"></span></button>
+                        </td>
+
+                        <td v-if="convocation.receivedTimestamp" class="col-2"> oui (mettre date)</td>
+                        <td class="col-2"></td>
+                        <td class="col-3"></td>
+
+                    </tr>
+
+                    </tbody>
+
+                </table>
             </div>
 
-            <div class="input-group col-3 float-right pr-0">
-                <input type="text" class="form-control" placeholder="Rechercher" v-model="filter.actor">
-                <div class="input-group-append">
-                    <button class="btn btn-primary" title="Effacer" @click="resetFilters()">
-                        <span class="fas fa-times"></span>
-                    </button>
+
+            <div class="col-10 offset-1 form-white mt-4">
+                <div class="row">
+                    <div class="col-6">
+                        <h2>Administratifs</h2>
+                    </div>
+                    <div class="col-6">
+                        <button :disabled="isAlreadySentEmployees" class="btn btn-primary float-right" title="Envoyer"
+                                data-target="#confirm_employee"
+                                data-toggle="modal">
+                            <span class="fa fa-paper-plane"></span> Envoyer toutes les invitations
+                        </button>
+                    </div>
                 </div>
+
+                <div class="input-group col-3 float-right pr-0">
+                    <input type="text" class="form-control" placeholder="Rechercher" v-model="filter.employee">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" title="Effacer" @click="resetFilters()">
+                            <span class="fas fa-times"></span>
+                        </button>
+                    </div>
+                </div>
+
+                <table class="table table-striped mt-5 bg-white">
+                    <thead>
+                    <tr class="d-flex">
+                        <th class="col-3">Nom</th>
+                        <th class="col-2">Envoyée</th>
+                        <th class="col-2">Reçue</th>
+                        <th class="col-2">Présence</th>
+                        <th class="col-3"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <tr class="d-flex" v-for="convocation in filteredEmployeeConvocations">
+                        <td class="col-3">
+                            ${convocation.user.firstName} ${convocation.user.lastName}
+                        </td>
+                        <td v-if="convocation.sentTimestamp" class="col-2"> ${convocation.sentTimestamp.createAt | formatDateString }
+                        </td>
+                        <td v-else class="col-2">
+                            <button v-on:click="sendConvocation(convocation.id)" class="btn btn-outline-primary borderless"
+                                    title="Envoyer"><span class="fa fa-paper-plane"></span></button>
+                        </td>
+
+                        <td v-if="convocation.receivedTimestamp" class="col-2"> oui (mettre date)</td>
+                        <td class="col-2"></td>
+                        <td class="col-3"></td>
+
+                    </tr>
+
+                    </tbody>
+
+                </table>
             </div>
 
-            <table class="table table-striped mt-5 bg-white">
-                <thead>
-                <tr class="d-flex">
-                    <th class="col-3">Nom</th>
-                    <th class="col-2">Envoyée</th>
-                    <th class="col-2">Reçue</th>
-                    <th class="col-2">Présence</th>
-                    <th class="col-3">Mandataire</th>
-                </tr>
-                </thead>
-                <tbody>
 
-                <tr class="d-flex" v-for="convocation in filteredConvocations">
-                    <td class="col-3">
-                        ${convocation.actor.firstName} ${convocation.actor.lastName}
-                    </td>
-                    <td v-if="convocation.sentTimestamp" class="col-2"> ${convocation.sentTimestamp.createAt | formatDateString }
-                    </td>
-                    <td v-else class="col-2">
-                        <button v-on:click="sendConvocation(convocation.id)" class="btn btn-outline-primary borderless"
-                                title="Envoyer"><span class="fa fa-paper-plane"></span></button>
-                    </td>
 
-                    <td v-if="convocation.receivedTimestamp" class="col-2"> oui (mettre date)</td>
-                    <td class="col-2"></td>
-                    <td class="col-3"></td>
+            <div class="col-10 offset-1 form-white mt-4">
+                <div class="row">
+                    <div class="col-6">
+                        <h2>Invités</h2>
+                    </div>
+                    <div class="col-6">
+                        <button :disabled="isAlreadySentGuests" class="btn btn-primary float-right" title="Envoyer"
+                                data-target="#confirm_guest"
+                                data-toggle="modal">
+                            <span class="fa fa-paper-plane"></span> Envoyer toutes les invitations
+                        </button>
+                    </div>
+                </div>
 
-                </tr>
+                <div class="input-group col-3 float-right pr-0">
+                    <input type="text" class="form-control" placeholder="Rechercher" v-model="filter.guest">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" title="Effacer" @click="resetFilters()">
+                            <span class="fas fa-times"></span>
+                        </button>
+                    </div>
+                </div>
 
-                </tbody>
+                <table class="table table-striped mt-5 bg-white">
+                    <thead>
+                    <tr class="d-flex">
+                        <th class="col-3">Nom</th>
+                        <th class="col-2">Envoyée</th>
+                        <th class="col-2">Reçue</th>
+                        <th class="col-2">Présence</th>
+                        <th class="col-3"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
 
-            </table>
+                    <tr class="d-flex" v-for="convocation in filteredGuestConvocations">
+                        <td class="col-3">
+                            ${convocation.user.firstName} ${convocation.user.lastName}
+                        </td>
+                        <td v-if="convocation.sentTimestamp" class="col-2"> ${convocation.sentTimestamp.createAt | formatDateString }
+                        </td>
+                        <td v-else class="col-2">
+                            <button v-on:click="sendConvocation(convocation.id)" class="btn btn-outline-primary borderless"
+                                    title="Envoyer"><span class="fa fa-paper-plane"></span></button>
+                        </td>
+
+                        <td v-if="convocation.receivedTimestamp" class="col-2"> oui (mettre date)</td>
+                        <td class="col-2"></td>
+                        <td class="col-3"></td>
+
+                    </tr>
+
+                    </tbody>
+
+                </table>
+            </div>
+
 
             <div id="confirm" ref="confirm" class="modal fade" role="dialog" data-backdrop="static">
                 <div class="modal-dialog">
@@ -97,7 +219,7 @@
                             <button class="btn btn-secondary" data-dismiss="modal" type="button">
                                 <span class="fa fa-times"></span> Annuler
                             </button>
-                            <button class="btn btn-primary" data-dismiss="modal" type="button" v-on:click="sendConvocations()">
+                            <button class="btn btn-primary" data-dismiss="modal" type="button" v-on:click="sendConvocations('Actor')">
                                 Envoyer
                             </button>
 
@@ -107,10 +229,73 @@
                 </div>
             </div>
 
+
+
+
+
+
+
+
+            <div id="confirm_employee" ref="confirm_employee" class="modal fade" role="dialog" data-backdrop="static">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Attention</h4>
+                            <button class="close" data-dismiss="modal" type="button">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            Veuillez valider l'envoi de toutes les invitations aux administratifs
+                        </div>
+
+                        <div class="modal-footer">
+
+                            <button class="btn btn-secondary" data-dismiss="modal" type="button">
+                                <span class="fa fa-times"></span> Annuler
+                            </button>
+                            <button class="btn btn-primary" data-dismiss="modal" type="button" v-on:click="sendConvocations('Employee')">
+                                Envoyer
+                            </button>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div id="confirm_guest" ref="confirm_guest" class="modal fade" role="dialog" data-backdrop="static">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Attention</h4>
+                            <button class="close" data-dismiss="modal" type="button">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            Veuillez valider l'envoi de toutes les invitations aux invités
+                        </div>
+
+                        <div class="modal-footer">
+
+                            <button class="btn btn-secondary" data-dismiss="modal" type="button">
+                                <span class="fa fa-times"></span> Annuler
+                            </button>
+                            <button class="btn btn-primary" data-dismiss="modal" type="button" v-on:click="sendConvocations('Guest')">
+                                Envoyer
+                            </button>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
         </div>
 
-
-
     </div>
+
+
+
 
 {% endblock %}

@@ -24,7 +24,7 @@ class ZipSittingGenerator
         $zipPath = $this->getAndCreateZipPath($sitting);
         $this->deleteZipIfAlreadyExists($zipPath);
         $zip->open($zipPath, ZipArchive::CREATE);
-        $zip->addFile($sitting->getFile()->getPath(), $sitting->getFile()->getName());
+        $zip->addFile($sitting->getConvocationFile()->getPath(), $sitting->getConvocationFile()->getName());
         $this->addProjectAndAnnexesFiles($zip, $sitting);
         $zip->close();
 

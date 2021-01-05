@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Convocation;
+use App\Entity\Role;
 use App\Entity\Sitting;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -23,14 +24,41 @@ class ConvocationRepository extends ServiceEntityRepository
     /**
      * @return Convocation[]
      */
-    public function getConvocationsBySitting(Sitting $sitting): array
+    public function getActorConvocationsBySitting(Sitting $sitting): array
+    {
+        return $this->getWithRolesConvocationsBySitting($sitting, [Role::NAME_ROLE_ACTOR]);
+    }
+
+    /**
+     * @return Convocation[]
+     */
+    public function getInvitableEmployeeConvocationsBySitting(Sitting $sitting): array
+    {
+        return $this->getWithRolesConvocationsBySitting($sitting, Role::INVITABLE_EMPLOYEE);
+    }
+
+    /**
+     * @return Convocation[]
+     */
+    public function getGuestConvocationsBySitting(Sitting $sitting): array
+    {
+        return $this->getWithRolesConvocationsBySitting($sitting, [Role::NAME_ROLE_GUEST]);
+    }
+
+    /**
+     * @return Convocation[]
+     */
+    private function getWithRolesConvocationsBySitting(Sitting $sitting, array $roleNames): array
     {
         return $this->createQueryBuilder('c')
             ->andWhere('c.sitting = :sitting')
             ->setParameter('sitting', $sitting)
-            ->leftJoin('c.actor', 'actor')
-            ->addSelect('actor')
-            ->orderBy('actor.lastName')
+            ->leftJoin('c.user', 'user')
+            ->addSelect('user')
+            ->innerJoin('user.role', 'r')
+            ->andWhere('r.name in (:roleNames)')
+            ->setParameter('roleNames', $roleNames)
+            ->orderBy('user.lastName')
             ->getQuery()
             ->getResult();
     }
@@ -38,14 +66,14 @@ class ConvocationRepository extends ServiceEntityRepository
     /**
      * @return Convocation[]
      */
-    public function getConvocationsBySittingAndActorIds(Sitting $sitting, array $actorIds): array
+    public function getConvocationsBySittingAndActorIds(Sitting $sitting, array $userIds): array
     {
         return $this->createQueryBuilder('c')
             ->andWhere('c.sitting = :sitting')
             ->setParameter('sitting', $sitting)
-            ->join('c.actor', 'actor')
-            ->andWhere('actor.id in (:actorIds)')
-            ->setParameter('actorIds', $actorIds)
+            ->join('c.user', 'user')
+            ->andWhere('user.id in (:userIds)')
+            ->setParameter('userIds', $userIds)
             ->getQuery()
             ->getResult();
     }

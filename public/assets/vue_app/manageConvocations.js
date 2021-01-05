@@ -8,54 +8,79 @@ let app = new Vue({
     delimiters: ['${', '}'],
     el: "#app",
     data: {
-        convocations: [],
-        isAlreadySent: false,
+        actorConvocations: [],
+        guestConvocations: [],
+        employeeConvocations: [],
+        isAlreadySentActors: false,
+        isAlreadySentGuests: false,
+        isAlreadySentEmployees: false,
         filter: {
             actor: "",
             guest: "",
-            administrative: ""
+            employee: ""
         }
     },
 
     computed: {
-        filteredConvocations: function () {
-            if (!this.filter.actor || this.filter.actor === "") {
-                return this.convocations
-            }
+        filteredActorConvocations: function () {
+            return filter(this.actorConvocations, this.filter.actor);
+        },
 
-            let filterLowerCase = this.filter.actor.toLowerCase();
+        filteredEmployeeConvocations: function () {
+            return filter(this.employeeConvocations, this.filter.employee);
+        },
 
-            return this.convocations.filter(convocation =>
-                convocation.actor.lastName.toLowerCase().includes(filterLowerCase) ||
-                convocation.actor.firstName.toLowerCase().includes(filterLowerCase) ||
-                convocation.actor.username.toLowerCase().includes(filterLowerCase)
-            )
+        filteredGuestConvocations: function () {
+            return filter(this.guestConvocations, this.filter.guest);
         }
     },
 
     methods: {
         sendConvocation(convocationId) {
+
             axios.post(`/api/convocations/${convocationId}/send`).then(response => {
-                updateConvocations(this.convocations, response.data);
-                this.isAlreadySent = isAlreadySentSitting(this.convocations);
+                updateConvocations(this.actorConvocations, response.data);
+                updateConvocations(this.guestConvocations, response.data);
+                updateConvocations(this.employeeConvocations, response.data);
+
+                this.isAlreadySentActors = isAlreadySentSitting(this.actorConvocations);
+                this.isAlreadySentGuests = isAlreadySentSitting(this.guestConvocations);
+                this.isAlreadySentEmployees = isAlreadySentSitting(this.employeeConvocations);
             });
         },
 
-        sendConvocations() {
-            axios.post(`/api/sittings/${getSittingId()}/sendConvocations`).then(() => {
+        sendConvocations(type) {
+            let url = `/api/sittings/${getSittingId()}/sendConvocations`;
+            if(type === 'Actor') {
+                url += "?userProfile=Actor"
+            }
+            if(type === 'Employee') {
+                url += "?userProfile=Employee"
+            }
+
+            if(type === 'Guest') {
+                url += "?userProfile=Guest"
+            }
+
+            axios.post(url).then(() => {
                 this.getConvocations();
             });
         },
 
         getConvocations() {
             axios.get(`/api/convocations/${getSittingId()}`).then(convocations => {
-                this.convocations = convocations.data;
-                this.isAlreadySent = isAlreadySentSitting(this.convocations);
+                this.actorConvocations = convocations.data['actors'];
+                this.guestConvocations = convocations.data['guests'];
+                this.employeeConvocations = convocations.data['employees'];
+
+                this.isAlreadySentActors = isAlreadySentSitting(this.actorConvocations);
+                this.isAlreadySentGuests = isAlreadySentSitting(this.guestConvocations);
+                this.isAlreadySentEmployees = isAlreadySentSitting(this.employeeConvocations);
             })
         },
 
         resetFilters() {
-            this.filter = { actor: "", guest: "", administrative: "" };
+            this.filter = { actor: "", guest: "", employees: "" };
         }
 
     },
@@ -73,7 +98,7 @@ function getSittingId() {
 function updateConvocations(convocations, convocation) {
     for (let i = 0; i < convocations.length; i++) {
         if (convocations[i].id === convocation.id) {
-            app.$set(app.convocations, i, convocation)
+            app.$set(convocations, i, convocation)
         }
     }
 }
@@ -85,4 +110,19 @@ function isAlreadySentSitting(convocations) {
         }
     }
     return true;
+}
+
+
+function filter(convocations, search) {
+
+    if (!search || search === "") {
+        return convocations
+    }
+
+    let filterLowerCase = search.toLowerCase();
+    return convocations.filter(convocation =>
+        convocation.user.lastName.toLowerCase().includes(filterLowerCase) ||
+        convocation.user.firstName.toLowerCase().includes(filterLowerCase) ||
+        convocation.user.username.toLowerCase().includes(filterLowerCase)
+    )
 }

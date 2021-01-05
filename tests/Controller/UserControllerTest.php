@@ -175,6 +175,33 @@ class UserControllerTest extends WebTestCase
         $this->assertSame($user->getAuthorizedTypes()->first()->getId(), $type->getId());
     }
 
+    public function testEditSecretaryRemoveAllAuthorized()
+    {
+        $this->loginAsAdminLibriciel();
+
+        $user = $this->getOneUserBy(['username' => 'secretary1@libriciel.coop']);
+
+        $crawler = $this->client->request(Request::METHOD_GET, '/user/edit/' . $user->getId());
+        $this->assertResponseStatusCodeSame(200);
+        $item = $crawler->filter('html:contains("Modifier un utilisateur")');
+        $this->assertCount(1, $item);
+
+        $form = $crawler->selectButton('Enregistrer')->form();
+
+        $form['user[authorizedTypes]'] = [];
+        $this->client->submit($form);
+
+        $this->assertTrue($this->client->getResponse()->isRedirect());
+
+        $crawler = $this->client->followRedirect();
+        $this->assertResponseStatusCodeSame(200);
+        $successMsg = $crawler->filter('html:contains("votre utilisateur a bien été modifié")');
+        $this->assertCount(1, $successMsg);
+
+        $this->entityManager->refresh($user);
+        $this->assertCount(0, $user->getAuthorizedTypes());
+    }
+
     public function testIndex()
     {
         $this->loginAsAdminLibriciel();
