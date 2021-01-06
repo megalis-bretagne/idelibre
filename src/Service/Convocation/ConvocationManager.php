@@ -230,16 +230,20 @@ class ConvocationManager
 
     private function getConvocationByUserProfile(Sitting $sitting, ?string $userProfile): array
     {
-        $findActions = [
-            Role::NAME_ROLE_ACTOR => fn (Sitting $sitting) => $this->convocationRepository->getActorConvocationsBySitting($sitting),
-            Role::NAME_ROLE_GUEST => fn (Sitting $sitting) => $this->convocationRepository->getGuestConvocationsBySitting($sitting),
-            Role::NAME_ROLE_EMPLOYEE => fn (Sitting $sitting) => $this->convocationRepository->getInvitableEmployeeConvocationsBySitting($sitting),
-        ];
-
-        if (!$userProfile || !isset($findActions[$userProfile])) {
-            return $sitting->getConvocations()->toArray();
+        switch ($userProfile) {
+            case Role::NAME_ROLE_ACTOR:
+                $convocations = $this->convocationRepository->getActorConvocationsBySitting($sitting);
+                break;
+            case Role::NAME_ROLE_GUEST:
+                $convocations = $this->convocationRepository->getGuestConvocationsBySitting($sitting);
+                break;
+            case Role::NAME_ROLE_EMPLOYEE:
+                $convocations = $this->convocationRepository->getInvitableEmployeeConvocationsBySitting($sitting);
+                break;
+            default:
+                $convocations = $sitting->getConvocations()->toArray();
         }
 
-        return $findActions[$userProfile]($sitting);
+        return $convocations;
     }
 }
