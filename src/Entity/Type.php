@@ -97,7 +97,6 @@ class Type
         return $this;
     }
 
-    //TODO check if useless ?
     public function addAssociatedUser(User $associatedUser): self
     {
         if (!$this->associatedUsers->contains($associatedUser)) {
@@ -107,7 +106,6 @@ class Type
         return $this;
     }
 
-    //TODO check if useless ?
     public function removeAssociatedUser(User $associatedUser): self
     {
         if ($this->associatedUsers->contains($associatedUser)) {
