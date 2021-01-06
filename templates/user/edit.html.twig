@@ -7,9 +7,31 @@
     {{ macro.backButton('user_index') }}
 {% endblock %}
 
-{% block pageSaveReturn %}
-    {{ macro.save('user_index') }}
+{% block pageForm %}
+
+{{ form_start(form) }}
+
+{{ form_row(form.firstName) }}
+{{ form_row(form.lastName) }}
+
+{{ form_label(form.username) }}
+<div class="row mb-3">
+    <div class="col-7">
+        {{ form_widget(form.username) }}
+    </div>
+    <div class="col-5 form-control borderless">
+        <b class="text-ls-dark">@{{ suffix }}</b>
+    </div>
+</div>
+
+{{ form_widget(form) }}
+<div class="float-right">
+    {% block pageSaveReturn %}{{ macro.save('user_index') }}{% endblock %}
+</div>
+{{ form_end(form) }}
+
 {% endblock %}
+
 
 {% block javascripts %}
     <script src="{{ asset('assets/enableSelect2.js') }}"></script>

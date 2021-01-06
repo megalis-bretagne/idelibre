@@ -21,19 +21,19 @@ class StructureFixtures extends Fixture implements DependentFixtureInterface
         /** @var Timezone $timezoneParis */
         $timezoneParis = $this->getReference(TimezoneFixtures::REFERENCE . 'paris');
 
-        $structureLibriciel = new Structure();
-        $structureLibriciel->setName('Libriciel')
+        $structureLibriciel = (new Structure())
+            ->setName('Libriciel')
             ->setSuffix('libriciel')
-            ->setReplyTo('libriciel@example.org')
+            ->setReplyTo('libriciel@exemple.org')
             ->setTimezone($timezoneParis);
 
         $manager->persist($structureLibriciel);
         $this->addReference(self::REFERENCE . 'libriciel', $structureLibriciel);
 
-        $structureMtp = new Structure();
-        $structureMtp->setName('Montpellier')
+        $structureMtp = (new Structure())
+            ->setName('Montpellier')
             ->setSuffix('montpellier')
-            ->setReplyTo('montpellier@example.org')
+            ->setReplyTo('montpellier@exemple.org')
             ->setTimezone($timezoneParis)
             ->setGroup($groupRecia);
         $manager->persist($structureMtp);

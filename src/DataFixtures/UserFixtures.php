@@ -126,7 +126,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $actorLibriciel1 = new User();
         $actorLibriciel1->setEmail('actor1@example.org')
             ->setRole($roleActor)
-            ->setUsername('actor1@libriciel.coop')
+            ->setUsername('actor1@libriciel')
             ->setFirstName('actor_1')
             ->setLastname('libriciel')
             ->setParty($partyMajority)
@@ -140,7 +140,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $actorLibriciel2 = new User();
         $actorLibriciel2->setEmail('actor2@example.org')
             ->setRole($roleActor)
-            ->setUsername('actor2@libriciel.coop')
+            ->setUsername('actor2@libriciel')
             ->setFirstName('actor_2')
             ->setLastname('libriciel')
             ->setStructure($structureLibriciel)
@@ -151,7 +151,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $actorLibriciel3 = new User();
         $actorLibriciel3->setEmail('actor3@example.org')
             ->setRole($roleActor)
-            ->setUsername('actor3@libriciel.coop')
+            ->setUsername('actor3@libriciel')
             ->setFirstName('actor_3')
             ->setLastname('libriciel')
             ->setStructure($structureLibriciel)
@@ -164,7 +164,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $secretaryLibriciel1 = new User();
         $secretaryLibriciel1->setEmail('secretary1@example.org')
             ->setRole($roleSecretary)
-            ->setUsername('secretary1@libriciel.coop')
+            ->setUsername('secretary1@libriciel')
             ->setFirstName('secretary_1')
             ->setLastname('libriciel')
             ->setStructure($structureLibriciel)
@@ -175,7 +175,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $secretaryLibriciel2 = new User();
         $secretaryLibriciel2->setEmail('secretary2@example.org')
             ->setRole($roleSecretary)
-            ->setUsername('secretary2@libriciel.coop')
+            ->setUsername('secretary2@libriciel')
             ->setFirstName('secretary_2')
             ->setLastname('libriciel')
             ->setStructure($structureLibriciel)
@@ -188,7 +188,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $guestLibriciel1 = new User();
         $guestLibriciel1->setEmail('guest1@example.org')
             ->setRole($roleGuest)
-            ->setUsername('guest1@libriciel.coop')
+            ->setUsername('guest1@libriciel')
             ->setFirstName('guest1')
             ->setLastname('libriciel')
             ->setStructure($structureLibriciel)
@@ -199,7 +199,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $guestLibriciel2 = new User();
         $guestLibriciel2->setEmail('guest2@example.org')
             ->setRole($roleGuest)
-            ->setUsername('guest2@libriciel.coop')
+            ->setUsername('guest2@libriciel')
             ->setFirstName('guest2')
             ->setLastname('libriciel')
             ->setStructure($structureLibriciel)
@@ -212,7 +212,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $employeeLibriciel1 = new User();
         $employeeLibriciel1->setEmail('employee1@example.org')
             ->setRole($roleEmployee)
-            ->setUsername('employee1@libriciel.coop')
+            ->setUsername('employee1@libriciel')
             ->setFirstName('employee1')
             ->setLastname('libriciel')
             ->setStructure($structureLibriciel)
@@ -223,7 +223,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $employeeLibriciel2 = new User();
         $employeeLibriciel2->setEmail('employee2@example.org')
             ->setRole($roleEmployee)
-            ->setUsername('employee2@libriciel.coop')
+            ->setUsername('employee2@libriciel')
             ->setFirstName('employee2')
             ->setLastname('libriciel')
             ->setStructure($structureLibriciel)

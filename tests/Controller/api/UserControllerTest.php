@@ -89,7 +89,7 @@ class UserControllerTest extends WebTestCase
 
     public function testUpdateUsersInSittingAddActor()
     {
-        $actor3 = $this->getOneUserBy(['username' => 'actor3@libriciel.coop']);
+        $actor3 = $this->getOneUserBy(['username' => 'actor3@libriciel']);
         $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
         $this->loginAsAdminLibriciel();
         $data = json_encode(['addedActors' => [$actor3->getId()], 'addedEmployees' => [], 'addedGuests' => [],  'removedUsers' => []]);
@@ -111,7 +111,7 @@ class UserControllerTest extends WebTestCase
 
     public function testUpdateUsersInSittingRemoveActor()
     {
-        $actor1 = $this->getOneUserBy(['username' => 'actor1@libriciel.coop']);
+        $actor1 = $this->getOneUserBy(['username' => 'actor1@libriciel']);
         $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
         $this->loginAsAdminLibriciel();
         $data = json_encode(['addedActors' => [], 'addedEmployees' => [], 'addedGuests' => [], 'removedUsers' => [$actor1->getId()]]);

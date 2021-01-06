@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Party;
 use App\Entity\Role;
+use App\Entity\Structure;
 use App\Entity\Type;
 use App\Entity\User;
 use App\Repository\PartyRepository;
@@ -12,12 +13,14 @@ use App\Repository\TypeRepository;
 use App\Service\role\RoleManager;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Regex;
 
 class UserType extends AbstractType
 {
@@ -45,9 +48,11 @@ class UserType extends AbstractType
                 'label' => 'Prénom',
             ])
             ->add('lastName', TextType::class, [
-                'label' => 'Nom', ])
+                'label' => 'Nom',
+                ])
             ->add('username', TextType::class, [
-                'label' => 'Nom d\'utilisateur', ])
+                'label' => 'Nom d\'utilisateur',
+                ])
             ->add('email', EmailType::class, [
                 'label' => 'Email', ]);
 
@@ -96,6 +101,11 @@ class UserType extends AbstractType
             'first_options' => ['label' => 'Mot de passe'],
             'second_options' => ['label' => 'Confirmer'],
         ]);
+
+        $builder->get('username')->addModelTransformer(new CallbackTransformer(
+            fn ($username) => preg_replace('/@.*/', '', $username),
+            fn ($username) => $username . '@' . $this->getStructureSuffix($options['structure'])
+        ));
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -138,5 +148,10 @@ class UserType extends AbstractType
         $user = $options['data'];
 
         return $user->getRole()->getId() === $this->roleManager->getSecretaryRole()->getId();
+    }
+
+    private function getStructureSuffix(Structure $structure): string
+    {
+        return $structure->getSuffix();
     }
 }

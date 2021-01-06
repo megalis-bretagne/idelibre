@@ -111,9 +111,9 @@ class TypeControllerTest extends WebTestCase
 
     public function testAddWithAssociatedUsers()
     {
-        $actorLs = $this->getOneUserBy(['username' => 'actor1@libriciel.coop']);
-        $guestLs = $this->getOneUserBy(['username' => 'guest2@libriciel.coop']);
-        $employeeLs = $this->getOneUserBy(['username' => 'employee2@libriciel.coop']);
+        $actorLs = $this->getOneUserBy(['username' => 'actor1@libriciel']);
+        $guestLs = $this->getOneUserBy(['username' => 'guest2@libriciel']);
+        $employeeLs = $this->getOneUserBy(['username' => 'employee2@libriciel']);
         $this->loginAsAdminLibriciel();
         $crawler = $this->client->request(Request::METHOD_GET, '/type/add');
         $this->assertResponseStatusCodeSame(200);
@@ -147,7 +147,7 @@ class TypeControllerTest extends WebTestCase
     {
         $this->loginAsAdminLibriciel();
         $type = $this->getOneTypeBy(['name' => 'Conseil Communautaire Libriciel']);
-        $notAssociatedActor = $this->getOneUserBy(['username' => 'actor3@libriciel.coop']);
+        $notAssociatedActor = $this->getOneUserBy(['username' => 'actor3@libriciel']);
         $crawler = $this->client->request(Request::METHOD_GET, '/type/edit/' . $type->getId());
         $this->assertResponseStatusCodeSame(200);
         $item = $crawler->filter('html:contains("Modifier un type de séance")');
