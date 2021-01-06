@@ -43,7 +43,7 @@ class RoleFixtures extends Fixture
 
         $roleSecretary = (new Role())
         ->setName('Secretary')
-            ->setPrettyName('Secrétaire')
+            ->setPrettyName('Gestionnaire de séance')
             ->addComposite('ROLE_SECRETARY')
             ->setIsInStructureRole(true);
         $manager->persist($roleSecretary);

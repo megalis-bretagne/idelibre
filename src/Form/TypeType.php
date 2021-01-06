@@ -68,9 +68,9 @@ class TypeType extends AbstractType
             ])
 
             ->add('authorizedSecretaries', EntityType::class, [
-                'placeholder' => 'Sélectionner les secretaires autorisées',
+                'placeholder' => 'Sélectionner les gestionnaires de séance autorisés',
                 'required' => false,
-                'label' => 'Secretaires autorisées',
+                'label' => 'Gestionnaire de séance autorisés',
                 'class' => User::class,
                 'query_builder' => $this->userRepository
                     ->findSecretariesByStructure($options['structure']),
