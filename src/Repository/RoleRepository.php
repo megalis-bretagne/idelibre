@@ -24,6 +24,7 @@ class RoleRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('r')
             ->andWhere('r.isInStructureRole = :isInStructureRole')
-            ->setParameter('isInStructureRole', true);
+            ->setParameter('isInStructureRole', true)
+            ->orderBy('r.prettyName', 'ASC');
     }
 }
