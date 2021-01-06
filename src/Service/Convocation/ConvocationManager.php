@@ -7,6 +7,7 @@ use App\Entity\Role;
 use App\Entity\Sitting;
 use App\Entity\User;
 use App\Repository\ConvocationRepository;
+use App\Service\Email\EmailNotSendException;
 use App\Service\Email\EmailServiceInterface;
 use App\Service\EmailTemplate\EmailGenerator;
 use App\Service\Timestamp\TimestampManager;
@@ -108,6 +109,7 @@ class ConvocationManager
      * NB le processe d'envoi et d'hrodatage pourrait (devrait) ce faire en async.
      *
      * @throws ConnectionException
+     * @throws EmailNotSendException
      */
     public function sendAllConvocations(Sitting $sitting, ?string $userProfile): void
     {
@@ -121,9 +123,15 @@ class ConvocationManager
         }
     }
 
+    /**
+     * @throws ConnectionException
+     * @throws EmailNotSendException
+     */
     public function sendConvocation(Convocation $convocation)
     {
         $this->timestampAndActiveConvocations($convocation->getSitting(), [$convocation]);
+        $emails = $this->generateEmailsData($convocation->getSitting(), [$convocation]);
+        $this->emailService->sendBatch($emails);
 
         // TODO send email !
     }

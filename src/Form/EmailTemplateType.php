@@ -9,7 +9,6 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -30,11 +29,8 @@ class EmailTemplateType extends AbstractType
         $isDefaultTemplate = $this->isDefaultTemplate($options['data'] ?? null);
 
         if (!$isDefaultTemplate) {
-            $builder->add('category', ChoiceType::class, [
-                'choices' => [
-                    'Convocation' => EmailTemplate::CATEGORY_CONVOCATION,
-                    'Invitation' => EmailTemplate::CATEGORY_INVITATION,
-                ],
+            $builder->add('category', HiddenType::class, [
+                'data' => EmailTemplate::CATEGORY_CONVOCATION,
             ])
                 ->add('name', TextType::class, [
                     'label' => 'Intitulé',

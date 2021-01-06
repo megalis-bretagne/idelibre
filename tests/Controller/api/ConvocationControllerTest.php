@@ -3,6 +3,8 @@
 namespace App\Tests\Controller\api;
 
 use App\DataFixtures\ConvocationFixtures;
+use App\DataFixtures\EmailTemplateFixtures;
+use App\DataFixtures\TypeFixtures;
 use App\Tests\FileTrait;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
@@ -36,6 +38,8 @@ class ConvocationControllerTest extends WebTestCase
 
         $this->loadFixtures([
             ConvocationFixtures::class,
+            TypeFixtures::class,
+            EmailTemplateFixtures::class
         ]);
     }
 
@@ -65,6 +69,9 @@ class ConvocationControllerTest extends WebTestCase
         $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
         $actor = $this->getOneUserBy(['username' => 'actor1@libriciel']);
         $convocation = $this->getOneConvocationBy(['sitting' => $sitting, 'user' => $actor]);
+
+
+
         $this->loginAsAdminLibriciel();
         $this->client->request(Request::METHOD_POST, '/api/convocations/' . $convocation->getId() . '/send');
         $this->assertResponseStatusCodeSame(200);
