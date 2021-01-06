@@ -42,12 +42,24 @@ class EmailGenerator
 
     public function generateFromTemplateAndConvocation(?EmailTemplate $emailTemplate, Convocation $convocation): EmailData
     {
-        if (null === $emailTemplate) {
+        $isInvitation = $this->isInvitation($convocation);
+
+        if ($isInvitation) {
+            $emailTemplate = $this->emailTemplateManager->getDefaultInvitationTemplate($convocation->getSitting()->getStructure());
+        }
+
+        if (null === $emailTemplate && !$isInvitation) {
             $emailTemplate = $this->emailTemplateManager->getDefaultConvocationTemplate($convocation->getSitting()->getStructure());
         }
 
         return $this->generateFromTemplate($emailTemplate, $this->generateParams($convocation));
     }
+
+    public function isInvitation(Convocation $convocation): bool
+    {
+        return $convocation->getCategory() === Convocation::CATEGORY_INVITATION;
+    }
+
 
     public function generateParams(Convocation $convocation): array
     {
