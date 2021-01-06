@@ -1,10 +1,10 @@
-{#<!-- <ls-lib-sidebar class="{{ app.request.cookies.get('SidebarState') }}"> -->#}
+{# <!-- <ls-lib-sidebar class="{{ app.request.cookies.get('SidebarState') }}"> --> #}
 {% if app.user %}
     <ls-lib-sidebar>
         <section class="ls-sidebar-coll-logo">
             {% if app.user.structure %}
-                {# idelibre ne gere pas encore les logos par collectivités#}
-                {# <img alt="Logo de la ville" src="{{ asset('assets/img/logo_Libriciel.png') }}">#}
+                {# idelibre ne gere pas encore les logos par collectivités #}
+                {# <img alt="Logo de la ville" src="{{ asset('assets/img/logo_Libriciel.png') }}"> #}
                 <b>{{ app.user.structure.name }}</b>
             {% else %}
                 <span>Administration</span>
@@ -14,16 +14,18 @@
             <ul class="main-menu">
 
                 {% if  app.user.structure %}
-                    {% if is_granted('ROLE_MANAGE_TYPES') %}
-                        <li class="{{ 'type-nav' in sidebar ? 'active' : '' }}">
-                            <a href="{{ path('type_index') }}">
-                                <i class="fas fa-tag"> </i>
-                                <span>&ensp; Type de séance</span>
+
+                    {% if is_granted('ROLE_MANAGE_SITTINGS') %}
+                        <li class="{{ 'sitting-nav' in sidebar ? 'active' : '' }}">
+                            <a href="{{ path('sitting_index') }}">
+                                <i class="ls-font ls-seance" style="font-size: 0.8em; margin-right: -20px"></i>
+                                <span>&ensp; Séances</span>
                             </a>
                             <ul class="sub-menu">
                             </ul>
                         </li>
                     {% endif %}
+
 
                     {% if is_granted('ROLE_MANAGE_USERS') %}
                         <li class="{{ 'user-nav' in sidebar ? 'active' : '' }}">
@@ -48,11 +50,12 @@
                         </li>
                     {% endif %}
 
-                    {% if is_granted('ROLE_MANAGE_EMAIL_TEMPLATES') %}
-                        <li class="{{ 'email-template-nav' in sidebar ? 'active' : '' }}">
-                            <a href="{{ path('email_template_index') }}">
-                                <i class="fas fa-envelope"></i>
-                                <span>&ensp; Modèles d'email</span>
+
+                    {% if is_granted('ROLE_MANAGE_TYPES') %}
+                        <li class="{{ 'type-nav' in sidebar ? 'active' : '' }}">
+                            <a href="{{ path('type_index') }}">
+                                <i class="fas fa-tag"> </i>
+                                <span>&ensp; Type de séance</span>
                             </a>
                             <ul class="sub-menu">
                             </ul>
@@ -71,16 +74,18 @@
                         </li>
                     {% endif %}
 
-                    {% if is_granted('ROLE_MANAGE_SITTINGS') %}
-                        <li class="{{ 'sitting-nav' in sidebar ? 'active' : '' }}">
-                            <a href="{{ path('sitting_index') }}">
-                                <i class="ls-font ls-seance" style="font-size: 0.8em; margin-right: -20px"></i>
-                                <span>&ensp; Séances</span>
+
+                    {% if is_granted('ROLE_MANAGE_EMAIL_TEMPLATES') %}
+                        <li class="{{ 'email-template-nav' in sidebar ? 'active' : '' }}">
+                            <a href="{{ path('email_template_index') }}">
+                                <i class="fas fa-envelope"></i>
+                                <span>&ensp; Modèles d'email</span>
                             </a>
                             <ul class="sub-menu">
                             </ul>
                         </li>
                     {% endif %}
+
 
                     {% if is_granted('ROLE_STRUCTURE_ADMIN') %}
                         <li class="{{ 'structure-preference-nav' in sidebar ? 'active' : '' }}">
