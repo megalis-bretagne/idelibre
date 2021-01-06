@@ -9,7 +9,7 @@ INSERT INTO role (id, name, composites, is_in_structure_role, pretty_name)
 VALUES ('306ed58f-7219-49ce-b269-7b7bce7ed3aa', 'GroupAdmin', '["ROLE_GROUP_ADMIN", "ROLE_MANAGE_STRUCTURES"]', false, 'Administrateur de groupe');
 
 INSERT INTO role (id, name, composites, is_in_structure_role, pretty_name)
-VALUES ('160e7561-7ffa-459c-ae9b-4da32b49e1b1', 'Secretary', '["ROLE_SECRETARY"]', true, 'Secrétaire');
+VALUES ('160e7561-7ffa-459c-ae9b-4da32b49e1b1', 'Secretary', '["ROLE_SECRETARY"]', true, 'Gestionnaire de séance');
 
 INSERT INTO role (id, name, composites, is_in_structure_role, pretty_name)
 VALUES ('230a1c1d-eaec-4fb7-9ba7-d7ac47dc97bb', 'Actor', '["ROLE_ACTOR"]', true, 'Elu');
@@ -21,7 +21,7 @@ INSERT INTO role (id, name, composites, is_in_structure_role, pretty_name)
 VALUES ('e581587e-1694-4b83-9ed7-4994bc792e5b', 'Guest', '["ROLE_GUEST"]', true, 'Invité');
 
 INSERT INTO role (id, name, composites, is_in_structure_role, pretty_name)
-VALUES ('811a1329-0cd0-49e8-b59b-5394219c50dd', 'Employee', '["ROLE_EMPLOYEE"]', true, 'Administratif');
+VALUES ('811a1329-0cd0-49e8-b59b-5394219c50dd', 'Employee', '["ROLE_EMPLOYEE"]', true, 'Personnel administratif');
 
 
 INSERT INTO "user" (id, structure_id, email, username, role_id, password, first_name, last_name)

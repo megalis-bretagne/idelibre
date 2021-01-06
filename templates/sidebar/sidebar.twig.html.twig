@@ -13,11 +13,12 @@
             <ul class="main-menu">
 
                 {% if  app.user.structure %}
-                    {% if is_granted('ROLE_MANAGE_TYPES') %}
-                        <li class="{{ 'type-nav' in activeNavs ? 'active' : '' }}">
-                            <a href="{{ path('type_index') }}">
-                                <i class="fas fa-tag"> </i>
-                                <span>&ensp; Type de séance</span>
+
+                    {% if is_granted('ROLE_MANAGE_SITTINGS') %}
+                        <li class="{{ 'sitting-nav' in activeNavs ? 'active' : '' }}">
+                            <a href="{{ path('sitting_index') }}">
+                                <i class="ls-font ls-seance" style="font-size: 0.8em; margin-right: -20px"></i>
+                                <span>&ensp; Séances</span>
                             </a>
                             <ul class="sub-menu">
                             </ul>
@@ -47,17 +48,17 @@
                         </li>
                     {% endif %}
 
-                    {% if is_granted('ROLE_MANAGE_EMAIL_TEMPLATES') %}
-                        <li class="{{ 'email-template-nav' in activeNavs ? 'active' : '' }}">
-                            <a href="{{ path('email_template_index') }}">
-                                <i class="fas fa-envelope"></i>
-                                <span>&ensp; Modèles d'email</span>
+
+                    {% if is_granted('ROLE_MANAGE_TYPES') %}
+                        <li class="{{ 'type-nav' in activeNavs ? 'active' : '' }}">
+                            <a href="{{ path('type_index') }}">
+                                <i class="fas fa-tag"> </i>
+                                <span>&ensp; Type de séance</span>
                             </a>
                             <ul class="sub-menu">
                             </ul>
                         </li>
                     {% endif %}
-
 
                     {% if is_granted('ROLE_MANAGE_THEMES') %}
                         <li class="{{ 'theme-nav' in activeNavs ? 'active' : '' }}">
@@ -70,11 +71,11 @@
                         </li>
                     {% endif %}
 
-                    {% if is_granted('ROLE_MANAGE_SITTINGS') %}
-                        <li class="{{ 'sitting-nav' in activeNavs ? 'active' : '' }}">
-                            <a href="{{ path('sitting_index') }}">
-                                <i class="ls-font ls-seance" style="font-size: 0.8em; margin-right: -20px"></i>
-                                <span>&ensp; Séances</span>
+                    {% if is_granted('ROLE_MANAGE_EMAIL_TEMPLATES') %}
+                        <li class="{{ 'email-template-nav' in activeNavs ? 'active' : '' }}">
+                            <a href="{{ path('email_template_index') }}">
+                                <i class="fas fa-envelope"></i>
+                                <span>&ensp; Modèles d'email</span>
                             </a>
                             <ul class="sub-menu">
                             </ul>

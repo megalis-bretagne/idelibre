@@ -75,7 +75,7 @@
 
             <div class="row mt-4">
                 <div class="col-8 offset-2 form-white">
-                    <h2 class="mt-4">Administratifs</h2>
+                    <h2 class="mt-4">Personnel administratif</h2>
                     <div class="row">
                         <div v-for="user in inSittingEmployees" class="col-4">
                             <button :disabled="alreadySentConvocation(user.id)" class="btn btn-outline-danger borderless" v-on:click="removeActor(user.id)">
@@ -91,7 +91,7 @@
             <div class="row mt-4">
                 <div class="col-8 offset-2 form-white">
                     <div class="form-group">
-                        <label for="actors">Ajouter des administratifs</label>
+                        <label for="actors">Ajouter des personnels administratifs</label>
                         <v-select
                                 v-bind:options="notInSittingEmployees"
                                 id="employees"

@@ -42,9 +42,9 @@ class TypeType extends AbstractType
             ])
 
             ->add('associatedEmployees', EntityType::class, [
-                'placeholder' => 'Sélectionner les administratifs',
+                'placeholder' => 'Sélectionner les personnels administratifs',
                 'required' => false,
-                'label' => 'Administratifs associés',
+                'label' => 'Personnels administratifs associés',
                 'class' => User::class,
                 'query_builder' => $this->userRepository
                     ->findInvitableEmployeesByStructure($options['structure']),
@@ -68,9 +68,9 @@ class TypeType extends AbstractType
             ])
 
             ->add('authorizedSecretaries', EntityType::class, [
-                'placeholder' => 'Sélectionner les secretaires autorisées',
+                'placeholder' => 'Sélectionner les gestionnaires de séance autorisés',
                 'required' => false,
-                'label' => 'Secretaires autorisées',
+                'label' => 'Gestionnaire de séance autorisés',
                 'class' => User::class,
                 'query_builder' => $this->userRepository
                     ->findSecretariesByStructure($options['structure']),

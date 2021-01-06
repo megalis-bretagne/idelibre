@@ -137,9 +137,8 @@ Peut etre faire la distinction entre employee et simpleEmployee ?
 ou alors dans l'autre sens faires un convocable employee qui regroupe les 3 type invitable ?
 
 
-personnel administraif
+personnel administratif
 Gestionnaire de séance
-
 
 
 Ordre des menus
@@ -153,9 +152,6 @@ Ordre des menus
 
 et Séances tout en haut ou tout en bas
 
-Mettre une regle js pour eviter que le username est un @ dedans
-
-
 
 Faire un type custom pour le suffixType et eviter ça
 $builder->get('username')->addModelTransformer(new CallbackTransformer(
@@ -166,6 +162,4 @@ et d'avoir a detailler le form
 
 
 
-
-Contain one and only one @   ^[^@\n]*@[^@\n]*$
 
