@@ -21,7 +21,7 @@ INSERT INTO role (id, name, composites, is_in_structure_role, pretty_name)
 VALUES ('e581587e-1694-4b83-9ed7-4994bc792e5b', 'Guest', '["ROLE_GUEST"]', true, 'Invité');
 
 INSERT INTO role (id, name, composites, is_in_structure_role, pretty_name)
-VALUES ('811a1329-0cd0-49e8-b59b-5394219c50dd', 'Employee', '["ROLE_EMPLOYEE"]', true, 'Administratif');
+VALUES ('811a1329-0cd0-49e8-b59b-5394219c50dd', 'Employee', '["ROLE_EMPLOYEE"]', true, 'Personnel administratif');
 
 
 INSERT INTO "user" (id, structure_id, email, username, role_id, password, first_name, last_name)

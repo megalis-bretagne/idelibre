@@ -42,9 +42,9 @@ class TypeType extends AbstractType
             ])
 
             ->add('associatedEmployees', EntityType::class, [
-                'placeholder' => 'Sélectionner les administratifs',
+                'placeholder' => 'Sélectionner les personnels administratifs',
                 'required' => false,
-                'label' => 'Administratifs associés',
+                'label' => 'Personnels administratifs associés',
                 'class' => User::class,
                 'query_builder' => $this->userRepository
                     ->findInvitableEmployeesByStructure($options['structure']),
