@@ -61,7 +61,7 @@ class PartyControllerTest extends WebTestCase
     public function testAdd()
     {
         /** @var User $actor2 */
-        $actor2 = $this->getOneEntityBy(User::class, ['username' => 'actor2@libriciel.coop']);
+        $actor2 = $this->getOneEntityBy(User::class, ['username' => 'actor2@libriciel']);
 
         $this->loginAsAdminLibriciel();
         $crawler = $this->client->request(Request::METHOD_GET, '/party/add');
@@ -95,10 +95,10 @@ class PartyControllerTest extends WebTestCase
     public function testEdit()
     {
         /** @var User $actor2 */
-        $actor2 = $this->getOneEntityBy(User::class, ['username' => 'actor2@libriciel.coop']);
+        $actor2 = $this->getOneEntityBy(User::class, ['username' => 'actor2@libriciel']);
 
         /** @var User $actor3 */
-        $actor3 = $this->getOneEntityBy(User::class, ['username' => 'actor3@libriciel.coop']);
+        $actor3 = $this->getOneEntityBy(User::class, ['username' => 'actor3@libriciel']);
 
         $this->loginAsAdminLibriciel();
         /** @var $party Party */

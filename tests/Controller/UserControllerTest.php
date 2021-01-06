@@ -122,7 +122,7 @@ class UserControllerTest extends WebTestCase
         $successMsg = $crawler->filter('html:contains("votre utilisateur a bien été ajouté")');
         $this->assertCount(1, $successMsg);
 
-        $this->assertNotEmpty($this->getOneEntityBy(User::class, ['username' => 'newuser']));
+        $this->assertNotEmpty($this->getOneEntityBy(User::class, ['username' => 'newuser@libriciel']));
     }
 
     public function testEdit()
@@ -151,7 +151,7 @@ class UserControllerTest extends WebTestCase
     {
         $this->loginAsAdminLibriciel();
 
-        $user = $this->getOneUserBy(['username' => 'secretary1@libriciel.coop']);
+        $user = $this->getOneUserBy(['username' => 'secretary1@libriciel']);
         $type = $this->getOneTypeBy(['name' => 'Bureau Communautaire Libriciel']);
 
         $crawler = $this->client->request(Request::METHOD_GET, '/user/edit/' . $user->getId());
@@ -179,7 +179,7 @@ class UserControllerTest extends WebTestCase
     {
         $this->loginAsAdminLibriciel();
 
-        $user = $this->getOneUserBy(['username' => 'secretary1@libriciel.coop']);
+        $user = $this->getOneUserBy(['username' => 'secretary1@libriciel']);
 
         $crawler = $this->client->request(Request::METHOD_GET, '/user/edit/' . $user->getId());
         $this->assertResponseStatusCodeSame(200);

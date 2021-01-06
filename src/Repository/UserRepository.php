@@ -146,7 +146,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
     public function findInvitableEmployeesInSitting(Sitting $sitting): QueryBuilder
     {
-        return $this->findWithRoleInSitting($sitting,Role::INVITABLE_EMPLOYEE);
+        return $this->findWithRoleInSitting($sitting, Role::INVITABLE_EMPLOYEE);
     }
 
     public function findGuestsInSitting(Sitting $sitting): QueryBuilder
@@ -225,7 +225,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
         $associatedArrayIds = $qb->getQuery()->getScalarResult();
 
-        return array_map(fn($el) => $el['id'], $associatedArrayIds);
+        return array_map(fn ($el) => $el['id'], $associatedArrayIds);
     }
 
     public function findSecretariesByStructure($structure): QueryBuilder

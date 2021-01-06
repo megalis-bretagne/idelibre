@@ -32,7 +32,7 @@ class UserTest extends WebTestCase
         ]);
     }
 
-    public function testValid()
+    public function testValidNoAtUsername()
     {
         $user = (new User())
             ->setFirstName('new firstName')
@@ -41,6 +41,28 @@ class UserTest extends WebTestCase
             ->setEmail('email@example.org');
 
         $this->assertHasValidationErrors($user, 0);
+    }
+
+    public function testValidOneAtUsername()
+    {
+        $user = (new User())
+            ->setFirstName('new firstName')
+            ->setLastName('new lastName')
+            ->setUsername('new username@toto')
+            ->setEmail('email@example.org');
+
+        $this->assertHasValidationErrors($user, 0);
+    }
+
+    public function testInvalidTwoAtUsername()
+    {
+        $user = (new User())
+            ->setFirstName('new firstName')
+            ->setLastName('new lastName')
+            ->setUsername('new username@toto@extrasuffix')
+            ->setEmail('email@example.org');
+
+        $this->assertHasValidationErrors($user, 1);
     }
 
     public function testInvalidUsernameAlreadyExists()

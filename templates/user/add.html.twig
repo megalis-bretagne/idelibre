@@ -13,11 +13,25 @@
 
     {{ form_row(form.firstName) }}
     {{ form_row(form.lastName) }}
-    {{ form_row(form.username) }}
+
+
+    {{ form_label(form.username) }}
+    {{ form_errors(form.username) }}
+
+    <div class="row mb-3">
+        <div class="col-7">
+            {{ form_widget(form.username) }}
+        </div>
+        <div class="col-5 form-control borderless">
+            <b class="text-ls-dark">@{{ suffix }}</b>
+        </div>
+    </div>
+    {{ form_help(form.username) }}
+
     {{ form_row(form.email) }}
     {{ form_row(form.role) }}
 
-    <div id="actor-info" style="display: none" >
+    <div id="actor-info" style="display: none">
         {{ form_row(form.party) }}
         {{ form_row(form.title) }}
     </div>

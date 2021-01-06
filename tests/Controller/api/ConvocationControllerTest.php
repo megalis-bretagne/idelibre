@@ -63,7 +63,7 @@ class ConvocationControllerTest extends WebTestCase
     public function testSendConvocation()
     {
         $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
-        $actor = $this->getOneUserBy(['username' => 'actor1@libriciel.coop']);
+        $actor = $this->getOneUserBy(['username' => 'actor1@libriciel']);
         $convocation = $this->getOneConvocationBy(['sitting' => $sitting, 'user' => $actor]);
         $this->loginAsAdminLibriciel();
         $this->client->request(Request::METHOD_POST, '/api/convocations/' . $convocation->getId() . '/send');

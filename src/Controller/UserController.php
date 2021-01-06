@@ -71,6 +71,7 @@ class UserController extends AbstractController
 
         return $this->render('user/add.html.twig', [
             'form' => $form->createView(),
+            'suffix' => $this->getUser()->getStructure()->getSuffix(),
         ]);
     }
 
@@ -97,6 +98,7 @@ class UserController extends AbstractController
 
         return $this->render('user/edit.html.twig', [
             'form' => $form->createView(),
+            'suffix' => $this->getUser()->getStructure()->getSuffix(),
         ]);
     }
 

@@ -63,7 +63,7 @@ class EmailGeneratorTest extends WebTestCase
     public function testGenerateParams()
     {
         $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
-        $actor = $this->getOneUserBy(['username' => 'actor1@libriciel.coop']);
+        $actor = $this->getOneUserBy(['username' => 'actor1@libriciel']);
         $convocation = $this->getOneConvocationBy(['sitting' => $sitting, 'user' => $actor]);
         $generator = new EmailGenerator(new DateUtil(), new GenderConverter(), $this->emailTemplateManager);
 
@@ -74,7 +74,7 @@ class EmailGeneratorTest extends WebTestCase
             '#lieuseance#' => 'Salle du conseil',
             '#prenom#' => 'actor_1',
             '#nom#' => 'libriciel',
-            '#username#' => 'actor1@libriciel.coop',
+            '#username#' => 'actor1@libriciel',
             '#titre#' => 'Madame le maire',
             '#civilite#' => 'Monsieur', ];
 

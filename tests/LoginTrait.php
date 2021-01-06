@@ -35,7 +35,7 @@ trait LoginTrait
 
     public function loginAsSecretaryLibriciel()
     {
-        $this->login('secretary1@libriciel.coop');
+        $this->login('secretary1@libriciel');
     }
 
     public function loginAsUserMontpellier()

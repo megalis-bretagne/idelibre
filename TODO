@@ -135,3 +135,37 @@ Possibilité et surment plus simple à gérer (voir ce que font les collectivit�
 
 Peut etre faire la distinction entre employee et simpleEmployee ?
 ou alors dans l'autre sens faires un convocable employee qui regroupe les 3 type invitable ?
+
+
+personnel administraif
+Gestionnaire de séance
+
+
+
+Ordre des menus
+1/ Utilisateurs
+2/ Groupes politiques
+3/ Types de séance
+4/ Thèmes
+5/ Modèles d'email
+6/ (ou 7) Informations
+7/ (ou6) Connecteurs
+
+et Séances tout en haut ou tout en bas
+
+Mettre une regle js pour eviter que le username est un @ dedans
+
+
+
+Faire un type custom pour le suffixType et eviter ça
+$builder->get('username')->addModelTransformer(new CallbackTransformer(
+            fn ($username) => preg_replace('/@.*/', '', $username),
+            fn ($username) => $username . '@.' . $this->getStructureSuffix($options['structure'])
+        ));
+et d'avoir a detailler le form
+
+
+
+
+Contain one and only one @   ^[^@\n]*@[^@\n]*$
+

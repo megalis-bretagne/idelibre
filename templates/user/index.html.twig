@@ -39,7 +39,7 @@
         {% for user in users %}
             <tr class="d-flex">
                 <td class="col-3">{{ user.lastName }} </td>
-                <td class="col-4">{{ user.username }} </td>
+                <td class="col-4">{{ user.username | noSuffix }} </td>
                 <td class="col-3">{{ user.role ? user.role.prettyName : '' }} </td>
                 <td class="col-2">
                     {{ macros.editButton('user_edit', user.id) }}
