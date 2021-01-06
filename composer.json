@@ -58,7 +58,7 @@
     "phpstan/phpstan": "^0.12.57",
     "symfony/css-selector": "5.1.*",
     "symfony/phpunit-bridge": "^5.1",
-    "symplify/easy-coding-standard": "^8.3"
+    "symplify/easy-coding-standard": "^9"
   },
   "config": {
     "optimize-autoloader": true,
