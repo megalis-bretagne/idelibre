@@ -25,6 +25,7 @@ class PartyRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('p')
             ->andWhere('p.structure =:structure')
-            ->setParameter('structure', $structure);
+            ->setParameter('structure', $structure)
+            ->orderBy('p.name', 'ASC');
     }
 }
