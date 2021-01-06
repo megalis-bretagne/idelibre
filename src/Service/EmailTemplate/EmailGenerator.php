@@ -57,9 +57,8 @@ class EmailGenerator
 
     public function isInvitation(Convocation $convocation): bool
     {
-        return $convocation->getCategory() === Convocation::CATEGORY_INVITATION;
+        return Convocation::CATEGORY_INVITATION === $convocation->getCategory();
     }
-
 
     public function generateParams(Convocation $convocation): array
     {

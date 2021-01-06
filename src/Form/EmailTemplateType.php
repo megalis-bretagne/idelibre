@@ -30,7 +30,7 @@ class EmailTemplateType extends AbstractType
 
         if (!$isDefaultTemplate) {
             $builder->add('category', HiddenType::class, [
-                'data' => EmailTemplate::CATEGORY_CONVOCATION
+                'data' => EmailTemplate::CATEGORY_CONVOCATION,
             ])
                 ->add('name', TextType::class, [
                     'label' => 'Intitulé',
@@ -70,8 +70,8 @@ class EmailTemplateType extends AbstractType
         ]);
 
         $builder->get('structure')->addModelTransformer(new CallbackTransformer(
-            fn() => '',
-            fn() => $options['structure']
+            fn () => '',
+            fn () => $options['structure']
         ));
     }
 
