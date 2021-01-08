@@ -125,7 +125,6 @@ body {
 
 
 .ls-seance:before {
-    content: "\e900";
-    margin: 10px;
     font-size: .9em;
 }
+

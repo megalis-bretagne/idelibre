@@ -84,6 +84,7 @@
     align-items: center;
     min-height: 2.75rem;
     padding-right: .75rem;
+    padding-left: .75rem;
 }
 
 .ls-sidebar .main-menu > li > a > i {
