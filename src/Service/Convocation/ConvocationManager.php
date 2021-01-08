@@ -7,6 +7,7 @@ use App\Entity\Role;
 use App\Entity\Sitting;
 use App\Entity\User;
 use App\Repository\ConvocationRepository;
+use App\Repository\UserRepository;
 use App\Service\Email\EmailNotSendException;
 use App\Service\Email\EmailServiceInterface;
 use App\Service\EmailTemplate\EmailGenerator;
@@ -26,6 +27,7 @@ class ConvocationManager
     private ParameterBagInterface $bag;
     private EmailServiceInterface $emailService;
     private EmailGenerator $emailGenerator;
+    private UserRepository $userRepository;
 
     public function __construct(
         EntityManagerInterface $em,
@@ -34,7 +36,8 @@ class ConvocationManager
         LoggerInterface $logger,
         ParameterBagInterface $bag,
         EmailServiceInterface $emailService,
-        EmailGenerator $emailGenerator
+        EmailGenerator $emailGenerator,
+        UserRepository $userRepository
     ) {
         $this->em = $em;
         $this->convocationRepository = $convocationRepository;
@@ -43,11 +46,32 @@ class ConvocationManager
         $this->bag = $bag;
         $this->emailService = $emailService;
         $this->emailGenerator = $emailGenerator;
+        $this->userRepository = $userRepository;
     }
 
-    public function createConvocations(Sitting $sitting): void
+    public function createConvocationsActors(Sitting $sitting): void
     {
-        $associatedUsers = $sitting->getType()->getAssociatedUsers();
+        $associatedActors = $this->userRepository->getAssociatedActorsWithType($sitting->getType());
+        $this->createConvocations($sitting, $associatedActors);
+    }
+
+    public function createConvocationsInvitableEmployees(Sitting $sitting): void
+    {
+        $associatedInvitableEmployees = $this->userRepository->getAssociatedInvitableEmployeesWithType($sitting->getType());
+        $this->createConvocations($sitting, $associatedInvitableEmployees);
+    }
+
+    public function createConvocationsGuests(Sitting $sitting): void
+    {
+        $associatedGuests = $this->userRepository->getAssociatedGuestWithType($sitting->getType());
+        $this->createConvocations($sitting, $associatedGuests);
+    }
+
+    /**
+     * @param User[] $associatedUsers
+     */
+    private function createConvocations(Sitting $sitting, array $associatedUsers): void
+    {
         foreach ($associatedUsers as $user) {
             $convocation = new Convocation();
             $convocation->setSitting($sitting)

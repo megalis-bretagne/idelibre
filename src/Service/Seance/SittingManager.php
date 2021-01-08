@@ -58,17 +58,27 @@ class SittingManager
             ->setConvocationFile($convocationFile);
         $this->em->persist($sitting);
 
-        if ($uploadedInvitationFile) {
-            $invitationFile = $this->fileManager->save($uploadedInvitationFile, $structure);
-            $sitting->setInvitationFile($invitationFile);
-        }
+        $this->convocationManager->createConvocationsActors($sitting);
+        $this->createInvitationsInvitableEmployeesAndGuests($uploadedInvitationFile, $sitting, $structure);
 
-        $this->convocationManager->createConvocations($sitting);
         $this->em->flush();
 
         $this->messageBus->dispatch(new UpdatedSitting($sitting->getId()));
 
         return $sitting->getId();
+    }
+
+    private function createInvitationsInvitableEmployeesAndGuests(
+        ?UploadedFile $uploadedInvitationFile,
+        Sitting $sitting,
+        Structure $structure
+    ) {
+        if ($uploadedInvitationFile) {
+            $invitationFile = $this->fileManager->save($uploadedInvitationFile, $structure);
+            $this->convocationManager->createConvocationsInvitableEmployees($sitting);
+            $this->convocationManager->createConvocationsGuests($sitting);
+            $sitting->setInvitationFile($invitationFile);
+        }
     }
 
     public function delete(Sitting $sitting): void
