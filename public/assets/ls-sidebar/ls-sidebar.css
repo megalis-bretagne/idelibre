@@ -17,7 +17,6 @@
     position: fixed;
     left: 0;
     top: 30px;
-    transition: width 0.3s;
     z-index: 5;
 }
 
@@ -65,7 +64,7 @@
 
 .ls-sidebar ul.pop {
     overflow-y: visible !important;
-    transform: translate3d(12.5rem, -2.5rem, 0);
+    transform: translate3d(12.5rem, -2.75rem, 0);
 
 
 }
