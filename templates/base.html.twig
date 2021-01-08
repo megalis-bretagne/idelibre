@@ -10,8 +10,9 @@
     <link rel="stylesheet" href="{{ asset('assets/select2/select2.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/flatpickr/flatpickr.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/Libriciel-font.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/ls-sidebar/ls-sidebar.css') }}">
 
-</head>ss
+</head>
 <body>
 
 {% block navigation %}
@@ -20,11 +21,11 @@
 
 {{ ls_sidebar() }}
 
-<ls-lib-content>
+<div class="main-content">
     <div class="container-fluid" style="margin-bottom: 150px">
         {% block body %}{% endblock %}
     </div>
-</ls-lib-content>
+</div>
 
 
 {{ include('include/_footer.html.twig') }}
@@ -33,11 +34,11 @@
 <script src="{{ asset('assets/popper.min.js') }}"></script>
 <script src="{{ asset('assets/bootstrap/js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('assets/bootstrap/js/bs-custom-file-input.js') }}"></script>
-<script src="{{ asset('node_modules/@libriciel/ls-composants/ls-elements.js') }}"></script>s
 <script src="{{ asset('assets/select2/select2.js') }}"></script>
 <script src="{{ asset('assets/fontawesome-free-5.12.1-web/js/all.min.js') }}"></script>
 <script src="{{ asset('assets/flatpickr/flatpickr.js') }}"></script>
 <script src="{{ asset('assets/flatpickr/flatpickr_fr.js') }}"></script>
+<script src="{{ asset('assets/ls-sidebar/ls-sidebar.js') }}"></script>
 
 
 
