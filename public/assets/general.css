@@ -122,3 +122,10 @@ body {
 
 .required:before{content:none !important;}
 .required:after{position:absolute;content:"*";color:#c02b2b;right:-10px}
+
+
+.ls-seance:before {
+    content: "\e900";
+    margin: 10px;
+    font-size: .9em;
+}

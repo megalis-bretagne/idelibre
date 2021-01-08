@@ -1,5 +1,5 @@
 {% if app.user %}
-    <ls-lib-sidebar>
+    <div class="ls-sidebar">
         <section class="ls-sidebar-coll-logo">
             {% if app.user.structure %}
                 {# idelibre ne gere pas encore les logos par collectivités#}
@@ -17,8 +17,8 @@
                     {% if is_granted('ROLE_MANAGE_SITTINGS') %}
                         <li class="{{ 'sitting-nav' in activeNavs ? 'active' : '' }}">
                             <a href="{{ path('sitting_index') }}">
-                                <i class="ls-font ls-seance" style="font-size: 0.8em; margin-right: -20px"></i>
-                                <span>&ensp; Séances</span>
+                                <i class="ls-font ls-seance"></i>
+                                <span>Séances</span>
                             </a>
                             <ul class="sub-menu">
                             </ul>
@@ -29,7 +29,7 @@
                         <li class="{{ 'user-nav' in activeNavs ? 'active' : '' }}">
                             <a href="{{ path('user_index') }}">
                                 <i class="fas fa-user"></i>
-                                <span>&ensp; Utilisateurs</span>
+                                <span>Utilisateurs</span>
                             </a>
                             <ul class="sub-menu">
                             </ul>
@@ -41,7 +41,7 @@
                         <li class="{{ 'party-nav' in activeNavs ? 'active' : '' }}">
                             <a href="{{ path('party_index') }}">
                                 <i class="fas fa-users"></i>
-                                <span>&ensp; Groupes politiques</span>
+                                <span>Groupes politiques</span>
                             </a>
                             <ul class="sub-menu">
                             </ul>
@@ -53,7 +53,7 @@
                         <li class="{{ 'type-nav' in activeNavs ? 'active' : '' }}">
                             <a href="{{ path('type_index') }}">
                                 <i class="fas fa-tag"> </i>
-                                <span>&ensp; Type de séance</span>
+                                <span>Type de séance</span>
                             </a>
                             <ul class="sub-menu">
                             </ul>
@@ -64,7 +64,7 @@
                         <li class="{{ 'theme-nav' in activeNavs ? 'active' : '' }}">
                             <a href="{{ path('theme_index') }}">
                                 <i class="fas fa-book"></i>
-                                <span>&ensp; Thèmes</span>
+                                <span>Thèmes</span>
                             </a>
                             <ul class="sub-menu">
                             </ul>
@@ -75,7 +75,7 @@
                         <li class="{{ 'email-template-nav' in activeNavs ? 'active' : '' }}">
                             <a href="{{ path('email_template_index') }}">
                                 <i class="fas fa-envelope"></i>
-                                <span>&ensp; Modèles d'email</span>
+                                <span>Modèles d'email</span>
                             </a>
                             <ul class="sub-menu">
                             </ul>
@@ -86,7 +86,7 @@
                         <li class="{{ 'structure-preference-nav' in activeNavs ? 'active' : '' }}">
                         <a href="{{ path('structure_preferences') }}">
                             <i class="fas fa-info-circle"></i>
-                            <span>&ensp; Informations</span>
+                            <span>Informations</span>
                         </a>
                         <ul class="sub-menu">
                         </ul>
@@ -97,7 +97,7 @@
                         <li class="{{ 'connector-nav' in activeNavs ? 'active' : '' }}">
                             <a href="{{ path('connector_index') }}">
                                 <i class="fas fa-cog"></i>
-                                <span>&ensp; Connecteurs</span>
+                                <span>Connecteurs</span>
                             </a>
                             <ul class="sub-menu">
                             </ul>
@@ -110,7 +110,7 @@
                     <li class="{{ 'platform-nav' in activeNavs ? 'active' : '' }}">
                         <a href="#">
                             <i class="fas fa-cogs"> </i>
-                            <span>&ensp; Plateforme</span>
+                            <span>Plateforme</span>
                         </a>
                         <ul class="sub-menu">
 
@@ -142,5 +142,5 @@
 
             </ul>
         </section>
-    </ls-lib-sidebar>
+    </div>
 {% endif %}
