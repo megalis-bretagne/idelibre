@@ -3,11 +3,8 @@
 {% import 'macro/_sitting_tabs.html.twig' as macroTab %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('assets/inputFile.css') }}">
-    <link rel="stylesheet" href="https://unpkg.com/vue-select@latest/dist/vue-select.css">
+    {{ encore_entry_link_tags('vue-manage-projects') }}
 {% endblock %}
-
-
 
 
 {% block body %}
@@ -35,7 +32,7 @@
         <div class="alert alert-success mt-2" v-if="messageInfo"> ${messageInfo}</div>
 
         <label class="custom-file-upload btn btn-primary" title="Ajouter des projets">
-            <input type="file" accept=".pdf,.PDF" multiple @change="addProject($event)">
+            <input class="custom-file-upload" type="file" accept=".pdf,.PDF" multiple @change="addProject($event)">
             <span class="fa fa-folder-open"></span> Ajouter des projets
         </label>
 
@@ -76,7 +73,7 @@
                     <div class="row mt-3">
                         <div class="col-2">
                             <label class="custom-file-upload btn btn-outline-primary" title="Ajouter des annexes">
-                                <input type="file" multiple @change="addAnnexes($event, project)">
+                                <input class="custom-file-upload" type="file" multiple @change="addAnnexes($event, project)">
                                 <span class="fa fa-folder-open"></span> annexes
                             </label>
                         </div>
@@ -170,34 +167,9 @@
         </div>
     </div>
 
-
 {% endblock %}
 
 
 {% block javascripts %}
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="//cdn.jsdelivr.net/npm/sortablejs@1.8.4/Sortable.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.20.0/vuedraggable.umd.min.js"></script>
-    <script src="https://unpkg.com/vue-select@latest"></script>
-    <script src="{{ asset('assets/vue_app/manageProjects.js') }}"></script>
-    <script>
-        $('.change-tab').click(function (event) {
-
-            if ($(this).hasClass('active')) {
-                event.preventDefault();
-                return false;
-            }
-
-            if (isDirty) {
-                event.preventDefault();
-                $('#confirm-btn').attr('href', $(this).attr('href'));
-                $('#confirm-not-save').modal();
-
-                return false;
-            }
-            return true;
-        });
-    </script>
-
+    {{ encore_entry_script_tags('vue-manage-projects') }}
 {% endblock %}

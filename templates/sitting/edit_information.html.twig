@@ -43,48 +43,7 @@
 
 
 {% block javascripts %}
-    <script>
-        $(document).ready(function () {
-            bsCustomFileInput.init();
-        });
-
-        let config = {
-            enableTime: true,
-            altInput: true,
-            altFormat: "d/m/y : H:i",
-            //dateFormat: "d/m/y : H:i",
-            "locale": "fr"
-        };
-        $("#sitting_date").flatpickr(config);
-
-
-        let isDirty = false;
-        $('input, select').click(function () {
-            isDirty = true;
-        });
-
-
-        $('.change-tab').click(function (event) {
-
-            if ($(this).hasClass('active')) {
-                event.preventDefault();
-                return false;
-            }
-
-            if (isDirty) {
-                event.preventDefault();
-                $('#confirm-btn').attr('href', $(this).attr('href'));
-                $('#confirm-not-save').modal();
-
-                return false;
-            }
-            return true;
-        });
-
-
-    </script>
-
-
+    {{ encore_entry_script_tags('vue-edit-informations') }}
 {% endblock %}
 
 

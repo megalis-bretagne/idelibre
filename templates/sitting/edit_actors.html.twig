@@ -4,7 +4,7 @@
 
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="https://unpkg.com/vue-select@latest/dist/vue-select.css">
+    {{ encore_entry_link_tags('vue-edit-invitations') }}
 {% endblock %}
 
 
@@ -209,29 +209,7 @@
 
 
 {% block javascripts %}
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.9.4/dayjs.min.js"></script>
-    <script src="https://unpkg.com/vue-select@latest"></script>
-    <script src="{{ asset('assets/vue_app/manageActors.js') }}"></script>
+    {{ encore_entry_script_tags('vue-edit-invitations') }}
 
-    <script>
-        $('.change-tab').click(function (event) {
-
-            if ($(this).hasClass('active')) {
-                event.preventDefault();
-                return false;
-            }
-
-            if (isDirty()) {
-                event.preventDefault();
-                $('#confirm-btn').attr('href', $(this).attr('href'));
-                $('#confirm-not-save').modal();
-
-                return false;
-            }
-            return true;
-        });
-    </script>
 
 {% endblock %}

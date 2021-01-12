@@ -40,6 +40,8 @@ RUN docker-php-ext-install intl mbstring xml zip pdo pdo_pgsql pgsql opcache
 COPY ./docker-resources/wkhtmltox_0.12.6-1.buster_amd64.deb /tmp/wkhtmltox.deb
 RUN  dpkg -i /tmp/wkhtmltox.deb
 
+RUN curl -sL https://deb.nodesource.com/setup_12.x | sudo bash -
+RUN apt-get install nodejs -yqq
 
 RUN pecl install -o -f redis \
   &&  rm -rf /tmp/pear \
@@ -50,6 +52,7 @@ COPY --chown=www-data:www-data . /app
 WORKDIR /app
 
 RUN curl -s https://getcomposer.org/installer | php && sudo -u www-data php composer.phar install --no-interaction
+RUN npm install && npm run build
 
 RUN mkdir -p /data
 RUN chown -R www-data:www-data /data
