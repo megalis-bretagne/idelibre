@@ -3,13 +3,6 @@
 {% import 'macro/_sitting_tabs.html.twig' as macroTab %}
 
 
-{% block javascripts %}
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.9.4/dayjs.min.js"></script>
-    <script src="{{ asset('assets/vue_app/manageConvocations.js') }}"></script>
-{% endblock %}
-
 {% block body %}
     <div class="col-10 offset-1">
         {{ apy_breadcrumb_trail_render(breadcrumb) }}
@@ -277,19 +270,18 @@
                             <button class="btn btn-primary" data-dismiss="modal" type="button" v-on:click="sendConvocations('Guest')">
                                 Envoyer
                             </button>
-
-
                         </div>
                     </div>
                 </div>
             </div>
-
-
         </div>
 
     </div>
 
 
+{% endblock %}
 
 
+{% block javascripts %}
+    {{ encore_entry_script_tags('vue-show-invitations') }}
 {% endblock %}

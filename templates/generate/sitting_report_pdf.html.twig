@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}idelibre{% endblock %}</title>
-    <link rel="stylesheet" href="{{ absolute_url(asset('assets/bootstrap/css/il-bootstrap-4.css')) }}">
+
+    {% for file in encore_entry_css_files('app') %}
+        <link href="{{ absolute_url(asset(file)) }}" rel="stylesheet" />
+    {% endfor %}
+
+
 </head>
 <body>
 <div class="container-fluid">

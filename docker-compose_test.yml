@@ -15,6 +15,8 @@ services:
       - ./config:/app/config
       - ./src:/app/src
       - ./templates:/app/templates
+      - ./vendor:/app/vendor
+      - ./public:/app/public
       - ./tests:/app/tests
       - ./docker-resources/zz-idelibre.conf:/usr/local/etc/php-fpm.d/zz-idelibre.conf
     command: ["/app/docker-resources/initApp.sh"]

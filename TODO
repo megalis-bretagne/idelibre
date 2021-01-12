@@ -101,9 +101,6 @@ Comme ça on aun object qui as les 3 propriétés : associatedActors, associated
 
 
 
-ADMINISTRATIVES => EMPLOYEES !
-
-
 Peut etre mettre des tooltips o des popever partout par exemple sur profile la liste des profiles avec explication
 
 Ajouter l'extenson de l'uilisateur au moment de la creation comme on fait actueleletn pour setter la structure !
@@ -133,25 +130,6 @@ Possibilité et surment plus simple à gérer (voir ce que font les collectivit�
 
 
 
-Peut etre faire la distinction entre employee et simpleEmployee ?
-ou alors dans l'autre sens faires un convocable employee qui regroupe les 3 type invitable ?
-
-
-personnel administratif
-Gestionnaire de séance
-
-
-Ordre des menus
-1/ Utilisateurs
-2/ Groupes politiques
-3/ Types de séance
-4/ Thèmes
-5/ Modèles d'email
-6/ (ou 7) Informations
-7/ (ou6) Connecteurs
-
-et Séances tout en haut ou tout en bas
-
 
 Faire un type custom pour le suffixType et eviter ça
 $builder->get('username')->addModelTransformer(new CallbackTransformer(
@@ -169,3 +147,5 @@ TODO enlever la category de convocation , on peut faire le distingo avec l'user 
 TODO MODIFIER LES INFORMATION DE LA SEANCE ET PEUT ETRE CHANGER LE button parcourir en bouton normal avec le titre du ficheri à coté
 
 
+Avec le css genere par webpack il va falloir gerer le pb de ça dans template/generate
+<link rel="stylesheet" href="{{ absolute_url(asset('assets/bootstrap/css/il-bootstrap-4.css')) }}">

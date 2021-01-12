@@ -81,7 +81,7 @@ class GroupController extends AbstractController
     /**
      * @Route("/group/manage/{id}", name="group_manage")
      * @IsGranted("ROLE_SUPERADMIN")
-     * @Breadcrumb("Gérer {goupe.name}")
+     * @Breadcrumb("Gérer {group.name}")
      */
     public function manage(Group $group, Request $request, GroupManager $groupManager): Response
     {
@@ -103,7 +103,7 @@ class GroupController extends AbstractController
     /**
      * @Route("/group/edit/{id}", name="group_edit")
      * @IsGranted("ROLE_SUPERADMIN")
-     * @Breadcrumb("Modifier {goupe.name}")
+     * @Breadcrumb("Modifier {group.name}")
      */
     public function edit(Group $group, Request $request, GroupManager $groupManager): Response
     {
