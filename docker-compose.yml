@@ -12,7 +12,7 @@ services:
       - ./docker-resources/zz-idelibre.conf:/usr/local/etc/php-fpm.d/zz-idelibre.conf
     command: ["/app/docker-resources/initApp.sh"]
 
-  nginx-comelus:
+  nginx-idelibre:
     container_name: nginx-idelibre
     image: nginx:1.17
     depends_on:
