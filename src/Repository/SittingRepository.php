@@ -22,7 +22,7 @@ class SittingRepository extends ServiceEntityRepository
         parent::__construct($registry, Sitting::class);
     }
 
-    public function findByStructure(Structure $structure, ?string $searchTerm = null): QueryBuilder
+    public function findByStructure(Structure $structure, ?string $searchTerm = null, ?string $status = null): QueryBuilder
     {
         $qb = $this->createQueryBuilder('s')
             ->andWhere('s.structure =:structure')
@@ -33,13 +33,27 @@ class SittingRepository extends ServiceEntityRepository
                 ->setParameter('search', mb_strtolower("%${searchTerm}%"));
         }
 
+        if ($status) {
+            $qb->andWhere('s.isArchived =:isArchived')
+                ->setParameter('isArchived', !$this->isActive($status));
+        }
+
         return $qb;
+    }
+
+    private function isActive(string $status): bool
+    {
+        if (Sitting::ARCHIVED === $status) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
      * @param Type[] $types
      */
-    public function findWithTypesByStructure(Structure $structure, iterable $types, ?string $searchTerm = null): QueryBuilder
+    public function findWithTypesByStructure(Structure $structure, iterable $types, ?string $searchTerm = null, ?string $status = null): QueryBuilder
     {
         $qb = $this->createQueryBuilder('s')
             ->andWhere('s.structure =:structure')
@@ -51,6 +65,11 @@ class SittingRepository extends ServiceEntityRepository
         if ($searchTerm) {
             $qb->andWhere('LOWER(s.name) like :search')
                 ->setParameter('search', mb_strtolower("%${searchTerm}%"));
+        }
+
+        if ($status) {
+            $qb->andWhere('s.isArchived =:isArchived')
+                ->setParameter('isArchived', !$this->isActive($status));
         }
 
         return $qb;

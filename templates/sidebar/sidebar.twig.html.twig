@@ -21,6 +21,16 @@
                                 <span>Séances</span>
                             </a>
                             <ul class="sub-menu">
+                                <li class="{{ 'sitting-active-nav' in activeNavs ? 'active' : '' }}">
+                                    <a href="{{ path('sitting_index', {status: 'active'}) }}">
+                                        En cours
+                                    </a>
+                                </li>
+                                <li class="{{ 'sitting-archived-nav' in activeNavs ? 'active' : '' }}">
+                                    <a href="{{ path('sitting_index', {status: 'archived'}) }}">
+                                        Classées
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                     {% endif %}
