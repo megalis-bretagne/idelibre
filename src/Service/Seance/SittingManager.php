@@ -119,4 +119,15 @@ class SittingManager
 
         return $this->sittingRepository->findByStructure($user->getStructure(), $search, $status);
     }
+
+    public function isAlreadySent(Sitting $sitting): bool
+    {
+        foreach ($sitting->getConvocations() as $convocation) {
+            if ($convocation->getIsActive()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

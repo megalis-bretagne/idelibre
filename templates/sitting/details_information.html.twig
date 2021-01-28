@@ -121,21 +121,21 @@
                 </div>
             </div>
 
-
-            <div class="row mt-2">
-                <div class="col-4 text-right mt-1">
-                    <b>jetons d'horodatage :</b>
+            {% if isAlreadySent %}
+                <div class="row mt-2">
+                    <div class="col-4 text-right mt-1">
+                        <b>jetons d'horodatage :</b>
+                    </div>
+                    <div class="col-8">
+                        {{ sitting.name }}_jetons.zip
+                        <a class="btn btn-outline-secondary borderless"
+                           href="{{ path('sitting_report_token', {'id': sitting.id}) }}"
+                           title="Télécharger les jetons">
+                            <span class="fas fa-download"></span>
+                        </a>
+                    </div>
                 </div>
-                <div class="col-8">
-                    {{ sitting.name }}_jetons.zip
-                    <a class="btn btn-outline-secondary borderless"
-                       href="{{ path('sitting_report_token', {'id': sitting.id}) }}"
-                       title="Télécharger les jetons">
-                        <span class="fas fa-download"></span>
-                    </a>
-                </div>
-            </div>
-
+            {% endif %}
 
         </div>
 
