@@ -7,13 +7,13 @@ use App\Form\SearchType;
 use App\Form\SittingType;
 use App\Repository\ConvocationRepository;
 use App\Repository\ProjectRepository;
-use App\Repository\SittingRepository;
 use App\Service\Convocation\ConvocationManager;
 use App\Service\Pdf\PdfSittingGenerator;
 use App\Service\Seance\ActorManager;
 use App\Service\Seance\SittingManager;
 use App\Service\Zip\ZipSittingGenerator;
 use App\Sidebar\Annotation\Sidebar;
+use App\Sidebar\State\SidebarState;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -34,12 +34,11 @@ class SittingController extends AbstractController
      * @Route("/sitting", name="sitting_index")
      * @IsGranted("ROLE_MANAGE_SITTINGS")
      */
-    public function index(SittingRepository $sittingRepository, PaginatorInterface $paginator, Request $request, SittingManager $sittingManager): Response
+    public function index(PaginatorInterface $paginator, Request $request, SittingManager $sittingManager, SidebarState $sidebarState): Response
     {
         $formSearch = $this->createForm(SearchType::class);
-
         $sittings = $paginator->paginate(
-            $sittingManager->getListSittingByStructureQuery($this->getUser(), $request->query->get('search')),
+            $sittingManager->getListSittingByStructureQuery($this->getUser(), $request->query->get('search'), $request->query->get('status')),
             $request->query->getInt('page', 1),
             20,
             [
@@ -47,6 +46,10 @@ class SittingController extends AbstractController
                 'defaultSortDirection' => 'desc',
             ]
         );
+
+        if ($status = $request->query->get('status')) {
+            $sidebarState->addActiveNavs(['sitting-nav', "sitting-${status}-nav"]);
+        }
 
         return $this->render('sitting/index.html.twig', [
             'sittings' => $sittings,

@@ -111,12 +111,12 @@ class SittingManager
         $this->em->flush();
     }
 
-    public function getListSittingByStructureQuery(User $user, ?string $search): QueryBuilder
+    public function getListSittingByStructureQuery(User $user, ?string $search, ?string $status): QueryBuilder
     {
         if ($user->getRole()->getId() === $this->roleManager->getSecretaryRole()->getId()) {
-            return $this->sittingRepository->findWithTypesByStructure($user->getStructure(), $user->getAuthorizedTypes(), $search);
+            return $this->sittingRepository->findWithTypesByStructure($user->getStructure(), $user->getAuthorizedTypes(), $search, $status);
         }
 
-        return $this->sittingRepository->findByStructure($user->getStructure(), $search);
+        return $this->sittingRepository->findByStructure($user->getStructure(), $search, $status);
     }
 }

@@ -24,6 +24,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Sitting
 {
+    public const ARCHIVED = 'archived';
+    public const ACTIVE = 'active';
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="UUID")
