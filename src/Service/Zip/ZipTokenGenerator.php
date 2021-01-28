@@ -15,7 +15,7 @@ class ZipTokenGenerator
         $this->bag = $bag;
     }
 
-    public function generateZipToken(Sitting $sitting)
+    public function generateZipToken(Sitting $sitting): string
     {
         $tmpPath = '/tmp/' . uniqid('zip_token');
         $zip = new ZipArchive();
@@ -26,7 +26,7 @@ class ZipTokenGenerator
         return $tmpPath;
     }
 
-    private function getTimestampDirectory(Sitting $sitting)
+    private function getTimestampDirectory(Sitting $sitting): string
     {
         $year = $sitting->getDate()->format('Y');
 

@@ -153,9 +153,10 @@ class SittingController extends AbstractController
      * @IsGranted("MANAGE_SITTINGS", subject="sitting")
      * @Breadcrumb("Détail {sitting.name}")
      */
-    public function showInformation(Sitting $sitting): Response
+    public function showInformation(Sitting $sitting, SittingManager $sittingManager): Response
     {
         return $this->render('sitting/details_information.html.twig', [
+            'isAlreadySent' => $sittingManager->isAlreadySent($sitting),
             'sitting' => $sitting,
             'timezone' => $sitting->getStructure()->getTimezone()->getName(),
         ]);

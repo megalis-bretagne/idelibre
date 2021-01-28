@@ -34,7 +34,8 @@ class SittingManager
         ProjectManager $projectManager,
         RoleManager $roleManager,
         SittingRepository $sittingRepository
-    ) {
+    )
+    {
         $this->convocationManager = $convocationManager;
         $this->fileManager = $fileManager;
         $this->em = $em;
@@ -49,7 +50,8 @@ class SittingManager
         UploadedFile $uploadedConvocationFile,
         ?UploadedFile $uploadedInvitationFile,
         Structure $structure
-    ): string {
+    ): string
+    {
         // TODO remove file if transaction failed
         $convocationFile = $this->fileManager->save($uploadedConvocationFile, $structure);
 
@@ -72,7 +74,8 @@ class SittingManager
         ?UploadedFile $uploadedInvitationFile,
         Sitting $sitting,
         Structure $structure
-    ) {
+    )
+    {
         if ($uploadedInvitationFile) {
             $invitationFile = $this->fileManager->save($uploadedInvitationFile, $structure);
             $this->convocationManager->createConvocationsInvitableEmployees($sitting);
@@ -119,4 +122,15 @@ class SittingManager
 
         return $this->sittingRepository->findByStructure($user->getStructure(), $search, $status);
     }
+
+    public function isAlreadySent(Sitting $sitting): bool
+    {
+        foreach ($sitting->getConvocations() as $convocation) {
+            if ($convocation->getIsActive()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
