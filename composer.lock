@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "acfcc97284f83d28cd899e351b94c359",
+    "content-hash": "9cea7ffa0ef62e8975b30e7b88a43839",
     "packages": [
         {
             "name": "apy/breadcrumbtrail-bundle",

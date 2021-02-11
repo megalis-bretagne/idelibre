@@ -6,10 +6,12 @@ services:
     image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/idelibre/idelibre:master
 
     env_file:
-      - .env.docker
+      - .env.docker.local
     volumes:
-      - data-public:/app/public
+      #- data-public:/app/public
       - ./docker-resources/zz-idelibre.conf:/usr/local/etc/php-fpm.d/zz-idelibre.conf
+      - ./docker-resources/empty:/usr/local/etc/php/conf.d/opcache.ini
+      - .:/app
     command: ["/app/docker-resources/initApp.sh"]
 
   nginx-idelibre:
@@ -26,13 +28,27 @@ services:
       - ./docker-resources/options-ssl-nginx.conf:/etc/letsencrypt/options-ssl-nginx.conf
       - /data/certbot/conf:/etc/letsencrypt
       - /data/certbot/www:/var/www/certbot
-      - data-public:/app/public:ro
-
+      #- data-public:/app/public:ro
+      - .:/app
   certbot:
     image: certbot/certbot
     volumes:
       - /data/certbot/conf:/etc/letsencrypt
       - /data/certbot/www:/var/www/certbot
+
+  lshorodatage:
+    container_name: lshorodatage
+    image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/lshorodatage:master
+    ports:
+      - 3000:3000
+    environment:
+      - NODE_ENV=production
+      - POSTGRES_HOST=172.17.0.1
+      - POSTGRES_DB=lshorodatage
+      - POSTGRES_USER=idelibre
+      - POSTGRES_PASSWORD=idelibre
+      - POSTGRES_PORT=5432
+    command: ["/app/docker-resources/init.sh"]
 
 volumes:
   data-public:
