@@ -19,13 +19,11 @@ class TimestampManager
     private TimestampContentFileGenerator $contentGenerator;
     private LshorodatageInterface $lshorodatage;
 
-
     public function __construct(
         EntityManagerInterface $em,
         TimestampContentFileGenerator $contentGenerator,
         LshorodatageInterface $lshorodatage
-    )
-    {
+    ) {
         $this->em = $em;
         $this->contentGenerator = $contentGenerator;
         $this->lshorodatage = $lshorodatage;
@@ -57,7 +55,6 @@ class TimestampManager
 
         return $timeStamp;
     }
-
 
     private function saveTimestampInFile(StreamInterface $tsToken, string $path): string
     {
