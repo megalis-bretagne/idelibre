@@ -186,6 +186,9 @@
     "league/csv": {
         "version": "9.6.1"
     },
+    "libriciel/lshorodatage-api-wrapper": {
+        "version": "1.0.0"
+    },
     "liip/test-fixtures-bundle": {
         "version": "1.9.1"
     },
