@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-
-use App\lsHorodatage\LsHorodatage;
+use Libriciel\LshorodatageApiWrapper\LsHorodatage;
+use Libriciel\LshorodatageApiWrapper\LshorodatageInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -16,8 +16,11 @@ class CheckController extends AbstractController
     /**
      * @Route("/check", name="check")
      */
-    public function index(LsHorodatage $lsHorodatage, Request $request): Response
+    public function index(LshorodatageInterface $lsHorodatage, Request $request): Response
     {
+        $res = $lsHorodatage->createTimestampToken('/tmp/toto ');
+
+        dd($res->getContents());
 
         $form = $this->createFormBuilder()
             ->add('file', FileType::class)
@@ -26,31 +29,29 @@ class CheckController extends AbstractController
 
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             /** @var UploadedFile $file */
             $file = $form->get('file')->getData();
             $token = $form->get('token')->getData();
 
             $lsHorodatage->setUrl('http://lshorodatage:3000');
-          //  $lsHorodatageApiWrapper->setUrl('http://lshorodatage:3000');
-          //  $lsHorodatageApiWrapper->setApiKey('lshorodatage');
+
+            //  $lsHorodatageApiWrapper->setUrl('http://lshorodatage:3000');
+            //  $lsHorodatageApiWrapper->setApiKey('lshorodatage');
             //  $res = $lsHorodatageApiWrapper->check();
-          //  $res = $lsHorodatageApiWrapper->createTimestampToken($file);
-          //  dd($res);
+            //  $res = $lsHorodatageApiWrapper->createTimestampToken($file);
+            //  dd($res);
             //dd($lsHorodatage->ping()->getContents());
-           // $lsHorodatage->createTimestampToken($file->getRealPath());
+            // $lsHorodatage->createTimestampToken($file->getRealPath());
 
             //$lsHorodatage->readTimestampToken($file->getRealPath());
 
-           $res = $lsHorodatage->verifyTimestampToken($file->getRealPath(), $token->getRealPath());
+            $res = $lsHorodatage->verifyTimestampToken($file->getRealPath(), $token->getRealPath());
             dd($res);
         }
-
 
         return $this->render('check/index.html.twig', [
             'form' => $form->createView(),
         ]);
-
-
     }
 }

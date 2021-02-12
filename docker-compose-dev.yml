@@ -8,8 +8,10 @@ services:
     env_file:
       - .env.docker.local
     volumes:
-      - data-public:/app/public
+      #- data-public:/app/public
       - ./docker-resources/zz-idelibre.conf:/usr/local/etc/php-fpm.d/zz-idelibre.conf
+      - ./docker-resources/empty:/usr/local/etc/php/conf.d/opcache.ini
+      - .:/app
     command: ["/app/docker-resources/initApp.sh"]
 
   nginx-idelibre:
@@ -26,7 +28,8 @@ services:
       - ./docker-resources/options-ssl-nginx.conf:/etc/letsencrypt/options-ssl-nginx.conf
       - /data/certbot/conf:/etc/letsencrypt
       - /data/certbot/www:/var/www/certbot
-      - data-public:/app/public:ro
+      #- data-public:/app/public:ro
+      - .:/app
   certbot:
     image: certbot/certbot
     volumes:

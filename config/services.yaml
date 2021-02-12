@@ -52,3 +52,11 @@ services:
 
     App\Service\Email\EmailServiceInterface:
       factory: ['@App\Service\Email\EmailServiceFactory', 'chooseImplementation']
+
+    Libriciel\LshorodatageApiWrapper\LsHorodatage:
+      calls:
+        - setUrl: ['http://lshorodatage:3000']
+
+
+    Libriciel\LshorodatageApiWrapper\LshorodatageInterface:
+      factory: ['@App\Service\Timestamp\LshorodatageFactory', 'chooseImplementation']
