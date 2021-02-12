@@ -53,6 +53,7 @@ class StructureCreator
         $structure->setGroup($group);
         $this->em->persist($structure);
 
+        $this->addSuffixToUsername($user, $structure->getSuffix());
         $errors = $this->userManager->saveStructureAdmin($user, $plainPassword, $structure);
 
         if (!empty($errors)) {
@@ -67,6 +68,15 @@ class StructureCreator
 
         return null;
     }
+
+
+    private function addSuffixToUsername(User $user, string $suffix): void
+    {
+        $usernameWithSuffix = $user->getUsername() . '@' . $suffix;
+        $user->setUsername($usernameWithSuffix);
+
+    }
+
 
     /**
      * @throws ComelusConnectorException
