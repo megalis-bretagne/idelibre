@@ -18,7 +18,7 @@ class CheckController extends AbstractController
      */
     public function index(LshorodatageInterface $lsHorodatage, Request $request): Response
     {
-        $res = $lsHorodatage->createTimestampToken('/tmp/toto');
+        $res = $lsHorodatage->createTimestampToken('/tmp/toto ');
 
         dd($res->getContents());
 
