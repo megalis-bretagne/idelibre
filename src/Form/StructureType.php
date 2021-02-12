@@ -28,6 +28,10 @@ class StructureType extends AbstractType
             ->add('replyTo', TextType::class, [
                 'label' => 'Email de réponse',
             ])
+            ->add('siren', TextType::class, [
+                'label' => 'Numéro de siren',
+                'required' => false,
+            ])
             ->add('timezone', EntityType::class, [
                 'class' => Timezone::class,
                 'choice_label' => 'name',

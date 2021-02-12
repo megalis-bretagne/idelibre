@@ -37,6 +37,12 @@ class Structure
     private $replyTo;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Length(max="255")
+     */
+    private $siren;
+
+    /**
      * @ORM\OneToMany(targetEntity=User::class, mappedBy="structure")
      */
     private $users;
@@ -158,6 +164,18 @@ class Structure
     public function setSuffix(string $suffix): self
     {
         $this->suffix = $suffix;
+
+        return $this;
+    }
+
+    public function getSiren(): string
+    {
+        return $this->siren;
+    }
+
+    public function setSiren($siren): self
+    {
+        $this->siren = $siren;
 
         return $this;
     }

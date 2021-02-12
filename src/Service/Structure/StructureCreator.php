@@ -69,14 +69,11 @@ class StructureCreator
         return null;
     }
 
-
     private function addSuffixToUsername(User $user, string $suffix): void
     {
         $usernameWithSuffix = $user->getUsername() . '@' . $suffix;
         $user->setUsername($usernameWithSuffix);
-
     }
-
 
     /**
      * @throws ComelusConnectorException
