@@ -7,9 +7,21 @@
     {{ macro.backButton('sitting_index') }}
 {% endblock %}
 
-{% block pageSaveReturn %}
-    {{ macro.save('sitting_index') }}
+
+{% block pageForm %}
+
+    {{ form_start(form) }}
+    {{ form_row(form.convocationFile) }}
+
+    {{ form_widget(form) }}
+    <div class="float-right">
+        {% block pageSaveReturn %}{{ macro.save('sitting_index') }}{% endblock %}
+    </div>
+    {{ form_end(form) }}
+
 {% endblock %}
+
+
 
 
 
