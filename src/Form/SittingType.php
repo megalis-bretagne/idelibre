@@ -9,7 +9,6 @@ use App\Repository\TypeRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -45,7 +44,7 @@ class SittingType extends AbstractType
                 'label' => 'Lieu',
                 'required' => false,
             ])
-            ->add('convocationFile', FileType::class, [
+            ->add('convocationFile', LsFileType::class, [
                 'label' => $isNew ? 'Fichier de convocation' : 'Remplacer le fichier de convocation',
                 'attr' => [
                     'placeholder' => 'Sélectionner un fichier',
@@ -55,7 +54,7 @@ class SittingType extends AbstractType
                 'required' => $isNew,
             ])
 
-            ->add('invitationFile', FileType::class, [
+            ->add('invitationFile', LsFileType::class, [
                 'label' => $isNew ? 'Fichier d\'invitation' : 'Remplacer le fichier d\'invitation',
                 'attr' => [
                     'placeholder' => 'Sélectionner un fichier',

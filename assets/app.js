@@ -18,6 +18,23 @@ $(document).ready(function () {
     };
      flatpickr($('input[type=datetime-local]'), config);
 
+
+    $("input.custom-file-upload").change(function () {
+        let $input = $(this);
+        $input.parent().attr('hidden', true);
+        let $detailDiv = $(this).parent().next();
+        let removeBtn = `<button  type="button" class="btn btn-outline-danger borderless"><span class="fas fa-trash-alt"> </span></button>`
+        $detailDiv.html(removeBtn + $(this)[0].files[0].name);
+        $detailDiv.attr('hidden', false);
+
+        $detailDiv.children().first().click(function() {
+            $detailDiv.attr('hidden', true);
+            $input.val('');
+            $input.parent().attr('hidden', false);
+        });
+
+    })
+
 })
 
 //const getMessage = require('./getMessage');

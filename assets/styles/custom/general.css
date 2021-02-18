@@ -158,3 +158,8 @@ input[type="file"].custom-file-upload {
     cursor: pointer;
 }
 
+
+.div-info {
+    border-radius: 5px;
+    background: var(--ls-grey-100);
+}
