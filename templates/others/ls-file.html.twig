@@ -1,5 +1,4 @@
 {% block ls_file_row %}
-
     <div class="form-group">
         {{- form_errors(form) -}}
         {{- form_label(form) -}} <br>
@@ -14,6 +13,8 @@
             {{ attr.placeholder is defined ? attr.placeholder : "Parcourir" }}
         </label>
         <div class="div-info mb-4" hidden="true">
+            <span class="{{ remove_icon }} btn btn-outline-danger borderless"> </span>
+            <span class="file-title"></span>
 
         </div>
     </div>

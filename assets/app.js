@@ -16,18 +16,18 @@ $(document).ready(function () {
         altFormat: "d/m/y : H:i",
         "locale": French
     };
-     flatpickr($('input[type=datetime-local]'), config);
+    flatpickr($('input[type=datetime-local]'), config);
 
 
     $("input.custom-file-upload").change(function () {
         let $input = $(this);
         $input.parent().attr('hidden', true);
         let $detailDiv = $(this).parent().next();
-        let removeBtn = `<button  type="button" class="btn btn-outline-danger borderless"><span class="fas fa-trash-alt"> </span></button>`
-        $detailDiv.html(removeBtn + $(this)[0].files[0].name);
+        let $fileNameSpan = $(this).parent().next().children().eq(1);
+        $fileNameSpan.html($(this)[0].files[0].name);
         $detailDiv.attr('hidden', false);
 
-        $detailDiv.children().first().click(function() {
+        $detailDiv.children().first().click(function () {
             $detailDiv.attr('hidden', true);
             $input.val('');
             $input.parent().attr('hidden', false);
@@ -40,4 +40,4 @@ $(document).ready(function () {
 //const getMessage = require('./getMessage');
 //import getMessage from './getMessage'
 //console.log(getMessage(5));
-//global.$ = $;
+global.$ = $;
