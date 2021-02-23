@@ -1,0 +1,15 @@
+input[type="file"].ls-file {
+    display: none;
+}
+.ls-file {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+
+.div-info {
+    border-radius: 5px;
+    background: var(--ls-grey-100);
+}
