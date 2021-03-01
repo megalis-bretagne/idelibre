@@ -1,4 +1,5 @@
 <?php
+
 // vendor/bin/ecs check src [--fix ]
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\EasyCodingStandard\ValueObject\Option;
@@ -11,4 +12,3 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         SetList::PSR_12,
     ]);
 };
-

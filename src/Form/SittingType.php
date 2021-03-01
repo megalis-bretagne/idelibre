@@ -52,7 +52,7 @@ class SittingType extends AbstractType
                 ],
                 'mapped' => false,
                 'required' => $isNew,
-                'file_name' => $this->getConvocationFileName($options['data'] ?? null)
+                'file_name' => $this->getConvocationFileName($options['data'] ?? null),
             ])
             ->add('invitationFile', LsFileType::class, [
                 'label' => $isNew ? 'Fichier d\'invitation' : 'Remplacer le fichier d\'invitation',
@@ -62,15 +62,15 @@ class SittingType extends AbstractType
                 ],
                 'mapped' => false,
                 'required' => false,
-                'file_name' => $this->getInvitationFileName($options['data'] ?? null)
+                'file_name' => $this->getInvitationFileName($options['data'] ?? null),
             ])
             ->add('structure', HiddenType::class, [
                 'data' => $options['structure'],
                 'data_class' => null,
             ])
             ->get('structure')->addModelTransformer(new CallbackTransformer(
-                fn() => '',
-                fn() => $options['structure']
+                fn () => '',
+                fn () => $options['structure']
             ));
     }
 
