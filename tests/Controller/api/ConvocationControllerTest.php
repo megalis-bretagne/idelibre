@@ -39,7 +39,7 @@ class ConvocationControllerTest extends WebTestCase
         $this->loadFixtures([
             ConvocationFixtures::class,
             TypeFixtures::class,
-            EmailTemplateFixtures::class
+            EmailTemplateFixtures::class,
         ]);
     }
 
@@ -69,8 +69,6 @@ class ConvocationControllerTest extends WebTestCase
         $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
         $actor = $this->getOneUserBy(['username' => 'actor1@libriciel']);
         $convocation = $this->getOneConvocationBy(['sitting' => $sitting, 'user' => $actor]);
-
-
 
         $this->loginAsAdminLibriciel();
         $this->client->request(Request::METHOD_POST, '/api/convocations/' . $convocation->getId() . '/send');

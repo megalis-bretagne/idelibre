@@ -1,0 +1,22 @@
+{% block ls_file_row %}
+    <div class="form-group">
+        {{- form_errors(form) -}}
+        {{- form_label(form) -}} <br>
+        <label class="ls-file btn btn-primary" title="{{ label }}" {{ file_name is defined ? 'hidden="true"' : '' }}>
+            <input type="file"
+                   id="{{ id }}" name="{{ full_name }}" class="ls-file"
+                    {%- if disabled %} disabled="disabled"{% endif -%}
+                    {%- if required %} required="required"{% endif -%}
+                    {%- if attr.accept is defined %} accept="{{ attr.accept }}"{% endif -%}
+            />
+            <span class="{{ attr.icon is defined ? attr.icon : 'fas fa-plus-circle' }}"> </span>
+            {{ attr.placeholder is defined ? attr.placeholder : "Parcourir" }}
+        </label>
+        <div class="div-info mb-4" {{ file_name is not defined ? 'hidden="true"' : '' }}>
+            <span class="{{ remove_icon }} btn btn-outline-danger borderless"> </span>
+            <span class="file-title">{{ file_name | default("") }}</span>
+
+        </div>
+    </div>
+
+{% endblock %}

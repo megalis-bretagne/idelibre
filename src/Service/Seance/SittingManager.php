@@ -86,17 +86,24 @@ class SittingManager
         $this->fileManager->delete($sitting->getConvocationFile());
         $this->projectManager->deleteProjects($sitting->getProjects());
         $this->convocationManager->deleteConvocations($sitting->getConvocations());
+        // TODO delete invitations
         $this->em->remove($sitting);
         $this->em->flush();
         // TODO remove fullpdf and zip !
     }
 
-    public function update(Sitting $sitting, ?UploadedFile $uploadedFile): void
+    public function update(Sitting $sitting, ?UploadedFile $uploadedConvocationFile, ?UploadedFile $uploadedInvitationFile): void
     {
-        if ($uploadedFile) {
-            $convocationFile = $this->fileManager->replace($uploadedFile, $sitting);
+        if ($uploadedConvocationFile) {
+            $convocationFile = $this->fileManager->replace($uploadedConvocationFile, $sitting);
             $sitting->setConvocationFile($convocationFile);
         }
+
+        if ($uploadedInvitationFile) {
+            $invitationFile = $this->fileManager->replace($uploadedInvitationFile, $sitting);
+            $sitting->setInvitationFile($invitationFile);
+        }
+
         $this->em->persist($sitting);
         $this->em->flush();
 

@@ -6,7 +6,7 @@ import bsCustomFileInput from 'bs-custom-file-input'
 import flatpickr from "flatpickr";
 import {French} from "flatpickr/dist/l10n/fr"
 import './ls-sidebar/ls-sidebar'
-
+import './js/ls-file'
 
 $(document).ready(function () {
     bsCustomFileInput.init()
@@ -16,8 +16,7 @@ $(document).ready(function () {
         altFormat: "d/m/y : H:i",
         "locale": French
     };
-     flatpickr($('input[type=datetime-local]'), config);
-
+    flatpickr($('input[type=datetime-local]'), config);
 })
 
 //const getMessage = require('./getMessage');

@@ -1,14 +1,26 @@
 {% extends 'form.html.twig' %}
 {% import 'macro/_forms.html.twig' as macro %}
 
+
 {% block pageTitle 'Ajouter une séance' %}
 
 {% block pageActions %}
     {{ macro.backButton('sitting_index') }}
 {% endblock %}
 
-{% block pageSaveReturn %}
-    {{ macro.save('sitting_index') }}
+
+
+{% block pageForm %}
+
+    {{ form_start(form) }}
+
+    {{ form_widget(form) }}
+    <div class="float-right">
+        {% block pageSaveReturn %}{{ macro.save('sitting_index') }}{% endblock %}
+    </div>
+
+    {{ form_end(form) }}
+
 {% endblock %}
 
 
