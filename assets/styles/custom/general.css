@@ -145,3 +145,77 @@ body {
     margin-bottom: 80px;
     margin-top: 80px;
 }
+
+
+.nav-tabs .nav-link {
+    border: 1px solid transparent;
+    color: var(--ls-grey-400);
+}
+
+.nav-tabs .nav-link:hover {
+    border-color: transparent transparent;
+    border-bottom: 3px solid !important;
+    color: var(--ls-grey-500);
+}
+
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+    color: var(--ls-dark);
+    background-color: transparent;
+    border-color: transparent transparent;
+    border-bottom: 3px solid !important;
+    font-weight: bold;
+}
+
+
+input[type="file"].project-file-btn {
+    display: none;
+}
+
+.project-file-btn {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+
+.il-project {
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+    padding: 10px;
+    background-color: var(--ls-grey-100);
+}
+
+.il-project .il-border-right {
+    border-right: 2px solid var(--ls-grey-200);
+}
+
+.il-project .il-border-right:hover {
+    cursor: grab;
+}
+
+
+/*  v-select placeholder color */
+.v-select input {
+    color: var(--ls-grey-500);
+}
+
+
+div.annex-list:nth-child(odd) {
+    background-color: var(--ls-grey-200) !important;
+}
+
+.annex-list .annex-item:hover {
+    cursor: grab;
+}
+
+.annex-item {
+    align-items: center;
+}
+
+.project-rank {
+    font-size: 1.5em;
+    border-radius: .4em;
+}
+

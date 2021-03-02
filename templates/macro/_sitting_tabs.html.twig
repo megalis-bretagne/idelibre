@@ -1,6 +1,6 @@
 {% macro editTabs(activeTab, sitting) %}
     <nav class="mb-3">
-        <div class="nav nav-tabs justify-content-end" id="nav-tab" role="tablist">
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
             <a class="nav-item nav-link change-tab {{ activeTab == 'information' ? 'active': '' }}" id="nav-information"
                href="{{ path('edit_sitting_information', {'id': sitting.id}) }}"
                aria-selected="{{ activeTab == 'information' ? 'false' : 'true' }}">Informations</a>
@@ -18,7 +18,7 @@
 
 {% macro showTabs(activeTab, sitting) %}
     <nav class="mb-3">
-        <div class="nav nav-tabs justify-content-end" id="nav-tab" role="tablist">
+        <div class="nav nav-tabs justify-content-start" id="nav-tab" role="tablist">
             <a class="nav-item nav-link {{ activeTab == 'information' ? 'active': '' }}" id="nav-information"
                href="{{ path('sitting_show_information', {'id': sitting.id}) }}"
                aria-selected="{{ activeTab == 'information' ? 'false' : 'true' }}">Informations</a>
