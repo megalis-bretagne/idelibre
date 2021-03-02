@@ -3,15 +3,11 @@
 {% import 'macro/_sitting_tabs.html.twig' as macroTab %}
 
 {% block body %}
-    <div class="col-10 offset-1">
+    <div class="col-12">
         {{ apy_breadcrumb_trail_render(breadcrumb) }}
     </div>
 
-    <div class="col-10 offset-1">
-        {{ macroTab.showTabs('projects', sitting) }}
-    </div>
-
-    <div class="mt-3 col-10 offset-1">
+    <div class="mt-3 col-12">
         <h1>Ordre du jour</h1>
 
         <div class="mt-4">
@@ -19,69 +15,82 @@
         </div>
 
 
-        <div class="col-10 offset-1 mt-4 bg-white">
+        <div class="col-8 offset-2 mt-4 bg-white">
+            {{ macroTab.showTabs('projects', sitting) }}
             <h2>Projets</h2>
             <div class="mt-5"></div>
             {% for project in projects %}
 
-                <div class="alert alert-secondary">
-                    {# firstLine #}
+                <div class="il-project">
                     <div class="row">
-                        <div class="col-1">
-                            <span class="badge badge-primary" style="font-size: 1.5em">{{ project.rank + 1 }}</span>
+                        <div class="col-1 il-border-right">
+                            <span class="badge badge-primary project-rank">{{ project.rank + 1 }}</span>
                         </div>
+                        <div class="coll-11 flex-fill">
 
-                        <div class="col-5">
-                            {{ project.name }}
-                        </div>
+                            {# firstLine #}
+                            <div class="row ml-1 align-items-center">
+                                <div class="col-6">
+                                    <b>{{ project.name }}</b>
+                                </div>
 
-                        <div class="col-5">
-                            {{ project.file.name }}
-                        </div>
+                                <div class="col-5">
+                                    {{ project.file.name }}
+                                </div>
 
-                        <div class="col-1">
-                            <a class="btn btn-outline-secondary borderless"
-                               href="{{ path('file_download', {'id': project.file.id}) }}"
-                               title="Télécharger le project">
-                                <span class="fas fa-download"></span>
-                            </a>
-                        </div>
-
-                    </div>
-                    {# second line #}
-                    <div class="row mt-3">
-                        <div class="col-2">
-
-                        </div>
-
-                        <div class="col-4">
-                            {% if project.reporter %}
-                                {{ project.reporter.firstName }} {{ project.reporter.lastName }}
-                            {% endif %}
-                        </div>
-                        <div class="col-6">
-                            {{ project.theme.fullName |default("") }}
-                        </div>
-                    </div>
-
-                    {# annexes#}
-
-
-                    <div class="col-10 offset-1 mt-1">
-                        {% for annex in project.annexes %}
-
-                            <div class="row">
-                                <span class="">{{ annex.rank + 1}}</span>
-                                <div class="col-10">{{ annex.file.name }}</div>
                                 <div class="col-1">
                                     <a class="btn btn-outline-secondary borderless"
-                                       href="{{ path('file_download', {'id': annex.file.id}) }}"
-                                       title="Télécharger l'annexe">
+                                       href="{{ path('file_download', {'id': project.file.id}) }}"
+                                       title="Télécharger le project">
                                         <span class="fas fa-download"></span>
                                     </a>
                                 </div>
+
                             </div>
-                        {% endfor %}
+                            {# second line #}
+                            <div class="row mt-3 ml-1">
+
+                                <div class="col-6">
+                                    {% if project.reporter %}
+                                        Rapporteur : <b>{{ project.reporter.firstName }} {{ project.reporter.lastName }}</b>
+                                    {% endif %}
+                                </div>
+                                <div class="col-6">
+                                    Theme : <b>{{ project.theme.fullName |default("") }}</b>
+                                </div>
+                            </div>
+
+                            {# annexes #}
+
+
+                            <div class="mt-3 ">
+                                {% if project.annexes | length > 0 %}
+                                    <div class="row ml-1 col-12">
+                                        Annexes associées:
+                                    </div>
+
+                                {% endif %}
+
+
+                                <div class="col-12 ml-1 annex-list">
+                                    {% for annex in project.annexes %}
+
+                                        <div class="row annex-item">
+                                            <div class="col-11">{{ annex.rank + 1 }} - {{ annex.file.name }}</div>
+                                            <div class="col-1">
+                                                <a class="btn btn-outline-secondary borderless"
+                                                   href="{{ path('file_download', {'id': annex.file.id}) }}"
+                                                   title="Télécharger l'annexe">
+                                                    <span class="fas fa-download"></span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                        </div>
+
                     </div>
 
 

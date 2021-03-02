@@ -2,9 +2,6 @@
 {% import 'macro/_forms.html.twig' as macro %}
 {% import 'macro/_sitting_tabs.html.twig' as macroTab %}
 
-{% block pageTop %}
-    {{ macroTab.editTabs('information', sitting) }}
-{% endblock %}
 
 
 {% block pageTitle 'Modifier les informations d\'une séance' %}
@@ -13,8 +10,17 @@
     {{ macro.backButton('sitting_index') }}
 {% endblock %}
 
-{% block pageSaveReturn %}
-    {{ macro.save('sitting_index') }}
+
+{% block pageForm %}
+
+    {{ macroTab.editTabs('information', sitting) }}
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <div class="float-right">
+        {% block pageSaveReturn %} {{ macro.save('sitting_index') }} {% endblock %}
+    </div>
+    {{ form_end(form) }}
 
     <div id="confirm-not-save" class="modal fade" role="dialog" data-backdrop="static">
         <div class="modal-dialog">
