@@ -7,6 +7,8 @@ import flatpickr from "flatpickr";
 import {French} from "flatpickr/dist/l10n/fr"
 import './ls-sidebar/ls-sidebar'
 import './js/ls-file'
+import './js/comelus'
+import './js/lsmessage'
 
 $(document).ready(function () {
     bsCustomFileInput.init()

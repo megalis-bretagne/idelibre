@@ -60,3 +60,7 @@ services:
 
     Libriciel\LshorodatageApiWrapper\LshorodatageInterface:
       factory: ['@App\Service\Timestamp\LshorodatageFactory', 'chooseImplementation']
+
+    Libriciel\ComelusApiWrapper\ComelusWrapper:
+
+    Libriciel\LsMessageWrapper\LsMessageWrapper:
