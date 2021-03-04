@@ -7,16 +7,21 @@ use App\Entity\Connector\LsmessageConnector;
 use App\Entity\Structure;
 use App\Repository\Connector\LsmessageConnectorRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Libriciel\LsMessageWrapper\LsMessageException;
+use Libriciel\LsMessageWrapper\LsMessageWrapper;
 
 class LsmessageConnectorManager
 {
     private EntityManagerInterface $em;
     private LsmessageConnectorRepository $lsmessageConnectorRepository;
 
-    public function __construct(EntityManagerInterface $em, LsmessageConnectorRepository $lsmessageConnectorRepository)
+    private LsMessageWrapper $lsMessageWrapper;
+
+    public function __construct(EntityManagerInterface $em, LsmessageConnectorRepository $lsmessageConnectorRepository, LsMessageWrapper $lsMessageWrapper)
     {
         $this->em = $em;
         $this->lsmessageConnectorRepository = $lsmessageConnectorRepository;
+        $this->lsMessageWrapper = $lsMessageWrapper;
     }
 
     /**
@@ -41,5 +46,16 @@ class LsmessageConnectorManager
     {
         $this->em->persist($lsmessageConnector);
         $this->em->flush();
+    }
+
+    public function checkApiKey(?string $url, ?string $apiKey): ?array
+    {
+        try {
+            $this->lsMessageWrapper->setUrl($url);
+            $this->lsMessageWrapper->setApiKey($apiKey);
+            return $this->lsMessageWrapper->info();
+        } catch (LsMessageException $e) {
+            return null;
+        }
     }
 }

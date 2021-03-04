@@ -7,8 +7,28 @@
     {{ macro.backButton('connector_index') }}
 {% endblock %}
 
-{% block pageSaveReturn %}
-    {{ macro.save('connector_index') }}
-{% endblock %}
+ {% block pageForm %}
+
+     {{ form_start(form) }}
+
+     {{ form_row(form.url) }}
+     {{ form_row(form.apiKey) }}
+
+     <div id="status" class="alert alert-danger" data-url-check="{{ path("comelus_connector_check") }}">
+         Le connecteur n'est pas correctement configuré
+     </div>
+
+     {{ form_row(form.mailingListId, {attr : {'data-url-list':path("comelus_connector_mailing_lists")}}) }}
+
+     {{ form_widget(form) }}
+
+
+     <div class="float-right">
+         {% block pageSaveReturn %}{{ macro.save('connector_index') }}{% endblock %}
+     </div>
+     {{ form_end(form) }}
+
+ {% endblock %}
+
 
 
