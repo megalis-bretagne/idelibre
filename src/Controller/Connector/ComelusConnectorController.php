@@ -30,8 +30,7 @@ class ComelusConnectorController extends AbstractController
         ComelusConnectorRepository $comelusConnectorRepository,
         ComelusConnectorManager $comelusConnectorManager,
         Request $request
-    ): Response
-    {
+    ): Response {
         $connector = $comelusConnectorRepository->findOneBy(['structure' => $this->getUser()->getStructure()]);
 
         $form = $this->createForm(ComelusConnectorType::class, $connector);
@@ -52,7 +51,6 @@ class ComelusConnectorController extends AbstractController
     /**
      * @Route("/connector/comelus/check/", name="comelus_connector_check")
      * @IsGranted("ROLE_MANAGE_CONNECTORS")
-     *
      */
     public function isValidApiKey(ComelusConnectorManager $comelusConnectorManager, Request $request): JsonResponse
     {
@@ -62,9 +60,9 @@ class ComelusConnectorController extends AbstractController
         if ($comelusConnectorManager->checkApiKey($url, $apiKey)) {
             return $this->json(null);
         }
+
         return $this->json(null, 400);
     }
-
 
     /**
      * @Route("/connector/comelus/mailingLists", name="comelus_connector_mailing_lists")
@@ -81,5 +79,4 @@ class ComelusConnectorController extends AbstractController
             return $this->json(null, 400);
         }
     }
-
 }

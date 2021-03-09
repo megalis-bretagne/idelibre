@@ -55,6 +55,7 @@ class ComelusConnectorManager
             $this->comelusWrapper->setApiKey($apiKey);
             $this->comelusWrapper->setUrl($url);
             $this->comelusWrapper->check();
+
             return true;
         } catch (ComelusException $e) {
             return false;
@@ -68,8 +69,7 @@ class ComelusConnectorManager
     {
         $this->comelusWrapper->setApiKey($apiKey);
         $this->comelusWrapper->setUrl($url);
+
         return $this->comelusWrapper->getMailingLists();
-
-
     }
 }
