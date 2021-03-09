@@ -96,7 +96,7 @@ class SittingControllerTest extends WebTestCase
         $crawler = $this->client->followRedirect();
         $this->assertResponseStatusCodeSame(200);
 
-        $successMsg = $crawler->filter('html:contains("Gérer les destinataires")');
+        $successMsg = $crawler->filter('html:contains("Modifier la séance")');
         $this->assertCount(1, $successMsg);
 
         $this->assertNotEmpty($this->getOneEntityBy(Sitting::class, ['name' => 'unUsedType']));
@@ -109,7 +109,7 @@ class SittingControllerTest extends WebTestCase
         $crawler = $this->client->request(Request::METHOD_GET, '/sitting/edit/' . $sitting->getId() . '/actors');
         $this->assertResponseStatusCodeSame(200);
 
-        $item = $crawler->filter('html:contains("Gérer les destinataires")');
+        $item = $crawler->filter('html:contains("Modifier la séance")');
         $this->assertCount(1, $item);
     }
 
@@ -120,7 +120,7 @@ class SittingControllerTest extends WebTestCase
         $crawler = $this->client->request(Request::METHOD_GET, '/sitting/edit/' . $sitting->getId() . '/projects');
         $this->assertResponseStatusCodeSame(200);
 
-        $item = $crawler->filter('html:contains("Gérer les projets")');
+        $item = $crawler->filter('html:contains("Modifier la séance")');
         $this->assertCount(1, $item);
     }
 
@@ -234,7 +234,7 @@ class SittingControllerTest extends WebTestCase
         $crawler = $this->client->request(Request::METHOD_GET, '/sitting/edit/' . $sitting->getId());
         $this->assertResponseStatusCodeSame(200);
 
-        $item = $crawler->filter('html:contains("Modifier les informations d\'une séance")');
+        $item = $crawler->filter('html:contains("Modifier la séance")');
         $this->assertCount(1, $item);
 
         $form = $crawler->selectButton('Enregistrer')->form();
@@ -248,7 +248,7 @@ class SittingControllerTest extends WebTestCase
         $crawler = $this->client->followRedirect();
         $this->assertResponseStatusCodeSame(200);
 
-        $successMsg = $crawler->filter('html:contains("Modifier les informations d\'une séance")');
+        $successMsg = $crawler->filter('html:contains("Modifier la séance")');
         $this->assertCount(1, $successMsg);
 
         $this->assertNotEmpty($this->getOneEntityBy(Sitting::class, ['place' => 'MyUniquePlace']));

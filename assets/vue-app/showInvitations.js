@@ -1,6 +1,7 @@
 import Vue from 'vue/dist/vue';
 import axios from 'axios';
 import dayjs from 'dayjs';
+import './vue-app.css';
 
 
 Vue.filter('formatDateString', function (value) {

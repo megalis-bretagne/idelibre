@@ -1,5 +1,7 @@
+import './vue-app.css';
 import $ from 'jquery'
 import 'bootstrap'
+
 
 let isDirty = false;
 $('input, select').click(function () {
