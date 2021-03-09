@@ -87,7 +87,7 @@ class SittingController extends AbstractController
     /**
      * @Route("/sitting/edit/{id}/actors", name="edit_sitting_actor", methods={"GET"})
      * @IsGranted("ROLE_MANAGE_SITTINGS")
-     * @Breadcrumb("Gérer les acteurs")
+     * @Breadcrumb("Modifier")
      */
     public function editUsers(Sitting $sitting, Request $request, ActorManager $actorManager, ConvocationManager $convocationManager): Response
     {
@@ -99,7 +99,7 @@ class SittingController extends AbstractController
     /**
      * @Route("/sitting/edit/{id}/projects", name="edit_sitting_project")
      * IsGranted("ROLE_MANAGE_SITTINGS")
-     * @Breadcrumb("Gérer les projets")
+     * @Breadcrumb("Modifier")
      */
     public function editProjects(Sitting $sitting): Response
     {
