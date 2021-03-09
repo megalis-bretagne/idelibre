@@ -1,26 +1,43 @@
-{% extends 'form.html.twig' %}
+{% extends 'base.html.twig' %}
 {% import 'macro/_forms.html.twig' as macro %}
 {% import 'macro/_sitting_tabs.html.twig' as macroTab %}
 
 
+{% block body %}
 
-{% block pageTitle 'Modifier les informations d\'une séance' %}
+<div class="col-12">
+    {{ apy_breadcrumb_trail_render(breadcrumb) }}
+</div>
 
-{% block pageActions %}
-    {{ macro.backButton('sitting_index') }}
-{% endblock %}
+<div class="mt-3 col-12">
+    <h1>Modifier les informations d'une séance</h1>
 
-
-{% block pageForm %}
-
-    {{ macroTab.editTabs('information', sitting) }}
-
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <div class="float-right">
-        {% block pageSaveReturn %} {{ macro.save('sitting_index') }} {% endblock %}
+    <div class="mt-4">
+        {{ macro.backButton('sitting_index') }}
     </div>
-    {{ form_end(form) }}
+
+
+</div>
+
+<div class="row mt-4">
+    <div class="col-10 offset-1 form-white">
+        {{ macroTab.editTabs('information', sitting) }}
+
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <div class="float-right">
+            {{ macro.save('sitting_index') }}
+        </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+
+&nbsp
+<div class="col-10 offset-1">
+    {% block bottomPage %}{% endblock %}
+</div>
+
+
 
     <div id="confirm-not-save" class="modal fade" role="dialog" data-backdrop="static">
         <div class="modal-dialog">

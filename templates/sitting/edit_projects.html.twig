@@ -24,7 +24,7 @@
     </div>
 
 
-    <div v-cloak class="col-8 offset-2 mt-4 form-white" id="app">
+    <div v-cloak class="col-10 offset-1 mt-4 form-white" id="app">
         {{ macroTab.editTabs('projects', sitting) }}
 
 
@@ -47,7 +47,7 @@
             <div v-for="(project, index) in projects">
                 <div class="il-project">
 
-                    <div class="project-left">
+                    <div class="project-left cursor-grab">
                         <span class="badge badge-primary rank">${index + 1}</span>
                     </div>
 
@@ -117,7 +117,7 @@
                         </div>
 
                         <draggable v-model="project.annexes"  v-on:change="projectChange()" class="annex-list">
-                            <div class="project-line annex" v-for="(annex, index) in project.annexes">
+                            <div class="project-line annex cursor-grab" v-for="(annex, index) in project.annexes">
                                 <div class="project-item">
                                     <span class="">${index + 1} - </span> ${annex.fileName}
                                 </div>
@@ -136,28 +136,8 @@
 
 
                     </div>
-
-
-                    {# <draggable v-model="project.annexes" class="mt-1" v-on:change="projectChange()"> #}
-                    {# <div class="col-12 annex-list" v-for="(annex, index) in project.annexes"> #}
-                    {# <div class="row annex-item"> #}
-
-                    {# <div class="col-11"><span class="">${index + 1} - </span> ${annex.fileName}</div> #}
-                    {# <div class="col-1 pr-0"> #}
-                    {# <button class="btn btn-outline-danger borderless float-right" #}
-                    {# @click="deleteAnnex(project.annexes, index)"> #}
-                    {# <span class="fa fa-trash-alt" title="Supprimer"></span> #}
-                    {# </button> #}
-                    {# </div> #}
-                    {# </div> #}
-                    {# </div> #}
-                    {# </draggable> #}
-
                 </div>
-
-
             </div>
-
         </draggable>
 
         <div class="float-right" v-if="projects.length > 0">

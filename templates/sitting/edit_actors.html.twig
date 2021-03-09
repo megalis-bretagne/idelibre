@@ -28,7 +28,7 @@
             <div class="alert alert-success mt-2" v-if="messageInfo"> ${messageInfo}</div>
 
             <div class="row mt-4">
-                <div class="col-8 offset-2 form-white">
+                <div class="col-10 offset-1 form-white">
                     {{ macroTab.editTabs('actors', sitting) }}
 
                     <h2 class="mt-4">Elus</h2>
@@ -47,7 +47,7 @@
 
 
             <div class="row mt-4">
-                <div class="col-8 offset-2 form-white">
+                <div class="col-10 offset-1 form-white">
                     <div class="form-group">
                         <label for="actors">Ajouter des élus</label>
                         <v-select
@@ -74,7 +74,7 @@
 
             {% if sitting.invitationFile %}
                 <div class="row mt-4">
-                    <div class="col-8 offset-2 form-white">
+                    <div class="col-10 offset-1 form-white">
                         <h2 class="mt-4">Personnel administratif</h2>
                         <div class="row">
                             <div v-for="user in inSittingEmployees" class="col-4">
@@ -90,7 +90,7 @@
                 </div>
 
                 <div class="row mt-4">
-                    <div class="col-8 offset-2 form-white">
+                    <div class="col-10 offset-1 form-white">
                         <div class="form-group">
                             <label for="actors">Ajouter des personnels administratifs</label>
                             <v-select
@@ -117,7 +117,7 @@
 
 
                 <div class="row mt-4">
-                    <div class="col-8 offset-2 form-white">
+                    <div class="col-10 offset-1 form-white">
                         <h2 class="mt-4">Invités</h2>
                         <div class="row">
                             <div v-for="user in inSittingGuests" class="col-4">
@@ -135,7 +135,7 @@
 
 
                 <div class="row mt-4">
-                    <div class="col-8 offset-2 form-white">
+                    <div class="col-10 offset-1 form-white">
                         <div class="form-group">
                             <label for="actors">Ajouter des invités</label>
                             <v-select
@@ -161,7 +161,7 @@
             {% endif %}
 
             <div class="row mt-4">
-                <div class="col-8 offset-2">
+                <div class="col-10 offset-1">
                     <div class="float-right">
 
                         <button class="btn btn-outline-dark" @click="cancel()">
