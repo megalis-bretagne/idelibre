@@ -185,6 +185,7 @@ input[type="file"].project-file-btn {
     border-radius: .25rem;
     padding: 10px;
     background-color: var(--ls-grey-100);
+    display: flex;
 }
 
 .il-project .il-border-right {
@@ -202,20 +203,71 @@ input[type="file"].project-file-btn {
 }
 
 
-div.annex-list:nth-child(odd) {
-    background-color: var(--ls-grey-200) !important;
-}
-
-.annex-list .annex-item:hover {
-    cursor: grab;
-}
 
 .annex-item {
     align-items: center;
 }
 
-.project-rank {
-    font-size: 1.5em;
-    border-radius: .4em;
+
+
+
+.annex {
+    display: flex; justify-content: space-between; align-items: center
 }
+
+
+.annexes .annex:nth-child(2n + 1){
+    background-color: var(--ls-grey-200);
+}
+
+
+
+
+.project-container {
+    display: flex;
+}
+
+.project-left {
+    border-right: 2px solid var(--ls-grey-200);
+    flex: 0 0 10px;
+    padding-right: 10px;
+}
+
+.project-right {
+    width: 100%;
+    padding-left: 10px;
+}
+
+.rank {
+    font-size: 30px;
+    border-radius: 10px;
+}
+
+.project-line {
+    display: flex;
+    align-items: center;
+}
+
+.project-item {
+    flex: 1;
+    padding: 5px 5px 5px 5px;
+
+}
+
+.action {
+    flex: 0 0 50px
+}
+
+
+.annex-list .annex:nth-child(2n +1) {
+    background: var(--ls-grey-200);
+}
+
+.annex-list {
+    padding-left: 5px;
+}
+
+
+
+
 
