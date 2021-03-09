@@ -231,6 +231,7 @@ input[type="file"].project-file-btn {
     border-right: 2px solid var(--ls-grey-200);
     flex: 0 0 10px;
     padding-right: 10px;
+    padding-top: 5px;
 }
 
 .project-right {
