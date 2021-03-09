@@ -53,6 +53,7 @@ class LsmessageConnectorManager
         try {
             $this->lsMessageWrapper->setUrl($url);
             $this->lsMessageWrapper->setApiKey($apiKey);
+
             return $this->lsMessageWrapper->info();
         } catch (LsMessageException $e) {
             return null;

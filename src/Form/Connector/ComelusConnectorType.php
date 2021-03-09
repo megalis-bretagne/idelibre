@@ -69,8 +69,6 @@ class ComelusConnectorType extends AbstractType
                 $this->getMailingList($event->getForm());
             }
         );
-
-
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -90,13 +88,9 @@ class ComelusConnectorType extends AbstractType
             'choices' => $options,
             'label' => 'Liste de diffusion',
         ]);
-
-
-
     }
 
-
-    private function getAvailableOptions(?string $url, ?string $apiKey ): ?array
+    private function getAvailableOptions(?string $url, ?string $apiKey): ?array
     {
         if (null === $apiKey || null == $url) {
             return null;
@@ -112,7 +106,7 @@ class ComelusConnectorType extends AbstractType
         foreach ($mailingLists as $mailingList) {
             $formattedList[$mailingList['name']] = $mailingList['id'];
         }
-        return $formattedList;
 
+        return $formattedList;
     }
 }

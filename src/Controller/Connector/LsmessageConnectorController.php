@@ -29,8 +29,7 @@ class LsmessageConnectorController extends AbstractController
         LsmessageConnectorRepository $lsmessageConnectorRepository,
         LsmessageConnectorManager $lsmessageConnectorManager,
         Request $request
-    ): Response
-    {
+    ): Response {
         $connector = $lsmessageConnectorRepository->findOneBy(['structure' => $this->getUser()->getStructure()]);
 
         $form = $this->createForm(LsmessageConnectorType::class, $connector);
@@ -51,7 +50,6 @@ class LsmessageConnectorController extends AbstractController
     /**
      * @Route("/connector/lsmessage/check/", name="lsmessage_connector_check")
      * @IsGranted("ROLE_MANAGE_CONNECTORS")
-     *
      */
     public function isValidApiKey(LsmessageConnectorManager $lsmessageConnectorManager, Request $request): JsonResponse
     {
@@ -60,11 +58,10 @@ class LsmessageConnectorController extends AbstractController
 
         $lsmessageInfo = $lsmessageConnectorManager->checkApiKey($url, $apiKey);
 
-        if(null === $lsmessageInfo ) {
+        if (null === $lsmessageInfo) {
             return $this->json(null, 400);
         }
 
         return $this->json(['balance' => $lsmessageInfo['balance']]);
-
     }
 }
