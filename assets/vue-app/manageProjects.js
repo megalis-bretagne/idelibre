@@ -18,7 +18,11 @@ let app = new Vue({
         projects: [],
         themes: [],
         reporters: [],
-        messageInfo: null
+        messageInfo: null,
+        showModal: false,
+        uploadPercent: 0,
+        messageError: null,
+
     },
 
     methods: {
@@ -72,16 +76,34 @@ let app = new Vue({
             addProjectAndAnnexeFiles(this.projects, formData);
             setProjectsRank(this.projects);
             formData.append('projects', JSON.stringify(this.projects));
+            this.showModal = true;
+            this.uploadPercent = 0;
+            const config = {
+                onUploadProgress: (progressEvent) => {
+                    this.uploadPercent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
 
-            axios.post(`/api/projects/${getSittingId()}`, formData).then(response => {
+                }
+            }
+
+            axios.post(`/api/projects/${getSittingId()}`,
+                formData,
+                config
+            ).then(response => {
+                console.log('done');
                 this.showMessage('Modifications enregistrées');
                 isDirty = false;
+                this.showModal = false;
+                window.scrollTo(0,0);
+            }).catch(e => {
+                this.showModal = false;
+                window.scrollTo(0,0);
+                this.showMessageError('Impossible d\'enregistrer les modifications');
             });
         },
 
 
-        cancel(){
-            axios.get(`/api/projects/${getSittingId()}`).then((response ) => {
+        cancel() {
+            axios.get(`/api/projects/${getSittingId()}`).then((response) => {
                 this.projects = response.data;
                 isDirty = false;
                 this.showMessage('Modifications annulées');
@@ -91,6 +113,11 @@ let app = new Vue({
         showMessage(msg) {
             this.messageInfo = msg;
             setTimeout(() => this.messageInfo = null, 3000);
+        },
+
+        showMessageError(msg) {
+            this.messageError = msg;
+            setTimeout(() => this.messageError = null, 3000);
         },
 
 
