@@ -52,7 +52,7 @@
                                 {% endif %}
                             </div>
                             <div class="project-item">
-                                {% if project.theme.fullName %}
+                                {% if project.theme.fullName is defined %}
                                     Theme : <b>{{ project.theme.fullName }}</b>
                                 {% endif %}
                             </div>
