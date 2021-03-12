@@ -59,7 +59,7 @@
                         <td class="col-3">
                             ${convocation.user.firstName} ${convocation.user.lastName}
                         </td>
-                        <td v-if="convocation.sentTimestamp" class="col-2"> ${convocation.sentTimestamp.createAt | formatDateString }
+                        <td v-if="convocation.sentTimestamp" class="col-2"> ${convocation.sentTimestamp.createdAt | formatDateString }
                         </td>
                         <td v-else class="col-2">
                             <button v-on:click="sendConvocation(convocation.id)" class="btn btn-outline-primary borderless"
@@ -118,7 +118,7 @@
                             <td class="col-3">
                                 ${convocation.user.firstName} ${convocation.user.lastName}
                             </td>
-                            <td v-if="convocation.sentTimestamp" class="col-2"> ${convocation.sentTimestamp.createAt | formatDateString }
+                            <td v-if="convocation.sentTimestamp" class="col-2"> ${convocation.sentTimestamp.createdAt | formatDateString }
                             </td>
                             <td v-else class="col-2">
                                 <button v-on:click="sendConvocation(convocation.id)" class="btn btn-outline-primary borderless"
@@ -177,7 +177,7 @@
                             <td class="col-3">
                                 ${convocation.user.firstName} ${convocation.user.lastName}
                             </td>
-                            <td v-if="convocation.sentTimestamp" class="col-2"> ${convocation.sentTimestamp.createAt | formatDateString }
+                            <td v-if="convocation.sentTimestamp" class="col-2"> ${convocation.sentTimestamp.createdAt | formatDateString }
                             </td>
                             <td v-else class="col-2">
                                 <button v-on:click="sendConvocation(convocation.id)" class="btn btn-outline-primary borderless"

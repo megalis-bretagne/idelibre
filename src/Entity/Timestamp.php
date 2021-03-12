@@ -29,7 +29,7 @@ class Timestamp
      *
      * @var DateTimeInterface
      */
-    private $createAt;
+    private $createdAt;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -50,7 +50,7 @@ class Timestamp
 
     public function __construct()
     {
-        $this->createAt = new DateTimeImmutable();
+        $this->createdAt = new DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -58,9 +58,9 @@ class Timestamp
         return $this->id;
     }
 
-    public function getCreateAt(): ?DateTimeInterface
+    public function getCreatedAt(): ?DateTimeInterface
     {
-        return $this->createAt;
+        return $this->createdAt;
     }
 
     public function getFilePathContent(): ?string

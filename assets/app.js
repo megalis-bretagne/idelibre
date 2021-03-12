@@ -9,6 +9,7 @@ import './ls-sidebar/ls-sidebar'
 import './js/ls-file'
 import './js/comelus'
 import './js/lsmessage'
+import './js/expandable'
 
 $(document).ready(function () {
     bsCustomFileInput.init()
@@ -24,4 +25,4 @@ $(document).ready(function () {
 //const getMessage = require('./getMessage');
 //import getMessage from './getMessage'
 //console.log(getMessage(5));
-//global.$ = $;
+global.$ = $;
