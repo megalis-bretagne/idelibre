@@ -276,4 +276,18 @@ input[type="file"].project-file-btn {
 
 
 
+.expandable:hover {
+    cursor: pointer;
+}
 
+.expand-icon::before {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 500;
+    content: "\f0fe ";
+}
+
+.collapse-icon::before {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 500;
+    content: "\f146 ";
+}

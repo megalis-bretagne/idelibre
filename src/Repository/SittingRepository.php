@@ -74,4 +74,15 @@ class SittingRepository extends ServiceEntityRepository
 
         return $qb;
     }
+
+    public function findActiveFromStructure(Structure $structure): QueryBuilder
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.structure =:structure')
+            ->setParameter('structure', $structure)
+            ->join('s.convocations', 'c')
+            ->join('c.user', 'u')
+            ->addSelect('c')
+            ->addSelect('u');
+    }
 }

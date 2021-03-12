@@ -2,8 +2,8 @@
     <div class="ls-sidebar">
         <section class="ls-sidebar-coll-logo">
             {% if app.user.structure %}
-                {# idelibre ne gere pas encore les logos par collectivités#}
-                {# <img alt="Logo de la ville" src="{{ asset('assets/img/logo_Libriciel.png') }}">#}
+                {# idelibre ne gere pas encore les logos par collectivités #}
+                {# <img alt="Logo de la ville" src="{{ asset('assets/img/logo_Libriciel.png') }}"> #}
                 <b>{{ app.user.structure.name }}</b>
             {% else %}
                 <span>Administration</span>
@@ -113,6 +113,19 @@
                             </ul>
                         </li>
                     {% endif %}
+
+
+                    {% if is_granted('ROLE_MANAGE_SITTINGS') %}
+                        <li class="{{ 'board-nav' in activeNavs ? 'active' : '' }}">
+                            <a href="{{ path('board_index') }}">
+                                <i class="fas fa-tachometer-alt"></i>
+                                <span>Tableau de bord</span>
+                            </a>
+                            <ul class="sub-menu">
+                            </ul>
+                        </li>
+                    {% endif %}
+
                 {% endif %}
 
 

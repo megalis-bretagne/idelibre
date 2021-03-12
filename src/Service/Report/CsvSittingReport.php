@@ -37,6 +37,6 @@ class CsvSittingReport
             return '';
         }
 
-        return $timestamp->getCreateAt()->format('d/m/Y');
+        return $timestamp->getCreatedAt()->format('d/m/Y');
     }
 }

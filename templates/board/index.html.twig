@@ -1,0 +1,57 @@
+{% extends 'dataview.html.twig' %}
+{% import 'macro/_forms.html.twig' as macros %}
+
+{% block pageTitle 'Tableau de board' %}
+
+
+
+
+{% block pageTable %}
+    {% for sitting in sittings %}
+
+        <table class="table table-striped bg-white ">
+            <thead>
+            <tr>
+                <th class="text-secondary expand-icon expandable" style="font-size: 1.2em">
+                    <span class="ml-3">{{ sitting.name }} {{ sitting.date | date('d/m/Y : H:i', timezone) }}</span></th>
+            </tr>
+
+            <tr class="d-flex hidden">
+                <th class="col-4">Utilisateur</th>
+                <th class="col-3">Date d'envoi</th>
+                <th class="col-3">Date de reception</th>
+                <th class="col-2">Présence</th>
+            </tr>
+            </thead>
+            <tbody class="hidden">
+
+            {% for convocation in sitting.convocations %}
+                <tr class="d-flex">
+                    <td>{{ convocation.user.lastname }} {{ convocation.user.firstname }}</td>
+                    <td>
+                        {% if convocation.sentTimestamp is not null %}
+                            {{ convocation.sentTimestamp.createdAt |  date('d/m/Y : H:i', timezone) }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if convocation.receivedTimestamp is not null %}
+                            {{ convocation.receivedTimestamp.createdAt |  date('d/m/Y : H:i', timezone) }}
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            <tr>
+
+            </tr>
+            </tbody>
+
+        </table>
+    {% endfor %}
+
+
+{% endblock %}
+
+
+
+
+
