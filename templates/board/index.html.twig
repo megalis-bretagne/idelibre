@@ -27,17 +27,20 @@
 
             {% for convocation in sitting.convocations %}
                 <tr class="d-flex">
-                    <td>{{ convocation.user.lastname }} {{ convocation.user.firstname }}</td>
-                    <td>
+                    <td class="col-4">{{ convocation.user.lastname }} {{ convocation.user.firstname }}</td>
+                    <td class="col-3">
                         {% if convocation.sentTimestamp is not null %}
                             {{ convocation.sentTimestamp.createdAt |  date('d/m/Y : H:i', timezone) }}
                         {% endif %}
                     </td>
-                    <td>
+                    <td class="col-3">
                         {% if convocation.receivedTimestamp is not null %}
                             {{ convocation.receivedTimestamp.createdAt |  date('d/m/Y : H:i', timezone) }}
                         {% endif %}
                     </td>
+                    <td class="col-2">
+                    </td>
+
                 </tr>
             {% endfor %}
             <tr>
