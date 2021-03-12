@@ -7,6 +7,7 @@ use App\Repository\SittingRepository;
 use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,6 +21,7 @@ class BoardController extends AbstractController
     /**
      * @Breadcrumb("Tableau de bord", routeName="board_index")
      * @Route("/board", name="board_index")
+     * @IsGranted("ROLE_MANAGE_SITTINGS")
      */
     public function index(SittingRepository $sittingRepository, PaginatorInterface $paginator, Request $request): Response
     {
