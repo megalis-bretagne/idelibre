@@ -2,6 +2,7 @@
 
 namespace App\Tests\Repository;
 
+use App\DataFixtures\ConvocationFixtures;
 use App\DataFixtures\RoleFixtures;
 use App\DataFixtures\SittingFixtures;
 use App\DataFixtures\StructureFixtures;
@@ -43,6 +44,7 @@ class SittingRepositoryTest extends WebTestCase
             TypeFixtures::class,
             SittingFixtures::class,
             RoleFixtures::class,
+            ConvocationFixtures::class
         ]);
     }
 
@@ -70,5 +72,12 @@ class SittingRepositoryTest extends WebTestCase
         $structureLs = $this->getOneStructureBy(['name' => 'Libriciel']);
 
         $this->assertCount(2, $this->sittingRepository->findByStructure($structureLs)->getQuery()->getResult());
+    }
+
+
+    public function testFindActiveFromStructure()
+    {
+        $structureLs = $this->getOneStructureBy(['name' => 'Libriciel']);
+        $this->assertCount(1, $this->sittingRepository->findActiveFromStructure($structureLs)->getQuery()->getResult());
     }
 }
