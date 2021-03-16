@@ -28,7 +28,7 @@ let app = new Vue({
         },
         showModalAttendance: false,
         attendanceStatus: [],
-        changedAttendance: {},
+        changedAttendance: [],
         errorMessage: null
     },
 
@@ -104,8 +104,8 @@ let app = new Vue({
             this.showModalAttendance = true;
         },
 
-        changeAttendance(event, convocationId) {
-            this.changedAttendance[convocationId] = event.target.value;
+        changeAttendance(status) {
+            this.changedAttendance.push({convocationId: status.convocationId, attendance: status.attendance, deputy: status.deputy })
         },
 
         saveAttendance() {
@@ -118,7 +118,10 @@ let app = new Vue({
                     this.setErrorMessage("erreur lors de l'enregistrement des présences")
 
                 })
-                .finally(() => this.showModalAttendance = false );
+                .finally(() =>  {
+                    this.showModalAttendance = false
+                    this.changedAttendance = [];
+                });
         },
 
         setErrorMessage(msg) {
@@ -145,7 +148,9 @@ function formatAttendanceStatus(convocations) {
             convocationId: convocation.id,
             firstName: convocation.user.firstName,
             lastName: convocation.user.lastName,
-            attendance: convocation.attendance
+            attendance: convocation.attendance,
+            deputy: convocation.deputy,
+            category: convocation.category
         })
     }
 

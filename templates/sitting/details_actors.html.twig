@@ -98,7 +98,9 @@
                             </span>
 
                         </td>
-                        <td class="col-3"></td>
+                        <td class="col-3">
+                            <span v-if="convocation.deputy"> ${convocation.deputy}</span>
+                        </td>
 
                     </tr>
 
@@ -353,17 +355,23 @@
                                     <div class="modal-body">
                                         <table class="table table-striped">
                                             <tr class="d-flex" v-for="status in attendanceStatus">
-                                                <td class="col-9">
+                                                <td class="col-5">
 
                                                     ${status.firstName} ${status.lastName}
                                                 </td>
                                                 <td class="col-3">
                                                     <select class="select form-control" v-model="status.attendance"
-                                                            @change="changeAttendance($event, status.convocationId)">
+                                                            @change="changeAttendance(status)">
                                                         <option value="">Sans Réponse</option>
                                                         <option value="present">Présent</option>
                                                         <option value="absent">Absent</option>
                                                     </select>
+                                                </td>
+
+                                                <td class="col-4" v-if="status.category === 'convocation'">
+                                                    <input class="select form-control" v-model="status.deputy"
+                                                            @change="changeAttendance(status)">
+                                                    </input>
                                                 </td>
 
 
