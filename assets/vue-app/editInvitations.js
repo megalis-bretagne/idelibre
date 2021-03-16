@@ -9,8 +9,6 @@ import 'bootstrap';
 
 Vue.component('v-select', VueSelect);
 
-console.log(VueSelect);
-
 let app = new Vue({
     delimiters: ['${', '}'],
     el: "#app",
