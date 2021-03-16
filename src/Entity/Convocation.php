@@ -94,6 +94,12 @@ class Convocation
      */
     private $attendance;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"convocation"})
+     */
+    private $deputy;
+
     public function __construct()
     {
         $this->createdAt = new DateTimeImmutable();
@@ -216,6 +222,18 @@ class Convocation
             throw new InvalidArgumentException('attendance not allowed');
         }
         $this->attendance = $attendance;
+
+        return $this;
+    }
+
+    public function getDeputy(): ?string
+    {
+        return $this->deputy;
+    }
+
+    public function setDeputy(?string $deputy): self
+    {
+        $this->deputy = $deputy;
 
         return $this;
     }
