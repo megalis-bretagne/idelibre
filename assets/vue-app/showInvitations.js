@@ -1,7 +1,8 @@
+import './vue-app.css';
+
 import Vue from 'vue/dist/vue';
 import axios from 'axios';
 import dayjs from 'dayjs';
-import './vue-app.css';
 
 
 Vue.filter('formatDateString', function (value) {
@@ -24,7 +25,11 @@ let app = new Vue({
             actor: "",
             guest: "",
             employee: ""
-        }
+        },
+        showModalAttendance: false,
+        attendanceStatus: [],
+        changedAttendance: {},
+        errorMessage: null
     },
 
     computed: {
@@ -57,14 +62,14 @@ let app = new Vue({
 
         sendConvocations(type) {
             let url = `/api/sittings/${getSittingId()}/sendConvocations`;
-            if(type === 'Actor') {
+            if (type === 'Actor') {
                 url += "?userProfile=Actor"
             }
-            if(type === 'Employee') {
+            if (type === 'Employee') {
                 url += "?userProfile=Employee"
             }
 
-            if(type === 'Guest') {
+            if (type === 'Guest') {
                 url += "?userProfile=Guest"
             }
 
@@ -86,8 +91,41 @@ let app = new Vue({
         },
 
         resetFilters() {
-            this.filter = { actor: "", guest: "", employees: "" };
+            this.filter = {actor: "", guest: "", employees: ""};
+        },
+
+        openShowModalAttendance() {
+            this.attendanceStatus = [
+                ...formatAttendanceStatus(this.actorConvocations),
+                ...formatAttendanceStatus(this.employeeConvocations),
+                ...formatAttendanceStatus(this.guestConvocations)
+            ];
+
+            this.showModalAttendance = true;
+        },
+
+        changeAttendance(event, convocationId) {
+            this.changedAttendance[convocationId] = event.target.value;
+        },
+
+        saveAttendance() {
+            axios.post(`/api/convocations/attendance`,  this.changedAttendance).then(
+                (response) => {
+                    this.getConvocations()
+                })
+                .catch((e) => {
+                    console.log(e);
+                    this.setErrorMessage("erreur lors de l'enregistrement des présences")
+
+                })
+                .finally(() => this.showModalAttendance = false );
+        },
+
+        setErrorMessage(msg) {
+            this.errorMessage = msg
+            setTimeout(() => this.errorMessage = null, 3000);
         }
+
 
     },
 
@@ -96,6 +134,24 @@ let app = new Vue({
         this.getConvocations();
     }
 });
+
+
+
+function formatAttendanceStatus(convocations) {
+    let status = []
+    for (let i = 0; i < convocations.length; i++) {
+        let convocation = convocations[i];
+        status.push({
+            convocationId: convocation.id,
+            firstName: convocation.user.firstName,
+            lastName: convocation.user.lastName,
+            attendance: convocation.attendance
+        })
+    }
+
+    return status;
+}
+
 
 function getSittingId() {
     return window.location.pathname.split('/')[3];

@@ -270,4 +270,16 @@ class ConvocationManager
 
         return $convocations;
     }
+
+    /**
+     * @param array<string, string> $ConvocationAttendances
+     */
+    public function updateConvocationAttendances(array $ConvocationAttendances)
+    {
+        foreach ($ConvocationAttendances as $convocationId => $status) {
+            $convocation = $this->convocationRepository->find($convocationId);
+            $convocation->setAttendance($status);
+        }
+        $this->em->flush();
+    }
 }

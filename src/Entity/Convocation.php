@@ -6,6 +6,7 @@ use App\Repository\ConvocationRepository;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
+use http\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -16,6 +17,9 @@ class Convocation
 {
     public const CATEGORY_CONVOCATION = 'convocation';
     public const CATEGORY_INVITATION = 'invitation';
+    public const PRESENT = 'present';
+    public const ABSENT = 'absent';
+    public const UNDEFINED = '';
 
     /**
      * @ORM\Id
@@ -83,6 +87,12 @@ class Convocation
      * @Assert\NotBlank
      */
     private $category;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"convocation"})
+     */
+    private $attendance;
 
     public function __construct()
     {
@@ -191,6 +201,21 @@ class Convocation
     public function setCategory(string $category): self
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    public function getAttendance(): ?string
+    {
+        return $this->attendance;
+    }
+
+    public function setAttendance(?string $attendance): self
+    {
+        if (!in_array($attendance, [self::PRESENT, self::ABSENT, self::UNDEFINED])) {
+            throw new InvalidArgumentException('attendance not allowed');
+        }
+        $this->attendance = $attendance;
 
         return $this;
     }

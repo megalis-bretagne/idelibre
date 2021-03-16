@@ -9,6 +9,7 @@ use App\Service\Convocation\ConvocationManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ConvocationController extends AbstractController
@@ -39,5 +40,15 @@ class ConvocationController extends AbstractController
         $convocationManager->sendConvocation($convocation);
 
         return $this->json($convocation, 200, [], ['groups' => ['convocation', 'user']]);
+    }
+
+    /**
+     * @Route("/api/convocations/attendance", name="api_convocation_attendance", methods={"POST", "PUT"})
+     */
+    public function setAttendance(ConvocationManager $convocationManager, Request $request): JsonResponse
+    {
+        $convocationManager->updateConvocationAttendances($request->toArray());
+
+        return $this->json(['success' => 'true']);
     }
 }

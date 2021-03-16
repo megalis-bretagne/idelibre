@@ -291,3 +291,7 @@ input[type="file"].project-file-btn {
     font-weight: 500;
     content: "\f146 ";
 }
+
+.opacity-full {
+    opacity: 1 !important;
+}

@@ -2,6 +2,9 @@
 {% import 'macro/_forms.html.twig' as macro %}
 {% import 'macro/_sitting_tabs.html.twig' as macroTab %}
 
+{% block stylesheets %}
+    {{ encore_entry_link_tags('vue-manage-projects') }}
+{% endblock %}
 
 {% block body %}
     <div class="col-12">
@@ -19,18 +22,28 @@
 
         <div v-cloak id="app">
 
+
             <div class="col-10 offset-1 form-white mt-4">
                 {{ macroTab.showTabs('actors', sitting) }}
+
+                <div class="alert alert-danger" v-if="errorMessage">
+                    ${ errorMessage }
+                </div>
 
                 <div class="row">
                     <div class="col-6">
                         <h2>Elus</h2>
                     </div>
                     <div class="col-6">
-                        <button :disabled="isAlreadySentActors" class="btn btn-primary float-right" title="Envoyer" data-target="#confirm"
-                                data-toggle="modal">
-                            <span class="fa fa-paper-plane"></span> Envoyer toutes les convocations
-                        </button>
+                        <div class="float-right">
+                            <button class="btn btn-outline-primary " @click="openShowModalAttendance()">Gerer les Présences
+                            </button>
+                            <button :disabled="isAlreadySentActors" class="btn btn-primary" title="Envoyer"
+                                    data-target="#confirm"
+                                    data-toggle="modal">
+                                <span class="fa fa-paper-plane"></span> Envoyer toutes les convocations
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -56,6 +69,7 @@
                     <tbody>
 
                     <tr class="d-flex" v-for="convocation in filteredActorConvocations">
+
                         <td class="col-3">
                             ${convocation.user.firstName} ${convocation.user.lastName}
                         </td>
@@ -67,7 +81,23 @@
                         </td>
 
                         <td v-if="convocation.receivedTimestamp" class="col-2"> oui (mettre date)</td>
-                        <td class="col-2"></td>
+                        <td v-else class="col-2"></td>
+
+                        <td class="col-2">
+                            <span v-if="!convocation.attendance" class="btn borderless btn-outline-warning disabled opacity-full"
+                                  title="Sans réponse">
+                                <i class="fas fa-pause"></i>
+                            </span>
+                            <span v-else-if="convocation.attendance === 'present'"
+                                  class="btn borderless btn-outline-success disabled opacity-full"
+                                  title="Présent">
+                                <i class="fas fa-check"></i>
+                            </span>
+                            <span v-else class="btn borderless btn-outline-danger disabled opacity-full" title="Absent">
+                                <i class="fas fa-times"></i>
+                            </span>
+
+                        </td>
                         <td class="col-3"></td>
 
                     </tr>
@@ -126,7 +156,24 @@
                             </td>
 
                             <td v-if="convocation.receivedTimestamp" class="col-2"> oui (mettre date)</td>
-                            <td class="col-2"></td>
+                            <td v-else class="col-2"></td>
+
+                            <td class="col-2">
+                            <span v-if="!convocation.attendance" class="btn borderless btn-outline-warning disabled opacity-full"
+                                  title="Sans réponse">
+                                <i class="fas fa-pause"></i>
+                            </span>
+                                <span v-else-if="convocation.attendance === 'present'"
+                                      class="btn borderless btn-outline-success disabled opacity-full"
+                                      title="Présent">
+                                <i class="fas fa-check"></i>
+                            </span>
+                                <span v-else class="btn borderless btn-outline-danger disabled opacity-full" title="Absent">
+                                <i class="fas fa-times"></i>
+                            </span>
+
+                            </td>
+
                             <td class="col-3"></td>
 
                         </tr>
@@ -185,7 +232,23 @@
                             </td>
 
                             <td v-if="convocation.receivedTimestamp" class="col-2"> oui (mettre date)</td>
-                            <td class="col-2"></td>
+                            <td v-else class="col-2"></td>
+
+                            <td class="col-2">
+                            <span v-if="!convocation.attendance" class="btn borderless btn-outline-warning disabled opacity-full"
+                                  title="Sans réponse">
+                                <i class="fas fa-pause"></i>
+                            </span>
+                                <span v-else-if="convocation.attendance === 'present'"
+                                      class="btn borderless btn-outline-success disabled opacity-full"
+                                      title="Présent">
+                                <i class="fas fa-check"></i>
+                            </span>
+                                <span v-else class="btn borderless btn-outline-danger disabled opacity-full" title="Absent">
+                                <i class="fas fa-times"></i>
+                            </span>
+
+                            </td>
                             <td class="col-3"></td>
 
                         </tr>
@@ -273,9 +336,60 @@
                     </div>
                 </div>
             </div>
+
+
+            <div v-if="showModalAttendance">
+                <transition name="modal">
+                    <div class="modal-mask">
+                        <div class="modal-wrapper">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Gestion des présences</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true" @click="showModalAttendance = false">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <table class="table table-striped">
+                                            <tr class="d-flex" v-for="status in attendanceStatus">
+                                                <td class="col-9">
+
+                                                    ${status.firstName} ${status.lastName}
+                                                </td>
+                                                <td class="col-3">
+                                                    <select class="select form-control" v-model="status.attendance"
+                                                            @change="changeAttendance($event, status.convocationId)">
+                                                        <option value="">Sans Réponse</option>
+                                                        <option value="present">Présent</option>
+                                                        <option value="absent">Absent</option>
+                                                    </select>
+                                                </td>
+
+
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" @click="showModalAttendance = false">Annuler
+                                        </button>
+                                        <button type="button" class="btn btn-primary" @click="saveAttendance()">Enregistrer</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </transition>
+            </div>
+
+
         </div>
 
     </div>
+
+
+
+
 
 
 {% endblock %}
