@@ -271,9 +271,6 @@ class ConvocationManager
         return $convocations;
     }
 
-    /**
-     * @param array $convocationAttendances
-     */
     public function updateConvocationAttendances(array $convocationAttendances)
     {
         foreach ($convocationAttendances as $convocationAttendance) {
