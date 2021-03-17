@@ -31,11 +31,14 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-3">
                         <h2>Elus</h2>
                     </div>
-                    <div class="col-6">
+                    <div class="col-9">
                         <div class="float-right">
+
+                            <button class="btn btn-outline-primary " @click="openShowModalNotifyAgain()">Notifier à nouveau
+                            </button>
                             <button class="btn btn-outline-primary " @click="openShowModalAttendance()">Gerer les Présences
                             </button>
                             <button :disabled="isAlreadySentActors" class="btn btn-primary" title="Envoyer"
@@ -390,6 +393,46 @@
                 </transition>
             </div>
 
+
+
+
+
+
+            <div v-if="showModalNotifyAgain">
+                <transition name="modal">
+                    <div class="modal-mask">
+                        <div class="modal-wrapper">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Notifier les convoqués et invités</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true" @click="showModalNotifyAgain = false">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <label for="object">Objet</label>
+                                            <input type="text" class="form-control"  id="object" placeholder="Objet" v-model="notification.object">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="content">Message</label>
+                                            <textarea class="form-control"  id="content" placeholder="Votre message ..." rows="7" v-model="notification.content"> </textarea>
+                                        </div>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" @click="showModalNotifyAgain = false">Annuler
+                                        </button>
+                                        <button type="button" class="btn btn-primary" @click="sendNotifyAgain()">Envoyer</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </transition>
+            </div>
 
         </div>
 
