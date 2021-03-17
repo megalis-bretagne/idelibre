@@ -4,8 +4,8 @@ namespace App\Service\Email;
 
 class EmailData
 {
-    const TYPE_HTML = 'html';
-    const TYPE_TEXT = 'text';
+    public const TYPE_HTML = 'html';
+    public const TYPE_TEXT = 'text';
 
     private string $subject;
     private string $content;

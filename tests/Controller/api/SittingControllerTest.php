@@ -70,7 +70,7 @@ class SittingControllerTest extends WebTestCase
     {
         $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
         $this->loginAsAdminLibriciel();
-        $this->client->request(Request::METHOD_POST, '/api/sittings/' . $sitting->getId() . '/notifyAgain', [],[],[],json_encode(['object' => 'test', 'content' => 'test']));
+        $this->client->request(Request::METHOD_POST, '/api/sittings/' . $sitting->getId() . '/notifyAgain', [],[],[],json_encode(['object' => 'test', 'content' => 'test'm ]));
         $this->assertResponseStatusCodeSame(200);
     }
 }

@@ -47,10 +47,9 @@ class SimpleEmailService implements EmailServiceInterface
         }
     }
 
-
     private function selectEmailType(string $type): string
     {
-        if ($type === EmailData::TYPE_TEXT) {
+        if (EmailData::TYPE_TEXT === $type) {
             return 'text/plain';
         }
 
