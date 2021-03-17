@@ -84,4 +84,60 @@ class ConvocationControllerTest extends WebTestCase
         $tokenPath = "{$bag->get('token_directory')}{$sitting->getStructure()->getId()}/$year/{$sitting->getId()}";
         $this->assertEquals(2, $this->countFileInDirectory($tokenPath));
     }
+
+    public function testSetAttendanceNoLogin()
+    {
+        $this->client->request(Request::METHOD_POST, '/api/convocations/attendance',
+            [
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                ]
+            ]);
+        $this->assertResponseStatusCodeSame(302);
+    }
+
+    public function testSetAttendance()
+    {
+
+        $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
+        $actor = $this->getOneUserBy(['username' => 'actor1@libriciel']);
+        $convocation = $this->getOneConvocationBy(['sitting' => $sitting, 'user' => $actor]);
+
+        $data = [['convocationId' => $convocation->getId(), 'attendance' => 'absent', 'deputy' => 'John Doe']];
+
+        $this->loginAsAdminLibriciel();
+
+        $this->client->request(Request::METHOD_POST,
+            '/api/convocations/attendance',
+            [],
+            [],
+            [],
+            json_encode($data)
+        );
+        $this->assertResponseStatusCodeSame(200);
+        $this->entityManager->refresh($convocation);
+        $this->assertEquals('absent', $convocation->getAttendance());
+        $this->assertEquals('John Doe', $convocation->getDeputy());
+    }
+
+
+    public function testSetAttendanceConvocationNotExists()
+    {
+        $randomUUID ='ce854a57-0e0b-459e-b93e-53239680b30e';
+
+        $data = [['convocationId' => $randomUUID, 'attendance' => 'absent', 'deputy' => 'John Doe']];
+
+        $this->loginAsAdminLibriciel();
+
+        $this->client->request(Request::METHOD_POST,
+            '/api/convocations/attendance',
+            [],
+            [],
+            [],
+            json_encode($data)
+        );
+        $this->assertResponseStatusCodeSame(404);
+
+    }
+
 }
