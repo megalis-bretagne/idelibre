@@ -4,6 +4,7 @@ namespace App\Controller\api;
 
 use App\Entity\Sitting;
 use App\Service\Convocation\ConvocationManager;
+use App\Service\Email\NotificationService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -27,13 +28,11 @@ class SittingController extends AbstractController
      * @Route("/api/sittings/{id}/notifyAgain", name="api_convocations_send", methods={"POST"})
      * @IsGranted("MANAGE_SITTINGS", subject="sitting")
      */
-    public function notifyAgain(Sitting $sitting, Request $request)
+    public function notifyAgain(Sitting $sitting, NotificationService $notificationService, Request $request): JsonResponse
     {
-        dump($request->toArray());
+        $msg = $request->toArray();
+        $notificationService->reNotify($sitting, $msg['object'], $msg['content']);
+
+        return $this->json(['success' => true]);
     }
-
-
-
-
-
 }

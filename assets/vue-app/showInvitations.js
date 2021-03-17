@@ -30,6 +30,7 @@ let app = new Vue({
         attendanceStatus: [],
         changedAttendance: [],
         errorMessage: null,
+        infoMessage: null,
         showModalNotifyAgain : false,
         notification : {
             object : "",
@@ -108,15 +109,16 @@ let app = new Vue({
         sendNotifyAgain() {
             axios.post(`/api/sittings/${getSittingId()}/notifyAgain`,  this.notification).then(
                 (response) => {
-                    console.log(response);
+                    this.setInfoMessage("Messages envoyés");
+
                 })
                 .catch((e) => {
                     console.log(e);
-                    this.setErrorMessage("erreur lors de l'envoi")
+                    this.setErrorMessage("erreur lors de l'envoi");
 
                 })
                 .finally(() =>  {
-//                    this.showModalNotifyAgain = false
+                    this.showModalNotifyAgain = false
                 });
 
         },
@@ -154,6 +156,10 @@ let app = new Vue({
         setErrorMessage(msg) {
             this.errorMessage = msg
             setTimeout(() => this.errorMessage = null, 3000);
+        },
+        setInfoMessage(msg) {
+            this.infoMessage = msg
+            setTimeout(() => this.infoMessage = null, 3000);
         }
 
 

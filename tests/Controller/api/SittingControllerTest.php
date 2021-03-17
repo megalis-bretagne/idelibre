@@ -65,4 +65,12 @@ class SittingControllerTest extends WebTestCase
 
         // TODO CHECK GENERATED FILES !
     }
+
+    public function testNotifyAgain()
+    {
+        $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
+        $this->loginAsAdminLibriciel();
+        $this->client->request(Request::METHOD_POST, '/api/sittings/' . $sitting->getId() . '/notifyAgain', [],[],[],json_encode(['object' => 'test', 'content' => 'test']));
+        $this->assertResponseStatusCodeSame(200);
+    }
 }
