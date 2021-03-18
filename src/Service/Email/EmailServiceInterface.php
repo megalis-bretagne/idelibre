@@ -13,7 +13,5 @@ interface EmailServiceInterface
      *
      * @throws EmailNotSendException
      */
-    public function sendBatch(array $emails, string $format = EmailData::FORMAT_HTML): void;
+    public function sendBatch(array $emails): void;
 }
-
-//TODO email format should be in emailData !

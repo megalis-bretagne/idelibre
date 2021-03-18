@@ -11,13 +11,13 @@ class EmailData
     private string $content;
     private ?string $to;
     private ?string $replyTo;
+    private string $format;
 
-    public function __construct(string $subject, string $content, ?string $to = null, ?string $replyTo = null)
+    public function __construct(string $subject, string $content, string $format = self::FORMAT_HTML)
     {
         $this->subject = $subject;
         $this->content = $content;
-        $this->to = $to;
-        $this->replyTo = $replyTo;
+        $this->format = $format;
     }
 
     public function getSubject(): string
@@ -53,4 +53,11 @@ class EmailData
 
         return $this;
     }
+
+    public function getFormat(): string
+    {
+        return $this->format;
+    }
+
+
 }

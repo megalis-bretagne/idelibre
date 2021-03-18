@@ -17,9 +17,8 @@ class EmailServiceInterfaceFake implements EmailServiceInterface
 
     /**
      * @param EmailData[] $emails
-     * @param string      $format
      */
-    public function sendBatch(array $emails, $format = EmailData::FORMAT_HTML): void
+    public function sendBatch(array $emails): void
     {
     }
 }

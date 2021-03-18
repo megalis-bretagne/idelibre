@@ -28,7 +28,8 @@ class EmailGenerator
     {
         return new EmailData(
             $this->generate($emailTemplate->getSubject(), $params),
-            $this->generate($emailTemplate->getContent(), $params)
+            $this->generate($emailTemplate->getContent(), $params),
+            $emailTemplate->getFormat()
         );
     }
 
