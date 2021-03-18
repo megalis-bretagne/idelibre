@@ -3,6 +3,7 @@
 namespace App\Service\Email;
 
 use App\Entity\User;
+use App\Service\EmailTemplate\HtmlTag;
 use Exception;
 use Swift_Mailer;
 use Swift_Message;
@@ -24,7 +25,7 @@ class SimpleEmailService implements EmailServiceInterface
      *
      * @throws EmailNotSendException
      */
-    public function sendBatch(array $emails, string $type = EmailData::TYPE_HTML): void
+    public function sendBatch(array $emails): void
     {
         foreach ($emails as $email) {
             try {
@@ -32,8 +33,8 @@ class SimpleEmailService implements EmailServiceInterface
                     ->setFrom($this->bag->get('email_from'))
                     ->setTo($email->getTo())
                     ->setBody(
-                        $email->getContent(),
-                        $this->selectEmailType($type)
+                        $this->getFormattedContent($email),
+                        $this->selectEmailFormat($email->getFormat())
                     );
 
                 if ($email->getReplyTo()) {
@@ -47,9 +48,18 @@ class SimpleEmailService implements EmailServiceInterface
         }
     }
 
-    private function selectEmailType(string $type): string
+    private function getFormattedContent(EmailData $email): string
     {
-        if (EmailData::TYPE_TEXT === $type) {
+        if (EmailData::FORMAT_TEXT === $email->getFormat()) {
+            return $email->getContent();
+        }
+
+        return HtmlTag::START_HTML . $email->getContent() . HtmlTag::END_HTML;
+    }
+
+    private function selectEmailFormat(string $format): string
+    {
+        if (EmailData::FORMAT_TEXT === $format) {
             return 'text/plain';
         }
 

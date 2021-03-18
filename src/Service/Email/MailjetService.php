@@ -3,6 +3,7 @@
 namespace App\Service\Email;
 
 use App\Entity\User;
+use App\Service\EmailTemplate\HtmlTag;
 use Mailjet\Client;
 use Mailjet\Resources;
 use Psr\Log\LoggerInterface;
@@ -26,9 +27,9 @@ class MailjetService implements EmailServiceInterface
      *
      * @throws EmailNotSendException
      */
-    public function sendBatch(array $emails, string $type = EmailData::TYPE_HTML): void
+    public function sendBatch(array $emails): void
     {
-        $messages = $this->generateMailjetMessages($emails, $type);
+        $messages = $this->generateMailjetMessages($emails);
         $response = $this->mailjetClient->post(Resources::$Email, ['body' => ['Messages' => $messages]]);
 
         if (!$response->success()) {
@@ -41,7 +42,7 @@ class MailjetService implements EmailServiceInterface
     /**
      * @param EmailData[] $emails
      */
-    private function generateMailjetMessages(array $emails, string $type): array
+    private function generateMailjetMessages(array $emails): array
     {
         $messages = [];
         foreach ($emails as $email) {
@@ -56,14 +57,13 @@ class MailjetService implements EmailServiceInterface
                     ],
                 ],
                 'Subject' => $email->getSubject(),
-                'HTMLPart' => $email->getContent(),
             ];
 
-            if (EmailData::TYPE_HTML === $type) {
-                $message['HTMLPart'] = $email->getContent();
+            if (EmailData::FORMAT_HTML === $email->getFormat()) {
+                $message['HTMLPart'] = HtmlTag::START_HTML . $email->getContent() . HtmlTag::END_HTML;
             }
 
-            if (EmailData::TYPE_TEXT === $type) {
+            if (EmailData::FORMAT_TEXT === $email->getFormat()) {
                 $message['TextPart'] = $email->getContent();
             }
 

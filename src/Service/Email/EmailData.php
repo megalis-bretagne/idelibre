@@ -4,20 +4,20 @@ namespace App\Service\Email;
 
 class EmailData
 {
-    public const TYPE_HTML = 'html';
-    public const TYPE_TEXT = 'text';
+    public const FORMAT_HTML = 'html';
+    public const FORMAT_TEXT = 'text';
 
     private string $subject;
     private string $content;
     private ?string $to;
     private ?string $replyTo;
+    private string $format;
 
-    public function __construct(string $subject, string $content, ?string $to = null, ?string $replyTo = null)
+    public function __construct(string $subject, string $content, string $format = self::FORMAT_HTML)
     {
         $this->subject = $subject;
         $this->content = $content;
-        $this->to = $to;
-        $this->replyTo = $replyTo;
+        $this->format = $format;
     }
 
     public function getSubject(): string
@@ -52,5 +52,10 @@ class EmailData
         $this->replyTo = $replyTo;
 
         return $this;
+    }
+
+    public function getFormat(): string
+    {
+        return $this->format;
     }
 }

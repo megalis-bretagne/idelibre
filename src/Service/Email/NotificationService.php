@@ -17,7 +17,7 @@ class NotificationService
     {
         $emails = [];
         foreach ($sitting->getConvocations() as $convocation) {
-            $emailData = new EmailData($subject, $content);
+            $emailData = new EmailData($subject, $content, EmailData::FORMAT_TEXT);
             $emailData->setTo($convocation->getUser()->getEmail());
             $emailData->setReplyTo($sitting->getStructure()->getReplyTo());
             $emails[] = $emailData;
@@ -29,6 +29,6 @@ class NotificationService
     public function reNotify(Sitting $sitting, string $subject, string $content)
     {
         $emailDataList = $this->generateEmailDataList($sitting, $subject, $content);
-        $this->emailService->sendBatch($emailDataList, EmailData::TYPE_TEXT);
+        $this->emailService->sendBatch($emailDataList, EmailData::FORMAT_TEXT);
     }
 }

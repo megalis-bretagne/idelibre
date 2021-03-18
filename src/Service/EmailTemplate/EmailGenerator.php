@@ -28,7 +28,8 @@ class EmailGenerator
     {
         return new EmailData(
             $this->generate($emailTemplate->getSubject(), $params),
-            HtmlTag::START_HTML . $this->generate($emailTemplate->getContent(), $params) . HtmlTag::END_HTML
+            $this->generate($emailTemplate->getContent(), $params),
+            $emailTemplate->getFormat()
         );
     }
 
