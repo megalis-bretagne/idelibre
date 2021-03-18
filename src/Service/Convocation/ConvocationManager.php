@@ -248,6 +248,7 @@ class ConvocationManager
             $email = $this->emailGenerator->generateFromTemplateAndConvocation($sitting->getType()->getEmailTemplate(), $convocation);
             $email->setTo($convocation->getUser()->getEmail());
             $email->setReplyTo($sitting->getStructure()->getReplyTo());
+            $emails[] = $email;
         }
 
         return $emails;

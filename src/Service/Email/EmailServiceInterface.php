@@ -13,5 +13,5 @@ interface EmailServiceInterface
      *
      * @throws EmailNotSendException
      */
-    public function sendBatch(array $emails): void;
+    public function sendBatch(array $emails, string $type = EmailData::TYPE_HTML): void;
 }

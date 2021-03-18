@@ -24,7 +24,7 @@ class SimpleEmailService implements EmailServiceInterface
      *
      * @throws EmailNotSendException
      */
-    public function sendBatch(array $emails): void
+    public function sendBatch(array $emails, string $type = EmailData::TYPE_HTML): void
     {
         foreach ($emails as $email) {
             try {
@@ -33,7 +33,7 @@ class SimpleEmailService implements EmailServiceInterface
                     ->setTo($email->getTo())
                     ->setBody(
                         $email->getContent(),
-                        'text/html'
+                        $this->selectEmailType($type)
                     );
 
                 if ($email->getReplyTo()) {
@@ -45,6 +45,15 @@ class SimpleEmailService implements EmailServiceInterface
 
             $this->mailer->send($message);
         }
+    }
+
+    private function selectEmailType(string $type): string
+    {
+        if (EmailData::TYPE_TEXT === $type) {
+            return 'text/plain';
+        }
+
+        return 'text/html';
     }
 
     public function sendReInitPassword(User $user, string $token): void

@@ -29,7 +29,13 @@ let app = new Vue({
         showModalAttendance: false,
         attendanceStatus: [],
         changedAttendance: [],
-        errorMessage: null
+        errorMessage: null,
+        infoMessage: null,
+        showModalNotifyAgain : false,
+        notification : {
+            object : "",
+            content : "",
+        }
     },
 
     computed: {
@@ -94,6 +100,29 @@ let app = new Vue({
             this.filter = {actor: "", guest: "", employees: ""};
         },
 
+        openShowModalNotifyAgain() {
+            this.notification.object = ""
+            this.notification.content = ""
+            this.showModalNotifyAgain  =true;
+        },
+
+        sendNotifyAgain() {
+            axios.post(`/api/sittings/${getSittingId()}/notifyAgain`,  this.notification).then(
+                (response) => {
+                    this.setInfoMessage("Messages envoyés");
+
+                })
+                .catch((e) => {
+                    console.log(e);
+                    this.setErrorMessage("erreur lors de l'envoi");
+
+                })
+                .finally(() =>  {
+                    this.showModalNotifyAgain = false
+                });
+
+        },
+
         openShowModalAttendance() {
             this.attendanceStatus = [
                 ...formatAttendanceStatus(this.actorConvocations),
@@ -127,6 +156,10 @@ let app = new Vue({
         setErrorMessage(msg) {
             this.errorMessage = msg
             setTimeout(() => this.errorMessage = null, 3000);
+        },
+        setInfoMessage(msg) {
+            this.infoMessage = msg
+            setTimeout(() => this.infoMessage = null, 3000);
         }
 
 

@@ -26,9 +26,9 @@ class MailjetService implements EmailServiceInterface
      *
      * @throws EmailNotSendException
      */
-    public function sendBatch(array $emails): void
+    public function sendBatch(array $emails, string $type = EmailData::TYPE_HTML): void
     {
-        $messages = $this->generateMailjetMessages($emails);
+        $messages = $this->generateMailjetMessages($emails, $type);
         $response = $this->mailjetClient->post(Resources::$Email, ['body' => ['Messages' => $messages]]);
 
         if (!$response->success()) {
@@ -41,7 +41,7 @@ class MailjetService implements EmailServiceInterface
     /**
      * @param EmailData[] $emails
      */
-    private function generateMailjetMessages(array $emails): array
+    private function generateMailjetMessages(array $emails, string $type): array
     {
         $messages = [];
         foreach ($emails as $email) {
@@ -58,6 +58,14 @@ class MailjetService implements EmailServiceInterface
                 'Subject' => $email->getSubject(),
                 'HTMLPart' => $email->getContent(),
             ];
+
+            if (EmailData::TYPE_HTML === $type) {
+                $message['HTMLPart'] = $email->getContent();
+            }
+
+            if (EmailData::TYPE_TEXT === $type) {
+                $message['TextPart'] = $email->getContent();
+            }
 
             if ($email->getReplyTo()) {
                 $message['ReplyTo'] = [
