@@ -3,6 +3,7 @@
 namespace App\Service\Email;
 
 use App\Entity\User;
+use App\Service\EmailTemplate\HtmlTag;
 use Exception;
 use Swift_Mailer;
 use Swift_Message;
@@ -32,7 +33,7 @@ class SimpleEmailService implements EmailServiceInterface
                     ->setFrom($this->bag->get('email_from'))
                     ->setTo($email->getTo())
                     ->setBody(
-                        $email->getContent(),
+                        $this->getFormattedContent($email, $type),
                         $this->selectEmailType($type)
                     );
 
@@ -45,6 +46,15 @@ class SimpleEmailService implements EmailServiceInterface
 
             $this->mailer->send($message);
         }
+    }
+
+    private function getFormattedContent(EmailData $email, string $type): string
+    {
+        if (EmailData::TYPE_TEXT === $type) {
+            return $email->getContent();
+        }
+
+        return HtmlTag::START_HTML . $email->getContent() . HtmlTag::END_HTML;
     }
 
     private function selectEmailType(string $type): string

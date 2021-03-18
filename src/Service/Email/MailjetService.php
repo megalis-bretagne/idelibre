@@ -3,6 +3,7 @@
 namespace App\Service\Email;
 
 use App\Entity\User;
+use App\Service\EmailTemplate\HtmlTag;
 use Mailjet\Client;
 use Mailjet\Resources;
 use Psr\Log\LoggerInterface;
@@ -60,7 +61,7 @@ class MailjetService implements EmailServiceInterface
             ];
 
             if (EmailData::TYPE_HTML === $type) {
-                $message['HTMLPart'] = $email->getContent();
+                $message['HTMLPart'] = HtmlTag::START_HTML . $email->getContent() . HtmlTag::END_HTML;
             }
 
             if (EmailData::TYPE_TEXT === $type) {
