@@ -5,10 +5,12 @@ namespace App\Form;
 use App\Entity\EmailTemplate;
 use App\Entity\Type;
 use App\Repository\TypeRepository;
+use App\Service\Email\EmailData;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -35,6 +37,7 @@ class EmailTemplateType extends AbstractType
                 ->add('name', TextType::class, [
                     'label' => 'Intitulé',
                 ])
+
                 ->add('type', EntityType::class, [
                     'label' => 'Type de séance',
                     'placeholder' => 'Sélectionner un type',
@@ -47,6 +50,14 @@ class EmailTemplateType extends AbstractType
                     'choice_label' => 'name',
                 ]);
         }
+
+        $builder->add('format', ChoiceType::class, [
+            'label' => "Format de l'email",
+            'choices' => [
+                'Html' => EmailData::FORMAT_HTML,
+                'Text' => EmailData::FORMAT_TEXT,
+            ]
+        ]);
 
         $builder->add('subject', TextType::class, [
             'label' => 'Objet',

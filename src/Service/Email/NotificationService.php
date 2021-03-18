@@ -29,6 +29,6 @@ class NotificationService
     public function reNotify(Sitting $sitting, string $subject, string $content)
     {
         $emailDataList = $this->generateEmailDataList($sitting, $subject, $content);
-        $this->emailService->sendBatch($emailDataList, EmailData::TYPE_TEXT);
+        $this->emailService->sendBatch($emailDataList, EmailData::FORMAT_TEXT);
     }
 }

@@ -3,7 +3,9 @@
 namespace App\Entity;
 
 use App\Repository\EmailTemplateRepository;
+use App\Service\Email\EmailData;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -80,6 +82,11 @@ class EmailTemplate
      * @ORM\Column(type="boolean")
      */
     private $isAttachment = false;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $format = EmailData::FORMAT_HTML;
 
     public function getId(): ?string
     {
@@ -178,6 +185,24 @@ class EmailTemplate
     public function setIsAttachment(bool $isAttachment): self
     {
         $this->isAttachment = $isAttachment;
+
+        return $this;
+    }
+
+    public function getFormat(): ?string
+    {
+        return $this->format;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function setFormat(string $format): self
+    {
+        if(!in_array($format, [EmailData::FORMAT_HTML, EmailData::FORMAT_TEXT])) {
+            throw new Exception("invalid format");
+        }
+        $this->format = $format;
 
         return $this;
     }
