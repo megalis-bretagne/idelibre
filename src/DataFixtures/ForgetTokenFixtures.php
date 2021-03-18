@@ -19,7 +19,6 @@ class ForgetTokenFixtures extends Fixture implements DependentFixtureInterface
 
         $forgetToken = new ForgetToken($user);
 
-
         $forgetToken->setToken('forgetToken');
 
         $manager->persist($forgetToken);
