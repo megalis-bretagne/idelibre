@@ -56,7 +56,7 @@ class EmailTemplateType extends AbstractType
             'choices' => [
                 'Html' => EmailData::FORMAT_HTML,
                 'Text' => EmailData::FORMAT_TEXT,
-            ]
+            ],
         ]);
 
         $builder->add('subject', TextType::class, [

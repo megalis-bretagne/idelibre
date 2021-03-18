@@ -199,8 +199,8 @@ class EmailTemplate
      */
     public function setFormat(string $format): self
     {
-        if(!in_array($format, [EmailData::FORMAT_HTML, EmailData::FORMAT_TEXT])) {
-            throw new Exception("invalid format");
+        if (!in_array($format, [EmailData::FORMAT_HTML, EmailData::FORMAT_TEXT])) {
+            throw new Exception('invalid format');
         }
         $this->format = $format;
 

@@ -51,7 +51,7 @@ class EmailGeneratorTest extends WebTestCase
         $generator = new EmailGenerator(new DateUtil(), new GenderConverter(), $this->emailTemplateManager);
         $emailData = $generator->generateFromTemplate($emailTemplate, ['#variable#' => 'test']);
         $this->assertEquals(
-            HtmlTag::START_HTML . 'test de génération de message : test' . HtmlTag::END_HTML,
+             'test de génération de message : test',
             $emailData->getContent()
         );
         $this->assertEquals(

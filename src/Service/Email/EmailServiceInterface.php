@@ -15,3 +15,5 @@ interface EmailServiceInterface
      */
     public function sendBatch(array $emails, string $format = EmailData::FORMAT_HTML): void;
 }
+
+//TODO email format should be in emailData !
