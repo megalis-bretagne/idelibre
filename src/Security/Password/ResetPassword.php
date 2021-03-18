@@ -78,10 +78,14 @@ class ResetPassword
      */
     public function getUserFromToken(string $token)
     {
+
         $token = $this->tokenRepository->findOneBy(['token' => $token]);
+
         if (empty($token)) {
             throw new EntityNotFoundException('this token does not exist', 400);
         }
+
+
         if (new DateTime() > $token->getExpireAt()) {
             throw new TimeoutException('this token has expired', 400);
         }

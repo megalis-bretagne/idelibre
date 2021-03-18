@@ -25,7 +25,7 @@ class SittingController extends AbstractController
     }
 
     /**
-     * @Route("/api/sittings/{id}/notifyAgain", name="api_convocations_send", methods={"POST"})
+     * @Route("/api/sittings/{id}/notifyAgain", name="api_sitting_notify_again", methods={"POST"})
      * @IsGranted("MANAGE_SITTINGS", subject="sitting")
      */
     public function notifyAgain(Sitting $sitting, NotificationService $notificationService, Request $request): JsonResponse

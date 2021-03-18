@@ -126,6 +126,7 @@ class SecurityController extends AbstractController
             throw new NotFoundHttpException('this token does not exist');
         }
 
+
         $form = $this->createForm(UserPasswordType::class);
         $form->handleRequest($request);
 
@@ -135,6 +136,7 @@ class SecurityController extends AbstractController
 
             return $this->redirectToRoute('app_login');
         }
+
 
         return $this->render('security/reset_ls.html.twig', [
             'form' => $form->createView(),
