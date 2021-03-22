@@ -53,11 +53,11 @@ class SimpleEmailService implements EmailServiceInterface
 
     private function setAttachment(Swift_Message $message, EmailData $email)
     {
-        if (!$email->isAttachment()) {
+        if (!$email->isAttachment() || !file_exists($email->getAttachment()->getPath())) {
             return;
         }
 
-        if (!file_exists($email->getAttachment()->getPath())) {
+        if (filesize($email->getAttachment()->getPath()) > $this->bag->get('max_email_attachment_file_size')) {
             return;
         }
 
