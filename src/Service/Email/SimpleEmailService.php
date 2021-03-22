@@ -5,6 +5,7 @@ namespace App\Service\Email;
 use App\Entity\User;
 use App\Service\EmailTemplate\HtmlTag;
 use Exception;
+use Swift_Attachment;
 use Swift_Mailer;
 use Swift_Message;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -40,12 +41,30 @@ class SimpleEmailService implements EmailServiceInterface
                 if ($email->getReplyTo()) {
                     $message->setReplyTo($email->getReplyTo());
                 }
+
+                $this->setAttachment($message, $email);
             } catch (Exception $e) {
                 throw new EmailNotSendException($e->getMessage());
             }
 
             $this->mailer->send($message);
         }
+    }
+
+    private function setAttachment(Swift_Message $message, EmailData $email)
+    {
+        if (!$email->isAttachment() || !file_exists($email->getAttachment()->getPath())) {
+            return;
+        }
+
+        if (filesize($email->getAttachment()->getPath()) > $this->bag->get('max_email_attachment_file_size')) {
+            return;
+        }
+
+        $message->attach(
+            Swift_Attachment::fromPath($email->getAttachment()->getPath())
+                ->setFilename($email->getAttachment()->getFileName())
+        );
     }
 
     private function getFormattedContent(EmailData $email): string
