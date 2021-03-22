@@ -3,11 +3,13 @@
 namespace App\Service\Convocation;
 
 use App\Entity\Convocation;
+use App\Entity\File;
 use App\Entity\Role;
 use App\Entity\Sitting;
 use App\Entity\User;
 use App\Repository\ConvocationRepository;
 use App\Repository\UserRepository;
+use App\Service\Email\Attachment;
 use App\Service\Email\EmailNotSendException;
 use App\Service\Email\EmailServiceInterface;
 use App\Service\EmailTemplate\EmailGenerator;
@@ -248,6 +250,7 @@ class ConvocationManager
             $email = $this->emailGenerator->generateFromTemplateAndConvocation($sitting->getType()->getEmailTemplate(), $convocation);
             $email->setTo($convocation->getUser()->getEmail());
             $email->setReplyTo($sitting->getStructure()->getReplyTo());
+            $email->setAttachment($this->getConvocationAttachment($convocation, $sitting));
             $emails[] = $email;
         }
 
@@ -285,5 +288,21 @@ class ConvocationManager
             $convocation->setDeputy($convocationAttendance['deputy']);
         }
         $this->em->flush();
+    }
+
+    private function getConvocationAttachment(Convocation $convocation, Sitting $sitting): Attachment
+    {
+        $file = $this->getConvocationFile($convocation, $sitting);
+
+        return new Attachment($file->getName(), $file->getPath());
+    }
+
+    private function getConvocationFile(Convocation $convocation, Sitting $sitting): ?File
+    {
+        if (Convocation::CATEGORY_CONVOCATION === $convocation->getCategory()) {
+            return $sitting->getConvocationFile();
+        }
+
+        return $sitting->getInvitationFile();
     }
 }

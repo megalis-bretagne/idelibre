@@ -26,11 +26,15 @@ class EmailGenerator
      */
     public function generateFromTemplate(EmailTemplate $emailTemplate, array $params): EmailData
     {
-        return new EmailData(
+        $emailData = new EmailData(
             $this->generate($emailTemplate->getSubject(), $params),
             $this->generate($emailTemplate->getContent(), $params),
             $emailTemplate->getFormat()
         );
+
+        $emailData->setIsAttachment($emailTemplate->getIsAttachment());
+
+        return $emailData;
     }
 
     /**

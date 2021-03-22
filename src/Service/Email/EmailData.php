@@ -12,6 +12,8 @@ class EmailData
     private ?string $to;
     private ?string $replyTo;
     private string $format;
+    private Attachment $attachment;
+    private bool $isAttachment = false;
 
     public function __construct(string $subject, string $content, string $format = self::FORMAT_HTML)
     {
@@ -57,5 +59,29 @@ class EmailData
     public function getFormat(): string
     {
         return $this->format;
+    }
+
+    public function getAttachment(): Attachment
+    {
+        return $this->attachment;
+    }
+
+    public function setAttachment(Attachment $attachment): EmailData
+    {
+        $this->attachment = $attachment;
+
+        return $this;
+    }
+
+    public function isAttachment(): bool
+    {
+        return $this->isAttachment;
+    }
+
+    public function setIsAttachment(bool $isAttachment): EmailData
+    {
+        $this->isAttachment = $isAttachment;
+
+        return $this;
     }
 }

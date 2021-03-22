@@ -73,10 +73,32 @@ class MailjetService implements EmailServiceInterface
                     'Name' => 'Repondre',
                 ];
             }
+
+            $this->setAttachment($message, $email);
+
             $messages[] = $message;
         }
 
         return $messages;
+    }
+
+    private function setAttachment(array &$message, EmailData $email)
+    {
+        if (!$email->isAttachment()) {
+            return;
+        }
+
+        if (!file_exists($email->getAttachment()->getPath())) {
+            return;
+        }
+
+        $message['Attachments'] = [
+            [
+                'ContentType' => $email->getAttachment()->getContentType(),
+                'Filename' => $email->getAttachment()->getFileName(),
+                'Base64Content' => base64_encode(file_get_contents($email->getAttachment()->getPath())),
+            ],
+        ];
     }
 
     public function sendReInitPassword(User $user, string $token): void
