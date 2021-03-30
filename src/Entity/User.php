@@ -112,6 +112,11 @@ class User implements UserInterface
      */
     private $authorizedTypes;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isActive = true;
+
     public function __construct()
     {
         $this->associatedTypes = new ArrayCollection();
@@ -342,6 +347,18 @@ class User implements UserInterface
         if ($this->authorizedTypes->removeElement($authorizedType)) {
             $authorizedType->removeAuthorizedSecretary($this);
         }
+
+        return $this;
+    }
+
+    public function getIsActive(): bool
+    {
+        return $this->isActive;
+    }
+
+    public function setIsActive(bool $isActive): self
+    {
+        $this->isActive = $isActive;
 
         return $this;
     }
