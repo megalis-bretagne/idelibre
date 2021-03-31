@@ -97,9 +97,9 @@
 
 {%- endmacro -%}
 
-{% macro button_open_modal_post(id, title, content, pathAction, icon = "fa fa-paper-plane",
+{% macro button_open_modal_post(id, title, content, pathAction, icon = "fa fa-paper-plane", btn_title = "Envoyer",
     confirmMessage = '<span class="fas fa-exclamation-circle"></span> Confirmer' ) %}
-    <button type="button" class="btn btn-outline-warning borderless" title="Envoyer"
+    <button type="button" class="btn btn-outline-warning borderless" title="{{ btn_title }}"
             data-target="#post{{ id }}" data-toggle="modal">
         <span class="{{ icon }}"></span>
     </button>
