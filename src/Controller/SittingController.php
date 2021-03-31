@@ -145,6 +145,7 @@ class SittingController extends AbstractController
         $this->addFlash('success', 'la séance a bien été supprimée');
 
         $referer = $request->headers->get('referer');
+
         return $this->redirect($referer);
     }
 
