@@ -144,9 +144,9 @@ class SittingController extends AbstractController
         $sittingManager->delete($sitting);
         $this->addFlash('success', 'la séance a bien été supprimée');
 
-        return $this->redirectToRoute('sitting_index', [
-            'page' => $request->get('page'),
-        ]);
+        $referer = $request->headers->get('referer');
+
+        return  $referer ? $this->redirect($referer) : $this->redirectToRoute('sitting_index');
     }
 
     /**
@@ -222,11 +222,12 @@ class SittingController extends AbstractController
      * @Route("/sitting/archive/{id}", name="sitting_archive", methods={"POST"})
      * @IsGranted("MANAGE_SITTINGS", subject="sitting")
      */
-    public function archiveSitting(Sitting $sitting, SittingManager $sittingManager): Response
+    public function archiveSitting(Sitting $sitting, SittingManager $sittingManager, Request $request): Response
     {
         $sittingManager->archive($sitting);
         $this->addFlash('success', 'La séance a été classée');
+        $referer = $request->headers->get('referer');
 
-        return $this->redirectToRoute('sitting_index');
+        return  $referer ? $this->redirect($referer) : $this->redirectToRoute('sitting_index');
     }
 }

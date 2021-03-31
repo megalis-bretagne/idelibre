@@ -43,14 +43,16 @@
                     {{ macros.showButton('sitting_show_information', sitting.id) }}
                     {{ macros.editButton('edit_sitting_information', sitting.id) }}
 
-                    {{ macros.button_open_modal_post(
-                        sitting.id,
-                        'Classement de la séances',
-                        'Voulez vous classez cette séance ?',
-                        'sitting_archive',
-                        'fas fa-book'
-                    ) }}
-
+                    {% if sitting.isArchived == false %}
+                        {{ macros.button_open_modal_post(
+                            sitting.id,
+                            'Classement de la séances',
+                            'Voulez vous classez cette séance ?',
+                            'sitting_archive',
+                            'fas fa-book',
+                            'Classer'
+                        ) }}
+                    {% endif %}
 
                     {{ macros.button_open_modal_delete(
                         sitting.id,
@@ -59,6 +61,7 @@
                         'Voulez vous vraiment supprimer cette séance ?',
                         sittings.currentPageNumber
                     ) }}
+
                 </td>
             </tr>
         {% endfor %}
