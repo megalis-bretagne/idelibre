@@ -128,4 +128,84 @@ class SecurityControllerTest extends WebTestCase
         $flash = $crawler->filter('html:contains("Vous n\'êtes plus connecté dans une structure")');
         $this->assertCount(1, $flash);
     }
+
+
+    public function testLogin()
+    {
+        $crawler = $this->client->request(Request::METHOD_GET, '/login');
+        $this->assertResponseStatusCodeSame(200);
+        $title = $crawler->filter('html:contains("Veuillez saisir vos identifiants de connexion")');
+
+        $this->assertCount(1, $title);
+
+        $form = $crawler->selectButton('Se connecter')->form();
+
+        $form['username'] = "superadmin";
+        $form['password'] = "password";
+
+        $this->client->submit($form);
+
+        $this->assertTrue($this->client->getResponse()->isRedirect());
+        $crawler = $this->client->followRedirect();
+        $this->assertResponseStatusCodeSame(200);
+
+        $successMsg = $crawler->filter('html:contains("Structures")');
+
+        $this->assertCount(1, $successMsg);
+
+    }
+
+
+
+    public function testLoginFalse()
+    {
+        $crawler = $this->client->request(Request::METHOD_GET, '/login');
+        $this->assertResponseStatusCodeSame(200);
+        $title = $crawler->filter('html:contains("Veuillez saisir vos identifiants de connexion")');
+
+        $this->assertCount(1, $title);
+
+        $form = $crawler->selectButton('Se connecter')->form();
+
+        $form['username'] = "superadmin";
+        $form['password'] = "false";
+
+        $this->client->submit($form);
+
+        $this->assertTrue($this->client->getResponse()->isRedirect());
+        $crawler = $this->client->followRedirect();
+        $this->assertResponseStatusCodeSame(200);
+
+        $successMsg = $crawler->filter('html:contains("erreur d\'identification")');
+
+        $this->assertCount(1, $successMsg);
+
+    }
+
+    public function testLoginInactive()
+    {
+        $crawler = $this->client->request(Request::METHOD_GET, '/login');
+        $this->assertResponseStatusCodeSame(200);
+        $title = $crawler->filter('html:contains("Veuillez saisir vos identifiants de connexion")');
+
+        $this->assertCount(1, $title);
+
+        $form = $crawler->selectButton('Se connecter')->form();
+
+        $form['username'] = "superadminInactive";
+        $form['password'] = "password";
+
+        $this->client->submit($form);
+
+        $this->assertTrue($this->client->getResponse()->isRedirect());
+        $crawler = $this->client->followRedirect();
+        $this->assertResponseStatusCodeSame(200);
+
+        $successMsg = $crawler->filter('html:contains("erreur d\'identification")');
+
+        $this->assertCount(1, $successMsg);
+
+    }
+
+
 }

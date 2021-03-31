@@ -29,15 +29,15 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         /**
          * @var Structure $structureLibriciel
          * @var Structure $structureMontpellier
-         * @var Group     $groupRecia
-         * @var Role      $roleSuperAdmin
-         * @var Role      $roleGroupAdmin
-         * @var Role      $roleStructureAdminLibriciel
-         * @var Role      $roleActor
-         * @var Role      $roleSecretary
-         * @var Party     $partyMajority
-         * @var Role      $roleGuest
-         * @var Role      $roleEmployee
+         * @var Group $groupRecia
+         * @var Role $roleSuperAdmin
+         * @var Role $roleGroupAdmin
+         * @var Role $roleStructureAdminLibriciel
+         * @var Role $roleActor
+         * @var Role $roleSecretary
+         * @var Party $partyMajority
+         * @var Role $roleGuest
+         * @var Role $roleEmployee
          */
         $structureLibriciel = $this->getReference(StructureFixtures::REFERENCE . 'libriciel');
         $structureMontpellier = $this->getReference(StructureFixtures::REFERENCE . 'montpellier');
@@ -74,6 +74,18 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             ->setLastName('admin');
         $manager->persist($otherSuperAdmin);
         $this->addReference(self::REFERENCE . 'otherSuperadmin', $otherSuperAdmin);
+
+
+        $superAdminInactive = new User();
+        $superAdminInactive->setEmail('superadminInactive@example.org')
+            ->setRole($roleSuperAdmin)
+            ->setUsername('superadminInactive')
+            ->setPassword($this->passwordEncoder->encodePassword($superAdminInactive, 'password'))
+            ->setFirstName('super')
+            ->setLastName('admin inactive')
+            ->setIsActive(false);
+        $manager->persist($superAdminInactive);
+        $this->addReference(self::REFERENCE . 'superadminInactive', $superAdminInactive);
 
         //////  user structure ///////
 

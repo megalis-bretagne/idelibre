@@ -72,7 +72,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
             throw new InvalidCsrfTokenException();
         }
 
-        return $this->userRepository->findOneBy(['username' => $credentials['username']]);
+        return $this->userRepository->findOneBy(['username' => $credentials['username'], 'isActive' => true]);
     }
 
     public function checkCredentials($credentials, UserInterface $user): bool
