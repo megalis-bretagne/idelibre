@@ -75,6 +75,17 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($otherSuperAdmin);
         $this->addReference(self::REFERENCE . 'otherSuperadmin', $otherSuperAdmin);
 
+        $superAdminInactive = new User();
+        $superAdminInactive->setEmail('superadminInactive@example.org')
+            ->setRole($roleSuperAdmin)
+            ->setUsername('superadminInactive')
+            ->setPassword($this->passwordEncoder->encodePassword($superAdminInactive, 'password'))
+            ->setFirstName('super')
+            ->setLastName('admin inactive')
+            ->setIsActive(false);
+        $manager->persist($superAdminInactive);
+        $this->addReference(self::REFERENCE . 'superadminInactive', $superAdminInactive);
+
         //////  user structure ///////
 
         $adminLibriciel = new User();
