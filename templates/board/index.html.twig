@@ -30,15 +30,30 @@
                     <td class="col-4">{{ convocation.user.lastname }} {{ convocation.user.firstname }}</td>
                     <td class="col-3">
                         {% if convocation.sentTimestamp is not null %}
+                            <span class="badge badge-success fas fa-check"> </span>
                             {{ convocation.sentTimestamp.createdAt |  date('d/m/Y : H:i', timezone) }}
+
+                        {% else %}
+                            <span class="badge badge-danger fa fa-times"> </span>
                         {% endif %}
                     </td>
                     <td class="col-3">
                         {% if convocation.receivedTimestamp is not null %}
+                            <span class="badge badge-success fas fa-check"> </span>
                             {{ convocation.receivedTimestamp.createdAt |  date('d/m/Y : H:i', timezone) }}
+                        {% else %}
+                            <span class="badge badge-danger fa fa-times "> </span>
                         {% endif %}
+
                     </td>
                     <td class="col-2">
+                        {% if convocation.attendance is null %}
+                            <span class="badge badge-warning fas fa-pause"> </span>
+                        {% elseif convocation.attendance == 'present' %}
+                            <span class="badge badge-success fas fa-check"> </span>
+                        {% else %}
+                            <span class="badge badge-danger fa fa-times "> </span>
+                        {% endif %}
                     </td>
 
                 </tr>
