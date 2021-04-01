@@ -46,6 +46,7 @@
 
 .ls-sidebar .main-menu {
     padding: 0.5rem 0;
+    overflow-y: auto;
 }
 
 .ls-sidebar .main-menu:nth-child(1) {
