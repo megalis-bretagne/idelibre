@@ -167,7 +167,7 @@ class SittingControllerTest extends WebTestCase
         $crawler = $this->client->request(Request::METHOD_GET, '/sitting/show/' . $sitting->getId() . '/actors');
         $this->assertResponseStatusCodeSame(200);
 
-        $item = $crawler->filter('html:contains("Détail des destinataires")');
+        $item = $crawler->filter('html:contains("Détail de la séance")');
         $this->assertCount(1, $item);
     }
 
@@ -178,7 +178,7 @@ class SittingControllerTest extends WebTestCase
         $crawler = $this->client->request(Request::METHOD_GET, '/sitting/show/' . $sitting->getId() . '/projects');
         $this->assertResponseStatusCodeSame(200);
 
-        $item = $crawler->filter('html:contains("Ordre du jour")');
+        $item = $crawler->filter('html:contains("Détail de la séance")');
         $this->assertCount(1, $item);
     }
 
