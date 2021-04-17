@@ -1,0 +1,97 @@
+
+
+
+<span us-spinner spinner-key="spinner-1"></span>
+
+<div class="perso-top-left">
+    <button ng-click="goToOdj()"  type="button" class="btn btn-primary " ><i class="fa fa-reply fa-2x"></i></button>
+    <button ng-click="openSideBar()" type="button" class="btn btn-primary "><i class="fa fa-list fa-2x"></i></button>
+</div>
+
+
+<div class="perso-top-right">
+    <button type="button" class="btn btn-success " ng-click="toggleSearchbar()"><i class="fa fa-search fa-2x"></i></button>
+    <button ng-if="!dlStatus" ng-click="downloadDocument()" type="button" class="btn btn-warning"><i class="fa fa-download fa-2x"></i></button>
+    <button ng-if="dlStatus" ng-click="downloadDocument()" type="button" class="btn btn-warning"><i class="fa fa-spinner fa-2x fa-pulse"></i></button>
+</div>
+
+<!--<button class="perso-bottom-left btn disabled">
+    {{pageNum}}/{{pageTotal}}
+</button>-->
+
+
+
+<!--affichage du numero de page et ouverture du dropup-->
+<div class="perso-bottom-left">
+    <div id="page_num" class=" btn perso-grey-light dropup dropdown-toggle" dropdown-toggle dropdown >
+        <!--<a  class="dropdown-toggle" dropdown-toggle>-->
+        <div style="font-size: 20px"> 
+            {{pageNum}}/{{pageTotal}} <span class="caret"></span>
+        </div>
+             <ul class="dropdown-menu" style="padding: 10px">
+            
+             <li>
+                 <button class="btn" ng-click="zoomIn()"><i class="fa fa-search-plus fa-2x"></i></button>
+                 <button class="btn" ng-click="zoomOut()"><i class="fa fa-search-minus fa-2x"></i></button>
+                 <button class="btn" ng-click="defaultZoom()"><i class="fa fa-magic fa-2x"></i></button>
+            </li>
+            
+            <hr>
+            
+            
+            <li>
+                 <button class="btn" ng-click="rotatePages(90)"><i class="fa fa-repeat fa-2x"></i></button>
+                 <button class="btn" ng-click="rotatePages(-90)"><i class="fa fa-undo fa-2x"></i></button>
+                 
+            </li>
+            
+            <hr>
+            
+            <li class="input-group input-group-lg" style="width:140px">
+                <input class="form-control" type="number" ng-model="pageNum" ><span class="input-group-addon" ng-click="goToPage()"><i class="fa fa-search"></i></span>
+            </li>
+            
+           
+            
+        </ul>
+
+    </div>  
+</div>
+
+
+<div id="summary-side" >
+
+    <div style="margin-top: 60px">
+
+        <ul ng-repeat="projet in seance.projets">
+            <summary-btn data = "projet" seance="seanceId" account='accountId'></summary-btn>
+            <div ng-repeat="annexe in projet.annexes" >
+                <!--              seulement si c'est une annexe pdf -->
+                <span ng-if="annexe.type == 'application/pdf'">
+
+                    <summaryannexe-btn annexe = "annexe" seance="seanceId" account='accountId' projet='projet.id'></summaryannexe-btn>
+                </span>
+            </div>
+
+        </ul>
+    </div> 
+</div>
+
+
+
+<div id="princ">
+
+    <div id="annotateur">
+
+        <!--        <div id="viewerContainer">
+                    <div id="viewer" class="pdfViewer"></div>
+                </div>-->
+
+
+        <div id="viewerContainer">
+            <div id="viewer" class="pdfViewer"></div>
+        </div>
+
+        <!--
+        -->    </div>
+</div>

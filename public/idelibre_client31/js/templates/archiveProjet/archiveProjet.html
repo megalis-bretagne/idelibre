@@ -1,0 +1,9 @@
+<span us-spinner spinner-key="spinner-1"></span>
+<div class="perso-top-left">
+    <button ng-click="goToArchiveSeance()"  type="button" class="btn btn-primary " ><i class="fa fa-reply fa-2x"></i></button>
+</div>
+
+<button ng-if="!dlStatus" ng-click="downloadDocument()" type="button" class="btn btn-warning perso-top-right"><i class="fa fa-download fa-2x"></i></button>
+<button ng-if="dlStatus" ng-click="downloadDocument()" type="button" class="btn btn-warning perso-top-right"><i class="fa fa-spinner fa-2x fa-pulse"></i></button>
+
+<pdf-viewer seanceid="seanceId" accountid="accountId" document="projet" documentid="documentId" typedocument="typeDocument" senderid="projetId"></pdf-viewer>

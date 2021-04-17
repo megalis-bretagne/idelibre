@@ -1,0 +1,28 @@
+<style>
+
+    .annexeItem{
+        width : 400px;
+        background: #BBDEFB;
+        margin-bottom: 5px;
+        padding-top: 8px;
+        padding-bottom: 8px;
+        padding-left: 15px;
+        padding-right: 20px;           
+        font-size: 14px;
+        overflow: hidden;
+        max-height: 125px
+    }
+
+
+</style>
+
+
+<div ng-click="clickOnAnnexe()" class="annexeItem">
+    <div class="col-xs-1" >
+        <span ng-class="stateClass"></span>
+    </div>
+    <div class="col-xs-11">
+        {{annexe.annexe_name}}
+    </div>
+    
+</div>

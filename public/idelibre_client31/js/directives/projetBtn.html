@@ -1,0 +1,24 @@
+
+<div class ="btn btn-default btn-lg center-block projet perso_align_left menuButton"  ng-click="action()">   
+
+    <div class="row" >
+        <div class="col-xs-1" > <i class = {{chooseClassState()}}></i> </div>
+        <div ng-if="!isRapporteur" class="col-xs-1" style="margin-top: 5px" ><i class=" perso-label label-primary" style="font-size: 16px; "> {{data.rank + 1}} </i> </div>
+        <div ng-if="isRapporteur" class="col-xs-1" style="margin-top: 5px" ><i class=" perso-label label-warning" style="font-size: 16px; "> {{data.rank + 1}} </i> </div>
+        <div class="col-xs-5 nopadding multiline" style="overflow: hidden">  {{data.name}}</div>
+
+        <div class="col-xs-3" >
+            <span class=" multiline " style="font-size: 14px; color: #388E3C;"> {{data.theme}}</span> <br>
+            <span class=" multiline " style="font-size: 14px;"> {{data.rapporteur}}</span>
+        </div>
+
+        <div class="col-xs-2">
+            <span ng-if="annotations.private > 0" class='fa-user fa label-as-badge label-primary'>  {{annotations.private}}</span>
+            <span ng-if="annotations.sharred > 0" class='fa-users fa label-as-badge label-success'>  {{annotations.sharred}}</span>
+            <span ng-if="annotations.unread > 0" class='fa-users fa label-danger label-as-badge'>  {{annotations.unread}}</span>
+        </div>
+    </div>
+</div>
+
+
+

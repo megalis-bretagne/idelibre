@@ -1,0 +1,81 @@
+<style>
+
+    .pdfViewer {
+        position: absolute;
+        display: block;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+    }
+
+
+
+
+</style>
+
+
+<span us-spinner spinner-key="spinner-1"></span>
+
+
+
+
+<button type="button" title="Page précédente" class="btn btn-primary perso-middle-left fa fa-chevron-circle-left fa-2x" ng-click="gotoPreviousPage()"></button>
+<button type="button" title="Page suivante" class="btn btn-primary perso-middle-right fa fa-chevron-circle-right fa-2x" ng-click="gotoNextPage()"></button>
+
+<!--affichage du numero de page et ouverture du dropup-->
+<div class="perso-bottom-left">
+    <div id="page_num" class=" btn perso-grey-light dropup dropdown-toggle" dropdown-toggle dropdown >
+        <!--<a  class="dropdown-toggle" dropdown-toggle>-->
+        <div style="font-size: 20px"> 
+            {{pageNum}}/{{pageTotal}} <span class="caret"></span>
+        </div>
+        <ul class="dropdown-menu" style="padding: 10px">
+
+<!--            <li>
+                <button class="btn" ng-click="zoomIn()"><i class="fa fa-search-plus fa-2x"></i></button>
+                <button class="btn" ng-click="zoomOut()"><i class="fa fa-search-minus fa-2x"></i></button>
+                <button class="btn" ng-click="defaultZoom()"><i class="fa fa-magic fa-2x"></i></button>
+            </li>
+
+            <hr>
+
+
+            <li>
+                <button class="btn" ng-click="rotatePages(90)"><i class="fa fa-repeat fa-2x"></i></button>
+                <button class="btn" ng-click="rotatePages(-90)"><i class="fa fa-undo fa-2x"></i></button>
+
+            </li>
+
+            <hr>-->
+
+            <li class="input-group input-group-lg" style="width:140px">
+                <input class="form-control" type="number" ng-model="pageNum" ><span class="input-group-addon" ng-click="gotoPage()"><i class="fa fa-search"></i></span>
+            </li>
+
+
+
+        </ul>
+
+    </div>  
+</div>
+
+
+<div id="container">
+
+    <div ng-if="showDrawers()">
+        <span ng-if="enableAnnotations"></span><annotation-drawer annotations="document.annotations" account="account" ng-show="isDrawer"></annotation-drawer>
+        <navigation-drawer seance="seance" account="account" currentdocument="document" ng-show="isLeftDrawer"></navigation-drawer>
+        <span ng-if="enableAnnotations"><annotationjs account="account" document="document" users="users"></annotationjs></span>
+    </div>
+    <canvas id="the-canvas" class="pdfViewer"/>
+
+</div>
+
+
+
+
+
+
+
+

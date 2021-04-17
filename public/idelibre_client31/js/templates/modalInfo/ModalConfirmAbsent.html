@@ -1,0 +1,52 @@
+
+<!--
+  ~ Copyright (c) 2018. Libriciel scop
+  ~ i-delibRE 3.1
+  ~ LICENCE CeCILL v2
+  ~
+  -->
+
+<div class="modal-header">
+    <h3 class="modal-title">Confirmer votre absence</h3>
+</div>
+
+
+<div class="modal-body">
+
+    <div class="row">
+        <div class="col-md-9">
+            Confirmer votre absence (Sans donner de pouvoir)
+        </div>
+
+        <div class="col-md-3">
+            <button  class="btn btn-primary" ng-click="simpleConfirm()" >Confirmer</button>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            Confirmer votre absence et donner pouvoir à :
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-9">
+            <input class="form-control" ng-model="procName.name" />
+        </div>
+
+        <div class="col-md-3">
+            <button class="btn btn-primary" ng-click="confirmWithName()">Confirmer</button>
+        </div>
+
+    </div>
+
+
+
+</div>
+
+
+<div class="modal-footer">
+    <button class="btn btn-danger" ng-click="cancel()">Annuler</button>
+</div>
+

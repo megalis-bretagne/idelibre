@@ -1,0 +1,49 @@
+<div class="container">
+    <div class="margin-auto">
+        <div class="account-wall">
+
+            <form class="form-signin">
+
+                <div class="input-group">
+                    <div class="input-group-addon"><i class="fa fa-university  "></i></div>
+                    <input type="text" class="form-control"  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"   placeholder="Mandat" ng-model="account.name"  required autofocus>
+                </div>
+                <br>
+
+                <div class="input-group">
+                    <div class="input-group-addon"><i class="fa fa-user"></i></div>
+                    <input type="text" class="form-control"  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"   placeholder="Identifiant" ng-model="account.username"  required autofocus>
+                </div>
+                <br>
+                <div class="input-group">
+                    <div class="input-group-addon"><i class="fa fa-unlock"></i></div>
+                    <input type="password" class="form-control" placeholder="Mot de passe" ng-model="account.password" autocomplete="off" required autofocus>
+                </div>
+                <br>
+
+                <div class="input-group">
+                    <div class="input-group-addon"><i class="fa fa-at"></i></div>
+                    <input type="text" class="form-control"  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"   placeholder="Suffixe" ng-model="account.suffix"  required autofocus>
+                </div>
+                <br>
+
+                <div class="input-group" ng-show="{{cordova}}">
+                    <div class="input-group-addon"><i class="fa fa-server"></i></div>
+                    <input type="text" class="form-control" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"  placeholder="Url" ng-model="account.url" required autofocus>
+                </div><br>
+
+                <div></div> 
+                <div class="btn-group pull-right" role="group" aria-label="...">
+                    <button class="btn  btn-danger" type="button" ng-click="remove()"> Supprimer</button>
+                    <button class="btn  btn-primary" type="button" ng-click="validate()"> Valider</button>
+                </div>
+
+                <div class="pull-left" ng-if="online">
+                    <button class="btn  btn-primary fa fa-unlock-alt  fa-2x " style="height:40px" type="button" ng-click="changePassword()" title="changer de mot de passe"> </button>
+                </div>
+
+                <br>
+            </form>
+        </div>
+    </div>
+</div>

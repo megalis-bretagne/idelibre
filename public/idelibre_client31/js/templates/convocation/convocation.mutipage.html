@@ -1,0 +1,51 @@
+<span us-spinner spinner-key="spinner-1"></span>
+<!--{{documentId}} <br>-->
+<!--<br>
+<button type="button" ng-click="goToOdj()">goToOdj</button> <br>-->
+
+<annotationjs></annotationjs>
+<button ng-click="goToOdj()" type="button" class="btn btn-primary perso-top-left" ><i class="fa fa-reply fa-2x"></i></button>
+
+
+<div class="perso-top-right">
+    <button ng-if="!dlStatus" ng-click="downloadDocument()" type="button" class="btn btn-warning"><i class="fa fa-download fa-2x"></i></button>
+    <button ng-if="dlStatus" ng-click="downloadDocument()" type="button" class="btn btn-warning"><i class="fa fa-spinner fa-2x fa-pulse"></i></button>
+    <!--<button style="margin-left: 2px;" ng-click="goToOdj()"  type="button" class="btn btn-primary" ><i class="fa fa-list fa-2x"></i></button>-->
+
+
+
+</div>
+
+<!--<div class="perso-top-right">
+    <button type="button" class="btn btn-success " ng-click="toggleSearchbar()"><i class="fa fa-search fa-2x"></i></button>
+    <button ng-if="!dlStatus" ng-click="downloadDocument()" type="button" class="btn btn-warning"><i class="fa fa-download fa-2x"></i></button>
+    <button ng-if="dlStatus" ng-click="downloadDocument()" type="button" class="btn btn-warning"><i class="fa fa-spinner fa-2x fa-pulse"></i></button>
+</div>-->
+
+
+
+<!--<button class="perso-bottom-left btn disabled">
+    {{pageNum}}/{{pageTotal}}
+</button>-->
+
+<!--<button ng-click="goToOdj()"  type="button" class="btn btn-primary perso-top-right" ><i class="fa fa-list fa-2x"></i></button>-->
+
+
+<div id="annotateur">
+
+    <div id="viewerContainer">
+        <div id="viewer" class="pdfViewer"></div>
+    </div>
+
+
+</div>
+
+
+
+
+<!--
+  <div id="viewerContainer">
+    <div id="viewer" class="pdfViewer"></div>
+  </div>-->
+
+

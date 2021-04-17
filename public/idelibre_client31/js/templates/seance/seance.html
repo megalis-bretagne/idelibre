@@ -1,0 +1,37 @@
+<button ng-click="goToAccueil()" type="button" title="Précédent" class="btn btn-primary perso-top-left" ><i class="fa fa-reply fa-2x"></i></button>
+<!--Modal d'accusé reception-->
+
+<script type="text/ng-template" id="ARModal.html">
+    <div class="modal-header">
+    <h3 class="modal-title">Accusé de réception</h3>
+    </div>
+    <div class="modal-body">
+    Une convocation vous est adressée. Cliquez ci-dessous pour accéder à la convocation et en confirmer la réception.
+    </div>
+    <div class="modal-footer">
+    <button class="btn btn-primary" ng-click="ok()">OK</button>
+    <button class="btn btn-warning" ng-click="cancel()">Annuler</button>
+    </div>
+</script>
+
+
+
+<div class="perso-margin-vertical-lg">
+    
+    <div ng-show="connectionStatus">  <archive-btn accountid="accountId"></archive-btn>  </div>
+    
+
+<!--    {{account.seances}}-->
+    <div ng-repeat="seance in account.seances track by $index">
+
+        <seance-btn data="seance" account="account"></seance-btn>
+
+
+
+
+    </div>
+
+
+    
+    
+</div>
