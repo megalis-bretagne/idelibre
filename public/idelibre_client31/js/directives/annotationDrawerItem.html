@@ -1,0 +1,66 @@
+<style>
+    .annotationItem{
+        width : 400px;
+
+        margin-bottom: 5px;
+        padding-top: 4px;
+        padding-bottom: 4px;
+        padding-left: 15px;
+        padding-right: 20px;           
+        font-size: 14px;
+        overflow: hidden;
+        max-height: 125px
+    }
+
+    .title{
+        width : 400px;
+        padding-top: 4px;
+        padding-bottom: 4px;
+        padding-left: 15px;
+        padding-right: 20px;       
+        font-weight: bold;
+        font-size: 16px;
+
+        overflow: hidden;
+    }
+
+
+    .sharedTitle{
+        background: #A5D6A7;        
+    }
+
+    .privateTitle{
+        background: #9FA8DA;
+    }
+
+    .sharedItem{
+        background: #C8E6C9;
+    }
+
+    .privateItem{
+        background: #C5CAE9;
+    }
+    
+    .lockedItem{
+        background: #FFCDD2;
+        
+    }
+    
+    .lockedTitle{
+        background: #EF9A9A;
+    }
+
+
+
+
+
+</style>
+
+
+<div ng-click="goToPage()">
+    <div class="title" ng-class="{sharedTitle:isSharedByMe(), privateTitle:isNotShared(), lockedTitle:isLocked()}">    {{annotation.authorName}} <span class="pull-right">{{annotation.page}}</span></div>
+    <div class="annotationItem" ng-class="{sharedItem:isSharedByMe(), privateItem:isNotShared(), lockedItem:isLocked()}">
+        <div class="pull-right"><b>{{annotation.formatedDate}}</b></div><br>
+        <div>{{annotation.text}}</div>
+    </div>
+</div>

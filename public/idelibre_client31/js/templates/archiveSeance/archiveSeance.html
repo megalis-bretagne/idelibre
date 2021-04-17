@@ -1,0 +1,19 @@
+<span us-spinner spinner-key="spinner-1"></span>
+
+<button ng-click="goToArchive()"  type="button" class="btn btn-primary perso-top-left" ><i class="fa fa-reply fa-2x"></i></button>
+
+
+<div class="perso-margin-vertical-lg">
+    <div ng-repeat="projet in archivedProjets| orderBy:'projet_rank' ">
+        <archiveprojet-btn state='state' accountid="accountId" seanceid="seanceId" projet="projet"></archiveprojet-btn>
+
+        <!--    seulement si il y a au moins une annexe-->
+        <span ng-if="projet.annexes.length > 0">
+            <div ng-repeat="annexe in projet.annexes">
+
+                <archiveannexe-btn annexe ='annexe' seanceid='seanceId' accountid= 'accountId' projetid="projet.id" state='state'></archiveannexe-btn>
+            </div>
+        </span>
+    </div>
+</div>
+

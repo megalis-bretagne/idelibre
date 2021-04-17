@@ -1,0 +1,45 @@
+
+<span us-spinner spinner-key="spinner-1"></span>
+
+<div class="perso-top-left">
+    <button ng-click="goToOdj()"  type="button" class="btn btn-primary " ><i class="fa fa-reply fa-2x"></i></button>
+    <button ng-click="openSideBar()" type="button" class="btn btn-primary "><i class="fa fa-list fa-2x"></i></button>
+
+</div>
+
+
+<div class="perso-top-right">
+    <button type="button" class="btn btn-success " ng-click="toggleSearchbar()"><i class="fa fa-search fa-2x"></i></button>
+    <button ng-if="!dlStatus" ng-click="downloadDocument()" type="button" class="btn btn-warning"><i class="fa fa-download fa-2x"></i></button>
+    <button ng-if="dlStatus" ng-click="downloadDocument()" type="button" class="btn btn-warning"><i class="fa fa-spinner fa-2x fa-pulse"></i></button>
+</div>
+
+<div id="summary-side">
+
+    <div style="margin-top: 60px">
+        <ul ng-repeat="projet in seance.projets">
+            <summary-btn data = "projet" seance="seanceId" account='accountId'></summary-btn>
+            <div ng-repeat="annexe in projet.annexes" >
+<!--              seulement si c'est une annexe pdf -->
+              <span ng-if="annexe.type == 'application/pdf'">
+               
+                  <summaryannexe-btn annexe = "annexe" seance="seanceId" account='accountId' projet='projet.id'></summaryannexe-btn>
+              </span>
+            </div>
+
+        </ul>
+    </div> 
+</div>
+
+
+
+<div id="princ">
+
+    <div id="annotateur">
+
+        <div id="viewerContainer">
+            <div id="viewer" class="pdfViewer"></div>
+        </div>
+
+    </div>
+</div>

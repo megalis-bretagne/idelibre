@@ -1,0 +1,411 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 8 déc. 2014, 15:23:09
+    Author     : rdubourget
+*/
+
+.notFound{
+    color: red;
+}
+
+.longButton {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: 50px;
+    border-color: #CCC;
+    box-shadow: 3px 3px 5px #DDD;
+    cursor: pointer;
+    background-color: #F5F5F5;
+    background-image: linear-gradient(to bottom, #FFF, #E6E6E6);
+    background-repeat: repeat-x;
+    color: #333;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.menuButton{
+    display: block; 
+    width: 85%;
+}
+
+.perso_bigpadding{
+    padding: 20px;
+}
+
+.perso_padding-bottom{
+    padding-bottom: 15px;
+}
+
+.perso_padding-top{
+    padding-top: 15px;
+}
+
+
+.perso_big-padding-top{
+    padding-top: 25px;
+}
+
+.perso_margin{
+    margin: 20px;
+}
+
+span.glyphicon-envelope {
+    font-size: 1.9em;
+}
+
+.small_text{
+    font-size: 0.8em;
+}
+
+
+.green_color{
+    color:green;
+}
+
+.greenFash_color {
+    color: rgb(0, 255, 42) !important; 
+}
+
+.red_color {
+    color:#d9534f !important; 
+}
+
+
+
+.download_color {
+    color: #69FF82 !important; 
+}
+
+.upload_color {
+    color: #F35E5E !important; 
+}
+
+
+
+
+.current_bg {
+    background: #5F9A37 !important; 
+}
+
+.perso_button {
+    margin: 15px;
+    width: 180px;
+    height: 180px;
+    cursor: pointer;
+    border: 1px solid #CCC;
+    border-radius: 15px;
+    box-shadow: 0px 0px 7px #CCC;
+    padding: 10px;
+    background-color: #F5F5F5;
+    background-image: linear-gradient(to bottom, #FFF, #E6E6E6);
+    overflow: hidden;
+    font-size: 14px;
+}
+
+
+
+
+
+.projet {
+
+    margin-top: 10px;
+    margin-bottom: 10px;
+    // height: 50px;
+    border-color: #CCC;
+    box-shadow: 3px 3px 5px #DDD;
+    cursor: pointer;
+    background-color: #F5F5F5;
+    background-image: linear-gradient(to bottom, #FFF, #E6E6E6);
+    background-repeat: repeat-x;
+    color: #333;
+    font-size: 14px;
+
+    font-weight: bold;
+}
+
+
+.perso_align_left {
+    text-align: left;
+}
+
+
+.label-as-badge {
+
+    border-radius: 10px;
+    display: inline-block;
+    color: white;
+    font-size: 0.75em;
+    font-weight: 700;
+    line-height: 1;
+    min-width: 10px;
+    padding: 3px 7px;
+    text-align: center;
+    vertical-align: baseline;
+    white-space: nowrap;
+}
+
+
+
+
+#summary-side{
+    padding-top: 50px;
+    position:fixed;
+    display:none;
+    z-index: -1;
+    top:0;
+    bottom:0;
+    left:0; /*-100px;*/
+    width:350px;
+    background:#ddd;
+    overflow-y: auto;
+    overflow-x: hidden; 
+
+}
+
+ul{
+    margin:0;padding:0;
+}
+#princ{
+    //z-index: 2;
+    background:#FFF;
+    margin-left:0px;
+}
+
+
+
+.navbar-inverse {
+    background-color: #444;
+}
+
+
+
+.margin-auto{
+    width: 400px;
+    margin : auto;
+}
+
+
+.form-signin
+{
+    width: 370px;
+    padding: 15px;
+    margin:  auto;
+}
+.form-signin .form-signin-heading, .form-signin .checkbox
+{
+    margin-bottom: 10px;
+}
+.form-signin .checkbox
+{
+    font-weight: normal;
+}
+.form-signin .form-control
+{
+    position: relative;
+    font-size: 16px;
+    height: auto;
+    padding: 10px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.form-signin .form-control:focus
+{
+    z-index: 2;
+}
+.form-signin input[type="text"]
+{
+    margin-bottom: 0px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.form-signin input[type="password"]
+{
+    margin-bottom: 0px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+.account-wall
+{
+    margin-top: 20px;
+    padding: 10px 0px 20px 0px;
+    background-color: #f7f7f7;
+    -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+}
+.login-title
+{
+    color: #555;
+    font-size: 18px;
+    font-weight: 400;
+    display: block;
+}
+.profile-img
+{
+    width: 200px;
+    //height: 96px;
+    margin: 0 auto 30px ;
+    display: block;
+    /*    -moz-border-radius: 50%;
+        -webkit-border-radius: 50%;
+        border-radius: 50%;*/
+}
+.need-help
+{
+    margin-top: 10px;
+}
+.new-account
+{
+    display: block;
+    margin-top: 10px;
+}
+
+.perso-margin-vertical{
+    margin-top: 30px;
+}
+
+
+.perso-margin-vertical-lg{
+    margin-top: 60px;
+}
+
+
+.perso-middle-left{
+    position: fixed;
+    left:10px;
+    top:350px;
+    z-index: 1080;
+    height: 60px;
+    opacity: 0.6;
+}
+
+.perso-middle-right{
+    position: fixed;
+    right:13px;
+    top:350px;
+    z-index: 1080;
+    height: 60px;
+    opacity: 0.6;
+}
+
+
+.perso-top-left{
+    position: fixed;
+    left:10px;
+    top:65px;
+    z-index: 1080;
+}
+
+.perso-top-right{
+    position: fixed;
+    right:13px;
+    top:65px;
+    z-index: 1080;
+}
+
+
+.perso-bottom-right{
+    position: fixed;
+    right:13px;
+    bottom:20px;
+    z-index: 1080;
+}
+
+
+
+.perso-bottom-left{
+    position: fixed;
+    left:10px;
+    bottom:10px;
+    z-index: 1080;
+}
+
+
+.perso-color-white{
+    color: white;
+}
+
+.perso-color-yellow{
+    color: #f0ad4e;
+}
+
+
+.perso-label {
+    padding: 2px 4px 2px;
+    font-weight: bold;
+    line-height: 10px;    
+    vertical-align: baseline;
+    white-space: nowrap;
+    margin-top: 4px;
+    border: 1px solid #676767;
+    color: #FFF; 
+    font-size: 12px;
+    border-radius: 5px;
+}
+
+
+
+
+.navbar-inverse .navbar-text {
+    color: #EAEAEA;
+}
+
+
+.navbar-text {
+    font-size: 1.2em;
+}
+
+
+
+.navbar-inverse .navbar-nav > li > a {
+    color: #EAEAEA;
+    font-size: 1.2em;
+}
+
+
+.breadcumb{
+    width:250px;
+    overflow: hidden;
+    white-space: nowrap;
+    margin-left:40px;
+}
+
+
+
+.discret{
+    font-size: 0.75em;
+    color: #595858;
+}
+
+.perso-grey-light{
+    opacity: .65;
+    background: #E9E9E9; 
+    color: black;
+}
+
+
+
+.multiline{
+    white-space:pre-wrap;
+    word-wrap:break-word;
+}
+
+
+
+.multiline_center{
+    white-space:pre-wrap;
+    text-align: center;
+}
+
+.type_seance{
+    height: 35px;
+    overflow:hidden;
+}
+
+
+

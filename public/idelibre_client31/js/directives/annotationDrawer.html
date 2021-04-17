@@ -1,0 +1,23 @@
+<style>
+    .rightDrawer {
+        background: whitesmoke;
+        position: fixed;
+        display: block;
+        right: 0px;
+        top: 58px;
+        bottom: 0;
+        width: 400px;
+        z-index:1081;
+        overflow: scroll;
+        overflow-x:hidden;
+    }
+
+</style>
+
+
+
+<div class="rightDrawer" >
+    <div ng-repeat="annotation in annotations | orderBy:'page' ">
+        <annotation-drawer-item annotation="annotation" account="account"></annotation-drawer-item>
+    </div>
+</div>

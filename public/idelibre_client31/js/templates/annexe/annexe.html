@@ -1,0 +1,11 @@
+<div class="perso-top-left">
+    <button ng-click="goToOdj()"  type="button" class="btn btn-primary " ><i class="fa fa-reply fa-2x"></i></button>
+    <button ng-click="goToProjet()"  type="button" class="btn btn-primary " ><i class="fa fa-arrow-left fa-2x"></i></button>
+</div>
+
+
+<button ng-if="!dlStatus" ng-click="downloadAnnexe()" type="button" class="btn btn-warning perso-top-right"><i class="fa fa-download fa-2x"></i></button>
+<button ng-if="dlStatus" ng-click="downloadAnnexe()" type="button" class="btn btn-warning perso-top-right"><i class="fa fa-spinner fa-2x fa-pulse"></i></button>
+
+
+<pdf-viewer seanceid="seance.id" accountid="account.id" document="document" documentid="documentId" typedocument="typeDocument"></pdf-viewer>

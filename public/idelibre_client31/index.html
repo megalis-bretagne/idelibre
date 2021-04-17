@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html manifest="offline.appcache">
+    <head>
+        <title>i-delibRE</title>
+        <meta charset="UTF-8">
+
+        <!--        <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1" />-->
+        <link href="lib/boostrap.css" type="text/css" rel="stylesheet">
+        <link href="lib/idelibre.css" type="text/css" rel="stylesheet">
+        <link href="js/directives/directives.css" type="text/css" rel="stylesheet">
+
+        <script src="lib/underscore.js"></script>
+
+        <script src="lib/hammer.js"></script>
+
+        <script src="idelibre.conf.js"></script>
+
+        <script src="lib/angular.js"></script>
+        <script src="lib/angular-resource.js"></script>
+        <script src="lib/angular-route.js"></script>
+
+
+        <script src="lib/ui-bootstrap-tpls-0.12.0.js"></script>
+
+        <script src="lib/gestures.js"></script>
+
+
+        <!--raphalejs-->
+        <script src="lib/raphaeljs/raphael.js"></script>
+
+
+        <script src="lib/socket.io.174.min.js"></script>
+   
+        
+        <script src="lib/jquery/jquery_1.12.4.js"></script>
+
+
+        <script src="lib/pdfjs/pdf.js"></script>
+        <script src="lib/pdfjs/pdf.worker.js"></script>
+        <script src="lib/pdfjs/pdf_rendering_queue.js"></script>
+        <script src="lib/pdfjs/text_layer_builder.js"></script>
+        <script src="lib/pdfjs/pdf_page_view.js"></script>
+        <link rel="stylesheet" href="lib/pdfjs/text_layer_builder.css">
+
+        <!--<script src="lib/pdf.js/build/generic/build/pdf.worker.js"></script>-->
+
+
+        <script src="lib/pdf.js/build/components/pdf_viewer.js"></script>
+        <!--        <script src="lib/pdf.js.bak/web/pdf_viewer.js"></script>-->
+
+        <script src="lib/pdf.js/build/l10n.js"></script>
+        <!--        <script src="lib/pdf.js/build/ui_utils.js"></script>-->
+        <!--<script src="lib/pdf.js/build/pdf_find_bar.js"></script>-->
+        <!--<script src="lib/pdf.js/build/pdf_find_controller.js"></script>-->
+        <!--<script src="lib/pdf.js/build/pdf_rendering_queue.js"></script>-->
+        <script src="lib/pdf.js/build/pdf_link_service.js"></script>
+
+
+
+
+        <!-- AJOUT pour le pdfviewer sans rien -->
+        <script src="lib/pdf.js/web/pdf_page_view.js"></script>
+        <script src="lib/pdf.js/web/ui_utils.js"></script>
+        <script src="lib/pdf.js/web/text_layer_builder.js"></script>
+        <script src="lib/pdf.js/web/annotations_layer_builder.js"></script>
+        <script src="lib/pdf.js/web/pdf_rendering_queue.js"></script>
+        <script src="lib/pdf.js/web/pdf_find_controller.js"></script>
+        <script src="lib/pdf.js/web/pdf_find_bar.js"></script>
+        <!--        pour la singlepage-->
+        <script src="lib/pdf.js/web/pdf_page_view.js"></script>
+
+
+
+
+        <!--<link rel="stylesheet" href="lib/pdf.js/build/viewer.css">-->
+
+        <!--<link rel="stylesheet" href="lib/pdf.js/build/components/pdf_viewer.css">-->
+        <link rel="stylesheet" href="lib/pdf.js/build/components/pdf_viewer.css">
+        <!--        <link rel="stylesheet" href="lib/pdf.js/build/viewer.css">-->
+
+
+
+
+        <!--<script src="lib/pouchdb-4.0.3.min.js"></script>-->
+        <script src="lib/pouchdb-6.0.7.min.js"></script>
+
+        <!--        <script src="lib/pouchdbnight.js"></script>-->
+        <script src="lib/blobutil.js"></script>
+
+        <link rel="stylesheet" href="lib/font-awesome-4.3.0/css/font-awesome.min.css">
+
+        <!--pour le snap (fenetre glissement latéralle)-->
+        <link rel="stylesheet" href="lib/snap/snap.css">
+        <link rel="stylesheet" href="lib/snap/demo.css">
+        <script src="lib/snap/snap.js"></script>
+
+
+
+
+        <!--        pour le toast (notification)-->
+        <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.5/angular-sanitize.min.js"></script>-->
+        <script src="lib/angular-sanitize.min.js"></script>
+        <script src="lib/toast/ngToast.min.js"></script>
+        <link rel="stylesheet" href="lib/toast/ngToast.min.css">
+
+        <!--spinner -->
+        <script src="lib/spinner/spin.js"></script>
+        <script src="lib/spinner/angular-spinner.js"></script>
+
+
+        <script src="lib/jwt-decode.min.js"></script>
+
+        <!--<script src="lib/spinner/angular-spinner.css"></script>-->
+        <!--<script src="lib/spinner/angular-spinkit.js"></script>-->
+
+
+
+    </head>
+
+
+    <body ng-app="idelibreApp">
+        <div ng-controller="GlobalCtrl">
+
+            <navbar></navbar>
+            <toast></toast>
+
+            <div class="perso_bigpadding">
+            </div>
+            <div ng-view></div>
+
+        </div> 
+
+        <!--    <script src="service/SeanceSrv.js"></script>-->
+
+        <!--Utils -->
+        <script src="js/utils/MyBlobBuilder.js"></script>
+        <script src="js/utils/DateUtils.js"></script>
+        <script src="js/utils/AnnotationUtils.js"></script>
+        <script src="js/utils/Messages.js"></script>
+
+
+        <!--pojos-->        
+        <script src="js/models/User.js"></script>
+        <script src="js/models/Projet.js"></script>
+        <script src="js/models/Annexe.js"></script>
+        <script src="js/models/Convocation.js"></script>
+        <script src="js/models/Seance.js"></script>
+        <script src="js/models/Document_text.js"></script>
+        <script src="js/models/Account.js"></script>
+        <script src="js/models/Annotation.js"></script>
+        <script src="js/models/Pdfdata.js"></script>
+        <script src="js/models/Login.js"></script>
+        <script src="js/models/Socketio.js"></script>
+        <script src="js/models/StickyNote.js"></script>
+        <script src="js/models/Invitation.js"></script>
+
+        <!--DAOs-->
+        <script src="js/DAO/ProjetDAO.js"></script>
+        <script src="js/DAO/SeanceDAO.js"></script>
+        <script src="js/DAO/AnnexeDAO.js"></script>
+        <script src="js/DAO/UserDAO.js"></script>
+        <script src="js/DAO/ConvocationDAO.js"></script>
+        <script src="js/DAO/Document_textDAO.js"></script>
+        <script src="js/DAO/AccountDAO.js"></script>
+        <script src="js/DAO/AnnotationDAO.js"></script>
+        <script src="js/DAO/LoginDAO.js"></script>
+        <script src="js/DAO/PdfdataDAO.js"></script>
+        <script src="js/DAO/InvitationDAO.js"></script>
+
+
+
+        <!--angular stuff-->
+
+        <script src="js/app.js"></script>
+
+
+        <!-- - -controllers-->
+        <script src="js/controllers/GlobalCtrl.js"></script>
+        <script src="js/controllers/AccueilCtrl.js"></script>
+        <script src="js/controllers/SeanceCtrl.js"></script>
+        <script src="js/controllers/OdjCtrl.js"></script>
+        <script src="js/controllers/IdentificationCtrl.js"></script>
+        <script src="js/controllers/ConvocationCtrl.js"></script>
+        <script src="js/controllers/ProjetCtrl.js"></script>
+        <script src="js/controllers/ArchiveCtrl.js"></script>
+        <script src="js/controllers/ArchiveSeanceCtrl.js"></script>
+        <script src="js/controllers/ArchiveProjetCtrl.js"></script>
+        <script src="js/controllers/AnnexeCtrl.js"></script>
+        <script src="js/controllers/ArchiveAnnexeCtrl.js"></script>
+
+
+        <!-- Modal -->
+        <script src="js/templates/modalInfo/ModalInfoCtrl.js"></script>
+        <script src="js/templates/modalInfo/ModalSortProjetCtrl.js"></script>
+        <script src="js/templates/modalInfo/ModalStickynoteCtrl.js"></script>
+        <script src="js/templates/modalInfo/ModalpresenceCtrl.js"></script>
+        <script src="js/templates/modalInfo/ModalPurge.js"></script>
+        <script src="js/templates/modalInfo/ModalPasswordCtrl.js"></script>
+        <script src="js/templates/modalInfo/ModalConfirmAbsentCtrl.js"></script>
+
+
+        <!-- - -directives-->
+        <script src="js/directives/accountBtn.js"></script>
+        <script src="js/directives/seanceBtn.js"></script>
+        <script src="js/directives/projetBtn.js"></script>
+        <script src="js/directives/navbar.js"></script>
+        <script src="js/directives/footbar.js"></script>
+        <script src="js/directives/modalConfirm.js"></script>
+        <script src="js/directives/archiveBtn.js"></script>
+        <script src="js/directives/archiveseanceBtn.js"></script>
+        <script src="js/directives/archiveprojetBtn.js"></script>
+        <script src="js/directives/annexeBtn.js"></script>
+        <script src="js/directives/archiveannexeBtn.js"></script>
+        <!--<script src="js/directives/pinchZoom.js"></script>-->
+        <script src="js/directives/accountLogin.js"></script>
+        <script src="js/directives/annotationjs.js"></script>
+        <script src="js/directives/annotationDrawer.js"></script>
+        <script src="js/directives/annotationDrawerItem.js"></script>
+        <script src="js/directives/navigationDrawer.js"></script>
+        <script src="js/directives/navigationDrawerItem.js"></script>
+        <script src="js/directives/navigationDrawerAnnexe.js"></script>
+        <script src="js/directives/pdfViewer.js"></script>
+
+        <!-- - -services -->
+        <script src="js/services/accountSrv.js"></script>
+        <script src="js/services/accountDAOSrv.js"></script>
+        <script src="js/services/loginDAOSrv.js"></script>
+        <script src="js/services/loginSrv.js"></script>
+        <script src="js/services/socketioSrv.js"></script>
+        <script src="js/services/localDbSrv.js"></script>
+        <script src="js/services/dlOriginalSrv.js"></script>
+        <script src="js/services/sslCheckerSrv.js"></script>
+        <script src="js/services/fakeUrlSrv.js"></script>
+        <script src="js/services/logger.js"></script>
+        <script src="js/services/workerSrv.js"></script>
+        <script src="js/services/arSrv.js"></script>
+        <script src="js/services/annotationSrv.js"></script>
+
+    </body>
+</html>

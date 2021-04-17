@@ -1,0 +1,61 @@
+<button ng-click="goToAccueil()" title="Précédent" type="button" class="btn btn-primary perso-top-left" ><i class="fa fa-reply fa-2x"></i></button>
+<button ng-click="addAccount()" title="Ajouter un compte" type="button" class="btn btn-primary perso-bottom-right " ><i class="fa fa-plus fa-2x"></i></button>
+
+<button ng-click="purgeData()" title="Supprimer les données" type="button" class="btn btn-danger perso-top-right " ><i class="fa fa-trash-o fa-2x"></i></button>
+
+<!--<div class="container perso-margin-vertical-lg">
+
+        <div class="margin-auto">
+    
+            <div class="account-wall">
+                
+                <form class="form-signin">
+                    <img class="profile-img" src="lib/images/logo_i_delibRE_login.png"
+                     alt="">
+                <form class="form-signin">
+                    <div class="input-group">
+                        <div class="input-group-addon"><i class="fa fa-user"></i></div>
+                        <input type="text" class="form-control"  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"   placeholder="Login" ng-model="login.username"  required autofocus>
+                    </div>
+                    <br>
+                    <div class="input-group">
+                        <div class="input-group-addon"><i class="fa fa-unlock"></i></div>
+                        <input type="password" class="form-control" placeholder="Password" ng-model="login.password" required autofocus>
+                    </div>
+                    <br>
+                    
+                    <div class="input-group">
+                        <div class="input-group-addon"><i class="fa fa-at"></i></div>
+                        <input type="text" class="form-control"  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"   placeholder="Suffixe" ng-model="login.suffix"  required autofocus>
+                    </div>
+                    <br>
+                    
+                    <div class="input-group" ng-show="cordova">
+                        <div class="input-group-addon"><i class="fa fa-server"></i></div>
+                        <input type="text" class="form-control" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"  placeholder="Server url" ng-model="login.server_url" required autofocus>
+                    </div><br>
+                    
+                    
+                    <div class="perso-margin-vertical"></div> 
+                    <input type="password" class="form-control" placeholder="Password" required>
+                    <button class="btn btn-lg btn-primary btn-block" type="button" ng-click="connection()"> Connexion</button>
+                    <button class="btn btn-lg btn-danger btn-block" type="button" ng-click="disconnection()"> Déconnexion</button>
+                    
+                    <a href="#" class="pull-right need-help">Need help? </a><span class="clearfix"></span>
+                </form>
+            </div>
+            <a href="#" class="text-center new-account">Create an account </a>
+        </div>
+   
+</div>-->
+
+
+<div ng-repeat="account in accounts">
+
+        <account-login account="account"></account-login>
+
+
+</div>
+
+
+

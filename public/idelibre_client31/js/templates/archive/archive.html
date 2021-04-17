@@ -1,0 +1,9 @@
+<span us-spinner spinner-key="spinner-1"></span>
+<button ng-click="goToSeances()"  type="button" class="btn btn-primary perso-top-left" ><i class="fa fa-reply fa-2x"></i></button>
+
+
+<div class="perso-margin-vertical-lg">
+    <div ng-repeat="seance in archivedSeances| orderBy:  sortSeance">
+        <archiveseance_btn seance="seance" accountid="accountId" state='state'></archiveseance_btn>
+    </div>
+</div>

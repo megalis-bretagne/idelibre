@@ -1,0 +1,153 @@
+<style>
+
+    .pdfViewer {
+        position: absolute;
+        display: block;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+    }
+
+
+
+    .searchBar{
+
+        position: absolute;
+        display: block;
+        left: 200px;
+        top: 100px;
+/*        width: 400px;
+        height: 500px;*/
+        z-index:1082;
+        background: white;
+    }
+
+
+</style>
+
+
+<span us-spinner spinner-key="spinner-1"></span>
+<!--{{documentId}} <br>-->
+<!--<br>
+<button type="button" ng-click="goToOdj()">goToOdj</button> <br>-->
+
+<!--<annotationjs></annotationjs>-->
+<button ng-click="goToOdj()" type="button" class="btn btn-primary perso-top-left" ><i class="fa fa-reply fa-2x"></i></button>
+
+
+<div class="perso-top-right">
+    <button ng-if="!dlStatus" ng-click="downloadDocument()" type="button" class="btn btn-warning"><i class="fa fa-download fa-2x"></i></button>
+    <button ng-if="dlStatus" ng-click="downloadDocument()" type="button" class="btn btn-warning"><i class="fa fa-spinner fa-2x fa-pulse"></i></button>
+    <!--<button style="margin-left: 2px;" ng-click="goToOdj()"  type="button" class="btn btn-primary" ><i class="fa fa-list fa-2x"></i></button>-->
+
+
+
+</div>
+
+<!--<div class="perso-top-right">
+    <button type="button" class="btn btn-success " ng-click="toggleSearchbar()"><i class="fa fa-search fa-2x"></i></button>
+    <button ng-if="!dlStatus" ng-click="downloadDocument()" type="button" class="btn btn-warning"><i class="fa fa-download fa-2x"></i></button>
+    <button ng-if="dlStatus" ng-click="downloadDocument()" type="button" class="btn btn-warning"><i class="fa fa-spinner fa-2x fa-pulse"></i></button>
+</div>-->
+
+
+
+<!--<button class="perso-bottom-left btn disabled">
+    {{pageNum}}/{{pageTotal}}
+</button>-->
+
+<!--<button ng-click="goToOdj()"  type="button" class="btn btn-primary perso-top-right" ><i class="fa fa-list fa-2x"></i></button>-->
+
+
+
+
+
+<!--
+  <div id="viewerContainer">
+    <div id="viewer" class="pdfViewer"></div>
+  </div>-->
+
+
+<!--affichage du numero de page et ouverture du dropup-->
+<div class="perso-bottom-left">
+    <div id="page_num" class=" btn perso-grey-light dropup dropdown-toggle" dropdown-toggle dropdown >
+        <!--<a  class="dropdown-toggle" dropdown-toggle>-->
+        <div style="font-size: 20px"> 
+            {{pageNum}}/{{pageTotal}} <span class="caret"></span>
+        </div>
+        <ul class="dropdown-menu" style="padding: 10px">
+
+            <li>
+                <button class="btn" ng-click="zoomIn()"><i class="fa fa-search-plus fa-2x"></i></button>
+                <button class="btn" ng-click="zoomOut()"><i class="fa fa-search-minus fa-2x"></i></button>
+                <button class="btn" ng-click="defaultZoom()"><i class="fa fa-magic fa-2x"></i></button>
+            </li>
+
+            <hr>
+
+
+            <li>
+                <button class="btn" ng-click="rotatePages(90)"><i class="fa fa-repeat fa-2x"></i></button>
+                <button class="btn" ng-click="rotatePages(-90)"><i class="fa fa-undo fa-2x"></i></button>
+
+            </li>
+
+            <hr>
+
+            <li class="input-group input-group-lg" style="width:140px">
+                <input class="form-control" type="number" ng-model="pageNum" ><span class="input-group-addon" ng-click="gotoPage()"><i class="fa fa-search"></i></span>
+            </li>
+
+
+
+        </ul>
+
+    </div>  
+</div>
+
+
+<!--
+
+        searchbar
+<div class="searchBar">
+    <button id="verif">verif</button>
+    
+    <div class="well" style="padding: 8px; margin-bottom: 5px; width: 70%; margin:auto ">
+        <div class="input-group">
+            <span class="input-group-btn">
+                <button type="button" id="findPrevious" class="btn btn-warning">Précédent</button>
+            </span>
+            <input type="search" id="findInput" class="form-control" placeholder="Rechercher...">
+            <span class="input-group-btn">
+                <button type="button" id="findNext" class="btn btn-primary">Suivant</button>
+            </span>
+            <span id="findMsg"></span>
+            <span id="findHighlightAll"></span>
+            <span id="findMatchCase"></span>
+        </div>
+    </div> 
+</div>-->
+
+
+
+
+
+
+<div id="container">
+    <annotation-drawer annotations="document.annotations" ng-show="isDrawer"></annotation-drawer>
+    <navigation-drawer seance="seance" ng-show="isLeftDrawer"></navigation-drawer>
+    
+    
+    <annotationjs account="account" document="document" users="users"></annotationjs>
+    <canvas id="the-canvas" style="border:1px solid black;" class="pdfViewer"/>
+
+</div>
+
+
+
+
+
+
+
+

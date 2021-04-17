@@ -1,0 +1,14 @@
+
+<span us-spinner spinner-key="spinner-1"></span>
+
+<div class="perso-top-left">
+    <button ng-click="goToOdj()" title="Ordre du jour" type="button" class="btn btn-primary " ><i class="fa fa-reply fa-2x"></i></button>
+</div>
+
+
+<div class="perso-top-right">
+    <button ng-if="!dlStatus" title="Télécharger le document" ng-click="downloadDocument()" type="button" class="btn btn-warning"><i class="fa fa-download fa-2x"></i></button>
+    <button ng-if="dlStatus" ng-click="downloadDocument()" type="button" class="btn btn-warning"><i class="fa fa-spinner fa-2x fa-pulse"></i></button>
+</div>
+    
+<pdf-viewer seanceid="seance.id" accountid="account.id" document="document" documentid="documentId" typedocument="typeDocument" senderid="projetId"></pdf-viewer>
