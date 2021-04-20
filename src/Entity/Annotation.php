@@ -5,7 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Annotationv3
+ * Annotationv3.
  *
  * @ORM\Table(name="annotationv3")
  * @ORM\Entity
@@ -27,14 +27,8 @@ class Annotation
      *
      * @ORM\Column(name="authorid", type="guid", nullable=false)
      */
-    private $authorid;
+    private $authorid;   //userId  (faire aussi le author => User)
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="authorname", type="string", nullable=true)
-     */
-    private $authorname;
 
     /**
      * @var int|null
@@ -62,35 +56,33 @@ class Annotation
      *
      * @ORM\Column(name="projet_id", type="guid", nullable=true)
      */
-    private $projetId;
+    private $projetId;  //ajouter  project => Project
 
     /**
      * @var string|null
      *
      * @ORM\Column(name="seance_id", type="guid", nullable=true)
      */
-    private $seanceId;
+    private $seanceId;   //ça a l'air inutile pusiqu'on a forcement soit le projet sit l'annexe (sauf si on joue la convocation ??? à terster avec la 3.2)
 
     /**
      * @var string|null
      *
      * @ORM\Column(name="annexe_id", type="guid", nullable=true)
      */
-    private $annexeId;
+    private $annexeId;  //ajouter annex => Annex
 
     /**
      * @var string|null
      *
      * @ORM\Column(name="shareduseridlist", type="string", nullable=true)
      */
-    private $shareduseridlist;
+    private $shareduseridlist; //Tres mauvaise idée faire une jointable recipients entre annotation et user !
 
     /**
      * @var int|null
      *
      * @ORM\Column(name="date", type="bigint", nullable=true)
      */
-    private $date;
-
-
+    private $date;  // ('la date est un big int pour le timestamp' 'est peut etre le moement de changer et on fera la conversion dans le dto ?)
 }
