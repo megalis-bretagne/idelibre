@@ -8,15 +8,38 @@ services:
     env_file:
       - .env.docker.local
     volumes:
-      - data-public:/app/public
+      #- data-public:/app/public
+      - ./public:/app/public
+      - data-tmp:/tmp
       - ./docker-resources/zz-idelibre.conf:/usr/local/etc/php-fpm.d/zz-idelibre.conf
+
     command: ["/app/docker-resources/initApp.sh"]
+
+
+## il faut partager le /data/workspace entre le node et le fpm sinon on ne peut pas recuperer les fichiers
+
+  node-idelibre:
+    container_name: node-idelibre
+    ports:
+      - 4000:3000
+    image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/idelibre/idelibre-nodejs:main
+    volumes:
+      - ../idelibre4-nodejs:/app
+      - data-tmp:/tmp
+    env_file:
+      #- docker-resources/.env.test
+      - .env.docker.local
+    #depends_on:
+    #  - db-idelibre-test
+    command: [ "/app/docker-resources/init-test.sh" ]
+
 
   nginx-idelibre:
     container_name: nginx-idelibre
     image: nginx:1.17
     depends_on:
       - fpm-idelibre
+      - node-idelibre
     ports:
       - 80:80
       - 443:443
@@ -26,7 +49,9 @@ services:
       - ./docker-resources/options-ssl-nginx.conf:/etc/letsencrypt/options-ssl-nginx.conf
       - /data/certbot/conf:/etc/letsencrypt
       - /data/certbot/www:/var/www/certbot
-      - data-public:/app/public:ro
+      #- data-public:/app/public:ro
+      - ./public:/app/public
+
   certbot:
     image: certbot/certbot
     volumes:
@@ -47,5 +72,9 @@ services:
       - POSTGRES_PORT=5432
     command: ["/app/docker-resources/init.sh"]
 
+
+
+
 volumes:
   data-public:
+  data-tmp:
