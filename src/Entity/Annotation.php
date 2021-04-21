@@ -61,7 +61,7 @@ class Annotation
     private $sitting;
 
     /**
-     * @ORM\Column(type="string", length=1000, nullable=true)
+     * @ORM\Column(type="json", options={"jsonb"=true})
      */
     private $rect;
 
