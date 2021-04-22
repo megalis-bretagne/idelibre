@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use App\Repository\AnnotationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -51,11 +50,6 @@ class Annotation
     private $annex;
 
     /**
-     * @ORM\ManyToMany(targetEntity=User::class)
-     */
-    private $recipients;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Sitting::class)
      */
     private $sitting;
@@ -64,11 +58,6 @@ class Annotation
      * @ORM\Column(type="json", options={"jsonb"=true})
      */
     private $rect;
-
-    public function __construct()
-    {
-        $this->recipients = new ArrayCollection();
-    }
 
     public function getId(): ?string
     {
@@ -147,29 +136,7 @@ class Annotation
         return $this;
     }
 
-    /**
-     * @return Collection|User[]
-     */
-    public function getRecipients(): Collection
-    {
-        return $this->recipients;
-    }
 
-    public function addRecipient(User $recipient): self
-    {
-        if (!$this->recipients->contains($recipient)) {
-            $this->recipients[] = $recipient;
-        }
-
-        return $this;
-    }
-
-    public function removeRecipient(User $recipient): self
-    {
-        $this->recipients->removeElement($recipient);
-
-        return $this;
-    }
 
     public function getSitting(): ?Sitting
     {
