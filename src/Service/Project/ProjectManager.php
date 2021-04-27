@@ -3,6 +3,7 @@
 namespace App\Service\Project;
 
 use App\Entity\Annex;
+use App\Entity\Convocation;
 use App\Entity\Project;
 use App\Entity\Sitting;
 use App\Entity\Structure;
@@ -15,6 +16,7 @@ use App\Repository\UserRepository;
 use App\Service\Annex\AnnexManager;
 use App\Service\ApiEntity\AnnexApi;
 use App\Service\ApiEntity\ProjectApi;
+use App\Service\ClientNotifier\ClientNotifierInterface;
 use App\Service\File\FileManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
@@ -29,6 +31,7 @@ class ProjectManager
     private EntityManagerInterface $em;
     private AnnexRepository $annexRepository;
     private AnnexManager $annexManager;
+    private ClientNotifierInterface $clientNotifier;
 
     public function __construct(
         ProjectRepository $projectRepository,
@@ -37,7 +40,8 @@ class ProjectManager
         ThemeRepository $themeRepository,
         FileManager $fileManager,
         AnnexManager $annexManager,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        ClientNotifierInterface  $clientNotifier
     ) {
         $this->projectRepository = $projectRepository;
         $this->userRepository = $userRepository;
@@ -46,6 +50,7 @@ class ProjectManager
         $this->em = $em;
         $this->annexRepository = $annexRepository;
         $this->annexManager = $annexManager;
+        $this->clientNotifier = $clientNotifier;
     }
 
     /**
@@ -60,7 +65,9 @@ class ProjectManager
             $this->createOrUpdateProject($clientProject, $uploadedFiles, $sitting);
         }
         $this->em->flush();
+        $this->clientNotifier->modifiedSittingNotification($sitting->getConvocations());
     }
+
 
     /**
      * @param UploadedFile[] $uploadedFiles

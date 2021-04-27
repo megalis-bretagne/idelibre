@@ -2,11 +2,22 @@
 
 namespace App\Service\ClientNotifier;
 
+use App\Entity\Convocation;
+
 interface ClientNotifierInterface
 {
-    public function newSittingNotification(string $userId);
+    /**
+     * @param Convocation[] $convocations
+     */
+    public function newSittingNotification(array $convocations);
 
-    public function modifiedSittingNotification(string $userId);
+    /**
+     * @param Convocation[] $convocations
+     */
+    public function modifiedSittingNotification(array $convocations);
 
-    public function removedSittingNotification(string $userId);
+    /**
+     * @param Convocation[] $convocations
+     */
+    public function removedSittingNotification(array $convocations);
 }

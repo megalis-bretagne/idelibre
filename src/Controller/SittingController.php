@@ -232,13 +232,4 @@ class SittingController extends AbstractController
         return $referer ? $this->redirect($referer) : $this->redirectToRoute('sitting_index');
     }
 
-    /**
-     * @Route("/notif", name="sdssd")
-     */
-    public function sendNotif(ClientNotifier $clientNotifier): Response
-    {
-        //dd('ok');
-        $clientNotifier->sendNotification('http://node-idelibre:3000/0.2.0/notification/sittings/new', ['toto', 'tata']);
-        dd('done');
-    }
 }

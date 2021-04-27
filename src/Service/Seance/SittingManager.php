@@ -86,7 +86,6 @@ class SittingManager
         $this->fileManager->delete($sitting->getConvocationFile());
         $this->projectManager->deleteProjects($sitting->getProjects());
         $this->convocationManager->deleteConvocations($sitting->getConvocations());
-        // TODO delete invitations
         $this->em->remove($sitting);
         $this->em->flush();
         // TODO remove fullpdf and zip !

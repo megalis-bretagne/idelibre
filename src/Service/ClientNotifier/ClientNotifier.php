@@ -7,7 +7,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class ClientNotifier /*implements ClientNotifierInterface*/
+class ClientNotifier implements ClientNotifierInterface
 {
     private string $passphrase;
     private HttpClientInterface $httpClient;
@@ -23,10 +23,33 @@ class ClientNotifier /*implements ClientNotifierInterface*/
         $this->baseUrl = $bag->get('nodejs_notification_url');
     }
 
+
     /**
      * @param Convocation[] $convocations
      */
     public function newSittingNotification(array $convocations)
+    {
+        $this->sendNotification('/sittings/new', $this->getUserList($convocations));
+    }
+
+
+    public function modifiedSittingNotification(array $convocations)
+    {
+        $this->sendNotification('/sittings/modify', $this->getUserList($convocations));
+
+    }
+
+    public function removedSittingNotification(array $convocations)
+    {
+        $this->sendNotification('/sittings/modify', $this->getUserList($convocations));
+    }
+
+
+    /**
+     * @param Convocation[] $convocations
+     * @return string[]
+     */
+    private function getUserList(array $convocations): array
     {
         $userIds = [];
         foreach ($convocations as $convocation) {
@@ -34,13 +57,15 @@ class ClientNotifier /*implements ClientNotifierInterface*/
                 $userIds[] = $convocation->getUser()->getId();
             }
         }
-        $this->$this->sendNotification('/sittings/new', $userIds);
+
+        return $userIds;
     }
+
 
     /**
      * @param string[] $userIds
      */
-    public function sendNotification(string $path, array $userIds)
+    private function sendNotification(string $path, array $userIds)
     {
         try {
             $this->httpClient->request('POST', "$this->baseUrl/$path", [
@@ -54,21 +79,4 @@ class ClientNotifier /*implements ClientNotifierInterface*/
         }
     }
 
-    public function modifiedSittingNotification(string $userId)
-    {
-        try {
-            $this->httpClient->request('POST', 'http://node-idelibre:3000/sittings/modify/' . $userId . '/' . $this->passphrase);
-        } catch (TransportExceptionInterface $e) {
-            dump($e);
-        }
-    }
-
-    public function removedSittingNotification(string $userId)
-    {
-        try {
-            $this->httpClient->request('POST', 'http://node-idelibre:3000/sittings/removed/' . $userId . '/' . $this->passphrase);
-        } catch (TransportExceptionInterface $e) {
-            dump($e);
-        }
-    }
 }
