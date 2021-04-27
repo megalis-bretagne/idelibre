@@ -23,7 +23,6 @@ class ClientNotifier implements ClientNotifierInterface
         $this->baseUrl = $bag->get('nodejs_notification_url');
     }
 
-
     /**
      * @param Convocation[] $convocations
      */
@@ -32,11 +31,9 @@ class ClientNotifier implements ClientNotifierInterface
         $this->sendNotification('/sittings/new', $this->getUserList($convocations));
     }
 
-
     public function modifiedSittingNotification(array $convocations)
     {
         $this->sendNotification('/sittings/modify', $this->getUserList($convocations));
-
     }
 
     public function removedSittingNotification(array $convocations)
@@ -44,9 +41,9 @@ class ClientNotifier implements ClientNotifierInterface
         $this->sendNotification('/sittings/modify', $this->getUserList($convocations));
     }
 
-
     /**
      * @param Convocation[] $convocations
+     *
      * @return string[]
      */
     private function getUserList(array $convocations): array
@@ -60,7 +57,6 @@ class ClientNotifier implements ClientNotifierInterface
 
         return $userIds;
     }
-
 
     /**
      * @param string[] $userIds
@@ -78,5 +74,4 @@ class ClientNotifier implements ClientNotifierInterface
             dump($e);
         }
     }
-
 }

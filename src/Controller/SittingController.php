@@ -7,7 +7,6 @@ use App\Form\SearchType;
 use App\Form\SittingType;
 use App\Repository\ConvocationRepository;
 use App\Repository\ProjectRepository;
-use App\Service\ClientNotifier\ClientNotifier;
 use App\Service\Convocation\ConvocationManager;
 use App\Service\Pdf\PdfSittingGenerator;
 use App\Service\Seance\ActorManager;
@@ -231,5 +230,4 @@ class SittingController extends AbstractController
 
         return $referer ? $this->redirect($referer) : $this->redirectToRoute('sitting_index');
     }
-
 }

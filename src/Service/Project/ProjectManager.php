@@ -3,7 +3,6 @@
 namespace App\Service\Project;
 
 use App\Entity\Annex;
-use App\Entity\Convocation;
 use App\Entity\Project;
 use App\Entity\Sitting;
 use App\Entity\Structure;
@@ -41,7 +40,7 @@ class ProjectManager
         FileManager $fileManager,
         AnnexManager $annexManager,
         EntityManagerInterface $em,
-        ClientNotifierInterface  $clientNotifier
+        ClientNotifierInterface $clientNotifier
     ) {
         $this->projectRepository = $projectRepository;
         $this->userRepository = $userRepository;
@@ -67,7 +66,6 @@ class ProjectManager
         $this->em->flush();
         $this->clientNotifier->modifiedSittingNotification($sitting->getConvocations());
     }
-
 
     /**
      * @param UploadedFile[] $uploadedFiles
