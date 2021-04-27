@@ -158,9 +158,8 @@ class ConvocationManager
     {
         $this->timestampAndActiveConvocations($convocation->getSitting(), [$convocation]);
         $emails = $this->generateEmailsData($convocation->getSitting(), [$convocation]);
-        $this->emailService->sendBatch($emails);
 
-        // TODO send email !
+        $this->emailService->sendBatch($emails);
     }
 
     /**

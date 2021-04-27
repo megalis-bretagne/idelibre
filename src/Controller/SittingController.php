@@ -7,6 +7,7 @@ use App\Form\SearchType;
 use App\Form\SittingType;
 use App\Repository\ConvocationRepository;
 use App\Repository\ProjectRepository;
+use App\Service\ClientNotifier\ClientNotifier;
 use App\Service\Convocation\ConvocationManager;
 use App\Service\Pdf\PdfSittingGenerator;
 use App\Service\Seance\ActorManager;
@@ -146,7 +147,7 @@ class SittingController extends AbstractController
 
         $referer = $request->headers->get('referer');
 
-        return  $referer ? $this->redirect($referer) : $this->redirectToRoute('sitting_index');
+        return $referer ? $this->redirect($referer) : $this->redirectToRoute('sitting_index');
     }
 
     /**
@@ -228,6 +229,17 @@ class SittingController extends AbstractController
         $this->addFlash('success', 'La séance a été classée');
         $referer = $request->headers->get('referer');
 
-        return  $referer ? $this->redirect($referer) : $this->redirectToRoute('sitting_index');
+        return $referer ? $this->redirect($referer) : $this->redirectToRoute('sitting_index');
+    }
+
+
+    /**
+     * @Route("/notif", name="sdssd")
+     */
+    public function sendNotif(ClientNotifier $clientNotifier): Response
+    {
+        //dd('ok');
+        $clientNotifier->sendNotification('http://node-idelibre:3000/0.2.0/notification/sittings/new', ["toto", "tata"]);
+        dd('done');
     }
 }
