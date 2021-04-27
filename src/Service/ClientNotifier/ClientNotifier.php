@@ -11,41 +11,43 @@ class ClientNotifier /*implements ClientNotifierInterface*/
 {
     private string $passphrase;
     private HttpClientInterface $httpClient;
+    /**
+     * @var mixed
+     */
+    private $baseUrl;
 
     public function __construct(ParameterBagInterface $bag, HttpClientInterface $httpClient)
     {
         $this->passphrase = $bag->get('nodejs_passphrase');
         $this->httpClient = $httpClient;
+        $this->baseUrl = $bag->get('nodejs_notification_url');
     }
-
 
     /**
      * @param Convocation[] $convocations
      */
-    public function newSittingNotification(array $convocations) {
+    public function newSittingNotification(array $convocations)
+    {
         $userIds = [];
         foreach ($convocations as $convocation) {
-            if($convocation->getIsActive()) {
+            if ($convocation->getIsActive()) {
                 $userIds[] = $convocation->getUser()->getId();
             }
         }
-        $this->$this->sendNotification("http://node-idelibre:3000/0.2.0/notification/sittings/new");
-
+        $this->$this->sendNotification('/sittings/new', $userIds);
     }
 
-
     /**
-     * @param string $url
      * @param string[] $userIds
      */
-    public function sendNotification(string $url, array $userIds)
+    public function sendNotification(string $path, array $userIds)
     {
         try {
-            $this->httpClient->request('POST', $url, [
+            $this->httpClient->request('POST', "$this->baseUrl/$path", [
                 'json' => [
                     'userIds' => $userIds,
-                    'passphrase' => '$this->passphrase'
-                ]
+                    'passphrase' => $this->passphrase,
+                ],
             ]);
         } catch (TransportExceptionInterface $e) {
             dump($e);
