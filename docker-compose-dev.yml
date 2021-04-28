@@ -13,6 +13,7 @@ services:
       - data-file:/tmp
       - ./docker-resources/zz-idelibre.conf:/usr/local/etc/php-fpm.d/zz-idelibre.conf
       - ./src:/app/src
+      - ./templates:/app/templates
 
     command: ["/app/docker-resources/initApp.sh"]
 
