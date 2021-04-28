@@ -28,12 +28,12 @@ class ClientNotifier implements ClientNotifierInterface
      */
     public function newSittingNotification(array $convocations)
     {
-        $this->sendNotification('/sittings/new', $this->getUserList($convocations));
+        $this->sendNotification('/sittings/new', $this->getConvocationActiveUserList($convocations));
     }
 
     public function modifiedSittingNotification(array $convocations)
     {
-        $this->sendNotification('/sittings/modify', $this->getUserList($convocations));
+        $this->sendNotification('/sittings/modify', $this->getConvocationActiveUserList($convocations));
     }
 
     public function removedSittingNotification(array $convocations)
@@ -41,12 +41,30 @@ class ClientNotifier implements ClientNotifierInterface
         $this->sendNotification('/sittings/modify', $this->getUserList($convocations));
     }
 
+
     /**
      * @param Convocation[] $convocations
      *
      * @return string[]
      */
     private function getUserList(array $convocations): array
+    {
+        $userIds = [];
+        foreach ($convocations as $convocation) {
+                $userIds[] = $convocation->getUser()->getId();
+        }
+
+        return $userIds;
+    }
+
+
+
+    /**
+     * @param Convocation[] $convocations
+     *
+     * @return string[]
+     */
+    private function getConvocationActiveUserList(array $convocations): array
     {
         $userIds = [];
         foreach ($convocations as $convocation) {
@@ -71,6 +89,7 @@ class ClientNotifier implements ClientNotifierInterface
                 ],
             ]);
         } catch (TransportExceptionInterface $e) {
+            // TODO log ERROR !
             dump($e);
         }
     }

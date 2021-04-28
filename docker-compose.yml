@@ -10,7 +10,7 @@ services:
     volumes:
       #- data-public:/app/public
       - ./public:/app/public
-      - data-tmp:/tmp
+      - data-file:/tmp
       - ./docker-resources/zz-idelibre.conf:/usr/local/etc/php-fpm.d/zz-idelibre.conf
       - ./src:/app/src
 
@@ -26,13 +26,11 @@ services:
     image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/idelibre/idelibre-nodejs:main
     volumes:
       - ../idelibre4-nodejs:/app
-      - data-tmp:/tmp
+      - data-file:/tmp
     env_file:
       #- docker-resources/.env.test
       - .env.docker.local
-    #depends_on:
-    #  - db-idelibre-test
-    command: [ "/app/docker-resources/init-test.sh" ]
+    command: [ "/app/docker-resources/init.sh" ]
 
 
   nginx-idelibre:
@@ -50,8 +48,8 @@ services:
       - ./docker-resources/options-ssl-nginx.conf:/etc/letsencrypt/options-ssl-nginx.conf
       - /data/certbot/conf:/etc/letsencrypt
       - /data/certbot/www:/var/www/certbot
-      #- data-public:/app/public:ro
-      - ./public:/app/public
+      - data-public:/app/public:ro
+      #- ./public:/app/public
 
   certbot:
     image: certbot/certbot
@@ -78,4 +76,4 @@ services:
 
 volumes:
   data-public:
-  data-tmp:
+  data-file:

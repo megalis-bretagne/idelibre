@@ -212,7 +212,7 @@ class ConvocationManager
     }
 
     /**
-     * @param Convocation[] $convocations
+     * @param iterable<Convocation> $convocations
      */
     public function deleteConvocations(iterable $convocations): void
     {
@@ -221,7 +221,7 @@ class ConvocationManager
             $this->deleteAssociatedTimestamp($convocation);
         }
 
-        $this->clientNotifier->removedSittingNotification($convocations);
+        $this->clientNotifier->removedSittingNotification($convocations->toArray());
     }
 
     private function deleteAssociatedTimestamp(Convocation $convocation): void
@@ -243,7 +243,7 @@ class ConvocationManager
             $convocation->setIsActive(false);
             $this->em->persist($convocation);
         }
-        $this->clientNotifier->removedSittingNotification($convocations);
+        $this->clientNotifier->removedSittingNotification($convocations->toArray());
     }
 
     /**

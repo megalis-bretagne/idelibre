@@ -63,8 +63,9 @@ class ProjectManager
         foreach ($clientProjects as $clientProject) {
             $this->createOrUpdateProject($clientProject, $uploadedFiles, $sitting);
         }
+        $sitting->setRevision($sitting->getRevision() + 1);
         $this->em->flush();
-        $this->clientNotifier->modifiedSittingNotification($sitting->getConvocations());
+        $this->clientNotifier->modifiedSittingNotification($sitting->getConvocations()->toArray());
     }
 
     /**
