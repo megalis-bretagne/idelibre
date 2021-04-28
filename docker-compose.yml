@@ -12,7 +12,7 @@ services:
       #- ./public:/app/public
       - data-file:/tmp
       - ./docker-resources/zz-idelibre.conf:/usr/local/etc/php-fpm.d/zz-idelibre.conf
-      - ./src:/app/src
+      #- ./src:/app/src
 
     command: ["/app/docker-resources/initApp.sh"]
 
@@ -21,11 +21,11 @@ services:
 
   node-idelibre:
     container_name: node-idelibre
-    ports:
-      - 4000:3000
+    #ports:
+    #  - 4000:3000
     image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/idelibre/idelibre-nodejs:main
     volumes:
-      - ../idelibre4-nodejs:/app
+     # - ../idelibre4-nodejs:/app
       - data-file:/tmp
     env_file:
       #- docker-resources/.env.test
@@ -60,8 +60,8 @@ services:
   lshorodatage:
     container_name: lshorodatage
     image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/lshorodatage/lshorodatage:master
-    ports:
-      - 3000:3000
+    #ports:
+    #  - 3000:3000
     environment:
       - NODE_ENV=production
       - POSTGRES_HOST=172.17.0.1
