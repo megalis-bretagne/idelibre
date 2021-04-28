@@ -41,7 +41,6 @@ class ClientNotifier implements ClientNotifierInterface
         $this->sendNotification('/sittings/modify', $this->getUserList($convocations));
     }
 
-
     /**
      * @param Convocation[] $convocations
      *
@@ -51,13 +50,11 @@ class ClientNotifier implements ClientNotifierInterface
     {
         $userIds = [];
         foreach ($convocations as $convocation) {
-                $userIds[] = $convocation->getUser()->getId();
+            $userIds[] = $convocation->getUser()->getId();
         }
 
         return $userIds;
     }
-
-
 
     /**
      * @param Convocation[] $convocations
