@@ -8,8 +8,8 @@ services:
     env_file:
       - .env.docker.local
     volumes:
-      #- data-public:/app/public
-      - ./public:/app/public
+      - data-public:/app/public
+      #- ./public:/app/public
       - data-file:/tmp
       - ./docker-resources/zz-idelibre.conf:/usr/local/etc/php-fpm.d/zz-idelibre.conf
       - ./src:/app/src

@@ -40,16 +40,19 @@ class Annotation
 
     /**
      * @ORM\ManyToOne(targetEntity=Project::class)
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $project;
 
     /**
      * @ORM\ManyToOne(targetEntity=Annex::class)
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $annex;
 
     /**
      * @ORM\ManyToOne(targetEntity=Sitting::class)
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $sitting;
 
