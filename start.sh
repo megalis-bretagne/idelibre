@@ -79,7 +79,7 @@ echo "### From here generate letsencrypt certificate (if stagging=1 we only try)
 
 
 echo "### Starting nginx ..."
-docker-compose up --force-recreate -d nginx-comelus
+docker-compose up --force-recreate -d nginx-idelibre
 echo
 
 
@@ -118,4 +118,4 @@ docker-compose run --rm --entrypoint "\
 echo
 
 echo "### Reloading nginx ..."
-docker-compose exec nginx-comelus nginx -s reload
+docker-compose exec nginx-idelibre nginx -s reload

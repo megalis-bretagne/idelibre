@@ -149,3 +149,9 @@ TODO MODIFIER LES INFORMATION DE LA SEANCE ET PEUT ETRE CHANGER LE button parcou
 
 Avec le css genere par webpack il va falloir gerer le pb de ça dans template/generate
 <link rel="stylesheet" href="{{ absolute_url(asset('assets/bootstrap/css/il-bootstrap-4.css')) }}">
+
+
+
+Creation de l'utilisateur admn de collectivité à l'origine.
+Pour l'instant il met l'user tel que rentré cad par default sans la @.
+Il faudrait empecher de mettre un @ et forcer le suffix à l'enregistrement !

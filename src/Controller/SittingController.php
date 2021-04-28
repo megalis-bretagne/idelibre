@@ -146,7 +146,7 @@ class SittingController extends AbstractController
 
         $referer = $request->headers->get('referer');
 
-        return  $referer ? $this->redirect($referer) : $this->redirectToRoute('sitting_index');
+        return $referer ? $this->redirect($referer) : $this->redirectToRoute('sitting_index');
     }
 
     /**
@@ -228,6 +228,6 @@ class SittingController extends AbstractController
         $this->addFlash('success', 'La séance a été classée');
         $referer = $request->headers->get('referer');
 
-        return  $referer ? $this->redirect($referer) : $this->redirectToRoute('sitting_index');
+        return $referer ? $this->redirect($referer) : $this->redirectToRoute('sitting_index');
     }
 }

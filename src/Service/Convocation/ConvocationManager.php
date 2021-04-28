@@ -9,6 +9,7 @@ use App\Entity\Sitting;
 use App\Entity\User;
 use App\Repository\ConvocationRepository;
 use App\Repository\UserRepository;
+use App\Service\ClientNotifier\ClientNotifierInterface;
 use App\Service\Email\Attachment;
 use App\Service\Email\EmailNotSendException;
 use App\Service\Email\EmailServiceInterface;
@@ -31,6 +32,7 @@ class ConvocationManager
     private EmailServiceInterface $emailService;
     private EmailGenerator $emailGenerator;
     private UserRepository $userRepository;
+    private ClientNotifierInterface $clientNotifier;
 
     public function __construct(
         EntityManagerInterface $em,
@@ -40,7 +42,8 @@ class ConvocationManager
         ParameterBagInterface $bag,
         EmailServiceInterface $emailService,
         EmailGenerator $emailGenerator,
-        UserRepository $userRepository
+        UserRepository $userRepository,
+        ClientNotifierInterface $clientNotifier
     ) {
         $this->em = $em;
         $this->convocationRepository = $convocationRepository;
@@ -50,6 +53,7 @@ class ConvocationManager
         $this->emailService = $emailService;
         $this->emailGenerator = $emailGenerator;
         $this->userRepository = $userRepository;
+        $this->clientNotifier = $clientNotifier;
     }
 
     public function createConvocationsActors(Sitting $sitting): void
@@ -144,7 +148,7 @@ class ConvocationManager
         while (count($convocations)) {
             $convocationBatch = array_splice($convocations, 0, $this->bag->get('max_batch_email'));
             $this->timestampAndActiveConvocations($sitting, $convocationBatch);
-
+            $this->clientNotifier->newSittingNotification($convocationBatch);
             $emails = $this->generateEmailsData($sitting, $convocationBatch);
             $this->emailService->sendBatch($emails);
         }
@@ -158,9 +162,8 @@ class ConvocationManager
     {
         $this->timestampAndActiveConvocations($convocation->getSitting(), [$convocation]);
         $emails = $this->generateEmailsData($convocation->getSitting(), [$convocation]);
+        $this->clientNotifier->newSittingNotification([$convocation]);
         $this->emailService->sendBatch($emails);
-
-        // TODO send email !
     }
 
     /**
@@ -209,7 +212,7 @@ class ConvocationManager
     }
 
     /**
-     * @param Convocation[] $convocations
+     * @param iterable<Convocation> $convocations
      */
     public function deleteConvocations(iterable $convocations): void
     {
@@ -217,6 +220,8 @@ class ConvocationManager
             $this->em->remove($convocation);
             $this->deleteAssociatedTimestamp($convocation);
         }
+
+        $this->clientNotifier->removedSittingNotification($convocations->toArray());
     }
 
     private function deleteAssociatedTimestamp(Convocation $convocation): void
@@ -238,6 +243,7 @@ class ConvocationManager
             $convocation->setIsActive(false);
             $this->em->persist($convocation);
         }
+        $this->clientNotifier->removedSittingNotification($convocations->toArray());
     }
 
     /**
