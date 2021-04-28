@@ -1,12 +1,9 @@
 <?php
 
-
 namespace App\Service\ClientNotifier;
-
 
 class FakeClientNotifier implements ClientNotifierInterface
 {
-
     public function newSittingNotification(array $convocations)
     {
         // Fake newSittingNotification() method.

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Service\ClientNotifier;
-
 
 class ClientNotifierFactory
 {
@@ -23,5 +21,4 @@ class ClientNotifierFactory
 
         return $this->clientNotifier;
     }
-
 }
