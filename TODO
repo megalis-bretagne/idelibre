@@ -155,3 +155,7 @@ Avec le css genere par webpack il va falloir gerer le pb de ça dans template/ge
 Creation de l'utilisateur admn de collectivité à l'origine.
 Pour l'instant il met l'user tel que rentré cad par default sans la @.
 Il faudrait empecher de mettre un @ et forcer le suffix à l'enregistrement !
+
+
+creer un fakeClientnotifier implement ClientNotifier interface . logs in test
+
