@@ -16,7 +16,7 @@ parameters:
   max_email_attachment_file_size: 512000
 
   nodejs_passphrase: '%env(PASSPHRASE)%'
-  nodejs_notification_url: 'http://node-idelibre:3000/0.2.0/notification'
+  nodejs_notification_url: 'http://node-idelibre:3000/notifications'
 
 
 services:
