@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Regex;
 
 class SuperUserType extends AbstractType
 {
@@ -24,7 +25,11 @@ class SuperUserType extends AbstractType
             ->add('lastName', TextType::class, [
                 'label' => 'Nom', ])
             ->add('username', TextType::class, [
-                'label' => 'Nom d\'utilisateur', ])
+                'label' => 'Nom d\'utilisateur (sans @suffix)',
+                'constraints' => [
+                    new Regex('/^((?!@).)*$/', 'le champ ne doit pas contenir le suffixe'),
+                ],
+            ])
             ->add('email', EmailType::class, [
                 'label' => 'Email', ])
             ->add('plainPassword', RepeatedType::class, [
