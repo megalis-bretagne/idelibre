@@ -31,6 +31,12 @@ class Party
     private $id;
 
     /**
+     * @ORM\Column(type="integer")
+     * On cree la sequence correspondante (party_legacy_seq) manuellement dans la migration Version20210430085944
+     */
+    private $legacyId;
+
+    /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(max="255")
      * @Assert\NotBlank
@@ -110,6 +116,21 @@ class Party
     public function setStructure(?Structure $structure): self
     {
         $this->structure = $structure;
+
+        return $this;
+    }
+
+    public function getLegacyId(): ?int
+    {
+        return $this->legacyId;
+    }
+
+    /**
+     * @return Party
+     */
+    public function setLegacyId(int $legacyId): self
+    {
+        $this->legacyId = $legacyId;
 
         return $this;
     }
