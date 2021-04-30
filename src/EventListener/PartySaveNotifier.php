@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\EventListener;
-
 
 use App\Entity\Party;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,12 +17,13 @@ class PartySaveNotifier
 
     public function preFlush(Party $party, PreFlushEventArgs $event): void
     {
-        if($party->getLegacyId() !== null) {
+        if (null !== $party->getLegacyId()) {
             return;
         }
 
         if ('test' === getenv('APP_ENV')) {
             $party->setLegacyId(99999);
+
             return;
         }
 

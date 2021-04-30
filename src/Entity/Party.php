@@ -120,9 +120,6 @@ class Party
         return $this;
     }
 
-    /**
-     * @return int|null
-     */
     public function getLegacyId(): ?int
     {
         return $this->legacyId;
@@ -134,6 +131,7 @@ class Party
     public function setLegacyId(int $legacyId): self
     {
         $this->legacyId = $legacyId;
+
         return $this;
     }
 }
