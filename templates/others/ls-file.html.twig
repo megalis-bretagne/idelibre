@@ -2,6 +2,7 @@
     <div class="form-group">
         {{- form_errors(form) -}}
         {{- form_label(form) -}} <br>
+
         <label class="ls-file btn btn-primary" title="{{ label }}" {{ file_name is defined ? 'hidden="true"' : '' }}>
             <input type="file"
                    id="{{ id }}" name="{{ full_name }}" class="ls-file"
@@ -13,7 +14,7 @@
             {{ attr.placeholder is defined ? attr.placeholder : "Parcourir" }}
         </label>
         <div class="div-info mb-4" {{ file_name is not defined ? 'hidden="true"' : '' }}>
-            <span class="{{ remove_icon }} btn btn-outline-danger borderless"> </span>
+            {%- if not disabled %}<span class="{{ remove_icon }} btn btn-outline-danger borderless"> </span> {% endif %}
             <span class="file-title">{{ file_name | default("") }}</span>
 
         </div>

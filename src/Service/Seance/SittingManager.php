@@ -136,4 +136,26 @@ class SittingManager
 
         return false;
     }
+
+    public function isAlreadySentConvocation(Sitting $sitting): bool
+    {
+        foreach ($sitting->getConvocations() as $convocation) {
+            if ($convocation->getIsActive() && $convocation->isConvocation()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function isAlreadySentInvitation(Sitting $sitting): bool
+    {
+        foreach ($sitting->getConvocations() as $convocation) {
+            if ($convocation->getIsActive() && $convocation->isInvitation()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

@@ -180,29 +180,7 @@
     </div>
 
 
-    <div id="confirm-not-save" class="modal fade" role="dialog" data-backdrop="static">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Attention</h4>
-                    <button class="close" data-dismiss="modal" type="button">&times;</button>
-                </div>
-                <div class="modal-body">
-                    Voulez vous changer de page sans sauvegarder ?
-                </div>
-
-                <div class="modal-footer">
-
-                    <button class="btn btn-secondary" data-dismiss="modal" type="button">
-                        <span class="fa fa-times"></span> Annuler
-                    </button>
-                    <a href="#" id="confirm-btn">Confirmer</a>
-
-                </div>
-            </div>
-        </div>
-    </div>
-
+    {{ include('include/_modal_confirm_not_save.html.twig') }}
 
 
 {% endblock %}

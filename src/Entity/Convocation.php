@@ -237,4 +237,14 @@ class Convocation
 
         return $this;
     }
+
+    public function isConvocation(): bool
+    {
+        return self::CATEGORY_CONVOCATION === $this->category;
+    }
+
+    public function isInvitation(): bool
+    {
+        return self::CATEGORY_INVITATION === $this->category;
+    }
 }
