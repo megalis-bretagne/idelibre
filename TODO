@@ -159,3 +159,6 @@ Il faudrait empecher de mettre un @ et forcer le suffix à l'enregistrement !
 
 creer un fakeClientnotifier implement ClientNotifier interface . logs in test
 
+
+
+En editition type associé est figé !
