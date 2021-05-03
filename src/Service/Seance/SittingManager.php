@@ -137,7 +137,6 @@ class SittingManager
         return false;
     }
 
-
     public function isAlreadySentConvocation(Sitting $sitting): bool
     {
         foreach ($sitting->getConvocations() as $convocation) {
@@ -149,7 +148,6 @@ class SittingManager
         return false;
     }
 
-
     public function isAlreadySentInvitation(Sitting $sitting): bool
     {
         foreach ($sitting->getConvocations() as $convocation) {
@@ -160,8 +158,4 @@ class SittingManager
 
         return false;
     }
-
-
-
-
 }

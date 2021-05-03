@@ -240,12 +240,11 @@ class Convocation
 
     public function isConvocation(): bool
     {
-        return $this->category === self::CATEGORY_CONVOCATION;
+        return self::CATEGORY_CONVOCATION === $this->category;
     }
 
     public function isInvitation(): bool
     {
-        return $this->category === self::CATEGORY_INVITATION;
+        return self::CATEGORY_INVITATION === $this->category;
     }
-
 }

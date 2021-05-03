@@ -38,8 +38,7 @@ class SittingType extends AbstractType
                 'class' => Type::class,
                 'query_builder' => $this->typeRepository->findByStructure($options['structure']),
                 'choice_label' => 'name',
-                'disabled' => !$isNew
-
+                'disabled' => !$isNew,
             ])
             ->add('date', null, [
                 'label' => 'Date et heure',
@@ -60,7 +59,7 @@ class SittingType extends AbstractType
                 'mapped' => false,
                 'required' => $isNew,
                 'file_name' => $this->getConvocationFileName($options['data'] ?? null),
-                'disabled' => $isAlreadySentConvocation
+                'disabled' => $isAlreadySentConvocation,
             ])
             ->add('invitationFile', LsFileType::class, [
                 'label' => $isNew ? 'Fichier d\'invitation' : 'Remplacer le fichier d\'invitation',
@@ -71,7 +70,7 @@ class SittingType extends AbstractType
                 'mapped' => false,
                 'required' => false,
                 'file_name' => $this->getInvitationFileName($options['data'] ?? null),
-                'disabled' => $isAlreadySentInvitation
+                'disabled' => $isAlreadySentInvitation,
             ])
             ->add('structure', HiddenType::class, [
                 'data' => $options['structure'],
