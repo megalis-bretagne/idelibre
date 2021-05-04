@@ -3,8 +3,9 @@ version: '3.4'
 services:
   fpm-idelibre:
     container_name: fpm-idelibre
-    image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/idelibre/idelibre:master
-
+    #image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/idelibre/idelibre:master
+    build:
+      .
     env_file:
       - .env.docker.local
     volumes:
@@ -14,7 +15,7 @@ services:
       - ./docker-resources/zz-idelibre.conf:/usr/local/etc/php-fpm.d/zz-idelibre.conf
       - ./src:/app/src
       - ./templates:/app/templates
-      - ./vendor:/app/vendor
+      #- ./vendor:/app/vendor
 
     command: ["/app/docker-resources/initApp.sh"]
 
