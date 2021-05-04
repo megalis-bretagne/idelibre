@@ -92,8 +92,8 @@ class SittingController extends AbstractController
      */
     public function editUsers(Sitting $sitting, Request $request, ActorManager $actorManager, ConvocationManager $convocationManager): Response
     {
-        if($sitting->getIsArchived()) {
-            throw new InvalidArgumentException("Impossible de modifier une séance archivée");
+        if ($sitting->getIsArchived()) {
+            throw new InvalidArgumentException('Impossible de modifier une séance archivée');
         }
 
         return $this->render('sitting/edit_actors.html.twig', [
@@ -108,9 +108,10 @@ class SittingController extends AbstractController
      */
     public function editProjects(Sitting $sitting): Response
     {
-        if($sitting->getIsArchived()) {
-            throw new InvalidArgumentException("Impossible de modifier une séance archivée");
+        if ($sitting->getIsArchived()) {
+            throw new InvalidArgumentException('Impossible de modifier une séance archivée');
         }
+
         return $this->render('sitting/edit_projects.html.twig', [
             'sitting' => $sitting,
         ]);
@@ -123,17 +124,14 @@ class SittingController extends AbstractController
      */
     public function editInformation(Sitting $sitting, Request $request, SittingManager $sittingManager): Response
     {
-        if($sitting->getIsArchived()) {
-            throw new InvalidArgumentException("Impossible de modifier une séance archivée");
+        if ($sitting->getIsArchived()) {
+            throw new InvalidArgumentException('Impossible de modifier une séance archivée');
         }
 
         $form = $this->createForm(SittingType::class, $sitting, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-
-
             $sittingManager->update(
                 $form->getData(),
                 $form->get('convocationFile')->getData(),
