@@ -1,9 +1,12 @@
 {
+  "description": "idelibre 4",
+  "name": "libriciel/idelibre",
   "type": "project",
   "license": "agpl",
   "require": {
     "php": ">=7.4",
     "ext-ctype": "*",
+    "ext-http": "*",
     "ext-iconv": "*",
     "ext-intl": "*",
     "ext-json": "*",
@@ -12,6 +15,7 @@
     "composer/package-versions-deprecated": "^1.11",
     "doctrine/annotations": "^1.0",
     "guzzlehttp/guzzle": "^7.2",
+    "iio/libmergepdf": "^4.0",
     "knplabs/knp-paginator-bundle": "^5.3",
     "knplabs/knp-snappy-bundle": "^1.8",
     "league/csv": "^9.0",
@@ -19,7 +23,6 @@
     "libriciel/ls-message-wrapper": "^1.0",
     "libriciel/lshorodatage-api-wrapper": "^1.0.2",
     "mailjet/mailjet-apiv3-php": "^1.5",
-    "mikehaertl/php-pdftk": "^0.9.1",
     "neitanod/forceutf8": "^2.0",
     "nyholm/psr7": "^1.4",
     "phpdocumentor/reflection-docblock": "^5.2",
@@ -55,11 +58,9 @@
     "symfony/webpack-encore-bundle": "^1.8",
     "symfony/yaml": "5.2.*",
     "twig/extra-bundle": "^2.12|^3.0",
-    "twig/twig": "^2.12|^3.0",
-    "ext-http": "*"
+    "twig/twig": "^2.12|^3.0"
   },
   "require-dev": {
-    "ext-json": "*",
     "dama/doctrine-test-bundle": "^6.3",
     "doctrine/doctrine-fixtures-bundle": "^3.3",
     "liip/test-fixtures-bundle": "^1.7",

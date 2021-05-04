@@ -6,6 +6,7 @@ use App\Entity\Sitting;
 use App\Service\Report\CsvSittingReport;
 use App\Service\Report\PdfSittingReport;
 use App\Service\Zip\ZipTokenGenerator;
+use iio\libmergepdf\Merger;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -62,4 +63,22 @@ class ReportSittingController extends AbstractController
 
         return $response;
     }
+
+
+    /**
+     * @Route("/checkPdf", name="checkPdf")
+     */
+    public function checkPdf(): Response
+    {
+        $merger = new Merger();
+        $merger->addFile('/tmp/il.pdf');
+        $merger->addFile('/tmp/il.pdf');
+        $createdPdf = $merger->merge();
+
+        file_put_contents('/tmp/saved', $createdPdf);
+
+        dd('done');
+
+    }
+
 }

@@ -5,7 +5,7 @@ namespace App\Service\Pdf;
 use App\Entity\Annex;
 use App\Entity\Project;
 use App\Entity\Sitting;
-use mikehaertl\pdftk\Pdf;
+use iio\libmergepdf\Merger;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -22,36 +22,37 @@ class PdfSittingGenerator
 
     public function generateFullSittingPdf(Sitting $sitting): void
     {
-        $pdf = new Pdf();
-        $this->addConvocation($pdf, $sitting);
-        $this->addProjectsAndAnnexes($pdf, $sitting->getProjects());
-        $pdf->saveAs($this->getPdfPath($sitting));
+        $merger = new Merger();
+        $this->addConvocation($merger, $sitting);
+        $this->addProjectsAndAnnexes($merger, $sitting->getProjects());
+        $merged = $merger->merge();
+        file_put_contents($this->getPdfPath($sitting), $merged);
     }
 
-    private function addConvocation(Pdf $pdf, Sitting $sitting): void
+    private function addConvocation(Merger $merger, Sitting $sitting): void
     {
-        $pdf->addFile($sitting->getConvocationFile()->getPath());
+        $merger->addFile($sitting->getConvocationFile()->getPath());
     }
 
     /**
      * @param Project[] $projects
      */
-    private function addProjectsAndAnnexes(Pdf $pdf, iterable $projects): void
+    private function addProjectsAndAnnexes(Merger $merger, iterable $projects): void
     {
         foreach ($projects as $project) {
-            $pdf->addFile($project->getFile()->getPath());
-            $this->addAnnexes($pdf, $project->getAnnexes());
+            $merger->addFile($project->getFile()->getPath());
+            $this->addAnnexes($merger, $project->getAnnexes());
         }
     }
 
     /**
      * @param Annex[] $annexes
      */
-    private function addAnnexes(Pdf $pdf, iterable $annexes): void
+    private function addAnnexes(Merger $merger, iterable $annexes): void
     {
         foreach ($annexes as $annex) {
             if ($this->isPdfFile($annex->getFile()->getName())) {
-                $pdf->addFile($annex->getFile()->getPath());
+                $merger->addFile($annex->getFile()->getPath());
             }
         }
     }

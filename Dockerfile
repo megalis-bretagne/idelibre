@@ -26,7 +26,6 @@ RUN apt-get update -yqq \
         libzip-dev \
         netcat \
         openssl \
-        pdftk \
         xfonts-75dpi \
         fontconfig \
         xfonts-base \
