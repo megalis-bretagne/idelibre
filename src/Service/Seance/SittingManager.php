@@ -129,7 +129,7 @@ class SittingManager
     public function isAlreadySent(Sitting $sitting): bool
     {
         foreach ($sitting->getConvocations() as $convocation) {
-            if ($convocation->getIsActive()) {
+            if ($convocation->getSentTimestamp()) {
                 return true;
             }
         }
