@@ -64,7 +64,6 @@ class ReportSittingController extends AbstractController
         return $response;
     }
 
-
     /**
      * @Route("/checkPdf", name="checkPdf")
      */
@@ -78,7 +77,5 @@ class ReportSittingController extends AbstractController
         file_put_contents('/tmp/saved', $createdPdf);
 
         dd('done');
-
     }
-
 }
