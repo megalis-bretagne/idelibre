@@ -81,7 +81,7 @@
                     </thead>
                     <tbody>
 
-                    <tr class="d-flex" v-for="convocation in filteredActorConvocations">
+                    <tr class="d-flex " v-for="convocation in filteredActorConvocations">
 
                         <td class="col-3">
                             ${convocation.user.firstName} ${convocation.user.lastName}
@@ -89,24 +89,24 @@
                         <td v-if="convocation.sentTimestamp" class="col-2"> ${convocation.sentTimestamp.createdAt | formatDateString }
                         </td>
                         <td v-else class="col-2">
-                            <button v-on:click="sendConvocation(convocation.id)" class="btn btn-outline-primary borderless"
+                            <button v-on:click="sendConvocation(convocation.id)" class="btn btn-outline-primary borderless mt-n2"
                                     title="Envoyer"><span class="fa fa-paper-plane"></span></button>
                         </td>
 
-                        <td v-if="convocation.receivedTimestamp" class="col-2"> oui (mettre date)</td>
+                        <td v-if="convocation.receivedTimestamp" class="col-2">${convocation.receivedTimestamp.createdAt | formatDateString }</td>
                         <td v-else class="col-2"></td>
 
                         <td class="col-2">
-                            <span v-if="!convocation.attendance" class="btn borderless btn-outline-warning disabled opacity-full"
+                            <span v-if="!convocation.attendance" class="text-warning"
                                   title="Sans réponse">
-                                <i class="fas fa-pause"></i>
+                                <i class="fas fa-question"></i>
                             </span>
                             <span v-else-if="convocation.attendance === 'present'"
-                                  class="btn borderless btn-outline-success disabled opacity-full"
+                                  class="text-success"
                                   title="Présent">
                                 <i class="fas fa-check"></i>
                             </span>
-                            <span v-else class="btn borderless btn-outline-danger disabled opacity-full" title="Absent">
+                            <span v-else class="text-danger" title="Absent">
                                 <i class="fas fa-times"></i>
                             </span>
 
@@ -166,7 +166,7 @@
                             <td v-if="convocation.sentTimestamp" class="col-2"> ${convocation.sentTimestamp.createdAt | formatDateString }
                             </td>
                             <td v-else class="col-2">
-                                <button v-on:click="sendConvocation(convocation.id)" class="btn btn-outline-primary borderless"
+                                <button v-on:click="sendConvocation(convocation.id)" class="btn btn-outline-primary borderless mt-n2"
                                         title="Envoyer"><span class="fa fa-paper-plane"></span></button>
                             </td>
 
@@ -174,16 +174,16 @@
                             <td v-else class="col-2"></td>
 
                             <td class="col-2">
-                            <span v-if="!convocation.attendance" class="btn borderless btn-outline-warning disabled opacity-full"
+                            <span v-if="!convocation.attendance" class="text-warning"
                                   title="Sans réponse">
-                                <i class="fas fa-pause"></i>
+                                <i class="fas fa-question"></i>
                             </span>
                                 <span v-else-if="convocation.attendance === 'present'"
-                                      class="btn borderless btn-outline-success disabled opacity-full"
+                                      class="text-success"
                                       title="Présent">
                                 <i class="fas fa-check"></i>
                             </span>
-                                <span v-else class="btn borderless btn-outline-danger disabled opacity-full" title="Absent">
+                                <span v-else class="text-danger" title="Absent">
                                 <i class="fas fa-times"></i>
                             </span>
 
@@ -242,7 +242,7 @@
                             <td v-if="convocation.sentTimestamp" class="col-2"> ${convocation.sentTimestamp.createdAt | formatDateString }
                             </td>
                             <td v-else class="col-2">
-                                <button v-on:click="sendConvocation(convocation.id)" class="btn btn-outline-primary borderless"
+                                <button v-on:click="sendConvocation(convocation.id)" class="btn btn-outline-primary borderless mt-n2"
                                         title="Envoyer"><span class="fa fa-paper-plane"></span></button>
                             </td>
 
@@ -250,16 +250,16 @@
                             <td v-else class="col-2"></td>
 
                             <td class="col-2">
-                            <span v-if="!convocation.attendance" class="btn borderless btn-outline-warning disabled opacity-full"
+                            <span v-if="!convocation.attendance" class="text-warning"
                                   title="Sans réponse">
-                                <i class="fas fa-pause"></i>
+                                <i class="fas fa-question"></i>
                             </span>
                                 <span v-else-if="convocation.attendance === 'present'"
-                                      class="btn borderless btn-outline-success disabled opacity-full"
+                                      class="text-success"
                                       title="Présent">
                                 <i class="fas fa-check"></i>
                             </span>
-                                <span v-else class="btn borderless btn-outline-danger disabled opacity-full" title="Absent">
+                                <span v-else class="text-danger" title="Absent">
                                 <i class="fas fa-times"></i>
                             </span>
 
