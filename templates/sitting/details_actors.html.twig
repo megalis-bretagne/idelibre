@@ -15,7 +15,9 @@
 
     <div class="d-flex align-items-center col-11 mt-3">
         <h1 class="flex-grow-1">Détail de la séance</h1>
-        {{ macroNav.toogleView( path('edit_sitting_actor', {'id': sitting.id}) , 'show') }}
+        {% if  not sitting.isArchived %}
+            {{ macroNav.toogleView( path('edit_sitting_actor', {'id': sitting.id}) , 'show') }}
+        {% endif %}
     </div>
 
 
@@ -86,7 +88,8 @@
                         <td class="col-3">
                             ${convocation.user.firstName} ${convocation.user.lastName}
                         </td>
-                        <td v-if="convocation.sentTimestamp" class="col-2"> <span class="fas fa-check text-success"> </span> ${convocation.sentTimestamp.createdAt | formatDateString }
+                        <td v-if="convocation.sentTimestamp" class="col-2"><span class="fas fa-check text-success"> </span>
+                            ${convocation.sentTimestamp.createdAt | formatDateString }
                         </td>
                         <td v-else class="col-2">
                             <button v-on:click="sendConvocation(convocation.id)" class="btn btn-outline-primary borderless mt-n2"
@@ -167,7 +170,8 @@
                             <td class="col-3">
                                 ${convocation.user.firstName} ${convocation.user.lastName}
                             </td>
-                            <td v-if="convocation.sentTimestamp" class="col-2"> <span class="fas fa-check text-success"> </span> ${convocation.sentTimestamp.createdAt | formatDateString }
+                            <td v-if="convocation.sentTimestamp" class="col-2"><span class="fas fa-check text-success"> </span>
+                                ${convocation.sentTimestamp.createdAt | formatDateString }
                             </td>
                             <td v-else class="col-2">
                                 <button v-on:click="sendConvocation(convocation.id)" class="btn btn-outline-primary borderless mt-n2"
@@ -175,7 +179,8 @@
                             </td>
 
                             <td v-if="convocation.receivedTimestamp" class="col-2">
-                                <span class="fas fa-check text-success"> </span> ${convocation.receivedTimestamp.createdAt | formatDateString }
+                                <span class="fas fa-check text-success"> </span>
+                                ${convocation.receivedTimestamp.createdAt | formatDateString }
                             </td>
                             <td v-else class="col-2">
                                 <span class="fas fa-times text-danger"> </span>
@@ -247,7 +252,8 @@
                             <td class="col-3">
                                 ${convocation.user.firstName} ${convocation.user.lastName}
                             </td>
-                            <td v-if="convocation.sentTimestamp" class="col-2"><span class="fas fa-check text-success"> </span> ${convocation.sentTimestamp.createdAt | formatDateString }
+                            <td v-if="convocation.sentTimestamp" class="col-2"><span class="fas fa-check text-success"> </span>
+                                ${convocation.sentTimestamp.createdAt | formatDateString }
                             </td>
                             <td v-else class="col-2">
                                 <button v-on:click="sendConvocation(convocation.id)" class="btn btn-outline-primary borderless mt-n2"
@@ -255,7 +261,8 @@
                             </td>
 
                             <td v-if="convocation.receivedTimestamp" class="col-2">
-                                <span class="fas fa-check text-success"> </span> ${convocation.receivedTimestamp.createdAt | formatDateString }
+                                <span class="fas fa-check text-success"> </span>
+                                ${convocation.receivedTimestamp.createdAt | formatDateString }
                             </td>
                             <td v-else class="col-2">
                                 <span class="fas fa-times text-danger"> </span>
@@ -395,7 +402,7 @@
 
                                                 <td class="col-4" v-if="status.category === 'convocation'">
                                                     <input class="select form-control" v-model="status.deputy"
-                                                            @change="changeAttendance(status)">
+                                                           @change="changeAttendance(status)">
                                                     </input>
                                                 </td>
 
@@ -419,10 +426,6 @@
             </div>
 
 
-
-
-
-
             <div v-if="showModalNotifyAgain">
                 <transition name="modal">
                     <div class="modal-mask">
@@ -438,12 +441,14 @@
                                     <div class="modal-body">
                                         <div class="form-group">
                                             <label for="object">Objet</label>
-                                            <input type="text" class="form-control"  id="object" placeholder="Objet" v-model="notification.object">
+                                            <input type="text" class="form-control" id="object" placeholder="Objet"
+                                                   v-model="notification.object">
                                         </div>
 
                                         <div class="form-group">
                                             <label for="content">Message</label>
-                                            <textarea class="form-control"  id="content" placeholder="Votre message ..." rows="7" v-model="notification.content"> </textarea>
+                                            <textarea class="form-control" id="content" placeholder="Votre message ..." rows="7"
+                                                      v-model="notification.content"> </textarea>
                                         </div>
 
                                     </div>

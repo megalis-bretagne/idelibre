@@ -12,7 +12,9 @@
 
     <div class="d-flex align-items-center col-11 mt-3">
         <h1 class="flex-grow-1">Détail de la séance</h1>
-        {{ macroNav.toogleView( path('edit_sitting_project', {'id': sitting.id}) , 'show') }}
+        {% if  not sitting.isArchived %}
+            {{ macroNav.toogleView( path('edit_sitting_project', {'id': sitting.id}) , 'show') }}
+        {% endif %}
     </div>
 
     <div class="col-12">
