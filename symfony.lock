@@ -207,6 +207,15 @@
     "mailjet/mailjet-apiv3-php": {
         "version": "v1.5.0"
     },
+    "mikehaertl/php-pdftk": {
+        "version": "0.9.2"
+    },
+    "mikehaertl/php-shellcommand": {
+        "version": "1.6.4"
+    },
+    "mikehaertl/php-tmpfile": {
+        "version": "1.2.1"
+    },
     "monolog/monolog": {
         "version": "2.1.1"
     },
