@@ -116,10 +116,10 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     }
 
     /**
-     * @param Structure $structure
      * @param string[] $userIds
      */
-    public function deleteActorsByStructure(Structure $structure, array $userIds) {
+    public function deleteActorsByStructure(Structure $structure, array $userIds)
+    {
         $qb = $this->createQueryBuilder('u')
             ->delete()
             ->where('u.id in (:userIds)')
@@ -130,7 +130,6 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
         return $qb->execute();
     }
-
 
     public function findGuestsByStructure($structure): QueryBuilder
     {
