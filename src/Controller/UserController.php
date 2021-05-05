@@ -129,7 +129,7 @@ class UserController extends AbstractController
     public function deleteBatch(UserRepository $userRepository, Request $request): Response
     {
         if ($request->isMethod('POST')) {
-            $deleted = $userRepository->deleteActorsByStructure($this->getUser()->getStructure(), $request->request->get('users') ?? []);
+            $userRepository->deleteActorsByStructure($this->getUser()->getStructure(), $request->request->get('users') ?? []);
             $this->addFlash('success', 'Les élus ont été supprimés.');
 
             return $this->redirectToRoute('user_index');
