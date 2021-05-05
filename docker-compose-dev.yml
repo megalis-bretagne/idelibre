@@ -3,9 +3,8 @@ version: '3.4'
 services:
   fpm-idelibre:
     container_name: fpm-idelibre
-    #image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/idelibre/idelibre:master
-    build:
-      .
+    image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/idelibre/idelibre:cyril
+
     env_file:
       - .env.docker.local
     volumes:
