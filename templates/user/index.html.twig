@@ -6,15 +6,20 @@
 {% block pageActions %}
 
 <div class="row">
-    <div class="col-6 pull-left">
+    <div class="col-7 pull-left">
     <a href="{{ path('user_add') }}" class="btn btn-primary"><span
                 class="fa fa-plus-circle"></span>
         Ajouter</a>
     <a href="{{ path('csv_add_users') }}" class="btn btn-outline-primary"><span
                 class="fa fa-plus-circle"></span>
         Ajouter via csv</a>
+
+        <a href="{{ path('user_delete_batch') }}" class="btn btn-outline-primary"><span
+                    class="fa fa-trash-alt"></span>
+            Supprimer par lot</a>
     </div>
-    <div class="col-6">
+
+    <div class="col-5">
         {{ macros.searchForm(formSearch, searchTerm) }}
     </div>
 
