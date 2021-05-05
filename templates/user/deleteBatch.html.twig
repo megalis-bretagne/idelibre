@@ -63,7 +63,7 @@
 
     <div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <form method="post">
                     <div class="modal-header">
@@ -79,13 +79,13 @@
                         </div>
 
                         <div id="addListUser"
-                             style="max-height: 200px; overflow: auto; border:2px solid; margin: 40px; padding:20px">
+                             style="max-height: 50vh; overflow-y: auto;">
                         </div>
 
                     </div>
 
                     <div id="user-list" style="height: 20px">
-                        <input name="toto" value="ok" type="hidden">
+
                     </div>
 
 
@@ -154,13 +154,16 @@
 
 
             function generateUserList() {
-                let html = "";
+                let html = '<table class="table table-striped">'
+                html += '<tbody>'
                 for (let i = 0; i < deleteList.length; i++) {
-                    html += deleteList[i].fullName + " | ";
-                    html += deleteList[i].username;
-                    html += "<br>";
+                    html += '<tr class="d-flex">'
+
+                    html += '<td class="col-7">' +  deleteList[i].fullName + '</td>' ;
+                    html += '<td class="col-5">' + deleteList[i].username + '</td>';
+                    html += '</tr>';
                 }
-                html += "<br>";
+                html += '</tbody> </table>';
                 $("#addListUser").html(html);
             }
 

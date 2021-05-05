@@ -129,11 +129,11 @@ class UserController extends AbstractController
     public function deleteBatch(UserRepository $userRepository, Request $request): Response
     {
         $actors = $userRepository->findActorsByStructure($this->getUser()->getStructure())->getQuery()->getResult();
+
         return $this->render('user/deleteBatch.html.twig', [
-            'actors' => $actors
+            'actors' => $actors,
         ]);
     }
-
 
     /**
      * @Route("/user/preferences", name="user_preferences")
