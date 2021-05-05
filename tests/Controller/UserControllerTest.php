@@ -73,6 +73,11 @@ class UserControllerTest extends WebTestCase
     {
         $this->loginAsAdminLibriciel();
 
+        $crawler = $this->client->request(Request::METHOD_GET, '/user/deleteBatch');
+        $this->assertResponseStatusCodeSame(200);
+        $item = $crawler->filter('html:contains("Suppression des élus par lot")');
+        $this->assertCount(1, $item);
+
         $actor1 = $this->getOneUserBy(['username' => 'actor1@libriciel']);
         $actor2 = $this->getOneUserBy(['username' => 'actor1@libriciel']);
         $this->client->request(Request::METHOD_POST, '/user/deleteBatch', [
