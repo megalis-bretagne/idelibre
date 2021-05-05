@@ -167,17 +167,15 @@ creer un fakeClientnotifier implement ClientNotifier interface . logs in test
 
 
 
-type de seance tous les acteurs
-
 modification ratachement du theme
 
 supression en masse des acteurs
 
 rapport pdf de la seance => erreur 500
 
-gerer les presenece  D'abord les elus puis separateur  puis administratifs
 
-gestion de présence ya t'il uns taile max avec scroll !
+gerer les presenece  D'abord les elus puis separateur  puis administratifs  -> Pas mauvaise idée mais pas le temps la !
+
 
 bouton ouvrir nouelle onglet client elus
 
