@@ -50,6 +50,7 @@ class SittingType extends AbstractType
             ->add('place', TextType::class, [
                 'label' => 'Lieu',
                 'required' => false,
+                'disabled' => $isAlreadySentConvocation || $isAlreadySentInvitation,
             ])
             ->add('convocationFile', LsFileType::class, [
                 'label' => $isNew ? 'Fichier de convocation' : 'Remplacer le fichier de convocation',
