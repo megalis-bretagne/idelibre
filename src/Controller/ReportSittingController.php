@@ -6,7 +6,6 @@ use App\Entity\Sitting;
 use App\Service\Report\CsvSittingReport;
 use App\Service\Report\PdfSittingReport;
 use App\Service\Zip\ZipTokenGenerator;
-use iio\libmergepdf\Merger;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
