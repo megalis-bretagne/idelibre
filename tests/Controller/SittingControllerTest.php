@@ -230,6 +230,7 @@ class SittingControllerTest extends WebTestCase
     public function testEditInformation()
     {
         $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
+
         $this->loginAsAdminLibriciel();
         $crawler = $this->client->request(Request::METHOD_GET, '/sitting/edit/' . $sitting->getId());
         $this->assertResponseStatusCodeSame(200);
@@ -239,9 +240,11 @@ class SittingControllerTest extends WebTestCase
 
         $form = $crawler->selectButton('Enregistrer')->form();
 
-        $form['sitting[place]'] = 'MyUniquePlace';
+        $form['sitting[place]'] = 'MyUniquePlace'; //Possiblement faux car la seance est dans un etat qui ne permet pas sa modification
 
-        $this->client->submit($form);
+        $crawler = $this->client->submit($form);
+
+       // dd($crawler);
 
         $this->assertTrue($this->client->getResponse()->isRedirect());
 
