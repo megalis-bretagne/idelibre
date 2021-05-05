@@ -4,13 +4,15 @@
     <meta charset="UTF-8">
     <title>{% block title %}idelibre{% endblock %}</title>
 
-    <link rel="stylesheet" href="{{ absolute_url(asset('assets/il-bootstrap-4.css')) }}">
+    {% for path in encore_entry_css_files('app') %}
+        <link rel="stylesheet" type="text/css" href="{{ nginx }}{{path}}">
+    {% endfor %}
 
 </head>
 <body>
 <div class="container-fluid">
 
-    <img src="{{ absolute_url(asset('assets/img/logo_Libriciel.png')) }}" style="width: 200px" alt="ls"
+    <img src="{{ nginx }}{{ asset('assets/img/logo_Libriciel.png') }}" style="width: 200px" alt="ls"
          class="float-right">
 
     <div>Généré le {{ date() | date('d/m/Y à H:i') }}</div>

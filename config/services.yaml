@@ -18,6 +18,7 @@ parameters:
   nodejs_passphrase: '%env(PASSPHRASE)%'
   nodejs_notification_url: 'http://node-idelibre:3000/notifications'
 
+  nginx_host: 'https://nginx-idelibre'
 
 services:
   # default configuration for services in *this* file

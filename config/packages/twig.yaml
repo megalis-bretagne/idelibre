@@ -4,3 +4,4 @@ twig:
   globals:
     version: '%version%'
     breadcrumb: 'others/breadCrumb.html.twig'
+    nginx: '%nginx_host%'
