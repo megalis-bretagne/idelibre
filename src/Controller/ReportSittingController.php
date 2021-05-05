@@ -63,19 +63,4 @@ class ReportSittingController extends AbstractController
 
         return $response;
     }
-
-    /**
-     * @Route("/checkPdf", name="checkPdf")
-     */
-    public function checkPdf(): Response
-    {
-        $merger = new Merger();
-        $merger->addFile('/tmp/il.pdf');
-        $merger->addFile('/tmp/il.pdf');
-        $createdPdf = $merger->merge();
-
-        file_put_contents('/tmp/saved', $createdPdf);
-
-        dd('done');
-    }
 }

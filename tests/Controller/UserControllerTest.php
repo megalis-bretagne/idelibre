@@ -75,7 +75,7 @@ class UserControllerTest extends WebTestCase
 
         $actor1 = $this->getOneUserBy(['username' => 'actor1@libriciel']);
         $actor2 = $this->getOneUserBy(['username' => 'actor1@libriciel']);
-        $crawler = $this->client->request(Request::METHOD_POST, '/user/deleteBatch', [
+        $this->client->request(Request::METHOD_POST, '/user/deleteBatch', [
             'users' => [$actor1->getId(), $actor2->getId() ]
         ]);
 
