@@ -30,7 +30,6 @@ class PdfSittingGenerator
         $this->addProjectsAndAnnexes($merger, $sitting->getProjects());
         $merged = $merger->merge();
 
-
         file_put_contents($this->getPdfPath($sitting), $merged);
     }
 

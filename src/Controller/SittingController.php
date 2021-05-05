@@ -132,7 +132,6 @@ class SittingController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $sittingManager->update(
                 $form->getData(),
                 $form->get('convocationFile')->getData(),
