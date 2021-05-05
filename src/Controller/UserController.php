@@ -122,6 +122,20 @@ class UserController extends AbstractController
     }
 
     /**
+     * @Route("/user/deleteBatch", name="user_delete_batch")
+     * @Breadcrumb("Suppression par lot")
+     * @IsGranted("ROLE_MANAGE_USERS")
+     */
+    public function deleteBatch(UserRepository $userRepository, Request $request): Response
+    {
+        $actors = $userRepository->findActorsByStructure($this->getUser()->getStructure())->getQuery()->getResult();
+        return $this->render('user/deleteBatch.html.twig', [
+            'actors' => $actors
+        ]);
+    }
+
+
+    /**
      * @Route("/user/preferences", name="user_preferences")
      * @IsGranted("ROLE_MANAGE_PREFERENCES")
      * @Breadcrumb("Préférences utilisateur")

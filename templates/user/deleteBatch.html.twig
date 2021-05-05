@@ -1,0 +1,179 @@
+{% extends 'base.html.twig' %}
+{% import 'macro/_forms.html.twig' as macro %}
+
+{% block body %}
+    <div class="col-12 offset-0">
+        {{ apy_breadcrumb_trail_render(breadcrumb) }}
+    </div>
+
+    <div class="mt-3 col-12 offset-0">
+        <h1>{% block pageTitle %}Supression des élus par lot{% endblock %}</h1>
+
+        <div class="mt-4">
+            {{ macro.backButton('user_index') }}
+        </div>
+
+        <div class="row">
+            <div class="col-10 offset-1 mt-4">
+                <table class="table table-striped bg-white">
+                    <thead>
+                    <tr class="d-flex">
+                        <th class="col-1"></th>
+                        <th class="col-3">Prénom</th>
+                        <th class="col-4">Nom</th>
+                        <th class="col-4">Nom d'utilisateur</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for actor in actors %}
+                        <tr class="d-flex ">
+                            <td class="col-1 ">
+                                <input type="checkbox" class="checkbox select-batch"
+                                       data-username="{{ actor.username }}"
+                                       data-firstname="{{ actor.firstName }}"
+                                       data-lastname="{{ actor.lastName }}"
+                                       value="{{ actor.id }}">
+                            </td>
+                            <td class="col-3">{{ actor.firstName }}</td>
+                            <td class="col-4">{{ actor.lastName }}</td>
+                            <td class="col-4">{{ actor.username }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+
+                </table>
+
+                <div class="float-right mt-3">
+                    <a href="{{ path('user_index') }}" class="btn btn-outline-dark">
+                        <span class="fa fa-times"></span> Annuler</a>
+
+                    <button class="btn btn-danger" type="button" onclick="deleteAll()">
+                        <span class="fa fa-trash-alt"></span>
+                        Supprimer
+                    </button>
+                </div>
+
+
+            </div>
+        </div>
+
+
+    </div>
+
+
+    <div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Suppression d'acteurs</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-danger">
+                            Etes-vous certain de vouloir supprimer les acteurs sélectionnés ? <br>La suppression est un <b>processus
+                                irréversible</b>.<br><br>
+                        </div>
+
+                        <div id="addListUser"
+                             style="max-height: 200px; overflow: auto; border:2px solid; margin: 40px; padding:20px">
+                        </div>
+
+                    </div>
+
+                    <div id="user-list" style="height: 20px">
+                        <input name="toto" value="ok" type="hidden">
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-dark" data-dismiss="modal">
+                            <span class="fa fa-times"></span> Annuler
+                        </button>
+                        <button type="submit" class="btn btn-danger">
+                            <span class="fa fa-trash-alt"></span>
+                            Confirmer
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+
+
+    {% block javascripts %}
+        <script>
+            $('document').ready(function () {
+                $(".select-batch").each(function () {
+                    this.checked = false;
+                });
+
+
+                $(".select-batch").click(function () {
+                    if (this.checked == true) {
+                        $(this).parent().parent().addClass('alert-warning font-weight-bolder');
+                    } else {
+                        $(this).parent().parent().removeClass('alert-warning font-weight-bolder');
+                    }
+                });
+            });
+
+
+            let deleteList = [];
+
+            function deleteAll() {
+                let toDelete = []
+                $(".select-batch").each(function () {
+                    if (this.checked) {
+                        toDelete.push({
+                            id: this.value,
+                            username: $(this).data('username'),
+                            fullName: $(this).data('firstname') + " " + $(this).data('lastname')
+                        });
+                    }
+                });
+                deleteList = toDelete;
+
+                console.log(toDelete);
+
+                if (!deleteList.length) {
+                    return;
+                }
+                generateUserList();
+                generateInputList();
+
+                $("#modalDelete").modal('show');
+            }
+
+
+            function generateUserList() {
+                let html = "";
+                for (let i = 0; i < deleteList.length; i++) {
+                    html += deleteList[i].fullName + " | ";
+                    html += deleteList[i].username;
+                    html += "<br>";
+                }
+                html += "<br>";
+                $("#addListUser").html(html);
+            }
+
+            function generateInputList() {
+                let html = "";
+                for (let i = 0; i < deleteList.length; i++) {
+                    html += '<input type="hidden" name="user[]" value="' + deleteList[i].id + '">';
+                    html += "<br>";
+                }
+                html += "<br>";
+                $("#user-list").html(html);
+            }
+
+        </script>
+    {% endblock %}
+
