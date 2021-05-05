@@ -18,6 +18,7 @@ use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpClient\Exception\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -91,6 +92,10 @@ class SittingController extends AbstractController
      */
     public function editUsers(Sitting $sitting, Request $request, ActorManager $actorManager, ConvocationManager $convocationManager): Response
     {
+        if ($sitting->getIsArchived()) {
+            throw new InvalidArgumentException('Impossible de modifier une séance archivée');
+        }
+
         return $this->render('sitting/edit_actors.html.twig', [
             'sitting' => $sitting,
         ]);
@@ -103,6 +108,10 @@ class SittingController extends AbstractController
      */
     public function editProjects(Sitting $sitting): Response
     {
+        if ($sitting->getIsArchived()) {
+            throw new InvalidArgumentException('Impossible de modifier une séance archivée');
+        }
+
         return $this->render('sitting/edit_projects.html.twig', [
             'sitting' => $sitting,
         ]);
@@ -110,11 +119,15 @@ class SittingController extends AbstractController
 
     /**
      * @Route("/sitting/edit/{id}", name="edit_sitting_information")
-     * @IsGranted("ROLE_MANAGE_SITTINGS")
+     * @IsGranted("MANAGE_SITTINGS", subject="sitting")
      * @Breadcrumb("Modifier")
      */
     public function editInformation(Sitting $sitting, Request $request, SittingManager $sittingManager): Response
     {
+        if ($sitting->getIsArchived()) {
+            throw new InvalidArgumentException('Impossible de modifier une séance archivée');
+        }
+
         $form = $this->createForm(SittingType::class, $sitting, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
 
@@ -124,6 +137,7 @@ class SittingController extends AbstractController
                 $form->get('convocationFile')->getData(),
                 $form->get('invitationFile')->getData(),
             );
+
             $this->addFlash('success', 'votre séance a bien été modifiée');
 
             return $this->redirectToRoute('edit_sitting_information', ['id' => $sitting->getId()]);

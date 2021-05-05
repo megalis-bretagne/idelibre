@@ -164,54 +164,18 @@ creer un fakeClientnotifier implement ClientNotifier interface . logs in test
 
 
 
-
-utilisateur ajouter le prenom
-
-exemple ajoue.csv type manquant
-
-type de seance tous les acteurs
-
-modification ratachement du theme
+Présence et mandaire sur le rapport de la seance (pdf + csv !)
 
 
-supression en masse des acteurs
-
-
-type de séances => Type de séance
-
-
-bloquer lieu une fois envoyé
+modification ratachement du theme  -> A voir
 
 
 
-coche verte seance envoyé
 
-
-PDF complet ne fait que la convocation
-
-rapport pdf de la seance => erreur 500
-
-
-pause => question   idem tableau de bord / sitting !
-
-
-Enlever bouton edition seance
-
-
-gerer les presenece  D'abord les elus puis separateur  puis administratifs
-
-
-
-gestion de présence ya t'il uns taile max avec scroll !
+gerer les presenece  D'abord les elus puis separateur  puis administratifs  -> Pas mauvaise idée mais pas le temps la !
 
 
 bouton ouvrir nouelle onglet client elus
-
-seance classée jeton horodatage !
-
-
-Empecher modifier seance archivée
-
 
 cas elu essai de se connecté
 

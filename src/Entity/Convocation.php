@@ -61,7 +61,7 @@ class Convocation
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class)
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      * @Groups({"convocation"})
      * @Assert\NotNull
      */

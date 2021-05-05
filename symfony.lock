@@ -56,6 +56,9 @@
     "doctrine/dbal": {
         "version": "2.12.1"
     },
+    "doctrine/deprecations": {
+        "version": "v0.5.3"
+    },
     "doctrine/doctrine-bundle": {
         "version": "2.0",
         "recipe": {
@@ -150,6 +153,9 @@
     "guzzlehttp/psr7": {
         "version": "1.7.0"
     },
+    "iio/libmergepdf": {
+        "version": "4.0.4"
+    },
     "jean85/pretty-package-versions": {
         "version": "1.5.1"
     },
@@ -202,13 +208,13 @@
         "version": "v1.5.0"
     },
     "mikehaertl/php-pdftk": {
-        "version": "0.9.1"
+        "version": "0.9.2"
     },
     "mikehaertl/php-shellcommand": {
-        "version": "1.6.2"
+        "version": "1.6.4"
     },
     "mikehaertl/php-tmpfile": {
-        "version": "1.1.6"
+        "version": "1.2.1"
     },
     "monolog/monolog": {
         "version": "2.1.1"
@@ -320,6 +326,9 @@
         "files": [
             "config/packages/sensio_framework_extra.yaml"
         ]
+    },
+    "setasign/fpdi": {
+        "version": "v2.3.6"
     },
     "slevomat/coding-standard": {
         "version": "6.4.1"
@@ -756,6 +765,9 @@
     },
     "symplify/symplify-kernel": {
         "version": "8.3.48"
+    },
+    "tecnickcom/tcpdf": {
+        "version": "6.4.1"
     },
     "twig/extra-bundle": {
         "version": "v3.1.1"

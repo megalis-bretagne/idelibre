@@ -29,7 +29,7 @@ class TypeType extends AbstractType
                 'label' => 'Intitulé',
             ])
             ->add('associatedActors', EntityType::class, [
-                'placeholder' => 'Sélectionner les acteurs',
+                'placeholder' => 'Sélectionner les élus',
                 'required' => false,
                 'label' => 'Acteurs associés',
                 'class' => User::class,

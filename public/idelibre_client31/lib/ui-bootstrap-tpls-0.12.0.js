@@ -2859,7 +2859,7 @@ angular.module('ui.bootstrap.progressbar', [])
         require: '^progress',
         scope: {
             value: '=',
-            type: '@'
+            etype: '@'
         },
         templateUrl: 'template/progressbar/bar.html',
         link: function(scope, element, attrs, progressCtrl) {

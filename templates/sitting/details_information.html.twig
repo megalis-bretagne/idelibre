@@ -11,7 +11,9 @@
 
     <div class="d-flex align-items-center col-11 mt-3">
         <h1 class="flex-grow-1">Détail de la séance</h1>
-        {{ macroNav.toogleView( path('edit_sitting_information', {'id': sitting.id}) , 'show') }}
+        {% if  not sitting.isArchived %}
+            {{ macroNav.toogleView( path('edit_sitting_information', {'id': sitting.id}) , 'show') }}
+        {% endif %}
     </div>
 
     <div class="col-12">
@@ -28,11 +30,10 @@
 
 
 
-{#            <div class="btn-group  float-right">#}
-{#                <a href="{{ path('sitting_show_information', {'id': sitting.id}) }}" class="btn btn-primary disabled" title="Visualiser"><span class="fa fa-eye"></span></a>#}
-{#                <a href="{{ path('edit_sitting_information', {'id': sitting.id}) }}" class="btn btn-primary" title="Modifier"><span class="fas fa-pen"></span></a>#}
-{#            </div>#}
-
+            {# <div class="btn-group  float-right"> #}
+            {# <a href="{{ path('sitting_show_information', {'id': sitting.id}) }}" class="btn btn-primary disabled" title="Visualiser"><span class="fa fa-eye"></span></a> #}
+            {# <a href="{{ path('edit_sitting_information', {'id': sitting.id}) }}" class="btn btn-primary" title="Modifier"><span class="fas fa-pen"></span></a> #}
+            {# </div> #}
 
 
             <h2 class="mb-5">Informations générales</h2>

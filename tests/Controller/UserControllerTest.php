@@ -69,6 +69,34 @@ class UserControllerTest extends WebTestCase
         $this->assertEmpty($this->getOneEntityBy(User::class, ['id' => $user->getId()]));
     }
 
+    public function testDeleteBatch()
+    {
+        $this->loginAsAdminLibriciel();
+
+        $crawler = $this->client->request(Request::METHOD_GET, '/user/deleteBatch');
+        $this->assertResponseStatusCodeSame(200);
+        $item = $crawler->filter('html:contains("Suppression des élus par lot")');
+        $this->assertCount(1, $item);
+
+        $actor1 = $this->getOneUserBy(['username' => 'actor1@libriciel']);
+        $actor2 = $this->getOneUserBy(['username' => 'actor1@libriciel']);
+        $this->client->request(Request::METHOD_POST, '/user/deleteBatch', [
+            'users' => [$actor1->getId(), $actor2->getId() ]
+        ]);
+
+        $this->assertTrue($this->client->getResponse()->isRedirect());
+        $crawler = $this->client->followRedirect();
+        $this->assertResponseStatusCodeSame(200);
+        $successMsg = $crawler->filter('html:contains("Les élus ont été supprimés")');
+        $this->assertCount(1, $successMsg);
+
+        $this->assertEmpty($this->getOneUserBy(['id' => $actor1->getId()]));
+        $this->assertEmpty($this->getOneUserBy(['id' => $actor2->getId()]));
+    }
+
+
+
+
     public function testDeleteOtherStructureUser()
     {
         $this->loginAsAdminLibriciel();

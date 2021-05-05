@@ -6,15 +6,20 @@
 {% block pageActions %}
 
 <div class="row">
-    <div class="col-6 pull-left">
+    <div class="col-7 pull-left">
     <a href="{{ path('user_add') }}" class="btn btn-primary"><span
                 class="fa fa-plus-circle"></span>
         Ajouter</a>
     <a href="{{ path('csv_add_users') }}" class="btn btn-outline-primary"><span
                 class="fa fa-plus-circle"></span>
         Ajouter via csv</a>
+
+        <a href="{{ path('user_delete_batch') }}" class="btn btn-outline-primary"><span
+                    class="fa fa-trash-alt"></span>
+            Supprimer par lot</a>
     </div>
-    <div class="col-6">
+
+    <div class="col-5">
         {{ macros.searchForm(formSearch, searchTerm) }}
     </div>
 
@@ -27,9 +32,10 @@
         <thead>
         <tr class="d-flex">
             <th class="col-3">{{ knp_pagination_sortable(users, 'Nom', 'u.lastName') }}</th>
-            <th class="col-4">{{ knp_pagination_sortable(users, 'Nom d\'utilisateur', 'u.username') }}</th>
-            <th class="col-3">{{ knp_pagination_sortable(users, 'Role', 'r.prettyName') }}</th>
-            <th class="col-2">Actions</th>
+            <th class="col-3">{{ knp_pagination_sortable(users, 'Prénom', 'u.firstName') }}</th>
+            <th class="col-3">{{ knp_pagination_sortable(users, 'Nom d\'utilisateur', 'u.username') }}</th>
+            <th class="col-2">{{ knp_pagination_sortable(users, 'Role', 'r.prettyName') }}</th>
+            <th class="col-1">Actions</th>
         </tr>
         </thead>
         <tbody>
@@ -39,9 +45,10 @@
         {% for user in users %}
             <tr class="d-flex">
                 <td class="col-3">{{ user.lastName }} </td>
-                <td class="col-4">{{ user.username | noSuffix }} </td>
-                <td class="col-3">{{ user.role ? user.role.prettyName : '' }} </td>
-                <td class="col-2">
+                <td class="col-3">{{ user.firstName }} </td>
+                <td class="col-3">{{ user.username | noSuffix }} </td>
+                <td class="col-2">{{ user.role ? user.role.prettyName : '' }} </td>
+                <td class="col-1">
                     {{ macros.editButton('user_edit', user.id) }}
                     {{ macros.button_open_modal_delete(
                         user.id,

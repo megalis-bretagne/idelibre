@@ -14,6 +14,8 @@ services:
       - ./docker-resources/zz-idelibre.conf:/usr/local/etc/php-fpm.d/zz-idelibre.conf
       - ./src:/app/src
       - ./templates:/app/templates
+      - ./config:/app/config
+      #- ./vendor:/app/vendor
 
     command: ["/app/docker-resources/initApp.sh"]
 

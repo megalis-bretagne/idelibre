@@ -8,13 +8,48 @@
     {{ macro.backButton('type_index') }}
 {% endblock %}
 
-{% block pageSaveReturn %}
-    {{ macro.save('type_index') }}
+
+{% block pageForm %}
+
+    {{ form_start(form) }}
+
+    {{ form_row(form.name) }}
+
+    <div class="form-group">
+        {{ form_label(form.associatedActors) }}
+        {{ form_errors(form.associatedActors) }}
+
+        <div class="row">
+            <div class="col-9">
+                {{ form_widget(form.associatedActors) }}
+            </div>
+            <div class="col-3">
+                <button type="button" id="selectAll" class="btn btn-primary">Selectionner tous les élus</button>
+            </div>
+        </div>
+
+    </div>
+
+
+    {{ form_widget(form) }}
+    <div class="float-right">
+        {% block pageSaveReturn %}{{ macro.save('type_index') }}{% endblock %}
+    </div>
+    {{ form_end(form) }}
+
 {% endblock %}
+
 
 
 {% block javascripts %}
     {{ encore_entry_script_tags('enable-select2') }}
+
+    <script>
+        $('#selectAll').click(function () {
+            $('#type_associatedActors option').attr('selected', true).parent().trigger('change')
+        });
+
+    </script>
 {% endblock %}
 
 

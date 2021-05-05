@@ -15,7 +15,9 @@
 
     <div class="d-flex align-items-center col-11 mt-3">
         <h1 class="flex-grow-1">Détail de la séance</h1>
-        {{ macroNav.toogleView( path('edit_sitting_actor', {'id': sitting.id}) , 'show') }}
+        {% if  not sitting.isArchived %}
+            {{ macroNav.toogleView( path('edit_sitting_actor', {'id': sitting.id}) , 'show') }}
+        {% endif %}
     </div>
 
 
@@ -86,15 +88,20 @@
                         <td class="col-3">
                             ${convocation.user.firstName} ${convocation.user.lastName}
                         </td>
-                        <td v-if="convocation.sentTimestamp" class="col-2"> ${convocation.sentTimestamp.createdAt | formatDateString }
+                        <td v-if="convocation.sentTimestamp" class="col-2"><span class="fas fa-check text-success"> </span>
+                            ${convocation.sentTimestamp.createdAt | formatDateString }
                         </td>
                         <td v-else class="col-2">
                             <button v-on:click="sendConvocation(convocation.id)" class="btn btn-outline-primary borderless mt-n2"
                                     title="Envoyer"><span class="fa fa-paper-plane"></span></button>
                         </td>
 
-                        <td v-if="convocation.receivedTimestamp" class="col-2">${convocation.receivedTimestamp.createdAt | formatDateString }</td>
-                        <td v-else class="col-2"></td>
+                        <td v-if="convocation.receivedTimestamp" class="col-2">
+                            <span class="fas fa-check text-success"> </span> ${convocation.receivedTimestamp.createdAt | formatDateString }
+                        </td>
+                        <td v-else class="col-2">
+                            <span class="fas fa-times text-danger"> </span>
+                        </td>
 
                         <td class="col-2">
                             <span v-if="!convocation.attendance" class="text-warning"
@@ -163,15 +170,21 @@
                             <td class="col-3">
                                 ${convocation.user.firstName} ${convocation.user.lastName}
                             </td>
-                            <td v-if="convocation.sentTimestamp" class="col-2"> ${convocation.sentTimestamp.createdAt | formatDateString }
+                            <td v-if="convocation.sentTimestamp" class="col-2"><span class="fas fa-check text-success"> </span>
+                                ${convocation.sentTimestamp.createdAt | formatDateString }
                             </td>
                             <td v-else class="col-2">
                                 <button v-on:click="sendConvocation(convocation.id)" class="btn btn-outline-primary borderless mt-n2"
                                         title="Envoyer"><span class="fa fa-paper-plane"></span></button>
                             </td>
 
-                            <td v-if="convocation.receivedTimestamp" class="col-2"> oui (mettre date)</td>
-                            <td v-else class="col-2"></td>
+                            <td v-if="convocation.receivedTimestamp" class="col-2">
+                                <span class="fas fa-check text-success"> </span>
+                                ${convocation.receivedTimestamp.createdAt | formatDateString }
+                            </td>
+                            <td v-else class="col-2">
+                                <span class="fas fa-times text-danger"> </span>
+                            </td>
 
                             <td class="col-2">
                             <span v-if="!convocation.attendance" class="text-warning"
@@ -239,15 +252,21 @@
                             <td class="col-3">
                                 ${convocation.user.firstName} ${convocation.user.lastName}
                             </td>
-                            <td v-if="convocation.sentTimestamp" class="col-2"> ${convocation.sentTimestamp.createdAt | formatDateString }
+                            <td v-if="convocation.sentTimestamp" class="col-2"><span class="fas fa-check text-success"> </span>
+                                ${convocation.sentTimestamp.createdAt | formatDateString }
                             </td>
                             <td v-else class="col-2">
                                 <button v-on:click="sendConvocation(convocation.id)" class="btn btn-outline-primary borderless mt-n2"
                                         title="Envoyer"><span class="fa fa-paper-plane"></span></button>
                             </td>
 
-                            <td v-if="convocation.receivedTimestamp" class="col-2"> oui (mettre date)</td>
-                            <td v-else class="col-2"></td>
+                            <td v-if="convocation.receivedTimestamp" class="col-2">
+                                <span class="fas fa-check text-success"> </span>
+                                ${convocation.receivedTimestamp.createdAt | formatDateString }
+                            </td>
+                            <td v-else class="col-2">
+                                <span class="fas fa-times text-danger"> </span>
+                            </td>
 
                             <td class="col-2">
                             <span v-if="!convocation.attendance" class="text-warning"
@@ -360,13 +379,14 @@
                             <div class="modal-dialog modal-lg" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title">Gestion des présences</h5>
+                                        <h5 class="modal-title">Gestion des présences 2</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true" @click="showModalAttendance = false">&times;</span>
                                         </button>
                                     </div>
                                     <div class="modal-body">
                                         <table class="table table-striped">
+                                            <tbody style="display: block;overflow-y: auto;max-height: 60vh;">
                                             <tr class="d-flex" v-for="status in attendanceStatus">
                                                 <td class="col-5">
 
@@ -383,12 +403,13 @@
 
                                                 <td class="col-4" v-if="status.category === 'convocation'">
                                                     <input class="select form-control" v-model="status.deputy"
-                                                            @change="changeAttendance(status)">
+                                                           @change="changeAttendance(status)">
                                                     </input>
                                                 </td>
 
 
                                             </tr>
+                                            </tbody>
                                         </table>
                                     </div>
                                     <div class="modal-footer">
@@ -407,10 +428,6 @@
             </div>
 
 
-
-
-
-
             <div v-if="showModalNotifyAgain">
                 <transition name="modal">
                     <div class="modal-mask">
@@ -426,12 +443,14 @@
                                     <div class="modal-body">
                                         <div class="form-group">
                                             <label for="object">Objet</label>
-                                            <input type="text" class="form-control"  id="object" placeholder="Objet" v-model="notification.object">
+                                            <input type="text" class="form-control" id="object" placeholder="Objet"
+                                                   v-model="notification.object">
                                         </div>
 
                                         <div class="form-group">
                                             <label for="content">Message</label>
-                                            <textarea class="form-control"  id="content" placeholder="Votre message ..." rows="7" v-model="notification.content"> </textarea>
+                                            <textarea class="form-control" id="content" placeholder="Votre message ..." rows="7"
+                                                      v-model="notification.content"> </textarea>
                                         </div>
 
                                     </div>
