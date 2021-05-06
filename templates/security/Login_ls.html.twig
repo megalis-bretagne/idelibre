@@ -3,7 +3,7 @@
 {% block body %}
     <div class="form-side">
 
-        <div class="form-content">
+        <div class="form-content" style="width: 600px">
             <div class="soft-logo">
                 <img id="libriciel-logo" alt="Image du Libriciel"
                      height="10" width="10"
@@ -13,66 +13,81 @@
 
             <section>
 
-                <div class="text-center mt-5">
-                    <a href="/idelibre_client31/" class="btn btn-primary btn-lg"> Accès élu</a>
+
+
+
+                {% for message in app.flashes('success') %}
+                    <div class="alert alert-success"><i class="fa fa-check"></i> {{ message }}</div>
+
+                {% endfor %}
+
+                {% for message in app.flashes('error') %}
+                    <div class="alert alert-danger"><i class="fa fa-exclamation-triangle"></i> {{ message }}
+                    </div>
+                {% endfor %}
+
+                <div class="row">
+                    <div class="col-4 mt-5">
+                        <div class="text-center mt-5" >
+                            <a href="/idelibre_client31/" class="btn btn-primary btn-lg"> Accès aux séances</a>
+                        </div>
+                    </div>
+
+                    <div class="col-1 mt-5" style="border-right: 2px solid var(--ls-grey-200);">
+                    </div>
+                    <div class="col-7">
+                        <h1 class="page-title">Veuillez saisir vos identifiants de connexion </h1>
+                        <form method="post">
+                            <input type="hidden" name="_csrf_token"
+                                   value="{{ csrf_token('authenticate') }}">
+
+
+                            <div class="form-group row">
+                                <label for="staticEmail" class="col-sm-3 col-form-label" hidden>Identifiant</label>
+                                <div class="col-sm-12">
+
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text"><span class="fa fa-user"></span></div>
+                                        </div>
+                                        <input type="text" value="{{ last_username }}" name="username" id="inputUsername"
+                                               class="form-control" placeholder="Nom d'utilisateur" required autofocus>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="inputPassword" class="col-sm-3 col-form-label" hidden>Mot de passe</label>
+                                <div class="col-sm-12">
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text"><span class="fa fa-lock"></span></div>
+                                        </div>
+                                        <input type="password" name="password" id="inputPassword" class="form-control"
+                                               placeholder="Mot de passe" required>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            <div class="float-right">
+                                <a href="{{ path('app_forget') }}" class="btn btn-link forgot-passwd-lnk">
+                                    Mot de passe oublié ?
+                                </a>
+
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="fa fa-sign-in fa-sign-in-alt fa-fw"></i>
+                                    Se connecter
+                                </button>
+                            </div>
+                        </form>
+
+
+                    </div>
                 </div>
-                <h1 class="page-title">Veuillez saisir vos identifiants de connexion </h1>
-                <form method="post">
-                    <input type="hidden" name="_csrf_token"
-                           value="{{ csrf_token('authenticate') }}"
-                    >
 
 
-                    {% for message in app.flashes('success') %}
-                        <div class="alert alert-success"><i class="fa fa-check"></i> {{ message }}</div>
-
-                    {% endfor %}
-
-                    {% for message in app.flashes('error') %}
-                        <div class="alert alert-danger"><i class="fa fa-exclamation-triangle"></i> {{ message }}
-                        </div>
-                    {% endfor %}
-
-                    <div class="form-group row">
-                        <label for="staticEmail" class="col-sm-3 col-form-label">Identifiant</label>
-                        <div class="col-sm-9">
-
-                            <div class="input-group mb-2">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text"><span class="fa fa-user"></span></div>
-                                </div>
-                                <input type="text" value="{{ last_username }}" name="username" id="inputUsername"
-                                       class="form-control" placeholder="Nom d'utilisateur" required autofocus>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">Mot de passe</label>
-                        <div class="col-sm-9">
-                            <div class="input-group mb-2">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text"><span class="fa fa-lock"></span></div>
-                                </div>
-                                <input type="password" name="password" id="inputPassword" class="form-control"
-                                       placeholder="Mot de passe" required>
-                            </div>
-
-                        </div>
-                    </div>
-
-
-                    <div class="float-right">
-                        <a href="{{ path('app_forget') }}" class="btn btn-link forgot-passwd-lnk">
-                            Mot de passe oublié ?
-                        </a>
-
-                        <button class="btn btn-primary" type="submit">
-                            <i class="fa fa-sign-in fa-sign-in-alt fa-fw"></i>
-                            Se connecter
-                        </button>
-                    </div>
-                </form>
             </section>
 
 

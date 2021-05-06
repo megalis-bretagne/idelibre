@@ -164,12 +164,7 @@ creer un fakeClientnotifier implement ClientNotifier interface . logs in test
 
 
 
-Présence et mandaire sur le rapport de la seance (pdf + csv !)
-
-
 modification ratachement du theme  -> A voir
-
-
 
 
 gerer les presenece  D'abord les elus puis separateur  puis administratifs  -> Pas mauvaise idée mais pas le temps la !
@@ -180,6 +175,4 @@ bouton ouvrir nouelle onglet client elus
 cas elu essai de se connecté
 
 
-
-
-
+Demander a cyril ne verifier qu'il n'y a plus de trace de acteur et secretaire
