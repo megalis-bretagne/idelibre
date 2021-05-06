@@ -7,6 +7,7 @@ use App\Entity\Party;
 use App\Entity\Role;
 use App\Entity\Structure;
 use App\Entity\User;
+use App\Security\Password\LegacyPassword;
 use App\Service\Util\GenderConverter;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -18,10 +19,12 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
     public const REFERENCE = 'User_';
 
     private UserPasswordEncoderInterface $passwordEncoder;
+    private LegacyPassword $legacyPassword;
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder, LegacyPassword $legacyPassword)
     {
         $this->passwordEncoder = $passwordEncoder;
+        $this->legacyPassword = $legacyPassword;
     }
 
     public function load(ObjectManager $manager): void
@@ -119,6 +122,17 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             ->setPassword($this->passwordEncoder->encodePassword($userMontpellier, 'password'));
         $manager->persist($userMontpellier);
         $this->addReference(self::REFERENCE . 'userMontpellier', $userMontpellier);
+
+        $userLegacy = new User();
+        $userLegacy->setEmail('userLegacy@example.org')
+            ->setUsername('userLegacy@montpellier')
+            ->setFirstName('userLegacy')
+            ->setLastname('montpellier')
+            ->setRole($roleStructureAdminLibriciel)
+            ->setStructure($structureMontpellier)
+            ->setPassword($this->legacyPassword->encode('passwordLegacy'));
+        $manager->persist($userLegacy);
+        $this->addReference(self::REFERENCE . 'userLegacy', $userLegacy);
 
         ////// admin group ////////////
 
