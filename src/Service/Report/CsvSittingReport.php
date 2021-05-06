@@ -28,6 +28,8 @@ class CsvSittingReport
             $convocation->getUser()->getLastName(),
             $this->getDateFormattedTimeStamp($convocation->getSentTimestamp()),
             $this->getDateFormattedTimeStamp($convocation->getReceivedTimestamp()),
+            $convocation->getAttendance() ?? '',
+            $convocation->getDeputy() ?? '',
         ];
     }
 
