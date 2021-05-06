@@ -163,6 +163,15 @@ creer un fakeClientnotifier implement ClientNotifier interface . logs in test
 
 
 
+Configuration oui / non sms par type de seances
+configuratin oui / non comelus par type de seances.
+
+Connecteur WD
+
+Envoi de la seance à comelus
+envoi de la seance à lsmessage
+
+Gestion des anciens password en sha1
 
 modification ratachement du theme  -> A voir
 

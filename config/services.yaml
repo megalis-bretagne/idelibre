@@ -20,6 +20,9 @@ parameters:
 
   nginx_host: 'https://nginx-idelibre'
 
+  legacy_salt: '%env(SALT)%'
+
+
 services:
   # default configuration for services in *this* file
   _defaults:

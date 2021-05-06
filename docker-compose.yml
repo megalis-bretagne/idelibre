@@ -30,6 +30,7 @@ services:
       - PHP_OPCACHE_MEMORY_CONSUMPTION=${PHP_OPCACHE_MEMORY_CONSUMPTION}
       - PHP_OPCACHE_MAX_WASTED_PERCENTAGE=${PHP_OPCACHE_MAX_WASTED_PERCENTAGE}
       - SENTRY_DSN=null
+      - SALT=SALT
     volumes:
       - data-public:/app/public
       - data-file:/tmp

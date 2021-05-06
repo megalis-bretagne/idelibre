@@ -3,6 +3,7 @@
 namespace App\Security;
 
 use App\Repository\UserRepository;
+use App\Security\Password\LegacyPassword;
 use App\Service\User\ImpersonateStructure;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,6 +27,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     private UserPasswordEncoderInterface $passwordEncoder;
     private Security $security;
     private ImpersonateStructure $impersonateStructure;
+    private LegacyPassword $legacyPassword;
 
     public function __construct(
         UserRepository $userRepository,
@@ -33,7 +35,8 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         CsrfTokenManagerInterface $csrfTokenManager,
         ImpersonateStructure $impersonateStructure,
         UserPasswordEncoderInterface $passwordEncoder,
-        Security $security
+        Security $security,
+        LegacyPassword $legacyPassword
     ) {
         $this->userRepository = $userRepository;
         $this->router = $router;
@@ -41,6 +44,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         $this->passwordEncoder = $passwordEncoder;
         $this->security = $security;
         $this->impersonateStructure = $impersonateStructure;
+        $this->legacyPassword = $legacyPassword;
     }
 
     public function supports(Request $request): bool
@@ -77,7 +81,11 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     public function checkCredentials($credentials, UserInterface $user): bool
     {
-        return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
+        if ($this->passwordEncoder->isPasswordValid($user, $credentials['password'])) {
+            return true;
+        }
+
+        return $this->legacyPassword->checkAndUpdateCredentials($user, $credentials['password']);
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey): Response
