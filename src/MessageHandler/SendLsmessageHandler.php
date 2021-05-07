@@ -27,6 +27,7 @@ class SendLsmessageHandler implements MessageHandlerInterface
 
     public function __invoke(ConvocationSent $convocationSent)
     {
+        dump('invoke');
         if ('test' === getenv('APP_ENV')) {
             return;
         }
@@ -38,7 +39,11 @@ class SendLsmessageHandler implements MessageHandlerInterface
         }
         $convocations = $this->convocationRepository->getConvocationsWithUser($convocationSent->getConvocationIds());
 
+        dump($convocations);
+
         $smsList = $this->prepareSms($convocations, $lsmessageConnector);
+
+        dump($smsList);
         $this->lsmessageConnectorManager->sendSms($sitting, $smsList);
     }
 

@@ -49,12 +49,17 @@ class UserType extends AbstractType
             ])
             ->add('lastName', TextType::class, [
                 'label' => 'Nom',
-                ])
+            ])
             ->add('username', TextType::class, [
                 'label' => 'Nom d\'utilisateur',
-                ])
+            ])
             ->add('email', EmailType::class, [
-                'label' => 'Email', ]);
+                'label' => 'Email', ])
+
+            ->add('phone', TextType::class, [
+                'label' => 'Téléphone mobile (06XXXXXXXX ou 07XXXXXXXX) ',
+                'required' => false,
+            ]);
 
         if ($this->isNew($options)) {
             $builder->add('role', EntityType::class, [
