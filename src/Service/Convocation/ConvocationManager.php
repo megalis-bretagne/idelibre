@@ -7,6 +7,7 @@ use App\Entity\File;
 use App\Entity\Role;
 use App\Entity\Sitting;
 use App\Entity\User;
+use App\Message\ConvocationSent;
 use App\Repository\ConvocationRepository;
 use App\Repository\UserRepository;
 use App\Service\ClientNotifier\ClientNotifierInterface;
@@ -151,6 +152,8 @@ class ConvocationManager
             $this->clientNotifier->newSittingNotification($convocationBatch);
             $emails = $this->generateEmailsData($sitting, $convocationBatch);
             $this->emailService->sendBatch($emails);
+            //l'envoi des sms en async semble une bien meilleur solution. Preparont deja le terrain
+
         }
     }
 
@@ -164,6 +167,7 @@ class ConvocationManager
         $emails = $this->generateEmailsData($convocation->getSitting(), [$convocation]);
         $this->clientNotifier->newSittingNotification([$convocation]);
         $this->emailService->sendBatch($emails);
+        $this->messageBus->dispatch(new ConvocationSent($sitting->getId()));
     }
 
     /**

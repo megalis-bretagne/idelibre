@@ -4,11 +4,14 @@ namespace App\Service\Connector;
 
 use App\Entity\Connector\Exception\LsmessageConnectorException;
 use App\Entity\Connector\LsmessageConnector;
+use App\Entity\Sitting;
 use App\Entity\Structure;
 use App\Repository\Connector\LsmessageConnectorRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Libriciel\LsMessageWrapper\LsMessageException;
 use Libriciel\LsMessageWrapper\LsMessageWrapper;
+use Libriciel\LsMessageWrapper\Sms;
+use Psr\Log\LoggerInterface;
 
 class LsmessageConnectorManager
 {
@@ -16,12 +19,19 @@ class LsmessageConnectorManager
     private LsmessageConnectorRepository $lsmessageConnectorRepository;
 
     private LsMessageWrapper $lsMessageWrapper;
+    private LoggerInterface $logger;
 
-    public function __construct(EntityManagerInterface $em, LsmessageConnectorRepository $lsmessageConnectorRepository, LsMessageWrapper $lsMessageWrapper)
+    public function __construct(
+        EntityManagerInterface $em,
+        LsmessageConnectorRepository $lsmessageConnectorRepository,
+        LsMessageWrapper $lsMessageWrapper,
+        LoggerInterface $logger
+    )
     {
         $this->em = $em;
         $this->lsmessageConnectorRepository = $lsmessageConnectorRepository;
         $this->lsMessageWrapper = $lsMessageWrapper;
+        $this->logger = $logger;
     }
 
     /**
@@ -58,5 +68,28 @@ class LsmessageConnectorManager
         } catch (LsMessageException $e) {
             return null;
         }
+    }
+
+    /**
+     * @param Sms[] $sms
+     */
+    public function sendSms(Sitting $sitting, array $smsList)
+    {
+        $lsmessageConnector = $this->getLsmessageConnector($sitting->getStructure());
+        if (!$lsmessageConnector || !$lsmessageConnector->getActive()) {
+            return;
+        }
+        $this->lsMessageWrapper->setUrl($lsmessageConnector->getUrl());
+        $this->lsMessageWrapper->setApiKey($lsmessageConnector->getApiKey());
+        try {
+            $this->lsMessageWrapper->sendMultiple($smsList);
+        } catch (\Exception $exception) {
+            $this->logger->error($exception->getMessage());
+        }
+    }
+
+    public function getLsmessageConnector(Structure $structure): LsmessageConnector
+    {
+        return $this->lsmessageConnectorRepository->findOneBy(['structure' => $structure]);
     }
 }

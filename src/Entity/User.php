@@ -117,6 +117,11 @@ class User implements UserInterface
      */
     private $isActive = true;
 
+    /**
+     * @ORM\Column(type="string", length=30, nullable=true)
+     */
+    private $phone;
+
     public function __construct()
     {
         $this->associatedTypes = new ArrayCollection();
@@ -359,6 +364,18 @@ class User implements UserInterface
     public function setIsActive(bool $isActive): self
     {
         $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(?string $phone): self
+    {
+        $this->phone = $phone;
 
         return $this;
     }
