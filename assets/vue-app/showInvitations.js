@@ -15,6 +15,9 @@ let app = new Vue({
     delimiters: ['${', '}'],
     el: "#app",
     data: {
+        comelusId: null,
+        isComelus: false,
+        isComelusSending: false,
         actorConvocations: [],
         guestConvocations: [],
         employeeConvocations: [],
@@ -31,10 +34,10 @@ let app = new Vue({
         changedAttendance: [],
         errorMessage: null,
         infoMessage: null,
-        showModalNotifyAgain : false,
-        notification : {
-            object : "",
-            content : "",
+        showModalNotifyAgain: false,
+        notification: {
+            object: "",
+            content: "",
         }
     },
 
@@ -96,6 +99,14 @@ let app = new Vue({
             })
         },
 
+        getSitting() {
+            axios.get(`/api/sittings/${getSittingId()}`).then(response => {
+                const sitting = response.data;
+                this.comelusId = sitting?.comelusId ?? null;
+                this.isComelus = sitting?.type.isComelus ?? false
+            })
+        },
+
         resetFilters() {
             this.filter = {actor: "", guest: "", employees: ""};
         },
@@ -103,11 +114,11 @@ let app = new Vue({
         openShowModalNotifyAgain() {
             this.notification.object = ""
             this.notification.content = ""
-            this.showModalNotifyAgain  =true;
+            this.showModalNotifyAgain = true;
         },
 
         sendNotifyAgain() {
-            axios.post(`/api/sittings/${getSittingId()}/notifyAgain`,  this.notification).then(
+            axios.post(`/api/sittings/${getSittingId()}/notifyAgain`, this.notification).then(
                 (response) => {
                     this.setInfoMessage("Messages envoyés");
 
@@ -117,9 +128,26 @@ let app = new Vue({
                     this.setErrorMessage("erreur lors de l'envoi");
 
                 })
-                .finally(() =>  {
+                .finally(() => {
                     this.showModalNotifyAgain = false
                 });
+
+        },
+
+        sendComelus() {
+            this.isComelusSending = true;
+            axios.post(`/api/sittings/${getSittingId()}/sendComelus`, this.notification).then(
+                (response) => {
+                    this.setInfoMessage("Document envoyés via comelus");
+                    this.comelusId = response.data['comelusId']
+                })
+                .catch((e) => {
+                    console.log(e);
+                    this.setErrorMessage("erreur lors de l'envoi");
+
+                }).finally(() => {
+                this.isComelusSending = false;
+            });
 
         },
 
@@ -134,11 +162,11 @@ let app = new Vue({
         },
 
         changeAttendance(status) {
-            this.changedAttendance.push({convocationId: status.convocationId, attendance: status.attendance, deputy: status.deputy })
+            this.changedAttendance.push({convocationId: status.convocationId, attendance: status.attendance, deputy: status.deputy})
         },
 
         saveAttendance() {
-            axios.post(`/api/convocations/attendance`,  this.changedAttendance).then(
+            axios.post(`/api/convocations/attendance`, this.changedAttendance).then(
                 (response) => {
                     this.getConvocations()
                 })
@@ -147,7 +175,7 @@ let app = new Vue({
                     this.setErrorMessage("erreur lors de l'enregistrement des présences")
 
                 })
-                .finally(() =>  {
+                .finally(() => {
                     this.showModalAttendance = false
                     this.changedAttendance = [];
                 });
@@ -168,9 +196,9 @@ let app = new Vue({
 
     mounted() {
         this.getConvocations();
+        this.getSitting();
     }
 });
-
 
 
 function formatAttendanceStatus(convocations) {

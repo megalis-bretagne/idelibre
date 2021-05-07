@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -26,6 +27,7 @@ class Type
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid")
+     * @Groups({"sitting"})
      */
     private $id;
 
@@ -33,6 +35,7 @@ class Type
      * @ORM\Column(type="string", length=255, nullable=false)
      * @Assert\NotBlank()
      * @Assert\Length(max="255")
+     * @Groups({"sitting"})
      */
     private $name;
 
@@ -58,6 +61,18 @@ class Type
      * @ORM\ManyToMany(targetEntity=User::class, inversedBy="authorizedTypes")
      */
     private $authorizedSecretaries;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     * @Groups({"sitting"})
+     */
+    private $isSms;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     * @Groups({"sitting"})
+     */
+    private $isComelus;
 
     public function __construct()
     {
@@ -155,6 +170,30 @@ class Type
     public function removeAuthorizedSecretary(User $authorizedSecretary): self
     {
         $this->authorizedSecretaries->removeElement($authorizedSecretary);
+
+        return $this;
+    }
+
+    public function getIsSms(): bool
+    {
+        return $this->isSms ?? false;
+    }
+
+    public function setIsSms(bool $isSms): self
+    {
+        $this->isSms = $isSms;
+
+        return $this;
+    }
+
+    public function getIsComelus(): bool
+    {
+        return $this->isComelus ?? false;
+    }
+
+    public function setIsComelus(?bool $isComelus): self
+    {
+        $this->isComelus = $isComelus;
 
         return $this;
     }

@@ -3,6 +3,7 @@
 namespace App\Controller\api;
 
 use App\Entity\Sitting;
+use App\Service\Connector\ComelusConnectorManager;
 use App\Service\Convocation\ConvocationManager;
 use App\Service\Email\NotificationService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -34,5 +35,25 @@ class SittingController extends AbstractController
         $notificationService->reNotify($sitting, $msg['object'], $msg['content']);
 
         return $this->json(['success' => true]);
+    }
+
+    /**
+     * @Route("/api/sittings/{id}", name="api_sitting_details", methods={"GET"})
+     * @IsGranted("MANAGE_SITTINGS", subject="sitting")
+     */
+    public function getSitting(Sitting $sitting): JsonResponse
+    {
+        return $this->json($sitting, 200, [], ['groups' => ['sitting']]);
+    }
+
+    /**
+     * @Route("/api/sittings/{id}/sendComelus", name="api_sitting_send_comelus", methods={"POST"})
+     * @IsGranted("MANAGE_SITTINGS", subject="sitting")
+     */
+    public function sendComelus(Sitting $sitting, ComelusConnectorManager $comelusConnectorManager): JsonResponse
+    {
+        $comelusId = $comelusConnectorManager->sendComelus($sitting);
+
+        return $this->json(['comelusId' => $comelusId]);
     }
 }
