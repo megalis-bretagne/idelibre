@@ -80,9 +80,9 @@ class ConvocationRepository extends ServiceEntityRepository
 
     /**
      * @param string[] $convocationIds
-     * @return array
      */
-    public function getConvocationsWithUser(array $convocationIds): array {
+    public function getConvocationsWithUser(array $convocationIds): array
+    {
         return $this->createQueryBuilder('c')
             ->andWhere('c.id in (:convocationIds)')
             ->setParameter('convocationIds', $convocationIds)
@@ -91,5 +91,4 @@ class ConvocationRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-
 }

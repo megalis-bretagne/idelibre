@@ -153,7 +153,6 @@ class ConvocationManager
             $emails = $this->generateEmailsData($sitting, $convocationBatch);
             $this->emailService->sendBatch($emails);
             //l'envoi des sms en async semble une bien meilleur solution. Preparont deja le terrain
-
         }
     }
 

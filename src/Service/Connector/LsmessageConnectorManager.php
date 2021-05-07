@@ -26,8 +26,7 @@ class LsmessageConnectorManager
         LsmessageConnectorRepository $lsmessageConnectorRepository,
         LsMessageWrapper $lsMessageWrapper,
         LoggerInterface $logger
-    )
-    {
+    ) {
         $this->em = $em;
         $this->lsmessageConnectorRepository = $lsmessageConnectorRepository;
         $this->lsMessageWrapper = $lsMessageWrapper;

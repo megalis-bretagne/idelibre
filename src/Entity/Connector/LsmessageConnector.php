@@ -2,11 +2,9 @@
 
 namespace App\Entity\Connector;
 
-use App\Entity\Connector\Exception\LsmessageConnectorException;
 use App\Entity\Structure;
 use App\Repository\Connector\LsmessageConnectorRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=LsmessageConnectorRepository::class)
@@ -85,7 +83,6 @@ class LsmessageConnector extends Connector
         return $this->fields['api_key'];
     }
 
-
     public function setApiKey(?string $apiKey): self
     {
         $this->fields['api_key'] = $apiKey;
@@ -111,7 +108,6 @@ class LsmessageConnector extends Connector
     }
 
     /**
-     * @param string|null $sender
      * @return $this
      */
     public function setSender(?string $sender): self
@@ -132,5 +128,4 @@ class LsmessageConnector extends Connector
 
         return $this;
     }
-
 }

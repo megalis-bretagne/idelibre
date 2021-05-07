@@ -38,12 +38,13 @@ class SendLsmessageHandler implements MessageHandlerInterface
         }
         $convocations = $this->convocationRepository->getConvocationsWithUser($convocationSent->getConvocationIds());
 
-        $smsList =$this->prepareSms($convocations, $lsmessageConnector);
+        $smsList = $this->prepareSms($convocations, $lsmessageConnector);
         $this->lsmessageConnectorManager->sendSms($sitting, $smsList);
     }
 
     /**
      * @param iterable<Convocation> $convocations
+     *
      * @return Sms[]
      */
     public function prepareSms(iterable $convocations, LsmessageConnector $connector): array
@@ -54,6 +55,7 @@ class SendLsmessageHandler implements MessageHandlerInterface
                 $smsList[] = new Sms('idelibre', $convocation->getUser()->getPhone(), $connector->getcontent(), $connector->getSender());
             }
         }
+
         return $smsList;
     }
 

@@ -2,9 +2,6 @@
 
 namespace App\Message;
 
-use App\Entity\Convocation;
-use App\Entity\Sitting;
-
 class ConvocationSent
 {
     /**
@@ -34,6 +31,4 @@ class ConvocationSent
     {
         return $this->sittingId;
     }
-
-
 }
