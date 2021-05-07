@@ -53,7 +53,14 @@
                             </button>
                             <button class="btn btn-outline-primary " @click="openShowModalAttendance()">Gerer les Présences
                             </button>
-                            <button :disabled="isAlreadySentActors" class="btn btn-primary" title="Envoyer"
+
+                            <button :disabled="comelusId || !isComelus || isComelusSending" class="btn btn-primary" title="Envoyer à comelus"
+                                    data-target="#confirmComelus"
+                                    data-toggle="modal">
+                                <span class="fa fa-paper-plane"></span> Envoyer via comelus
+                            </button>
+
+                            <button :disabled="isAlreadySentActors" class="btn btn-primary" title="Envoyer les convocations"
                                     data-target="#confirm"
                                     data-toggle="modal">
                                 <span class="fa fa-paper-plane"></span> Envoyer toutes les convocations
@@ -366,6 +373,33 @@
                             <button class="btn btn-primary" data-dismiss="modal" type="button" v-on:click="sendConvocations('Guest')">
                                 Envoyer
                             </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="confirmComelus" ref="confirmComelus" class="modal fade" role="dialog" data-backdrop="static">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Attention</h4>
+                            <button class="close" data-dismiss="modal" type="button">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            Veuillez valider l'envoi de toutes les documents via comelus
+                        </div>
+
+                        <div class="modal-footer">
+
+                            <button class="btn btn-secondary" data-dismiss="modal" type="button">
+                                <span class="fa fa-times"></span> Annuler
+                            </button>
+                            <button class="btn btn-primary" data-dismiss="modal" type="button" v-on:click="sendComelus()">
+                                Envoyer
+                            </button>
+
+
                         </div>
                     </div>
                 </div>

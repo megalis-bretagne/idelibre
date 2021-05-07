@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -31,39 +32,46 @@ class Sitting
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid")
+     * @Groups({"sitting"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(max="255")
+     * @Groups({"sitting"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="datetime")
      * @Assert\NotNull()
+     * @Groups({"sitting"})
      */
     private $date;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"sitting"})
      */
     private $revision = 0;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"sitting"})
      */
     private $isArchived = false;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Length(max="255")
+     * @Groups({"sitting"})
      */
     private $place;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"sitting"})
      */
     private $createdAt;
 
@@ -75,6 +83,7 @@ class Sitting
     /**
      * @ORM\ManyToOne(targetEntity=Type::class)
      * @ORM\JoinColumn(onDelete="SET NULL")
+     * @Groups({"sitting"})
      */
     private $type;
 
@@ -92,6 +101,7 @@ class Sitting
 
     /**
      * @ORM\OneToMany(targetEntity=Project::class, mappedBy="sitting")
+     * @ORM\OrderBy({"rank" = "ASC"})
      */
     private $projects;
 
@@ -99,6 +109,12 @@ class Sitting
      * @ORM\OneToOne(targetEntity=File::class, inversedBy="invitationSitting", cascade={"persist", "remove"})
      */
     private $invitationFile;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"sitting"})
+     */
+    private $comelusId;
 
     public function __construct()
     {
@@ -283,6 +299,18 @@ class Sitting
     public function setInvitationFile(?File $invitationFile): self
     {
         $this->invitationFile = $invitationFile;
+
+        return $this;
+    }
+
+    public function getComelusId(): ?string
+    {
+        return $this->comelusId;
+    }
+
+    public function setComelusId(?string $comelusId): self
+    {
+        $this->comelusId = $comelusId;
 
         return $this;
     }

@@ -2,7 +2,9 @@
 
 namespace App\Service\File;
 
+use App\Entity\Annex;
 use App\Entity\File;
+use App\Entity\Project;
 use App\Entity\Sitting;
 use App\Entity\Structure;
 use Doctrine\ORM\EntityManagerInterface;
@@ -76,5 +78,47 @@ class FileManager
         $this->delete($sitting->getConvocationFile());
 
         return $this->save($uploadedFile, $sitting->getStructure());
+    }
+
+    /**
+     * @return file[]
+     */
+    public function listFilesFromSitting(Sitting $sitting): array
+    {
+        $files = [];
+        $files[] = $sitting->getConvocationFile();
+
+        return [...$files, ...$this->addProjectsAndAnnexes($sitting->getProjects())];
+    }
+
+    /**
+     * @param iterable<Project> $projects
+     *
+     * @return File[]
+     */
+    private function addProjectsAndAnnexes(iterable $projects): array
+    {
+        $files = [];
+        foreach ($projects as $project) {
+            $files[] = $project->getFile();
+            $files = [...$files, ...$this->addAnnexes($project->getAnnexes())];
+        }
+
+        return $files;
+    }
+
+    /**
+     * @param iterable<Annex> $annexes
+     *
+     * @return File[]
+     */
+    private function addAnnexes(iterable $annexes): array
+    {
+        $files = [];
+        foreach ($annexes as $annex) {
+            $files[] = $annex->getFile();
+        }
+
+        return $files;
     }
 }
