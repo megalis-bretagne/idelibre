@@ -21,6 +21,7 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Regex;
 
 class UserType extends AbstractType
 {
@@ -49,12 +50,20 @@ class UserType extends AbstractType
             ])
             ->add('lastName', TextType::class, [
                 'label' => 'Nom',
-                ])
+            ])
             ->add('username', TextType::class, [
                 'label' => 'Nom d\'utilisateur',
-                ])
+            ])
             ->add('email', EmailType::class, [
-                'label' => 'Email', ]);
+                'label' => 'Email', ])
+
+            ->add('phone', TextType::class, [
+                'label' => 'Téléphone mobile (06XXXXXXXX ou 07XXXXXXXX) ',
+                'required' => false,
+                'constraints' => [
+                    new Regex('/^0(6|7)\d{8}$/', 'le numéro de téléphone doit etre de la forme 06xxxxxxxx ou 07xxxxxxxx'),
+                ],
+            ]);
 
         if ($this->isNew($options)) {
             $builder->add('role', EntityType::class, [

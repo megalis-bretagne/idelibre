@@ -77,4 +77,18 @@ class ConvocationRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * @param string[] $convocationIds
+     */
+    public function getConvocationsWithUser(array $convocationIds): array
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.id in (:convocationIds)')
+            ->setParameter('convocationIds', $convocationIds)
+            ->join('c.user', 'user')
+            ->addSelect('user')
+            ->getQuery()
+            ->getResult();
+    }
 }

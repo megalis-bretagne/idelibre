@@ -7,6 +7,7 @@ use App\Entity\File;
 use App\Entity\Role;
 use App\Entity\Sitting;
 use App\Entity\User;
+use App\Message\ConvocationSent;
 use App\Repository\ConvocationRepository;
 use App\Repository\UserRepository;
 use App\Service\ClientNotifier\ClientNotifierInterface;
@@ -21,6 +22,7 @@ use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 class ConvocationManager
 {
@@ -33,6 +35,7 @@ class ConvocationManager
     private EmailGenerator $emailGenerator;
     private UserRepository $userRepository;
     private ClientNotifierInterface $clientNotifier;
+    private MessageBusInterface $messageBus;
 
     public function __construct(
         EntityManagerInterface $em,
@@ -43,7 +46,8 @@ class ConvocationManager
         EmailServiceInterface $emailService,
         EmailGenerator $emailGenerator,
         UserRepository $userRepository,
-        ClientNotifierInterface $clientNotifier
+        ClientNotifierInterface $clientNotifier,
+        MessageBusInterface $messageBus
     ) {
         $this->em = $em;
         $this->convocationRepository = $convocationRepository;
@@ -54,6 +58,7 @@ class ConvocationManager
         $this->emailGenerator = $emailGenerator;
         $this->userRepository = $userRepository;
         $this->clientNotifier = $clientNotifier;
+        $this->messageBus = $messageBus;
     }
 
     public function createConvocationsActors(Sitting $sitting): void
@@ -164,6 +169,18 @@ class ConvocationManager
         $emails = $this->generateEmailsData($convocation->getSitting(), [$convocation]);
         $this->clientNotifier->newSittingNotification([$convocation]);
         $this->emailService->sendBatch($emails);
+        dump('before dispatch');
+        $this->messageBus->dispatch(new ConvocationSent([$convocation->getId()], $convocation->getSitting()->getId()));
+    }
+
+    /**
+     * @param iterable<Convocation> $convocations
+     *
+     * @return string[]
+     */
+    private function getConvocationIdList(iterable $convocations): array
+    {
+        return array_map(fn (Convocation $convocation) => $convocation->getId(), $convocations);
     }
 
     /**
