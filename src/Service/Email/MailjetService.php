@@ -2,7 +2,6 @@
 
 namespace App\Service\Email;
 
-use App\Entity\User;
 use App\Service\EmailTemplate\HtmlTag;
 use Mailjet\Client;
 use Mailjet\Resources;
@@ -99,10 +98,5 @@ class MailjetService implements EmailServiceInterface
                 'Base64Content' => base64_encode(file_get_contents($email->getAttachment()->getPath())),
             ],
         ];
-    }
-
-    public function sendReInitPassword(User $user, string $token): void
-    {
-        // TODO: Implement sendReInitPassword() method.
     }
 }

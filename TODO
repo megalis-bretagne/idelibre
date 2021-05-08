@@ -168,8 +168,11 @@ configuratin oui / non comelus par type de seances.
 
 Connecteur WD
 
-Envoi de la seance à comelus
-envoi de la seance à lsmessage
+Page de check !
+check horodatage,
+check send mail,
+//peut etre aussi la taille dispo mais deuis un docker c'est peut etre compliqué
+
 
 modification ratachement du theme  -> A voir
 
