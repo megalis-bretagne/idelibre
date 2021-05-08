@@ -83,5 +83,4 @@ class SimpleEmailService implements EmailServiceInterface
 
         return 'text/html';
     }
-
 }

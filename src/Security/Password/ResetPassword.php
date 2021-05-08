@@ -49,8 +49,7 @@ class ResetPassword
         UserRepository $userRepository,
         ForgetTokenRepository $tokenRepository,
         UserPasswordEncoderInterface $passwordEncoder
-    )
-    {
+    ) {
         $this->em = $em;
         $this->userRepository = $userRepository;
         $this->tokenRepository = $tokenRepository;
@@ -77,7 +76,7 @@ class ResetPassword
 
     public function prepareEmail(User $user, string $token): EmailData
     {
-        $subject = "Réinitialiser votre mot de passe";
+        $subject = 'Réinitialiser votre mot de passe';
         $resetPasswordUrl = $this->router->generate('app_reset', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
         $content = "Bonjour, \n Veuillez cliquer sur le lien suivant pour reinitialiser votre mot de passe \n " . $resetPasswordUrl;
 
@@ -87,7 +86,6 @@ class ResetPassword
 
         return $emailData;
     }
-
 
     /**
      * @return User

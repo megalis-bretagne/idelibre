@@ -2,9 +2,6 @@
 
 namespace App\Service\Email;
 
-use App\Entity\EmailTemplate;
-use App\Entity\User;
-
 class EmailServiceInterfaceFake implements EmailServiceInterface
 {
     /**
