@@ -90,6 +90,12 @@
                     </thead>
                     <tbody>
 
+                    <tr class="d-flex" v-if="filteredActorConvocations.length == 0">
+                       <td class="col-12 text-center">
+                           Aucun élu convoqué
+                       </td>
+                    </tr>
+
                     <tr class="d-flex " v-for="convocation in filteredActorConvocations">
 
                         <td class="col-3">
@@ -173,6 +179,13 @@
                         </thead>
                         <tbody>
 
+                        <tr class="d-flex" v-if="filteredEmployeeConvocations.length == 0">
+                            <td class="col-12 text-center">
+                                Aucun administratif invité
+                            </td>
+                        </tr>
+
+
                         <tr class="d-flex" v-for="convocation in filteredEmployeeConvocations">
                             <td class="col-3">
                                 ${convocation.user.firstName} ${convocation.user.lastName}
@@ -254,6 +267,13 @@
                         </tr>
                         </thead>
                         <tbody>
+
+                        <tr class="d-flex" v-if="filteredGuestConvocations.length == 0">
+                            <td class="col-12 text-center">
+                                Aucun invité
+                            </td>
+                        </tr>
+
 
                         <tr class="d-flex" v-for="convocation in filteredGuestConvocations">
                             <td class="col-3">
