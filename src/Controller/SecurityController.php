@@ -97,6 +97,7 @@ class SecurityController extends AbstractController
     {
         if ($request->isMethod('post')) {
             $username = $request->request->get('username');
+
             try {
                 $resetPassword->reset($username);
             } catch (EntityNotFoundException $e) {

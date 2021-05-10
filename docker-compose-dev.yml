@@ -75,6 +75,12 @@ services:
       - POSTGRES_PORT=5432
     command: ["/app/docker-resources/init.sh"]
 
+  maildev-idelibre:
+    container_name: maildev-idelibre
+    image: djfarrelly/maildev
+    ports:
+      - 1280:80
+
 
 
 
