@@ -2,56 +2,61 @@
 
 namespace App\Controller;
 
-use Libriciel\LshorodatageApiWrapper\LsHorodatage;
+use App\Service\ClientNotifier\ClientNotifier;
+use App\Service\Email\EmailData;
+use App\Service\Email\EmailServiceInterface;
+use App\Sidebar\Annotation\Sidebar;
+use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
+use Libriciel\LshorodatageApiWrapper\LsHorodatageException;
 use Libriciel\LshorodatageApiWrapper\LshorodatageInterface;
+use Psr\Log\LoggerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+
+/**
+ * @Sidebar(active={"platform-nav","check-nav"})
+ */
 class CheckController extends AbstractController
 {
+
     /**
-     * @Route("/check", name="check")
+     * @Route("/check", name="check_index")
+     * @IsGranted("ROLE_SUPERADMIN")
+     * @Breadcrumb("Vérification de la plateforme")
      */
-    public function index(LshorodatageInterface $lsHorodatage, Request $request): Response
+    public function index(ClientNotifier $clientNotifier, LshorodatageInterface $lshorodatage, LoggerInterface $logger): Response
     {
-        $res = $lsHorodatage->createTimestampToken('/tmp/toto ');
-
-        dd($res->getContents());
-
-        $form = $this->createFormBuilder()
-            ->add('file', FileType::class)
-            ->add('token', FileType::class)
-            ->getForm();
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            /** @var UploadedFile $file */
-            $file = $form->get('file')->getData();
-            $token = $form->get('token')->getData();
-
-            $lsHorodatage->setUrl('http://lshorodatage:3000');
-
-            //  $lsHorodatageApiWrapper->setUrl('http://lshorodatage:3000');
-            //  $lsHorodatageApiWrapper->setApiKey('lshorodatage');
-            //  $res = $lsHorodatageApiWrapper->check();
-            //  $res = $lsHorodatageApiWrapper->createTimestampToken($file);
-            //  dd($res);
-            //dd($lsHorodatage->ping()->getContents());
-            // $lsHorodatage->createTimestampToken($file->getRealPath());
-
-            //$lsHorodatage->readTimestampToken($file->getRealPath());
-
-            $res = $lsHorodatage->verifyTimestampToken($file->getRealPath(), $token->getRealPath());
-            dd($res);
+        $isNodejs = $clientNotifier->checkConnection();
+        $isLshorodatage = true;
+        try {
+            $lshorodatage->ping();
+        } catch (LsHorodatageException $e) {
+            $isLshorodatage = false;
+            $logger->error($e->getMessage());
         }
 
         return $this->render('check/index.html.twig', [
-            'form' => $form->createView(),
+            'isNodejs' => $isNodejs,
+            'isLshorodatage' => $isLshorodatage
         ]);
+    }
+
+    /**
+     * @Route("/check/email", name="check_email", methods={"POST"})
+     * @IsGranted("ROLE_SUPERADMIN")
+     */
+    public function testMail(Request $request, EmailServiceInterface $emailService, ParameterBagInterface $bag): Response
+    {
+        $email = $request->request->get('email');
+        $emailData = new EmailData("Test email idelibre", "email de verification", EmailData::FORMAT_TEXT);
+        $emailData->setTo($email)->setReplyTo($bag->get('email_from'));
+        $emailService->sendBatch([$emailData]);
+        $this->addFlash('success', 'Email de vérification envoyé');
+        return $this->redirectToRoute('check_index');
     }
 }

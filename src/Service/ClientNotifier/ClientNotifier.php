@@ -3,7 +3,9 @@
 namespace App\Service\ClientNotifier;
 
 use App\Entity\Convocation;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\HttpClient\Exception\ClientException;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -11,16 +13,17 @@ class ClientNotifier implements ClientNotifierInterface
 {
     private string $passphrase;
     private HttpClientInterface $httpClient;
-    /**
-     * @var mixed
-     */
-    private $baseUrl;
+    private string $baseNotificationUrl;
+    private LoggerInterface $logger;
+    private string $nodejsUrl;
 
-    public function __construct(ParameterBagInterface $bag, HttpClientInterface $httpClient)
+    public function __construct(ParameterBagInterface $bag, HttpClientInterface $httpClient, LoggerInterface $logger)
     {
         $this->passphrase = $bag->get('nodejs_passphrase');
         $this->httpClient = $httpClient;
-        $this->baseUrl = $bag->get('nodejs_notification_url');
+        $this->baseNotificationUrl = $bag->get('nodejs_notification_url');
+        $this->logger = $logger;
+        $this->nodejsUrl = $bag->get('nodejs_host');
     }
 
     /**
@@ -79,15 +82,26 @@ class ClientNotifier implements ClientNotifierInterface
     private function sendNotification(string $path, array $userIds)
     {
         try {
-            $this->httpClient->request('POST', "$this->baseUrl/$path", [
+            $this->httpClient->request('POST', "$this->baseNotificationUrl/$path", [
                 'json' => [
                     'userIds' => $userIds,
                     'passphrase' => $this->passphrase,
                 ],
             ]);
         } catch (TransportExceptionInterface $e) {
-            // TODO log ERROR !
-            dump($e);
+            $this->logger->error($e->getMessage());
         }
     }
+
+    public function checkConnection(): bool
+    {
+        try {
+            $this->httpClient->request('GET', "$this->nodejsUrl/version");
+        } catch (TransportExceptionInterface | ClientException $e) {
+            $this->logger->error($e);
+            return false;
+        }
+        return true;
+    }
+
 }
