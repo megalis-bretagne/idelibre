@@ -22,7 +22,7 @@ class AddActorType extends AbstractType
     {
         $builder
             ->add('notAssociatedActors', EntityType::class, [
-                'label' => 'Ajouter des acteurs',
+                'label' => 'Ajouter des élus',
                 'class' => User::class,
                 'choice_label' => fn (User $user) => $user->getFirstName() . ' ' . $user->getLastName(),
                 'query_builder' => $this->userRepository->findActorsNotInSitting($options['sitting'], $options['structure']),

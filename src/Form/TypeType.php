@@ -32,7 +32,7 @@ class TypeType extends AbstractType
             ->add('associatedActors', EntityType::class, [
                 'placeholder' => 'Sélectionner les élus',
                 'required' => false,
-                'label' => 'Acteurs associés',
+                'label' => 'Elus associés',
                 'class' => User::class,
                 'query_builder' => $this->userRepository
                     ->findActorsByStructure($options['structure']),
