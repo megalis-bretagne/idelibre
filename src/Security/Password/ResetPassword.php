@@ -6,39 +6,25 @@ use App\Entity\ForgetToken;
 use App\Entity\User;
 use App\Repository\ForgetTokenRepository;
 use App\Repository\UserRepository;
+use App\Service\Email\EmailData;
 use App\Service\Email\EmailServiceInterface;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class ResetPassword
 {
-    /**
-     * @var EntityManagerInterface
-     */
     private $em;
-    /**
-     * @var UserRepository
-     */
     private $userRepository;
-    /**
-     * @var ForgetTokenRepository
-     */
     private $tokenRepository;
-    /**
-     * @var RouterInterface
-     */
     private $router;
-    /**
-     * @var UserPasswordEncoderInterface
-     */
     private $passwordEncoder;
-    /**
-     * @var EmailServiceInterface
-     */
     private $email;
+    private ParameterBagInterface $bag;
 
     public function __construct(
         EmailServiceInterface $email,
@@ -46,7 +32,8 @@ class ResetPassword
         RouterInterface $router,
         UserRepository $userRepository,
         ForgetTokenRepository $tokenRepository,
-        UserPasswordEncoderInterface $passwordEncoder
+        UserPasswordEncoderInterface $passwordEncoder,
+        ParameterBagInterface $bag
     ) {
         $this->em = $em;
         $this->userRepository = $userRepository;
@@ -54,6 +41,7 @@ class ResetPassword
         $this->router = $router;
         $this->passwordEncoder = $passwordEncoder;
         $this->email = $email;
+        $this->bag = $bag;
     }
 
     /**
@@ -67,7 +55,25 @@ class ResetPassword
         }
 
         $token = $this->createToken($user);
-        $this->email->sendReInitPassword($user, $token);
+
+        $emailData = $this->prepareEmail($user, $token);
+        $this->email->sendBatch([$emailData]);
+    }
+
+    public function prepareEmail(User $user, string $token): EmailData
+    {
+        $subject = 'Réinitialiser votre mot de passe';
+        $resetPasswordUrl = $this->router->generate('app_reset', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
+        $content = "Bonjour, \n Veuillez cliquer sur le lien suivant pour reinitialiser votre mot de passe \n " . $resetPasswordUrl;
+
+        $emailData = new EmailData($subject, $content, EmailData::FORMAT_TEXT);
+        $emailData->setTo($user->getEmail())
+            ->setReplyTo($this->bag->get('email_from'));
+        if ($user->getStructure() && $user->getStructure()->getReplyTo()) {
+            $emailData->setReplyTo($user->getStructure()->getReplyTo());
+        }
+
+        return $emailData;
     }
 
     /**

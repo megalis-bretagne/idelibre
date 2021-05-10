@@ -75,7 +75,7 @@ class EmailData
 
     public function isAttachment(): bool
     {
-        return $this->isAttachment;
+        return $this->isAttachment ?? false;
     }
 
     public function setIsAttachment(bool $isAttachment): EmailData

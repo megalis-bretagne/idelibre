@@ -97,6 +97,7 @@ class SecurityController extends AbstractController
     {
         if ($request->isMethod('post')) {
             $username = $request->request->get('username');
+
             try {
                 $resetPassword->reset($username);
             } catch (EntityNotFoundException $e) {
@@ -126,7 +127,7 @@ class SecurityController extends AbstractController
             throw new NotFoundHttpException('this token does not exist');
         }
 
-        $form = $this->createForm(UserPasswordType::class);
+        $form = $this->createForm(UserPasswordType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

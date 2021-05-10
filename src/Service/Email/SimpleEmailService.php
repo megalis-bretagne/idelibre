@@ -2,7 +2,6 @@
 
 namespace App\Service\Email;
 
-use App\Entity\User;
 use App\Service\EmailTemplate\HtmlTag;
 use Exception;
 use Swift_Attachment;
@@ -83,10 +82,5 @@ class SimpleEmailService implements EmailServiceInterface
         }
 
         return 'text/html';
-    }
-
-    public function sendReInitPassword(User $user, string $token): void
-    {
-        // TODO: Implement sendReInitPassword() method.
     }
 }

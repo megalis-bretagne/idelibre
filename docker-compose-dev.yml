@@ -3,7 +3,7 @@ version: '3.4'
 services:
   fpm-idelibre:
     container_name: fpm-idelibre
-    image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/idelibre/idelibre:sendsms
+    image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/idelibre/idelibre:master
 
     env_file:
       - .env.docker.local
@@ -74,6 +74,12 @@ services:
       - POSTGRES_PASSWORD=idelibre
       - POSTGRES_PORT=5432
     command: ["/app/docker-resources/init.sh"]
+
+  maildev-idelibre:
+    container_name: maildev-idelibre
+    image: djfarrelly/maildev
+    ports:
+      - 1280:80
 
 
 

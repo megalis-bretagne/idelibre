@@ -63,7 +63,7 @@ class PdfSittingGenerator
     private function addAnnexes(Merger $merger, iterable $annexes): void
     {
         foreach ($annexes as $annex) {
-            if ($this->isPdfFile($annex->getFile()->getName())) {    //TODO TEST IF IS .pdf  !!!
+            if ($this->isPdfFile($annex->getFile()->getName())) {
                 $merger->addFile($annex->getFile()->getPath());
             }
         }
