@@ -17,13 +17,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-
 /**
  * @Sidebar(active={"platform-nav","check-nav"})
  */
 class CheckController extends AbstractController
 {
-
     /**
      * @Route("/check", name="check_index")
      * @IsGranted("ROLE_SUPERADMIN")
@@ -42,7 +40,7 @@ class CheckController extends AbstractController
 
         return $this->render('check/index.html.twig', [
             'isNodejs' => $isNodejs,
-            'isLshorodatage' => $isLshorodatage
+            'isLshorodatage' => $isLshorodatage,
         ]);
     }
 
@@ -53,10 +51,11 @@ class CheckController extends AbstractController
     public function testMail(Request $request, EmailServiceInterface $emailService, ParameterBagInterface $bag): Response
     {
         $email = $request->request->get('email');
-        $emailData = new EmailData("Test email idelibre", "email de verification", EmailData::FORMAT_TEXT);
+        $emailData = new EmailData('Test email idelibre', 'email de verification', EmailData::FORMAT_TEXT);
         $emailData->setTo($email)->setReplyTo($bag->get('email_from'));
         $emailService->sendBatch([$emailData]);
         $this->addFlash('success', 'Email de vérification envoyé');
+
         return $this->redirectToRoute('check_index');
     }
 }

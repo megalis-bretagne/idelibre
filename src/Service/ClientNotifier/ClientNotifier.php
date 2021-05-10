@@ -99,9 +99,10 @@ class ClientNotifier implements ClientNotifierInterface
             $this->httpClient->request('GET', "$this->nodejsUrl/version");
         } catch (TransportExceptionInterface | ClientException $e) {
             $this->logger->error($e);
+
             return false;
         }
+
         return true;
     }
-
 }
