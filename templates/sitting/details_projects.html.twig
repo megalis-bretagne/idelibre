@@ -23,10 +23,16 @@
         </div>
 
 
-        <div class="col-10 offset-1 mt-4 bg-white">
+        <div class="col-10 offset-1 mt-4 form-white">
             {{ macroTab.showTabs('projects', sitting) }}
             <h2>Projets</h2>
-            <div class="mt-5"></div>
+            <div class="mt-4"></div>
+
+            <div v-if="projects.length == 0" class="text-center" >
+                Aucun projet associé
+            </div>
+
+
             {% for project in projects %}
 
                 <div class="il-project">
