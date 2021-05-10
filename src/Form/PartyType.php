@@ -29,7 +29,7 @@ class PartyType extends AbstractType
                 'label' => 'Intitulé',
             ])
             ->add('actors', EntityType::class, [
-                'label' => 'Acteurs associés',
+                'label' => 'Elus associés',
                 'required' => false,
                 'class' => User::class,
                 'choice_label' => fn (User $user) => $user->getFirstName() . ' ' . $user->getLastName(),
