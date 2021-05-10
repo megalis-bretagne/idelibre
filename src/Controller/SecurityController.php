@@ -127,7 +127,7 @@ class SecurityController extends AbstractController
             throw new NotFoundHttpException('this token does not exist');
         }
 
-        $form = $this->createForm(UserPasswordType::class);
+        $form = $this->createForm(UserPasswordType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
