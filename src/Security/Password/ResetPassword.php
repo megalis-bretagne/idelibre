@@ -69,7 +69,7 @@ class ResetPassword
         $emailData = new EmailData($subject, $content, EmailData::FORMAT_TEXT);
         $emailData->setTo($user->getEmail())
             ->setReplyTo($this->bag->get('email_from'));
-        if($user->getStructure() && $user->getStructure()->getReplyTo()) {
+        if ($user->getStructure() && $user->getStructure()->getReplyTo()) {
             $emailData->setReplyTo($user->getStructure()->getReplyTo());
         }
 
