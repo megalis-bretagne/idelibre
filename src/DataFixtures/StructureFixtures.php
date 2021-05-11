@@ -24,6 +24,7 @@ class StructureFixtures extends Fixture implements DependentFixtureInterface
         $structureLibriciel = (new Structure())
             ->setName('Libriciel')
             ->setSuffix('libriciel')
+            ->setLegacyConnectionName('libriciel')
             ->setReplyTo('libriciel@exemple.org')
             ->setTimezone($timezoneParis);
 
@@ -33,6 +34,7 @@ class StructureFixtures extends Fixture implements DependentFixtureInterface
         $structureMtp = (new Structure())
             ->setName('Montpellier')
             ->setSuffix('montpellier')
+            ->setLegacyConnectionName('montpellier')
             ->setReplyTo('montpellier@exemple.org')
             ->setTimezone($timezoneParis)
             ->setGroup($groupRecia);
