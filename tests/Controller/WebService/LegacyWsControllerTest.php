@@ -2,6 +2,9 @@
 
 namespace App\Tests\Controller\WebService;
 
+use App\DataFixtures\RoleFixtures;
+use App\DataFixtures\StructureFixtures;
+use App\DataFixtures\UserFixtures;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
 use Doctrine\Persistence\ObjectManager;
@@ -36,7 +39,9 @@ class LegacyWsControllerTest extends WebTestCase
             ->getManager();
 
         $this->loadFixtures([
-
+            StructureFixtures::class,
+            UserFixtures::class,
+            RoleFixtures::class
         ]);
     }
 
@@ -60,8 +65,8 @@ class LegacyWsControllerTest extends WebTestCase
         $fileProject2 = new UploadedFile(__DIR__ . '/../../resources/project2.pdf', 'project2.pdf', 'application/pdf');
         $fileProject3 = new UploadedFile(__DIR__ . '/../../resources/project3.pdf', 'project3.pdf', 'application/pdf');
 
-        $username = 'secretary1@libriciel';
-        $password = 'password';  //TODO LEGACY PASSWORD !!!!
+        $username = 'secretary1';
+        $password = 'password';
         $conn = 'libriciel';
 
         $sittingData = [
@@ -69,11 +74,11 @@ class LegacyWsControllerTest extends WebTestCase
             'type_seance' => 'Commission webservice',
             'date_seance' => date('Y-m-d H:i'),
             'acteurs_convoques' => '[
-            {"Acteur":{"nom":"DURAND","prenom":"Thomas","salutation":"Monsieur","titre":"Pr\\u00e9sident","email":"thomas.durand@example.org","telmobile":""},
-            {"Acteur":{"nom":"DUPONT","prenom":"Emilie","salutation":"Madame","titre":"1ERE Vice-President","email":"emilie.dupont@example.org","telmobile":""},
-            {"Acteur":{"nom":"MARTINEZ","prenom":"Franck","salutation":"Monsieur","titre":"","email":"frank.martinez@gmail.com","telmobile":""},
-            {"Acteur":{"nom":"POMMIER","prenom":"Sarah","salutation":"Madame","titre":"","email":"sarah.pommier@example.org","telmobile":""},
-            {"Acteur":{"nom":"MARTIN","prenom":"Philippe","salutation":"Monsieur","titre":"","email":"philippe.marton@example.org","telmobile":""}
+            {"Acteur":{"nom":"DURAND","prenom":"Thomas","salutation":"Monsieur","titre":"Pr\\u00e9sident","email":"thomas.durand@example.org","telmobile":""}},
+            {"Acteur":{"nom":"DUPONT","prenom":"Emilie","salutation":"Madame","titre":"1ERE Vice-President","email":"emilie.dupont@example.org","telmobile":""}},
+            {"Acteur":{"nom":"MARTINEZ","prenom":"Franck","salutation":"Monsieur","titre":"","email":"frank.martinez@gmail.com","telmobile":""}},
+            {"Acteur":{"nom":"POMMIER","prenom":"Sarah","salutation":"Madame","titre":"","email":"sarah.pommier@example.org","telmobile":""}},
+            {"Acteur":{"nom":"MARTIN","prenom":"Philippe","salutation":"Monsieur","titre":"","email":"philippe.marton@example.org","telmobile":""}}
             ]',
             'projets' => [
                 [
@@ -96,9 +101,9 @@ class LegacyWsControllerTest extends WebTestCase
         ];
 
 
-        $this->client->request(
+        $res = $this->client->request(
             Request::METHOD_POST,
-            '/seances.json' ,
+            '/seance.json' ,
             [
                 'username' => $username,
                 'password' => $password,
@@ -112,6 +117,10 @@ class LegacyWsControllerTest extends WebTestCase
                 'projet_2_rapport' => $fileProject3,
             ]
         );
+
+        $this->assertResponseStatusCodeSame(200);
+
+        dd('done');
 
     }
 
