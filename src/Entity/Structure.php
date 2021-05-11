@@ -67,6 +67,11 @@ class Structure
      */
     private $suffix;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $legacyConnectionName;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -176,6 +181,18 @@ class Structure
     public function setSiren($siren): self
     {
         $this->siren = $siren;
+
+        return $this;
+    }
+
+    public function getLegacyConnectionName(): ?string
+    {
+        return $this->legacyConnectionName;
+    }
+
+    public function setLegacyConnectionName(string $legacyConnectionName): self
+    {
+        $this->legacyConnectionName = $legacyConnectionName;
 
         return $this;
     }
