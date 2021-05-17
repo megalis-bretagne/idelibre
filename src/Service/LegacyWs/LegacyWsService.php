@@ -30,11 +30,9 @@ class LegacyWsService
 
     public function getStructureFromLegacyConnection(string $legacyConnectionName): ?Structure
     {
-
         if (!$legacyConnectionName) {
             return null;
         }
-
 
         return $this->structureRepository->findOneBy(['legacyConnectionName' => $legacyConnectionName]);
     }

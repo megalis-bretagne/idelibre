@@ -23,7 +23,8 @@ class StructureManager
         UserPasswordEncoderInterface $passwordEncoder,
         ValidatorInterface $validator,
         ImpersonateStructure $impersonateStructure
-    ) {
+    )
+    {
         $this->structureRepository = $structureRepository;
         $this->em = $em;
         $this->passwordEncoder = $passwordEncoder;
@@ -33,6 +34,8 @@ class StructureManager
 
     public function save(Structure $structure): void
     {
+
+
         $this->em->persist($structure);
         $this->em->flush();
     }
@@ -50,4 +53,6 @@ class StructureManager
         $this->em->persist($structure);
         $this->em->flush();
     }
+
+
 }

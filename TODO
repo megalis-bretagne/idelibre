@@ -184,3 +184,6 @@ cas elu essai de se connecté
 
 
 Demander a cyril ne verifier qu'il n'y a plus de trace de acteur et secretaire
+
+
+WARNING VERIFIER Migration sequence !!!!!! semble ne fonctionner qu'ave un create sequence seul dans sa migration !
