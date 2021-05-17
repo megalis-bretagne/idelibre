@@ -173,7 +173,7 @@ class Structure
         return $this;
     }
 
-    public function getSiren(): string
+    public function getSiren(): ?string
     {
         return $this->siren;
     }

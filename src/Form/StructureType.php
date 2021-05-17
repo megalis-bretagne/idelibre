@@ -22,9 +22,7 @@ class StructureType extends AbstractType
             ->add('name', TextType::class, [
                 'label' => 'Dénomination',
             ])
-            ->add('suffix', TextType::class, [
-                'label' => 'Suffixe',
-            ])
+
             ->add('replyTo', TextType::class, [
                 'label' => 'Email de réponse',
             ])
@@ -39,6 +37,18 @@ class StructureType extends AbstractType
                 'label' => 'Fuseau horaire',
             ])
         ;
+
+        if (!$isNew) {
+            $builder->add('suffix', TextType::class, [
+                'label' => 'Suffixe',
+                'disabled' => true
+            ])
+            ->add('legacyConnectionName', TextType::class, [
+                'label' => 'Connexion',
+                'disabled' => true
+            ]);
+        }
+
 
         if ($isNew) {
             $builder->add('user', SuperUserType::class, [

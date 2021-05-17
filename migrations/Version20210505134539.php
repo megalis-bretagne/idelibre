@@ -22,7 +22,6 @@ final class Version20210505134539 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
-        $this->addSql('DROP SEQUENCE party_legacy_seq CASCADE');
         $this->addSql('ALTER TABLE convocation DROP CONSTRAINT FK_C03B3F5FA76ED395');
         $this->addSql('ALTER TABLE convocation ADD CONSTRAINT FK_C03B3F5FA76ED395 FOREIGN KEY (user_id) REFERENCES "user" (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
     }
