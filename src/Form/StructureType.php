@@ -41,14 +41,13 @@ class StructureType extends AbstractType
         if (!$isNew) {
             $builder->add('suffix', TextType::class, [
                 'label' => 'Suffixe',
-                'disabled' => true
+                'disabled' => true,
             ])
             ->add('legacyConnectionName', TextType::class, [
                 'label' => 'Connexion',
-                'disabled' => true
+                'disabled' => true,
             ]);
         }
-
 
         if ($isNew) {
             $builder->add('user', SuperUserType::class, [
