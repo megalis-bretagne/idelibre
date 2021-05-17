@@ -78,7 +78,7 @@ class StructureCreator
 
     private function createLegacyConnexionName(string $suffix): string
     {
-        return strtolower(preg_replace("/[^A-Za-z0-9 ]/", '', $suffix));
+        return strtolower(preg_replace('/[^A-Za-z0-9 ]/', '', $suffix));
     }
 
     /**
