@@ -70,7 +70,7 @@ class TypeType extends AbstractType
             ->add('associatedGuests', EntityType::class, [
                 'placeholder' => 'Sélectionner les Invités',
                 'required' => false,
-                'label' => 'invités associés',
+                'label' => 'Invités associés',
                 'class' => User::class,
                 'query_builder' => $this->userRepository
                     ->findGuestsByStructure($options['structure']),
