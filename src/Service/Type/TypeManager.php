@@ -15,7 +15,8 @@ class TypeManager
     public function __construct(
         TypeRepository $typeRepository,
         EntityManagerInterface $em
-    ) {
+    )
+    {
         $this->typeRepository = $typeRepository;
         $this->em = $em;
     }
@@ -26,7 +27,8 @@ class TypeManager
         iterable $associatedEmployees,
         iterable $associatedGuests,
         Structure $structure
-    ): void {
+    ): void
+    {
         $type->setAssociatedUsers([...$associatedActors, ...$associatedEmployees, ...$associatedGuests]);
         $type->setStructure($structure);
         $this->em->persist($type);
@@ -38,4 +40,20 @@ class TypeManager
         $this->em->remove($type);
         $this->em->flush();
     }
+
+    public function getOrCreateType(string $typeName, Structure $structure): Type
+    {
+        $type = $this->typeRepository->findOneBy(['name' => $typeName, 'structure' => $structure]);
+        if ($type) {
+            return $type;
+        }
+
+        $newType = (new Type())->setName($typeName)
+            ->setStructure($structure);
+
+        $this->em->persist($newType);
+
+        return $newType;
+    }
+
 }

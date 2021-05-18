@@ -18,7 +18,7 @@ class ThemeManager
         $this->em = $em;
     }
 
-    public function save(Theme $theme, Structure $structure, ?Theme $parentTheme = null): void
+    public function save(Theme $theme, Structure $structure, ?Theme $parentTheme = null): Theme
     {
         $theme->setStructure($structure);
 
@@ -29,6 +29,8 @@ class ThemeManager
         $this->em->flush();
 
         $this->addFullNameToTheme($theme, $this->generateFullName($theme));
+
+        return $theme;
     }
 
     public function update(Theme $theme): void
@@ -95,4 +97,29 @@ class ThemeManager
 
         return $themes ?? [];
     }
+
+
+    public function createThemesFromString(string $comaSeparatedThemes, Structure $structure): Theme
+    {
+        $themeNames = explode(',', $comaSeparatedThemes);
+        $parentTheme = null;
+        foreach ($themeNames as $position => $themeName) {
+            $parentTheme = $this->findOrCreateTheme(trim($themeName), $position, $parentTheme, $structure);
+        }
+
+        return $parentTheme;
+    }
+
+    private function findOrCreateTheme(string $themeName, int $level, ?Theme $parentTheme, Structure $structure): Theme
+    {
+        $theme = $this->themeRepository->findOneBy(['structure' => $structure, 'name' => $themeName, 'lvl' => $level]);
+        if ($theme) {
+            return $theme;
+        }
+        $newTheme = (new Theme())->setName($themeName);
+
+        return $this->save($newTheme, $structure, $parentTheme);
+    }
+
+
 }

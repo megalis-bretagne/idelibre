@@ -4,6 +4,7 @@ namespace App\Tests\Controller\WebService;
 
 use App\DataFixtures\RoleFixtures;
 use App\DataFixtures\StructureFixtures;
+use App\DataFixtures\ThemeFixtures;
 use App\DataFixtures\UserFixtures;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
@@ -41,7 +42,8 @@ class LegacyWsControllerTest extends WebTestCase
         $this->loadFixtures([
             StructureFixtures::class,
             UserFixtures::class,
-            RoleFixtures::class
+            RoleFixtures::class,
+            ThemeFixtures::class
         ]);
     }
 
@@ -89,7 +91,8 @@ class LegacyWsControllerTest extends WebTestCase
                 [
                     'ordre' => 1,
                     'libelle' => 'tarif cimetiere2',
-                    'theme' => 'T1, STB , sstb'
+                    'theme' => 'T1, STB , sstb',
+                    'annexes' =>[['ordre' => 0], ['ordre' => 1]]
                 ],
                 [
                     'ordre' => 2,

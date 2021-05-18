@@ -36,17 +36,18 @@ class LegacyWsController
             throw new Http403Exception("Erreur d'authentification");
         }
 
-        $sittingData = json_decode($jsonData, true);
-        if (!$sittingData) {
+        $rawSitting = json_decode($jsonData, true);
+        if (!$rawSitting) {
             throw new BadRequestHttpException('jsonData is not a valid json');
         }
 
-        $rawActors = json_decode($sittingData['acteurs_convoques'], true);
-        if (!$rawActors) {
-            throw new BadRequestHttpException('acteurs_convoques is not a valid json');
-        }
 
-        dd($request->files->all());
+        try {
+            $wsService->createSitting($rawSitting, $request->files->all(), $structure);
+        }catch (\Exception $e) {
+            dd($e);
+        }
+        //dd($request->files->all());
 
         dd('ok');
     }
