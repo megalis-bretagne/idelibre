@@ -8,6 +8,7 @@ use App\Entity\Sitting;
 use App\Entity\Structure;
 use App\Entity\Type;
 use App\Entity\User;
+use App\Repository\SittingRepository;
 use App\Repository\StructureRepository;
 use App\Repository\UserRepository;
 use App\Security\Password\LegacyPassword;
@@ -34,6 +35,7 @@ class LegacyWsService
     private ThemeManager $themeManager;
     private RoleManager $roleManager;
     private ConvocationManager $convocationManager;
+    private SittingRepository $sittingRepository;
 
     public function __construct(
         EntityManagerInterface $em,
@@ -45,8 +47,10 @@ class LegacyWsService
         FileManager $fileManager,
         ThemeManager $themeManager,
         RoleManager $roleManager,
-        ConvocationManager $convocationManager
-    ) {
+        ConvocationManager $convocationManager,
+        SittingRepository $sittingRepository
+    )
+    {
         $this->structureRepository = $structureRepository;
         $this->userRepository = $userRepository;
         $this->passwordEncoder = $passwordEncoder;
@@ -57,6 +61,7 @@ class LegacyWsService
         $this->themeManager = $themeManager;
         $this->roleManager = $roleManager;
         $this->convocationManager = $convocationManager;
+        $this->sittingRepository = $sittingRepository;
     }
 
     public function getStructureFromLegacyConnection(string $legacyConnectionName): ?Structure
@@ -97,9 +102,7 @@ class LegacyWsService
      */
     public function createSitting(array $rawSitting, array $uploadedFiles, Structure $structure): Sitting
     {
-        //TODO transaction !
-
-        $this->validateRawSitting($rawSitting, $uploadedFiles);
+        $this->validateRawSitting($rawSitting, $uploadedFiles, $structure);
         $sitting = new Sitting();
         $this->em->persist($sitting);
 
@@ -147,7 +150,7 @@ class LegacyWsService
             $project->setRank($rank)
                 ->setSitting($sitting)
                 ->setName($rawProject['libelle'])
-                //->setReporter()  //todo rapporteur
+                ->setReporter($this->getOrCreateReporter($rawProject['Rapporteur'] ?? null, $sitting->getStructure()))
                 ->setTheme($this->themeManager->createThemesFromString($rawProject['theme'], $sitting->getStructure()))
                 ->setFile($this->fileManager->save($uploadedFiles['projet_' . $rank . '_rapport'], $sitting->getStructure()));
             $this->em->persist($project);
@@ -211,6 +214,20 @@ class LegacyWsService
         }
     }
 
+    private function getOrCreateReporter(?array $rawReporter, Structure $structure): ?User
+    {
+        if (empty($rawReporter)) {
+            return null;
+        }
+        if (!isset($rawReporter['rapporteurlastname']) || !isset($rawReporter['rapporteurfirstname'])) {
+            throw new BadRequestHttpException('rapporteurlastname and rapporteurfirstname fields are required');
+        }
+
+        return $this->userRepository->findOneBy(
+            ['firstName' => $rawReporter['rapporteurfirstname'], 'lastName' => $rawReporter['rapporteurlastname'], 'structure' => $structure]
+        );
+    }
+
     private function createActorFromWsActor(WsActor $wsActor, Structure $structure): User
     {
         $actor = (new User())
@@ -256,7 +273,7 @@ class LegacyWsService
     }
 
     /**
-     * @param User[]    $associatedActors
+     * @param User[] $associatedActors
      * @param WsActor[] $wsActors
      */
     private function getAddedActors(iterable $associatedActors, array $wsActors): array
@@ -338,7 +355,7 @@ class LegacyWsService
     /**
      * @param UploadedFile[] $uploadedFiles
      */
-    private function validateRawSitting(array $rawSitting, array $uploadedFiles): void
+    private function validateRawSitting(array $rawSitting, array $uploadedFiles, Structure $structure): void
     {
         if (!isset($rawSitting['date_seance'])) {
             throw new BadRequestHttpException('date_seance is required');
@@ -359,6 +376,19 @@ class LegacyWsService
                 throw new BadRequestHttpException('acteurs_convoques must be json format');
             }
         }
+
+        if($this->isAlreadyExistsSitting($rawSitting, $structure)) {
+            throw new BadRequestHttpException('sitting same type same datetime already exists');
+        }
+    }
+
+    private function isAlreadyExistsSitting(array $rawSitting, Structure $structure): ?Sitting
+    {
+        return $this->sittingRepository->findOneBy([
+            'name' => $rawSitting['type_seance'],
+            'date' => new DateTimeImmutable($rawSitting['date_seance']),
+            'structure' => $structure
+        ]);
     }
 
     /**
@@ -378,4 +408,6 @@ class LegacyWsService
 
         return $wsActors;
     }
+
+
 }
