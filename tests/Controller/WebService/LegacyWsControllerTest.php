@@ -61,11 +61,15 @@ class LegacyWsControllerTest extends WebTestCase
         $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/project1.pdf');
         $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/project2.pdf');
         $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/project3.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/annex1.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/annex2.pdf');
 
         $fileConvocation = new UploadedFile(__DIR__ . '/../../resources/convocation.pdf', 'convocation.pdf', 'application/pdf');
         $fileProject1 = new UploadedFile(__DIR__ . '/../../resources/project1.pdf', 'project1.pdf', 'application/pdf');
         $fileProject2 = new UploadedFile(__DIR__ . '/../../resources/project2.pdf', 'project2.pdf', 'application/pdf');
         $fileProject3 = new UploadedFile(__DIR__ . '/../../resources/project3.pdf', 'project3.pdf', 'application/pdf');
+        $fileAnnex1 = new UploadedFile(__DIR__ . '/../../resources/annex1.pdf', 'annex1.pdf', 'application/pdf');
+        $fileAnnex2 = new UploadedFile(__DIR__ . '/../../resources/annex2.pdf', 'annex2.pdf', 'application/pdf');
 
         $username = 'secretary1';
         $password = 'password';
@@ -74,7 +78,7 @@ class LegacyWsControllerTest extends WebTestCase
         $sittingData = [
             'place' => '8 rue de la Mairie',
             'type_seance' => 'Commission webservice',
-            'date_seance' => date('Y-m-d H:i'),
+            'date_seance' => '2021-05-12 09:30',
             'acteurs_convoques' => '[
             {"Acteur":{"nom":"DURAND","prenom":"Thomas","salutation":"Monsieur","titre":"Pr\\u00e9sident","email":"thomas.durand@example.org","telmobile":""}},
             {"Acteur":{"nom":"DUPONT","prenom":"Emilie","salutation":"Madame","titre":"1ERE Vice-President","email":"emilie.dupont@example.org","telmobile":""}},
@@ -92,7 +96,7 @@ class LegacyWsControllerTest extends WebTestCase
                     'ordre' => 1,
                     'libelle' => 'tarif cimetiere2',
                     'theme' => 'T1, STB , sstb',
-                    'annexes' =>[['ordre' => 0], ['ordre' => 1]]
+                    'annexes' => [['ordre' => 0], ['ordre' => 1]]
                 ],
                 [
                     'ordre' => 2,
@@ -104,9 +108,9 @@ class LegacyWsControllerTest extends WebTestCase
         ];
 
 
-        $res = $this->client->request(
+        $this->client->request(
             Request::METHOD_POST,
-            '/seance.json' ,
+            '/seance.json',
             [
                 'username' => $username,
                 'password' => $password,
@@ -117,15 +121,28 @@ class LegacyWsControllerTest extends WebTestCase
                 'convocation' => $fileConvocation,
                 'projet_0_rapport' => $fileProject1,
                 'projet_1_rapport' => $fileProject2,
+                'projet_1_0_annexe' => $fileAnnex1,
+                'projet_1_1_annexe' => $fileAnnex2,
                 'projet_2_rapport' => $fileProject3,
+
             ]
         );
 
         $this->assertResponseStatusCodeSame(200);
 
-        dd('done');
+        $response = json_decode($this->client->getResponse()->getContent());
 
+        $this->assertTrue($response->success);
+        $this->assertSame("Seance.add.ok", $response->code);
+        $this->assertSame("La séance a bien été ajoutée.", $response->message);
+        $this->assertNotEmpty($response->uuid);
+
+        $sitting = $this->getOneSittingBy(['id' => $response->uuid]);
+        $this->assertCount(3, $sitting->getProjects());
+        $this->assertCount(5, $sitting->getConvocations());
+
+        $this->assertSame('2021-05-12 09:30', $sitting->getDate()->format("Y-m-d H:i"));
+
+        $this->assertCount(2, $sitting->getProjects()[1]->getAnnexes());
     }
-
-
 }

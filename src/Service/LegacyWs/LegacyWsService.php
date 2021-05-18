@@ -2,6 +2,7 @@
 
 namespace App\Service\LegacyWs;
 
+use App\Entity\Annex;
 use App\Entity\Project;
 use App\Entity\Sitting;
 use App\Entity\Structure;
@@ -45,7 +46,8 @@ class LegacyWsService
         ThemeManager $themeManager,
         RoleManager $roleManager,
         ConvocationManager $convocationManager
-    ) {
+    )
+    {
         $this->structureRepository = $structureRepository;
         $this->userRepository = $userRepository;
         $this->passwordEncoder = $passwordEncoder;
@@ -94,7 +96,7 @@ class LegacyWsService
     /**
      * @param UploadedFile[] $uploadedFiles
      */
-    public function createSitting(array $rawSitting, array $uploadedFiles, Structure $structure)
+    public function createSitting(array $rawSitting, array $uploadedFiles, Structure $structure): Sitting
     {
         //TODO transaction !
 
@@ -126,18 +128,17 @@ class LegacyWsService
         $this->convocationManager->createConvocationsActors($sitting);
 
         $this->em->flush();
+
+        return $sitting;
     }
 
     /**
      * @param UploadedFile[] $uploadedFiles
-     *
-     * @return Project[]
      */
-    private function createProjectsAndAnnexes(array $rawProjects, array $uploadedFiles, Sitting $sitting): array
+    private function createProjectsAndAnnexes(array $rawProjects, array $uploadedFiles, Sitting $sitting): void
     {
-        $projects = [];
         if (!$rawProjects) {
-            return $projects;
+            return;
         }
 
         foreach ($rawProjects as $rawProject) {
@@ -150,13 +151,30 @@ class LegacyWsService
                 //->setReporter()  //todo rapporteur
                 ->setTheme($this->themeManager->createThemesFromString($rawProject['theme'], $sitting->getStructure()))
                 ->setFile($this->fileManager->save($uploadedFiles['projet_' . $rank . '_rapport'], $sitting->getStructure()));
-            //todo annex
-
             $this->em->persist($project);
-            $projects[] = $project;
+            $this->createAnnexes($rawProject['annexes'] ?? null, $uploadedFiles, $project);
+        }
+    }
+
+    /**
+     * @param UploadedFile[] $uploadedFiles
+     */
+    private function createAnnexes(?array $rawAnnexes, array $uploadedFiles, Project $project)
+    {
+        if (empty($rawAnnexes)) {
+            return;
         }
 
-        return $projects;
+        foreach ($rawAnnexes as $rawAnnex) {
+            $this->validateRawAnnex($rawAnnex, $uploadedFiles, $project->getRank());
+            $annexRank = $rawAnnex['ordre'];
+            $projectRank = $project->getRank();
+            $annex = new Annex();
+            $annex->setRank($annexRank)
+                ->setProject($project)
+                ->setFile($this->fileManager->save($uploadedFiles["projet_${projectRank}_${annexRank}_annexe"], $project->getSitting()->getStructure()));
+            $this->em->persist($annex);
+        }
     }
 
     /**
@@ -239,7 +257,7 @@ class LegacyWsService
     }
 
     /**
-     * @param User[]    $associatedActors
+     * @param User[] $associatedActors
      * @param WsActor[] $wsActors
      */
     private function getAddedActors(iterable $associatedActors, array $wsActors): array
@@ -281,10 +299,10 @@ class LegacyWsService
     }
 
     /**
-     * @param $rawProject
+     * @param array $rawProject
      * @param UploadedFile[] $uploadedFiles
      */
-    private function validateRawProject($rawProject, array $uploadedFiles): void
+    private function validateRawProject(array $rawProject, array $uploadedFiles): void
     {
         if (!isset($rawProject['ordre'])) {
             throw new BadRequestHttpException('projets[]["ordre"] is required');
@@ -303,6 +321,24 @@ class LegacyWsService
             throw new BadRequestHttpException('file ' . 'projet_' . $rank . '_rapport' . ' is required');
         }
     }
+
+
+    /**
+     * @param array $rawAnnex
+     * @param UploadedFile[] $uploadedFiles
+     */
+    private function validateRawAnnex(array $rawAnnex, array $uploadedFiles, int $projectRank): void
+    {
+        if (!isset($rawAnnex['ordre'])) {
+            throw new BadRequestHttpException('annexes[]["ordre"] is required');
+        }
+
+        $annexRank = $rawAnnex['ordre'];
+        if (!isset($uploadedFiles["projet_${projectRank}_${annexRank}_annexe"])) {
+            throw new BadRequestHttpException('file ' . "projet_${projectRank}_${annexRank}_annexe" . ' is required');
+        }
+    }
+
 
     /**
      * @param UploadedFile[] $uploadedFiles
@@ -347,4 +383,6 @@ class LegacyWsService
 
         return $wsActors;
     }
+
+
 }

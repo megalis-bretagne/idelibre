@@ -4,16 +4,18 @@ namespace App\Controller\WebService;
 
 use App\Security\Http403Exception;
 use App\Service\LegacyWs\LegacyWsService;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
-class LegacyWsController
+class LegacyWsController extends AbstractController
 {
     /**
      * @Route("/seance.json", name="wd_connector")
      */
-    public function addSitting(Request $request, LegacyWsService $wsService)
+    public function addSitting(Request $request, LegacyWsService $wsService): JsonResponse
     {
         $username = $request->request->get('username');
         $plainPassword = $request->request->get('password');
@@ -42,12 +44,18 @@ class LegacyWsController
         }
 
         try {
-            $wsService->createSitting($rawSitting, $request->files->all(), $structure);
+            $sitting = $wsService->createSitting($rawSitting, $request->files->all(), $structure);
         } catch (\Exception $e) {
             dd($e);
         }
-        //dd($request->files->all());
 
-        dd('ok');
+        //TODO check ilf already exist sitting same date  same structure!
+
+        return $this->json([
+            'success' => true,
+            'code' => 'Seance.add.ok',
+            'message' => 'La séance a bien été ajoutée.',
+            'uuid' => $sitting->getId()
+        ]);
     }
 }
