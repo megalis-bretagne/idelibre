@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20210505134539 extends AbstractMigration
+final class Version20210511074020 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -22,8 +22,8 @@ final class Version20210505134539 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
-        $this->addSql('ALTER TABLE convocation DROP CONSTRAINT FK_C03B3F5FA76ED395');
-        $this->addSql('ALTER TABLE convocation ADD CONSTRAINT FK_C03B3F5FA76ED395 FOREIGN KEY (user_id) REFERENCES "user" (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE connector DROP CONSTRAINT FK_148C456E2534008B');
+        $this->addSql('ALTER TABLE connector ADD CONSTRAINT FK_148C456E2534008B FOREIGN KEY (structure_id) REFERENCES structure (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
     }
 
     public function down(Schema $schema) : void
@@ -32,8 +32,7 @@ final class Version20210505134539 extends AbstractMigration
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
         $this->addSql('CREATE SCHEMA public');
-
-        $this->addSql('ALTER TABLE convocation DROP CONSTRAINT fk_c03b3f5fa76ed395');
-        $this->addSql('ALTER TABLE convocation ADD CONSTRAINT fk_c03b3f5fa76ed395 FOREIGN KEY (user_id) REFERENCES "user" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE connector DROP CONSTRAINT fk_148c456e2534008b');
+        $this->addSql('ALTER TABLE connector ADD CONSTRAINT fk_148c456e2534008b FOREIGN KEY (structure_id) REFERENCES structure (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
     }
 }

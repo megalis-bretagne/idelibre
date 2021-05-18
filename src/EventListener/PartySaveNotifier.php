@@ -30,8 +30,8 @@ class PartySaveNotifier
         $conn = $this->em->getConnection();
         $sql = "select nextval('party_legacy_seq');";
         $stmt = $conn->prepare($sql);
-        $stmt->execute();
-        $nextVal = $stmt->fetchOne();
+        $result = $stmt->executeQuery();
+        $nextVal = $result->fetchOne();
 
         $party->setLegacyId($nextVal);
     }

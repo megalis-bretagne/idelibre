@@ -49,6 +49,7 @@ class StructureCreator
     public function create(Structure $structure, User $user, string $plainPassword, Group $group = null): ?ConstraintViolationListInterface
     {
         $this->em->getConnection()->beginTransaction();
+        $structure->setLegacyConnectionName($this->createLegacyConnexionName($structure->getSuffix()));
 
         $structure->setGroup($group);
         $this->em->persist($structure);
@@ -73,6 +74,11 @@ class StructureCreator
     {
         $usernameWithSuffix = $user->getUsername() . '@' . $suffix;
         $user->setUsername($usernameWithSuffix);
+    }
+
+    private function createLegacyConnexionName(string $suffix): string
+    {
+        return strtolower(preg_replace('/[^A-Za-z0-9 ]/', '', $suffix));
     }
 
     /**

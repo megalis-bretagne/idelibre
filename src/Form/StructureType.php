@@ -18,16 +18,19 @@ class StructureType extends AbstractType
         $entity = $builder->getData();
         $isNew = !$entity || null === $entity->getId();
 
-        $builder
-            ->add('name', TextType::class, [
-                'label' => 'Dénomination',
-            ])
-            ->add('suffix', TextType::class, [
+        $builder->add('name', TextType::class, [
+            'label' => 'Dénomination',
+        ]);
+
+        if ($isNew) {
+            $builder->add('suffix', TextType::class, [
                 'label' => 'Suffixe',
-            ])
-            ->add('replyTo', TextType::class, [
-                'label' => 'Email de réponse',
-            ])
+            ]);
+        }
+
+        $builder->add('replyTo', TextType::class, [
+            'label' => 'Email de réponse',
+        ])
             ->add('siren', TextType::class, [
                 'label' => 'Numéro de siren',
                 'required' => false,
@@ -37,8 +40,18 @@ class StructureType extends AbstractType
                 'choice_label' => 'name',
                 'multiple' => false,
                 'label' => 'Fuseau horaire',
+            ]);
+
+        if (!$isNew) {
+            $builder->add('suffix', TextType::class, [
+                'label' => 'Suffixe',
+                'disabled' => true,
             ])
-        ;
+                ->add('legacyConnectionName', TextType::class, [
+                    'label' => 'Connexion',
+                    'disabled' => true,
+                ]);
+        }
 
         if ($isNew) {
             $builder->add('user', SuperUserType::class, [

@@ -111,4 +111,8 @@ class UserManager
             $authorizedType->removeAuthorizedSecretary($user);
         }
     }
+
+    private function createActorFromRawActor(array $rawActor, $structure)
+    {
+    }
 }

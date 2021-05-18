@@ -184,3 +184,12 @@ cas elu essai de se connecté
 
 
 Demander a cyril ne verifier qu'il n'y a plus de trace de acteur et secretaire
+
+
+WARNING VERIFIER Migration sequence !!!!!! semble ne fonctionner qu'ave un create sequence seul dans sa migration !
+C'et la migration d'apres qui 'lenlever.'
+Si on le fait avec une annotion il le prend pour la primary key ce con !
+//CREATE SEQUENCE IF NOT EXISTS party_legacy_seq INCREMENT BY 1 MINVALUE 1 START 1;  à cahque start comme ça c'et reglé !
+
+
+Verifier le 2 seances du meme type à la meme heure !
