@@ -21,9 +21,7 @@ class LegacyWsService
     private ConvocationManager $convocationManager;
     private SittingRepository $sittingRepository;
     private WsActorManager $wsActorManager;
-    /**
-     * @var WsProjectManager
-     */
+
     private WsProjectManager $wsProjectManager;
 
     public function __construct(

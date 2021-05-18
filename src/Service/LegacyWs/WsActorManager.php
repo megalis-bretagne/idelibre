@@ -100,7 +100,7 @@ class WsActorManager
     }
 
     /**
-     * @param User[] $associatedActors
+     * @param User[]    $associatedActors
      * @param WsActor[] $wsActors
      */
     private function getAddedActors(iterable $associatedActors, array $wsActors): array
@@ -143,6 +143,7 @@ class WsActorManager
 
     /**
      * @param ?array $rawActors
+     *
      * @return ?WsActor[];
      */
     public function validateAndFormatActor(?array $rawActors): ?array

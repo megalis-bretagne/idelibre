@@ -37,7 +37,7 @@ class LegacyWsAuthentication
 
         $structure = $this->structureRepository->findOneBy(['legacyConnectionName' => $legacyConnectionName]);
 
-        if(!$structure){
+        if (!$structure) {
             throw new Http403Exception('connection does not exist');
         }
 
@@ -49,11 +49,11 @@ class LegacyWsAuthentication
         $user = $this->userRepository->findOneSecretaryInStructure($structure, $username);
 
         if (!$user) {
-            throw new Http403Exception("Authentication error");
+            throw new Http403Exception('Authentication error');
         }
 
         if (!$this->checkPassword($user, $plainPassword)) {
-            throw new Http403Exception("Authentication error");
+            throw new Http403Exception('Authentication error');
         }
 
         return $user;

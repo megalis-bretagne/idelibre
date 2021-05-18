@@ -16,7 +16,6 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class WsProjectManager
 {
-
     private EntityManagerInterface $em;
     private ThemeManager $themeManager;
     private FileManager $fileManager;
@@ -27,14 +26,12 @@ class WsProjectManager
         ThemeManager $themeManager,
         FileManager $fileManager,
         UserRepository $userRepository
-    )
-    {
+    ) {
         $this->em = $em;
         $this->themeManager = $themeManager;
         $this->fileManager = $fileManager;
         $this->userRepository = $userRepository;
     }
-
 
     /**
      * @param UploadedFile[] $uploadedFiles
