@@ -15,8 +15,7 @@ class TypeManager
     public function __construct(
         TypeRepository $typeRepository,
         EntityManagerInterface $em
-    )
-    {
+    ) {
         $this->typeRepository = $typeRepository;
         $this->em = $em;
     }
@@ -27,8 +26,7 @@ class TypeManager
         iterable $associatedEmployees,
         iterable $associatedGuests,
         Structure $structure
-    ): void
-    {
+    ): void {
         $type->setAssociatedUsers([...$associatedActors, ...$associatedEmployees, ...$associatedGuests]);
         $type->setStructure($structure);
         $this->em->persist($type);
@@ -55,5 +53,4 @@ class TypeManager
 
         return $newType;
     }
-
 }

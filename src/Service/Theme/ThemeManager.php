@@ -98,7 +98,6 @@ class ThemeManager
         return $themes ?? [];
     }
 
-
     public function createThemesFromString(string $comaSeparatedThemes, Structure $structure): Theme
     {
         $themeNames = explode(',', $comaSeparatedThemes);
@@ -120,6 +119,4 @@ class ThemeManager
 
         return $this->save($newTheme, $structure, $parentTheme);
     }
-
-
 }

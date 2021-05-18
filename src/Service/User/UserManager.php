@@ -114,7 +114,5 @@ class UserManager
 
     private function createActorFromRawActor(array $rawActor, $structure)
     {
-
     }
-
 }

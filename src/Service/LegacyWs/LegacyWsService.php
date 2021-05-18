@@ -45,8 +45,7 @@ class LegacyWsService
         ThemeManager $themeManager,
         RoleManager $roleManager,
         ConvocationManager $convocationManager
-    )
-    {
+    ) {
         $this->structureRepository = $structureRepository;
         $this->userRepository = $userRepository;
         $this->passwordEncoder = $passwordEncoder;
@@ -93,9 +92,7 @@ class LegacyWsService
     }
 
     /**
-     * @param array $rawSitting
      * @param UploadedFile[] $uploadedFiles
-     * @param Structure $structure
      */
     public function createSitting(array $rawSitting, array $uploadedFiles, Structure $structure)
     {
@@ -108,8 +105,8 @@ class LegacyWsService
         $date = new DateTimeImmutable($rawSitting['date_seance']);
         $type = $this->typeManager->getOrCreateType($rawSitting['type_seance'], $structure);
 
-        $wsActors = $this->validateAndFormatActor(json_decode($rawSitting['acteurs_convoques'] ?? null, true) );
-        if(!empty($wsActors)) {
+        $wsActors = $this->validateAndFormatActor(json_decode($rawSitting['acteurs_convoques'] ?? null, true));
+        if (!empty($wsActors)) {
             $this->associateActorsToType($type, $wsActors);
         }
         $convocationFile = $this->fileManager->save($uploadedFiles['convocation'], $structure);
@@ -129,12 +126,11 @@ class LegacyWsService
         $this->convocationManager->createConvocationsActors($sitting);
 
         $this->em->flush();
-
     }
-
 
     /**
      * @param UploadedFile[] $uploadedFiles
+     *
      * @return Project[]
      */
     private function createProjectsAndAnnexes(array $rawProjects, array $uploadedFiles, Sitting $sitting): array
@@ -156,7 +152,6 @@ class LegacyWsService
                 ->setFile($this->fileManager->save($uploadedFiles['projet_' . $rank . '_rapport'], $sitting->getStructure()));
             //todo annex
 
-
             $this->em->persist($project);
             $projects[] = $project;
         }
@@ -164,9 +159,9 @@ class LegacyWsService
         return $projects;
     }
 
-
     /**
      * @param WsActor[] $wsActors
+     *
      * @return User[]
      */
     private function associateActorsToType(Type $type, array $wsActors): void
@@ -180,7 +175,6 @@ class LegacyWsService
         $this->addWsActorsToType($wsActorsToAdd, $type);
     }
 
-
     /**
      * @param WsActor[] $wsActors
      */
@@ -188,7 +182,8 @@ class LegacyWsService
     {
         foreach ($wsActors as $wsActor) {
             $existingActor = $this->userRepository->findOneBy(
-                ['firstName' => $wsActor->firstName, 'lastName' => $wsActor->lastName, 'structure' => $type->getStructure()]);
+                ['firstName' => $wsActor->firstName, 'lastName' => $wsActor->lastName, 'structure' => $type->getStructure()]
+            );
             if ($existingActor) {
                 $type->addAssociatedUser($existingActor);
                 continue;
@@ -196,16 +191,14 @@ class LegacyWsService
 
             $newActor = $this->createActorFromWsActor($wsActor, $type->getStructure());
             $type->addAssociatedUser($newActor);
-
         }
     }
-
 
     private function createActorFromWsActor(WsActor $wsActor, Structure $structure): User
     {
         $actor = (new User())
             ->setStructure($structure)
-            ->setPassword("NotInitialiazed")
+            ->setPassword('NotInitialiazed')
             ->setEmail($wsActor->email)
             ->setFirstName($wsActor->firstName)
             ->setLastName($wsActor->lastName)
@@ -219,7 +212,6 @@ class LegacyWsService
         return $actor;
     }
 
-
     private function generateUserName(string $firstName, string $lastName, string $suffix)
     {
         $normalizedFirstnameLetter = $this->slugify($firstName[0]);
@@ -227,7 +219,6 @@ class LegacyWsService
 
         return "${normalizedFirstnameLetter}.${normalizedLastName}@${suffix}";
     }
-
 
     private function slugify($text)
     {
@@ -247,9 +238,8 @@ class LegacyWsService
         return $text;
     }
 
-
     /**
-     * @param User[] $associatedActors
+     * @param User[]    $associatedActors
      * @param WsActor[] $wsActors
      */
     private function getAddedActors(iterable $associatedActors, array $wsActors): array
@@ -268,9 +258,9 @@ class LegacyWsService
         return $addedWsActors;
     }
 
-
     /**
      * @param WsActor[] $wsActors
+     *
      * @return WsActor[]
      */
     private function removeDuplicate(array $wsActors): array
@@ -289,7 +279,6 @@ class LegacyWsService
 
         return $uniqRawUsers;
     }
-
 
     /**
      * @param $rawProject
@@ -313,16 +302,13 @@ class LegacyWsService
         if (!isset($uploadedFiles['projet_' . $rank . '_rapport'])) {
             throw new BadRequestHttpException('file ' . 'projet_' . $rank . '_rapport' . ' is required');
         }
-
     }
-
 
     /**
      * @param UploadedFile[] $uploadedFiles
      */
     private function validateRawSitting(array $rawSitting, array $uploadedFiles): void
     {
-
         if (!isset($rawSitting['date_seance'])) {
             throw new BadRequestHttpException('date_seance is required');
         }
@@ -344,9 +330,9 @@ class LegacyWsService
         }
     }
 
-
     /**
      * @param ?array $rawActors
+     *
      * @return ?WsActor[];
      */
     private function validateAndFormatActor(?array $rawActors): ?array
@@ -358,8 +344,7 @@ class LegacyWsService
         foreach ($rawActors as $rawActor) {
             $wsActors[] = new WsActor($rawActor);
         }
+
         return $wsActors;
     }
-
-
 }

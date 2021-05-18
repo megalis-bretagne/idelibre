@@ -41,10 +41,9 @@ class LegacyWsController
             throw new BadRequestHttpException('jsonData is not a valid json');
         }
 
-
         try {
             $wsService->createSitting($rawSitting, $request->files->all(), $structure);
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             dd($e);
         }
         //dd($request->files->all());
