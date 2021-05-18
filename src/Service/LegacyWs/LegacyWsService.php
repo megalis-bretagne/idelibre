@@ -46,8 +46,7 @@ class LegacyWsService
         ThemeManager $themeManager,
         RoleManager $roleManager,
         ConvocationManager $convocationManager
-    )
-    {
+    ) {
         $this->structureRepository = $structureRepository;
         $this->userRepository = $userRepository;
         $this->passwordEncoder = $passwordEncoder;
@@ -257,7 +256,7 @@ class LegacyWsService
     }
 
     /**
-     * @param User[] $associatedActors
+     * @param User[]    $associatedActors
      * @param WsActor[] $wsActors
      */
     private function getAddedActors(iterable $associatedActors, array $wsActors): array
@@ -299,7 +298,6 @@ class LegacyWsService
     }
 
     /**
-     * @param array $rawProject
      * @param UploadedFile[] $uploadedFiles
      */
     private function validateRawProject(array $rawProject, array $uploadedFiles): void
@@ -322,9 +320,7 @@ class LegacyWsService
         }
     }
 
-
     /**
-     * @param array $rawAnnex
      * @param UploadedFile[] $uploadedFiles
      */
     private function validateRawAnnex(array $rawAnnex, array $uploadedFiles, int $projectRank): void
@@ -338,7 +334,6 @@ class LegacyWsService
             throw new BadRequestHttpException('file ' . "projet_${projectRank}_${annexRank}_annexe" . ' is required');
         }
     }
-
 
     /**
      * @param UploadedFile[] $uploadedFiles
@@ -383,6 +378,4 @@ class LegacyWsService
 
         return $wsActors;
     }
-
-
 }

@@ -55,7 +55,7 @@ class LegacyWsController extends AbstractController
             'success' => true,
             'code' => 'Seance.add.ok',
             'message' => 'La séance a bien été ajoutée.',
-            'uuid' => $sitting->getId()
+            'uuid' => $sitting->getId(),
         ]);
     }
 }
