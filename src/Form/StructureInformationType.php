@@ -27,6 +27,17 @@ class StructureInformationType extends AbstractType
                 'multiple' => false,
                 'label' => 'Fuseau horaire',
             ])
+            ->add('suffix', TextType::class, [
+                'label' => 'Suffixe de connexion',
+                'disabled' => true,
+                'required' => false
+
+            ])
+            ->add('legacyConnectionName', TextType::class, [
+                'label' => 'Connexion',
+                'disabled' => true,
+                'required' => false
+            ])
         ;
     }
 

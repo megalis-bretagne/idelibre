@@ -203,9 +203,7 @@ Verifier le 2 seances du meme type à la meme heure !
 
 
 
-1) Super admin : pas de vue sur les infos de la coll quand se connecte à la coll
-2) Manque le suffixe de connexion dans les infos de la structure (DONE)
-3) Nom utilisateur : "@suffixe" (manque le e) (DONE)
+1) Super admin : pas de vue sur les infos de la coll quand se connecte à la coll  (Vu que tu peux les avoir via le menu de structure ya pas trop d'interet)
 4) Préférences utilisateurs : le "@structure" est modifiable
 5) Gpe politique : bouton "tous les élus" | Faire disparaître l'élu quand sélectionné ? (+ message d'erreur à la création) DONE
 6) Création type de séance : majuscule à "Invités associés" DONE
