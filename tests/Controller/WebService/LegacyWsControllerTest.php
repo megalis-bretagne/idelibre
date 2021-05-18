@@ -131,7 +131,6 @@ class LegacyWsControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(200);
 
         $response = json_decode($this->client->getResponse()->getContent());
-
         $this->assertTrue($response->success);
         $this->assertSame("Seance.add.ok", $response->code);
         $this->assertSame("La séance a bien été ajoutée.", $response->message);
@@ -140,9 +139,114 @@ class LegacyWsControllerTest extends WebTestCase
         $sitting = $this->getOneSittingBy(['id' => $response->uuid]);
         $this->assertCount(3, $sitting->getProjects());
         $this->assertCount(5, $sitting->getConvocations());
-
         $this->assertSame('2021-05-12 09:30', $sitting->getDate()->format("Y-m-d H:i"));
-
         $this->assertCount(2, $sitting->getProjects()[1]->getAnnexes());
+
+        $user = $this->getOneUserBy(['username' => 't.durand@libriciel']);
+        $this->assertNotNull($user);
+
     }
+
+
+    function testAddSittingNoConn()
+    {
+        $this->client->request(
+            Request::METHOD_POST,
+            '/seance.json',
+            [
+                'username' => 'secretary1',
+                'password' => 'password',
+                'jsonData' => json_encode(['a' => 1]),
+            ]
+        );
+
+        $this->assertResponseStatusCodeSame(400);
+        $content = json_decode($this->client->getResponse()->getContent());
+        $this->assertFalse($content->success);
+        $this->assertSame('fields jsonData, username, password and conn must be set', $content->message);
+
+    }
+
+    function testAddSittingNotExistConnection()
+    {
+        $this->client->request(
+            Request::METHOD_POST,
+            '/seance.json',
+            [
+                'username' => 'secretary1',
+                'password' => 'password',
+                'conn' => 'notExists',
+                'jsonData' => json_encode(['a' => 1]),
+            ]
+        );
+
+        $this->assertResponseStatusCodeSame(400);
+        $content = json_decode($this->client->getResponse()->getContent());
+        $this->assertFalse($content->success);
+        $this->assertSame('connection does not exist', $content->message);
+
+    }
+
+
+    function testAddSittingNotExistUser()
+    {
+        $this->client->request(
+            Request::METHOD_POST,
+            '/seance.json',
+            [
+                'username' => 'notExists',
+                'password' => 'password',
+                'conn' => 'libriciel',
+                'jsonData' => json_encode(['a' => 1]),
+            ]
+        );
+
+        $this->assertResponseStatusCodeSame(400);
+        $content = json_decode($this->client->getResponse()->getContent());
+        $this->assertFalse($content->success);
+        $this->assertSame('Authentication error', $content->message);
+
+    }
+
+    function testAddSittingWrongPassword()
+    {
+        $this->client->request(
+            Request::METHOD_POST,
+            '/seance.json',
+            [
+                'username' => 'secretary1',
+                'password' => 'wrongPassword',
+                'conn' => 'libriciel',
+                'jsonData' => json_encode(['a' => 1]),
+            ]
+        );
+
+        $this->assertResponseStatusCodeSame(400);
+        $content = json_decode($this->client->getResponse()->getContent());
+        $this->assertFalse($content->success);
+        $this->assertSame('Authentication error', $content->message);
+
+    }
+
+
+    function testAddSittingWrongFormatJsonData()
+    {
+        $this->client->request(
+            Request::METHOD_POST,
+            '/seance.json',
+            [
+                'username' => 'secretary1',
+                'password' => 'password',
+                'conn' => 'libriciel',
+                'jsonData' => json_encode(['a' => 1]),
+            ]
+        );
+
+        $this->assertResponseStatusCodeSame(400);
+        $content = json_decode($this->client->getResponse()->getContent());
+        $this->assertFalse($content->success);
+        $this->assertSame('date_seance is required', $content->message);
+
+    }
+
 }

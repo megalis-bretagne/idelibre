@@ -6,6 +6,7 @@ use App\Entity\Structure;
 use App\Entity\User;
 use App\Repository\StructureRepository;
 use App\Repository\UserRepository;
+use App\Security\Http403Exception;
 use App\Security\Password\LegacyPassword;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -31,10 +32,16 @@ class LegacyWsAuthentication
     public function getStructureFromLegacyConnection(string $legacyConnectionName): ?Structure
     {
         if (!$legacyConnectionName) {
-            return null;
+            throw new Http403Exception('conn field is required');
         }
 
-        return $this->structureRepository->findOneBy(['legacyConnectionName' => $legacyConnectionName]);
+        $structure = $this->structureRepository->findOneBy(['legacyConnectionName' => $legacyConnectionName]);
+
+        if(!$structure){
+            throw new Http403Exception('connection does not exist');
+        }
+
+        return $structure;
     }
 
     public function loginUser(Structure $structure, string $username, string $plainPassword): ?User
@@ -42,11 +49,11 @@ class LegacyWsAuthentication
         $user = $this->userRepository->findOneSecretaryInStructure($structure, $username);
 
         if (!$user) {
-            return null;
+            throw new Http403Exception("Authentication error");
         }
 
         if (!$this->checkPassword($user, $plainPassword)) {
-            return null;
+            throw new Http403Exception("Authentication error");
         }
 
         return $user;

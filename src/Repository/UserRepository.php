@@ -115,7 +115,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->orderBy('u.lastName', 'ASC');
     }
 
-    public function findOneSecretaryInStructure(Structure $structure, string $username): User
+    public function findOneSecretaryInStructure(Structure $structure, string $username): ?User
     {
         return $this->createQueryBuilder('u')
             ->leftJoin('u.role', 'r')

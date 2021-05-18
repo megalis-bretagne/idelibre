@@ -32,7 +32,7 @@ final class Version20210505134539 extends AbstractMigration
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
         $this->addSql('CREATE SCHEMA public');
-        $this->addSql('CREATE SEQUENCE party_legacy_seq INCREMENT BY 1 MINVALUE 1 START 1');
+
         $this->addSql('ALTER TABLE convocation DROP CONSTRAINT fk_c03b3f5fa76ed395');
         $this->addSql('ALTER TABLE convocation ADD CONSTRAINT fk_c03b3f5fa76ed395 FOREIGN KEY (user_id) REFERENCES "user" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
     }

@@ -24,8 +24,6 @@ class WsActorManager
 
     /**
      * @param WsActor[] $wsActors
-     *
-     * @return User[]
      */
     public function associateActorsToType(Type $type, array $wsActors): void
     {
@@ -57,7 +55,6 @@ class WsActorManager
         }
     }
 
-
     private function createActorFromWsActor(WsActor $wsActor, Structure $structure): User
     {
         $actor = (new User())
@@ -76,17 +73,15 @@ class WsActorManager
         return $actor;
     }
 
-
-
-    private function generateUserName(string $firstName, string $lastName, string $suffix)
+    private function generateUserName(string $firstName, string $lastName, string $suffix): string
     {
-        $normalizedFirstnameLetter = $this->slugify($firstName[0]);
-        $normalizedLastName = $this->slugify($lastName);
+        $normalizedFirstnameLetter = $this->stringNormalizer($firstName[0]);
+        $normalizedLastName = $this->stringNormalizer($lastName);
 
         return "${normalizedFirstnameLetter}.${normalizedLastName}@${suffix}";
     }
 
-    private function slugify($text)
+    private function stringNormalizer(string $text): string
     {
         $text = preg_replace('~[^\\pL\d]+~u', '-', $text);
         $text = trim($text, '-');
@@ -105,7 +100,7 @@ class WsActorManager
     }
 
     /**
-     * @param User[]    $associatedActors
+     * @param User[] $associatedActors
      * @param WsActor[] $wsActors
      */
     private function getAddedActors(iterable $associatedActors, array $wsActors): array
@@ -146,10 +141,8 @@ class WsActorManager
         return $uniqRawUsers;
     }
 
-
     /**
      * @param ?array $rawActors
-     *
      * @return ?WsActor[];
      */
     public function validateAndFormatActor(?array $rawActors): ?array
