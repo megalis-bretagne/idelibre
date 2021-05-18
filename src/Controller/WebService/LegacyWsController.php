@@ -3,6 +3,7 @@
 namespace App\Controller\WebService;
 
 use App\Security\Http403Exception;
+use App\Service\LegacyWs\LegacyWsAuthentication;
 use App\Service\LegacyWs\LegacyWsService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -15,7 +16,7 @@ class LegacyWsController extends AbstractController
     /**
      * @Route("/seance.json", name="wd_connector")
      */
-    public function addSitting(Request $request, LegacyWsService $wsService): JsonResponse
+    public function addSitting(Request $request, LegacyWsService $wsService, LegacyWsAuthentication $legacyWsAuthentication): JsonResponse
     {
         $username = $request->request->get('username');
         $plainPassword = $request->request->get('password');
@@ -26,13 +27,13 @@ class LegacyWsController extends AbstractController
             throw new BadRequestHttpException('fields jsonData, username, password and conn must be set');
         }
 
-        $structure = $wsService->getStructureFromLegacyConnection($request->request->get('conn'));
+        $structure = $legacyWsAuthentication->getStructureFromLegacyConnection($request->request->get('conn'));
 
         if (!$structure) {
             throw new Http403Exception('Erreur de structure');
         }
 
-        $userLoggedIn = $wsService->loginUser($structure, $username . '@' . $structure->getSuffix(), $plainPassword);
+        $userLoggedIn = $legacyWsAuthentication->loginUser($structure, $username . '@' . $structure->getSuffix(), $plainPassword);
 
         if (!$userLoggedIn) {
             throw new Http403Exception("Erreur d'authentification");
