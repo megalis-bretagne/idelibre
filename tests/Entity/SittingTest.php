@@ -93,7 +93,7 @@ class SittingTest extends WebTestCase
         $this->assertHasValidationErrors($sitting, 1);
     }
 
-    public function testInvalidAlreadyExistSameNameSameDateTimeSameStructure()
+    public function testInvalidAlreadyExistSameNameSameDateTimeSameStructureSameType()
     {
         $dbSitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
 
@@ -102,6 +102,7 @@ class SittingTest extends WebTestCase
             ->setConvocationFile(new File())
             ->setStructure($dbSitting->getStructure())
             ->setDate($dbSitting->getDate())
+            ->setType($dbSitting->getType())
         ;
 
         $this->assertHasValidationErrors($sitting, 1);
