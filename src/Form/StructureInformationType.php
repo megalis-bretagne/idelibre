@@ -30,13 +30,12 @@ class StructureInformationType extends AbstractType
             ->add('suffix', TextType::class, [
                 'label' => 'Suffixe de connexion',
                 'disabled' => true,
-                'required' => false
-
+                'required' => false,
             ])
             ->add('legacyConnectionName', TextType::class, [
                 'label' => 'Connexion',
                 'disabled' => true,
-                'required' => false
+                'required' => false,
             ])
         ;
     }

@@ -55,7 +55,7 @@ class UserController extends AbstractController
      */
     public function add(Request $request, UserManager $manageUser): Response
     {
-        $form = $this->createForm(UserType::class, null, ['structure' => $this->getUser()->getStructure()]);
+        $form = $this->createForm(UserType::class, new User(), ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $manageUser->save(
