@@ -146,6 +146,7 @@ class SecurityControllerTest extends WebTestCase
         $this->client->submit($form);
 
         $this->assertTrue($this->client->getResponse()->isRedirect());
+        $this->client->followRedirect();
         $crawler = $this->client->followRedirect();
         $this->assertResponseStatusCodeSame(200);
 
@@ -172,10 +173,11 @@ class SecurityControllerTest extends WebTestCase
         $this->client->submit($form);
 
         $this->assertTrue($this->client->getResponse()->isRedirect());
+        $this->client->followRedirect();
         $crawler = $this->client->followRedirect();
         $this->assertResponseStatusCodeSame(200);
 
-        $successMsg = $crawler->filter('html:contains("Utilisateurs")');
+        $successMsg = $crawler->filter('html:contains("Séances")');
 
         $this->assertCount(1, $successMsg);
 

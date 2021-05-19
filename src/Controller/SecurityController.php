@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Role;
 use App\Entity\Structure;
+use App\Entity\User;
 use App\Form\UserPasswordType;
 use App\Security\Password\ResetPassword;
 use App\Security\Password\TimeoutException;
@@ -16,6 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
@@ -23,17 +26,22 @@ class SecurityController extends AbstractController
     /**
      * @Route("/", name="app_entrypoint")
      */
-    public function entryPoint(): Response
+    public function entryPoint(Security $security): Response
     {
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
+        }
+
+        if (Role::NAME_ROLE_ACTOR === $this->getUser()->getRole()->getName()) {
+            //todo renvoyé sur une vue ave un deco !
+            return $this->render('security/noActors.html.twig');
         }
 
         if ($this->isGranted('ROLE_MANAGE_STRUCTURES')) {
             return $this->redirectToRoute('structure_index');
         }
 
-        return $this->redirectToRoute('user_index');
+        return $this->redirectToRoute('sitting_index');
     }
 
     /**
