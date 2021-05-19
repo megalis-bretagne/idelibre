@@ -1,4 +1,6 @@
 {
+  "name": "libriciel/idelibre",
+  "description": "porte document des élus",
   "type": "project",
   "license": "agpl",
   "require": {
@@ -59,7 +61,6 @@
     "twig/twig": "^2.12|^3.0"
   },
   "require-dev": {
-    "ext-json": "*",
     "dama/doctrine-test-bundle": "^6.3",
     "doctrine/doctrine-fixtures-bundle": "^3.3",
     "liip/test-fixtures-bundle": "^1.7",
