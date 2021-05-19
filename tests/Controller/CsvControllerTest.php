@@ -77,7 +77,7 @@ class CsvControllerTest extends WebTestCase
         $this->assertCount(1, $successMsg);
 
         /** @var User $user */
-        $user = $this->getOneEntityBy(User::class, ['username' => 't.martin']);
+        $user = $this->getOneEntityBy(User::class, ['username' => 't.martin@libriciel']);
         $this->assertNotEmpty($user);
         $this->assertCount(4, $user->getAssociatedTypes()->toArray());
         $this->assertNotEmpty($this->getOneEntityBy(Type::class, ['name' => 'New type']));
@@ -108,10 +108,10 @@ class CsvControllerTest extends WebTestCase
         $title = $crawler->filter('html:contains("Erreurs lors de l\'import")');
         $this->assertCount(1, $title);
 
-        $this->assertEmpty($this->getOneEntityBy(User::class, ['username' => 't.martin']));
+        $this->assertEmpty($this->getOneEntityBy(User::class, ['username' => 't.martin@libriciel']));
         $this->assertEmpty($this->getOneEntityBy(Type::class, ['name' => 'New type']));
 
-        $this->assertNotEmpty($this->getOneEntityBy(User::class, ['username' => 'e.dupont']));
+        $this->assertNotEmpty($this->getOneEntityBy(User::class, ['username' => 'e.dupont@libriciel']));
     }
 
     public function testCsvErrorWithNoError()

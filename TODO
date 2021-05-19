@@ -195,20 +195,20 @@ Si on le fait avec une annotion il le prend pour la primary key ce con !
 Verifier le 2 seances du meme type à la meme heure !
 
 
+IMPORT CSV : L'import est lent (a cause du flush a chaque coup pour eviter les doublons. (20 sec pour 120 users)
+Faire la verfi au debut et apres on flush qu'une fois on va gagner 80% du temps
 
-
-
-
-
+Peut Etre faire un preference pour les strcutremanager et un autre pour les user normaux ?
 
 
 5) Gpe politique : bouton "tous les élus" | Faire disparaître l'élu quand sélectionné ? (+ message d'erreur à la création) A voir n'existe pas aujourd'hui
 9) Doc zip : si mm nom annexe et projet >> l'annexe n'apparait pas dans le zip  (Par construction du doc. si on gare les noms d'origine ça fait forcement ça)
 1) Super admin : pas de vue sur les infos de la coll quand se connecte à la coll  (Vu que tu peux les avoir via le menu de structure ya pas trop d'interet)
+13) Com'Elus : Mettre la date de la séance dans le texte d'accompagnement (A VOIR plus tard)
 
-4) Préférences utilisateurs : le "@structure" est modifiable
+
+
+
+
 10) Création séance : La date de la séance n'est pas modifiable
-
-12) Fichier csv : manque les en-têtes dans le rapport csv
-13) Com'Elus : Mettre la date de la séance dans le texte d'accompagnement
 14) Com'Elus : Voir le nom de la structure dans le connecteur

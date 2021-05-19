@@ -7,6 +7,37 @@
     {{ macro.backButton('app_entrypoint') }}
 {% endblock %}
 
-{% block pageSaveReturn %}
-    {{ macro.save('app_entrypoint') }}
+
+
+{% block pageForm %}
+
+    {{ form_start(form) }}
+
+    {{ form_row(form.firstName) }}
+    {{ form_row(form.lastName) }}
+
+
+    {{ form_label(form.username) }}
+    {{ form_errors(form.username) }}
+
+    <div class="row mb-3">
+        <div class="col-7">
+            {{ form_widget(form.username) }}
+        </div>
+        {% if suffix %}
+            <div class="col-5 form-control borderless">
+                <b class="text-ls-dark">@{{ suffix }}</b>
+            </div>
+        {% endif %}
+    </div>
+
+    {{ form_widget(form) }}
+
+    <div class="float-right">
+        {% block pageSaveReturn %}{{ macro.save('app_entrypoint') }}{% endblock %}
+    </div>
+
+    {{ form_end(form) }}
+
 {% endblock %}
+

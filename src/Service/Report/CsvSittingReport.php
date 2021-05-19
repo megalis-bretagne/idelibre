@@ -10,7 +10,6 @@ use League\Csv\Writer;
 
 class CsvSittingReport
 {
-
     private ConvocationRepository $convocationRepository;
 
     public function __construct(ConvocationRepository $convocationRepository)
