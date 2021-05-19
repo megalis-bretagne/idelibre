@@ -32,7 +32,7 @@ class SecurityController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        if($this->getUser()->getRole()->getName() === Role::NAME_ROLE_ACTOR) {
+        if (Role::NAME_ROLE_ACTOR === $this->getUser()->getRole()->getName()) {
             //todo renvoyé sur une vue ave un deco !
             return $this->render('security/noActors.html.twig');
         }
