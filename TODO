@@ -163,14 +163,9 @@ creer un fakeClientnotifier implement ClientNotifier interface . logs in test
 
 
 
-Connecteur WD
+Connecteur WD api 300 !!!!
 
-Page de check !
-check horodatage,
-check send mail,
-connexion websocket
-//peut etre aussi la taille dispo mais deuis un docker c'est peut etre compliqué
-
+Position message erreur login
 
 modification ratachement du theme  -> A voir
 
