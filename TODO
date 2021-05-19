@@ -209,7 +209,6 @@ Verifier le 2 seances du meme type à la meme heure !
 4) Préférences utilisateurs : le "@structure" est modifiable
 10) Création séance : La date de la séance n'est pas modifiable
 
-11) Génération rapport séance : 2h de décalage sur le doc généré vs date de la séance + mettre les élus dans l'ordre alphabetique
 12) Fichier csv : manque les en-têtes dans le rapport csv
 13) Com'Elus : Mettre la date de la séance dans le texte d'accompagnement
 14) Com'Elus : Voir le nom de la structure dans le connecteur

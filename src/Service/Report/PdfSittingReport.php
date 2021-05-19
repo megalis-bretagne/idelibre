@@ -22,7 +22,6 @@ class PdfSittingReport
 
     public function generate(Sitting $sitting): string
     {
-        //<td class="col-3">{{ sitting.date | date('d/m/Y : H:i' , timezone) }} </td>
         $html = $this->twig->render('generate/sitting_report_pdf.html.twig', [
             'convocations' => $this->convocationRepository->getActorConvocationsBySitting($sitting),
             'sitting' => $sitting,
