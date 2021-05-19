@@ -31,7 +31,39 @@
 {% endblock %}
 
 
-{% block pageSaveReturn %}
-    {{ macro.save('user_index') }}
+
+{% block pageForm %}
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <div class="alert alert-warning">Attention : L'import des utilisateurs peut durer plusieurs dixaines de secondes</div>
+
+    <div class="float-right">
+        {% block pageSaveReturn %}{{ macro.save('user_index') }}{% endblock %}
+    </div>
+
+    {{ form_end(form) }}
+
+{% endblock %}
+
+
+
+{% block javascripts %}
+    <script>
+        let freezeClick = false;
+
+        let formCsv = document.getElementsByName("csv")[0];
+        formCsv.onsubmit = () => {
+            freezeClick = true;
+        }
+
+        document.addEventListener("click", e => {
+            if (freezeClick) {
+                console.log('clicks are disabled');
+                e.stopPropagation();
+                e.preventDefault();
+            }
+        }, true);
+    </script>
 {% endblock %}
 
