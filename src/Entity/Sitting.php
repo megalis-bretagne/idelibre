@@ -19,7 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     )})
  *
  * @UniqueEntity(
- *     fields={"name", "structure", "date"},
+ *     fields={"type", "structure", "date"},
  *     errorPath="name",
  *     message="Une séance du même type existe déja à la même heure")
  */

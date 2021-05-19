@@ -183,7 +183,6 @@ bouton ouvrir nouelle onglet client elus
 cas elu essai de se connecté
 
 
-Demander a cyril ne verifier qu'il n'y a plus de trace de acteur et secretaire
 
 
 WARNING VERIFIER Migration sequence !!!!!! semble ne fonctionner qu'ave un create sequence seul dans sa migration !
@@ -195,8 +194,7 @@ Si on le fait avec une annotion il le prend pour la primary key ce con !
 Verifier le 2 seances du meme type à la meme heure !
 
 
-IMPORT CSV : L'import est lent (a cause du flush a chaque coup pour eviter les doublons. (20 sec pour 120 users)
-Faire la verfi au debut et apres on flush qu'une fois on va gagner 80% du temps
+IMPORT CSV : L'import est lent Cela est du à l'ecodage des passwords !
 
 Peut Etre faire un preference pour les strcutremanager et un autre pour les user normaux ?
 
