@@ -152,7 +152,6 @@ class UserController extends AbstractController
         $form = $this->createForm(UserPreferenceType::class, $this->getUser());
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
             $userManager->save(
                 $form->getData(),
                 $form->get('plainPassword')->getData(),
@@ -164,10 +163,9 @@ class UserController extends AbstractController
             return $this->redirectToRoute('app_entrypoint');
         }
 
-
         return $this->render('user/preferences.html.twig', [
             'form' => $form->createView(),
-            'suffix' => $this->isGranted('ROLE_MANAGE_STRUCTURES') ? null : $this->getUser()->getStructure()->getSuffix()
+            'suffix' => $this->isGranted('ROLE_MANAGE_STRUCTURES') ? null : $this->getUser()->getStructure()->getSuffix(),
         ]);
     }
 }

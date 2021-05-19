@@ -27,8 +27,7 @@ class UserManager
         ValidatorInterface $validator,
         RoleManager $roleManager,
         TypeRepository $typeRepository
-    )
-    {
+    ) {
         $this->em = $em;
         $this->passwordEncoder = $passwordEncoder;
         $this->validator = $validator;

@@ -50,12 +50,10 @@ class UserPreferenceType extends AbstractType
                 'second_options' => ['label' => 'Confirmer'],
             ]);
 
-
         $builder->get('username')->addModelTransformer(new CallbackTransformer(
             fn ($username) => preg_replace('/@.*/', '', $username),
-            fn ($username) => $username .  $this->getStructureSuffix($user->getStructure())
+            fn ($username) => $username . $this->getStructureSuffix($user->getStructure())
         ));
-
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -67,11 +65,10 @@ class UserPreferenceType extends AbstractType
 
     private function getStructureSuffix(?Structure $structure): string
     {
-        if($this->security->isGranted('ROLE_MANAGE_STRUCTURES')) {
-            return "";
+        if ($this->security->isGranted('ROLE_MANAGE_STRUCTURES')) {
+            return '';
         }
         //TODO if superadmin or admin de groupe (je ne me souvient plus du nom generique pour eux, on ne l'ajoute pas
-        return '@' .$structure->getSuffix();
+        return '@' . $structure->getSuffix();
     }
-
 }
