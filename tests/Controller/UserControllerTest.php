@@ -264,6 +264,6 @@ class UserControllerTest extends WebTestCase
         $successMsg = $crawler->filter('html:contains("Vos préférences utilisateur ont bien été modifiées")');
         $this->assertCount(1, $successMsg);
 
-        $this->assertNotEmpty($user = $this->getOneEntityBy(User::class, ['username' => 'New username']));
+        $this->assertNotEmpty($user = $this->getOneEntityBy(User::class, ['username' => 'New username@libriciel']));
     }
 }

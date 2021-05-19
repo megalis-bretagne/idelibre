@@ -55,7 +55,7 @@ class EmailTemplateType extends AbstractType
             'label' => "Format de l'email",
             'choices' => [
                 'Html' => EmailData::FORMAT_HTML,
-                'Text' => EmailData::FORMAT_TEXT,
+                'Texte' => EmailData::FORMAT_TEXT,
             ],
         ]);
 

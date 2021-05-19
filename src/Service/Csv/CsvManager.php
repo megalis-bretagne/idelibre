@@ -59,7 +59,7 @@ class CsvManager
         $records = $csv->getRecords();
 
         foreach ($records as $record) {
-            $username = $this->sanitize($record[0] ?? '');
+            $username = $this->sanitize($record[0] ?? '') . '@' . $structure->getSuffix();
             if (!$this->isExistUsername($username, $structure)) {
                 $user = $this->createUserFromRecord($structure, $record);
 
@@ -164,7 +164,7 @@ class CsvManager
     private function createUserFromRecord(Structure $structure, array $record): User
     {
         $user = new User();
-        $user->setUsername($this->sanitize($record[0] ?? ''))
+        $user->setUsername($this->sanitize($record[0] ?? '') . '@' . $structure->getSuffix())
             ->setFirstName($this->sanitize($record[1] ?? ''))
             ->setLastName($this->sanitize($record[2] ?? ''))
             ->setEmail($this->sanitize($record[3] ?? ''))

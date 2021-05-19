@@ -55,7 +55,7 @@ class UserController extends AbstractController
      */
     public function add(Request $request, UserManager $manageUser): Response
     {
-        $form = $this->createForm(UserType::class, null, ['structure' => $this->getUser()->getStructure()]);
+        $form = $this->createForm(UserType::class, new User(), ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $manageUser->save(
@@ -151,7 +151,6 @@ class UserController extends AbstractController
     {
         $form = $this->createForm(UserPreferenceType::class, $this->getUser());
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $userManager->save(
                 $form->getData(),
@@ -166,6 +165,7 @@ class UserController extends AbstractController
 
         return $this->render('user/preferences.html.twig', [
             'form' => $form->createView(),
+            'suffix' => $this->isGranted('ROLE_MANAGE_STRUCTURES') ? null : $this->getUser()->getStructure()->getSuffix(),
         ]);
     }
 }

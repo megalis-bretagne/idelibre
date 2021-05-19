@@ -169,7 +169,6 @@ class ConvocationManager
         $emails = $this->generateEmailsData($convocation->getSitting(), [$convocation]);
         $this->clientNotifier->newSittingNotification([$convocation]);
         $this->emailService->sendBatch($emails);
-        dump('before dispatch');
         $this->messageBus->dispatch(new ConvocationSent([$convocation->getId()], $convocation->getSitting()->getId()));
     }
 

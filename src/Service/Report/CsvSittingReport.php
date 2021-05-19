@@ -5,20 +5,35 @@ namespace App\Service\Report;
 use App\Entity\Convocation;
 use App\Entity\Sitting;
 use App\Entity\Timestamp;
+use App\Repository\ConvocationRepository;
 use League\Csv\Writer;
 
 class CsvSittingReport
 {
+    private ConvocationRepository $convocationRepository;
+
+    public function __construct(ConvocationRepository $convocationRepository)
+    {
+        $this->convocationRepository = $convocationRepository;
+    }
+
     public function generate(Sitting $sitting): string
     {
         $csvPath = '/tmp/' . uniqid('csv_report');
         $writer = Writer::createFromPath($csvPath, 'w+');
+        $writer->insertOne($this->getHeaders());
 
-        foreach ($sitting->getConvocations() as $convocation) {
+        $convocations = $this->convocationRepository->getActorConvocationsBySitting($sitting);
+        foreach ($convocations as $convocation) {
             $writer->insertOne($this->getConvocationData($convocation));
         }
 
         return $csvPath;
+    }
+
+    private function getHeaders(): array
+    {
+        return ['Prénom', 'Nom', 'Envoi', 'Réception', 'Présence', 'Mandataire'];
     }
 
     private function getConvocationData(Convocation $convocation): array
