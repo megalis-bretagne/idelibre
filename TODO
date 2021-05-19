@@ -202,15 +202,13 @@ Verifier le 2 seances du meme type à la meme heure !
 
 
 
-
+5) Gpe politique : bouton "tous les élus" | Faire disparaître l'élu quand sélectionné ? (+ message d'erreur à la création) A voir n'existe pas aujourd'hui
+9) Doc zip : si mm nom annexe et projet >> l'annexe n'apparait pas dans le zip  (Par construction du doc. si on gare les noms d'origine ça fait forcement ça)
 1) Super admin : pas de vue sur les infos de la coll quand se connecte à la coll  (Vu que tu peux les avoir via le menu de structure ya pas trop d'interet)
+
 4) Préférences utilisateurs : le "@structure" est modifiable
-5) Gpe politique : bouton "tous les élus" | Faire disparaître l'élu quand sélectionné ? (+ message d'erreur à la création) DONE
-6) Création type de séance : majuscule à "Invités associés" DONE
-7) Création élu : mettre actif par défaut
-8) Format mail : mettre un e à la fin de text ? DONE
-9) Doc zip : si mm nom annexe et projet >> l'annexe n'apparait pas dans le zip
 10) Création séance : La date de la séance n'est pas modifiable
+
 11) Génération rapport séance : 2h de décalage sur le doc généré vs date de la séance + mettre les élus dans l'ordre alphabetique
 12) Fichier csv : manque les en-têtes dans le rapport csv
 13) Com'Elus : Mettre la date de la séance dans le texte d'accompagnement
