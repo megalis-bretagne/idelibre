@@ -25,7 +25,7 @@ class SuperUserType extends AbstractType
             ->add('lastName', TextType::class, [
                 'label' => 'Nom', ])
             ->add('username', TextType::class, [
-                'label' => 'Nom d\'utilisateur (sans @suffix)',
+                'label' => 'Nom d\'utilisateur (sans @suffixe)',
                 'constraints' => [
                     new Regex('/^((?!@).)*$/', 'le champ ne doit pas contenir le suffixe'),
                 ],

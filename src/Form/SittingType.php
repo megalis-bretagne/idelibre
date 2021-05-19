@@ -45,7 +45,7 @@ class SittingType extends AbstractType
                 'required' => true,
                 'widget' => 'single_text',
                 'view_timezone' => $this->getTimeZone($options['structure']),
-                'disabled' => !$isNew,
+                'disabled' => $isAlreadySentConvocation || $isAlreadySentInvitation,
             ])
             ->add('place', TextType::class, [
                 'label' => 'Lieu',

@@ -15,9 +15,9 @@
     <img src="{{ nginx }}{{ asset('assets/img/logo_Libriciel.png') }}" style="width: 200px" alt="ls"
          class="float-right">
 
-    <div>Généré le {{ date() | date('d/m/Y à H:i') }}</div>
+    <div>Généré le {{ date() | date('d/m/Y à H:i' , timezone) }}</div>
 
-    <h3> {{ sitting.name }} - {{ sitting.date | date('d/m/Y à H:i') }}</h3>
+    <h3> {{ sitting.name }} - {{ sitting.date | date('d/m/Y à H:i', timezone) }}</h3>
 
     <table class="table table-striped mt-4">
         <thead>

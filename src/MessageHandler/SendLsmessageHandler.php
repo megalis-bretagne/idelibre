@@ -27,7 +27,6 @@ class SendLsmessageHandler implements MessageHandlerInterface
 
     public function __invoke(ConvocationSent $convocationSent)
     {
-        dump('invoke');
         if ('test' === getenv('APP_ENV')) {
             return;
         }

@@ -35,7 +35,7 @@ class UserManager
         $this->typeRepository = $typeRepository;
     }
 
-    public function save(User $user, ?string $plainPassword, Structure $structure): void
+    public function save(User $user, ?string $plainPassword, ?Structure $structure): void
     {
         if ($plainPassword) {
             $user->setPassword($this->passwordEncoder->encodePassword($user, $plainPassword));
@@ -110,9 +110,5 @@ class UserManager
         foreach ($authorizedTypes as $authorizedType) {
             $authorizedType->removeAuthorizedSecretary($user);
         }
-    }
-
-    private function createActorFromRawActor(array $rawActor, $structure)
-    {
     }
 }
