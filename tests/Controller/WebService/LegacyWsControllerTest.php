@@ -251,4 +251,77 @@ class LegacyWsControllerTest extends WebTestCase
 
     }
 
+
+
+    function testPing() {
+        $this->client->request(Request::METHOD_GET, '/api300/ping');
+        $this->assertResponseStatusCodeSame(200);
+        $this->assertSame('ping',$this->client->getResponse()->getContent());
+    }
+
+    function testPingCapitalUrl() {
+        $this->client->request(Request::METHOD_GET, '/Api300/ping');
+        $this->assertResponseStatusCodeSame(200);
+        $this->assertSame('ping',$this->client->getResponse()->getContent());
+    }
+
+    function testVersion() {
+        $this->client->request(Request::METHOD_GET, '/api300/version');
+        $this->assertResponseStatusCodeSame(200);
+        $this->assertSame('4.0.0',$this->client->getResponse()->getContent());
+    }
+
+    function testVersionCapitalUrl() {
+        $this->client->request(Request::METHOD_GET, '/Api300/version');
+        $this->assertResponseStatusCodeSame(200);
+        $this->assertSame('4.0.0',$this->client->getResponse()->getContent());
+    }
+
+    function testCheck() {
+        $this->client->request(
+            Request::METHOD_POST,
+            '/api300/check',
+            [
+                'username' => 'secretary1',
+                'password' => 'password',
+                'conn' => 'libriciel',
+            ]
+        );
+
+        $this->assertResponseStatusCodeSame(200);
+        $this->assertSame('success',$this->client->getResponse()->getContent());
+    }
+
+
+    function testCheckWrongConn() {
+        $this->client->request(
+            Request::METHOD_POST,
+            '/api300/check',
+            [
+                'username' => 'secretary1',
+                'password' => 'password',
+                'conn' => 'falseConn',
+            ]
+        );
+
+        $this->assertResponseStatusCodeSame(403);
+        $this->assertSame('connection does not exist',$this->client->getResponse()->getContent());
+    }
+
+
+    function testCheckWrongPassword() {
+        $this->client->request(
+            Request::METHOD_POST,
+            '/api300/check',
+            [
+                'username' => 'secretary1',
+                'password' => 'passwordFalse',
+                'conn' => 'libriciel',
+            ]
+        );
+
+        $this->assertResponseStatusCodeSame(403);
+        $this->assertSame('Authentication error',$this->client->getResponse()->getContent());
+    }
+
 }
