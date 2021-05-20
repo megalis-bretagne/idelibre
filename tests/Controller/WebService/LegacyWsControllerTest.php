@@ -110,7 +110,7 @@ class LegacyWsControllerTest extends WebTestCase
 
         $this->client->request(
             Request::METHOD_POST,
-            '/seance.json',
+            '/seances.json',
             [
                 'username' => $username,
                 'password' => $password,
@@ -154,7 +154,7 @@ class LegacyWsControllerTest extends WebTestCase
     {
         $this->client->request(
             Request::METHOD_POST,
-            '/seance.json',
+            '/seances.json',
             [
                 'username' => 'secretary1',
                 'password' => 'password',
@@ -173,7 +173,7 @@ class LegacyWsControllerTest extends WebTestCase
     {
         $this->client->request(
             Request::METHOD_POST,
-            '/seance.json',
+            '/seances.json',
             [
                 'username' => 'secretary1',
                 'password' => 'password',
@@ -194,7 +194,7 @@ class LegacyWsControllerTest extends WebTestCase
     {
         $this->client->request(
             Request::METHOD_POST,
-            '/seance.json',
+            '/seances.json',
             [
                 'username' => 'notExists',
                 'password' => 'password',
@@ -214,7 +214,7 @@ class LegacyWsControllerTest extends WebTestCase
     {
         $this->client->request(
             Request::METHOD_POST,
-            '/seance.json',
+            '/seances.json',
             [
                 'username' => 'secretary1',
                 'password' => 'wrongPassword',
@@ -235,7 +235,7 @@ class LegacyWsControllerTest extends WebTestCase
     {
         $this->client->request(
             Request::METHOD_POST,
-            '/seance.json',
+            '/seances.json',
             [
                 'username' => 'secretary1',
                 'password' => 'password',
