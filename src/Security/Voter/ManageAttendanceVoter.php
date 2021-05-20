@@ -42,7 +42,7 @@ class ManageAttendanceVoter extends Voter
         /**
          * [["convocationId" => "e995df60-45f1-4903-b5c6-fdc94a66604d"
          *  "attendance" => "absent"
-         *  "deputy" => null], [] ...]
+         *  "deputy" => null], [] ...].
          */
         $dataArray = $subject->toArray();
 
@@ -61,6 +61,7 @@ class ManageAttendanceVoter extends Voter
         if (!$convocation) {
             return false;
         }
+
         return $loggedInUser->getStructure()->getId() === $convocation->getSitting()->getStructure()->getId();
     }
 
