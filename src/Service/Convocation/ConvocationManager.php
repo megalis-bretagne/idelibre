@@ -303,7 +303,6 @@ class ConvocationManager
         foreach ($convocationAttendances as $convocationAttendance) {
             $convocation = $this->convocationRepository->find($convocationAttendance['convocationId']);
             if (!$convocation) {
-                //TODO check if you own this convocation !
                 throw new NotFoundHttpException("Convocation with id ${convocationAttendance['convocationId']} does not exists");
             }
             $convocation->setAttendance($convocationAttendance['attendance']);
