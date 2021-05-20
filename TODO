@@ -1,32 +1,13 @@
 Create theme ROOT soit à la creation de la structure soit le creer lorss du premier enregistrement s'il n'existe pas
 
-Il manque la colone roe sur le tableau index des acteurs
 
-rename $type->getAssociatedUsers() en $type->getAssociatedActors()
-
-
-Il faut lier le ficher de convocation à la séance car sinon c'est la emrdeour ajouter de sutilisateurs ou pire encore si pas d'acteur dans e type de seance!
-
-
-Il faudrait que ce soit FILE qui contiene la reference à la table a laquelle elle appartient et non l'inverse comme aujourd'hui
-Come ça si je supprime un projet ça supprime le file associé et on l'inverse.
-
-
-Peut etre faire un lib qui precise dans quel menu je veux etre ?
-Ou alors je garde en memoire le dernier cliquer et je repart la dessus (peut etre la meilleur solution apres tout)
-Si le mec rentre un lien c'est son pb
 
 Faire une deifrerence entre la denomination remve et delete.
 le delete faisant unn remove + flush
 
 
-VOIR AVEC ERIC EST CE QUE JE METS LES ROPERTIES OBLIGATOIRE DANS LE CONSTRUCTEUR OU NON
-SI NON JE ME RETROUVE AVEC  DES NULLABLES A TESTER !
 
 CHANGER LE USERINTERFACE du l'utilisateur pour avoir des methodes en plus !!
-
-DEFINIR les templates email par defaut. ET mettre les blise HTML aux propre dans les message sinon on va passer pour des spammeurs
-Idem quand on crre un nouveau type de message. on met les balises. on est pas des porcs !
 
 configuration snappy
 
@@ -56,9 +37,6 @@ dans le modal preciser le nom de l'object nom se la seance par exemple
 selectOrButton s'il y a peu d'element (a voir)
 
 
-Faire tourner la CI avec sqlite pour les test sauf pour les merges  (3 fois plus rapide !)
-
-
 Regarder les data transformers pour eviter cela dans les forms. Faire plutot un type custom !
 $builder->add('structure', HiddenType::class, [
             'data' => $options['structure'],
@@ -71,15 +49,10 @@ $builder->add('structure', HiddenType::class, [
 
 
 
-Questionner eric pour la CI.
-Faire fonctionner avec sqlite sauf pour les merges ?
-Commit de pre merge qui foctionne avec postgresql ?
-
 
 Tous les path dans la bd devrait etre a partir d'un chemin donnée. Conseil Epommateau !
 
 
-liip cache
 Creer le cache pour postgres (bénéfique à tous)
 
 pg_dump --dbname=postgresql://idelibre:idelibre@127.0.0.1:5432/idelibre_docker --schema-only --file "/tmp/docker2.sql"
@@ -102,10 +75,6 @@ Comme ça on aun object qui as les 3 propriétés : associatedActors, associated
 
 
 Peut etre mettre des tooltips o des popever partout par exemple sur profile la liste des profiles avec explication
-
-Ajouter l'extenson de l'uilisateur au moment de la creation comme on fait actueleletn pour setter la structure !
-
-Ecrire le <inputfield>  <b>@structre.fr</b>  pour facilité la compréhension
 
 
 https://idelibre-4.recette.libriciel.net
@@ -144,28 +113,16 @@ et d'avoir a detailler le form
 TODO enlever la category de convocation , on peut faire le distingo avec l'user associé
 
 
-TODO MODIFIER LES INFORMATION DE LA SEANCE ET PEUT ETRE CHANGER LE button parcourir en bouton normal avec le titre du ficheri à coté
-
 
 Avec le css genere par webpack il va falloir gerer le pb de ça dans template/generate
 <link rel="stylesheet" href="{{ absolute_url(asset('assets/bootstrap/css/il-bootstrap-4.css')) }}">
 
 
 
-Creation de l'utilisateur admn de collectivité à l'origine.
-Pour l'instant il met l'user tel que rentré cad par default sans la @.
-Il faudrait empecher de mettre un @ et forcer le suffix à l'enregistrement !
-
 
 creer un fakeClientnotifier implement ClientNotifier interface . logs in test
 
 
-
-
-
-Connecteur WD api 300 !!!!
-
-Position message erreur login
 
 modification ratachement du theme  -> A voir
 
@@ -174,10 +131,6 @@ gerer les presenece  D'abord les elus puis separateur  puis administratifs  -> P
 
 
 bouton ouvrir nouelle onglet client elus
-
-cas elu essai de se connecté
-
-
 
 
 WARNING VERIFIER Migration sequence !!!!!! semble ne fonctionner qu'ave un create sequence seul dans sa migration !
