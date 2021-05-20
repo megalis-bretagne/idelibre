@@ -44,6 +44,12 @@ class ZipSittingGenerator
         return $directoryPath . '/' . $sitting->getId() . '.zip';
     }
 
+    public function deleteZip(Sitting $sitting): void
+    {
+        $path = $this->getAndCreateZipPath($sitting);
+        $this->filesystem->remove($path);
+    }
+
     private function addProjectAndAnnexesFiles(ZipArchive $zip, Sitting $sitting): void
     {
         foreach ($sitting->getProjects() as $project) {

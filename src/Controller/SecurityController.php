@@ -33,7 +33,6 @@ class SecurityController extends AbstractController
         }
 
         if (Role::NAME_ROLE_ACTOR === $this->getUser()->getRole()->getName()) {
-            //todo renvoyé sur une vue ave un deco !
             return $this->render('security/noActors.html.twig');
         }
 

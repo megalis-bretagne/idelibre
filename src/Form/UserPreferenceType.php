@@ -68,7 +68,7 @@ class UserPreferenceType extends AbstractType
         if ($this->security->isGranted('ROLE_MANAGE_STRUCTURES')) {
             return '';
         }
-        //TODO if superadmin or admin de groupe (je ne me souvient plus du nom generique pour eux, on ne l'ajoute pas
+
         return '@' . $structure->getSuffix();
     }
 }
