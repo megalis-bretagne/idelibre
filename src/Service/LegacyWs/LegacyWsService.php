@@ -67,7 +67,7 @@ class LegacyWsService
 
         $this->wsProjectManager->createProjectsAndAnnexes($rawSitting['projets'] ?? null, $uploadedFiles, $sitting);
 
-        if (!$rawSitting['place']) {
+        if (isset($rawSitting['place'])) {
             $sitting->setPlace($rawSitting['place']);
         }
 
