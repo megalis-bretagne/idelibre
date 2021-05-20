@@ -28,9 +28,11 @@
             <h2>Projets</h2>
             <div class="mt-4"></div>
 
-            <div v-if="projects.length == 0" class="text-center" >
+            {% if projects | length == 0 %}
+            <div class="text-center" >
                 Aucun projet associé
             </div>
+            {% endif %}
 
 
             {% for project in projects %}
