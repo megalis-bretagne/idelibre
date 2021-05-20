@@ -37,7 +37,8 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         UserPasswordEncoderInterface $passwordEncoder,
         Security $security,
         LegacyPassword $legacyPassword
-    ) {
+    )
+    {
         $this->userRepository = $userRepository;
         $this->router = $router;
         $this->csrfTokenManager = $csrfTokenManager;
@@ -90,6 +91,9 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey): Response
     {
+        if ($this->security->isGranted('ROLE_MANAGE_STRUCTURES')) {
+            $this->impersonateStructure->logoutStructure();
+        }
         return new RedirectResponse($this->router->generate('app_entrypoint'));
     }
 
