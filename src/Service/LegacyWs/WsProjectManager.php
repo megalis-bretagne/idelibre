@@ -84,7 +84,7 @@ class WsProjectManager
             return null;
         }
         if (!isset($rawReporter['rapporteurlastname']) || !isset($rawReporter['rapporteurfirstname'])) {
-            throw new BadRequestHttpException('rapporteurlastname and rapporteurfirstname fields are required');
+            return null;
         }
 
         return $this->userRepository->findOneBy(
