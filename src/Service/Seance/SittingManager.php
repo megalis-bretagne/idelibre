@@ -9,8 +9,10 @@ use App\Message\UpdatedSitting;
 use App\Repository\SittingRepository;
 use App\Service\Convocation\ConvocationManager;
 use App\Service\File\FileManager;
+use App\Service\Pdf\PdfSittingGenerator;
 use App\Service\Project\ProjectManager;
 use App\Service\role\RoleManager;
+use App\Service\Zip\ZipSittingGenerator;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -25,6 +27,8 @@ class SittingManager
     private ProjectManager $projectManager;
     private RoleManager $roleManager;
     private SittingRepository $sittingRepository;
+    private PdfSittingGenerator $pdfSittingGenerator;
+    private ZipSittingGenerator $zipSittingGenerator;
 
     public function __construct(
         ConvocationManager $convocationManager,
@@ -33,7 +37,9 @@ class SittingManager
         MessageBusInterface $messageBus,
         ProjectManager $projectManager,
         RoleManager $roleManager,
-        SittingRepository $sittingRepository
+        SittingRepository $sittingRepository,
+        PdfSittingGenerator $pdfSittingGenerator,
+        ZipSittingGenerator $zipSittingGenerator
     ) {
         $this->convocationManager = $convocationManager;
         $this->fileManager = $fileManager;
@@ -42,6 +48,8 @@ class SittingManager
         $this->projectManager = $projectManager;
         $this->roleManager = $roleManager;
         $this->sittingRepository = $sittingRepository;
+        $this->pdfSittingGenerator = $pdfSittingGenerator;
+        $this->zipSittingGenerator = $zipSittingGenerator;
     }
 
     public function save(
@@ -88,7 +96,9 @@ class SittingManager
         $this->convocationManager->deleteConvocations($sitting->getConvocations());
         $this->em->remove($sitting);
         $this->em->flush();
-        // TODO remove fullpdf and zip !
+
+        $this->pdfSittingGenerator->deletePdf($sitting);
+        $this->zipSittingGenerator->deleteZip($sitting);
     }
 
     public function update(Sitting $sitting, ?UploadedFile $uploadedConvocationFile, ?UploadedFile $uploadedInvitationFile): void

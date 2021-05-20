@@ -88,4 +88,10 @@ class PdfSittingGenerator
 
         return $directoryPath . '/' . $sitting->getId() . '.pdf';
     }
+
+    public function deletePdf(Sitting $sitting): void
+    {
+        $path = $this->getPdfPath($sitting);
+        $this->filesystem->remove($path);
+    }
 }
