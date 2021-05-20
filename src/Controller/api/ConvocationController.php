@@ -45,7 +45,7 @@ class ConvocationController extends AbstractController
 
     /**
      * @Route("/api/convocations/attendance", name="api_convocation_attendance", methods={"POST", "PUT"})
-     * @IsGranted("ROLE_MANAGE_SITTINGS")
+     * @IsGranted("MANAGE_ATTENDANCE", subject="request")
      */
     public function setAttendance(ConvocationManager $convocationManager, Request $request): JsonResponse
     {

@@ -136,7 +136,7 @@ class ConvocationControllerTest extends WebTestCase
             [],
             json_encode($data)
         );
-        $this->assertResponseStatusCodeSame(404);
+        $this->assertResponseStatusCodeSame(403);
 
     }
 
