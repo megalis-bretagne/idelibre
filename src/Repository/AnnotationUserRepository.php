@@ -18,6 +18,4 @@ class AnnotationUserRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, AnnotationUser::class);
     }
-
-
 }
