@@ -75,19 +75,17 @@ class AnnotationUser
         return $this;
     }
 
-
     public function getAnnotation(): Annotation
     {
         return $this->annotation;
     }
 
-
     public function setAnnotation(Annotation $annotation): self
     {
         $this->annotation = $annotation;
+
         return $this;
     }
-
 
     public function getUser(): User
     {
@@ -97,8 +95,7 @@ class AnnotationUser
     public function setUser(User $user): self
     {
         $this->user = $user;
+
         return $this;
     }
-
-
 }

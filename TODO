@@ -153,3 +153,28 @@ Peut Etre faire un preference pour les strcutremanager et un autre pour les user
 
 WARNING !
 update or delete on table "user" violates foreign key constraint "fk_2e443ef2f675f31b" on table "annotation"
+
+
+
+
+Marque blanch : name, editor, css, images, version
+
+
+sur IL
+///////////
+
+Logo Libriciel page login :
+public/assets/img/logo_Libriciel.png
+
+Logo idelibre page login
+public/assets/img/il-color.svg
+
+Logo footer libriciel blanc   //ils ne veulent rien donc mettre un empty.png
+public/assets/img/Libriciel_white_h24px.png
+
+Logo idelibre header
+public/assets/img/id-color-white.svg
+
+favicon :
+public/favicon.ico
+////////////

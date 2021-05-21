@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}idelibre{% endblock %}</title>
+    <title>{% block title %} {{ product_name }} {% endblock %}</title>
     {% block stylesheets %}{% endblock %}
 
     {{ encore_entry_link_tags('app') }}
