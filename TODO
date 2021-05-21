@@ -149,3 +149,7 @@ Peut Etre faire un preference pour les strcutremanager et un autre pour les user
 1) Super admin : pas de vue sur les infos de la coll quand se connecte à la coll  (Vu que tu peux les avoir via le menu de structure ya pas trop d'interet)
 13) Com'Elus : Mettre la date de la séance dans le texte d'accompagnement (A VOIR plus tard)
 14) Com'Elus : Voir le nom de la structure dans le connecteur   (Comelus ne le retourne pas pour le moment à faire)
+
+
+WARNING !
+update or delete on table "user" violates foreign key constraint "fk_2e443ef2f675f31b" on table "annotation"
