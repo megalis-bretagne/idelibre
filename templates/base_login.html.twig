@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}idelibre{% endblock %}</title>
+    <title>{% block title %} {{ product_name }} {% endblock %}</title>
     {% block stylesheets %}{% endblock %}
 
     {{ encore_entry_link_tags('app') }}
@@ -26,7 +26,7 @@
                         <img src="{{ asset('custom_logos/' ~ structure.logoPath) }}" alt="logo" class="epci-logo">
                     {% else %}
                         <img id="libriciel-logo" alt="Image du Libriciel"
-                             src="{{ asset('assets/img/logo_Libriciel.png') }}">
+                             src="{{ asset('assets/img/editor_logo.png') }}">
                     {% endif %}
 
 

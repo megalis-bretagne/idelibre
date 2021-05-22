@@ -3,5 +3,7 @@ twig:
   form_themes: ['bootstrap_4_layout.html.twig', 'others/ls-file.html.twig']
   globals:
     version: '%version%'
+    product_name: '%product_name%'
+    product_editor: '%product_editor%'
     breadcrumb: 'others/breadCrumb.html.twig'
     nginx: '%nginx_host%'

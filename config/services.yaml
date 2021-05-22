@@ -5,6 +5,9 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
   version: '%env(VERSION)%'
+  product_name: '%env(PRODUCT_NAME)%'
+  product_editor: '%env(PRODUCT_EDITOR)%'
+
   document_files_directory: '%env(DOCUMENT_FILES_DIRECTORY)%'
   document_zip_directory: '%env(DOCUMENT_ZIP_DIRECTORY)%'
   document_full_pdf_directory: '%env(DOCUMENT_FULL_PDF_DIRECTORY)%'
