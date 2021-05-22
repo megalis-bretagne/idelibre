@@ -164,16 +164,16 @@ sur IL
 ///////////
 
 Logo Libriciel page login :
-public/assets/img/logo_Libriciel.png
+public/assets/img/editor_logo.png
 
 Logo idelibre page login
-public/assets/img/il-color.svg
+public/assets/img/application_logo.svg
 
 Logo footer libriciel blanc   //ils ne veulent rien donc mettre un empty.png
-public/assets/img/Libriciel_white_h24px.png
+public/assets/img/editor_logo_footer.png
 
 Logo idelibre header
-public/assets/img/id-color-white.svg
+public/assets/img/application_logo_header.svg
 
 favicon :
 public/favicon.ico
