@@ -159,22 +159,5 @@ update or delete on table "user" violates foreign key constraint "fk_2e443ef2f67
 
 Marque blanch : name, editor, css, images, version
 
-
-sur IL
-///////////
-
-Logo Libriciel page login :
-public/assets/img/editor_logo.png
-
-Logo idelibre page login
-public/assets/img/application_logo.svg
-
-Logo footer libriciel blanc   //ils ne veulent rien donc mettre un empty.png
-public/assets/img/editor_logo_footer.png
-
-Logo idelibre header
-public/assets/img/application_logo_header.svg
-
-favicon :
-public/favicon.ico
-////////////
+TODO functionnalité blacklisted n'est pas convocable
+TODO champlibre ?
