@@ -82,7 +82,12 @@ class SittingRepository extends ServiceEntityRepository
             ->setParameter('structure', $structure)
             ->join('s.convocations', 'c')
             ->join('c.user', 'u')
+            ->join('c.sentTimestamp', 'sent_timestamp')
+            ->join('c.receivedTimestamp', 'received_timestamp')
             ->addSelect('c')
-            ->addSelect('u');
+            ->addSelect('u')
+            ->addSelect('sent_timestamp')
+            ->addSelect('received_timestamp')
+            ;
     }
 }
