@@ -54,8 +54,11 @@ WORKDIR /app
 RUN curl -s https://getcomposer.org/installer | php && sudo -u www-data php composer.phar install --no-interaction --no-cache
 RUN npm install && npm run build
 
-
+RUN mkdir -p /data
 RUN chown -R www-data:www-data /data
+
+
+
 
 COPY docker-resources/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 COPY docker-resources/zz-php.ini /usr/local/etc/php/conf.d/zz-php.ini
