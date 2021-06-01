@@ -10,8 +10,12 @@ services:
     volumes:
       #- data-public:/app/public
       - ./public:/app/public
-      - /tmp/data:/data
+      - /tmp/data/token:/data/token
+      - /tmp/data/zip:/data/zip
+      - /tmp/data/pdf:/data/pdf
+      - /tmp/data/workspace:/data/workspace
       - ./docker-resources/zz-idelibre.conf:/usr/local/etc/php-fpm.d/zz-idelibre.conf
+      - ./docker-resources/initApp.sh:/app/docker-resources/initApp.sh
       - ./src:/app/src
       - ./templates:/app/templates
       - ./config:/app/config

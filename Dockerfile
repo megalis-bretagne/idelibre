@@ -54,12 +54,8 @@ WORKDIR /app
 RUN curl -s https://getcomposer.org/installer | php && sudo -u www-data php composer.phar install --no-interaction --no-cache
 RUN npm install && npm run build
 
-RUN mkdir -p /data/workspace /data/zip /data/pdf /data/token
-RUN touch /data/workspace/.empty /data/zip/.empty  /data/pdf/.empty /data/token/.empty
+
 RUN chown -R www-data:www-data /data
-
-
-COPY ./docker-resources/zz-idelibre.conf /usr/local/etc/php-fpm.d/zz-idelibre.confcd
 
 COPY docker-resources/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 COPY docker-resources/zz-php.ini /usr/local/etc/php/conf.d/zz-php.ini
