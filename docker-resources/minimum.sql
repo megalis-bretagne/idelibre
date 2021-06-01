@@ -25,13 +25,13 @@ VALUES ('811a1329-0cd0-49e8-b59b-5394219c50dd', 'Employee', '["ROLE_EMPLOYEE"]',
 
 
 INSERT INTO "user" (id, structure_id, email, username, role_id, password, first_name, last_name, is_active)
-values (UUID_GENERATE_V4(), NULL, 'superadmin@exemple.org', 'superadminprov', '94663bed-16e9-4990-8493-323c3d5e5565',
+values (UUID_GENERATE_V4(), NULL, 'superadmin@exemple.org', 'superadminInstall', '94663bed-16e9-4990-8493-323c3d5e5565',
         '$argon2id$v=19$m=65536,t=4,p=1$jCNjXFnpctIdKy2XKJ3d9w$B2THO9hICaf20D73R6PB0FDiR1+2RpJCZlpG6RExTlg', 'super ',
         'admin ', true);
 
 
 INSERT INTO timezone (id, name)
-values (UUID_GENERATE_V4(), 'Europe/Paris');
+values ('069c8728-47b1-447a-a818-2fe4655d9bd2', 'Europe/Paris');
 INSERT INTO timezone (id, name)
 values (UUID_GENERATE_V4(), 'Indian/Reunion');
 INSERT INTO timezone (id, name)

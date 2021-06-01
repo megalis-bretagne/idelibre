@@ -32,7 +32,7 @@ class File
     private $size;
 
     /**
-     * @ORM\Column(type="string", length=125)
+     * @ORM\Column(type="string", length=512)
      * @Assert\NotBlank
      * @Assert\Length(max="125")
      */

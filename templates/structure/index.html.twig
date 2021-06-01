@@ -44,8 +44,8 @@
         {% for structure in structures %}
             <tr class="d-flex">
                 <td class="col-4">{{ structure.name }} </td>
-                <td class="col-3">{{ structure.suffix | slice(0,15) }} </td>
-                <td class="col-3">{{ (structure.group ? structure.group.name : "") | slice(0,15) }} </td>
+                <td class="col-3">{{ structure.suffix | slice(0,25) }} </td>
+                <td class="col-3">{{ (structure.group ? structure.group.name : "") | slice(0,25) }} </td>
                 <td class="col-2">
 
                     <a href="{{ path('security_impersonate', {'id': structure.id}) }}"
