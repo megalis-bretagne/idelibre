@@ -54,7 +54,7 @@ WORKDIR /app
 RUN curl -s https://getcomposer.org/installer | php && sudo -u www-data php composer.phar install --no-interaction --no-cache
 RUN npm install && npm run build
 
-RUN mkdir -p /data
+RUN mkdir -p /data/workspace /data/zip /data/pdf /data/token
 RUN chown -R www-data:www-data /data
 
 
