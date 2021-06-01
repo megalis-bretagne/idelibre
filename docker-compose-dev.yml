@@ -3,15 +3,19 @@ version: '3.4'
 services:
   fpm-idelibre:
     container_name: fpm-idelibre
-    image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/idelibre/idelibre:wd_connector
+    image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/idelibre/idelibre:directories
 
     env_file:
       - .env.docker.local
     volumes:
       #- data-public:/app/public
       - ./public:/app/public
-      - data-file:/tmp
+      - /tmp/data/token:/data/token
+      - /tmp/data/zip:/data/zip
+      - /tmp/data/pdf:/data/pdf
+      - /tmp/data/workspace:/data/workspace
       - ./docker-resources/zz-idelibre.conf:/usr/local/etc/php-fpm.d/zz-idelibre.conf
+      - ./docker-resources/initApp.sh:/app/docker-resources/initApp.sh
       - ./src:/app/src
       - ./templates:/app/templates
       - ./config:/app/config
@@ -28,8 +32,8 @@ services:
     #  - 4000:3000
     image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/idelibre/idelibre-nodejs:main
     volumes:
-      - ../idelibre4-nodejs:/app
-      - data-file:/tmp
+      #- ../idelibre4-nodejs:/app:ro
+      - /tmp/data:/data:ro
       #- /tmp/docker:/tmp
     env_file:
       #- docker-resources/.env.test
@@ -86,4 +90,3 @@ services:
 
 volumes:
   data-public:
-  data-file:

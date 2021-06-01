@@ -8,10 +8,11 @@ parameters:
   product_name: '%env(PRODUCT_NAME)%'
   product_editor: '%env(PRODUCT_EDITOR)%'
 
-  document_files_directory: '%env(DOCUMENT_FILES_DIRECTORY)%'
-  document_zip_directory: '%env(DOCUMENT_ZIP_DIRECTORY)%'
-  document_full_pdf_directory: '%env(DOCUMENT_FULL_PDF_DIRECTORY)%'
-  token_directory: '%env(TOKEN_DIRECTORY)%'
+  document_files_directory: '/data/workspace/'
+  document_zip_directory: '/data/zip/'
+  document_full_pdf_directory: '/data/pdf/'
+  token_directory: '/data/token/'
+
   email_from: '%env(EMAIL_FROM)%'
   email_alias: '%env(EMAIL_ALIAS)%'
 
