@@ -4,6 +4,7 @@ stages:
   - test
   - quality
   - testOld
+  - release
 
 variables:
   CONTAINER_IMAGE: "${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME}"
