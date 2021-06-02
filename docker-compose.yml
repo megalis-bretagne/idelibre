@@ -4,70 +4,58 @@ services:
   fpm-idelibre:
     container_name: fpm-idelibre
     image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/idelibre/idelibre:master
-    #env_file:
-    #  - .env.docker.local
     environment:
-      - APP_ENV=${APP_ENV}
-      - APP_SECRET=${APP_SECRET}
-      - DATABASE_URL=${DATABASE_URL}
-      - VERSION=${VERSION}
-      - MAILER_URL=${MAILER_URL}
-      - WKHTMLTOPDF_PATH=${WKHTMLTOPDF_PATH}
-      - WKHTMLTOIMAGE_PATH=${WKHTMLTOIMAGE_PATH}
-      - MAILJET_KEY=${MAILJET_KEY}
-      - MAILJET_SECRET=${MAILJET_SECRET}
-      - EMAIL_FROM=${EMAIL_FROM}
-      - EMAIL_ALIAS=${EMAIL_ALIAS}
-      - MAILER_TYPE=${MAILER_TYPE}
-      - DOCUMENT_MAX_SIZE=${DOCUMENT_MAX_SIZE}
-      - DOCUMENT_MAX_COUNT=${DOCUMENT_MAX_COUNT}
-      - DOCUMENT_FILES_DIRECTORY=${DOCUMENT_FILES_DIRECTORY}
-      - DOCUMENT_ZIP_DIRECTORY=${DOCUMENT_ZIP_DIRECTORY}
-      - DOCUMENT_FULL_PDF_DIRECTORY=${DOCUMENT_FULL_PDF_DIRECTORY}
-      - TOKEN_DIRECTORY=${TOKEN_DIRECTORY}
-      - PHP_OPCACHE_VALIDATE_TIMESTAMPS=${PHP_OPCACHE_VALIDATE_TIMESTAMPS}
-      - PHP_OPCACHE_MAX_ACCELERATED_FILES=${PHP_OPCACHE_MAX_ACCELERATED_FILES}
-      - PHP_OPCACHE_MEMORY_CONSUMPTION=${PHP_OPCACHE_MEMORY_CONSUMPTION}
-      - PHP_OPCACHE_MAX_WASTED_PERCENTAGE=${PHP_OPCACHE_MAX_WASTED_PERCENTAGE}
-      - SENTRY_DSN=null
-      - SALT=SALT
+      - APP_ENV=${APP_ENV:-prod}
+      - APP_SECRET=${APP_SECRET:-b64dca717248e387bc88b36d9c485244}
+      - DATABASE_URL=${DATABASE_URL:-postgresql://idelibre:idelibre@172.17.0.1:5432/idelibre}
+      - VERSION=${VERSION:-4.0.0}
+      - MAILER_URL=${MAILER_URL:-null://localhost}
+      - WKHTMLTOPDF_PATH=${WKHTMLTOPDF_PATH:-/usr/local/bin/wkhtmltopdf}
+      - WKHTMLTOIMAGE_PATH=${WKHTMLTOIMAGE_PATH:-/usr/local/bin/wkhtmltoimage}
+      - MAILJET_KEY=${MAILJET_KEY:-null}
+      - MAILJET_SECRET=${MAILJET_SECRET:-null}
+      - EMAIL_FROM=${EMAIL_FROM:-email@service.fr}
+      - EMAIL_ALIAS=${EMAIL_ALIAS:-idelibre}
+      - MAILER_TYPE=${MAILER_TYPE:-simple}
+      - DOCUMENT_MAX_SIZE=${DOCUMENT_MAX_SIZE:-150Mi}
+      - DOCUMENT_MAX_COUNT=${DOCUMENT_MAX_COUNT:-300}
+      - PHP_OPCACHE_VALIDATE_TIMESTAMPS=${PHP_OPCACHE_VALIDATE_TIMESTAMPS:-0}
+      - PHP_OPCACHE_MAX_ACCELERATED_FILES=${PHP_OPCACHE_MAX_ACCELERATED_FILES:-20000}
+      - PHP_OPCACHE_MEMORY_CONSUMPTION=${PHP_OPCACHE_MEMORY_CONSUMPTION:-192}
+      - PHP_OPCACHE_MAX_WASTED_PERCENTAGE=${PHP_OPCACHE_MAX_WASTED_PERCENTAGE:-10}
+      - SENTRY_DSN=${SENTRY_DSN:-null}
+      - SALT=${SALT:-saltsaltsalt}
+      - PASSPHRASE=${PASSPHRASE:-passphrase}
     volumes:
       - data-public:/app/public
-      - data-file:/tmp
+      - /data/files:/data
       - ./docker-resources/zz-idelibre.conf:/usr/local/etc/php-fpm.d/zz-idelibre.conf
 
     command: [ "/app/docker-resources/initApp.sh" ]
-
 
   node-idelibre:
     container_name: node-idelibre
     image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/idelibre/idelibre-nodejs:main
     volumes:
-      - data-file:/tmp
-    #env_file:
-    #  - .env.docker.local
+      - /data/files:/data:ro
     environment:
       - TYPEORM_CONNECTION=postgres
-      - TYPEORM_HOST=${POSTGRES_HOST}
-      - TYPEORM_USERNAME=${POSTGRES_USER}
-      - TYPEORM_PASSWORD=${POSTGRES_PASSWORD}
-      - TYPEORM_DATABASE=${POSTGRES_DB}
-      - TYPEORM_PORT=${POSTGRES_PORT}
+      - TYPEORM_HOST=${POSTGRES_HOST:-172.17.0.1}
+      - TYPEORM_USERNAME=${POSTGRES_USER:-idelibre}
+      - TYPEORM_PASSWORD=${POSTGRES_PASSWORD:-idelibre}
+      - TYPEORM_DATABASE=${POSTGRES_DB:-idelibre}
+      - TYPEORM_PORT=${POSTGRES_PORT:-5432}
       - TYPEORM_SYNCHRONIZE=false
       - TYPEORM_LOGGING=false
       - TYPEORM_ENTITIES=src/entity/**/*.ts
-      - SALT=${SALT}
-      - LOG_LEVEL=${LOG_LEVEL}
-      - LOG_PATH=${LOG_PATH}
-      - LISTEN_PORT=${LISTEN_PORT}
-      - PASSPHRASE=${PASSPHRASE}
-      - JWT_SECRET=${JWT_SECRET}
-      - JWT_TIMEOUT=${JWT_TIMEOUT}
-      - DOCUMENT_ZIP_DIRECTORY=${DOCUMENT_ZIP_DIRECTORY}
-      - DOCUMENT_FULL_PDF_DIRECTORY=${DOCUMENT_FULL_PDF_DIRECTORY}
+      - SALT=${SALT:-saltsaltsalt}
+      - LOG_LEVEL=${LOG_LEVEL:-error}
+      - LISTEN_PORT=${LISTEN_PORT:-3000}
+      - PASSPHRASE=${PASSPHRASE:-passphrase}
+      - JWT_SECRET=${JWT_SECRET:-jwtsecret}
+      - JWT_TIMEOUT=${JWT_TIMEOUT:-86400}
 
     command: [ "/app/docker-resources/init.sh" ]
-
 
   nginx-idelibre:
     container_name: nginx-idelibre
