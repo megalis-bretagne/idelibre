@@ -3,7 +3,6 @@ stages:
   - testWithoutCovering
   - test
   - quality
-  - testOld
   - release
 
 variables:
@@ -23,42 +22,6 @@ build:
     - docker login -u "gitlab-ci-token" -p "$CI_JOB_TOKEN" $CI_REGISTRY
     - docker push ${CONTAINER_IMAGE}
     - docker push $CI_REGISTRY_IMAGE:latest
-
-phpTestOld:
-  stage: testOld
-  only:
-    - tags
-  image: $CONTAINER_IMAGE
-  services:
-    - name: postgres:10.12
-      alias: db-idelibre
-  variables:
-    XDEBUG_MODE: coverage
-    POSTGRES_DB: idelibre_test
-    POSTGRES_USER: idelibre
-    POSTGRES_PASSWORD: idelibre
-    POSTGRES_PORT: 5432
-    APP_ENV: test
-    DATABASE_URL: postgresql://idelibre:idelibre@db-idelibre:5432/idelibre_test
-    GIT_STRATEGY: none
-    COMPOSER_PROCESS_TIMEOUT: 1200
-
-  before_script:
-    - cd /app
-    - pecl install xdebug && docker-php-ext-enable xdebug
-    - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-    - php composer-setup.php --install-dir=/usr/local/bin
-    - mv /usr/local/bin/composer.phar /usr/local/bin/composer
-
-  script:
-    - composer install
-    - docker-resources/initAppTest.sh
-    - SYMFONY_DEPRECATIONS_HELPER=disabled bin/phpunit --coverage-text --colors=never --coverage-clover coverage/coverage.xml --log-junit coverage/logfile.xml
-    - cp -rf coverage $CI_PROJECT_DIR
-  artifacts:
-    paths:
-      - coverage
-    expire_in: 1h
 
 
 phpTest:
