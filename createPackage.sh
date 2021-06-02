@@ -7,4 +7,4 @@ rm -rf $dest
 
 mkdir $dest
 
-cp -rfa docker-compose.yml .env docker-resources initializeCertificate.sh  $dest
+cp -rfa docker-compose.yml .env docker-resources initializeCertificates.sh  $dest
