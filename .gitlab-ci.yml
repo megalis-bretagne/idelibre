@@ -126,3 +126,28 @@ quality:
     - cp -rf $CI_PROJECT_DIR/* /app
     - cd /app
     - /sonar-scanner -Dsonar.login=$SONAR_LOGIN -Dsonar.host.url=$SONAR_HOST_URL
+
+release:
+  stage: release
+  only:
+    - tags
+  image: $CONTAINER_IMAGE
+
+  variables:
+    TARBALL_NAME: idelibre-${CI_COMMIT_REF_NAME}.tar.gz
+
+  before_script:
+    - apt-get -qq update || echo 1
+    - apt-get -yqq install openssh-client lftp
+    - mkdir -p ~/.ssh
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+  script:
+    - ./createPackage.sh
+    - cd /tmp/ && tar cvzf /tmp/${TARBALL_NAME} idelibre
+    - cp /tmp/${TARBALL_NAME} ${CI_PROJECT_DIR}
+    - lftp -p 2222 -u "idelibre","${RESSOURCE_LIBRICIEL_FTP_PASSWD}"  "sftp://ressources.libriciel.fr/idelibre" -e "put /tmp/${TARBALL_NAME}; bye"
+
+  artifacts:
+    paths:
+      - ${TARBALL_NAME}
+
