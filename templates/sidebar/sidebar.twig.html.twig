@@ -143,12 +143,13 @@
                                         Groupes
                                     </a>
                                 </li>
-                                <li class="{{ 'structure-nav' in activeNavs ? 'active' : '' }}">
-                                    <a href="{{ path('structure_index') }}">
-                                        Structures
-                                    </a>
-                                </li>
                             {% endif %}
+                            <li class="{{ 'structure-nav' in activeNavs ? 'active' : '' }}">
+                                <a href="{{ path('structure_index') }}">
+                                    Structures
+                                </a>
+                            </li>
+
                             <li class="{{ 'admin-nav' in activeNavs ? 'active' : '' }}">
                                 <a href="{{ path('admin_index') }}">
                                     Administrateurs
@@ -159,11 +160,13 @@
                                     RGPD
                                 </a>
                             </li>
+                            {% if is_granted('ROLE_SUPERADMIN') %}
                             <li class="{{ 'check-nav' in activeNavs ? 'active' : '' }}">
                                 <a href="{{ path('check_index') }}">
                                     Vérifications
                                 </a>
                             </li>
+                            {% endif %}
                         </ul>
                     </li>
                 {% endif %}
