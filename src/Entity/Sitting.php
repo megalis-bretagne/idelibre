@@ -314,4 +314,9 @@ class Sitting
 
         return $this;
     }
+
+    public function getNameWithDate():string
+    {
+        return $this->name . " " . $this->getDate()->format('d/m/y');
+    }
 }

@@ -88,7 +88,7 @@ class SittingController extends AbstractController
     /**
      * @Route("/sitting/edit/{id}/actors", name="edit_sitting_actor", methods={"GET"})
      * @IsGranted("ROLE_MANAGE_SITTINGS")
-     * @Breadcrumb("Modifier")
+     * @Breadcrumb("Modifier {sitting.nameWithDate}")
      */
     public function editUsers(Sitting $sitting, Request $request, ActorManager $actorManager, ConvocationManager $convocationManager): Response
     {
@@ -104,7 +104,7 @@ class SittingController extends AbstractController
     /**
      * @Route("/sitting/edit/{id}/projects", name="edit_sitting_project")
      * IsGranted("ROLE_MANAGE_SITTINGS")
-     * @Breadcrumb("Modifier")
+     * @Breadcrumb("Modifier {sitting.nameWithDate}")
      */
     public function editProjects(Sitting $sitting): Response
     {
@@ -120,7 +120,7 @@ class SittingController extends AbstractController
     /**
      * @Route("/sitting/edit/{id}", name="edit_sitting_information")
      * @IsGranted("MANAGE_SITTINGS", subject="sitting")
-     * @Breadcrumb("Modifier")
+     * @Breadcrumb("Modifier {sitting.nameWithDate}")
      */
     public function editInformation(Sitting $sitting, Request $request, SittingManager $sittingManager): Response
     {
@@ -166,7 +166,7 @@ class SittingController extends AbstractController
     /**
      * @Route("/sitting/show/{id}/information", name="sitting_show_information", methods={"GET"})
      * @IsGranted("MANAGE_SITTINGS", subject="sitting")
-     * @Breadcrumb("Détail {sitting.name}")
+     * @Breadcrumb("Détail {sitting.nameWithDate}")
      */
     public function showInformation(Sitting $sitting, SittingManager $sittingManager): Response
     {
@@ -180,7 +180,7 @@ class SittingController extends AbstractController
     /**
      * @Route("/sitting/show/{id}/actors", name="sitting_show_actors", methods={"GET"})
      * @IsGranted("MANAGE_SITTINGS", subject="sitting")
-     * @Breadcrumb("Détail {sitting.name}")
+     * @Breadcrumb("Détail {sitting.nameWithDate}")
      */
     public function showActors(Sitting $sitting, ConvocationRepository $convocationRepository): Response
     {
@@ -192,7 +192,7 @@ class SittingController extends AbstractController
     /**
      * @Route("/sitting/show/{id}/projects", name="sitting_show_projects", methods={"GET"})
      * @IsGranted("MANAGE_SITTINGS", subject="sitting")
-     * @Breadcrumb("Détail {sitting.name}")
+     * @Breadcrumb("Détail {sitting.nameWithDate}")
      */
     public function showProjects(Sitting $sitting, ConvocationRepository $convocationRepository, ProjectRepository $projectRepository): Response
     {
