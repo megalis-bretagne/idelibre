@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\EmailTemplate;
 use App\Form\EmailTemplateType;
 use App\Repository\EmailTemplateRepository;
+use App\Service\Email\EmailData;
 use App\Service\EmailTemplate\EmailGenerator;
 use App\Service\EmailTemplate\EmailTemplateManager;
 use App\Sidebar\Annotation\Sidebar;
@@ -133,6 +134,12 @@ class EmailTemplateController extends AbstractController
             '#civilite#' => 'Monsieur',
         ]);
 
-        return new Response($emailData->getContent());
+        $content  = $emailData->getContent();
+
+        if($emailData->getFormat() === EmailData::FORMAT_TEXT) {
+            $content = nl2br($content);
+        }
+
+        return new Response($content);
     }
 }
