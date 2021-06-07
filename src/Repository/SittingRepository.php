@@ -79,6 +79,7 @@ class SittingRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('s')
             ->andWhere('s.structure =:structure')
+            ->andWhere('s.isArchived = false')
             ->setParameter('structure', $structure)
             ->join('s.convocations', 'c')
             ->join('c.user', 'u')
@@ -88,6 +89,8 @@ class SittingRepository extends ServiceEntityRepository
             ->addSelect('u')
             ->addSelect('sent_timestamp')
             ->addSelect('received_timestamp')
+            ->orderBy('s.date', 'DESC')
+            ->orderBy('u.lastName', 'ASC')
             ;
     }
 }
