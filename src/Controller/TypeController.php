@@ -31,7 +31,7 @@ class TypeController extends AbstractController
         $formSearch = $this->createForm(SearchType::class);
 
         $types = $paginator->paginate(
-            $typeRepository->findByStructure($this->getUser()->getStructure()),
+            $typeRepository->findByStructure($this->getUser()->getStructure(), $request->query->get('search')),
             $request->query->getInt('page', 1),
             20,
             [

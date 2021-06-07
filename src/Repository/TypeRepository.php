@@ -23,11 +23,18 @@ class TypeRepository extends ServiceEntityRepository
         parent::__construct($registry, Type::class);
     }
 
-    public function findByStructure(Structure $structure): QueryBuilder
+    public function findByStructure(Structure $structure, ?string $searchTerm = null): QueryBuilder
     {
-        return $this->createQueryBuilder('t')
+        $qb = $this->createQueryBuilder('t')
             ->andWhere('t.structure =:structure')
             ->setParameter('structure', $structure);
+
+        if (!empty($searchTerm)) {
+            $qb->andWhere('LOWER(t.name) like :search')
+                ->setParameter('search', mb_strtolower("%${searchTerm}%"));
+        }
+
+        return $qb;
     }
 
     public function findNotAssociatedWithOtherTemplateByStructure(Structure $structure, ?EmailTemplate $emailTemplate): QueryBuilder
