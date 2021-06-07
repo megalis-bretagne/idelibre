@@ -134,9 +134,9 @@ class EmailTemplateController extends AbstractController
             '#civilite#' => 'Monsieur',
         ]);
 
-        $content  = $emailData->getContent();
+        $content = $emailData->getContent();
 
-        if($emailData->getFormat() === EmailData::FORMAT_TEXT) {
+        if (EmailData::FORMAT_TEXT === $emailData->getFormat()) {
             $content = nl2br($content);
         }
 

@@ -28,14 +28,6 @@
             {{ macroTab.showTabs('information', sitting) }}
 
 
-
-
-            {# <div class="btn-group  float-right"> #}
-            {# <a href="{{ path('sitting_show_information', {'id': sitting.id}) }}" class="btn btn-primary disabled" title="Visualiser"><span class="fa fa-eye"></span></a> #}
-            {# <a href="{{ path('edit_sitting_information', {'id': sitting.id}) }}" class="btn btn-primary" title="Modifier"><span class="fas fa-pen"></span></a> #}
-            {# </div> #}
-
-
             <h2 class="mb-5">Informations générales</h2>
             <div class="row">
                 <div class="col-4 text-right">
@@ -79,6 +71,21 @@
                 </div>
             </div>
 
+            {% if sitting.invitationFile  %}
+                <div class="row mt-2 align-bottom">
+                    <div class="col-4 text-right align-bottom mt-1">
+                        <b>Invitation :</b>
+                    </div>
+                    <div class="col-8">
+                        {{ sitting.invitationFile.name }}
+                        <a class="btn btn-outline-secondary borderless"
+                           href="{{ path('file_download', {'id': sitting.invitationFile.id}) }}"
+                           title="Télécharger l'invitation'">
+                            <span class="fas fa-download"></span>
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
 
             <div class="row mt-2">
                 <div class="col-4 text-right mt-1">

@@ -33,10 +33,10 @@ class DownloadFilesVoter extends Voter
             return false;
         }
 
-        return $this->isSameStructure($loggedInUser, $subject);
+                return $this->isSameStructure($loggedInUser, $subject);
     }
 
-    private function isSameStructure(User $loggedInUser, File $subject)
+    private function isSameStructure(User $loggedInUser, File $subject): bool
     {
         return $loggedInUser->getStructure()->getId() === $subject->getStructure()->getId();
     }

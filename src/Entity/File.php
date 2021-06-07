@@ -129,7 +129,11 @@ class File
             return $this->annex->getProject()->getSitting()->getStructure();
         }
 
-        return $this->convocationSitting->getStructure();
+        if($this->convocationSitting) {
+            return $this->convocationSitting->getStructure();
+        }
+
+        return $this->invitationSitting->getStructure();
     }
 
     public function getInvitationSitting(): ?Sitting
