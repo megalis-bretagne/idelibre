@@ -129,7 +129,7 @@ class File
             return $this->annex->getProject()->getSitting()->getStructure();
         }
 
-        if($this->convocationSitting) {
+        if ($this->convocationSitting) {
             return $this->convocationSitting->getStructure();
         }
 
