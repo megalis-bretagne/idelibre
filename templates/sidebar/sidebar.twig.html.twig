@@ -155,17 +155,18 @@
                                     Administrateurs
                                 </a>
                             </li>
-                            <li class="{{ 'gdpr-nav' in activeNavs ? 'active' : '' }}">
-                                <a href="{{ path('gdpr_edit') }}">
-                                    RGPD
-                                </a>
-                            </li>
+
                             {% if is_granted('ROLE_SUPERADMIN') %}
-                            <li class="{{ 'check-nav' in activeNavs ? 'active' : '' }}">
-                                <a href="{{ path('check_index') }}">
-                                    Vérifications
-                                </a>
-                            </li>
+                                <li class="{{ 'gdpr-nav' in activeNavs ? 'active' : '' }}">
+                                    <a href="{{ path('gdpr_edit') }}">
+                                        RGPD
+                                    </a>
+                                </li>
+                                <li class="{{ 'check-nav' in activeNavs ? 'active' : '' }}">
+                                    <a href="{{ path('check_index') }}">
+                                        Vérifications
+                                    </a>
+                                </li>
                             {% endif %}
                         </ul>
                     </li>
