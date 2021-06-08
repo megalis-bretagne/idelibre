@@ -8,23 +8,13 @@
         <div class="col-6 pull-left">
             {% if is_granted('ROLE_MANAGE_TYPES') %}
                 <a href="{{ path('type_add') }}" class="btn btn-primary"><span
-                           class="fa fa-plus-circle"></span> Ajouter
+                            class="fa fa-plus-circle"></span> Ajouter
                 </a>
             {% endif %}
         </div>
 
         <div class="col-6">
-            {{ form_start(formSearch, {'method': 'GET'}) }}
-
-            <div class="input-group col-8 float-right pr-0">
-                {{ form_widget(formSearch.search, {'value': searchTerm}) }}
-                <div class="input-group-append">
-                    <button class="btn btn-primary" title="Filtrer">
-                        <span class="fas fa-search"></span>
-                    </button>
-                </div>
-            </div>
-            {{ form_end(formSearch) }}
+            {{ macros.searchForm(formSearch, searchTerm, 'type_index') }}
         </div>
     </div>
 {% endblock %}
