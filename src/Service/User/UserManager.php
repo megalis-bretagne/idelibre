@@ -105,7 +105,7 @@ class UserManager
 
     private function removeAuthorizedType(User $user)
     {
-        $authorizedTypes = $this->typeRepository->findAuthorizedTypeByUser($user);
+        $authorizedTypes = $this->typeRepository->findAuthorizedTypeByUser($user)->getQuery()->getResult();
 
         foreach ($authorizedTypes as $authorizedType) {
             $authorizedType->removeAuthorizedSecretary($user);

@@ -5,7 +5,9 @@ namespace App\Form;
 use App\Entity\Sitting;
 use App\Entity\Structure;
 use App\Entity\Type;
+use App\Entity\User;
 use App\Repository\TypeRepository;
+use App\Service\role\RoleManager;
 use App\Service\Seance\SittingManager;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -19,11 +21,13 @@ class SittingType extends AbstractType
 {
     private TypeRepository $typeRepository;
     private SittingManager $sittingManager;
+    private RoleManager $roleManager;
 
-    public function __construct(TypeRepository $typeRepository, SittingManager $sittingManager)
+    public function __construct(TypeRepository $typeRepository, SittingManager $sittingManager, RoleManager $roleManager)
     {
         $this->typeRepository = $typeRepository;
         $this->sittingManager = $sittingManager;
+        $this->roleManager = $roleManager;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -36,7 +40,9 @@ class SittingType extends AbstractType
             ->add('type', EntityType::class, [
                 'label' => 'Type de séance',
                 'class' => Type::class,
-                'query_builder' => $this->typeRepository->findByStructure($options['structure']),
+                'query_builder' => $this->isSecretary($options['user'])
+                    ?  $this->typeRepository->findAuthorizedTypeByUser($options['user'])
+                    : $this->typeRepository->findByStructure($options['structure']),
                 'choice_label' => 'name',
                 'disabled' => !$isNew,
             ])
@@ -89,8 +95,17 @@ class SittingType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Sitting::class,
             'structure' => null,
+            'user' => null
         ]);
     }
+
+    private function isSecretary(?User $user):bool {
+        if(!$user) {
+            return false;
+        }
+        return $user->getRole()->getId() === $this->roleManager->getSecretaryRole()->getId();
+    }
+
 
     private function getConvocationFileName(?Sitting $sitting): ?string
     {

@@ -27,7 +27,8 @@ class TypeRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('t')
             ->andWhere('t.structure =:structure')
-            ->setParameter('structure', $structure);
+            ->setParameter('structure', $structure)
+            ->addOrderBy('t.name');
 
         if (!empty($searchTerm)) {
             $qb->andWhere('LOWER(t.name) like :search')
@@ -55,13 +56,11 @@ class TypeRepository extends ServiceEntityRepository
     /**
      * @return Type[]
      */
-    public function findAuthorizedTypeByUser(User $user): array
+    public function findAuthorizedTypeByUser(User $user): QueryBuilder
     {
         return $this->createQueryBuilder('t')
             ->Join('t.authorizedSecretaries', 's')
             ->andWhere('s.id = :userId')
-            ->setParameter('userId', $user->getId())
-            ->getQuery()
-            ->getResult();
+            ->setParameter('userId', $user->getId());
     }
 }

@@ -67,7 +67,7 @@ class SittingController extends AbstractController
      */
     public function createSitting(Request $request, SittingManager $sittingManager): Response
     {
-        $form = $this->createForm(SittingType::class, null, ['structure' => $this->getUser()->getStructure()]);
+        $form = $this->createForm(SittingType::class, null, ['structure' => $this->getUser()->getStructure(), 'user' => $this->getUser()]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $sittingId = $sittingManager->save(
