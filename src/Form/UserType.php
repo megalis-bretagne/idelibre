@@ -15,6 +15,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
@@ -35,7 +36,8 @@ class UserType extends AbstractType
         PartyRepository $partyRepository,
         RoleManager $roleManager,
         TypeRepository $typeRepository
-    ) {
+    )
+    {
         $this->roleRepository = $roleRepository;
         $this->partyRepository = $partyRepository;
         $this->roleManager = $roleManager;
@@ -45,6 +47,14 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('gender', ChoiceType::class, [
+                'label' => 'Civilité',
+                'choices' => [
+                    'Madame' => 1,
+                    'Monsieur' => 2
+                ],
+                'required' => false
+            ])
             ->add('firstName', TextType::class, [
                 'label' => 'Prénom',
             ])
@@ -55,8 +65,7 @@ class UserType extends AbstractType
                 'label' => 'Nom d\'utilisateur',
             ])
             ->add('email', EmailType::class, [
-                'label' => 'Email', ])
-
+                'label' => 'Email',])
             ->add('phone', TextType::class, [
                 'label' => 'Téléphone mobile (06XXXXXXXX ou 07XXXXXXXX) ',
                 'required' => false,
@@ -118,8 +127,8 @@ class UserType extends AbstractType
         ]);
 
         $builder->get('username')->addModelTransformer(new CallbackTransformer(
-            fn ($username) => preg_replace('/@.*/', '', $username),
-            fn ($username) => $username . '@' . $this->getStructureSuffix($options['structure'])
+            fn($username) => preg_replace('/@.*/', '', $username),
+            fn($username) => $username . '@' . $this->getStructureSuffix($options['structure'])
         ));
     }
 
