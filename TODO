@@ -161,3 +161,8 @@ Marque blanch : name, editor, css, images, version
 
 TODO functionnalité blacklisted n'est pas convocable
 TODO champlibre ?
+
+
+
+ ->setCategory(EmailTemplate::CATEGORY_RESET_PASSWORD)
+            ->setContent(DefaultTemplate::FORGET_PASSWORD);
