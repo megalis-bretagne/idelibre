@@ -37,7 +37,6 @@ class EmailTemplateType extends AbstractType
                 ->add('name', TextType::class, [
                     'label' => 'Intitulé',
                 ])
-
                 ->add('type', EntityType::class, [
                     'label' => 'Type de séance',
                     'placeholder' => 'Sélectionner un type',
@@ -67,13 +66,12 @@ class EmailTemplateType extends AbstractType
                 'attr' => ['rows' => 15],
             ]);
 
-        if (!$this->isForgetPassword($options['data'] ?? null)) {
-            $builder->add('isAttachment', CheckboxType::class, [
-                'required' => false,
-                'label_attr' => ['class' => 'switch-custom'],
-                'label' => 'Joindre le fichier de convocation',
-            ]);
-        }
+
+        $builder->add('isAttachment', CheckboxType::class, [
+            'required' => false,
+            'label_attr' => ['class' => 'switch-custom'],
+            'label' => 'Joindre le fichier de convocation',
+        ]);
 
         $builder->add('structure', HiddenType::class, [
             'data' => $options['structure'],
@@ -81,8 +79,8 @@ class EmailTemplateType extends AbstractType
         ]);
 
         $builder->get('structure')->addModelTransformer(new CallbackTransformer(
-            fn () => '',
-            fn () => $options['structure']
+            fn() => '',
+            fn() => $options['structure']
         ));
     }
 
@@ -99,8 +97,4 @@ class EmailTemplateType extends AbstractType
         return $emailTemplate && $emailTemplate->getIsDefault();
     }
 
-    private function isForgetPassword(?EmailTemplate $emailTemplate): bool
-    {
-        return $emailTemplate && EmailTemplate::CATEGORY_RESET_PASSWORD === $emailTemplate->getCategory();
-    }
 }

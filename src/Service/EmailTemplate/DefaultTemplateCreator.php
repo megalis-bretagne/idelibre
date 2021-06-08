@@ -17,21 +17,8 @@ class DefaultTemplateCreator
 
     public function initDefaultTemplates(Structure $structure)
     {
-        $this->initResetPassword($structure);
         $this->initDefaultConvocationTemplates($structure);
         $this->initDefaultInvitationTemplates($structure);
-    }
-
-    private function initResetPassword(Structure $structure)
-    {
-        $forgetTemplate = new EmailTemplate();
-        $forgetTemplate->setName('Mot de passe oublié')
-            ->setSubject('Mot de passe oublié')
-            ->setStructure($structure)
-            ->setIsDefault(true)
-            ->setCategory(EmailTemplate::CATEGORY_RESET_PASSWORD)
-            ->setContent(DefaultTemplate::FORGET_PASSWORD);
-        $this->em->persist($forgetTemplate);
     }
 
     private function initDefaultConvocationTemplates(Structure $structure): void
