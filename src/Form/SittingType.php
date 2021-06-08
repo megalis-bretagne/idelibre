@@ -41,7 +41,7 @@ class SittingType extends AbstractType
                 'label' => 'Type de séance',
                 'class' => Type::class,
                 'query_builder' => $this->isSecretary($options['user'])
-                    ?  $this->typeRepository->findAuthorizedTypeByUser($options['user'])
+                    ? $this->typeRepository->findAuthorizedTypeByUser($options['user'])
                     : $this->typeRepository->findByStructure($options['structure']),
                 'choice_label' => 'name',
                 'disabled' => !$isNew,
@@ -95,17 +95,18 @@ class SittingType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Sitting::class,
             'structure' => null,
-            'user' => null
+            'user' => null,
         ]);
     }
 
-    private function isSecretary(?User $user):bool {
-        if(!$user) {
+    private function isSecretary(?User $user): bool
+    {
+        if (!$user) {
             return false;
         }
+
         return $user->getRole()->getId() === $this->roleManager->getSecretaryRole()->getId();
     }
-
 
     private function getConvocationFileName(?Sitting $sitting): ?string
     {
