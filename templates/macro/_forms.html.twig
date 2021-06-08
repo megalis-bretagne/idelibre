@@ -38,15 +38,18 @@
 {% endmacro %}
 
 
-{% macro searchForm(formSearch, searchTerm) %}
+{% macro searchForm(formSearch, searchTerm, resetPath) %}
     {{ form_start(formSearch, {'method': 'GET'}) }}
 
     <div class="input-group col-8 float-right pr-0">
         {{ form_widget(formSearch.search, {'value': searchTerm}) }}
         <div class="input-group-append">
+            <a href="{{ path(resetPath) }}" class="btn btn-warning" title="Effacer" > <span class="fas fa-times"></span></a>
             <button class="btn btn-primary" title="Filtrer">
                 <span class="fas fa-search"></span>
             </button>
+
+
         </div>
     </div>
     {{ form_end(formSearch) }}
