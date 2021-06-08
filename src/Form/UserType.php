@@ -36,8 +36,7 @@ class UserType extends AbstractType
         PartyRepository $partyRepository,
         RoleManager $roleManager,
         TypeRepository $typeRepository
-    )
-    {
+    ) {
         $this->roleRepository = $roleRepository;
         $this->partyRepository = $partyRepository;
         $this->roleManager = $roleManager;
@@ -51,9 +50,9 @@ class UserType extends AbstractType
                 'label' => 'Civilité',
                 'choices' => [
                     'Madame' => 1,
-                    'Monsieur' => 2
+                    'Monsieur' => 2,
                 ],
-                'required' => false
+                'required' => false,
             ])
             ->add('firstName', TextType::class, [
                 'label' => 'Prénom',
@@ -65,7 +64,7 @@ class UserType extends AbstractType
                 'label' => 'Nom d\'utilisateur',
             ])
             ->add('email', EmailType::class, [
-                'label' => 'Email',])
+                'label' => 'Email', ])
             ->add('phone', TextType::class, [
                 'label' => 'Téléphone mobile (06XXXXXXXX ou 07XXXXXXXX) ',
                 'required' => false,
@@ -127,8 +126,8 @@ class UserType extends AbstractType
         ]);
 
         $builder->get('username')->addModelTransformer(new CallbackTransformer(
-            fn($username) => preg_replace('/@.*/', '', $username),
-            fn($username) => $username . '@' . $this->getStructureSuffix($options['structure'])
+            fn ($username) => preg_replace('/@.*/', '', $username),
+            fn ($username) => $username . '@' . $this->getStructureSuffix($options['structure'])
         ));
     }
 
