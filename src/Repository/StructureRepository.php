@@ -28,7 +28,7 @@ class StructureRepository extends ServiceEntityRepository
             ->addSelect('g');
 
         if (!empty($search)) {
-            $qb->andWhere('LOWER(s.name) like :search OR LOWER(g.name) like :search')
+            $qb->andWhere('LOWER(s.name) like :search OR LOWER(g.name) like :search OR LOWER(s.suffix) like :search')
                 ->setParameter('search', mb_strtolower("%${search}%"));
         }
 
