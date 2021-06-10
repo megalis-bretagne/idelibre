@@ -66,7 +66,6 @@ class EmailTemplateType extends AbstractType
                 'attr' => ['rows' => 15],
             ]);
 
-
         $builder->add('isAttachment', CheckboxType::class, [
             'required' => false,
             'label_attr' => ['class' => 'switch-custom'],
@@ -79,8 +78,8 @@ class EmailTemplateType extends AbstractType
         ]);
 
         $builder->get('structure')->addModelTransformer(new CallbackTransformer(
-            fn() => '',
-            fn() => $options['structure']
+            fn () => '',
+            fn () => $options['structure']
         ));
     }
 
@@ -96,5 +95,4 @@ class EmailTemplateType extends AbstractType
     {
         return $emailTemplate && $emailTemplate->getIsDefault();
     }
-
 }
