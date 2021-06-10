@@ -90,7 +90,6 @@ class SittingRepository extends ServiceEntityRepository
             ->addSelect('sent_timestamp')
             ->addSelect('received_timestamp')
             ->orderBy('s.date', 'DESC')
-            ->orderBy('u.lastName', 'ASC')
             ;
     }
 }
