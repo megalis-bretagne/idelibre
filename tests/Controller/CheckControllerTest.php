@@ -17,13 +17,11 @@ class CheckControllerTest extends WebTestCase
     use FindEntityTrait;
     use LoginTrait;
 
-
     private ?KernelBrowser $client;
     /**
      * @var ObjectManager
      */
     private $entityManager;
-
 
     protected function setUp(): void
     {
@@ -35,7 +33,7 @@ class CheckControllerTest extends WebTestCase
             ->getManager();
 
         $this->loadFixtures([
-            UserFixtures::class
+            UserFixtures::class,
         ]);
     }
 
@@ -55,6 +53,4 @@ class CheckControllerTest extends WebTestCase
         $item = $crawler->filter('html:contains("Vérification de la plateforme")');
         $this->assertCount(1, $item);
     }
-
-
 }

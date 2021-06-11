@@ -81,7 +81,7 @@ class UserControllerTest extends WebTestCase
         $actor1 = $this->getOneUserBy(['username' => 'actor1@libriciel']);
         $actor2 = $this->getOneUserBy(['username' => 'actor1@libriciel']);
         $this->client->request(Request::METHOD_POST, '/user/deleteBatch', [
-            'users' => [$actor1->getId(), $actor2->getId() ]
+            'users' => [$actor1->getId(), $actor2->getId()],
         ]);
 
         $this->assertTrue($this->client->getResponse()->isRedirect());
@@ -93,9 +93,6 @@ class UserControllerTest extends WebTestCase
         $this->assertEmpty($this->getOneUserBy(['id' => $actor1->getId()]));
         $this->assertEmpty($this->getOneUserBy(['id' => $actor2->getId()]));
     }
-
-
-
 
     public function testDeleteOtherStructureUser()
     {

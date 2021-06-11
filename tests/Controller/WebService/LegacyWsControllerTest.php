@@ -22,13 +22,11 @@ class LegacyWsControllerTest extends WebTestCase
     use FindEntityTrait;
     use LoginTrait;
 
-
     private ?KernelBrowser $client;
     /**
      * @var ObjectManager
      */
     private $entityManager;
-
 
     protected function setUp(): void
     {
@@ -43,7 +41,7 @@ class LegacyWsControllerTest extends WebTestCase
             StructureFixtures::class,
             UserFixtures::class,
             RoleFixtures::class,
-            ThemeFixtures::class
+            ThemeFixtures::class,
         ]);
     }
 
@@ -96,17 +94,16 @@ class LegacyWsControllerTest extends WebTestCase
                     'ordre' => 1,
                     'libelle' => 'tarif cimetiere2',
                     'theme' => 'T1, STB , sstb',
-                    'annexes' => [['ordre' => 0], ['ordre' => 1]]
+                    'annexes' => [['ordre' => 0], ['ordre' => 1]],
                 ],
                 [
                     'ordre' => 2,
                     'libelle' => 'tarif cimetiere3',
                     'theme' => 'STA, ssta',
-                    'Rapporteur' => ['rapporteurlastname' => 'DURAND', 'rapporteurfirstname' => 'Thomas']
+                    'Rapporteur' => ['rapporteurlastname' => 'DURAND', 'rapporteurfirstname' => 'Thomas'],
                 ],
-            ]
+            ],
         ];
-
 
         $this->client->request(
             Request::METHOD_POST,
@@ -124,7 +121,6 @@ class LegacyWsControllerTest extends WebTestCase
                 'projet_1_0_annexe' => $fileAnnex1,
                 'projet_1_1_annexe' => $fileAnnex2,
                 'projet_2_rapport' => $fileProject3,
-
             ]
         );
 
@@ -132,25 +128,23 @@ class LegacyWsControllerTest extends WebTestCase
 
         $response = json_decode($this->client->getResponse()->getContent());
         $this->assertTrue($response->success);
-        $this->assertSame("Seance.add.ok", $response->code);
-        $this->assertSame("La séance a bien été ajoutée.", $response->message);
+        $this->assertSame('Seance.add.ok', $response->code);
+        $this->assertSame('La séance a bien été ajoutée.', $response->message);
         $this->assertNotEmpty($response->uuid);
 
         $sitting = $this->getOneSittingBy(['id' => $response->uuid]);
         $this->assertCount(3, $sitting->getProjects());
         $this->assertCount(5, $sitting->getConvocations());
-        $this->assertSame('2021-05-12 09:30', $sitting->getDate()->format("Y-m-d H:i"));
+        $this->assertSame('2021-05-12 09:30', $sitting->getDate()->format('Y-m-d H:i'));
         $this->assertCount(2, $sitting->getProjects()[1]->getAnnexes());
 
         $this->assertSame('t.durand@libriciel', $sitting->getProjects()[2]->getReporter()->getUsername());
 
         $user = $this->getOneUserBy(['username' => 't.durand@libriciel']);
         $this->assertNotNull($user);
-
     }
 
-
-    function testAddSittingNoConn()
+    public function testAddSittingNoConn()
     {
         $this->client->request(
             Request::METHOD_POST,
@@ -166,10 +160,9 @@ class LegacyWsControllerTest extends WebTestCase
         $content = json_decode($this->client->getResponse()->getContent());
         $this->assertFalse($content->success);
         $this->assertSame('fields jsonData, username, password and conn must be set', $content->message);
-
     }
 
-    function testAddSittingNotExistConnection()
+    public function testAddSittingNotExistConnection()
     {
         $this->client->request(
             Request::METHOD_POST,
@@ -186,11 +179,9 @@ class LegacyWsControllerTest extends WebTestCase
         $content = json_decode($this->client->getResponse()->getContent());
         $this->assertFalse($content->success);
         $this->assertSame('connection does not exist', $content->message);
-
     }
 
-
-    function testAddSittingNotExistUser()
+    public function testAddSittingNotExistUser()
     {
         $this->client->request(
             Request::METHOD_POST,
@@ -207,10 +198,9 @@ class LegacyWsControllerTest extends WebTestCase
         $content = json_decode($this->client->getResponse()->getContent());
         $this->assertFalse($content->success);
         $this->assertSame('Authentication error', $content->message);
-
     }
 
-    function testAddSittingWrongPassword()
+    public function testAddSittingWrongPassword()
     {
         $this->client->request(
             Request::METHOD_POST,
@@ -227,11 +217,9 @@ class LegacyWsControllerTest extends WebTestCase
         $content = json_decode($this->client->getResponse()->getContent());
         $this->assertFalse($content->success);
         $this->assertSame('Authentication error', $content->message);
-
     }
 
-
-    function testAddSittingWrongFormatJsonData()
+    public function testAddSittingWrongFormatJsonData()
     {
         $this->client->request(
             Request::METHOD_POST,
@@ -248,36 +236,38 @@ class LegacyWsControllerTest extends WebTestCase
         $content = json_decode($this->client->getResponse()->getContent());
         $this->assertFalse($content->success);
         $this->assertSame('date_seance is required', $content->message);
-
     }
 
-
-
-    function testPing() {
+    public function testPing()
+    {
         $this->client->request(Request::METHOD_GET, '/api300/ping');
         $this->assertResponseStatusCodeSame(200);
-        $this->assertSame('ping',$this->client->getResponse()->getContent());
+        $this->assertSame('ping', $this->client->getResponse()->getContent());
     }
 
-    function testPingCapitalUrl() {
+    public function testPingCapitalUrl()
+    {
         $this->client->request(Request::METHOD_GET, '/Api300/ping');
         $this->assertResponseStatusCodeSame(200);
-        $this->assertSame('ping',$this->client->getResponse()->getContent());
+        $this->assertSame('ping', $this->client->getResponse()->getContent());
     }
 
-    function testVersion() {
+    public function testVersion()
+    {
         $this->client->request(Request::METHOD_GET, '/api300/version');
         $this->assertResponseStatusCodeSame(200);
-        $this->assertSame('4.0.0',$this->client->getResponse()->getContent());
+        $this->assertSame('4.0.0', $this->client->getResponse()->getContent());
     }
 
-    function testVersionCapitalUrl() {
+    public function testVersionCapitalUrl()
+    {
         $this->client->request(Request::METHOD_GET, '/Api300/version');
         $this->assertResponseStatusCodeSame(200);
-        $this->assertSame('4.0.0',$this->client->getResponse()->getContent());
+        $this->assertSame('4.0.0', $this->client->getResponse()->getContent());
     }
 
-    function testCheck() {
+    public function testCheck()
+    {
         $this->client->request(
             Request::METHOD_POST,
             '/api300/check',
@@ -289,11 +279,11 @@ class LegacyWsControllerTest extends WebTestCase
         );
 
         $this->assertResponseStatusCodeSame(200);
-        $this->assertSame('success',$this->client->getResponse()->getContent());
+        $this->assertSame('success', $this->client->getResponse()->getContent());
     }
 
-
-    function testCheckWrongConn() {
+    public function testCheckWrongConn()
+    {
         $this->client->request(
             Request::METHOD_POST,
             '/api300/check',
@@ -305,11 +295,11 @@ class LegacyWsControllerTest extends WebTestCase
         );
 
         $this->assertResponseStatusCodeSame(403);
-        $this->assertSame('connection does not exist',$this->client->getResponse()->getContent());
+        $this->assertSame('connection does not exist', $this->client->getResponse()->getContent());
     }
 
-
-    function testCheckWrongPassword() {
+    public function testCheckWrongPassword()
+    {
         $this->client->request(
             Request::METHOD_POST,
             '/api300/check',
@@ -321,7 +311,6 @@ class LegacyWsControllerTest extends WebTestCase
         );
 
         $this->assertResponseStatusCodeSame(403);
-        $this->assertSame('Authentication error',$this->client->getResponse()->getContent());
+        $this->assertSame('Authentication error', $this->client->getResponse()->getContent());
     }
-
 }

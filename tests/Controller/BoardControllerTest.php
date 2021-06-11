@@ -2,9 +2,7 @@
 
 namespace App\Tests\Controller;
 
-use App\Controller\BoardController;
 use App\DataFixtures\ConvocationFixtures;
-use App\DataFixtures\RoleFixtures;
 use App\DataFixtures\SittingFixtures;
 use App\DataFixtures\StructureFixtures;
 use App\DataFixtures\TypeFixtures;
@@ -23,15 +21,11 @@ class BoardControllerTest extends WebTestCase
     use FindEntityTrait;
     use LoginTrait;
 
-
     private ?KernelBrowser $client;
     /**
      * @var ObjectManager
      */
     private $entityManager;
-
-
-
 
     protected function setUp(): void
     {
@@ -47,7 +41,7 @@ class BoardControllerTest extends WebTestCase
             UserFixtures::class,
             TypeFixtures::class,
             SittingFixtures::class,
-            ConvocationFixtures::class
+            ConvocationFixtures::class,
         ]);
     }
 
@@ -58,7 +52,6 @@ class BoardControllerTest extends WebTestCase
         $this->entityManager->close();
     }
 
-
     public function testIndex()
     {
         $this->loginAsAdminLibriciel();
@@ -68,5 +61,4 @@ class BoardControllerTest extends WebTestCase
         $item = $crawler->filter('html:contains("Tableau de bord")');
         $this->assertCount(1, $item);
     }
-
 }
