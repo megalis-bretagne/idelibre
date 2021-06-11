@@ -1,6 +1,6 @@
-Date de mise a disposition : {{ "now" | date("m/d/Y à H:i") }}
+Date de mise a disposition : {{ "now" | date("d/m/Y à H:i") }} UTC
 Nom de la seance : {{ sitting.name }}
-Date de la seance : {{ sitting.date | date("d/m/Y à H:i") }}
+Date de la seance : {{ sitting.date | date("d/m/Y à H:i") }} UTC
 
 Destinataires de cet envoi :
 {% for convocation in convocations %}
@@ -18,7 +18,7 @@ Contenu de l'envoi original
 convocation :
 Fichier : {{ sitting.convocationFile.name}}
 Taille : {{ sitting.convocationFile.size }}
-UUID : {{ sitting.convocationFile.size }}
+UUID : {{ sitting.convocationFile.id }}
 
 Liste des projets
 {% for project in sitting.projects %}
