@@ -7,7 +7,6 @@ use App\DataFixtures\SittingFixtures;
 use App\DataFixtures\UserFixtures;
 use App\Entity\EmailTemplate;
 use App\Service\EmailTemplate\EmailGenerator;
-use App\Service\EmailTemplate\HtmlTag;
 use App\Service\Util\DateUtil;
 use App\Service\Util\GenderConverter;
 use App\Tests\FindEntityTrait;
@@ -51,7 +50,7 @@ class EmailGeneratorTest extends WebTestCase
         $generator = new EmailGenerator(new DateUtil(), new GenderConverter(), $this->emailTemplateManager);
         $emailData = $generator->generateFromTemplate($emailTemplate, ['#variable#' => 'test']);
         $this->assertEquals(
-             'test de génération de message : test',
+            'test de génération de message : test',
             $emailData->getContent()
         );
         $this->assertEquals(

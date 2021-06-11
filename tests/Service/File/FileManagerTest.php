@@ -21,7 +21,6 @@ class FileManagerTest extends WebTestCase
     use FindEntityTrait;
     use LoginTrait;
 
-
     private ?KernelBrowser $client;
     /**
      * @var ObjectManager
@@ -31,7 +30,6 @@ class FileManagerTest extends WebTestCase
      * @var FileManager|object|null
      */
     private FileManager $fileManager;
-
 
     protected function setUp(): void
     {
@@ -50,7 +48,7 @@ class FileManagerTest extends WebTestCase
             ProjectFixtures::class,
             ConvocationFixtures::class,
             AnnexFixtures::class,
-            SittingFixtures::class
+            SittingFixtures::class,
         ]);
     }
 
@@ -61,12 +59,10 @@ class FileManagerTest extends WebTestCase
         $this->entityManager->close();
     }
 
-
     public function testListFilesFromSitting()
     {
         $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
         $files = $this->fileManager->listFilesFromSitting($sitting);
         $this->assertCount(5, $files);
     }
-
 }

@@ -129,7 +129,6 @@ class SecurityControllerTest extends WebTestCase
         $this->assertCount(1, $flash);
     }
 
-
     public function testLogin()
     {
         $crawler = $this->client->request(Request::METHOD_GET, '/login');
@@ -140,8 +139,8 @@ class SecurityControllerTest extends WebTestCase
 
         $form = $crawler->selectButton('Se connecter')->form();
 
-        $form['username'] = "superadmin";
-        $form['password'] = "password";
+        $form['username'] = 'superadmin';
+        $form['password'] = 'password';
 
         $this->client->submit($form);
 
@@ -153,9 +152,7 @@ class SecurityControllerTest extends WebTestCase
         $successMsg = $crawler->filter('html:contains("Structures")');
 
         $this->assertCount(1, $successMsg);
-
     }
-
 
     public function testLoginLegacy()
     {
@@ -167,8 +164,8 @@ class SecurityControllerTest extends WebTestCase
 
         $form = $crawler->selectButton('Se connecter')->form();
 
-        $form['username'] = "userLegacy@montpellier";
-        $form['password'] = "passwordLegacy";
+        $form['username'] = 'userLegacy@montpellier';
+        $form['password'] = 'passwordLegacy';
 
         $this->client->submit($form);
 
@@ -183,12 +180,7 @@ class SecurityControllerTest extends WebTestCase
 
         $updatedPasswordUser = $this->getOneUserBy(['username' => 'userLegacy@montpellier']);
         $this->assertSame('$', $updatedPasswordUser->getPassword()[0]);
-
     }
-
-
-
-
 
     public function testLoginFalse()
     {
@@ -200,8 +192,8 @@ class SecurityControllerTest extends WebTestCase
 
         $form = $crawler->selectButton('Se connecter')->form();
 
-        $form['username'] = "superadmin";
-        $form['password'] = "false";
+        $form['username'] = 'superadmin';
+        $form['password'] = 'false';
 
         $this->client->submit($form);
 
@@ -212,7 +204,6 @@ class SecurityControllerTest extends WebTestCase
         $successMsg = $crawler->filter('html:contains("erreur d\'identification")');
 
         $this->assertCount(1, $successMsg);
-
     }
 
     public function testLoginInactive()
@@ -225,8 +216,8 @@ class SecurityControllerTest extends WebTestCase
 
         $form = $crawler->selectButton('Se connecter')->form();
 
-        $form['username'] = "superadminInactive";
-        $form['password'] = "password";
+        $form['username'] = 'superadminInactive';
+        $form['password'] = 'password';
 
         $this->client->submit($form);
 
@@ -237,8 +228,5 @@ class SecurityControllerTest extends WebTestCase
         $successMsg = $crawler->filter('html:contains("erreur d\'identification")');
 
         $this->assertCount(1, $successMsg);
-
     }
-
-
 }

@@ -87,18 +87,20 @@ class ConvocationControllerTest extends WebTestCase
 
     public function testSetAttendanceNoLogin()
     {
-        $this->client->request(Request::METHOD_POST, '/api/convocations/attendance',
+        $this->client->request(
+            Request::METHOD_POST,
+            '/api/convocations/attendance',
             [
                 'headers' => [
                     'Content-Type' => 'application/json',
-                ]
-            ]);
+                ],
+            ]
+        );
         $this->assertResponseStatusCodeSame(302);
     }
 
     public function testSetAttendance()
     {
-
         $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
         $actor = $this->getOneUserBy(['username' => 'actor1@libriciel']);
         $convocation = $this->getOneConvocationBy(['sitting' => $sitting, 'user' => $actor]);
@@ -107,7 +109,8 @@ class ConvocationControllerTest extends WebTestCase
 
         $this->loginAsAdminLibriciel();
 
-        $this->client->request(Request::METHOD_POST,
+        $this->client->request(
+            Request::METHOD_POST,
             '/api/convocations/attendance',
             [],
             [],
@@ -120,16 +123,16 @@ class ConvocationControllerTest extends WebTestCase
         $this->assertEquals('John Doe', $convocation->getDeputy());
     }
 
-
     public function testSetAttendanceConvocationNotExists()
     {
-        $randomUUID ='ce854a57-0e0b-459e-b93e-53239680b30e';
+        $randomUUID = 'ce854a57-0e0b-459e-b93e-53239680b30e';
 
         $data = [['convocationId' => $randomUUID, 'attendance' => 'absent', 'deputy' => 'John Doe']];
 
         $this->loginAsAdminLibriciel();
 
-        $this->client->request(Request::METHOD_POST,
+        $this->client->request(
+            Request::METHOD_POST,
             '/api/convocations/attendance',
             [],
             [],
@@ -137,7 +140,5 @@ class ConvocationControllerTest extends WebTestCase
             json_encode($data)
         );
         $this->assertResponseStatusCodeSame(403);
-
     }
-
 }

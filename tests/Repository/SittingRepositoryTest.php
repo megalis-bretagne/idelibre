@@ -44,7 +44,7 @@ class SittingRepositoryTest extends WebTestCase
             TypeFixtures::class,
             SittingFixtures::class,
             RoleFixtures::class,
-            ConvocationFixtures::class
+            ConvocationFixtures::class,
         ]);
     }
 
@@ -73,7 +73,6 @@ class SittingRepositoryTest extends WebTestCase
 
         $this->assertCount(2, $this->sittingRepository->findByStructure($structureLs)->getQuery()->getResult());
     }
-
 
     public function testFindActiveFromStructure()
     {
