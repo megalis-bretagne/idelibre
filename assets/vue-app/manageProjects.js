@@ -101,6 +101,10 @@ let app = new Vue({
             });
         },
 
+        move(fromIndex, toIndex) {
+          arrayMove(this.projects, fromIndex, toIndex);
+        },
+
 
         cancel() {
             axios.get(`/api/projects/${getSittingId()}`).then((response) => {
@@ -159,6 +163,13 @@ function addAnnexeFiles(project, index, formData) {
 
 function getPrettyNameFromFileName(fileName) {
     return fileName.replace(/\.[^/.]+$/, "").replace(/_/g, " ");
+}
+
+
+function arrayMove(arr, fromIndex, toIndex) {
+    let element = arr[fromIndex];
+    arr.splice(fromIndex, 1);
+    arr.splice(toIndex, 0, element);
 }
 
 function setThemeLevelName(themes) {

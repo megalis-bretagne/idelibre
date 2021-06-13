@@ -10,7 +10,7 @@
 
 {% block body %}
 
-    <div class="col-12">
+     <div class="col-12">
         {{ apy_breadcrumb_trail_render(breadcrumb) }}
     </div>
 
@@ -51,8 +51,14 @@
             <div v-for="(project, index) in projects">
                 <div class="il-project">
 
-                    <div class="project-left cursor-grab">
-                        <span class="badge badge-primary rank">${index + 1}</span>
+                    <div class="project-left cursor-grab ">
+                        <div class="dropdown">
+                            <span class="badge badge-primary rank">${index + 1}</span>
+                            <div class="dropdown-content">
+                                <div v-for="rank in projects.length" class="newRank" v-on:click="move(index, rank -1)"> ${rank}</div>
+                            </div>
+
+                        </div>
                     </div>
 
                     <div class="project-right">
@@ -120,7 +126,7 @@
                             </div>
                         </div>
 
-                        <draggable v-model="project.annexes"  v-on:change="projectChange()" class="annex-list">
+                        <draggable v-model="project.annexes" v-on:change="projectChange()" class="annex-list">
                             <div class="project-line annex cursor-grab" v-for="(annex, index) in project.annexes">
                                 <div class="project-item">
                                     <span class="">${index + 1} - </span> ${annex.fileName}
@@ -156,7 +162,6 @@
         </div>
 
 
-
         <div v-if="showModal">
             <transition name="modal">
                 <div class="modal-mask">
@@ -165,7 +170,7 @@
                             <div class="modal-content">
                                 <div class="modal-body text-center">
                                     <div class=" display-2">
-                                    <span class=" fas fa-spinner fa-spin"> </span>
+                                        <span class=" fas fa-spinner fa-spin"> </span>
                                     </div>
                                     <b class="display-4"> ${uploadPercent} %</b>
                                 </div>
