@@ -14,6 +14,8 @@ $(document).ready(function () {
         if (!($url.val() && $apiKey.val())) {
             return;
         }
+        $url.val($url.val().replace(/\/+$/,""));
+
         $.ajax({
             url: $status.data('url-check'),
             data: {
