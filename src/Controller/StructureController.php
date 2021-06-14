@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Breadcrumb("Structure", routeName="structure_index")
+ * @Breadcrumb("Structures", routeName="structure_index")
  * @Sidebar(active={"platform-nav","structure-nav"})
  */
 class StructureController extends AbstractController
