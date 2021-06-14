@@ -13,7 +13,7 @@ services:
       - /tmp/data/token:/data/token
       - /tmp/data/zip:/data/zip
       - /tmp/data/pdf:/data/pdf
-      - /tmp/data/workspace:/data/workspace
+      - /home/rdubourget/dataFiles/workspace:/data/workspace
       - ./docker-resources/zz-idelibre.conf:/usr/local/etc/php-fpm.d/zz-idelibre.conf
       - ./docker-resources/initApp.sh:/app/docker-resources/initApp.sh
       - ./src:/app/src
@@ -33,7 +33,7 @@ services:
     image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/idelibre/idelibre-nodejs:main
     volumes:
       #- ../idelibre4-nodejs:/app:ro
-      - /tmp/data:/data:ro
+      - /home/rdubourget/dataFiles:/data:ro
       #- /tmp/docker:/tmp
     env_file:
       #- docker-resources/.env.test
