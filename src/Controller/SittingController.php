@@ -26,7 +26,7 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Breadcrumb("Seance", routeName="sitting_index")
+ * @Breadcrumb("Seances", routeName="sitting_index")
  * @Sidebar(active={"sitting-nav"})
  */
 class SittingController extends AbstractController
