@@ -20,10 +20,10 @@ class SuperUserType extends AbstractType
     {
         $builder
             ->add('firstName', TextType::class, [
-                'label' => 'Prénom',
+                'label' => 'Prénom de l\'administrateur',
             ])
             ->add('lastName', TextType::class, [
-                'label' => 'Nom', ])
+                'label' => 'Nom de l\'administrateur', ])
             ->add('username', TextType::class, [
                 'label' => 'Nom d\'utilisateur (sans @suffixe)',
                 'constraints' => [
