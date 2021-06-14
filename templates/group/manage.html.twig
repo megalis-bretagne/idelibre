@@ -11,6 +11,12 @@
     {{ macro.save('group_index') }}
 {% endblock %}
 
+{% block bottomPage %}
+<div class="alert alert-warning">
+    Si la structure est déja associée à un autre groupe elle en sera dissociée.
+</div>
+{% endblock %}
+
 {% block javascripts %}
         {{ encore_entry_script_tags('enable-select2') }}
 {% endblock %}
