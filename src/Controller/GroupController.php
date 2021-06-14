@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Breadcrumb("Groupe", routeName="group_index")
+ * @Breadcrumb("Groupes", routeName="group_index")
  * @Sidebar(active={"platform-nav","group-nav"})
  */
 class GroupController extends AbstractController
