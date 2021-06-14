@@ -25,10 +25,10 @@ class PdfSittingGenerator
 
     public function generateFullSittingPdf(Sitting $sitting): void
     {
-        $cmd = "nohup pdftk ";
+        $cmd = 'nohup pdftk ';
         $cmd = $this->addConvocation($cmd, $sitting);
         $cmd = $this->addProjectsAndAnnexes($cmd, $sitting->getProjects());
-        $cmd .= " cat output " . $this->getPdfPath($sitting) . " &";
+        $cmd .= ' cat output ' . $this->getPdfPath($sitting) . ' &';
         try {
             shell_exec($cmd);
         } catch (Exception $exception) {
@@ -39,7 +39,6 @@ class PdfSittingGenerator
     private function addConvocation(string $cmd, Sitting $sitting): string
     {
         return $cmd . $sitting->getConvocationFile()->getPath() . ' ';
-
     }
 
     /**
@@ -47,11 +46,11 @@ class PdfSittingGenerator
      */
     private function addProjectsAndAnnexes(string $cmd, iterable $projects): string
     {
-
         foreach ($projects as $project) {
-            $cmd .= $project->getFile()->getPath() . " ";
+            $cmd .= $project->getFile()->getPath() . ' ';
             $cmd = $this->addAnnexes($cmd, $project->getAnnexes());
         }
+
         return $cmd;
     }
 
@@ -62,9 +61,10 @@ class PdfSittingGenerator
     {
         foreach ($annexes as $annex) {
             if ($this->isPdfFile($annex->getFile()->getName())) {
-                $cmd .= $annex->getFile()->getPath() . " ";
+                $cmd .= $annex->getFile()->getPath() . ' ';
             }
         }
+
         return $cmd;
     }
 
