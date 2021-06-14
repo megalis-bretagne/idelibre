@@ -172,7 +172,8 @@
                                     <div class=" display-2">
                                         <span class=" fas fa-spinner fa-spin"> </span>
                                     </div>
-                                    <b class="display-4"> ${uploadPercent} %</b>
+                                    <b class="display-4" v-if="uploadPercent < 100"> ${uploadPercent} %</b>
+                                    <b class="display-4" v-else> Préparation de la séance en cours</b>
                                 </div>
                             </div>
                         </div>
