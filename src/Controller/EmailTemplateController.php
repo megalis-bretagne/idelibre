@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Breadcrumb("Modèle d'email", routeName="email_template_index")
+ * @Breadcrumb("Modèles d'email", routeName="email_template_index")
  * @Sidebar(active={"email-template-nav"})
  */
 class EmailTemplateController extends AbstractController
