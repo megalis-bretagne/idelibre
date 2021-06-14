@@ -16,8 +16,6 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\NotNull;
 
 class SittingType extends AbstractType
 {
@@ -54,7 +52,6 @@ class SittingType extends AbstractType
                 'widget' => 'single_text',
                 'view_timezone' => $this->getTimeZone($options['structure']),
                 'disabled' => $isAlreadySentConvocation || $isAlreadySentInvitation,
-
             ])
             ->add('place', TextType::class, [
                 'label' => 'Lieu',
