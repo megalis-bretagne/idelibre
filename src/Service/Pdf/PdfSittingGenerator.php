@@ -5,7 +5,7 @@ namespace App\Service\Pdf;
 use App\Entity\Annex;
 use App\Entity\Project;
 use App\Entity\Sitting;
-use iio\libmergepdf\Merger;
+use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -25,48 +25,47 @@ class PdfSittingGenerator
 
     public function generateFullSittingPdf(Sitting $sitting): void
     {
-        $merger = new Merger();
-        $this->addConvocation($merger, $sitting);
-        $this->addProjectsAndAnnexes($merger, $sitting->getProjects());
-        $merged = $merger->merge();
-
-        file_put_contents($this->getPdfPath($sitting), $merged);
+        $cmd = "nohup pdftk ";
+        $cmd = $this->addConvocation($cmd, $sitting);
+        $cmd = $this->addProjectsAndAnnexes($cmd, $sitting->getProjects());
+        $cmd .= " cat output " . $this->getPdfPath($sitting) . " &";
+        try {
+            shell_exec($cmd);
+        } catch (Exception $exception) {
+            $this->logger->error('MergePdf : ' . $exception->getMessage());
+        }
     }
 
-    private function addConvocation(Merger $merger, Sitting $sitting): void
+    private function addConvocation(string $cmd, Sitting $sitting): string
     {
-        try {
-            $merger->addFile($sitting->getConvocationFile()->getPath());
-        } catch (\Exception $e) {
-            $this->logger->error($e->getMessage());
-        }
+        return $cmd . $sitting->getConvocationFile()->getPath() . ' ';
+
     }
 
     /**
      * @param Project[] $projects
      */
-    private function addProjectsAndAnnexes(Merger $merger, iterable $projects): void
+    private function addProjectsAndAnnexes(string $cmd, iterable $projects): string
     {
-        try {
-            foreach ($projects as $project) {
-                $merger->addFile($project->getFile()->getPath());
-                $this->addAnnexes($merger, $project->getAnnexes());
-            }
-        } catch (\Exception $e) {
-            $this->logger->error($e->getMessage());
+
+        foreach ($projects as $project) {
+            $cmd .= $project->getFile()->getPath() . " ";
+            $cmd = $this->addAnnexes($cmd, $project->getAnnexes());
         }
+        return $cmd;
     }
 
     /**
      * @param Annex[] $annexes
      */
-    private function addAnnexes(Merger $merger, iterable $annexes): void
+    private function addAnnexes(string $cmd, iterable $annexes): string
     {
         foreach ($annexes as $annex) {
             if ($this->isPdfFile($annex->getFile()->getName())) {
-                $merger->addFile($annex->getFile()->getPath());
+                $cmd .= $annex->getFile()->getPath() . " ";
             }
         }
+        return $cmd;
     }
 
     private function isPdfFile(string $fileName): bool
