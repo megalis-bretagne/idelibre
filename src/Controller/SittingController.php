@@ -263,5 +263,4 @@ class SittingController extends AbstractController
 
         return 'sitting-active-nav';
     }
-
 }
