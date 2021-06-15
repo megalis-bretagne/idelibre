@@ -54,9 +54,10 @@ class ReportSittingController extends AbstractController
     public function getSittingZipTokens(Sitting $sitting, ZipTokenGenerator $zipTokenGenerator): Response
     {
         $response = new BinaryFileResponse($zipTokenGenerator->generateZipToken($sitting));
+
         $response->setContentDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            $sitting->getName() . '_jetons.zip'
+            $sitting->getName() . '_' . $sitting->getDate()->format('d_m_Y_H_i') . '_jetons.zip'
         );
         $response->deleteFileAfterSend(true);
 
