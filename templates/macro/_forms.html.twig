@@ -31,11 +31,13 @@
 
 
 {% macro backButton(backPath, params = {}) %}
-
     <a href="{{ path(backPath, params) }}" class="btn btn-outline-primary">
         <span class="fa fa-arrow-left"></span> Retour
     </a>
 {% endmacro %}
+
+
+
 
 
 {% macro searchForm(formSearch, searchTerm, resetPath) %}
