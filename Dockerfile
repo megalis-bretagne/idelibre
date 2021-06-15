@@ -40,6 +40,10 @@ RUN docker-php-ext-install intl mbstring xml zip pdo pdo_pgsql pgsql opcache
 COPY ./docker-resources/wkhtmltox_0.12.6-1.buster_amd64.deb /tmp/wkhtmltox.deb
 RUN  dpkg -i /tmp/wkhtmltox.deb
 
+
+COPY ./docker-resources/pdftk-java-3.2.2-1-all.deb /tmp/pdftk.deb
+RUN  dpkg -i /tmp/pdftk.deb
+
 RUN curl -sL https://deb.nodesource.com/setup_12.x | sudo bash -
 RUN apt-get install nodejs -yqq
 
