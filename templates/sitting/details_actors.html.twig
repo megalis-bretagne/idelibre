@@ -47,8 +47,9 @@
                         <h2>Elus</h2>
                     </div>
                     <div class="col-9">
-                        <div class="float-right">
 
+
+                        <div class="float-right" v-if="!isArchived">
                             <button class="btn btn-outline-primary " @click="openShowModalNotifyAgain()">Notifier à nouveau
                             </button>
                             <button class="btn btn-outline-primary " @click="openShowModalAttendance()">Gerer les Présences
@@ -104,9 +105,12 @@
                         <td v-if="convocation.sentTimestamp" class="col-2"><span class="fas fa-check text-success"> </span>
                             ${convocation.sentTimestamp.createdAt | formatDateString }
                         </td>
-                        <td v-else class="col-2">
+                        <td v-else-if="!isArchived" class="col-2">
                             <button v-on:click="sendConvocation(convocation.id)" class="btn btn-outline-primary borderless mt-n2"
                                     title="Envoyer"><span class="fa fa-paper-plane"></span></button>
+                        </td>
+                        <td v-else class="col-2">
+                            <span class="fas fa-times text-danger"> </span>
                         </td>
 
                         <td v-if="convocation.receivedTimestamp" class="col-2">
