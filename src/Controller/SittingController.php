@@ -64,6 +64,7 @@ class SittingController extends AbstractController
      * @Route("/sitting/add", name="sitting_add")
      * @IsGranted("ROLE_MANAGE_SITTINGS")
      * @Breadcrumb("Ajouter")
+     * @Sidebar(active={"sitting-active-nav"})
      */
     public function createSitting(Request $request, SittingManager $sittingManager): Response
     {
@@ -89,6 +90,7 @@ class SittingController extends AbstractController
      * @Route("/sitting/edit/{id}/actors", name="edit_sitting_actor", methods={"GET"})
      * @IsGranted("ROLE_MANAGE_SITTINGS")
      * @Breadcrumb("Modifier {sitting.nameWithDate}")
+     * @Sidebar(active={"sitting-active-nav"})
      */
     public function editUsers(Sitting $sitting, Request $request, ActorManager $actorManager, ConvocationManager $convocationManager): Response
     {
@@ -105,6 +107,7 @@ class SittingController extends AbstractController
      * @Route("/sitting/edit/{id}/projects", name="edit_sitting_project")
      * IsGranted("ROLE_MANAGE_SITTINGS")
      * @Breadcrumb("Modifier {sitting.nameWithDate}")
+     * @Sidebar(active={"sitting-active-nav"})
      */
     public function editProjects(Sitting $sitting): Response
     {
@@ -121,6 +124,7 @@ class SittingController extends AbstractController
      * @Route("/sitting/edit/{id}", name="edit_sitting_information")
      * @IsGranted("MANAGE_SITTINGS", subject="sitting")
      * @Breadcrumb("Modifier {sitting.nameWithDate}")
+     * @Sidebar(active={"sitting-active-nav"})
      */
     public function editInformation(Sitting $sitting, Request $request, SittingManager $sittingManager): Response
     {
@@ -168,8 +172,10 @@ class SittingController extends AbstractController
      * @IsGranted("MANAGE_SITTINGS", subject="sitting")
      * @Breadcrumb("Détail {sitting.nameWithDate}")
      */
-    public function showInformation(Sitting $sitting, SittingManager $sittingManager): Response
+    public function showInformation(Sitting $sitting, SittingManager $sittingManager, SidebarState $sidebarState): Response
     {
+        $sidebarState->addActiveNavs(['sitting-nav', $this->activeSidebarNav($sitting->getIsArchived())]);
+
         return $this->render('sitting/details_information.html.twig', [
             'isAlreadySent' => $sittingManager->isAlreadySent($sitting),
             'sitting' => $sitting,
@@ -182,8 +188,10 @@ class SittingController extends AbstractController
      * @IsGranted("MANAGE_SITTINGS", subject="sitting")
      * @Breadcrumb("Détail {sitting.nameWithDate}")
      */
-    public function showActors(Sitting $sitting, ConvocationRepository $convocationRepository): Response
+    public function showActors(Sitting $sitting, ConvocationRepository $convocationRepository, SidebarState $sidebarState): Response
     {
+        $sidebarState->addActiveNavs(['sitting-nav', $this->activeSidebarNav($sitting->getIsArchived())]);
+
         return $this->render('sitting/details_actors.html.twig', [
             'sitting' => $sitting,
         ]);
@@ -194,8 +202,10 @@ class SittingController extends AbstractController
      * @IsGranted("MANAGE_SITTINGS", subject="sitting")
      * @Breadcrumb("Détail {sitting.nameWithDate}")
      */
-    public function showProjects(Sitting $sitting, ConvocationRepository $convocationRepository, ProjectRepository $projectRepository): Response
+    public function showProjects(Sitting $sitting, ConvocationRepository $convocationRepository, ProjectRepository $projectRepository, SidebarState $sidebarState): Response
     {
+        $sidebarState->addActiveNavs(['sitting-nav', $this->activeSidebarNav($sitting->getIsArchived())]);
+
         return $this->render('sitting/details_projects.html.twig', [
             'sitting' => $sitting,
             'projects' => $projectRepository->getProjectsWithAssociatedEntities($sitting),
@@ -243,5 +253,14 @@ class SittingController extends AbstractController
         $referer = $request->headers->get('referer');
 
         return $referer ? $this->redirect($referer) : $this->redirectToRoute('sitting_index');
+    }
+
+    private function activeSidebarNav(bool $isArchived): string
+    {
+        if ($isArchived) {
+            return 'sitting-archived-nav';
+        }
+
+        return 'sitting-active-nav';
     }
 }
