@@ -3,7 +3,7 @@ version: '3.4'
 services:
   fpm-idelibre:
     container_name: fpm-idelibre
-    image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/idelibre/idelibre:directories
+    image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/idelibre/idelibre:pdftk
 
     env_file:
       - .env.docker.local
