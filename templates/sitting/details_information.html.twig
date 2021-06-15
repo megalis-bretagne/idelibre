@@ -19,7 +19,7 @@
     <div class="col-12">
 
         <div class="mt-4">
-            {{ macro.backButton('sitting_index') }}
+            {{ macro.backButton('sitting_index', {'status' : sitting.isArchived ? 'archived' : 'active'}) }}
         </div>
 
 
