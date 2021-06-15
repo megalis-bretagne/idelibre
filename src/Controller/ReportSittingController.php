@@ -57,7 +57,7 @@ class ReportSittingController extends AbstractController
 
         $response->setContentDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            $sitting->getName() . '_' . $sitting->getDate()->format('d/m/Y_H_i') . '_jetons.zip'
+            $sitting->getName() . '_' . $sitting->getDate()->format('d_m_Y_H_i') . '_jetons.zip'
         );
         $response->deleteFileAfterSend(true);
 
