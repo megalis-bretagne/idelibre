@@ -24,6 +24,7 @@ let app = new Vue({
         isAlreadySentActors: false,
         isAlreadySentGuests: false,
         isAlreadySentEmployees: false,
+        isArchived: true,
         filter: {
             actor: "",
             guest: "",
@@ -104,6 +105,7 @@ let app = new Vue({
                 const sitting = response.data;
                 this.comelusId = sitting?.comelusId ?? null;
                 this.isComelus = sitting?.type.isComelus ?? false
+                this.isArchived = sitting.isArchived;
             })
         },
 
