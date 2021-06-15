@@ -3,18 +3,21 @@ import $ from 'jquery';
 $(document).ready(function () {
     let $url = $('#comelus_connector_url');
     let $apiKey = $('#comelus_connector_apiKey');
-    let $status = $('#status');
+    let $status = $('#statusComelus');
 
     $url.on('focusout', check);
     $apiKey.on('focusout', check)
 
 
-
     function check(isOnlyCheck) {
         if (!($url.val() && $apiKey.val())) {
+            $status.html("Le connecteur n'est pas correctement configuré")
+                .removeClass('alert-info')
+                .removeClass('alert-success')
+                .addClass('alert-danger');
             return;
         }
-        $url.val($url.val().replace(/\/+$/,""));
+        $url.val($url.val().replace(/\/+$/, ""));
 
         $.ajax({
             url: $status.data('url-check'),
@@ -25,15 +28,17 @@ $(document).ready(function () {
             success: function () {
                 $status.html("Le connecteur est correctement configuré")
                     .removeClass('alert-danger')
+                    .removeClass('alert-info')
                     .addClass('alert-success');
 
-                if(isOnlyCheck !== true) {
+                if (isOnlyCheck !== true) {
                     getMailingLists();
                 }
             },
             error: function () {
                 $status.html("Le connecteur n'est pas correctement configuré")
                     .removeClass('alert-success')
+                    .removeClass('alert-info')
                     .addClass('alert-danger');
                 $('#comelus_connector_mailingListId').empty();
                 $('#comelus_connector_mailingListId').append('<option value="">Connecteur non correctement configuré</option>');
@@ -56,7 +61,7 @@ $(document).ready(function () {
                 let $selectMailingList = $('#comelus_connector_mailingListId');
                 $selectMailingList.empty();
                 $selectMailingList.append('<option value="">choississez une liste</option>');
-                for(let i =0 ; i< data.length ; i++) {
+                for (let i = 0; i < data.length; i++) {
                     $selectMailingList.append($("<option></option>")
                         .attr("value", data[i].id).text(data[i].name));
                 }
@@ -67,5 +72,6 @@ $(document).ready(function () {
             }
         })
     }
+
     check(true);
 });

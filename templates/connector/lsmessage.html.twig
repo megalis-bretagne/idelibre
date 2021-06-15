@@ -15,8 +15,8 @@
     {{ form_row(form.url) }}
     {{ form_row(form.apiKey) }}
 
-    <div id="status" class="alert alert-danger" data-url-check="{{ path("lsmessage_connector_check") }}">
-        Le connecteur n'est pas correctement configuré
+    <div id="statusLsmessage" class="alert alert-info" data-url-check="{{ path("lsmessage_connector_check") }}">
+        Vérification de la configuration du connecteur
     </div>
 
     {{ form_widget(form) }}
