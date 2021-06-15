@@ -18,22 +18,22 @@ class LsmessageConnectorType extends AbstractType
     {
         $builder
             ->add('url', UrlType::class, [
-                'required' => false,
+                'required' => true,
                 'label' => 'Url',
                 'constraints' => [new Length(['max' => LsmessageConnector::MAX_URL_LENGTH])],
             ])
             ->add('apiKey', TextType::class, [
-                'required' => false,
+                'required' => true,
                 'label' => 'Clé d\'api',
                 'constraints' => [new Length(['max' => LsmessageConnector::MAX_API_KEY_LENGTH])],
             ])
             ->add('sender', TextType::class, [
-                'required' => false,
+                'required' => true,
                 'label' => 'Expéditeur',
                 'constraints' => [new Length(['max' => LsmessageConnector::MAX_SENDER_LENGTH])],
             ])
             ->add('content', TextareaType::class, [
-                'required' => false,
+                'required' => true,
                 'label' => 'Contenu du message',
                 'attr' => [
                     'rows' => 3,

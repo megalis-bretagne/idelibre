@@ -34,17 +34,17 @@ class ComelusConnectorType extends AbstractType
 
         $builder
             ->add('url', UrlType::class, [
-                'required' => false,
+                'required' => true,
                 'label' => 'Url',
                 'constraints' => [new Length(['max' => ComelusConnector::MAX_URL_LENGTH])],
             ])
             ->add('apiKey', TextType::class, [
-                'required' => false,
+                'required' => true,
                 'label' => 'Clé d\'api',
                 'constraints' => [new Length(['max' => ComelusConnector::MAX_API_KEY_LENGTH])],
             ])
             ->add('description', TextareaType::class, [
-                'required' => false,
+                'required' => true,
                 'label' => 'Texte d\'accompagnement',
                 'attr' => [
                     'rows' => 5,
@@ -57,7 +57,7 @@ class ComelusConnectorType extends AbstractType
                 'label' => 'Activer',
             ])
             ->add('mailingListId', ChoiceType::class, [
-                'required' => false,
+                'required' => true,
                 'placeholder' => 'choississez une liste',
                 'choices' => $this->getAvailableOptions($comelusConnector->getUrl(), $comelusConnector->getApiKey()),
                 'label' => 'Liste de diffusion',
