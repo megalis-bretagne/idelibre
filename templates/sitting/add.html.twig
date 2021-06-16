@@ -12,7 +12,7 @@
 
 {% block pageForm %}
 
-    {{ form_start(form) }}
+    {{ form_start(form, {attr:{'novalidate': true}}) }}
 
     {{ form_widget(form) }}
     <div class="float-right">
