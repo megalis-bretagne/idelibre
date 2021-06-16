@@ -437,7 +437,7 @@
                             <div class="modal-dialog modal-lg" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title">Gestion des présences 2</h5>
+                                        <h5 class="modal-title">Gestion des présences</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true" @click="showModalAttendance = false">&times;</span>
                                         </button>
@@ -461,8 +461,7 @@
 
                                                 <td class="col-4" v-if="status.category === 'convocation'">
                                                     <input class="select form-control" v-model="status.deputy"
-                                                           @change="changeAttendance(status)">
-                                                    </input>
+                                                           @change="changeAttendance(status)" placeholder="Mandataire">
                                                 </td>
 
 
