@@ -36,6 +36,7 @@ class UserPreferenceType extends AbstractType
             ])
             ->add('username', TextType::class, [
                 'label' => 'Nom d\'utilisateur',
+                'disabled' => true
             ])
             ->add('email', TextType::class, [
                 'label' => 'Adresse email',

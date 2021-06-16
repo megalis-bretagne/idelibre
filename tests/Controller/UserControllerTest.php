@@ -247,7 +247,7 @@ class UserControllerTest extends WebTestCase
         $this->assertCount(1, $item);
 
         $form = $crawler->selectButton('Enregistrer')->form();
-        $form['user_preference[username]'] = 'New username';
+        $form['user_preference[email]'] = 'NewEmail@exameple.org';
 
         $this->client->submit($form);
 
@@ -261,6 +261,6 @@ class UserControllerTest extends WebTestCase
         $successMsg = $crawler->filter('html:contains("Vos préférences utilisateur ont bien été modifiées")');
         $this->assertCount(1, $successMsg);
 
-        $this->assertNotEmpty($user = $this->getOneEntityBy(User::class, ['username' => 'New username@libriciel']));
+        $this->assertNotEmpty($user = $this->getOneEntityBy(User::class, ['email' => 'NewEmail@exameple.org']));
     }
 }
