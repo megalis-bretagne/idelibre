@@ -69,7 +69,7 @@ class SittingType extends AbstractType
                 'required' => $isNew,
                 'file_name' => $this->getConvocationFileName($options['data'] ?? null),
                 'disabled' => $isAlreadySentConvocation,
-                'constraints' => [new NotNull(null, 'le fichier de convocation est obligatoire')],
+                'constraints' => $isNew ? [new NotNull(null, 'le fichier de convocation est obligatoire')] : [],
             ])
             ->add('invitationFile', LsFileType::class, [
                 'label' => $isNew ? 'Fichier d\'invitation' : 'Remplacer le fichier d\'invitation',
