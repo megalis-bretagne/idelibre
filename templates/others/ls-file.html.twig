@@ -1,6 +1,5 @@
 {% block ls_file_row %}
     <div class="form-group">
-        {{- form_errors(form) -}}
         {{- form_label(form) -}} <br>
 
         <label class="ls-file btn btn-primary" title="{{ label }}" {{ file_name is defined ? 'hidden="true"' : '' }}>
