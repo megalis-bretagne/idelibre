@@ -46,9 +46,12 @@
 
     <script>
         $('#selectAll').click(function () {
-            $('#type_associatedActors option').attr('selected', true).parent().trigger('change')
+            let $options = $('#type_associatedActors option')
+            for (let i = 0; i < $options.length; i++) {
+                $options[i].selected = true;
+            }
+            $options.parent().trigger("change");
         });
-
     </script>
 {% endblock %}
 
