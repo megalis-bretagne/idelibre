@@ -40,7 +40,7 @@ class SecurityController extends AbstractController
             return $this->redirectToRoute('structure_index');
         }
 
-        return $this->redirectToRoute('sitting_index');
+        return $this->redirectToRoute('sitting_index', ['status' => 'active']);
     }
 
     /**
