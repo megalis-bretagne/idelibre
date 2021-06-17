@@ -15,7 +15,7 @@ class LsmessageConnector extends Connector
     public const MAX_URL_LENGTH = 255;
     public const MAX_API_KEY_LENGTH = 255;
     public const MAX_CONTENT_LENGTH = 140;
-    public const MAX_SENDER_LENGTH = 7;
+    public const MAX_SENDER_LENGTH = 11;
 
     /**
      * @ORM\Id
