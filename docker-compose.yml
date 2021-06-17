@@ -37,7 +37,7 @@ services:
     container_name: node-idelibre
     image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/idelibre/idelibre-nodejs:4.0.0-rc1
     volumes:
-      - /data/files:/data:ro
+      - /data/files:/data
     environment:
       - TYPEORM_CONNECTION=postgres
       - TYPEORM_HOST=${POSTGRES_HOST:-172.17.0.1}
