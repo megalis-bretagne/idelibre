@@ -64,12 +64,12 @@
                         <div class="project-line">
                             <div class="project-item">
                                 {% if project.reporter %}
-                                    Rapporteur : <b>{{ project.reporter.firstName }} {{ project.reporter.lastName }}</b>
+                                    Rapporteur : {{ project.reporter.firstName }} {{ project.reporter.lastName }}
                                 {% endif %}
                             </div>
                             <div class="project-item">
                                 {% if project.theme.fullName is defined %}
-                                    Theme : <b>{{ project.theme.fullName }}</b>
+                                    Theme : {{ project.theme.fullName }}
                                 {% endif %}
                             </div>
                             <div class="project-item action"></div>
