@@ -12,132 +12,142 @@ Vue.component('v-select', VueSelect);
 Vue.component('draggable', draggable);
 
 let app = new Vue({
-    delimiters: ['${', '}'],
-    el: "#app",
-    data: {
-        projects: [],
-        themes: [],
-        reporters: [],
-        messageInfo: null,
-        showModal: false,
-        uploadPercent: 0,
-        messageError: null,
+        delimiters: ['${', '}'],
+        el: "#app",
+        data: {
+            projects: [],
+            themes: [],
+            reporters: [],
+            messageInfo: null,
+            showModal: false,
+            uploadPercent: 0,
+            messageError: null,
 
-    },
-
-    methods: {
-        projectChange($event) {
-            isDirty = true;
         },
 
+        methods: {
 
-        addProject(event) {
-            for (let i = 0; i < event.target.files.length; i++) {
-                let file = event.target.files[i];
-                let project = {
-                    name: getPrettyNameFromFileName(file.name),
-                    fileName: file.name,
-                    file: file,
-                    annexes: [],
-                    themeId: null,
-                    reporterId: null,
-                    linkedFileKey: null,
-                    id: null
-                };
-                this.projects.push(project);
-            }
-            isDirty = true;
-        },
+            reporterFilter(option, label, search) {
+                let searchLowerCase = search.toLowerCase();
+                return option.firstName.toLowerCase().indexOf(searchLowerCase) > -1 ||
+                    option.lastName.toLowerCase().indexOf(searchLowerCase) > -1 ||
+                    (option.firstName.toLowerCase() + " " + option.lastName.toLowerCase()).indexOf(searchLowerCase) > -1
+            },
 
-        removeProject(index) {
-            this.projects.splice(index, 1);
-            isDirty = true;
-        },
-        addAnnexes(event, project) {
-            for (let i = 0; i < event.target.files.length; i++) {
-                let file = event.target.files[i];
-                let annex = {
-                    file: file,
-                    linkedFileKey: null,
-                    fileName: file.name,
-                    id: null
-                };
-                project.annexes.push(annex);
-            }
-            isDirty = true;
-        },
-        deleteAnnex(annexes, index) {
-            annexes.splice(index, 1);
-            isDirty = true;
-        },
 
-        save() {
-            let formData = new FormData();
-            addProjectAndAnnexeFiles(this.projects, formData);
-            setProjectsRank(this.projects);
-            formData.append('projects', JSON.stringify(this.projects));
-            this.showModal = true;
-            this.uploadPercent = 0;
-            const config = {
-                onUploadProgress: (progressEvent) => {
-                    this.uploadPercent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+            projectChange($event) {
+                isDirty = true;
+            },
 
+
+            addProject(event) {
+                for (let i = 0; i < event.target.files.length; i++) {
+                    let file = event.target.files[i];
+                    let project = {
+                        name: getPrettyNameFromFileName(file.name),
+                        fileName: file.name,
+                        file: file,
+                        annexes: [],
+                        themeId: null,
+                        reporterId: null,
+                        linkedFileKey: null,
+                        id: null
+                    };
+                    this.projects.push(project);
                 }
-            }
+                isDirty = true;
+            },
 
-            axios.post(`/api/projects/${getSittingId()}`,
-                formData,
-                config
-            ).then(response => {
-                console.log('done');
-                this.showMessage('Modifications enregistrées');
-                isDirty = false;
-                this.showModal = false;
-                window.scrollTo(0,0);
-            }).catch(e => {
-                this.showModal = false;
-                window.scrollTo(0,0);
-                this.showMessageError('Impossible d\'enregistrer les modifications');
+            removeProject(index) {
+                this.projects.splice(index, 1);
+                isDirty = true;
+            },
+            addAnnexes(event, project) {
+                for (let i = 0; i < event.target.files.length; i++) {
+                    let file = event.target.files[i];
+                    let annex = {
+                        file: file,
+                        linkedFileKey: null,
+                        fileName: file.name,
+                        id: null
+                    };
+                    project.annexes.push(annex);
+                }
+                isDirty = true;
+            },
+            deleteAnnex(annexes, index) {
+                annexes.splice(index, 1);
+                isDirty = true;
+            },
+
+            save() {
+                let formData = new FormData();
+                addProjectAndAnnexeFiles(this.projects, formData);
+                setProjectsRank(this.projects);
+                formData.append('projects', JSON.stringify(this.projects));
+                this.showModal = true;
+                this.uploadPercent = 0;
+                const config = {
+                    onUploadProgress: (progressEvent) => {
+                        this.uploadPercent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+
+                    }
+                }
+
+                axios.post(`/api/projects/${getSittingId()}`,
+                    formData,
+                    config
+                ).then(response => {
+                    console.log('done');
+                    this.showMessage('Modifications enregistrées');
+                    isDirty = false;
+                    this.showModal = false;
+                    window.scrollTo(0, 0);
+                }).catch(e => {
+                    this.showModal = false;
+                    window.scrollTo(0, 0);
+                    this.showMessageError('Impossible d\'enregistrer les modifications');
+                });
+            },
+
+            move(fromIndex, toIndex) {
+                arrayMove(this.projects, fromIndex, toIndex);
+            },
+
+
+            cancel() {
+                axios.get(`/api/projects/${getSittingId()}`).then((response) => {
+                    this.projects = response.data;
+                    isDirty = false;
+                    this.showMessage('Modifications annulées');
+                })
+            },
+
+            showMessage(msg) {
+                this.messageInfo = msg;
+                setTimeout(() => this.messageInfo = null, 3000);
+            },
+
+            showMessageError(msg) {
+                this.messageError = msg;
+                setTimeout(() => this.messageError = null, 3000);
+            },
+
+
+        },
+        mounted() {
+            Promise.all([
+                axios.get('/api/themes'),
+                axios.get('/api/actors'),
+                axios.get(`/api/projects/${getSittingId()}`)
+            ]).then((response) => {
+                this.themes = setThemeLevelName(response[0].data);
+                this.reporters = response[1].data;
+                this.projects = response[2].data;
             });
-        },
-
-        move(fromIndex, toIndex) {
-          arrayMove(this.projects, fromIndex, toIndex);
-        },
-
-
-        cancel() {
-            axios.get(`/api/projects/${getSittingId()}`).then((response) => {
-                this.projects = response.data;
-                isDirty = false;
-                this.showMessage('Modifications annulées');
-            })
-        },
-
-        showMessage(msg) {
-            this.messageInfo = msg;
-            setTimeout(() => this.messageInfo = null, 3000);
-        },
-
-        showMessageError(msg) {
-            this.messageError = msg;
-            setTimeout(() => this.messageError = null, 3000);
-        },
-
-
-    },
-    mounted() {
-        Promise.all([
-            axios.get('/api/themes'),
-            axios.get('/api/actors'),
-            axios.get(`/api/projects/${getSittingId()}`)
-        ]).then((response) => {
-            this.themes = setThemeLevelName(response[0].data);
-            this.reporters = response[1].data;
-            this.projects = response[2].data;
-        });
-    }
-});
+        }
+    })
+;
 
 
 function addProjectAndAnnexeFiles(projects, formData) {
