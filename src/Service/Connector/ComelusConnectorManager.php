@@ -32,8 +32,7 @@ class ComelusConnectorManager
         LoggerInterface $logger,
         FileManager $fileManager,
         DateUtil $dateUtil
-    )
-    {
+    ) {
         $this->em = $em;
         $this->comelusConnectorRepository = $comelusConnectorRepository;
         $this->comelusWrapper = $comelusWrapper;
@@ -116,11 +115,11 @@ class ComelusConnectorManager
         return $comelusId;
     }
 
-
     private function getDocumentName(Sitting $sitting): string
     {
         $formattedDateTime = $this->dateUtil->getFormattedDateTime($sitting->getDate(), $sitting->getStructure()->getTimezone()->getName());
-        return $sitting->getName() . " " . $formattedDateTime;
+
+        return $sitting->getName() . ' ' . $formattedDateTime;
     }
 
     /**
