@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\Regex;
 
 class LsmessageConnectorType extends AbstractType
 {
@@ -30,7 +31,10 @@ class LsmessageConnectorType extends AbstractType
             ->add('sender', TextType::class, [
                 'required' => true,
                 'label' => 'Expéditeur',
-                'constraints' => [new Length(['max' => LsmessageConnector::MAX_SENDER_LENGTH])],
+                'constraints' => [
+                    new Length(['max' => LsmessageConnector::MAX_SENDER_LENGTH]),
+                    new Regex('/^[^0-9][a-zA-Z0-9]+$/', 'Lexpéditeur ne doit ni commencer par un chiffre ni contenir de carractères spéciaux'),
+                ],
             ])
             ->add('content', TextareaType::class, [
                 'required' => true,
