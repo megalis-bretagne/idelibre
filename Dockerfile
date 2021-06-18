@@ -30,6 +30,7 @@ RUN apt-get update -yqq \
         xfonts-75dpi \
         fontconfig \
         xfonts-base \
+        libxrender1 \
         -yqq
 
 
