@@ -69,7 +69,7 @@ class EmailTemplateType extends AbstractType
         $builder->add('isAttachment', CheckboxType::class, [
             'required' => false,
             'label_attr' => ['class' => 'switch-custom'],
-            'label' => 'Joindre le fichier de convocation',
+            'label' => $this->isConvocation($options['data'] ?? null) ? 'Joindre le fichier de convocation' : 'Joindre le fichier d\'invitation',
         ]);
 
         $builder->add('structure', HiddenType::class, [
@@ -94,5 +94,14 @@ class EmailTemplateType extends AbstractType
     private function isDefaultTemplate(?EmailTemplate $emailTemplate): bool
     {
         return $emailTemplate && $emailTemplate->getIsDefault();
+    }
+
+    private function isConvocation(?EmailTemplate $emailTemplate):bool {
+        if(!$emailTemplate) {
+            return true;
+        }
+
+        return $emailTemplate->getCategory() === EmailTemplate::CATEGORY_CONVOCATION;
+
     }
 }
