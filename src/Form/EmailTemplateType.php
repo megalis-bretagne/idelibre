@@ -96,12 +96,12 @@ class EmailTemplateType extends AbstractType
         return $emailTemplate && $emailTemplate->getIsDefault();
     }
 
-    private function isConvocation(?EmailTemplate $emailTemplate):bool {
-        if(!$emailTemplate) {
+    private function isConvocation(?EmailTemplate $emailTemplate): bool
+    {
+        if (!$emailTemplate) {
             return true;
         }
 
-        return $emailTemplate->getCategory() === EmailTemplate::CATEGORY_CONVOCATION;
-
+        return EmailTemplate::CATEGORY_CONVOCATION === $emailTemplate->getCategory();
     }
 }
