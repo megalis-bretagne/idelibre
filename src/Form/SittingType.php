@@ -46,7 +46,7 @@ class SittingType extends AbstractType
                     : $this->typeRepository->findByStructure($options['structure']),
                 'choice_label' => 'name',
                 'disabled' => !$isNew,
-                'constraints' => [new NotNull(null, 'le fichier de convocation est obligatoire')]
+                'constraints' => [new NotNull(null, 'le fichier de convocation est obligatoire')],
             ])
             ->add('date', null, [
                 'label' => 'Date et heure',
