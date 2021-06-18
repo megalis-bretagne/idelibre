@@ -34,7 +34,11 @@
         <div class="mt-2">
             {{ form_row(form.isAttachment) }}
         </div>
-        {{ include('include/_attachment_warning.html.twig') }}
+        {% if email_template.category == 'invitation' %}
+            {{ include('include/_attachment_warning.html.twig', { 'invitation_category' : ' d\'invitation'}) }}
+        {% else %}
+            {{ include('include/_attachment_warning.html.twig', { 'invitation_category' : ' de convocation'}) }}
+        {% endif %}
     {% endif %}
     <div class="float-right">
         {% block pageSaveReturn %}{{ macro.save('email_template_index') }}{% endblock %}
