@@ -2,6 +2,7 @@
 
 namespace App\Controller\WebService;
 
+use App\Message\UpdatedSitting;
 use App\Security\Http403Exception;
 use App\Service\LegacyWs\LegacyWsAuthentication;
 use App\Service\LegacyWs\LegacyWsService;
@@ -12,6 +13,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\Messenger\MessageBus;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class LegacyWsController extends AbstractController
@@ -23,7 +26,8 @@ class LegacyWsController extends AbstractController
         Request $request,
         LegacyWsService $wsService,
         LegacyWsAuthentication $legacyWsAuthentication,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        MessageBusInterface $messageBus
     ): JsonResponse {
         $username = $request->request->get('username');
         $plainPassword = $request->request->get('password');
@@ -53,6 +57,8 @@ class LegacyWsController extends AbstractController
                 'message' => $e->getMessage(),
             ], 400);
         }
+
+        $messageBus->dispatch(new UpdatedSitting($sitting->getId()));
 
         return $this->json([
             'success' => true,
