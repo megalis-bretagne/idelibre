@@ -86,7 +86,9 @@
                                           v-model="project.reporterId"
                                           :reduce="item => item.id"
                                           label="lastName"
-                                          class="bs-form-like">
+                                          class="bs-form-like"
+                                          :filter-by="reporterFilter"
+                                >
                                     <template #option="{ firstName, lastName }">
                                         ${ firstName } ${ lastName }
                                     </template>
