@@ -144,6 +144,56 @@ class LegacyWsControllerTest extends WebTestCase
         $this->assertNotNull($user);
     }
 
+
+    public function testAddSittingNoProjects()
+    {
+        $filesystem = new FileSystem();
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/convocation.pdf');
+
+        $fileConvocation = new UploadedFile(__DIR__ . '/../../resources/convocation.pdf', 'convocation.pdf', 'application/pdf');
+
+        $username = 'secretary1';
+        $password = 'password';
+        $conn = 'libriciel';
+
+        $sittingData = [
+            'place' => '8 rue de la Mairie',
+            'type_seance' => 'Commission webservice',
+            'date_seance' => '2021-05-12 09:30',
+            'acteurs_convoques' => '[
+            {"Acteur":{"nom":"DURAND","prenom":"Thomas","salutation":"Monsieur","titre":"Pr\\u00e9sident","email":"thomas.durand@example.org","telmobile":""}},
+            {"Acteur":{"nom":"DUPONT","prenom":"Emilie","salutation":"Madame","titre":"1ERE Vice-President","email":"emilie.dupont@example.org","telmobile":""}},
+            {"Acteur":{"nom":"MARTINEZ","prenom":"Franck","salutation":"Monsieur","titre":"","email":"frank.martinez@gmail.com","telmobile":""}},
+            {"Acteur":{"nom":"POMMIER","prenom":"Sarah","salutation":"Madame","titre":"","email":"sarah.pommier@example.org","telmobile":""}},
+            {"Acteur":{"nom":"MARTIN","prenom":"Philippe","salutation":"Monsieur","titre":"","email":"philippe.marton@example.org","telmobile":""}}
+            ]',
+            'projets' => null,
+        ];
+
+        $this->client->request(
+            Request::METHOD_POST,
+            '/seances.json',
+            [
+                'username' => $username,
+                'password' => $password,
+                'conn' => $conn,
+                'jsonData' => json_encode($sittingData),
+            ],
+            [
+                'convocation' => $fileConvocation,
+            ]
+        );
+
+        $this->assertResponseStatusCodeSame(200);
+
+        $response = json_decode($this->client->getResponse()->getContent());
+
+        $this->assertTrue($response->success);
+        $this->assertSame('Seance.add.ok', $response->code);
+        $this->assertSame('La séance a bien été ajoutée.', $response->message);
+        $this->assertNotEmpty($response->uuid);
+    }
+
     public function testAddSittingNoConn()
     {
         $this->client->request(

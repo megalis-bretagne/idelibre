@@ -36,7 +36,7 @@ class WsProjectManager
     /**
      * @param UploadedFile[] $uploadedFiles
      */
-    public function createProjectsAndAnnexes(array $rawProjects, array $uploadedFiles, Sitting $sitting): void
+    public function createProjectsAndAnnexes(?array $rawProjects, array $uploadedFiles, Sitting $sitting): void
     {
         if (!$rawProjects) {
             return;
