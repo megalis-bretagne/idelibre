@@ -8,6 +8,7 @@ use App\Entity\Sitting;
 use App\Entity\Structure;
 use App\Repository\Connector\ComelusConnectorRepository;
 use App\Service\File\FileManager;
+use App\Service\Util\DateUtil;
 use Doctrine\ORM\EntityManagerInterface;
 use Libriciel\ComelusApiWrapper\ComelusException;
 use Libriciel\ComelusApiWrapper\ComelusWrapper;
@@ -22,19 +23,22 @@ class ComelusConnectorManager
     private ComelusWrapper $comelusWrapper;
     private LoggerInterface $logger;
     private FileManager $fileManager;
+    private DateUtil $dateUtil;
 
     public function __construct(
         EntityManagerInterface $em,
         ComelusConnectorRepository $comelusConnectorRepository,
         ComelusWrapper $comelusWrapper,
         LoggerInterface $logger,
-        FileManager $fileManager
+        FileManager $fileManager,
+        DateUtil $dateUtil
     ) {
         $this->em = $em;
         $this->comelusConnectorRepository = $comelusConnectorRepository;
         $this->comelusWrapper = $comelusWrapper;
         $this->logger = $logger;
         $this->fileManager = $fileManager;
+        $this->dateUtil = $dateUtil;
     }
 
     /**
@@ -97,7 +101,7 @@ class ComelusConnectorManager
         $this->comelusWrapper->setApiKey($comelusConnetor->getApiKey());
         $this->comelusWrapper->setUrl($comelusConnetor->getUrl());
 
-        $response = $this->comelusWrapper->createDocument($sitting->getName(), $comelusConnetor->getMailingListId(), $comelusConnetor->getDescription(), $uploadedFiles);
+        $response = $this->comelusWrapper->createDocument($this->getDocumentName($sitting), $comelusConnetor->getMailingListId(), $comelusConnetor->getDescription(), $uploadedFiles);
 
         $comelusId = $response['id'] ?? null;
 
@@ -109,6 +113,13 @@ class ComelusConnectorManager
         $this->em->flush();
 
         return $comelusId;
+    }
+
+    private function getDocumentName(Sitting $sitting): string
+    {
+        $formattedDateTime = $this->dateUtil->getFormattedDateTime($sitting->getDate(), $sitting->getStructure()->getTimezone()->getName());
+
+        return $sitting->getName() . ' ' . $formattedDateTime;
     }
 
     /**
