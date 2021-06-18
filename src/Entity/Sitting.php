@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\SittingRepository;
+use DateTime;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -318,6 +319,9 @@ class Sitting
 
     public function getNameWithDate(): string
     {
-        return $this->name . ' ' . $this->getDate()->format('d/m/y');
+        $dateTime = new \DateTime(null, new \DateTimeZone($this->getStructure()->getTimezone()->getName()));
+        $dateTime->setTimestamp($this->getDate()->getTimestamp());
+
+        return $this->name . ' ' . $dateTime->format('d/m/y');
     }
 }
