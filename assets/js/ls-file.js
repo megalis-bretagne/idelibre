@@ -12,7 +12,11 @@ $(document).ready(function () {
         })
 
         let $deleteBtn = $(this).parent().next().children().first();
+
         $deleteBtn.click(function () {
+            if( !$deleteBtn.hasClass("delete-file")) {
+                return;
+            }
             $detailDiv.attr('hidden', true);
             $input.val('');
             $input.parent().attr('hidden', false);
