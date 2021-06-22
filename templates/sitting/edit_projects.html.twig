@@ -46,12 +46,11 @@
         </div>
 
 
-        <draggable v-model="projects" class="bg-white" v-on:change="projectChange()">
+        <draggable v-model="projects" class="bg-white" v-on:change="projectChange()" handle=".handle">
 
             <div v-for="(project, index) in projects">
                 <div class="il-project">
-
-                    <div class="project-left cursor-grab ">
+                    <div class="project-left cursor-grab handle">
                         <div class="dropdown">
                             <span class="badge badge-primary rank">${index + 1}</span>
                             <div class="dropdown-content">
