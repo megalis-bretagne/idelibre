@@ -61,7 +61,8 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->addSelect('r');
 
         if (!empty($search)) {
-            $qb->andWhere('LOWER(u.lastName) like :search 
+            $qb->andWhere(
+                'LOWER(u.lastName) like :search 
             OR LOWER(u.username) like :search 
             OR LOWER(u.firstName) like :search 
             OR LOWER(r.prettyName) like :search
@@ -261,7 +262,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
         $associatedArrayIds = $qb->getQuery()->getScalarResult();
 
-        return array_map(fn($el) => $el['id'], $associatedArrayIds);
+        return array_map(fn ($el) => $el['id'], $associatedArrayIds);
     }
 
     public function findSecretariesByStructure($structure): QueryBuilder
