@@ -1,7 +1,7 @@
 {% extends 'dataview.html.twig' %}
 {% import 'macro/_forms.html.twig' as macros %}
 
-{% block pageTitle 'Themes' %}
+{% block pageTitle 'Thèmes' %}
 
 {% block pageActions %}
     <a href="{{ path('theme_add') }}" class="btn btn-primary"><span
@@ -38,8 +38,8 @@
                         theme.id,
                         'Suppression de thème',
                         'theme_delete',
-                        'Voulez vous vraiment supprimer ce thème ? ' ~
-                        'Attention s\'il possède des sous thèmes is seront eux aussi supprimés'
+                        'Voulez-vous vraiment supprimer ce thème ? ' ~
+                        'Attention s\'il possède des sous thèmes ils seront eux aussi supprimés'
                     ) }}
                 </td>
             </tr>

@@ -140,7 +140,7 @@ let app = new Vue({
             this.isComelusSending = true;
             axios.post(`/api/sittings/${getSittingId()}/sendComelus`, this.notification).then(
                 (response) => {
-                    this.setInfoMessage("Document envoyés via comelus");
+                    this.setInfoMessage("Documents envoyés via comelus");
                     this.comelusId = response.data['comelusId']
                 })
                 .catch((e) => {

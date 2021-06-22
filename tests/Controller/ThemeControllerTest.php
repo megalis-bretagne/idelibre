@@ -55,7 +55,7 @@ class ThemeControllerTest extends WebTestCase
         $crawler = $this->client->request(Request::METHOD_GET, '/theme/index');
         $this->assertResponseStatusCodeSame(200);
 
-        $item = $crawler->filter('html:contains("Themes")');
+        $item = $crawler->filter('html:contains("Thèmes")');
         $this->assertCount(1, $item);
     }
 

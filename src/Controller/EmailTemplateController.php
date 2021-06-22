@@ -78,7 +78,7 @@ class EmailTemplateController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $templateManager->save($form->getData(), $this->getUser()->getStructure());
-            $this->addFlash('success', 'Votre template d\'email a été modifié');
+            $this->addFlash('success', 'Votre modèle d\'email a été modifié');
 
             return $this->redirectToRoute('email_template_index');
         }

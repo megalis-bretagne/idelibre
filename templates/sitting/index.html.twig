@@ -2,7 +2,7 @@
 {% import 'macro/_forms.html.twig' as macros %}
 
 
-{% block pageTitle 'Seances' %}
+{% block pageTitle 'Séances' %}
 
 {% block pageActions %}
 
@@ -45,8 +45,8 @@
                     {% if sitting.isArchived == false %}
                         {{ macros.button_open_modal_post(
                             sitting.id,
-                            'Classement de la séances',
-                            'Voulez vous classez cette séance ?',
+                            'Classement de la séance',
+                            'Voulez-vous classer cette séance ?',
                             'sitting_archive',
                             'fas fa-book',
                             'Classer'
@@ -57,7 +57,7 @@
                         sitting.id,
                         'Suppression de la séance',
                         'sitting_delete',
-                        'Voulez vous vraiment supprimer cette séance ?',
+                        'Voulez-vous vraiment supprimer cette séance ?',
                         sittings.currentPageNumber
                     ) }}
 

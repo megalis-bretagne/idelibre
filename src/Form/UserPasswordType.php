@@ -17,7 +17,7 @@ class UserPasswordType extends AbstractType
             ->add('plainPassword', RepeatedType::class, [
                 'mapped' => false,
                 'type' => PasswordType::class,
-                'invalid_message' => 'Les mots de passes ne sont pas identiques',
+                'invalid_message' => 'Les mots de passe ne sont pas identiques',
                 'options' => ['attr' => ['class' => 'password-field']],
                 'required' => true,
                 'first_options' => ['label' => 'Mot de passe'],
