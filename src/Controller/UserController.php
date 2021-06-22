@@ -64,7 +64,7 @@ class UserController extends AbstractController
                 $this->getUser()->getStructure()
             );
 
-            $this->addFlash('success', 'votre utilisateur a bien été ajouté');
+            $this->addFlash('success', 'Votre utilisateur a bien été ajouté');
 
             return $this->redirectToRoute('user_index');
         }
@@ -91,7 +91,7 @@ class UserController extends AbstractController
                 $this->getUser()->getStructure()
             );
 
-            $this->addFlash('success', 'votre utilisateur a bien été modifié');
+            $this->addFlash('success', 'Votre utilisateur a bien été modifié');
 
             return $this->redirectToRoute('user_index');
         }

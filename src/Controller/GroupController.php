@@ -129,7 +129,7 @@ class GroupController extends AbstractController
     public function delete(Group $group, GroupManager $groupManager, Request $request): Response
     {
         $groupManager->delete($group);
-        $this->addFlash('success', 'Le groupe a bien été supprimée');
+        $this->addFlash('success', 'Le groupe a bien été supprimé');
 
         return $this->redirectToRoute('group_index', [
             'page' => $request->get('page'),

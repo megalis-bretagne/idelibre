@@ -40,9 +40,9 @@
                     {% if not template.isDefault %}
                         {{ macros.button_open_modal_delete(
                             template.id,
-                            "Confirmer suppression du modèle.",
+                            "Suppression du modèle.",
                             "email_template_delete",
-                            "Confirmer la suppression de " ~ template.name,
+                            "Voulez-vous vraiment supprimer ce modèle ? " ~ template.name,
                             templates.currentPageNumber
                         ) }}
                     {% endif %}

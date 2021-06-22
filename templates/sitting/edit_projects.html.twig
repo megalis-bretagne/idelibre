@@ -10,7 +10,7 @@
 
 {% block body %}
 
-     <div class="col-12">
+    <div class="col-12">
         {{ apy_breadcrumb_trail_render(breadcrumb) }}
     </div>
 
@@ -88,6 +88,7 @@
                                           label="lastName"
                                           class="bs-form-like"
                                           :filter-by="reporterFilter"
+
                                 >
                                     <template #option="{ firstName, lastName }">
                                         ${ firstName } ${ lastName }
@@ -95,12 +96,15 @@
                                     <template #selected-option="{ firstName, lastName }">
                                         <strong> ${ firstName } ${ lastName } </strong>
                                     </template>
+                                    <span slot="no-options">
+                                        Pas de résultats trouvés
+                                    </span>
                                 </v-select>
                             </div>
 
                             <div class="project-item">
                                 <v-select v-bind:options="themes"
-                                          placeholder="Theme"
+                                          placeholder="Thème"
                                           v-model="project.themeId"
                                           :reduce="item => item.id"
                                           label="fullName"
@@ -111,6 +115,9 @@
                                     <template #selected-option="{ fullName }">
                                         <strong> ${ fullName } </strong>
                                     </template>
+                                    <span slot="no-options">
+                                        Pas de résultats trouvés
+                                    </span>
                                 </v-select>
                             </div>
 

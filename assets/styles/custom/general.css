@@ -295,3 +295,7 @@ input[type="file"].project-file-btn {
 .opacity-full {
     opacity: 1 !important;
 }
+
+.custom-file-input ~ .custom-file-label::after {
+    content: "Parcourir";
+}

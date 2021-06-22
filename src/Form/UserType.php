@@ -69,7 +69,7 @@ class UserType extends AbstractType
                 'label' => 'Téléphone mobile (06XXXXXXXX ou 07XXXXXXXX) ',
                 'required' => false,
                 'constraints' => [
-                    new Regex('/^0(6|7)\d{8}$/', 'le numéro de téléphone doit etre de la forme 06xxxxxxxx ou 07xxxxxxxx'),
+                    new Regex('/^0(6|7)\d{8}$/', 'le numéro de téléphone doit être de la forme 06xxxxxxxx ou 07xxxxxxxx'),
                 ],
             ]);
 
@@ -112,7 +112,7 @@ class UserType extends AbstractType
         $builder->add('plainPassword', RepeatedType::class, [
             'mapped' => false,
             'type' => PasswordType::class,
-            'invalid_message' => 'Les mots de passes ne sont pas identiques',
+            'invalid_message' => 'Les mots de passe ne sont pas identiques',
             'options' => ['attr' => ['class' => 'password-field']],
             'required' => $this->isNew($options),
             'first_options' => ['label' => 'Mot de passe'],

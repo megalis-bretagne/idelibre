@@ -133,7 +133,7 @@ class GroupControllerTest extends WebTestCase
 
         $crawler = $this->client->followRedirect();
         $this->assertResponseStatusCodeSame(200);
-        $successMsg = $crawler->filter('html:contains("Le groupe a bien été supprimée")');
+        $successMsg = $crawler->filter('html:contains("Le groupe a bien été supprimé")');
         $this->assertCount(1, $successMsg);
 
         $this->assertEmpty($this->getOneEntityBy(Group::class, ['id' => $group->getId()]));

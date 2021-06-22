@@ -133,7 +133,7 @@ class EmailTemplateControllerTest extends WebTestCase
 
         $crawler = $this->client->followRedirect();
         $this->assertResponseStatusCodeSame(200);
-        $successMsg = $crawler->filter('html:contains("Votre template d\'email a été modifié")');
+        $successMsg = $crawler->filter('html:contains("Votre modèle d\'email a été modifié")');
         $this->assertCount(1, $successMsg);
 
         $this->assertNotEmpty($this->getOneEntityBy(EmailTemplate::class, ['name' => 'New name']));

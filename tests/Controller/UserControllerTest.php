@@ -144,7 +144,7 @@ class UserControllerTest extends WebTestCase
         $crawler = $this->client->followRedirect();
         $this->assertResponseStatusCodeSame(200);
 
-        $successMsg = $crawler->filter('html:contains("votre utilisateur a bien été ajouté")');
+        $successMsg = $crawler->filter('html:contains("Votre utilisateur a bien été ajouté")');
         $this->assertCount(1, $successMsg);
 
         $this->assertNotEmpty($this->getOneEntityBy(User::class, ['username' => 'newuser@libriciel']));
@@ -168,7 +168,7 @@ class UserControllerTest extends WebTestCase
 
         $crawler = $this->client->followRedirect();
         $this->assertResponseStatusCodeSame(200);
-        $successMsg = $crawler->filter('html:contains("votre utilisateur a bien été modifié")');
+        $successMsg = $crawler->filter('html:contains("Votre utilisateur a bien été modifié")');
         $this->assertCount(1, $successMsg);
     }
 
@@ -193,7 +193,7 @@ class UserControllerTest extends WebTestCase
 
         $crawler = $this->client->followRedirect();
         $this->assertResponseStatusCodeSame(200);
-        $successMsg = $crawler->filter('html:contains("votre utilisateur a bien été modifié")');
+        $successMsg = $crawler->filter('html:contains("Votre utilisateur a bien été modifié")');
         $this->assertCount(1, $successMsg);
 
         $this->entityManager->refresh($user);
@@ -220,7 +220,7 @@ class UserControllerTest extends WebTestCase
 
         $crawler = $this->client->followRedirect();
         $this->assertResponseStatusCodeSame(200);
-        $successMsg = $crawler->filter('html:contains("votre utilisateur a bien été modifié")');
+        $successMsg = $crawler->filter('html:contains("Votre utilisateur a bien été modifié")');
         $this->assertCount(1, $successMsg);
 
         $this->entityManager->refresh($user);
