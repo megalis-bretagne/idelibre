@@ -43,6 +43,7 @@ class Project
 
     /**
      * @ORM\ManyToOne(targetEntity=Theme::class)
+     * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $theme;
 
