@@ -1,17 +1,14 @@
 <?php
 
-
 namespace App\Service\Pdf;
 
-
 use App\Service\ApiEntity\ProjectApi;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class PdfValidator
 {
     public function isPdfFile(?string $fileName): bool
     {
-        if(!$fileName) {
+        if (!$fileName) {
             return false;
         }
 
@@ -25,10 +22,8 @@ class PdfValidator
         return 'pdf' === $extension || 'PDF' === $extension;
     }
 
-
     /**
      * @param ProjectApi[] $projects
-     * @return bool
      */
     public function isProjectsPdf(array $projects): bool
     {
@@ -37,7 +32,7 @@ class PdfValidator
                 return false;
             }
         }
+
         return true;
     }
-
 }

@@ -78,7 +78,7 @@ class SittingType extends AbstractType
                         new File([
                             'mimeTypes' => ['application/pdf'],
                             'mimeTypesMessage' => 'Le fichier doit être un pdf',
-                        ]),] :
+                        ]), ] :
                     [new File([
                         'mimeTypes' => ['application/pdf'],
                         'mimeTypesMessage' => 'Le fichier doit être un pdf',
@@ -104,8 +104,8 @@ class SittingType extends AbstractType
                 'data_class' => null,
             ])
             ->get('structure')->addModelTransformer(new CallbackTransformer(
-                fn() => '',
-                fn() => $options['structure']
+                fn () => '',
+                fn () => $options['structure']
             ));
     }
 

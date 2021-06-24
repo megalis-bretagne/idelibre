@@ -21,18 +21,21 @@ class ProjectController extends AbstractController
      * @Route("/api/projects/{id}", name="api_project_add", methods={"POST"})
      * @IsGranted("MANAGE_SITTINGS", subject="sitting")
      */
-    public function edit(Sitting $sitting,
-                         Request $request, SerializerInterface $serializer,
-                         ProjectManager $projectManager, MessageBusInterface $messageBus,
-                         PdfValidator $pdfValidator): JsonResponse
+    public function edit(
+        Sitting $sitting,
+        Request $request,
+        SerializerInterface $serializer,
+        ProjectManager $projectManager,
+        MessageBusInterface $messageBus,
+        PdfValidator $pdfValidator
+    ): JsonResponse
     {
         $rawProjects = $request->request->get('projects');
 
-
         $projects = $serializer->deserialize($rawProjects, ProjectApi::class . '[]', 'json');
 
-        if(! $pdfValidator->isProjectsPdf($projects)) {
-            return $this->json(['success' => false, 'message'=> 'Au moins un projet n\'est pas un pdf'], 400);
+        if (!$pdfValidator->isProjectsPdf($projects)) {
+            return $this->json(['success' => false, 'message' => 'Au moins un projet n\'est pas un pdf'], 400);
         }
 
         $projectManager->update($projects, $request->files->all(), $sitting);
