@@ -16,6 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\NotNull;
 
 class SittingType extends AbstractType
@@ -71,7 +72,17 @@ class SittingType extends AbstractType
                 'required' => $isNew,
                 'file_name' => $this->getConvocationFileName($options['data'] ?? null),
                 'disabled' => $isAlreadySentConvocation,
-                'constraints' => $isNew ? [new NotNull(null, 'le fichier de convocation est obligatoire')] : [],
+                'constraints' => $isNew ?
+                    [
+                        new NotNull(null, 'le fichier de convocation est obligatoire'),
+                        new File([
+                            'mimeTypes' => ['application/pdf'],
+                            'mimeTypesMessage' => 'Le fichier doit être un pdf',
+                        ]), ] :
+                    [new File([
+                        'mimeTypes' => ['application/pdf'],
+                        'mimeTypesMessage' => 'Le fichier doit être un pdf',
+                    ])],
             ])
             ->add('invitationFile', LsFileType::class, [
                 'label' => $isNew ? 'Fichier d\'invitation' : 'Remplacer le fichier d\'invitation',
@@ -83,6 +94,10 @@ class SittingType extends AbstractType
                 'required' => false,
                 'file_name' => $this->getInvitationFileName($options['data'] ?? null),
                 'disabled' => $isAlreadySentInvitation,
+                'constraints' => [new File([
+                    'mimeTypes' => ['application/pdf'],
+                    'mimeTypesMessage' => 'Le fichier doit être un pdf',
+                ])],
             ])
             ->add('structure', HiddenType::class, [
                 'data' => $options['structure'],

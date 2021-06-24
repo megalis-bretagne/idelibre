@@ -103,10 +103,12 @@ let app = new Vue({
                     isDirty = false;
                     this.showModal = false;
                     window.scrollTo(0, 0);
-                }).catch(e => {
+                }).catch((e, m) => {
                     this.showModal = false;
                     window.scrollTo(0, 0);
-                    this.showMessageError('Impossible d\'enregistrer les modifications');
+                    console.log(e.response.data)
+                    let errorBody = e.response.data;
+                    this.showMessageError(errorBody.message ? errorBody.message :'Impossible d\'enregistrer les modifications');
                 });
             },
 

@@ -88,12 +88,14 @@ class ProjectControllerTest extends WebTestCase
 
         $project1 = new ProjectApi();
         $project1->setName('first Project')
+            ->setFileName('project1.pdf')
             ->setRank(0)
             ->setLinkedFileKey('project1')
             ->setAnnexes([$annex]);
 
         $project2 = new ProjectApi();
         $project2->setName('second project')
+            ->setFileName('project2.pdf')
             ->setRank(1)
             ->setLinkedFileKey('project2');
 
@@ -119,6 +121,58 @@ class ProjectControllerTest extends WebTestCase
         $this->assertNotEmpty($project->getAnnexes());
     }
 
+
+    public function testEditAddProjectsNoPdf()
+    {
+        $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
+        $this->loginAsAdminLibriciel();
+
+        $filesystem = new Filesystem();
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/project1.txt');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/project2.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/annex1.pdf');
+
+        $fileProject1 = new UploadedFile(__DIR__ . '/../../resources/project1.txt', 'fichier.pdf', 'application/txt');
+        $fileProject2 = new UploadedFile(__DIR__ . '/../../resources/project2.pdf', 'fichier.pdf', 'application/pdf');
+        $fileAnnex1 = new UploadedFile(__DIR__ . '/../../resources/annex1.pdf', 'fichier.pdf', 'application/pdf');
+
+        $annex = new AnnexApi();
+        $annex->setLinkedFileKey('annex1')
+            ->setRank(0);
+
+        $project1 = new ProjectApi();
+        $project1->setName('first Project')
+            ->setFileName('project1.txt')
+            ->setRank(0)
+            ->setLinkedFileKey('project1')
+            ->setAnnexes([$annex]);
+
+        $project2 = new ProjectApi();
+        $project2->setName('second project')
+            ->setFileName('project2.pdf')
+            ->setRank(1)
+            ->setLinkedFileKey('project2');
+
+        $serializedProjects = $this->serializer->serialize([$project1, $project2], 'json');
+
+        $this->client->request(
+            Request::METHOD_POST,
+            '/api/projects/' . $sitting->getId(),
+            ['projects' => $serializedProjects],
+            [
+                'project1' => $fileProject1,
+                'project2' => $fileProject2,
+                'annex1' => $fileAnnex1,
+            ]
+        );
+
+        $this->assertResponseStatusCodeSame(400);
+        $response = json_decode($this->client->getResponse()->getContent());
+        $this->assertSame('Au moins un projet n\'est pas un pdf', $response->message);
+    }
+
+
+
     public function testEditDeleteProjects()
     {
         $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
@@ -128,6 +182,7 @@ class ProjectControllerTest extends WebTestCase
 
         $project2 = new ProjectApi();
         $project2->setName('Project 2')
+            ->setFileName('project2.pdf')
             ->setRank(0)
             ->setId($projectId);
 
@@ -160,12 +215,14 @@ class ProjectControllerTest extends WebTestCase
 
         $project1Client = new ProjectApi();
         $project1Client->setName('Project 1')
+            ->setFileName('project1.pdf')
             ->setRank(0)
             ->setId($project1->getId())
             ->setAnnexes([$annex]);
 
         $project2Client = new ProjectApi();
         $project2Client->setName('Project 2')
+            ->setFileName('project2.pdf')
             ->setRank(1)
             ->setId($project2->getId());
 

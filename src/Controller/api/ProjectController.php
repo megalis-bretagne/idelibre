@@ -5,6 +5,7 @@ namespace App\Controller\api;
 use App\Entity\Sitting;
 use App\Message\UpdatedSitting;
 use App\Service\ApiEntity\ProjectApi;
+use App\Service\Pdf\PdfValidator;
 use App\Service\Project\ProjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,10 +21,21 @@ class ProjectController extends AbstractController
      * @Route("/api/projects/{id}", name="api_project_add", methods={"POST"})
      * @IsGranted("MANAGE_SITTINGS", subject="sitting")
      */
-    public function edit(Sitting $sitting, Request $request, SerializerInterface $serializer, ProjectManager $projectManager, MessageBusInterface $messageBus): JsonResponse
-    {
+    public function edit(
+        Sitting $sitting,
+        Request $request,
+        SerializerInterface $serializer,
+        ProjectManager $projectManager,
+        MessageBusInterface $messageBus,
+        PdfValidator $pdfValidator
+    ): JsonResponse {
         $rawProjects = $request->request->get('projects');
+
         $projects = $serializer->deserialize($rawProjects, ProjectApi::class . '[]', 'json');
+
+        if (!$pdfValidator->isProjectsPdf($projects)) {
+            return $this->json(['success' => false, 'message' => 'Au moins un projet n\'est pas un pdf'], 400);
+        }
 
         $projectManager->update($projects, $request->files->all(), $sitting);
 
