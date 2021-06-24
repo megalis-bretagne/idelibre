@@ -28,8 +28,7 @@ class ProjectController extends AbstractController
         ProjectManager $projectManager,
         MessageBusInterface $messageBus,
         PdfValidator $pdfValidator
-    ): JsonResponse
-    {
+    ): JsonResponse {
         $rawProjects = $request->request->get('projects');
 
         $projects = $serializer->deserialize($rawProjects, ProjectApi::class . '[]', 'json');
