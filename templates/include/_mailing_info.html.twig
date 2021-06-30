@@ -4,5 +4,7 @@
     type de la séance : #typeseance# <br>
     prénom de l'élu : #prenom# <br>
     nom de l'élu : #nom# <br>
+    {% if email_template is not defined or email_template.category == 'convocation'  %}
     titre de l'élu : #titre# <br>
+    {% endif %}
     civilité de l'élu : #civilite# <br>
