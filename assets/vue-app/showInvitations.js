@@ -25,6 +25,7 @@ let app = new Vue({
         isAlreadySentGuests: false,
         isAlreadySentEmployees: false,
         isArchived: true,
+        showModalComelus: false,
         filter: {
             actor: "",
             guest: "",
@@ -138,6 +139,7 @@ let app = new Vue({
 
         sendComelus() {
             this.isComelusSending = true;
+            this.showModalComelus = true;
             axios.post(`/api/sittings/${getSittingId()}/sendComelus`, this.notification).then(
                 (response) => {
                     this.setInfoMessage("Documents envoyés via comelus");
@@ -149,6 +151,7 @@ let app = new Vue({
 
                 }).finally(() => {
                 this.isComelusSending = false;
+                this.showModalComelus = false;
             });
 
         },

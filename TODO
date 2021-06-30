@@ -166,3 +166,9 @@ TODO champlibre ?
 
  ->setCategory(EmailTemplate::CATEGORY_RESET_PASSWORD)
             ->setContent(DefaultTemplate::FORGET_PASSWORD);
+
+
+
+BUG du choix du groupe de partage quand nouvellemnt créé pas pris en compte
+
+Choix comelus proposer alors que le connecteur n'est pas activer generalement

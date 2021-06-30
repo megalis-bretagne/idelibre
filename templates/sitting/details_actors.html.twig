@@ -526,6 +526,27 @@
                 </transition>
             </div>
 
+
+
+            <div v-if="showModalComelus">
+                <transition name="modal">
+                    <div class="modal-mask">
+                        <div class="modal-wrapper">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-body text-center">
+                                        <div class=" display-2">
+                                            <span class=" fas fa-spinner fa-spin"> </span>
+                                        </div>
+                                        <b class="display-4">Envoi à comelus en cours</b>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </transition>
+            </div>
+
         </div>
 
     </div>
