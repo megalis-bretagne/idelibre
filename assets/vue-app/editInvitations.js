@@ -51,6 +51,7 @@ let app = new Vue({
                 this.addedEmployees = [];
                 this.addedGuests = [];
                 this.getUsers();
+                window.scrollTo(0, 0);
                 this.showMessage('Modifications enregistrées');
             })
         },
@@ -61,6 +62,7 @@ let app = new Vue({
             this.addedEmployees = [];
             this.addedGuests = [];
             this.getUsers();
+            window.scrollTo(0, 0);
             this.showMessage('Modifications annulées');
         },
 

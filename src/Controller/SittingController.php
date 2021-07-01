@@ -142,7 +142,7 @@ class SittingController extends AbstractController
                 $form->get('invitationFile')->getData(),
             );
 
-            $this->addFlash('success', 'votre séance a bien été modifiée');
+            $this->addFlash('success', 'Modifications enregistrées');
 
             return $this->redirectToRoute('edit_sitting_information', ['id' => $sitting->getId()]);
         }
