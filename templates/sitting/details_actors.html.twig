@@ -43,6 +43,13 @@
                 </div>
 
                 <div class="row">
+                    <div class="col-12 mb-3">
+                        <button :disabled="isAlreadySentActors" class="btn btn-primary" title="Envoyer à tous les destinataires"
+                                data-target="#confirmSendAll"
+                                data-toggle="modal">
+                            <span class="fa fa-paper-plane"></span> Envoyer à tous les destinataires
+                        </button>
+                    </div>
                     <div class="col-3">
                         <h2>Elus</h2>
                     </div>
@@ -55,7 +62,8 @@
                             <button class="btn btn-outline-primary " @click="openShowModalAttendance()">Gerer les Présences
                             </button>
 
-                            <button :disabled="comelusId || !isComelus || isComelusSending" class="btn btn-primary" title="Envoyer à comelus"
+                            <button :disabled="comelusId || !isComelus || isComelusSending" class="btn btn-primary"
+                                    title="Envoyer à comelus"
                                     data-target="#confirmComelus"
                                     data-toggle="modal">
                                 <span class="fa fa-paper-plane"></span> Envoyer via comelus
@@ -64,7 +72,7 @@
                             <button :disabled="isAlreadySentActors" class="btn btn-primary" title="Envoyer les convocations"
                                     data-target="#confirm"
                                     data-toggle="modal">
-                                <span class="fa fa-paper-plane"></span> Envoyer toutes les convocations
+                                <span class="fa fa-paper-plane"></span> Envoyer les convocations
                             </button>
                         </div>
                     </div>
@@ -92,9 +100,9 @@
                     <tbody>
 
                     <tr class="d-flex" v-if="filteredActorConvocations.length == 0">
-                       <td class="col-12 text-center">
-                           Aucun élu convoqué
-                       </td>
+                        <td class="col-12 text-center">
+                            Aucun élu convoqué
+                        </td>
                     </tr>
 
                     <tr class="d-flex " v-for="convocation in filteredActorConvocations">
@@ -157,7 +165,7 @@
                             <button :disabled="isAlreadySentEmployees" class="btn btn-primary float-right" title="Envoyer"
                                     data-target="#confirm_employee"
                                     data-toggle="modal">
-                                <span class="fa fa-paper-plane"></span> Envoyer toutes les invitations
+                                <span class="fa fa-paper-plane"></span> Envoyer les invitations
                             </button>
                         </div>
                     </div>
@@ -246,7 +254,7 @@
                             <button :disabled="isAlreadySentGuests" class="btn btn-primary float-right" title="Envoyer"
                                     data-target="#confirm_guest"
                                     data-toggle="modal">
-                                <span class="fa fa-paper-plane"></span> Envoyer toutes les invitations
+                                <span class="fa fa-paper-plane"></span> Envoyer les invitations
                             </button>
                         </div>
                     </div>
@@ -525,7 +533,6 @@
                     </div>
                 </transition>
             </div>
-
 
 
             <div v-if="showModalComelus">
