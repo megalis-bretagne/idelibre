@@ -6,6 +6,7 @@ use App\DataFixtures\RoleFixtures;
 use App\DataFixtures\StructureFixtures;
 use App\DataFixtures\ThemeFixtures;
 use App\DataFixtures\UserFixtures;
+use App\Entity\Theme;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
 use Doctrine\Persistence\ObjectManager;
@@ -142,6 +143,12 @@ class LegacyWsControllerTest extends WebTestCase
 
         $user = $this->getOneUserBy(['username' => 't.durand@libriciel']);
         $this->assertNotNull($user);
+
+        $themeRepository = $this->entityManager->getRepository(Theme::class);
+
+        $this->assertCount(1, $themeRepository->findBy(['name' => 'T1' ]));
+
+
     }
 
 

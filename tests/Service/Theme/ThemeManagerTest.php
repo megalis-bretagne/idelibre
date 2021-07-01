@@ -2,6 +2,7 @@
 
 namespace App\Tests\Service\Theme;
 
+use App\DataFixtures\StructureFixtures;
 use App\DataFixtures\ThemeFixtures;
 use App\Entity\Theme;
 use App\Repository\ThemeRepository;
@@ -44,6 +45,7 @@ class ThemeManagerTest extends WebTestCase
 
         $this->loadFixtures([
             ThemeFixtures::class,
+            StructureFixtures::class
         ]);
     }
 
@@ -63,4 +65,51 @@ class ThemeManagerTest extends WebTestCase
         $actual = $generateFullNameFct->invokeArgs($themeManager, [$themeBudget]);
         $this->assertEquals('Finance, budget', $actual);
     }
+
+    public function testCreateThemesFromString()
+    {
+        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
+
+        /** @var ThemeManager $themeManager */
+        $themeManager = self::$container->get(ThemeManager::class);
+        $themeManager->createThemesFromString("addedTheme", $structure);
+
+        $themeRepository = $this->entityManager->getRepository(Theme::class);
+
+        $addedThemes = $themeRepository->findBy(['name' => 'addedTheme' ]);
+        $this->assertCount(1, $addedThemes);
+
+    }
+
+    public function testCreateThemesFromStringAlreadyExists()
+    {
+        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
+
+        /** @var ThemeManager $themeManager */
+        $themeManager = self::$container->get(ThemeManager::class);
+        $themeManager->createThemesFromString("Finance", $structure);
+        $themeRepository = $this->entityManager->getRepository(Theme::class);
+
+        $addedThemes = $themeRepository->findBy(['name' => 'Finance' ]);
+        $this->assertCount(1, $addedThemes);
+    }
+
+
+    public function testCreateThemesFromStringTwice()
+    {
+        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
+
+        /** @var ThemeManager $themeManager */
+        $themeManager = self::$container->get(ThemeManager::class);
+        $themeManager->createThemesFromString("addedTheme", $structure);
+        $themeManager->createThemesFromString("addedTheme", $structure);
+
+        $themeRepository = $this->entityManager->getRepository(Theme::class);
+
+        $addedThemes = $themeRepository->findBy(['name' => 'addedTheme' ]);
+        $this->assertCount(1, $addedThemes);
+
+    }
+
+
 }

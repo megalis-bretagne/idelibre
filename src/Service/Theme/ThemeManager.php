@@ -103,7 +103,7 @@ class ThemeManager
         $themeNames = explode(',', $comaSeparatedThemes);
         $parentTheme = null;
         foreach ($themeNames as $position => $themeName) {
-            $parentTheme = $this->findOrCreateTheme(trim($themeName), $position, $parentTheme, $structure);
+            $parentTheme = $this->findOrCreateTheme(trim($themeName), $position + 1, $parentTheme, $structure);
         }
 
         return $parentTheme;
