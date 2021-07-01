@@ -27,6 +27,7 @@ class GroupStructureType extends AbstractType
                 'multiple' => true,
                 'required' => false,
                 'choice_label' => 'name',
+                'query_builder' => $this->structureRepository->findAllQueryBuilder(),
             ])
         ;
     }
