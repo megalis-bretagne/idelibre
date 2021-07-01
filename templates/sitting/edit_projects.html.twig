@@ -14,182 +14,186 @@
         {{ apy_breadcrumb_trail_render(breadcrumb) }}
     </div>
 
-    <div class="mt-3 col-11">
-        <div class="d-flex align-items-center">
-            <h1 class="flex-grow-1">Modifier la séance</h1>
-            {{ macroNav.toogleView( path('sitting_show_projects', {'id': sitting.id}) , 'edit') }}
-        </div>
 
-        <div class="mt-4">
-            {{ macro.backButton('sitting_index', {'status' : 'active'}) }}
-        </div>
+    <div v-cloak id="app">
+        <div class="alert alert-success mt-2 col-11" v-if="messageInfo"> ${messageInfo}</div>
+        <div class="alert alert-danger mt-2 col-11" v-if="messageError"> ${messageError}</div>
 
-    </div>
+        <div class="mt-3 col-11">
+            <div class="d-flex align-items-center">
+                <h1 class="flex-grow-1">Modifier la séance</h1>
+                {{ macroNav.toogleView( path('sitting_show_projects', {'id': sitting.id}) , 'edit') }}
+            </div>
 
+            <div class="mt-4">
+                {{ macro.backButton('sitting_index', {'status' : 'active'}) }}
+            </div>
 
-    <div v-cloak class="col-10 offset-1 mt-4 form-white" id="app">
-        {{ macroTab.editTabs('projects', sitting) }}
-
-
-        <div class="alert alert-success mt-2" v-if="messageInfo"> ${messageInfo}</div>
-        <div class="alert alert-danger mt-2" v-if="messageError"> ${messageError}</div>
-
-        <label class="project-file-btn btn btn-primary" title="Ajouter des projets">
-            <input class="project-file-btn" type="file" accept=".pdf,.PDF" multiple @change="addProject($event)">
-            <span class="fa fa-plus-circle"></span> Ajouter des projets
-        </label>
-
-        <div class="mt-4"></div>
-
-        <div v-if="projects.length == 0" class="text-center">
-            Aucun projet associé
         </div>
 
 
-        <draggable v-model="projects" class="bg-white" v-on:change="projectChange()" handle=".handle">
-
-            <div v-for="(project, index) in projects">
-                <div class="il-project">
-                    <div class="project-left cursor-grab handle">
-                        <div class="dropdown">
-                            <span class="badge badge-primary rank">${index + 1}</span>
-                            <div class="dropdown-content">
-                                <div v-for="rank in projects.length" class="newRank" v-on:click="move(index, rank -1)"> ${rank}</div>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div class="project-right">
-                        <div class="project-line">
-                            <div class="project-item">
-                                <textarea v-model="project.name" class="form-control" v-on:change="projectChange()"> </textarea>
-                            </div>
-                            <div class="project-item">
-                                ${project.fileName}
-                            </div>
-
-                            <div class="project-item action">
-                                <button class="btn btn-outline-danger borderless float-right"
-                                        v-on:click="removeProject(index)">
-                                    <span class="fa fa-trash-alt" title="Supprimer"></span>
-                                </button>
-                            </div>
-
-                        </div>
-
-                        <div class="project-line">
-                            <div class="project-item">
-                                <v-select v-bind:options="reporters"
-                                          placeholder="Rapporteur"
-                                          v-model="project.reporterId"
-                                          :reduce="item => item.id"
-                                          label="lastName"
-                                          class="bs-form-like"
-                                          :filter-by="reporterFilter"
-
-                                >
-                                    <template #option="{ firstName, lastName }">
-                                        ${ firstName } ${ lastName }
-                                    </template>
-                                    <template #selected-option="{ firstName, lastName }">
-                                         ${ firstName } ${ lastName }
-                                    </template>
-                                    <span slot="no-options">
-                                        Pas de résultats trouvés
-                                    </span>
-                                </v-select>
-                            </div>
-
-                            <div class="project-item">
-                                <v-select v-bind:options="themes"
-                                          placeholder="Thème"
-                                          v-model="project.themeId"
-                                          :reduce="item => item.id"
-                                          label="fullName"
-                                          class="bs-form-like">
-                                    <template #option="{ levelName }">
-                                        ${ levelName }
-                                    </template>
-                                    <template #selected-option="{ fullName }">
-                                         ${ fullName }
-                                    </template>
-                                    <span slot="no-options">
-                                        Pas de résultats trouvés
-                                    </span>
-                                </v-select>
-                            </div>
-
-                            <div class="project-item action"></div>
-
-                        </div>
+        <div class="col-10 offset-1 mt-4 form-white">
+            {{ macroTab.editTabs('projects', sitting) }}
 
 
-                        <div class="project-line">
-                            <div class="project-item">
-                                <label class="project-file-btn btn btn-outline-primary" title="Ajouter des annexes">
-                                    <input class="project-file-btn" type="file" multiple @change="addAnnexes($event, project)">
-                                    <span class="fa fa-plus-circle"></span> Ajouter des annexes
-                                </label>
+            <label class="project-file-btn btn btn-primary" title="Ajouter des projets">
+                <input class="project-file-btn" type="file" accept=".pdf,.PDF" multiple @change="addProject($event)">
+                <span class="fa fa-plus-circle"></span> Ajouter des projets
+            </label>
+
+            <div class="mt-4"></div>
+
+            <div v-if="projects.length == 0" class="text-center">
+                Aucun projet associé
+            </div>
+
+
+            <draggable v-model="projects" class="bg-white" v-on:change="projectChange()" handle=".handle">
+
+                <div v-for="(project, index) in projects">
+                    <div class="il-project">
+                        <div class="project-left cursor-grab handle">
+                            <div class="dropdown">
+                                <span class="badge badge-primary rank">${index + 1}</span>
+                                <div class="dropdown-content">
+                                    <div v-for="rank in projects.length" class="newRank" v-on:click="move(index, rank -1)"> ${rank}</div>
+                                </div>
+
                             </div>
                         </div>
 
-                        <draggable v-model="project.annexes" v-on:change="projectChange()" class="annex-list">
-                            <div class="project-line annex cursor-grab" v-for="(annex, index) in project.annexes">
+                        <div class="project-right">
+                            <div class="project-line">
                                 <div class="project-item">
-                                    <span class="">${index + 1} - </span> ${annex.fileName}
+                                    <textarea v-model="project.name" class="form-control" v-on:change="projectChange()"> </textarea>
+                                </div>
+                                <div class="project-item">
+                                    ${project.fileName}
                                 </div>
 
                                 <div class="project-item action">
                                     <button class="btn btn-outline-danger borderless float-right"
-                                            @click="deleteAnnex(project.annexes, index)">
+                                            v-on:click="removeProject(index)">
                                         <span class="fa fa-trash-alt" title="Supprimer"></span>
                                     </button>
                                 </div>
 
                             </div>
 
+                            <div class="project-line">
+                                <div class="project-item">
+                                    <v-select v-bind:options="reporters"
+                                              placeholder="Rapporteur"
+                                              v-model="project.reporterId"
+                                              :reduce="item => item.id"
+                                              label="lastName"
+                                              class="bs-form-like"
+                                              :filter-by="reporterFilter"
 
-                        </draggable>
+                                    >
+                                        <template #option="{ firstName, lastName }">
+                                            ${ firstName } ${ lastName }
+                                        </template>
+                                        <template #selected-option="{ firstName, lastName }">
+                                            ${ firstName } ${ lastName }
+                                        </template>
+                                        <span slot="no-options">
+                                        Pas de résultats trouvés
+                                    </span>
+                                    </v-select>
+                                </div>
+
+                                <div class="project-item">
+                                    <v-select v-bind:options="themes"
+                                              placeholder="Thème"
+                                              v-model="project.themeId"
+                                              :reduce="item => item.id"
+                                              label="fullName"
+                                              class="bs-form-like">
+                                        <template #option="{ levelName }">
+                                            ${ levelName }
+                                        </template>
+                                        <template #selected-option="{ fullName }">
+                                            ${ fullName }
+                                        </template>
+                                        <span slot="no-options">
+                                        Pas de résultats trouvés
+                                    </span>
+                                    </v-select>
+                                </div>
+
+                                <div class="project-item action"></div>
+
+                            </div>
 
 
+                            <div class="project-line">
+                                <div class="project-item">
+                                    <label class="project-file-btn btn btn-outline-primary" title="Ajouter des annexes">
+                                        <input class="project-file-btn" type="file" multiple @change="addAnnexes($event, project)">
+                                        <span class="fa fa-plus-circle"></span> Ajouter des annexes
+                                    </label>
+                                </div>
+                            </div>
+
+                            <draggable v-model="project.annexes" v-on:change="projectChange()" class="annex-list">
+                                <div class="project-line annex cursor-grab" v-for="(annex, index) in project.annexes">
+                                    <div class="project-item">
+                                        <span class="">${index + 1} - </span> ${annex.fileName}
+                                    </div>
+
+                                    <div class="project-item action">
+                                        <button class="btn btn-outline-danger borderless float-right"
+                                                @click="deleteAnnex(project.annexes, index)">
+                                            <span class="fa fa-trash-alt" title="Supprimer"></span>
+                                        </button>
+                                    </div>
+
+                                </div>
+
+
+                            </draggable>
+
+
+                        </div>
                     </div>
                 </div>
+            </draggable>
+
+            <div class="float-right mt-5">
+                <button class="btn btn-outline-dark" @click="cancel()">
+                    <span class="fa fa-times"></span> Annuler
+                </button>
+
+                <button class="btn btn-primary" @click="save()">
+                    <span class="fa fa-save"></span>
+                    Enregistrer les modifications
+                </button>
             </div>
-        </draggable>
-
-        <div class="float-right mt-5">
-            <button class="btn btn-outline-dark" @click="cancel()">
-                <span class="fa fa-times"></span> Annuler
-            </button>
-
-            <button class="btn btn-primary" @click="save()">
-                <span class="fa fa-save"></span>
-                Enregistrer les modifications
-            </button>
-        </div>
 
 
-        <div v-if="showModal">
-            <transition name="modal">
-                <div class="modal-mask">
-                    <div class="modal-wrapper">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-body text-center">
-                                    <div class=" display-2">
-                                        <span class=" fas fa-spinner fa-spin"> </span>
+            <div v-if="showModal">
+                <transition name="modal">
+                    <div class="modal-mask">
+                        <div class="modal-wrapper">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-body text-center">
+                                        <div class=" display-2">
+                                            <span class=" fas fa-spinner fa-spin"> </span>
+                                        </div>
+                                        <b class="display-4" v-if="uploadPercent < 100"> ${uploadPercent} %</b>
+                                        <b class="display-4" v-else> Préparation de la séance en cours</b>
                                     </div>
-                                    <b class="display-4" v-if="uploadPercent < 100"> ${uploadPercent} %</b>
-                                    <b class="display-4" v-else> Préparation de la séance en cours</b>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </transition>
-        </div>
+                </transition>
+            </div>
 
+
+        </div>
 
     </div>
 
