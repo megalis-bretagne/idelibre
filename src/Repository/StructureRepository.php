@@ -25,7 +25,8 @@ class StructureRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('s')
             ->leftJoin('s.group', 'g')
-            ->addSelect('g');
+            ->addSelect('g')
+            ->orderBy('s.name');
 
         if (!empty($search)) {
             $qb->andWhere('LOWER(s.name) like :search OR LOWER(g.name) like :search OR LOWER(s.suffix) like :search')

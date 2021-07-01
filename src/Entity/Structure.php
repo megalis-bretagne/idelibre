@@ -50,6 +50,7 @@ class Structure
     /**
      * @ORM\ManyToOne(targetEntity=Group::class, inversedBy="structures")
      * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
+     *
      */
     private $group;
 
