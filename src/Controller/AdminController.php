@@ -67,7 +67,7 @@ class AdminController extends AbstractController
                 $roleManager->getSuperAdminRole()
             );
 
-            $this->addFlash('success', 'votre administrateur a bien été ajouté');
+            $this->addFlash('success', 'Votre administrateur a bien été ajouté');
 
             return $this->redirectToRoute('admin_index');
         }
@@ -98,7 +98,7 @@ class AdminController extends AbstractController
                 $group ?? null
             );
 
-            $this->addFlash('success', 'votre administrateur a bien été ajouté');
+            $this->addFlash('success', 'Votre administrateur a bien été ajouté');
 
             return $this->redirectToRoute('admin_index');
         }
@@ -123,7 +123,7 @@ class AdminController extends AbstractController
                 $form->get('plainPassword')->getData()
             );
 
-            $this->addFlash('success', 'votre administrateur a bien été modifié');
+            $this->addFlash('success', 'Votre administrateur a bien été modifié');
 
             return $this->redirectToRoute('admin_index');
         }
@@ -146,7 +146,7 @@ class AdminController extends AbstractController
             return $this->redirectToRoute('admin_index');
         }
         $userManager->delete($user);
-        $this->addFlash('success', 'l\'utilisateur a bien été supprimé');
+        $this->addFlash('success', 'L\'utilisateur a bien été supprimé');
 
         return $this->redirectToRoute('admin_index', [
             'page' => $request->get('page'),

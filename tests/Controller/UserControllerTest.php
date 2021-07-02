@@ -63,7 +63,7 @@ class UserControllerTest extends WebTestCase
 
         $crawler = $this->client->followRedirect();
         $this->assertResponseStatusCodeSame(200);
-        $successMsg = $crawler->filter('html:contains("l\'utilisateur a bien été supprimé")');
+        $successMsg = $crawler->filter('html:contains("L\'utilisateur a bien été supprimé")');
         $this->assertCount(1, $successMsg);
 
         $this->assertEmpty($this->getOneEntityBy(User::class, ['id' => $user->getId()]));
