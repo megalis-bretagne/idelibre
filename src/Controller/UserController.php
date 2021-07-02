@@ -114,7 +114,7 @@ class UserController extends AbstractController
             return $this->redirectToRoute('user_index');
         }
         $manageUser->delete($user);
-        $this->addFlash('success', 'l\'utilisateur a bien été supprimé');
+        $this->addFlash('success', 'L\'utilisateur a bien été supprimé');
 
         return $this->redirectToRoute('user_index', [
             'page' => $request->get('page'),

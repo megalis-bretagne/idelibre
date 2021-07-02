@@ -62,7 +62,7 @@ class AdminControllerTest extends WebTestCase
 
         $crawler = $this->client->followRedirect();
         $this->assertResponseStatusCodeSame(200);
-        $successMsg = $crawler->filter('html:contains("l\'utilisateur a bien été supprimé")');
+        $successMsg = $crawler->filter('html:contains("L\'utilisateur a bien été supprimé")');
         $this->assertCount(1, $successMsg);
 
         $this->assertEmpty($this->getOneEntityBy(User::class, ['id' => $user->getId()]));
@@ -105,7 +105,7 @@ class AdminControllerTest extends WebTestCase
         $crawler = $this->client->followRedirect();
         $this->assertResponseStatusCodeSame(200);
 
-        $successMsg = $crawler->filter('html:contains("votre administrateur a bien été ajouté")');
+        $successMsg = $crawler->filter('html:contains("Votre administrateur a bien été ajouté")');
         $this->assertCount(1, $successMsg);
         $this->assertNotEmpty($this->getOneEntityBy(User::class, ['username' => 'newadmin']));
     }
@@ -127,7 +127,7 @@ class AdminControllerTest extends WebTestCase
 
         $crawler = $this->client->followRedirect();
         $this->assertResponseStatusCodeSame(200);
-        $successMsg = $crawler->filter('html:contains("votre administrateur a bien été modifié")');
+        $successMsg = $crawler->filter('html:contains("Votre administrateur a bien été modifié")');
         $this->assertCount(1, $successMsg);
     }
 
@@ -157,7 +157,7 @@ class AdminControllerTest extends WebTestCase
         $crawler = $this->client->followRedirect();
         $this->assertResponseStatusCodeSame(200);
 
-        $successMsg = $crawler->filter('html:contains("votre administrateur a bien été ajouté")');
+        $successMsg = $crawler->filter('html:contains("Votre administrateur a bien été ajouté")');
         $this->assertCount(1, $successMsg);
     }
 

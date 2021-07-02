@@ -128,7 +128,7 @@ let app = new Vue({
                 })
                 .catch((e) => {
                     console.log(e);
-                    this.setErrorMessage("erreur lors de l'envoi");
+                    this.setErrorMessage("Erreur lors de l'envoi");
 
                 })
                 .finally(() => {
@@ -147,7 +147,7 @@ let app = new Vue({
                 })
                 .catch((e) => {
                     console.log(e);
-                    this.setErrorMessage("erreur lors de l'envoi");
+                    this.setErrorMessage("Erreur lors de l'envoi");
 
                 }).finally(() => {
                 this.isComelusSending = false;
@@ -177,7 +177,7 @@ let app = new Vue({
                 })
                 .catch((e) => {
                     console.log(e);
-                    this.setErrorMessage("erreur lors de l'enregistrement des présences")
+                    this.setErrorMessage("Erreur lors de l'enregistrement des présences")
 
                 })
                 .finally(() => {
