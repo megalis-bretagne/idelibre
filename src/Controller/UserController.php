@@ -145,6 +145,7 @@ class UserController extends AbstractController
     /**
      * @Route("/user/preferences", name="user_preferences")
      * @IsGranted("ROLE_MANAGE_PREFERENCES")
+     * @Breadcrumb()
      * @Breadcrumb("Préférences utilisateur")
      */
     public function preferences(Request $request, UserManager $userManager): Response
