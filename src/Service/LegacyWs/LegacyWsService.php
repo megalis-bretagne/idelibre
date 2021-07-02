@@ -9,6 +9,7 @@ use App\Service\Convocation\ConvocationManager;
 use App\Service\File\FileManager;
 use App\Service\Type\TypeManager;
 use DateTimeImmutable;
+use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -21,7 +22,6 @@ class LegacyWsService
     private ConvocationManager $convocationManager;
     private SittingRepository $sittingRepository;
     private WsActorManager $wsActorManager;
-
     private WsProjectManager $wsProjectManager;
 
     public function __construct(
@@ -52,7 +52,10 @@ class LegacyWsService
         $sitting = new Sitting();
         $this->em->persist($sitting);
 
-        $date = new DateTimeImmutable($rawSitting['date_seance']);
+
+        $date = new \DateTime($rawSitting['date_seance'], new DateTimeZone($structure->getTimezone()->getName()));
+        $date = $date->setTimezone(new DateTimeZone('UTC'));
+
         $type = $this->typeManager->getOrCreateType($rawSitting['type_seance'], $structure);
 
         $this->associateActorsToType($type, $rawSitting['acteurs_convoques'] ?? null);
