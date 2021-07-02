@@ -136,7 +136,7 @@ class LegacyWsControllerTest extends WebTestCase
         $sitting = $this->getOneSittingBy(['id' => $response->uuid]);
         $this->assertCount(3, $sitting->getProjects());
         $this->assertCount(5, $sitting->getConvocations());
-        $this->assertSame('2021-05-12 09:30', $sitting->getDate()->format('Y-m-d H:i'));
+        $this->assertSame('2021-05-12 07:30', $sitting->getDate()->format('Y-m-d H:i'));
         $this->assertCount(2, $sitting->getProjects()[1]->getAnnexes());
 
         $this->assertSame('t.durand@libriciel', $sitting->getProjects()[2]->getReporter()->getUsername());
