@@ -35,7 +35,15 @@
                 {{ form_start(form) }}
                 {{ form_widget(form) }}
                 <div class="float-right mt-5">
-                    {{ macro.save('sitting_index',{}, 'Enregistrer les modifications') }}
+                    <a href="{{ path( 'edit_sitting_information', {'id': sitting.id} ) }}" class="btn btn-outline-dark">
+                        <span class="fa fa-times"></span> Annuler les modifications</a>
+
+                    <button class="btn btn-primary" type="submit">
+                        <span class="fa fa-save"></span>
+                        Enregistrer les modifications
+                    </button>
+
+
                 </div>
                 {{ form_end(form) }}
             </div>
