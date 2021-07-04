@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\UserRepository;
 use App\Validator\OneAtMax;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -16,6 +17,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="`user`")
  * @UniqueEntity("username", message="Ce nom d'utilisateur est déjà utilisé")
+ * @ApiResource(
+ *     normalizationContext={"groups"={"layout:read", "user"}},
+ *     denormalizationContext={"groups"={"layout:write"}},
+ * )
  */
 class User implements UserInterface
 {
