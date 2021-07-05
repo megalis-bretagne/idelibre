@@ -89,7 +89,7 @@ class CsvManager
 
     private function isMissingFields(array $record): bool
     {
-        return 6 !== count($record);
+        return 6 > count($record);
     }
 
     private function missingFieldViolation($record): ConstraintViolationList
