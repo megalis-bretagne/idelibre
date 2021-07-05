@@ -37,8 +37,7 @@ class CsvManager
         TypeRepository $typeRepository,
         UserPasswordEncoderInterface $passwordEncoder,
         RoleManager $roleManager
-    )
-    {
+    ) {
         $this->em = $em;
         $this->userRepository = $userRepository;
         $this->validator = $validator;
@@ -60,13 +59,10 @@ class CsvManager
         $records = $csv->getRecords();
 
         foreach ($records as $record) {
-
-
-            if($this->isMissingFields($record)) {
+            if ($this->isMissingFields($record)) {
                 $errors[] = $this->missingFieldViolation($record);
                 continue;
             }
-
 
             $username = $this->sanitize($record[0] ?? '') . '@' . $structure->getSuffix();
             if (!$this->isExistUsername($username, $structure)) {
@@ -91,13 +87,13 @@ class CsvManager
         return $errors;
     }
 
-
     private function isMissingFields(array $record): bool
     {
-        return count($record) !== 6;
+        return 6 !== count($record);
     }
 
-    private function missingFieldViolation($record):ConstraintViolationList {
+    private function missingFieldViolation($record): ConstraintViolationList
+    {
         $violation = new ConstraintViolation(
             'Chaque ligne doit contenir 6 champs separés par des virgules',
             null,
