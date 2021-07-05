@@ -42,8 +42,6 @@ class TypeType extends AbstractType
                 'data' => $this->userRepository->getAssociatedActorsWithType($options['data'] ?? null),
             ])
 
-
-
             ->add('associatedEmployees', EntityType::class, [
                 'placeholder' => 'Sélectionner les personnels administratifs',
                 'required' => false,
