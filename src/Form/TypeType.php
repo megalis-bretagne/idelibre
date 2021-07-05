@@ -42,22 +42,12 @@ class TypeType extends AbstractType
                 'data' => $this->userRepository->getAssociatedActorsWithType($options['data'] ?? null),
             ])
 
-            ->add('isComelus', CheckboxType::class, [
-                'required' => false,
-                'label_attr' => ['class' => 'switch-custom'],
-                'label' => 'Envoyer le dossier via comelus',
-            ])
 
-            ->add('isSms', CheckboxType::class, [
-                'required' => false,
-                'label_attr' => ['class' => 'switch-custom'],
-                'label' => 'Notifier les élus via sms',
-            ])
 
             ->add('associatedEmployees', EntityType::class, [
                 'placeholder' => 'Sélectionner les personnels administratifs',
                 'required' => false,
-                'label' => 'Personnels administratifs associés',
+                'label' => 'Personnels administratifs, Administrateurs, Gestionnaires de séance associés',
                 'class' => User::class,
                 'query_builder' => $this->userRepository
                     ->findInvitableEmployeesByStructure($options['structure']),
@@ -80,10 +70,22 @@ class TypeType extends AbstractType
                 'mapped' => false,
             ])
 
+            ->add('isComelus', CheckboxType::class, [
+                'required' => false,
+                'label_attr' => ['class' => 'switch-custom'],
+                'label' => 'Envoyer le dossier via comelus',
+            ])
+
+            ->add('isSms', CheckboxType::class, [
+                'required' => false,
+                'label_attr' => ['class' => 'switch-custom'],
+                'label' => 'Notifier les élus via sms',
+            ])
+
             ->add('authorizedSecretaries', EntityType::class, [
                 'placeholder' => 'Sélectionner les gestionnaires de séance autorisés',
                 'required' => false,
-                'label' => 'Gestionnaires de séance autorisés',
+                'label' => 'Gestionnaires de séance autorisés à gérer la séance',
                 'class' => User::class,
                 'query_builder' => $this->userRepository
                     ->findSecretariesByStructure($options['structure']),
