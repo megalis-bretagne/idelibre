@@ -93,9 +93,6 @@ class SittingRepository extends ServiceEntityRepository
             ;
     }
 
-
-
-
     public function findWithProjectsAndAnnexes(string $sittingId): ?Sitting
     {
         return $this->createQueryBuilder('s')
@@ -112,8 +109,4 @@ class SittingRepository extends ServiceEntityRepository
             ->getOneOrNullResult()
             ;
     }
-
-
-
-
 }
