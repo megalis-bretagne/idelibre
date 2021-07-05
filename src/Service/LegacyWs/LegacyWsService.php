@@ -52,7 +52,6 @@ class LegacyWsService
         $sitting = new Sitting();
         $this->em->persist($sitting);
 
-
         $date = new \DateTime($rawSitting['date_seance'], new DateTimeZone($structure->getTimezone()->getName()));
         $date = $date->setTimezone(new DateTimeZone('UTC'));
 
