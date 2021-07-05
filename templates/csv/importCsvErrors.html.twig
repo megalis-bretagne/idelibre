@@ -9,27 +9,39 @@
 {% endblock %}
 
 {% block pageDetails %}
-<div class="alert alert-primary">
-    L'import du csv a bien été réalisé, mais certains utilisateurs n'ont pas pu être importés
-</div>
+    <div class="alert alert-primary">
+        Certains utilisateurs n'ont pas pu être importés
+    </div>
 
-{% for error in errors %}
-<div class="alert alert-danger">
+    {% for error in errors %}
+        <div class="alert alert-danger">
 
-    {% for violation in error %}
-    Entrée : {{ violation.root.username }}, {{ violation.root.firstName }}, {{ violation.root.lastName }}
-    , {{ violation.root.lastName }} <br>
-    Message : {{ violation.message }} <br>
-    Champ en erreur : {{ violation.propertyPath }} <br>
-    Valeur du champ : {{ violation.invalidValue }} <br>
+            {% for violation in error %}
+                {% if violation.root.username is defined %}
+                    Entrée : {{ violation.root.username }}, {{ violation.root.firstName }}, {{ violation.root.lastName }}
+                    , {{ violation.root.lastName }} <br>
+                    Message : {{ violation.message }} <br>
+                    Champ en erreur : {{ violation.propertyPath }} <br>
+                    Valeur du champ : {{ violation.invalidValue }} <br>
 
-    {% if not loop.last %}
-        <hr>
-    {% endif %}
+                {% else%}
 
+                    Entrée : {{ violation.parameters | join(',') }} <br>
+                    Message: {{ violation.message }} <br>
+
+
+                {% endif %}
+
+                {% if not loop.last %}
+                    <hr>
+                {% endif %}
+
+            {% endfor %}
+
+
+
+        </div>
     {% endfor %}
-</div>
-{% endfor %}
 {% endblock %}
 
 {% block pageForm %}

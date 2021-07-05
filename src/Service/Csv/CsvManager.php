@@ -59,6 +59,11 @@ class CsvManager
         $records = $csv->getRecords();
 
         foreach ($records as $record) {
+            if ($this->isMissingFields($record)) {
+                $errors[] = $this->missingFieldViolation($record);
+                continue;
+            }
+
             $username = $this->sanitize($record[0] ?? '') . '@' . $structure->getSuffix();
             if (!$this->isExistUsername($username, $structure)) {
                 $user = $this->createUserFromRecord($structure, $record);
@@ -80,6 +85,25 @@ class CsvManager
         $this->em->flush();
 
         return $errors;
+    }
+
+    private function isMissingFields(array $record): bool
+    {
+        return 6 > count($record);
+    }
+
+    private function missingFieldViolation($record): ConstraintViolationList
+    {
+        $violation = new ConstraintViolation(
+            'Chaque ligne doit contenir 6 champs separés par des virgules',
+            null,
+            $record,
+            null,
+            'le nombre de champs',
+            'le nombre de champs est faux'
+        );
+
+        return new ConstraintViolationList([$violation]);
     }
 
     private function associateActorToTypeSeances(User $user, ?string $typeNamesString, Structure $structure): void
