@@ -33,8 +33,7 @@ class CheckController extends AbstractController
         LshorodatageInterface $lshorodatage,
         LoggerInterface $logger,
         ServiceInfo $serviceInfo
-    ): Response
-    {
+    ): Response {
         $isNodejs = $clientNotifier->checkConnection();
         $isLshorodatage = true;
         try {

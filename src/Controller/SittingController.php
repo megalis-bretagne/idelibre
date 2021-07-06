@@ -154,6 +154,17 @@ class SittingController extends AbstractController
     }
 
     /**
+     * @Route("/sitting/edit/{id}/cancel", name="edit_sitting_information_cancel")
+     * @IsGranted("MANAGE_SITTINGS", subject="sitting")
+     */
+    public function editInformationCancel(Sitting $sitting): Response
+    {
+        $this->addFlash('success', 'Modifications annulées');
+
+        return $this->redirectToRoute('edit_sitting_information', ['id' => $sitting->getId()]);
+    }
+
+    /**
      * @Route("/sitting/delete/{id}", name="sitting_delete", methods={"DELETE"})
      * @IsGranted("MANAGE_SITTINGS", subject="sitting")
      */
