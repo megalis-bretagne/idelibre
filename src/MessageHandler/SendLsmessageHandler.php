@@ -37,12 +37,7 @@ class SendLsmessageHandler implements MessageHandlerInterface
             return;
         }
         $convocations = $this->convocationRepository->getConvocationsWithUser($convocationSent->getConvocationIds());
-
-        dump($convocations);
-
         $smsList = $this->prepareSms($convocations, $lsmessageConnector);
-
-        dump($smsList);
         $this->lsmessageConnectorManager->sendSms($sitting, $smsList);
     }
 
