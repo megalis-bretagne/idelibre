@@ -122,6 +122,7 @@ let app = new Vue({
                     this.projects = response.data;
                     isDirty = false;
                     this.showMessage('Modifications annulées');
+                    window.scrollTo(0, 0);
                 })
             },
 
