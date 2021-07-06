@@ -1,10 +1,19 @@
-    date de la séance : #dateseance# <br>
-    heure de la séance : #heureseance# <br>
-    lieu de la seance : #lieuseance# <br>
-    type de la séance : #typeseance# <br>
+date de la séance : #dateseance# <br>
+heure de la séance : #heureseance# <br>
+lieu de la seance : #lieuseance# <br>
+type de la séance : #typeseance# <br>
+
+{% if email_template is not defined or email_template.category == 'convocation' %}
+    civilité de l'élu : #civilite# <br>
     prénom de l'élu : #prenom# <br>
     nom de l'élu : #nom# <br>
-    {% if email_template is not defined or email_template.category == 'convocation'  %}
+{% else %}
+    civilité de l'utilisateur : #civilite# <br>
+    prénom de l'utilisateur : #prenom# <br>
+    nom de l'utilisateur : #nom# <br>
+{% endif %}
+
+{% if email_template is not defined or email_template.category == 'convocation' %}
     titre de l'élu : #titre# <br>
-    {% endif %}
-    civilité de l'élu : #civilite# <br>
+{% endif %}
+
