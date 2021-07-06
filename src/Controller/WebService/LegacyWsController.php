@@ -19,7 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class LegacyWsController extends AbstractController
 {
     /**
-     * @Route("/{slash}/seances.json", name="wd_connector", requirements={"slash"="\/?"})
+     * @Route("/{slash}seances.json", name="wd_connector", requirements={"slash"="\/?"})
      */
     public function addSitting(
         Request $request,
