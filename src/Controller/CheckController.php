@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Service\ClientNotifier\ClientNotifier;
 use App\Service\Email\EmailData;
 use App\Service\Email\EmailServiceInterface;
+use App\Service\ServiceInfo\ServiceInfo;
 use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Libriciel\LshorodatageApiWrapper\LsHorodatageException;
@@ -27,7 +28,12 @@ class CheckController extends AbstractController
      * @IsGranted("ROLE_SUPERADMIN")
      * @Breadcrumb("Vérification de la plateforme")
      */
-    public function index(ClientNotifier $clientNotifier, LshorodatageInterface $lshorodatage, LoggerInterface $logger): Response
+    public function index(
+        ClientNotifier $clientNotifier,
+        LshorodatageInterface $lshorodatage,
+        LoggerInterface $logger,
+        ServiceInfo $serviceInfo
+    ): Response
     {
         $isNodejs = $clientNotifier->checkConnection();
         $isLshorodatage = true;
@@ -38,17 +44,10 @@ class CheckController extends AbstractController
             $logger->error($e->getMessage());
         }
 
-        $phpConfig = [
-            'memory_limit' => ini_get('memory_limit'),
-            'post_max_size' => ini_get('post_max_size'),
-            'upload_max_filesize' => ini_get('upload_max_filesize'),
-            'max_file_uploads' => ini_get('max_file_uploads'),
-        ];
-
         return $this->render('check/index.html.twig', [
             'isNodejs' => $isNodejs,
             'isLshorodatage' => $isLshorodatage,
-            'phpConfig' => $phpConfig,
+            'phpConfig' => $serviceInfo->getPhpConfiguration(),
         ]);
     }
 
