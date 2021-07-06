@@ -34,8 +34,8 @@
             <tr class="d-flex">
                 <td style="width: 15%;">{{ convocation.user.firstName }} </td>
                 <td style="width: 15%;">{{ convocation.user.lastName }} </td>
-                <td style="width: 15%;">{{ convocation.sentTimestamp ? convocation.sentTimestamp.createdAt | date('d/m/Y') : '' }} </td>
-                <td style="width: 15%;">{{ convocation.receivedTimestamp ? convocation.receivedTimestamp.createdAt | date('d/m/Y') : '' }} </td>
+                <td style="width: 15%;">{{ convocation.sentTimestamp ? convocation.sentTimestamp.createdAt | date('d/m/Y H:i', timezone) : '' }} </td>
+                <td style="width: 15%;">{{ convocation.receivedTimestamp ? convocation.receivedTimestamp.createdAt | date('d/m/Y H:i', timezone) : '' }} </td>
                 <td style="width: 10%;">{{ convocation.attendance ? convocation.attendance : '' }}</td>
                 <td style="width: 30%;">{{ convocation.deputy ? convocation.deputy : '' }}</td>
             </tr>
