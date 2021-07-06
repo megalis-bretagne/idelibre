@@ -4,17 +4,21 @@ namespace App\Service\Report;
 
 use App\Entity\Convocation;
 use App\Entity\Sitting;
+use App\Entity\Structure;
 use App\Entity\Timestamp;
 use App\Repository\ConvocationRepository;
+use App\Service\Util\DateUtil;
 use League\Csv\Writer;
 
 class CsvSittingReport
 {
     private ConvocationRepository $convocationRepository;
+    private DateUtil $dateUtil;
 
-    public function __construct(ConvocationRepository $convocationRepository)
+    public function __construct(ConvocationRepository $convocationRepository, DateUtil $dateUtil)
     {
         $this->convocationRepository = $convocationRepository;
+        $this->dateUtil = $dateUtil;
     }
 
     public function generate(Sitting $sitting): string
@@ -38,22 +42,24 @@ class CsvSittingReport
 
     private function getConvocationData(Convocation $convocation): array
     {
+        $structure = $convocation->getSitting()->getStructure();
+
         return [
             $convocation->getUser()->getFirstName(),
             $convocation->getUser()->getLastName(),
-            $this->getDateFormattedTimeStamp($convocation->getSentTimestamp()),
-            $this->getDateFormattedTimeStamp($convocation->getReceivedTimestamp()),
+            $this->getDateFormattedTimeStamp($convocation->getSentTimestamp(), $structure),
+            $this->getDateFormattedTimeStamp($convocation->getReceivedTimestamp(), $structure),
             $convocation->getAttendance() ?? '',
             $convocation->getDeputy() ?? '',
         ];
     }
 
-    private function getDateFormattedTimeStamp(?Timestamp $timestamp): string
+    private function getDateFormattedTimeStamp(?Timestamp $timestamp, Structure $structure): string
     {
         if (!$timestamp) {
             return '';
         }
 
-        return $timestamp->getCreatedAt()->format('d/m/Y');
+        return $this->dateUtil->getFormattedDateTime($timestamp->getCreatedAt(), $structure->getTimezone()->getName());
     }
 }
