@@ -68,8 +68,8 @@ class LegacyWsController extends AbstractController
     }
 
     /**
-     * @Route("/api300/ping", name="api_300_ping")
-     * @Route("/Api300/ping", name="Api_300_ping")
+     * @Route("/{slash}api300/ping", name="api_300_ping", requirements={"slash"="\/?"})
+     * @Route("/{slash}Api300/ping", name="Api_300_ping", requirements={"slash"="\/?"})
      */
     public function ping(): Response
     {
@@ -77,8 +77,8 @@ class LegacyWsController extends AbstractController
     }
 
     /**
-     * @Route("/api300/version", name="api_300_version")
-     * @Route("/Api300/version", name="Api_300_version")
+     * @Route("/{slash}api300/version", name="api_300_version", requirements={"slash"="\/?"})
+     * @Route("/{slash}Api300/version", name="Api_300_version", requirements={"slash"="\/?"})
      */
     public function version(ParameterBagInterface $bag): Response
     {
@@ -92,8 +92,8 @@ class LegacyWsController extends AbstractController
      *          password : "idelibre"
      * return string :(success, error_database //database missing, error_user //auth error).
      *
-     * @Route("/api300/check", name="api_300_check")
-     * @Route("/Api300/check", name="Api_300_check")
+     * @Route("/{slash}api300/check", name="api_300_check", requirements={"slash"="\/?"})
+     * @Route("/{slash}Api300/check", name="Api_300_check", requirements={"slash"="\/?"})
      */
     public function check(Request $request, LegacyWsAuthentication $legacyWsAuthentication): Response
     {
