@@ -28,10 +28,12 @@ class CheckController extends AbstractController
      * @IsGranted("ROLE_SUPERADMIN")
      * @Breadcrumb("Vérification de la plateforme")
      */
-    public function index(ClientNotifier $clientNotifier,
-                          LshorodatageInterface $lshorodatage,
-                          LoggerInterface $logger,
-                          ServiceInfo $serviceInfo): Response
+    public function index(
+        ClientNotifier $clientNotifier,
+        LshorodatageInterface $lshorodatage,
+        LoggerInterface $logger,
+        ServiceInfo $serviceInfo
+    ): Response
     {
         $isNodejs = $clientNotifier->checkConnection();
         $isLshorodatage = true;

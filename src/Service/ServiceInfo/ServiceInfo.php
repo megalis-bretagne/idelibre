@@ -2,7 +2,6 @@
 
 namespace App\Service\ServiceInfo;
 
-
 class ServiceInfo
 {
     public function getPhpConfiguration(): array
