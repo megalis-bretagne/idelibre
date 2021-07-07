@@ -104,12 +104,12 @@ class SittingManager
     public function update(Sitting $sitting, ?UploadedFile $uploadedConvocationFile, ?UploadedFile $uploadedInvitationFile): void
     {
         if ($uploadedConvocationFile) {
-            $convocationFile = $this->fileManager->replace($uploadedConvocationFile, $sitting);
+            $convocationFile = $this->fileManager->replaceConvocationFile($uploadedConvocationFile, $sitting);
             $sitting->setConvocationFile($convocationFile);
         }
 
         if ($uploadedInvitationFile) {
-            $invitationFile = $this->fileManager->replace($uploadedInvitationFile, $sitting);
+            $invitationFile = $this->fileManager->replaceInvitationFile($uploadedInvitationFile, $sitting);
             $sitting->setInvitationFile($invitationFile);
         }
 
