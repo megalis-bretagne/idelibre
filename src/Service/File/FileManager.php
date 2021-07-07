@@ -73,9 +73,16 @@ class FileManager
         $this->em->remove($file);
     }
 
-    public function replace(UploadedFile $uploadedFile, Sitting $sitting): File
+    public function replaceConvocationFile(UploadedFile $uploadedFile, Sitting $sitting): File
     {
         $this->delete($sitting->getConvocationFile());
+
+        return $this->save($uploadedFile, $sitting->getStructure());
+    }
+
+    public function replaceInvitationFile(UploadedFile $uploadedFile, Sitting $sitting): File
+    {
+        $this->delete($sitting->getInvitationFile());
 
         return $this->save($uploadedFile, $sitting->getStructure());
     }
