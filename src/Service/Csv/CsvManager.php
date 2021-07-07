@@ -73,6 +73,11 @@ class CsvManager
                     continue;
                 }
 
+                if (!$user->getRole()) {
+                    $errors[] = $this->missingRoleViolation($record);
+                    continue;
+                }
+
                 if ($errorCsv = $this->isUsernameTwiceInCsv($csvEmails, $username, $user)) {
                     $errors[] = $errorCsv;
                     continue;
@@ -95,12 +100,26 @@ class CsvManager
     private function missingFieldViolation($record): ConstraintViolationList
     {
         $violation = new ConstraintViolation(
-            'Chaque ligne doit contenir 6 champs separés par des virgules',
+            'Chaque ligne doit contenir 6 champs séparés par des virgules.',
             null,
             $record,
             null,
             'le nombre de champs',
             'le nombre de champs est faux'
+        );
+
+        return new ConstraintViolationList([$violation]);
+    }
+
+    private function missingRoleViolation($record): ConstraintViolationList
+    {
+        $violation = new ConstraintViolation(
+            'Il est obligatoire de définir un role parmi les valeurs 1, 2 ou 3.',
+            null,
+            $record,
+            null,
+            'role',
+            'le role n\'est pas bon'
         );
 
         return new ConstraintViolationList([$violation]);
@@ -192,10 +211,20 @@ class CsvManager
             ->setFirstName($this->sanitize($record[1] ?? ''))
             ->setLastName($this->sanitize($record[2] ?? ''))
             ->setEmail($this->sanitize($record[3] ?? ''))
-            ->setPassword($this->passwordEncoder->encodePassword($user, $this->sanitize($record[4] ?? '')))
+            ->setPassword($this->getPassword($user, $record[4] ?? ''))
             ->setRole($this->getRoleFromCode(intval($record[5] ?? 0)))
             ->setStructure($structure);
 
         return $user;
+    }
+
+    private function getPassword(User $user, string $plainPassword): string
+    {
+        $sanitizedPassword = $this->sanitize($plainPassword);
+        if (0 === strlen($sanitizedPassword)) {
+            return 'NotInitialized';
+        }
+
+        return  $this->passwordEncoder->encodePassword($user, $sanitizedPassword);
     }
 }
