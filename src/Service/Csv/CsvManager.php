@@ -37,7 +37,8 @@ class CsvManager
         TypeRepository $typeRepository,
         UserPasswordEncoderInterface $passwordEncoder,
         RoleManager $roleManager
-    ) {
+    )
+    {
         $this->em = $em;
         $this->userRepository = $userRepository;
         $this->validator = $validator;
@@ -192,10 +193,22 @@ class CsvManager
             ->setFirstName($this->sanitize($record[1] ?? ''))
             ->setLastName($this->sanitize($record[2] ?? ''))
             ->setEmail($this->sanitize($record[3] ?? ''))
-            ->setPassword($this->passwordEncoder->encodePassword($user, $this->sanitize($record[4] ?? '')))
+            ->setPassword($this->getPassword($user, $record[4] ?? ''))
             ->setRole($this->getRoleFromCode(intval($record[5] ?? 0)))
             ->setStructure($structure);
 
         return $user;
     }
+
+
+    private function getPassword(User $user, string $plainPassword): string
+    {
+        $sanitizedPassword = $this->sanitize($plainPassword);
+        if (strlen($sanitizedPassword) === 0) {
+            return "NotInitialized";
+        }
+
+        return  $this->passwordEncoder->encodePassword($user, $sanitizedPassword);
+    }
+
 }
