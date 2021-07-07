@@ -182,6 +182,37 @@ class CsvControllerTest extends WebTestCase
     }
 
 
+    public function testImportUserCsvNoRole()
+    {
+        $csvFile = new UploadedFile(__DIR__ . '/../resources/user_no_role.csv', 'user.csv');
+        $this->assertNotEmpty($csvFile);
+
+        $this->loginAsAdminLibriciel();
+        $crawler = $this->client->request(Request::METHOD_GET, '/csv/importUsers');
+        $this->assertResponseStatusCodeSame(200);
+        $item = $crawler->filter('html:contains("Importer des utilisateurs via csv")');
+        $this->assertCount(1, $item);
+
+        $form = $crawler->selectButton('Enregistrer')->form();
+
+        $form['csv[csv]'] = $csvFile;
+
+        $this->client->submit($form);
+
+        $this->assertTrue($this->client->getResponse()->isRedirect());
+
+        $crawler = $this->client->followRedirect();
+        $this->assertResponseStatusCodeSame(200);
+
+        $title = $crawler->filter('html:contains("Erreurs lors de l\'import")');
+        $this->assertCount(1, $title);
+
+
+        $errorMsg = $crawler->filter('html:contains("Il est obligatoire de définir un role parmi les valeurs 1, 2 ou 3.")');
+        $this->assertCount(1, $errorMsg);
+    }
+
+
 
 
 

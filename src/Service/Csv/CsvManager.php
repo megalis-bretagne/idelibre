@@ -73,6 +73,12 @@ class CsvManager
                     continue;
                 }
 
+                if(!$user->getRole()) {
+                    $errors[] = $this->missingRoleViolation($record);
+                    continue;
+
+                }
+
                 if ($errorCsv = $this->isUsernameTwiceInCsv($csvEmails, $username, $user)) {
                     $errors[] = $errorCsv;
                     continue;
@@ -105,6 +111,22 @@ class CsvManager
 
         return new ConstraintViolationList([$violation]);
     }
+
+
+    private function missingRoleViolation($record): ConstraintViolationList
+    {
+        $violation = new ConstraintViolation(
+            'Il est obligatoire de définir un role parmi les valeurs 1, 2 ou 3.',
+            null,
+            $record,
+            null,
+            'role',
+            'le role n\'est pas bon'
+        );
+
+        return new ConstraintViolationList([$violation]);
+    }
+
 
     private function associateActorToTypeSeances(User $user, ?string $typeNamesString, Structure $structure): void
     {
