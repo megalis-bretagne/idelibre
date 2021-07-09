@@ -29,7 +29,10 @@ class PdfSittingReport
         ]);
 
         $generatedPdfPath = '/tmp/' . uniqid('pdf_report');
-        $this->pdf->generateFromHtml($html, $generatedPdfPath, ['orientation' => 'landscape']);
+        $this->pdf->generateFromHtml($html, $generatedPdfPath, [
+            'orientation' => 'landscape',
+            'footer-right' => '[page] / [toPage]',
+        ]);
 
         return $generatedPdfPath;
     }
