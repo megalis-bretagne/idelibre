@@ -229,6 +229,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->andWhere(' r.name in (:roleNames)')
             ->setParameter('roleNames', $roleNames)
             ->andWhere('u.structure =:structure')
+            ->andWhere('u.isActive = true')
             ->setParameter('structure', $structure);
 
         if (!empty($actorsInSitting)) {
@@ -308,6 +309,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->setParameter('type', $type)
             ->leftJoin('u.role', 'r')
             ->andWhere(' r.name in (:roleCondition)')
+            ->andWhere('u.isActive = true')
             ->setParameter('roleCondition', $roleNames)
             ->getQuery()
             ->getResult();
