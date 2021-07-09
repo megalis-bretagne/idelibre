@@ -308,6 +308,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->setParameter('type', $type)
             ->leftJoin('u.role', 'r')
             ->andWhere(' r.name in (:roleCondition)')
+            ->andWhere('u.isActive = true')
             ->setParameter('roleCondition', $roleNames)
             ->getQuery()
             ->getResult();
