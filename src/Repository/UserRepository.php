@@ -229,6 +229,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->andWhere(' r.name in (:roleNames)')
             ->setParameter('roleNames', $roleNames)
             ->andWhere('u.structure =:structure')
+            ->andWhere('u.isActive = true')
             ->setParameter('structure', $structure);
 
         if (!empty($actorsInSitting)) {
