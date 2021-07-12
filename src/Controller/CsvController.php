@@ -49,7 +49,7 @@ class CsvController extends AbstractController
     /**
      * @Route("/csv/errors", name="user_csv_error")
      * @IsGranted("ROLE_MANAGE_USERS")
-     * @Breadcrumb("Erreur lors de l'import")
+     * @Breadcrumb("Erreurs lors de l'import")
      */
     public function csvError(Session $session): Response
     {

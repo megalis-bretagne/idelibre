@@ -53,7 +53,7 @@ class SittingControllerTest extends WebTestCase
         $crawler = $this->client->request(Request::METHOD_GET, '/sitting');
         $this->assertResponseStatusCodeSame(200);
 
-        $item = $crawler->filter('html:contains("Seances")');
+        $item = $crawler->filter('html:contains("Séances")');
         $this->assertCount(1, $item);
     }
 
@@ -63,7 +63,7 @@ class SittingControllerTest extends WebTestCase
         $crawler = $this->client->request(Request::METHOD_GET, '/sitting');
         $this->assertResponseStatusCodeSame(200);
 
-        $item = $crawler->filter('html:contains("Seances")');
+        $item = $crawler->filter('html:contains("Séances")');
         $this->assertCount(1, $item);
     }
 
@@ -134,7 +134,7 @@ class SittingControllerTest extends WebTestCase
 
         $crawler = $this->client->followRedirect();
         $this->assertResponseStatusCodeSame(200);
-        $successMsg = $crawler->filter('html:contains("Seances")');
+        $successMsg = $crawler->filter('html:contains("Séances")');
         $this->assertCount(1, $successMsg);
 
         $this->assertEmpty($this->getOneSittingBy(['name' => 'Conseil Libriciel']));
@@ -270,7 +270,7 @@ class SittingControllerTest extends WebTestCase
         $successMsg = $crawler->filter('html:contains("La séance a été classée")');
         $this->assertCount(1, $successMsg);
 
-        $item = $crawler->filter('html:contains("Seances")');
+        $item = $crawler->filter('html:contains("Séances")');
         $this->assertCount(1, $item);
     }
 }
