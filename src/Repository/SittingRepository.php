@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Sitting;
 use App\Entity\Structure;
 use App\Entity\Type;
+use DateTimeInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -89,8 +90,7 @@ class SittingRepository extends ServiceEntityRepository
             ->addSelect('u')
             ->addSelect('sent_timestamp')
             ->addSelect('received_timestamp')
-            ->orderBy('s.date', 'DESC')
-            ;
+            ->orderBy('s.date', 'DESC');
     }
 
     public function findWithProjectsAndAnnexes(string $sittingId): ?Sitting
@@ -106,7 +106,23 @@ class SittingRepository extends ServiceEntityRepository
             ->addSelect('a')
             ->orderBy('p.rank', 'ASC')
             ->getQuery()
-            ->getOneOrNullResult()
-            ;
+            ->getOneOrNullResult();
+    }
+
+
+    /**
+     * @return Sitting[]
+     */
+    public function findActiveSittingsAfterDate(Structure $structure, DateTimeInterface $after): array
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.structure =:structure')
+            ->andWhere('s.isArchived = false')
+            ->setParameter('structure', $structure)
+            ->andWhere('s.date > :afterDate')
+            ->setParameter('afterDate', $after)
+            ->orderBy('s.date', 'DESC')
+            ->getQuery()
+            ->getResult();
     }
 }

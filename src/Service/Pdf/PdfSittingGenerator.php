@@ -25,10 +25,10 @@ class PdfSittingGenerator
 
     public function generateFullSittingPdf(Sitting $sitting): void
     {
-        $cmd = 'nohup pdftk ';
+        $cmd = 'pdftk ';
         $cmd = $this->addConvocation($cmd, $sitting);
         $cmd = $this->addProjectsAndAnnexes($cmd, $sitting->getProjects());
-        $cmd .= ' cat output ' . $this->getPdfPath($sitting) . ' &';
+        $cmd .= ' cat output ' . $this->getPdfPath($sitting);
         try {
             shell_exec($cmd);
         } catch (Exception $exception) {
