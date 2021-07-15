@@ -13,7 +13,7 @@ class GenPdfAndZipSittingCommand extends Command
     protected static $defaultName = 'gen:zip_pdf';
     private GenZipAndPdf $genZipAndPdf;
 
-    public function __construct(GenZipAndPdf $genZipAndPdf,string $name = null)
+    public function __construct(GenZipAndPdf $genZipAndPdf, string $name = null)
     {
         parent::__construct($name);
         $this->genZipAndPdf = $genZipAndPdf;
@@ -32,9 +32,6 @@ class GenPdfAndZipSittingCommand extends Command
         $io = new SymfonyStyle($input, $output);
 
         $this->genZipAndPdf->genAllZipPdf();
-
-
-
 
         return Command::SUCCESS;
     }

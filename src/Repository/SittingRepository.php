@@ -109,7 +109,6 @@ class SittingRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-
     /**
      * @return Sitting[]
      */

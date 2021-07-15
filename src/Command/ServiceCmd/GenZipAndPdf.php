@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Command\ServiceCmd;
-
 
 use App\Entity\Sitting;
 use App\Entity\Structure;
@@ -19,17 +17,18 @@ class GenZipAndPdf
     private PdfSittingGenerator $pdfSittingGenerator;
     private ZipSittingGenerator $zipSittingGenerator;
 
-    public function __construct(StructureRepository $structureRepository,
-                                SittingRepository $sittingRepository,
-                                PdfSittingGenerator $pdfSittingGenerator,
-                                ZipSittingGenerator $zipSittingGenerator)
+    public function __construct(
+        StructureRepository $structureRepository,
+        SittingRepository $sittingRepository,
+        PdfSittingGenerator $pdfSittingGenerator,
+        ZipSittingGenerator $zipSittingGenerator
+    )
     {
         $this->structureRepository = $structureRepository;
         $this->sittingRepository = $sittingRepository;
         $this->pdfSittingGenerator = $pdfSittingGenerator;
         $this->zipSittingGenerator = $zipSittingGenerator;
     }
-
 
     /**
      * @return Structure[]
@@ -39,15 +38,13 @@ class GenZipAndPdf
         return $this->structureRepository->findAll();
     }
 
-
     /**
      * @return Sitting[]
      */
     private function listActiveSittingsByStructure(Structure $structure): array
     {
-        return $this->sittingRepository->findActiveSittingsAfterDate($structure, new DateTime("- 4month"));
+        return $this->sittingRepository->findActiveSittingsAfterDate($structure, new DateTime('- 4month'));
     }
-
 
     public function genAllZipPdf()
     {
@@ -56,20 +53,16 @@ class GenZipAndPdf
         }
     }
 
-
     public function genZipAndPdfByStructure(Structure $structure)
     {
-        dump("_________________________");
-        dump("Structure : " . $structure->getName());
-        dump("Sitting count : " . count($this->listActiveSittingsByStructure($structure)));
+        dump('_________________________');
+        dump('Structure : ' . $structure->getName());
+        dump('Sitting count : ' . count($this->listActiveSittingsByStructure($structure)));
 
         foreach ($this->listActiveSittingsByStructure($structure) as $key => $sitting) {
-            dump("Sitting num : " . $key);
+            dump('Sitting num : ' . $key);
             $this->pdfSittingGenerator->generateFullSittingPdf($sitting);
             $this->zipSittingGenerator->generateZipSitting($sitting);
         }
-
     }
-
-
 }
