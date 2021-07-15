@@ -26,7 +26,7 @@ class StructureInformationType extends AbstractType
                 'choice_label' => 'name',
                 'multiple' => false,
                 'label' => 'Fuseau horaire',
-                'disabled' => true
+                'disabled' => true,
             ])
             ->add('suffix', TextType::class, [
                 'label' => 'Suffixe de connexion',
