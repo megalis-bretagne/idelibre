@@ -22,8 +22,7 @@ class GenZipAndPdf
         SittingRepository $sittingRepository,
         PdfSittingGenerator $pdfSittingGenerator,
         ZipSittingGenerator $zipSittingGenerator
-    )
-    {
+    ) {
         $this->structureRepository = $structureRepository;
         $this->sittingRepository = $sittingRepository;
         $this->pdfSittingGenerator = $pdfSittingGenerator;
