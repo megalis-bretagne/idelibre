@@ -229,11 +229,14 @@ class SittingController extends AbstractController
      */
     public function getZipSitting(Sitting $sitting, ZipSittingGenerator $zipSittingGenerator): Response
     {
-        $response = new BinaryFileResponse($zipSittingGenerator->getAndCreateZipPath($sitting));
+        $zipPath = $zipSittingGenerator->getAndCreateZipPath($sitting);
+        $response = new BinaryFileResponse($zipPath);
         $response->setContentDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
             $sitting->getName() . '.zip'
         );
+
+        $response->headers->set('X-Accel-Redirect', $zipPath);
 
         return $response;
     }
@@ -244,11 +247,14 @@ class SittingController extends AbstractController
      */
     public function getFullPdfSitting(Sitting $sitting, PdfSittingGenerator $pdfSittingGenerator): Response
     {
-        $response = new BinaryFileResponse($pdfSittingGenerator->getPdfPath($sitting));
+        $pdfPath = $pdfSittingGenerator->getPdfPath($sitting);
+        $response = new BinaryFileResponse($pdfPath);
         $response->setContentDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
             $sitting->getName() . '.pdf'
         );
+
+        $response->headers->set('X-Accel-Redirect', $pdfPath);
 
         return $response;
     }

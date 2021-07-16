@@ -24,6 +24,8 @@ class FileController extends AbstractController
             $file->getName()
         );
 
+        $response->headers->set('X-Accel-Redirect', $file->getPath());
+
         return $response;
     }
 }
