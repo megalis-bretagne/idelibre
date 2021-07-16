@@ -58,6 +58,7 @@ services:
       - /data/certbot/www:/var/www/certbot
       #- data-public:/app/public:ro
       - ./public:/app/public
+      - /tmp/data/pdf:/data/pdf:ro
 
   certbot:
     image: certbot/certbot
