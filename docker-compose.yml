@@ -73,6 +73,7 @@ services:
       - /data/certbot/conf:/etc/letsencrypt
       - /data/certbot/www:/var/www/certbot
       - data-public:/app/public:ro
+      - /data/files:/data:ro
 
   certbot:
     image: certbot/certbot
