@@ -7,13 +7,12 @@ use App\Entity\User;
 use App\Tests\FindEntityTrait;
 use App\Tests\HasValidationError;
 use App\Tests\StringTrait;
-use Liip\TestFixturesBundle\Test\FixturesTrait;
+use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class UserTest extends WebTestCase
 {
-    use FixturesTrait;
     use FindEntityTrait;
     use HasValidationError;
     use StringTrait;
@@ -24,10 +23,11 @@ class UserTest extends WebTestCase
     protected function setUp(): void
     {
         self::bootKernel();
-        $this->validator = self::$container->get('validator');
-        $this->entityManager = self::$container->get('doctrine')->getManager();
+        $this->validator = self::getContainer()->get('validator');
+        $this->entityManager = self::getContainer()->get('doctrine')->getManager();
 
-        $this->loadFixtures([
+        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
+        $databaseTool->loadFixtures([
             UserFixtures::class,
         ]);
     }

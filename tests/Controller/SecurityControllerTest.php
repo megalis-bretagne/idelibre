@@ -7,13 +7,12 @@ use App\DataFixtures\UserFixtures;
 use App\Entity\Structure;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
-use Liip\TestFixturesBundle\Test\FixturesTrait;
+use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 class SecurityControllerTest extends WebTestCase
 {
-    use FixturesTrait;
     use FindEntityTrait;
     use LoginTrait;
 
@@ -35,7 +34,8 @@ class SecurityControllerTest extends WebTestCase
             ->get('doctrine')
             ->getManager();
 
-        $this->loadFixtures([
+        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
+        $databaseTool->loadFixtures([
             UserFixtures::class,
             ForgetTokenFixtures::class,
         ]);

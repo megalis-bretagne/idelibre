@@ -15,7 +15,7 @@ use App\Service\ApiEntity\ProjectApi;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
 use Doctrine\Persistence\ObjectManager;
-use Liip\TestFixturesBundle\Test\FixturesTrait;
+use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Filesystem\Filesystem;
@@ -25,7 +25,6 @@ use Symfony\Component\Serializer\Serializer;
 
 class ProjectControllerTest extends WebTestCase
 {
-    use FixturesTrait;
     use FindEntityTrait;
     use LoginTrait;
 
@@ -51,7 +50,8 @@ class ProjectControllerTest extends WebTestCase
         $this->serializer = $kernel->getContainer()
             ->get('serializer');
 
-        $this->loadFixtures([
+        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
+        $databaseTool->loadFixtures([
             ProjectFixtures::class,
             UserFixtures::class,
             AnnexFixtures::class,

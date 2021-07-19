@@ -12,12 +12,11 @@ use App\Entity\Sitting;
 use App\Repository\SittingRepository;
 use App\Tests\FindEntityTrait;
 use Doctrine\Persistence\ObjectManager;
-use Liip\TestFixturesBundle\Test\FixturesTrait;
+use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class SittingRepositoryTest extends WebTestCase
 {
-    use FixturesTrait;
     use FindEntityTrait;
 
     /**
@@ -38,7 +37,9 @@ class SittingRepositoryTest extends WebTestCase
 
         $this->sittingRepository = $this->entityManager->getRepository(Sitting::class);
 
-        $this->loadFixtures([
+        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
+
+        $databaseTool->loadFixtures([
             StructureFixtures::class,
             UserFixtures::class,
             TypeFixtures::class,

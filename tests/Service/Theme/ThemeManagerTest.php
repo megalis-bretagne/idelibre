@@ -11,13 +11,12 @@ use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
 use App\Tests\privateMethodTrait;
 use Doctrine\ORM\EntityManagerInterface;
-use Liip\TestFixturesBundle\Test\FixturesTrait;
+use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class ThemeManagerTest extends WebTestCase
 {
-    use FixturesTrait;
     use FindEntityTrait;
     use LoginTrait;
     use privateMethodTrait;
@@ -43,7 +42,8 @@ class ThemeManagerTest extends WebTestCase
 
         $this->themeRepository = $this->entityManager->getRepository(Theme::class);
 
-        $this->loadFixtures([
+        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
+        $databaseTool->loadFixtures([
             ThemeFixtures::class,
             StructureFixtures::class
         ]);

@@ -8,27 +8,29 @@ use App\Entity\Structure;
 use App\Tests\FindEntityTrait;
 use App\Tests\HasValidationError;
 use App\Tests\StringTrait;
-use Liip\TestFixturesBundle\Test\FixturesTrait;
+use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class EmailTemplateTest extends WebTestCase
 {
-    use FixturesTrait;
     use FindEntityTrait;
     use HasValidationError;
     use StringTrait;
 
-    private ValidatorInterface $validator;
+    private $validator;
     private $entityManager;
 
     protected function setUp(): void
     {
         self::bootKernel();
-        $this->validator = self::$container->get('validator');
-        $this->entityManager = self::$container->get('doctrine')->getManager();
 
-        $this->loadFixtures([
+        $this->validator = self::getContainer()->get('validator');
+        $this->entityManager = self::getContainer()->get('doctrine')->getManager();
+
+        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
+
+        $databaseTool->loadFixtures([
             EmailTemplateFixtures::class,
         ]);
     }

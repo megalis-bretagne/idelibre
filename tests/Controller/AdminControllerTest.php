@@ -9,14 +9,14 @@ use App\Entity\User;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
 use Doctrine\ORM\EntityManagerInterface;
-use Liip\TestFixturesBundle\Test\FixturesTrait;
+use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 class AdminControllerTest extends WebTestCase
 {
-    use FixturesTrait;
+
     use FindEntityTrait;
     use LoginTrait;
 
@@ -30,16 +30,21 @@ class AdminControllerTest extends WebTestCase
      */
     private $entityManager;
 
+
+
     protected function setUp(): void
     {
         $this->client = static::createClient();
 
         $kernel = self::bootKernel();
+
+        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
+
         $this->entityManager = $kernel->getContainer()
             ->get('doctrine')
             ->getManager();
 
-        $this->loadFixtures([
+        $databaseTool->loadFixtures ([
             UserFixtures::class,
             GroupFixtures::class,
         ]);

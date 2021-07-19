@@ -159,12 +159,6 @@
     "laminas/laminas-code": {
         "version": "3.5.1"
     },
-    "laminas/laminas-eventmanager": {
-        "version": "3.3.0"
-    },
-    "laminas/laminas-zendframework-bridge": {
-        "version": "1.1.1"
-    },
     "league/csv": {
         "version": "9.6.1"
     },
@@ -425,9 +419,6 @@
     "symfony/http-kernel": {
         "version": "v5.1.9"
     },
-    "symfony/intl": {
-        "version": "v5.1.9"
-    },
     "symfony/maker-bundle": {
         "version": "1.0",
         "recipe": {
@@ -475,6 +466,9 @@
     },
     "symfony/orm-pack": {
         "version": "v1.2.0"
+    },
+    "symfony/password-hasher": {
+        "version": "v5.3.3"
     },
     "symfony/phpunit-bridge": {
         "version": "4.3",

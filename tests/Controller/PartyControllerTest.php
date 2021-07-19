@@ -9,14 +9,13 @@ use App\Entity\User;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
 use Doctrine\Persistence\ObjectManager;
-use Liip\TestFixturesBundle\Test\FixturesTrait;
+use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 class PartyControllerTest extends WebTestCase
 {
-    use FixturesTrait;
     use FindEntityTrait;
     use LoginTrait;
 
@@ -35,7 +34,9 @@ class PartyControllerTest extends WebTestCase
             ->get('doctrine')
             ->getManager();
 
-        $this->loadFixtures([
+        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
+
+        $databaseTool->loadFixtures([
             PartyFixtures::class,
             UserFixtures::class,
         ]);
