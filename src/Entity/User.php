@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -16,8 +17,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="`user`")
  * @UniqueEntity("username", message="Ce nom d'utilisateur est déjà utilisé")
+ *
  */
-class User implements UserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
      * @ORM\Id()
@@ -152,7 +154,7 @@ class User implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->username;
+        return (string)$this->username;
     }
 
     public function setUsername(string $username): self
@@ -179,7 +181,7 @@ class User implements UserInterface
      */
     public function getPassword(): string
     {
-        return (string) $this->password;
+        return (string)$this->password;
     }
 
     public function setPassword(string $password): self
@@ -204,6 +206,13 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
     }
+
+
+    public function getUserIdentifier(): string
+    {
+        return $this->username;
+    }
+
 
     public function getFirstName(): ?string
     {
@@ -378,5 +387,10 @@ class User implements UserInterface
         $this->phone = $phone;
 
         return $this;
+    }
+
+    public function __call($name, $arguments)
+    {
+        // TODO: Implement @method string getUserIdentifier()
     }
 }

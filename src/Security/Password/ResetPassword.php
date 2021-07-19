@@ -12,9 +12,9 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class ResetPassword
 {
@@ -22,7 +22,7 @@ class ResetPassword
     private $userRepository;
     private $tokenRepository;
     private $router;
-    private $passwordEncoder;
+    private UserPasswordHasherInterface $passwordHasher;
     private $email;
     private ParameterBagInterface $bag;
 
@@ -32,14 +32,14 @@ class ResetPassword
         RouterInterface $router,
         UserRepository $userRepository,
         ForgetTokenRepository $tokenRepository,
-        UserPasswordEncoderInterface $passwordEncoder,
+        UserPasswordHasherInterface $passwordHasher,
         ParameterBagInterface $bag
     ) {
         $this->em = $em;
         $this->userRepository = $userRepository;
         $this->tokenRepository = $tokenRepository;
         $this->router = $router;
-        $this->passwordEncoder = $passwordEncoder;
+        $this->passwordHasher = $passwordHasher;
         $this->email = $email;
         $this->bag = $bag;
     }
@@ -122,7 +122,7 @@ class ResetPassword
 
     public function setNewPassword(User $user, string $plainPassword)
     {
-        $user->setPassword($this->passwordEncoder->encodePassword($user, $plainPassword));
+        $user->setPassword($this->passwordHasher->hashPassword($user, $plainPassword));
         $this->em->persist($user);
         $this->em->flush();
 

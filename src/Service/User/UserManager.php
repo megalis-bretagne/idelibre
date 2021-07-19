@@ -9,27 +9,27 @@ use App\Entity\User;
 use App\Repository\TypeRepository;
 use App\Service\role\RoleManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class UserManager
 {
     private EntityManagerInterface $em;
-    private UserPasswordEncoderInterface $passwordEncoder;
+    private UserPasswordHasherInterface $passwordHasher;
     private ValidatorInterface $validator;
     private RoleManager $roleManager;
     private TypeRepository $typeRepository;
 
     public function __construct(
         EntityManagerInterface $em,
-        UserPasswordEncoderInterface $passwordEncoder,
+        UserPasswordHasherInterface $passwordHasher,
         ValidatorInterface $validator,
         RoleManager $roleManager,
         TypeRepository $typeRepository
     ) {
         $this->em = $em;
-        $this->passwordEncoder = $passwordEncoder;
+        $this->passwordHasher = $passwordHasher;
         $this->validator = $validator;
         $this->roleManager = $roleManager;
         $this->typeRepository = $typeRepository;
@@ -38,7 +38,7 @@ class UserManager
     public function save(User $user, ?string $plainPassword, ?Structure $structure): void
     {
         if ($plainPassword) {
-            $user->setPassword($this->passwordEncoder->encodePassword($user, $plainPassword));
+            $user->setPassword($this->passwordHasher->hashPassword($user, $plainPassword));
         }
 
         $user->setStructure($structure);
@@ -52,7 +52,7 @@ class UserManager
     public function saveStructureAdmin(User $user, ?string $plainPassword, Structure $structure): ?ConstraintViolationListInterface
     {
         if ($plainPassword) {
-            $user->setPassword($this->passwordEncoder->encodePassword($user, $plainPassword));
+            $user->setPassword($this->passwordHasher->hashPassword($user, $plainPassword));
         }
         $user->setRole($this->roleManager->getStructureAdminRole());
         $user->setStructure($structure);
@@ -71,7 +71,7 @@ class UserManager
     public function saveAdmin(User $user, ?string $plainPassword, Role $role = null, ?Group $group = null): void
     {
         if ($plainPassword) {
-            $user->setPassword($this->passwordEncoder->encodePassword($user, $plainPassword));
+            $user->setPassword($this->passwordHasher->hashPassword($user, $plainPassword));
         }
         if ($role) {
             $user->setRole($role);
