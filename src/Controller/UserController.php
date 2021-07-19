@@ -135,8 +135,6 @@ class UserController extends AbstractController
             return $this->redirectToRoute('user_index');
         }
 
-
-
         $actors = $userRepository->findActorsByStructure($this->getUser()->getStructure())->getQuery()->getResult();
 
         return $this->render('user/deleteBatch.html.twig', [
