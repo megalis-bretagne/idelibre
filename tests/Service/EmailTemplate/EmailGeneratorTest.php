@@ -11,12 +11,11 @@ use App\Service\Util\DateUtil;
 use App\Service\Util\GenderConverter;
 use App\Tests\FindEntityTrait;
 use Doctrine\ORM\EntityManagerInterface;
-use Liip\TestFixturesBundle\Test\FixturesTrait;
+use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class EmailGeneratorTest extends WebTestCase
 {
-    use FixturesTrait;
     use FindEntityTrait;
 
     private EntityManagerInterface $entityManager;
@@ -32,10 +31,11 @@ class EmailGeneratorTest extends WebTestCase
             ->get('doctrine')
             ->getManager();
 
-        $container = self::$container;
+        $container = self::getContainer();
         $this->emailTemplateManager = $container->get('App\Service\EmailTemplate\EmailTemplateManager');
 
-        $this->loadFixtures([
+        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
+        $databaseTool->loadFixtures([
             UserFixtures::class,
             SittingFixtures::class,
             ConvocationFixtures::class,

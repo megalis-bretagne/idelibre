@@ -8,12 +8,11 @@ use App\Entity\Structure;
 use App\Repository\StructureRepository;
 use App\Tests\FindEntityTrait;
 use Doctrine\Persistence\ObjectManager;
-use Liip\TestFixturesBundle\Test\FixturesTrait;
+use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class StructureRepositoryTest extends WebTestCase
 {
-    use FixturesTrait;
     use FindEntityTrait;
 
     /**
@@ -32,7 +31,8 @@ class StructureRepositoryTest extends WebTestCase
 
         $this->structureRepository = $this->entityManager->getRepository(Structure::class);
 
-        $this->loadFixtures([
+        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
+        $databaseTool->loadFixtures([
             StructureFixtures::class,
             GroupFixtures::class,
         ]);

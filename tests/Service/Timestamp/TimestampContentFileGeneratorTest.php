@@ -12,12 +12,12 @@ use App\Tests\FileTrait;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
 use Doctrine\Persistence\ObjectManager;
+use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class TimestampContentFileGeneratorTest extends WebTestCase
 {
-    use FixturesTrait;
     use FindEntityTrait;
     use LoginTrait;
     use FileTrait;
@@ -46,7 +46,8 @@ class TimestampContentFileGeneratorTest extends WebTestCase
         $this->bag = $container->get('parameter_bag');
         $this->fileSystem = $container->get('filesystem');
 
-        $this->loadFixtures([
+        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
+        $databaseTool->loadFixtures([
             SittingFixtures::class,
             ConvocationFixtures::class,
             ProjectFixtures::class,

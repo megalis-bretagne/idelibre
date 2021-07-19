@@ -6,13 +6,12 @@ use App\DataFixtures\GroupFixtures;
 use App\Entity\Group;
 use App\Tests\HasValidationError;
 use App\Tests\StringTrait;
-use Liip\TestFixturesBundle\Test\FixturesTrait;
+use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class GroupTest extends WebTestCase
 {
-    use FixturesTrait;
     use HasValidationError;
     use StringTrait;
 
@@ -22,10 +21,11 @@ class GroupTest extends WebTestCase
     protected function setUp(): void
     {
         self::bootKernel();
-        $this->validator = self::$container->get('validator');
-        $this->entityManager = self::$container->get('doctrine')->getManager();
+        $this->validator = self::getContainer()->get('validator');
+        $this->entityManager = self::getContainer()->get('doctrine')->getManager();
+        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
 
-        $this->loadFixtures([
+        $databaseTool->loadFixtures([
             GroupFixtures::class,
         ]);
     }

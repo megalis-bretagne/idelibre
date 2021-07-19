@@ -10,13 +10,12 @@ use App\Repository\ThemeRepository;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
 use Doctrine\Persistence\ObjectManager;
-use Liip\TestFixturesBundle\Test\FixturesTrait;
+use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class ThemeRepositoryTest extends WebTestCase
 {
-    use FixturesTrait;
     use FindEntityTrait;
     use LoginTrait;
 
@@ -41,7 +40,8 @@ class ThemeRepositoryTest extends WebTestCase
 
         $this->themeRepository = $this->entityManager->getRepository(Theme::class);
 
-        $this->loadFixtures([
+        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
+        $databaseTool->loadFixtures([
             StructureFixtures::class,
             ThemeFixtures::class,
         ]);

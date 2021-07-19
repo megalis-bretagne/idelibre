@@ -19,7 +19,7 @@ class ThemeTest extends WebTestCase
     protected function setUp(): void
     {
         self::bootKernel();
-        $this->validator = self::$container->get('validator');
+        $this->validator = self::getContainer()->get('validator');
     }
 
     public function testValid()

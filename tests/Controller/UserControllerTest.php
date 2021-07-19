@@ -10,13 +10,12 @@ use App\Entity\User;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
 use Doctrine\ORM\EntityManagerInterface;
-use Liip\TestFixturesBundle\Test\FixturesTrait;
+use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 class UserControllerTest extends WebTestCase
 {
-    use FixturesTrait;
     use FindEntityTrait;
     use LoginTrait;
 
@@ -39,7 +38,9 @@ class UserControllerTest extends WebTestCase
             ->get('doctrine')
             ->getManager();
 
-        $this->loadFixtures([
+        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
+
+        $databaseTool->loadFixtures([
             UserFixtures::class,
             RoleFixtures::class,
             TypeFixtures::class,
