@@ -56,13 +56,15 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $roleActor = $this->getReference(RoleFixtures::REFERENCE . 'actor');
         $partyMajority = $this->getReference(PartyFixtures::REFERENCE . 'majorite');
 
+        $password = $this->passwordHasher->hashPassword(new User(), 'password');
+
         ///////// SuperAdmin  ////////////////////
 
         $superAdmin = new User();
         $superAdmin->setEmail('superadmin@example.org')
             ->setRole($roleSuperAdmin)
             ->setUsername('superadmin')
-            ->setPassword($this->passwordHasher->hashPassword($superAdmin, 'password'))
+            ->setPassword($password)
             ->setFirstName('super')
             ->setLastName('admin');
         $manager->persist($superAdmin);
@@ -72,7 +74,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $otherSuperAdmin->setEmail('otherSuperadmin@example.org')
             ->setRole($roleSuperAdmin)
             ->setUsername('otherSuperadmin')
-            ->setPassword($this->passwordHasher->hashPassword($otherSuperAdmin, 'password'))
+            ->setPassword($password)
             ->setFirstName('otherSuper')
             ->setLastName('admin');
         $manager->persist($otherSuperAdmin);
@@ -82,7 +84,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $superAdminInactive->setEmail('superadminInactive@example.org')
             ->setRole($roleSuperAdmin)
             ->setUsername('superadminInactive')
-            ->setPassword($this->passwordHasher->hashPassword($superAdminInactive, 'password'))
+            ->setPassword($password)
             ->setFirstName('super')
             ->setLastName('admin inactive')
             ->setIsActive(false);
@@ -98,7 +100,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             ->setFirstName('admin')
             ->setLastname('libriciel')
             ->setStructure($structureLibriciel)
-            ->setPassword($this->passwordHasher->hashPassword($adminLibriciel, 'password'));
+            ->setPassword($password);
         $manager->persist($adminLibriciel);
         $this->addReference(self::REFERENCE . 'adminLibriciel', $adminLibriciel);
 
@@ -109,7 +111,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             ->setLastname('libriciel')
             ->setRole($roleActor)
             ->setStructure($structureLibriciel)
-            ->setPassword($this->passwordHasher->hashPassword($otherUserLibriciel, 'password'));
+            ->setPassword($password);
         $manager->persist($otherUserLibriciel);
         $this->addReference(self::REFERENCE . 'otherUserLibriciel', $otherUserLibriciel);
 
@@ -119,7 +121,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             ->setFirstName('user')
             ->setLastname('montpellier')
             ->setStructure($structureMontpellier)
-            ->setPassword($this->passwordHasher->hashPassword($userMontpellier, 'password'));
+            ->setPassword($password);
         $manager->persist($userMontpellier);
         $this->addReference(self::REFERENCE . 'userMontpellier', $userMontpellier);
 
@@ -143,7 +145,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             ->setFirstName('userGroup')
             ->setLastname('Recia')
             ->setGroup($groupRecia)
-            ->setPassword($this->passwordHasher->hashPassword($userGroupRecia, 'password'));
+            ->setPassword($password);
         $manager->persist($userGroupRecia);
         $this->addReference(self::REFERENCE . 'userGroupRecia', $userGroupRecia);
 
@@ -158,7 +160,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             ->setStructure($structureLibriciel)
             ->setGender(GenderConverter::MALE)
             ->setTitle('Madame le maire')
-            ->setPassword($this->passwordHasher->hashPassword($actorLibriciel1, 'password'));
+            ->setPassword($password);
         $manager->persist($actorLibriciel1);
         $this->addReference(self::REFERENCE . 'actorLibriciel1', $actorLibriciel1);
 
@@ -169,7 +171,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             ->setFirstName('actor_2')
             ->setLastname('libriciel')
             ->setStructure($structureLibriciel)
-            ->setPassword($this->passwordHasher->hashPassword($actorLibriciel2, 'password'));
+            ->setPassword($password);
         $manager->persist($actorLibriciel2);
         $this->addReference(self::REFERENCE . 'actorLibriciel2', $actorLibriciel2);
 
@@ -180,7 +182,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             ->setFirstName('actor_3')
             ->setLastname('libriciel')
             ->setStructure($structureLibriciel)
-            ->setPassword($this->passwordHasher->hashPassword($actorLibriciel3, 'password'));
+            ->setPassword($password);
         $manager->persist($actorLibriciel3);
         $this->addReference(self::REFERENCE . 'actorLibriciel3', $actorLibriciel3);
 
@@ -193,7 +195,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             ->setFirstName('secretary_1')
             ->setLastname('libriciel')
             ->setStructure($structureLibriciel)
-            ->setPassword($this->passwordHasher->hashPassword($secretaryLibriciel1, 'password'));
+            ->setPassword($password);
         $manager->persist($secretaryLibriciel1);
         $this->addReference(self::REFERENCE . 'secretaryLibriciel1', $secretaryLibriciel1);
 
@@ -204,7 +206,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             ->setFirstName('secretary_2')
             ->setLastname('libriciel')
             ->setStructure($structureLibriciel)
-            ->setPassword($this->passwordHasher->hashPassword($secretaryLibriciel2, 'password'));
+            ->setPassword($password);
         $manager->persist($secretaryLibriciel2);
         $this->addReference(self::REFERENCE . 'secretaryLibriciel2', $secretaryLibriciel2);
 
@@ -217,7 +219,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             ->setFirstName('guest1')
             ->setLastname('libriciel')
             ->setStructure($structureLibriciel)
-            ->setPassword($this->passwordHasher->hashPassword($guestLibriciel1, 'password'));
+            ->setPassword($password);
         $manager->persist($guestLibriciel1);
         $this->addReference(self::REFERENCE . 'guestLibriciel1', $guestLibriciel1);
 
@@ -228,7 +230,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             ->setFirstName('guest2')
             ->setLastname('libriciel')
             ->setStructure($structureLibriciel)
-            ->setPassword($this->passwordHasher->hashPassword($guestLibriciel2, 'password'));
+            ->setPassword($password);
         $manager->persist($guestLibriciel2);
         $this->addReference(self::REFERENCE . 'guestLibriciel2', $guestLibriciel2);
 
@@ -241,7 +243,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             ->setFirstName('employee1')
             ->setLastname('libriciel')
             ->setStructure($structureLibriciel)
-            ->setPassword($this->passwordHasher->hashPassword($employeeLibriciel1, 'password'));
+            ->setPassword($password);
         $manager->persist($employeeLibriciel1);
         $this->addReference(self::REFERENCE . 'employeeLibriciel1', $employeeLibriciel1);
 
@@ -252,7 +254,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             ->setFirstName('employee2')
             ->setLastname('libriciel')
             ->setStructure($structureLibriciel)
-            ->setPassword($this->passwordHasher->hashPassword($employeeLibriciel2, 'password'));
+            ->setPassword($password);
         $manager->persist($employeeLibriciel2);
         $this->addReference(self::REFERENCE . 'employeeLibriciel2', $employeeLibriciel2);
 
