@@ -8,24 +8,24 @@ use App\Repository\StructureRepository;
 use App\Repository\UserRepository;
 use App\Security\Http403Exception;
 use App\Security\Password\LegacyPassword;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class LegacyWsAuthentication
 {
     private StructureRepository $structureRepository;
     private UserRepository $userRepository;
-    private UserPasswordEncoderInterface $passwordEncoder;
+    private UserPasswordHasherInterface $passwordHasher;
     private LegacyPassword $legacyPassword;
 
     public function __construct(
         StructureRepository $structureRepository,
         UserRepository $userRepository,
-        UserPasswordEncoderInterface $passwordEncoder,
+        UserPasswordHasherInterface $passwordEncoder,
         LegacyPassword $legacyPassword
     ) {
         $this->structureRepository = $structureRepository;
         $this->userRepository = $userRepository;
-        $this->passwordEncoder = $passwordEncoder;
+        $this->passwordHasher = $passwordEncoder;
         $this->legacyPassword = $legacyPassword;
     }
 
@@ -61,7 +61,7 @@ class LegacyWsAuthentication
 
     private function checkPassword(User $user, string $plainPassword): bool
     {
-        if ($this->passwordEncoder->isPasswordValid($user, $plainPassword)) {
+        if ($this->passwordHasher->isPasswordValid($user, $plainPassword)) {
             return true;
         }
 

@@ -10,7 +10,7 @@ trait LoginTrait
 {
     private function login(string $username)
     {
-        $session = self::$container->get('session');
+        $session = self::getContainer()->get('session');
 
         $firewallName = 'main';
         $firewallContext = 'main';

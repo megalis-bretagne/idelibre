@@ -27,7 +27,7 @@ class SidebarListener
 
     public function onKernelRequest(ControllerEvent $event)
     {
-        if (!$event->isMasterRequest()) {
+        if (!$event->isMainRequest()) {
             return;
         }
 

@@ -4,19 +4,20 @@ namespace App\Security\Password;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class LegacyPassword
 {
     private string $salt;
-    private UserPasswordEncoderInterface $passwordEncoder;
+    private UserPasswordHasherInterface $passwordHasher;
     private EntityManagerInterface $em;
 
-    public function __construct(ParameterBagInterface $bag, UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $em)
+    public function __construct(ParameterBagInterface $bag, UserPasswordHasherInterface $passwordEncoder, EntityManagerInterface $em)
     {
         $this->salt = $bag->get('legacy_salt');
-        $this->passwordEncoder = $passwordEncoder;
+        $this->passwordHasher = $passwordEncoder;
         $this->em = $em;
     }
 
@@ -39,9 +40,9 @@ class LegacyPassword
         return $encodedPassword === $userEncodedPassword;
     }
 
-    private function updatePassword(UserInterface $user, string $plainPassword): void
+    private function updatePassword(PasswordAuthenticatedUserInterface $user, string $plainPassword): void
     {
-        $user->setPassword($this->passwordEncoder->encodePassword($user, $plainPassword));
+        $user->setPassword($this->passwordHasher->hashPassword($user, $plainPassword));
         $this->em->persist($user);
         $this->em->flush();
     }

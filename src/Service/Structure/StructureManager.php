@@ -6,27 +6,27 @@ use App\Entity\Structure;
 use App\Repository\StructureRepository;
 use App\Service\User\ImpersonateStructure;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class StructureManager
 {
     private StructureRepository $structureRepository;
     private EntityManagerInterface $em;
-    private UserPasswordEncoderInterface $passwordEncoder;
+    private UserPasswordHasherInterface $passwordHasher;
     private ValidatorInterface $validator;
     private ImpersonateStructure $impersonateStructure;
 
     public function __construct(
         StructureRepository $structureRepository,
         EntityManagerInterface $em,
-        UserPasswordEncoderInterface $passwordEncoder,
+        UserPasswordHasherInterface $userPasswordHasher,
         ValidatorInterface $validator,
         ImpersonateStructure $impersonateStructure
     ) {
         $this->structureRepository = $structureRepository;
         $this->em = $em;
-        $this->passwordEncoder = $passwordEncoder;
+        $this->passwordHasher = $userPasswordHasher;
         $this->validator = $validator;
         $this->impersonateStructure = $impersonateStructure;
     }

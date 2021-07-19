@@ -7,27 +7,27 @@ use App\Entity\User;
 use App\Repository\StructureRepository;
 use App\Service\role\RoleManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class GroupManager
 {
     private EntityManagerInterface $em;
-    private UserPasswordEncoderInterface $passwordEncoder;
+    private UserPasswordHasherInterface $passwordHasher;
     private ValidatorInterface $validator;
     private StructureRepository $structureRepository;
     private RoleManager $roleManager;
 
     public function __construct(
         EntityManagerInterface $em,
-        UserPasswordEncoderInterface $passwordEncoder,
+        UserPasswordHasherInterface $passwordHasher,
         ValidatorInterface $validator,
         StructureRepository $structureRepository,
         RoleManager $roleManager
     ) {
         $this->em = $em;
-        $this->passwordEncoder = $passwordEncoder;
+        $this->passwordHasher = $passwordHasher;
         $this->validator = $validator;
         $this->structureRepository = $structureRepository;
         $this->roleManager = $roleManager;
@@ -57,7 +57,7 @@ class GroupManager
 
     public function create(Group $group, User $user, string $plainPassword): ?ConstraintViolationListInterface
     {
-        $user->setPassword($this->passwordEncoder->encodePassword($user, $plainPassword));
+        $user->setPassword($this->passwordHasher->hashPassword($user, $plainPassword));
         $errors = $this->validator->validate($user);
 
         if (count($errors)) {

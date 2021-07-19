@@ -8,9 +8,9 @@ use App\Service\User\ImpersonateStructure;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -24,7 +24,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     private UserRepository $userRepository;
     private RouterInterface $router;
     private CsrfTokenManagerInterface $csrfTokenManager;
-    private UserPasswordEncoderInterface $passwordEncoder;
+    private UserPasswordHasherInterface $passwordEncoder;
     private Security $security;
     private ImpersonateStructure $impersonateStructure;
     private LegacyPassword $legacyPassword;
@@ -34,14 +34,14 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         RouterInterface $router,
         CsrfTokenManagerInterface $csrfTokenManager,
         ImpersonateStructure $impersonateStructure,
-        UserPasswordEncoderInterface $passwordEncoder,
+        UserPasswordHasherInterface $passwordHasher,
         Security $security,
         LegacyPassword $legacyPassword
     ) {
         $this->userRepository = $userRepository;
         $this->router = $router;
         $this->csrfTokenManager = $csrfTokenManager;
-        $this->passwordEncoder = $passwordEncoder;
+        $this->passwordEncoder = $passwordHasher;
         $this->security = $security;
         $this->impersonateStructure = $impersonateStructure;
         $this->legacyPassword = $legacyPassword;

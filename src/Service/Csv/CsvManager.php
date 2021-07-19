@@ -13,7 +13,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use ForceUTF8\Encoding;
 use League\Csv\Reader;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
@@ -26,7 +26,8 @@ class CsvManager
     private EntityManagerInterface $em;
     private UserRepository $userRepository;
     private ValidatorInterface $validator;
-    private UserPasswordEncoderInterface $passwordEncoder;
+    private UserPasswordHasherInterface $passwordHasher
+    ;
     private RoleManager $roleManager;
     private TypeRepository $typeRepository;
 
@@ -35,13 +36,13 @@ class CsvManager
         ValidatorInterface $validator,
         UserRepository $userRepository,
         TypeRepository $typeRepository,
-        UserPasswordEncoderInterface $passwordEncoder,
+        UserPasswordHasherInterface $passwordHasher,
         RoleManager $roleManager
     ) {
         $this->em = $em;
         $this->userRepository = $userRepository;
         $this->validator = $validator;
-        $this->passwordEncoder = $passwordEncoder;
+        $this->passwordHasher = $passwordHasher;
         $this->roleManager = $roleManager;
         $this->typeRepository = $typeRepository;
     }
@@ -225,6 +226,6 @@ class CsvManager
             return 'NotInitialized';
         }
 
-        return  $this->passwordEncoder->encodePassword($user, $sanitizedPassword);
+        return  $this->passwordHasher->hashPassword($user, $sanitizedPassword);
     }
 }
