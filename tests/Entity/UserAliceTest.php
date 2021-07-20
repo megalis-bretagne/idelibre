@@ -40,6 +40,7 @@ class UserAliceTest extends WebTestCase
             __DIR__ . '/../Fixtures/role.yaml',
             __DIR__ . '/../Fixtures/type.yaml',
             __DIR__ . '/../Fixtures/sitting.yaml',
+            __DIR__ . '/../Fixtures/theme.yaml',
 
         ]);
         dd($structures);

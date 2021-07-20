@@ -1,0 +1,46 @@
+App\Entity\Theme:
+  th_root:
+    name: 'ROOT'
+    fullName: 'ROOT'
+    structure: '@str_libriciel'
+
+  ### First Level ###
+
+  th_finance:
+    name: 'Finance'
+    parent: '@th_root'
+    fullName: 'Finance'
+    structure: '@str_libriciel'
+
+  th_ecole:
+    name: 'Ecole'
+    parent: '@th_root'
+    fullName: 'Ecole'
+    structure: '@str_libriciel'
+
+  th_rh:
+    name: 'rh'
+    parent: '@th_root'
+    fullName: 'rh'
+    structure: '@str_libriciel'
+
+  ### Second level ###
+
+  th_budget:
+    name: 'Budget'
+    parent: '@th_finance'
+    fullName: 'Finance, budget'
+    structure: '@str_libriciel'
+
+  ### montpellier ###
+
+  th_rootMontpellier:
+    name: 'ROOT'
+    fullName: 'ROOT'
+    structure: '@str_montpellier'
+
+  th_urbanismeMontpellier:
+    name: 'Urbanisme Montpellier'
+    parent: '@th_rootMontpellier'
+    fullName: 'Urbanisme Montpellier'
+    structure: '@str_montpellier'
