@@ -1,7 +1,7 @@
 <?php
 
+namespace App\Tests\Alice;
 
-namespace App\Service\Alice;
 use App\Entity\User;
 use Faker\Generator;
 use Faker\Provider\Base as BaseProvider;
@@ -19,18 +19,12 @@ class PasswordProvider extends BaseProvider
         $this->userPasswordHasher = $userPasswordHasher;
     }
 
-
-
     public function argon(string $plainPassword = 'password'): string
     {
-        if($plainPassword === 'password') {
-            return $this->argon2iPassword ??  $this->argon2iPassword = $this->userPasswordHasher->hashPassword(new User(), 'password');
+        if ('password' === $plainPassword) {
+            return $this->argon2iPassword ?? $this->argon2iPassword = $this->userPasswordHasher->hashPassword(new User(), 'password');
         }
 
         return $this->argon2iPassword = $this->userPasswordHasher->hashPassword(new User(), $plainPassword);
-
-
-
     }
-
 }

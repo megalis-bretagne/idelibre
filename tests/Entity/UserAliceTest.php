@@ -36,7 +36,7 @@ class UserAliceTest extends WebTestCase
 
     public function testCheck()
     {
-       // $this->markTestSkipped();
+        $this->markTestSkipped();
        // return;
         dd('ok');
     }
