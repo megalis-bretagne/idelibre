@@ -1,15 +1,163 @@
-parameters:
-  argon_password: 'argonPassword'
-  sha1_password: 'Sha1Password'
-
-
 App\Entity\User:
-  user{1..2}:
-    username: user<current()>
-    email: "mario<current()>_@toot.fr"
-    password: '<{argon_password}>'
-    firstName: "firstName<current()>"
-    lastName: "<argon(password)>"
+
+  ### SuperAdmin ###
+
+  user_superAdmin:
+    role: '@role_superAdmin'
+    username: 'superadmin'
+    email: 'superadmin@example.org'
+    password: '<argon(password)>'
+    firstName: 'super'
+    lastName: 'admin'
+
+  user_otherSuperAdmin:
+    role: '@role_superAdmin'
+    username: 'otherSuperadmin'
+    email: 'otherSuperadmin@example.org'
+    password: '<argon(password)>'
+    firstName: 'otherSuper'
+    lastName: 'admin'
+
+  user_superAdminInactive:
+    role: '@role_superAdmin'
+    username: 'superadminInactive'
+    email: 'superadminInactive@example.org'
+    password: '<argon(password)>'
+    firstName: 'super'
+    lastName: 'admin inactive'
+    isActive: false
+
+  ### Admin structure ###
+
+  user_adminLibriciel:
+    role: '@role_structureAdmin'
+    structure: '@str_libriciel'
+    username: 'admin@libriciel'
+    email: 'userLibriciel@example.org'
+    password: '<argon(password)>'
+    firstName: 'admin'
+    lastName: 'libriciel'
+
+  user_otherAdminLibriciel:
+    role: '@role_structureAdmin'
+    structure: '@str_libriciel'
+    username: 'otherUser@libriciel'
+    email: 'otherUserLibriciel@example.org'
+    password: '<argon(password)>'
+    firstName: 'otherUser'
+    lastName: 'libriciel'
+
+  user_AdminMontpellier:
+    role: '@role_structureAdmin'
+    structure: '@str_montpellier'
+    username: 'user@montpellier'
+    email: 'userMontpellier@example.org'
+    password: '<argon(password)>'
+    firstName: 'user'
+    lastName: 'montpellier'
+
+  user_AdminLegacy:
+    role: '@role_structureAdmin'
+    structure: '@str_libriciel'
+    username: 'userLegacy@libriciel'
+    email: 'userLegacy@example.org'
+    password: '<legacyEncoder(password)>'
+    firstName: 'user'
+    lastName: 'legacy'
+
+  ### Group admin ###
+
+  user_AdminGroupRecia:
+    role: '@role_groupAdmin'
+    username: 'userGroupRecia'
+    email: 'userGroupRecia@example.org'
+    password: '<argon(password)>'
+    firstName: 'userGroup'
+    lastName: 'Recia'
+    group: '@grp_recia'
+
+  ### Actor ###
+
+  user_actorLibriciel1:
+    role: '@role_actor'
+    structure: '@str_libriciel'
+    username: 'actor1@libriciel'
+    email: 'actor1@example.org'
+    password: '<argon(password)>'
+    firstName: 'actor_1'
+    lastName: 'libriciel'
+    party: '@party_majorite'
+    gender: 2
+    title: 'madame le maire'
+
+  ########## setGender(GenderConverter::MALE)
+
+  user_actorLibriciel2:
+    role: '@role_actor'
+    structure: '@str_libriciel'
+    username: 'actor2@libriciel'
+    email: 'actor2@example.org'
+    password: '<argon(password)>'
+    firstName: 'actor_2'
+    lastName: 'libriciel'
+
+  user_actorLibriciel3:
+    role: '@role_actor'
+    structure: '@str_libriciel'
+    username: 'actor3@libriciel'
+    email: 'actor3@example.org'
+    password: '<argon(password)>'
+    firstName: 'actor_3'
+    lastName: 'libriciel'
 
 
+  ### Secretary ###
 
+  user_secretaryLibriciel1:
+    role: '@role_secretary'
+    structure: '@str_libriciel'
+    username: 'secretary1@libriciel'
+    email: 'secretary1@example.org'
+    password: '<argon(password)>'
+    firstName: 'secretary_1'
+    lastName: 'libriciel'
+
+  user_secretaryLibriciel2:
+    role: '@role_secretary'
+    structure: '@str_libriciel'
+    username: 'secretary2@libriciel'
+    email: 'secretary2@example.org'
+    password: '<argon(password)>'
+    firstName: 'secretary_2'
+    lastName: 'libriciel'
+
+  ### guest ###
+
+  user_guestLibriciel1:
+    role: '@role_guest'
+    structure: '@str_libriciel'
+    username: 'guest1@libriciel'
+    email: 'guest1@example.org'
+    password: '<argon(password)>'
+    firstName: 'guest1'
+    lastName: 'libriciel'
+
+  user_guestLibriciel2:
+    role: '@role_guest'
+    structure: '@str_libriciel'
+    username: 'guest2@libriciel'
+    email: 'guest2@example.org'
+    password: '<argon(password)>'
+    firstName: 'guest2'
+    lastName: 'libriciel'
+
+  ### Employee ###
+
+  user_employeeLibriciel2:
+    role: '@role_guest'
+    structure: '@str_libriciel'
+    username: 'employee2@libriciel'
+    email: 'employee2@example.org'
+    password: '<argon(password)>'
+    firstName: 'employee2'
+    lastName: 'libriciel'

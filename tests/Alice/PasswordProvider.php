@@ -32,7 +32,7 @@ class PasswordProvider extends BaseProvider
         return $this->userPasswordHasher->hashPassword(new User(), $plainPassword);
     }
 
-    public function legacyPassword(string $plainPassword = 'password'): string
+    public function legacyEncoder(string $plainPassword = 'password'): string
     {
         if ('password' === $plainPassword) {
             return $this->sha1Password ?? $this->sha1Password = $this->legacyPassword->encode('password');

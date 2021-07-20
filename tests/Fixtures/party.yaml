@@ -1,0 +1,12 @@
+App\Entity\Party:
+  party_majorite:
+    name: 'Majorité'
+    structure: '@str_libriciel'
+
+  party_opposition:
+    name: 'Opposition'
+    structure: '@str_libriciel'
+
+  party_montpellier:
+    name: 'Montpellier'
+    structure: '@str_montpellier'
