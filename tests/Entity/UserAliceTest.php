@@ -31,8 +31,12 @@ class UserAliceTest extends WebTestCase
             __DIR__ . '/../Fixtures/structure.yaml',
             __DIR__ . '/../Fixtures/timezone.yaml',
             __DIR__ . '/../Fixtures/group.yaml',
+            __DIR__ . '/../Fixtures/file.yaml',
+            __DIR__ . '/../Fixtures/timestamp.yaml',
+            __DIR__ . '/../Fixtures/lsmessageConnector.yaml',
+            __DIR__ . '/../Fixtures/comelusConnector.yaml',
         ]);
-        dd($structures);
+        dd($structures['comelus_libriciel']);
     }
 
     public function testCheck()

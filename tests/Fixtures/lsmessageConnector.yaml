@@ -1,0 +1,8 @@
+App\Entity\Connector\LsmessageConnector:
+  lsm_libriciel:
+    __construct: ['@str_libriciel']
+    url: 'https://url.fr'
+    sender: 'sender'
+    content: 'my content'
+    active: true
+    apiKey: 'apikey'

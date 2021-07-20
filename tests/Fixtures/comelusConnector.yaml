@@ -1,0 +1,7 @@
+App\Entity\Connector\comelusConnector:
+  comelus_libriciel:
+    __construct: ['@str_libriciel']
+    url: 'https://url.fr'
+    description: 'my description'
+    active: true
+    apiKey: 'apikey'
