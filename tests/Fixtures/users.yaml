@@ -1,0 +1,15 @@
+parameters:
+  argon_password: 'argonPassword'
+  sha1_password: 'Sha1Password'
+
+
+App\Entity\User:
+  user{1..2}:
+    username: user<current()>
+    email: "mario<current()>_@toot.fr"
+    password: '<{argon_password}>'
+    firstName: "firstName<current()>"
+    lastName: "<argon(password)>"
+
+
+

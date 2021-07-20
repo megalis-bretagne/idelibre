@@ -117,6 +117,9 @@
     "egulias/email-validator": {
         "version": "2.1.21"
     },
+    "fakerphp/faker": {
+        "version": "v1.15.0"
+    },
     "friendsofphp/proxy-manager-lts": {
         "version": "v1.0.0"
     },
@@ -189,8 +192,24 @@
     "monolog/monolog": {
         "version": "2.1.1"
     },
+    "myclabs/deep-copy": {
+        "version": "1.10.2"
+    },
     "neitanod/forceutf8": {
         "version": "v2.0.4"
+    },
+    "nelmio/alice": {
+        "version": "3.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.2",
+            "ref": "0b9900ece737bec7752e4155c0164639dd9b0cb0"
+        },
+        "files": [
+            "config/packages/dev/nelmio_alice.yaml",
+            "config/packages/test/nelmio_alice.yaml"
+        ]
     },
     "nikic/php-parser": {
         "version": "v4.10.3"
@@ -263,6 +282,18 @@
     },
     "scienta/doctrine-json-functions": {
         "version": "4.2.0"
+    },
+    "sebastian/comparator": {
+        "version": "4.0.6"
+    },
+    "sebastian/diff": {
+        "version": "4.0.4"
+    },
+    "sebastian/exporter": {
+        "version": "4.0.3"
+    },
+    "sebastian/recursion-context": {
+        "version": "4.0.4"
     },
     "sensio/framework-extra-bundle": {
         "version": "5.2",
@@ -684,6 +715,15 @@
     },
     "tecnickcom/tcpdf": {
         "version": "6.4.1"
+    },
+    "theofidry/alice-data-fixtures": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "fe5a50faf580eb58f08ada2abe8afbd2d4941e05"
+        }
     },
     "twig/extra-bundle": {
         "version": "v3.1.1"

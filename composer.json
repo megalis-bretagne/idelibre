@@ -57,12 +57,14 @@
     "symfony/web-profiler-bundle": "5.3.*",
     "symfony/webpack-encore-bundle": "^1.8",
     "symfony/yaml": "5.3.*",
+    "theofidry/alice-data-fixtures": "^1.4",
     "twig/extra-bundle": "^2.12|^3.0",
     "twig/twig": "^2.12|^3.0"
   },
   "require-dev": {
     "dama/doctrine-test-bundle": "^6.3",
     "doctrine/doctrine-fixtures-bundle": "^3.3",
+    "fakerphp/faker": "^1.15",
     "liip/test-fixtures-bundle": "^2.0.0-beta1",
     "phpstan/phpstan": "^0.12.57",
     "symfony/css-selector": "5.3.*",
