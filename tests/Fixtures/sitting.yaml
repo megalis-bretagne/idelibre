@@ -1,0 +1,16 @@
+App\Entity\Sitting:
+  sit_conseilLibriciel:
+    name: 'Conseil Libriciel'
+    date: '<(new DateTime("2020-10-22"))>'
+    structure: '@str_libriciel'
+    convocationFile: '@file_convocation1'
+    place: 'Salle du conseil'
+    type: '@type_conseilLibriciel'
+
+  sit_BureauLibriciel:
+    name: 'Bureau Libriciel'
+    date: '<(new DateTime("2020-10-22"))>'
+    structure: '@str_libriciel'
+    convocationFile: '@file_convocation2'
+    place: 'Salle du conseil'
+    type: '@type_bureauLibriciel'

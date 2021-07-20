@@ -1,0 +1,21 @@
+App\Entity\Type:
+  type_conseilLibriciel:
+    name: 'Conseil Communautaire Libriciel'
+    structure: '@str_libriciel'
+    AssociatedUsers: ['@user_actorLibriciel1', '@user_actorLibriciel2']
+    AuthorizedSecretaries: ['@user_secretaryLibriciel1']
+
+  type_bureauLibriciel:
+    name: 'Bureau Communautaire Libriciel'
+    structure: '@str_libriciel'
+    AssociatedUsers: [ '@user_actorLibriciel2' ]
+
+  type_conseilMontpellier:
+    name: 'Conseil Municipal Montpellier'
+    structure: '@str_montpellier'
+
+
+  type_testLibriciel:
+    name: 'unUsedType'
+    structure: '@str_libriciel'
+    AssociatedUsers: [ '@user_actorLibriciel1', '@user_actorLibriciel2' ]

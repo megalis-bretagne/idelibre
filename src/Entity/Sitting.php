@@ -46,6 +46,7 @@ class Sitting
     private $name;
 
     /**
+     * @var DateTime
      * @ORM\Column(type="datetime")
      * @Assert\NotNull(message="La date et l'heure sont obligatoires")
      * @Groups({"sitting"})

@@ -28,6 +28,7 @@ class UserAliceTest extends WebTestCase
 
         $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
         $structures = $databaseTool->loadAliceFixture([
+            __DIR__ . '/../Fixtures/users.yaml',
             __DIR__ . '/../Fixtures/structure.yaml',
             __DIR__ . '/../Fixtures/timezone.yaml',
             __DIR__ . '/../Fixtures/group.yaml',
@@ -37,7 +38,9 @@ class UserAliceTest extends WebTestCase
             __DIR__ . '/../Fixtures/comelusConnector.yaml',
             __DIR__ . '/../Fixtures/party.yaml',
             __DIR__ . '/../Fixtures/role.yaml',
-            __DIR__ . '/../Fixtures/users.yaml',
+            __DIR__ . '/../Fixtures/type.yaml',
+            __DIR__ . '/../Fixtures/sitting.yaml',
+
         ]);
         dd($structures);
     }
