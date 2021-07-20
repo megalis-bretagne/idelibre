@@ -1,0 +1,5 @@
+App\Entity\Timestamp:
+  ts_sent:
+    filePathContent: 'fake path File content'
+    filePathTsa: 'fakepathFile tsa'
+

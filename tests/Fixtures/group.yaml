@@ -1,0 +1,6 @@
+App\Entity\Group:
+  grp_recia:
+    name: 'Recia'
+
+  grp_megalis:
+    name: 'Megalis'

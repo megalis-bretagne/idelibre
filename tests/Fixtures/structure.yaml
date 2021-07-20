@@ -1,0 +1,15 @@
+App\Entity\Structure:
+  str_libriciel:
+    name: 'Libriciel'
+    suffix: 'libriciel'
+    legacyConnectionName: 'libriciel'
+    replyTo : 'libriciel@exemple.org'
+    timezone: '@tz_paris'
+
+  str_montpellier:
+    name: 'Montpellier'
+    suffix: 'montpellier'
+    legacyConnectionName: 'montpellier'
+    replyTo: 'montpellier@exemple.org'
+    timezone: '@tz_paris'
+    group: '@grp_recia'

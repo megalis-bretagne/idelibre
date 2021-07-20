@@ -27,16 +27,17 @@ class UserAliceTest extends WebTestCase
         $this->entityManager = self::getContainer()->get('doctrine')->getManager();
 
         $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
-        $users = $databaseTool->loadAliceFixture([
-            __DIR__ . '/../Fixtures/users.yaml',
+        $structures = $databaseTool->loadAliceFixture([
+            __DIR__ . '/../Fixtures/structure.yaml',
+            __DIR__ . '/../Fixtures/timezone.yaml',
+            __DIR__ . '/../Fixtures/group.yaml',
         ]);
-
-        dd($users);
+        dd($structures);
     }
 
     public function testCheck()
     {
-        $this->markTestSkipped();
+        //$this->markTestSkipped();
        // return;
         dd('ok');
     }

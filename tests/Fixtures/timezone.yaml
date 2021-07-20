@@ -1,0 +1,6 @@
+App\Entity\Timezone:
+  tz_paris:
+    name: 'Europe/Paris'
+
+  tz_reunion:
+    name: 'Indian/Reunion'

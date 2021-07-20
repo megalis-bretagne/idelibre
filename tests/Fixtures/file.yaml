@@ -1,0 +1,30 @@
+App\Entity\File:
+  file_project1:
+    name: 'Fichier projet 1'
+    size: 100
+    path: '/tmp/fileProject1'
+
+  file_project2:
+    name: 'Fichier projet 2'
+    size: 100
+    path: '/tmp/fileProject2'
+
+  file_annex1:
+    name: 'Fichier annexe 1'
+    size: 100
+    path: '/tmp/fileAnnex1'
+
+  file_annex2:
+    name: 'Fichier annexe 2'
+    size: 100
+    path: '/tmp/fileAnnex1'
+
+  file_convocation1:
+    name: 'fichier de convocation'
+    size: 100
+    path: '/tmp/convocation'
+
+  file_convocation2:
+    name: 'fichier de convocation 2'
+    size: 100
+    path: '/tmp/convocation'
