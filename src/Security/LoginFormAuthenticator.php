@@ -82,7 +82,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     public function checkCredentials($credentials, UserInterface $user): bool
     {
-        /** @var $user PasswordAuthenticatedUserInterface|UserInterface  */
+        /** @var $user PasswordAuthenticatedUserInterface|UserInterface */
         if ($this->passwordHasher->isPasswordValid($user, $credentials['password'])) {
             return true;
         }
