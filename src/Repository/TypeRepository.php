@@ -53,14 +53,4 @@ class TypeRepository extends ServiceEntityRepository
         return $this->count(['name' => $typeName, 'structure' => $structure]) > 0;
     }
 
-    /**
-     * @return Type[]
-     */
-    public function findAuthorizedTypeByUser(User $user): QueryBuilder
-    {
-        return $this->createQueryBuilder('t')
-            ->Join('t.authorizedSecretaries', 's')
-            ->andWhere('s.id = :userId')
-            ->setParameter('userId', $user->getId());
-    }
 }

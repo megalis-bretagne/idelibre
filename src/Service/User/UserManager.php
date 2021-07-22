@@ -42,7 +42,6 @@ class UserManager
         }
 
         $user->setStructure($structure);
-        $this->updateAuthorizedType($user);
 
         $this->em->persist($user);
 
@@ -89,26 +88,5 @@ class UserManager
         $this->em->remove($user);
         $this->em->flush();
     }
-
-    private function updateAuthorizedType(User $user)
-    {
-        $this->removeAuthorizedType($user);
-        $this->addAuthorizedType($user);
-    }
-
-    private function addAuthorizedType(User $user)
-    {
-        foreach ($user->getAuthorizedTypes() as $type) {
-            $type->addAuthorizedSecretary($user);
-        }
-    }
-
-    private function removeAuthorizedType(User $user)
-    {
-        $authorizedTypes = $this->typeRepository->findAuthorizedTypeByUser($user)->getQuery()->getResult();
-
-        foreach ($authorizedTypes as $authorizedType) {
-            $authorizedType->removeAuthorizedSecretary($user);
-        }
-    }
+    
 }
