@@ -2,6 +2,7 @@
 
 namespace App\Tests\Controller;
 
+use App\DataFixtures\FileFixtures;
 use App\DataFixtures\SittingFixtures;
 use App\Entity\Sitting;
 use App\Tests\FindEntityTrait;
@@ -37,6 +38,7 @@ class SittingControllerTest extends WebTestCase
         $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
         $databaseTool->loadFixtures([
             SittingFixtures::class,
+            FileFixtures::class
         ]);
     }
 
@@ -184,7 +186,7 @@ class SittingControllerTest extends WebTestCase
 
     public function testGetZipSeances()
     {
-        $container = self::$container;
+        $container = self::getContainer();
         $bag = $container->get('parameter_bag');
 
         $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
@@ -211,7 +213,7 @@ class SittingControllerTest extends WebTestCase
 
     public function testGetPdfSeances()
     {
-        $container = self::$container;
+        $container = self::getContainer();
         $bag = $container->get('parameter_bag');
 
         $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
@@ -229,6 +231,8 @@ class SittingControllerTest extends WebTestCase
 
     public function testEditInformation()
     {
+        $filesystem = new Filesystem();
+        $filesystem->copy(__DIR__ . '/../resources/fichier.pdf', '/tmp/convocation');
         $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
 
         $this->loginAsAdminLibriciel();
@@ -240,11 +244,10 @@ class SittingControllerTest extends WebTestCase
 
         $form = $crawler->selectButton('Enregistrer')->form();
 
-        $form['sitting[place]'] = 'MyUniquePlace'; //Possiblement faux car la seance est dans un etat qui ne permet pas sa modification
+        $form['sitting[place]'] = 'MyUniquePlace';
 
         $crawler = $this->client->submit($form);
 
-        // dd($crawler);
 
         $this->assertTrue($this->client->getResponse()->isRedirect());
 
