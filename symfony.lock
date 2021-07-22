@@ -520,12 +520,12 @@
         "version": "v5.3.3"
     },
     "symfony/security-bundle": {
-        "version": "5.1",
+        "version": "5.3",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "master",
-            "version": "5.1",
-            "ref": "0a4bae19389d3b9cba1ca0102e3b2bccea724603"
+            "version": "5.3",
+            "ref": "8b35bfc00a7716db4ca5a764a4b338476ca3a704"
         },
         "files": [
             "config/packages/security.yaml"
@@ -564,7 +564,7 @@
             "repo": "github.com/symfony/recipes",
             "branch": "master",
             "version": "2.5",
-            "ref": "ae4d22af30bbd484506bc1817c5a3ef72c855b93"
+            "ref": "f0b2fccdca2dfd97dc2fd5ad216d5e27c4f895ac"
         },
         "files": [
             "config/packages/dev/swiftmailer.yaml",
