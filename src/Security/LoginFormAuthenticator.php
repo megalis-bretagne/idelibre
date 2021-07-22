@@ -13,6 +13,7 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Csrf\CsrfToken;
@@ -24,7 +25,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     private UserRepository $userRepository;
     private RouterInterface $router;
     private CsrfTokenManagerInterface $csrfTokenManager;
-    private UserPasswordHasherInterface $passwordEncoder;
+    private UserPasswordHasherInterface $passwordHasher;
     private Security $security;
     private ImpersonateStructure $impersonateStructure;
     private LegacyPassword $legacyPassword;
@@ -41,7 +42,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         $this->userRepository = $userRepository;
         $this->router = $router;
         $this->csrfTokenManager = $csrfTokenManager;
-        $this->passwordEncoder = $passwordHasher;
+        $this->passwordHasher = $passwordHasher;
         $this->security = $security;
         $this->impersonateStructure = $impersonateStructure;
         $this->legacyPassword = $legacyPassword;
@@ -81,7 +82,8 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     public function checkCredentials($credentials, UserInterface $user): bool
     {
-        if ($this->passwordEncoder->isPasswordValid($user, $credentials['password'])) {
+        /** @var $user PasswordAuthenticatedUserInterface|UserInterface  */
+        if ($this->passwordHasher->isPasswordValid($user, $credentials['password'])) {
             return true;
         }
 
