@@ -88,5 +88,4 @@ class UserManager
         $this->em->remove($user);
         $this->em->flush();
     }
-    
 }

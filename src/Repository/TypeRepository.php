@@ -5,7 +5,6 @@ namespace App\Repository;
 use App\Entity\EmailTemplate;
 use App\Entity\Structure;
 use App\Entity\Type;
-use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -52,5 +51,4 @@ class TypeRepository extends ServiceEntityRepository
     {
         return $this->count(['name' => $typeName, 'structure' => $structure]) > 0;
     }
-
 }
