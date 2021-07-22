@@ -132,9 +132,6 @@
     "guzzlehttp/psr7": {
         "version": "1.7.0"
     },
-    "iio/libmergepdf": {
-        "version": "4.0.4"
-    },
     "knplabs/knp-components": {
         "version": "v3.0.0"
     },
@@ -176,15 +173,6 @@
     },
     "mailjet/mailjet-apiv3-php": {
         "version": "v1.5.0"
-    },
-    "mikehaertl/php-pdftk": {
-        "version": "0.9.2"
-    },
-    "mikehaertl/php-shellcommand": {
-        "version": "1.6.4"
-    },
-    "mikehaertl/php-tmpfile": {
-        "version": "1.2.1"
     },
     "monolog/monolog": {
         "version": "2.1.1"
@@ -261,9 +249,6 @@
     "ramsey/uuid": {
         "version": "4.1.1"
     },
-    "scienta/doctrine-json-functions": {
-        "version": "4.2.0"
-    },
     "sensio/framework-extra-bundle": {
         "version": "5.2",
         "recipe": {
@@ -275,9 +260,6 @@
         "files": [
             "config/packages/sensio_framework_extra.yaml"
         ]
-    },
-    "setasign/fpdi": {
-        "version": "v2.3.6"
     },
     "stof/doctrine-extensions-bundle": {
         "version": "1.2",
@@ -681,9 +663,6 @@
     },
     "symplify/easy-coding-standard": {
         "version": "8.3.48"
-    },
-    "tecnickcom/tcpdf": {
-        "version": "6.4.1"
     },
     "twig/extra-bundle": {
         "version": "v3.1.1"
