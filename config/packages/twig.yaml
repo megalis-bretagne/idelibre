@@ -7,3 +7,7 @@ twig:
     product_editor: '%product_editor%'
     breadcrumb: 'others/breadCrumb.html.twig'
     nginx: '%nginx_host%'
+
+when@test:
+  twig:
+    strict_variables: true
