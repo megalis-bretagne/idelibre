@@ -5,7 +5,6 @@ namespace App\Repository;
 use App\Entity\EmailTemplate;
 use App\Entity\Structure;
 use App\Entity\Type;
-use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -51,16 +50,5 @@ class TypeRepository extends ServiceEntityRepository
     public function exists(string $typeName, Structure $structure): bool
     {
         return $this->count(['name' => $typeName, 'structure' => $structure]) > 0;
-    }
-
-    /**
-     * @return Type[]
-     */
-    public function findAuthorizedTypeByUser(User $user): QueryBuilder
-    {
-        return $this->createQueryBuilder('t')
-            ->Join('t.authorizedSecretaries', 's')
-            ->andWhere('s.id = :userId')
-            ->setParameter('userId', $user->getId());
     }
 }

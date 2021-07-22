@@ -106,6 +106,7 @@ class UserType extends AbstractType
                 'query_builder' => $this->typeRepository->findByStructure($options['structure']),
                 'choice_label' => 'name',
                 'multiple' => true,
+                'by_reference' => false,
             ]);
         }
 
