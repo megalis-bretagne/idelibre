@@ -74,6 +74,8 @@ class ProjectControllerTest extends WebTestCase
         $this->loginAsAdminLibriciel();
 
         $filesystem = new Filesystem();
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', '/tmp/convocation');
+
         $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/project1.pdf');
         $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/project2.pdf');
         $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/annex1.pdf');
@@ -175,6 +177,10 @@ class ProjectControllerTest extends WebTestCase
 
     public function testEditDeleteProjects()
     {
+        $filesystem = new Filesystem();
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', '/tmp/convocation');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', '/tmp/fileProject2');
+
         $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
         $projectId = $this->getOneProjectBy(['name' => 'Project 2'])->getId();
 
@@ -202,6 +208,12 @@ class ProjectControllerTest extends WebTestCase
 
     public function testEditDeleteAnnex()
     {
+
+        $filesystem = new Filesystem();
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', '/tmp/convocation');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', '/tmp/fileProject1');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', '/tmp/fileProject2');
+
         $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
         $project1 = $this->getOneProjectBy(['name' => 'Project 1']);
         $project2 = $this->getOneProjectBy(['name' => 'Project 2']);
