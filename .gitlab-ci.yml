@@ -126,8 +126,8 @@ publish:
   tags:
     - docker-build
   script:
-    - echo "Création de l'image ${REGISTRY_CONTAINER_HOST}/public/citoyens/idelibre}:${IMAGE_VERSION}"
+    - echo "Création de l'image ${REGISTRY_CONTAINER_HOST}/public/citoyens/idelibre/idelibre:${IMAGE_VERSION}"
     - echo ${IMAGE_VERSION} > VERSION
     - docker login -u "$REGISTRY_CONTAINER_USER" -p "$REGISTRY_CONTAINER_PASSWORD" "$REGISTRY_CONTAINER_HOST"
-    - docker build --pull -t ${REGISTRY_CONTAINER_HOST}/public/citoyens/idelibre:${IMAGE_VERSION} .
-    - docker push ${REGISTRY_CONTAINER_HOST}/public/citoyens/idelibre:${IMAGE_VERSION}
+    - docker build --pull -t ${REGISTRY_CONTAINER_HOST}/public/citoyens/idelibre/idelibre:${IMAGE_VERSION} .
+    - docker push ${REGISTRY_CONTAINER_HOST}/public/citoyens/idelibre/idelibre:${IMAGE_VERSION}
