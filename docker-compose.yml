@@ -3,12 +3,12 @@ version: '3.4'
 services:
   fpm-idelibre:
     container_name: fpm-idelibre
-    image: registry.libriciel.fr:443/public/citoyens/idelibre/idelibre:4.0.0-rc1
+    image: registry.libriciel.fr:443/public/citoyens/idelibre/idelibre:TAG
     environment:
       - APP_ENV=${APP_ENV:-prod}
       - APP_SECRET=${APP_SECRET:-b64dca717248e387bc88b36d9c485244}
       - DATABASE_URL=${DATABASE_URL:-postgresql://idelibre:idelibre@172.17.0.1:5432/idelibre}
-      - VERSION=${VERSION:-4.0.0}
+      - VERSION=${VERSION:-TAG}
       - MAILER_URL=${MAILER_URL:-null://localhost}
       - WKHTMLTOPDF_PATH=${WKHTMLTOPDF_PATH:-/usr/local/bin/wkhtmltopdf}
       - WKHTMLTOIMAGE_PATH=${WKHTMLTOIMAGE_PATH:-/usr/local/bin/wkhtmltoimage}
