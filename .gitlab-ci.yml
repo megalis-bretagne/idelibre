@@ -118,8 +118,8 @@ release:
 
 publish:
   stage: deploy
-  #only:
-  #  - tags
+  only:
+    - tags
   variables:
     IMAGE_VERSION: "$CI_COMMIT_REF_NAME"
     REGISTRY_CONTAINER_PATH: ""
