@@ -3,7 +3,7 @@ version: '3.4'
 services:
   fpm-idelibre:
     container_name: fpm-idelibre
-    image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/idelibre/idelibre:4.0.0-rc1
+    image: registry.libriciel.fr:443/public/citoyens/idelibre/idelibre:4.0.0-rc1
     environment:
       - APP_ENV=${APP_ENV:-prod}
       - APP_SECRET=${APP_SECRET:-b64dca717248e387bc88b36d9c485244}
@@ -35,7 +35,7 @@ services:
 
   node-idelibre:
     container_name: node-idelibre
-    image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/idelibre/idelibre-nodejs:4.0.0-rc1
+    image: registry.libriciel.fr:443/public/citoyens/idelibre-node/idelibre-nodejs:4.0.0-rc1
     volumes:
       - /data/files:/data
     environment:
@@ -83,7 +83,7 @@ services:
 
   lshorodatage:
     container_name: lshorodatage
-    image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/lshorodatage/lshorodatage:1.0.0-rc1
+    image: registry.libriciel.fr:443/public/citoyens/lshorodatage/lshorodatage:1.0.0-rc1
     environment:
       - NODE_ENV=production
       - POSTGRES_HOST=${POSTGRES_HOST:-172.17.0.1}

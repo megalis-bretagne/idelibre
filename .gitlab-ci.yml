@@ -4,7 +4,7 @@ stages:
   - test
   - quality
   - release
-
+  - deploy
 variables:
   CONTAINER_IMAGE: "${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME}"
 
@@ -115,3 +115,19 @@ release:
     paths:
       - ${TARBALL_NAME}
 
+
+publish:
+  stage: deploy
+  only:
+    - tags
+  variables:
+    IMAGE_VERSION: "$CI_COMMIT_REF_NAME"
+    REGISTRY_CONTAINER_PATH: ""
+  tags:
+    - docker-build
+  script:
+    - echo "Création de l'image ${REGISTRY_CONTAINER_HOST}/public/citoyens/idelibre/idelibre:${IMAGE_VERSION}"
+    - echo ${IMAGE_VERSION} > VERSION
+    - docker login -u "$REGISTRY_CONTAINER_USER" -p "$REGISTRY_CONTAINER_PASSWORD" "$REGISTRY_CONTAINER_HOST"
+    - docker build --pull -t ${REGISTRY_CONTAINER_HOST}/public/citoyens/idelibre/idelibre:${IMAGE_VERSION} .
+    - docker push ${REGISTRY_CONTAINER_HOST}/public/citoyens/idelibre/idelibre:${IMAGE_VERSION}
