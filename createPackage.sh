@@ -2,9 +2,13 @@
 
 echo "generate installation package"
 
-dest="/tmp/idelibre"
-rm -rf $dest
 
-mkdir $dest
+echo $CI_COMMIT_REF_NAME
 
-cp -rfa docker-compose.yml .env docker-resources initializeCertificates.sh  $dest
+
+#dest="/tmp/idelibre"
+#rm -rf $dest
+
+#mkdir $dest
+
+#cp -rfa docker-compose.yml .env docker-resources initializeCertificates.sh  $dest
