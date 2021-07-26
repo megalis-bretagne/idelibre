@@ -1,5 +1,4 @@
 stages:
-  - check
   - build
   - testWithoutCovering
   - test
@@ -10,135 +9,125 @@ variables:
   CONTAINER_IMAGE: "${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME}"
 
 
-check:
-  stage: check
+build:
+  stage: build
+
+  tags:
+    - docker-build
 
   script:
+    - docker login -u "gitlab-ci-token" -p "$CI_JOB_TOKEN" $CI_REGISTRY
+    - docker pull $CI_REGISTRY_IMAGE:latest || true
+    - docker build --cache-from $CI_REGISTRY_IMAGE:latest --tag ${CONTAINER_IMAGE} --tag $CI_REGISTRY_IMAGE:latest .
+    - docker login -u "gitlab-ci-token" -p "$CI_JOB_TOKEN" $CI_REGISTRY
+    - docker push ${CONTAINER_IMAGE}
+    - docker push $CI_REGISTRY_IMAGE:latest
+
+
+phpTest:
+  stage: test
+  only:
+    - master
+  image: $CONTAINER_IMAGE
+
+  variables:
+    XDEBUG_MODE: coverage
+    APP_ENV: test
+    DATABASE_URL: sqlite:///%kernel.project_dir%/var/data.db
+    GIT_STRATEGY: none
+    COMPOSER_PROCESS_TIMEOUT: 1200
+
+  before_script:
+    - cd /app
+    - pecl install xdebug && docker-php-ext-enable xdebug
+    - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+    - php composer-setup.php --install-dir=/usr/local/bin
+    - mv /usr/local/bin/composer.phar /usr/local/bin/composer
+
+  script:
+    - composer install
+    - docker-resources/initAppTest.sh
+    - SYMFONY_DEPRECATIONS_HELPER=disabled bin/phpunit --coverage-text --colors=never --coverage-clover coverage/coverage.xml --log-junit coverage/logfile.xml
+    - cp -rf coverage $CI_PROJECT_DIR
+  artifacts:
+    paths:
+      - coverage
+    expire_in: 1h
+
+
+
+phpTestWithoutCovering:
+  stage: testWithoutCovering
+  except:
+    - tags
+    - master
+  image: $CONTAINER_IMAGE
+
+  variables:
+    XDEBUG_MODE: coverage
+    APP_ENV: test
+    DATABASE_URL: sqlite:///%kernel.project_dir%/var/data.db
+    GIT_STRATEGY: none
+    COMPOSER_PROCESS_TIMEOUT: 1200
+
+  before_script:
+    - cd /app
+    - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+    - php composer-setup.php --install-dir=/usr/local/bin
+    - mv /usr/local/bin/composer.phar /usr/local/bin/composer
+
+  script:
+    - composer install
+    - SYMFONY_DEPRECATIONS_HELPER=disabled bin/phpunit --colors=never
+
+quality:
+  stage: quality
+  only:
+    - master
+  image: gitlab.libriciel.fr:4567/docker/sonar-scanner:latest
+  script:
+    - mkdir /app
+    - cp -rf $CI_PROJECT_DIR/* /app
+    - cd /app
+    - /sonar-scanner -Dsonar.login=$SONAR_LOGIN -Dsonar.host.url=$SONAR_HOST_URL
+
+release:
+  stage: release
+  only:
+    - tags
+  image: $CONTAINER_IMAGE
+
+  variables:
+    TARBALL_NAME: idelibre-${CI_COMMIT_REF_NAME}.tar.gz
+
+  before_script:
+    - apt-get -qq update || echo 1
+    - apt-get -yqq install openssh-client lftp
+    - mkdir -p ~/.ssh
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+  script:
     - ./createPackage.sh
+    - cd /tmp/ && tar cvzf /tmp/${TARBALL_NAME} idelibre
+    - cp /tmp/${TARBALL_NAME} ${CI_PROJECT_DIR}
+    - lftp -p 2222 -u "idelibre","${RESSOURCE_LIBRICIEL_FTP_PASSWD}"  "sftp://ressources.libriciel.fr/idelibre" -e "put /tmp/${TARBALL_NAME}; bye"
+
+  artifacts:
+    paths:
+      - ${TARBALL_NAME}
 
 
-
-
-#build:
-#  stage: build
-#
-#  tags:
-#    - docker-build
-#
-#  script:
-#    - docker login -u "gitlab-ci-token" -p "$CI_JOB_TOKEN" $CI_REGISTRY
-#    - docker pull $CI_REGISTRY_IMAGE:latest || true
-#    - docker build --cache-from $CI_REGISTRY_IMAGE:latest --tag ${CONTAINER_IMAGE} --tag $CI_REGISTRY_IMAGE:latest .
-#    - docker login -u "gitlab-ci-token" -p "$CI_JOB_TOKEN" $CI_REGISTRY
-#    - docker push ${CONTAINER_IMAGE}
-#    - docker push $CI_REGISTRY_IMAGE:latest
-#
-#
-#phpTest:
-#  stage: test
-#  only:
-#    - master
-#  image: $CONTAINER_IMAGE
-#
-#  variables:
-#    XDEBUG_MODE: coverage
-#    APP_ENV: test
-#    DATABASE_URL: sqlite:///%kernel.project_dir%/var/data.db
-#    GIT_STRATEGY: none
-#    COMPOSER_PROCESS_TIMEOUT: 1200
-#
-#  before_script:
-#    - cd /app
-#    - pecl install xdebug && docker-php-ext-enable xdebug
-#    - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-#    - php composer-setup.php --install-dir=/usr/local/bin
-#    - mv /usr/local/bin/composer.phar /usr/local/bin/composer
-#
-#  script:
-#    - composer install
-#    - docker-resources/initAppTest.sh
-#    - SYMFONY_DEPRECATIONS_HELPER=disabled bin/phpunit --coverage-text --colors=never --coverage-clover coverage/coverage.xml --log-junit coverage/logfile.xml
-#    - cp -rf coverage $CI_PROJECT_DIR
-#  artifacts:
-#    paths:
-#      - coverage
-#    expire_in: 1h
-#
-#
-#
-#phpTestWithoutCovering:
-#  stage: testWithoutCovering
-#  except:
-#    - tags
-#    - master
-#  image: $CONTAINER_IMAGE
-#
-#  variables:
-#    XDEBUG_MODE: coverage
-#    APP_ENV: test
-#    DATABASE_URL: sqlite:///%kernel.project_dir%/var/data.db
-#    GIT_STRATEGY: none
-#    COMPOSER_PROCESS_TIMEOUT: 1200
-#
-#  before_script:
-#    - cd /app
-#    - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-#    - php composer-setup.php --install-dir=/usr/local/bin
-#    - mv /usr/local/bin/composer.phar /usr/local/bin/composer
-#
-#  script:
-#    - composer install
-#    - SYMFONY_DEPRECATIONS_HELPER=disabled bin/phpunit --colors=never
-#
-#quality:
-#  stage: quality
-#  only:
-#    - master
-#  image: gitlab.libriciel.fr:4567/docker/sonar-scanner:latest
-#  script:
-#    - mkdir /app
-#    - cp -rf $CI_PROJECT_DIR/* /app
-#    - cd /app
-#    - /sonar-scanner -Dsonar.login=$SONAR_LOGIN -Dsonar.host.url=$SONAR_HOST_URL
-#
-#release:
-#  stage: release
-#  only:
-#    - tags
-#  image: $CONTAINER_IMAGE
-#
-#  variables:
-#    TARBALL_NAME: idelibre-${CI_COMMIT_REF_NAME}.tar.gz
-#
-#  before_script:
-#    - apt-get -qq update || echo 1
-#    - apt-get -yqq install openssh-client lftp
-#    - mkdir -p ~/.ssh
-#    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
-#  script:
-#    - ./createPackage.sh
-#    - cd /tmp/ && tar cvzf /tmp/${TARBALL_NAME} idelibre
-#    - cp /tmp/${TARBALL_NAME} ${CI_PROJECT_DIR}
-#    - lftp -p 2222 -u "idelibre","${RESSOURCE_LIBRICIEL_FTP_PASSWD}"  "sftp://ressources.libriciel.fr/idelibre" -e "put /tmp/${TARBALL_NAME}; bye"
-#
-#  artifacts:
-#    paths:
-#      - ${TARBALL_NAME}
-#
-#
-#publish:
-#  stage: deploy
-#  only:
-#    - tags
-#  variables:
-#    IMAGE_VERSION: "$CI_COMMIT_REF_NAME"
-#    REGISTRY_CONTAINER_PATH: ""
-#  tags:
-#    - docker-build
-#  script:
-#    - echo "Création de l'image ${REGISTRY_CONTAINER_HOST}/public/citoyens/idelibre/idelibre:${IMAGE_VERSION}"
-#    - echo ${IMAGE_VERSION} > VERSION
-#    - docker login -u "$REGISTRY_CONTAINER_USER" -p "$REGISTRY_CONTAINER_PASSWORD" "$REGISTRY_CONTAINER_HOST"
-#    - docker build --pull -t ${REGISTRY_CONTAINER_HOST}/public/citoyens/idelibre/idelibre:${IMAGE_VERSION} .
-#    - docker push ${REGISTRY_CONTAINER_HOST}/public/citoyens/idelibre/idelibre:${IMAGE_VERSION}
-#
+publish:
+  stage: deploy
+  only:
+    - tags
+  variables:
+    IMAGE_VERSION: "$CI_COMMIT_REF_NAME"
+    REGISTRY_CONTAINER_PATH: ""
+  tags:
+    - docker-build
+  script:
+    - echo "Création de l'image ${REGISTRY_CONTAINER_HOST}/public/citoyens/idelibre/idelibre:${IMAGE_VERSION}"
+    - echo ${IMAGE_VERSION} > VERSION
+    - docker login -u "$REGISTRY_CONTAINER_USER" -p "$REGISTRY_CONTAINER_PASSWORD" "$REGISTRY_CONTAINER_HOST"
+    - docker build --pull -t ${REGISTRY_CONTAINER_HOST}/public/citoyens/idelibre/idelibre:${IMAGE_VERSION} .
+    - docker push ${REGISTRY_CONTAINER_HOST}/public/citoyens/idelibre/idelibre:${IMAGE_VERSION}
