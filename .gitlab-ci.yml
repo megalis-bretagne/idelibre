@@ -4,8 +4,7 @@ stages:
   - test
   - quality
   - release
-  - publish_to_public
-
+  - publish
 variables:
   CONTAINER_IMAGE: "${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME}"
 
@@ -117,7 +116,7 @@ release:
       - ${TARBALL_NAME}
 
 
-publish_to_public:
+publish:
   stage: deploy
   #only:
   #  - tags
