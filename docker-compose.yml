@@ -35,7 +35,7 @@ services:
 
   node-idelibre:
     container_name: node-idelibre
-    image: registry.libriciel.fr:443/public/citoyens/idelibre-node/idelibre-nodejs:4.0.0-rc1
+    image: registry.libriciel.fr:443/public/citoyens/idelibre-node/idelibre-node:4.0.1
     volumes:
       - /data/files:/data
     environment:
@@ -83,7 +83,7 @@ services:
 
   lshorodatage:
     container_name: lshorodatage
-    image: registry.libriciel.fr:443/public/citoyens/lshorodatage/lshorodatage:1.0.0-rc1
+    image: registry.libriciel.fr:443/public/citoyens/lshorodatage/lshorodatage:1.0.0
     environment:
       - NODE_ENV=production
       - POSTGRES_HOST=${POSTGRES_HOST:-172.17.0.1}
