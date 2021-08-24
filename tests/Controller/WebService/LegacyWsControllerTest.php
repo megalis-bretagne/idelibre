@@ -314,14 +314,14 @@ class LegacyWsControllerTest extends WebTestCase
     {
         $this->client->request(Request::METHOD_GET, '/api300/version');
         $this->assertResponseStatusCodeSame(200);
-        $this->assertSame('4.0.0', $this->client->getResponse()->getContent());
+        $this->assertSame('4.0.1', $this->client->getResponse()->getContent());
     }
 
     public function testVersionCapitalUrl()
     {
         $this->client->request(Request::METHOD_GET, '/Api300/version');
         $this->assertResponseStatusCodeSame(200);
-        $this->assertSame('4.0.0', $this->client->getResponse()->getContent());
+        $this->assertSame('4.0.1', $this->client->getResponse()->getContent());
     }
 
     public function testCheck()
