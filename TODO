@@ -174,3 +174,37 @@ BUG du choix du groupe de partage quand nouvellemnt créé pas pris en compte
 Choix comelus proposer alors que le connecteur n'est pas activer generalement
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+TRIM de tous les nom / prenom dans la bdd !!!!!!
+
+
+secretaire : creer une seance erreur 500
+
+
+
+supprime utilisateur avec compte admin
+
+ fpm-idelibre      | {"message":"Uncaught PHP Exception Doctrine\\DBAL\\Exception\\ForeignKeyConstraintViolationException: \"An exception occurred while executing 'DELETE FROM \"user\" WHERE id = ?' with params [\"56d44844-5e54-492f-bab4-2486c18e9eb7\"]:\n\nSQLSTATE[23503]: Foreign key violation: 7 ERROR:  update or delete on table \"user\" violates foreign key constraint \"fk_2fb3d0eee1cfe6f5\" on table \"project\"\nDETAIL:  Key (id)=(56d44844-5e54-492f-bab4-2486c18e9eb7) is still referenced from table \"project\".\" at /app/vendor/doctrine/dbal/lib/Doctrine/DBAL/Driver/AbstractPostgreSQLDriver.php line 67","context":{"exception":{"class":"Doctrine\\DBAL\\Exception\\ForeignKeyConstraintViolationException","message":"An exception occurred while executing 'DELETE FROM \"user\" WHERE id = ?' with params [\"56d44844-5e54-492f-bab4-2486c18e9eb7\"]:\n\nSQLSTATE[23503]: Foreign key violation: 7 ERROR:  update or delete on table \"user\" violates foreign key constraint \"fk_2fb3d0eee1cfe6f5\" on table \"project\"\nDETAIL:  Key (id)=(56d44844-5e54-492f-bab4-2486c18e9eb7) is still referenced from table \"project\".","code":0,"file":"/app/vendor/doctrine/dbal/lib/Doctrine/DBAL/Driver/AbstractPostgreSQLDriver.php:67","previous":{"class":"Doctrine\\DBAL\\Driver\\PDO\\Exception","message":"SQLSTATE[23503]: Foreign key violation: 7 ERROR:  update or delete on table \"user\" violates foreign key constraint \"fk_2fb3d0eee1cfe6f5\" on table \"project\"\nDETAIL:  Key (id)=(56d44844-5e54-492f-bab4-2486c18e9eb7) is still referenced from table \"project\".","code":23503,"file":"/app/vendor/doctrine/dbal/lib/Doctrine/DBAL/Driver/PDO/Exception.php:18","previous":{"class":"PDOException","message":"SQLSTATE[23503]: Foreign key violation: 7 ERROR:  update or delete on table \"user\" violates foreign key constraint \"fk_2fb3d0eee1cfe6f5\" on table \"project\"\nDETAIL:  Key (id)=(56d44844-5e54-492f-bab4-2486c18e9eb7) is still referenced from table \"project\".","code":23503,"file":"/app/vendor/doctrine/dbal/lib/Doctrine/DBAL/Driver/PDOStatement.php:112"}}}},"level":500,"level_name":"CRITICAL","channel":"request","datetime":"2021-08-24T14:32:33.194940+00:00","extra":{}}
+fpm-idelibre      | {"message":"Failed to save key \"Symfony%5CComponent%5CHttpKernel%5CController%5CErrorController\" of type array: fopen(/app/var/cache/prod/pools/GXnXgNGobZ/0bbd6742046e): failed to open stream: Permission denied","context":{"key":"Symfony%5CComponent%5CHttpKernel%5CController%5CErrorController","exception":{"class":"ErrorException","message":"fopen(/app/var/cache/prod/pools/GXnXgNGobZ/0bbd6742046e): failed to open stream: Permission denied","code":0,"file":"/app/vendor/symfony/cache/Traits/FilesystemCommonTrait.php:99"},"cache-adapter":"Symfony\\Component\\Cache\\Adapter\\PhpFilesAdapter"},"level":300,"level_name":"WARNING","channel":"cache","datetime":"2021-08-24T14:32:33.200477+00:00","extra":{}}
+
+
+
+
+
+eenlever l'extension @ dans le type de seance dans la liste
+
+
+
+
