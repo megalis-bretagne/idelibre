@@ -49,6 +49,7 @@ class Project
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class)
+     * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $reporter;
 
