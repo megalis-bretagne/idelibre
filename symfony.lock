@@ -133,6 +133,9 @@
     "guzzlehttp/psr7": {
         "version": "1.7.0"
     },
+    "hamcrest/hamcrest-php": {
+        "version": "v2.0.1"
+    },
     "knplabs/knp-components": {
         "version": "v3.0.0"
     },
@@ -174,6 +177,9 @@
     },
     "mailjet/mailjet-apiv3-php": {
         "version": "v1.5.0"
+    },
+    "mockery/mockery": {
+        "version": "1.4.3"
     },
     "monolog/monolog": {
         "version": "2.1.1"
@@ -445,9 +451,6 @@
     },
     "symfony/options-resolver": {
         "version": "v5.1.9"
-    },
-    "symfony/orm-pack": {
-        "version": "v1.2.0"
     },
     "symfony/password-hasher": {
         "version": "v5.3.3"
