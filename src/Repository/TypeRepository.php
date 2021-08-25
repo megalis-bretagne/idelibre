@@ -53,7 +53,6 @@ class TypeRepository extends ServiceEntityRepository
         return $this->count(['name' => $typeName, 'structure' => $structure]) > 0;
     }
 
-
     public function findAuthorizedTypeByUser(User $user): QueryBuilder
     {
         return $this->createQueryBuilder('t')

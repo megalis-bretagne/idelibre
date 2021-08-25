@@ -19,7 +19,7 @@ class Timestamp
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid")
      *
-     * @var string | null
+     * @var string|null
      */
     private $id;
 
@@ -36,7 +36,7 @@ class Timestamp
      * @Assert\NotBlank
      * @Assert\Length(max="255")
      *
-     * @var string | null
+     * @var string|null
      */
     private $filePathContent;
 
@@ -44,7 +44,7 @@ class Timestamp
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Length(max="255")
      *
-     * @var string | null
+     * @var string|null
      */
     private $filePathTsa;
 
