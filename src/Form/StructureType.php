@@ -14,7 +14,7 @@ class StructureType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        /** @var Structure | null $entity */
+        /** @var Structure|null $entity */
         $entity = $builder->getData();
         $isNew = !$entity || null === $entity->getId();
 
