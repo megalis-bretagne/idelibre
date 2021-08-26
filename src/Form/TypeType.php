@@ -103,6 +103,7 @@ class TypeType extends AbstractType
     private function formatUserString(User $user): string
     {
         $usernameWithoutSuffix = preg_replace('/@.*/', '', $user->getUsername());
+
         return sprintf('%s %s <%s>', $user->getFirstName(), $user->getLastName(), $usernameWithoutSuffix);
     }
 
