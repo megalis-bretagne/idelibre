@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+
+## [unversionned] - ????-??-??
+### Evolutions
+- mise en place de sentry
+
+
+
 ## [4.0.2] - 2021-08-25
 
 ### Corrections
