@@ -1,5 +1,8 @@
 monolog:
     handlers:
+        sentry:
+            type: service
+            id: Sentry\Monolog\Handler
         main:
             type: fingers_crossed
             action_level: error
