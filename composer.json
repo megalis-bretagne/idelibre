@@ -29,6 +29,7 @@
     "phpdocumentor/reflection-docblock": "^5.2",
     "ramsey/uuid": "^4.1",
     "sensio/framework-extra-bundle": "^5.6",
+    "sentry/sentry-symfony": "^4.2",
     "stof/doctrine-extensions-bundle": "^1.5",
     "symfony/asset": "5.3.*",
     "symfony/browser-kit": "5.3.*",
