@@ -8,7 +8,7 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 trait LoginTrait
 {
-    private function login(string $username)
+    public function login(string $username)
     {
         $session = self::getContainer()->get('session');
 

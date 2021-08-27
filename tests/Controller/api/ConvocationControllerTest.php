@@ -45,7 +45,12 @@ class ConvocationControllerTest extends WebTestCase
 
     protected function tearDown(): void
     {
+
+        $bag = static::getContainer()->get('parameter_bag');
+        $tokenPath = $bag->get('token_directory');
+        $this->deleteFileInDirectory($tokenPath);
         parent::tearDown();
+
         $this->client = null;
         $this->entityManager->close();
     }
@@ -78,7 +83,7 @@ class ConvocationControllerTest extends WebTestCase
 
         $this->assertNotEmpty($convocation->getSentTimestamp());
 
-        $bag = self::$container->get('parameter_bag');
+        $bag = static::getContainer()->get('parameter_bag');
 
         $year = $sitting->getDate()->format('Y');
         $tokenPath = "{$bag->get('token_directory')}{$sitting->getStructure()->getId()}/$year/{$sitting->getId()}";

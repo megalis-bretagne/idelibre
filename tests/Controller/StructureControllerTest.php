@@ -103,6 +103,27 @@ class StructureControllerTest extends WebTestCase
         $this->assertNotEmpty($this->getOneEntityBy(Structure::class, ['name' => 'New structure']));
     }
 
+
+    public function testAddGroupAdmin()
+    {
+
+        $this->login('userGroupRecia');
+        $crawler = $this->client->request(Request::METHOD_GET, '/structure/add');
+        $this->assertResponseStatusCodeSame(200);
+        $item = $crawler->filter('html:contains("Ajouter une structure")');
+        $this->assertCount(1, $item);
+    }
+
+
+    public function testAddGroupAdminNotStructureCreator()
+    {
+
+        $this->login('adminNotStructureCreator');
+        $crawler = $this->client->request(Request::METHOD_GET, '/structure/add');
+        $this->assertResponseStatusCodeSame(403);
+    }
+
+
     public function testEdit()
     {
         $structure = $this->getOneEntityBy(Structure::class, ['name' => 'Libriciel']);
