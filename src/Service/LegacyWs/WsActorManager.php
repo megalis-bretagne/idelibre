@@ -16,10 +16,12 @@ class WsActorManager
     private RoleManager $roleManager;
     private ActorFinder $actorFinder;
 
-    public function __construct(EntityManagerInterface $em,
-                                UserRepository $userRepository,
-                                RoleManager $roleManager,
-                                ActorFinder $actorFinder)
+    public function __construct(
+        EntityManagerInterface $em,
+        UserRepository $userRepository,
+        RoleManager $roleManager,
+        ActorFinder $actorFinder
+    )
     {
         $this->em = $em;
         $this->userRepository = $userRepository;
@@ -104,7 +106,7 @@ class WsActorManager
     }
 
     /**
-     * @param User[] $associatedActors
+     * @param User[]    $associatedActors
      * @param WsActor[] $wsActors
      */
     private function getAddedActors(iterable $associatedActors, array $wsActors): array
