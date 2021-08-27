@@ -33,6 +33,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
          * @var Structure $structureLibriciel
          * @var Structure $structureMontpellier
          * @var Group     $groupRecia
+         * @var Group     $groupNotStructureCreator
          * @var Role      $roleSuperAdmin
          * @var Role      $roleGroupAdmin
          * @var Role      $roleStructureAdminLibriciel
@@ -46,6 +47,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $structureMontpellier = $this->getReference(StructureFixtures::REFERENCE . 'montpellier');
 
         $groupRecia = $this->getReference(GroupFixtures::REFERENCE . 'recia');
+        $groupNotStructureCreator = $this->getReference(GroupFixtures::REFERENCE . 'notStructureCreator');
         $roleSuperAdmin = $this->getReference(RoleFixtures::REFERENCE . 'superAdmin');
         $roleGroupAdmin = $this->getReference(RoleFixtures::REFERENCE . 'groupAdmin');
         $roleSecretary = $this->getReference(RoleFixtures::REFERENCE . 'secretary');
@@ -148,6 +150,19 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             ->setPassword($password);
         $manager->persist($userGroupRecia);
         $this->addReference(self::REFERENCE . 'userGroupRecia', $userGroupRecia);
+
+
+
+        $adminNotStructureCreator = new User();
+        $adminNotStructureCreator->setEmail('userGroupRecia@example.org')
+            ->setRole($roleGroupAdmin)
+            ->setUsername('adminNotStructureCreator')
+            ->setFirstName('adminGroup')
+            ->setLastname('NotStructureCreator')
+            ->setGroup($groupNotStructureCreator)
+            ->setPassword($password);
+        $manager->persist($adminNotStructureCreator);
+        $this->addReference(self::REFERENCE . 'adminNotStructureCreator', $adminNotStructureCreator);
 
         ///////// Actors  /////////////////////
         $actorLibriciel1 = new User();

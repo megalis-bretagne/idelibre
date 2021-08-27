@@ -69,7 +69,7 @@ class UserRepositoryTest extends WebTestCase
 
     public function testFindSuperAdminAndGroupAdmin()
     {
-        $this->assertCount(4, $this->userRepository->findSuperAdminAndGroupAdmin(null)->getQuery()->getResult());
+        $this->assertCount(5, $this->userRepository->findSuperAdminAndGroupAdmin(null)->getQuery()->getResult());
     }
 
     public function testFindSuperAdminAndGroupAdminLimitedRecia()
