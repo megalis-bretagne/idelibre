@@ -21,8 +21,7 @@ class WsActorManager
         UserRepository $userRepository,
         RoleManager $roleManager,
         ActorFinder $actorFinder
-    )
-    {
+    ) {
         $this->em = $em;
         $this->userRepository = $userRepository;
         $this->roleManager = $roleManager;
