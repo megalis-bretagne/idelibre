@@ -6,9 +6,11 @@
 {% block pageActions %}
     <div class="row">
         <div class="col-6 pull-left">
-            <a href="{{ path('structure_add') }}" class="btn btn-primary"><span
-                        class="fa fa-plus-circle"></span>
-                Ajouter</a>
+            {% if isStructureCreator %}
+                <a href="{{ path('structure_add') }}" class="btn btn-primary"><span
+                            class="fa fa-plus-circle"></span>
+                    Ajouter</a>
+            {% endif %}
         </div>
 
         <div class="col-6">

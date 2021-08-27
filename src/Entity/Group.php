@@ -39,6 +39,11 @@ class Group
      */
     private $structures;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isStructureCreator = false;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -120,6 +125,18 @@ class Group
                 $structure->setGroup(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getIsStructureCreator(): ?bool
+    {
+        return $this->isStructureCreator;
+    }
+
+    public function setIsStructureCreator(bool $isStructureCreator): self
+    {
+        $this->isStructureCreator = $isStructureCreator;
 
         return $this;
     }

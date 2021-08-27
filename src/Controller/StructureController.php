@@ -57,12 +57,13 @@ class StructureController extends AbstractController
             'structures' => $structures,
             'formSearch' => $formSearch->createView(),
             'searchTerm' => $request->query->get('search') ?? '',
+            'isStructureCreator' => $this->isSuperAdmin($this->getUser()) || $this->getUser()->getGroup()->getIsStructureCreator()
         ]);
     }
 
     /**
      * @Route("/structure/add", name="structure_add")
-     * @IsGranted("ROLE_MANAGE_STRUCTURES")
+     * @IsGranted("CREATE_STRUCTURE")
      * @Breadcrumb("Ajouter")
      */
     public function add(Request $request, StructureCreator $structureCreator): Response
