@@ -57,7 +57,7 @@ class StructureController extends AbstractController
             'structures' => $structures,
             'formSearch' => $formSearch->createView(),
             'searchTerm' => $request->query->get('search') ?? '',
-            'isStructureCreator' => $this->isSuperAdmin($this->getUser()) || $this->getUser()->getGroup()->getIsStructureCreator()
+            'isStructureCreator' => $this->isSuperAdmin($this->getUser()) || $this->getUser()->getGroup()->getIsStructureCreator(),
         ]);
     }
 

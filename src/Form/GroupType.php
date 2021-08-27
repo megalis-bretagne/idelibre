@@ -17,7 +17,7 @@ class GroupType extends AbstractType
             ->add('name', TextType::class, [
                 'label' => 'Intitulé',
             ])
-            ->add('isStructureCreator', CheckboxType::class , [
+            ->add('isStructureCreator', CheckboxType::class, [
                 'required' => false,
                 'label_attr' => ['class' => 'switch-custom'],
                 'label' => 'Autoriser la création de structures',
