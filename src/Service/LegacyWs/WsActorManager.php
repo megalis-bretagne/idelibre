@@ -14,12 +14,19 @@ class WsActorManager
     private EntityManagerInterface $em;
     private UserRepository $userRepository;
     private RoleManager $roleManager;
+    private ActorFinder $actorFinder;
 
-    public function __construct(EntityManagerInterface $em, UserRepository $userRepository, RoleManager $roleManager)
+    public function __construct(
+        EntityManagerInterface $em,
+        UserRepository $userRepository,
+        RoleManager $roleManager,
+        ActorFinder $actorFinder
+    )
     {
         $this->em = $em;
         $this->userRepository = $userRepository;
         $this->roleManager = $roleManager;
+        $this->actorFinder = $actorFinder;
     }
 
     /**
@@ -42,9 +49,8 @@ class WsActorManager
     private function addWsActorsToType(array $wsActors, Type $type)
     {
         foreach ($wsActors as $wsActor) {
-            $existingActor = $this->userRepository->findOneBy(
-                ['firstName' => $wsActor->firstName, 'lastName' => $wsActor->lastName, 'structure' => $type->getStructure()]
-            );
+            $existingActor = $this->actorFinder->findByStructure($wsActor, $type->getStructure());
+
             if ($existingActor) {
                 $type->addAssociatedUser($existingActor);
                 continue;

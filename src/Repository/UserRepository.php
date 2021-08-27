@@ -314,4 +314,23 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getQuery()
             ->getResult();
     }
+
+    public function findByFirstNameLastNameAndStructure(string $firstName, string $lastName, Structure $structure): ?User
+    {
+        $users = $this->createQueryBuilder('u')
+            ->andWhere('u.structure =:structure')
+            ->setParameter('structure', $structure)
+            ->andWhere('TRIM(LOWER(u.firstName)) = :firstName')
+            ->setParameter('firstName', mb_strtolower(trim($firstName)))
+            ->andWhere('TRIM(LOWER(u.lastName)) = :lastName')
+            ->setParameter('lastName', mb_strtolower(trim($lastName)))
+            ->getQuery()
+            ->getResult();
+
+        if (!count($users)) {
+            return null;
+        }
+
+        return $users[0];
+    }
 }
