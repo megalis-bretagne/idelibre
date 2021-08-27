@@ -151,8 +151,6 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($userGroupRecia);
         $this->addReference(self::REFERENCE . 'userGroupRecia', $userGroupRecia);
 
-
-
         $adminNotStructureCreator = new User();
         $adminNotStructureCreator->setEmail('userGroupRecia@example.org')
             ->setRole($roleGroupAdmin)

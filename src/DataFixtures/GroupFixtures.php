@@ -20,7 +20,6 @@ class GroupFixtures extends Fixture
 
         $this->addReference(self::REFERENCE . 'recia', $group);
 
-
         $notStructureCreator = new Group();
         $notStructureCreator->setName('notStructureCreator');
         $notStructureCreator->setIsStructureCreator(false);
