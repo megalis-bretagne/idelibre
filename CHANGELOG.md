@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 
 
-## [unversionned] - ????-??-??
+## [4.0.3] - 2021-08-27
 ### Evolutions
 - mise en place de sentry
 - enlever le suffix dans le select de l'association des utilisateurs aux types (#125)
