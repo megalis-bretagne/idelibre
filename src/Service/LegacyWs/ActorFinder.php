@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Service\LegacyWs;
-
 
 use App\Entity\Structure;
 use App\Repository\UserRepository;
@@ -20,5 +18,4 @@ class ActorFinder
     {
         return $this->userRepository->findByFirstNameLastNameAndStructure($actor->firstName, $actor->lastName, $structure);
     }
-
 }

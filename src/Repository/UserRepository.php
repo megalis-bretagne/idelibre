@@ -263,7 +263,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
         $associatedArrayIds = $qb->getQuery()->getScalarResult();
 
-        return array_map(fn($el) => $el['id'], $associatedArrayIds);
+        return array_map(fn ($el) => $el['id'], $associatedArrayIds);
     }
 
     public function findSecretariesByStructure($structure): QueryBuilder
@@ -315,15 +315,14 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getResult();
     }
 
-
     public function findByFirstNameLastNameAndStructure(string $firstName, string $lastName, Structure $structure): ?User
     {
         $users = $this->createQueryBuilder('u')
             ->andWhere('u.structure =:structure')
             ->setParameter('structure', $structure)
-            ->andWhere('LOWER(u.firstName) = :firstName')
+            ->andWhere('TRIM(LOWER(u.firstName)) = :firstName')
             ->setParameter('firstName', mb_strtolower(trim($firstName)))
-            ->andWhere('LOWER(u.lastName) = :lastName')
+            ->andWhere('TRIM(LOWER(u.lastName)) = :lastName')
             ->setParameter('lastName', mb_strtolower(trim($lastName)))
             ->getQuery()
             ->getResult();
@@ -333,6 +332,5 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         }
 
         return $users[0];
-
     }
 }

@@ -6,7 +6,8 @@ All notable changes to this project will be documented in this file.
 ### Evolutions
 - mise en place de sentry
 - enlever le suffix dans le select de l'association des utilisateurs aux types (#125)
-- rendre configurable si un groupe peut creer ou non des structures
+- rendre configurable si un groupe peut creer ou non des structures (#127)
+- rendre le connecteur WD non snessible à la casse et aux espaces en périphérie (#126)
 
 
 
