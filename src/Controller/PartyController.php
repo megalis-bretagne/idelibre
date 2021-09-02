@@ -93,7 +93,7 @@ class PartyController extends AbstractController
     public function delete(Party $party, PartyManager $partyManager, Request $request): Response
     {
         $partyManager->delete($party);
-        $this->addFlash('success', 'le groupe politique a bien été supprimé');
+        $this->addFlash('success', 'Le groupe politique a bien été supprimé');
 
         return $this->redirectToRoute('party_index', [
             'page' => $request->get('page'),
