@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file.
 
 
+## [unversioned] - 2021-??-??
+### Correction
+- L'aperçu de l'email de template en format text echappe maintenant les balises html (#132)
+
+
+
 ## [4.0.3] - 2021-08-27
 ### Evolutions
 - mise en place de sentry
