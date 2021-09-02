@@ -40,16 +40,7 @@
 
 {% block javascripts %}
     {{ encore_entry_script_tags('enable-select2') }}
-
-    <script>
-        $('#selectAll').click(function () {
-            let $options = $('#type_associatedActors option')
-            for (let i = 0; i < $options.length; i++) {
-                $options[i].selected = true;
-            }
-            $options.parent().trigger("change");
-        });
-    </script>
+    {{ encore_entry_script_tags('select-all-users') }}
 {% endblock %}
 
 
