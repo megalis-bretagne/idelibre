@@ -137,9 +137,13 @@ class EmailTemplateController extends AbstractController
         $content = $emailData->getContent();
 
         if (EmailData::FORMAT_TEXT === $emailData->getFormat()) {
+            $content = htmlspecialchars($content);
             $content = nl2br($content);
         }
 
         return new Response($content);
     }
+
+
+
 }
