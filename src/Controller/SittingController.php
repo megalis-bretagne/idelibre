@@ -171,7 +171,7 @@ class SittingController extends AbstractController
     public function delete(Sitting $sitting, SittingManager $sittingManager, Request $request): Response
     {
         $sittingManager->delete($sitting);
-        $this->addFlash('success', 'la séance a bien été supprimée');
+        $this->addFlash('success', 'La séance a bien été supprimée');
 
         $referer = $request->headers->get('referer');
 

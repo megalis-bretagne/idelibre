@@ -7,7 +7,7 @@ $('document').ready(function () {
         'closeOnSelect': true,
         'allowClear': true,
          width: '100%',
-        placeholder :'Selectionner ...',
+        placeholder :'Sélectionner ...',
         "language": {
             "noResults": function () {
                 return "Pas de résultats trouvés";

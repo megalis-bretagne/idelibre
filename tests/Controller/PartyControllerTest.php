@@ -152,7 +152,7 @@ class PartyControllerTest extends WebTestCase
 
         $crawler = $this->client->followRedirect();
         $this->assertResponseStatusCodeSame(200);
-        $successMsg = $crawler->filter('html:contains("le groupe politique a bien été supprimé")');
+        $successMsg = $crawler->filter('html:contains("Le groupe politique a bien été supprimé")');
         $this->assertCount(1, $successMsg);
 
         $this->assertEmpty($this->getOneEntityBy(Party::class, ['id' => $party->getId()]));
