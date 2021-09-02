@@ -63,7 +63,7 @@ class SittingType extends AbstractType
                 'disabled' => $isAlreadySentConvocation || $isAlreadySentInvitation,
             ])
             ->add('convocationFile', LsFileType::class, [
-                'label' => $isNew ? 'Fichier de convocation' : 'Remplacer le fichier de convocation',
+                'label' => ($isNew || $isAlreadySentConvocation) ? 'Fichier de convocation' : 'Remplacer le fichier de convocation',
                 'attr' => [
                     'placeholder' => 'Sélectionner un fichier',
                     'accept' => '.pdf,.PDF',
@@ -85,7 +85,7 @@ class SittingType extends AbstractType
                     ])],
             ])
             ->add('invitationFile', LsFileType::class, [
-                'label' => $isNew ? 'Fichier d\'invitation' : 'Remplacer le fichier d\'invitation',
+                'label' => ($isNew || $isAlreadySentInvitation) ? 'Fichier d\'invitation' : 'Remplacer le fichier d\'invitation',
                 'attr' => [
                     'placeholder' => 'Sélectionner un fichier',
                     'accept' => '.pdf,.PDF',
