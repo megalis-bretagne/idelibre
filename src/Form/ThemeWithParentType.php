@@ -29,7 +29,7 @@ class ThemeWithParentType extends AbstractType
             ])
             ->add('parentTheme', EntityType::class, [
                 'mapped' => false,
-                'label' => 'Sous thème de',
+                'label' => 'Sous-thème de',
                 'required' => false,
                 'class' => Theme::class,
                 'choice_label' => function (Theme $theme) {
