@@ -28,6 +28,7 @@ Encore
     .addEntry('enable-popover', './assets/js/enablePopover.js')
     .addEntry('enable-select2', './assets/js/enableSelect2.js')
     .addEntry('create-user', './assets/js/createUser.js')
+    .addEntry('delete-user-batch', './assets/js/deleteBatch.js')
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')
