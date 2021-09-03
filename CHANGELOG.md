@@ -5,7 +5,13 @@ All notable changes to this project will be documented in this file.
 ## [unversioned] - 2021-??-??
 ### Correction
 - L'aperçu de l'email de template en format text echappe maintenant les balises html (#132)
-
+- Correction de l'impossibilité de supprimer un acteur s'il a une annotation (#137)
+- Selectionner tous les élus dans l'association au type (#136)
+- Suppression par lot (#135)
+- label des champs fichiers dans la création d'une séance (#134)
+- Fautes d'orthographes (#133)
+- Les balises html sont visibles dans l'appercu des templates d'email si on est en mode texte (#132)
+- Si on ajoute une invitation apres l'enregistrement cela ajoute bien les administratifs et invites par defaut (#130)
 
 
 ## [4.0.3] - 2021-08-27
