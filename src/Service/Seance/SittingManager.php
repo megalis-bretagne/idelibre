@@ -109,14 +109,25 @@ class SittingManager
         }
 
         if ($uploadedInvitationFile) {
-            $invitationFile = $this->fileManager->replaceInvitationFile($uploadedInvitationFile, $sitting);
-            $sitting->setInvitationFile($invitationFile);
+            $this->createOrReplaceInvitation($uploadedInvitationFile, $sitting);
         }
 
         $this->em->persist($sitting);
         $this->em->flush();
 
         $this->messageBus->dispatch(new UpdatedSitting($sitting->getId()));
+    }
+
+    private function createOrReplaceInvitation(UploadedFile $uploadedInvitationFile, Sitting $sitting)
+    {
+        if(!$sitting->getInvitationFile()) {
+            $this->createInvitationsInvitableEmployeesAndGuests($uploadedInvitationFile, $sitting, $sitting->getStructure());
+
+            return;
+        }
+
+        $invitationFile = $this->fileManager->replaceInvitationFile($uploadedInvitationFile, $sitting);
+        $sitting->setInvitationFile($invitationFile);
     }
 
     public function archive(Sitting $sitting): void
