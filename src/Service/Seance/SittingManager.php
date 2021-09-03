@@ -120,7 +120,7 @@ class SittingManager
 
     private function createOrReplaceInvitation(UploadedFile $uploadedInvitationFile, Sitting $sitting)
     {
-        if(!$sitting->getInvitationFile()) {
+        if (!$sitting->getInvitationFile()) {
             $this->createInvitationsInvitableEmployeesAndGuests($uploadedInvitationFile, $sitting, $sitting->getStructure());
 
             return;
@@ -134,6 +134,14 @@ class SittingManager
     {
         $sitting->setIsArchived(true);
         $this->convocationManager->deactivate($sitting->getConvocations());
+        $this->em->persist($sitting);
+        $this->em->flush();
+    }
+
+    public function unArchive(Sitting $sitting)
+    {
+        $sitting->setIsArchived(false);
+        $this->convocationManager->reactivate($sitting->getConvocations());
         $this->em->persist($sitting);
         $this->em->flush();
     }

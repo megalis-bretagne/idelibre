@@ -269,6 +269,17 @@ class ConvocationManager
     }
 
     /**
+     * @param iterable<Convocation> $convocations
+     */
+    public function reactivate(iterable $convocations): void
+    {
+        foreach ($convocations as $convocation) {
+            $convocation->setIsActive(true);
+            $this->em->persist($convocation);
+        }
+    }
+
+    /**
      * @param Convocation[] $convocations
      */
     private function generateEmailsData(Sitting $sitting, array $convocations): array
