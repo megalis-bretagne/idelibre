@@ -138,7 +138,8 @@ class SittingManager
         $this->em->flush();
     }
 
-    public function unArchive(Sitting $sitting) {
+    public function unArchive(Sitting $sitting)
+    {
         $sitting->setIsArchived(false);
         $this->convocationManager->reactivate($sitting->getConvocations());
         $this->em->persist($sitting);

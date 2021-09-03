@@ -272,7 +272,6 @@ class SittingController extends AbstractController
         return $referer ? $this->redirect($referer) : $this->redirectToRoute('sitting_index');
     }
 
-
     /**
      * @Route("/sitting/unarchive/{id}", name="sitting_unarchive", methods={"POST"})
      * @IsGranted("ROLE_SUPERADMIN")
@@ -283,11 +282,8 @@ class SittingController extends AbstractController
         $this->addFlash('success', 'La séance a été déclassée');
         $referer = $request->headers->get('referer');
 
-
-
         return $referer ? $this->redirect($referer) : $this->redirectToRoute('sitting_index');
     }
-
 
     private function activeSidebarNav(bool $isArchived): string
     {
