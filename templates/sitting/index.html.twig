@@ -61,6 +61,18 @@
                         sittings.currentPageNumber
                     ) }}
 
+
+                    {% if sitting.isArchived and is_granted('ROLE_SUPERADMIN') %}
+                        {{ macros.button_open_modal_post(
+                            sitting.id,
+                            'Déclassement de la séance',
+                            'Voulez-vous déclasser cette séance ?',
+                            'sitting_unarchive',
+                            'fas fa-chart-line',
+                            'Déclasser'
+                        ) }}
+                    {% endif %}
+
                 </td>
             </tr>
         {% endfor %}
