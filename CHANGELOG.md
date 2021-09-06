@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 
 
-## [unversioned] - 2021-??-??
+## [4.0.4] - 2021-09-06
 ### Correction
 - L'aperçu de l'email de template en format text echappe maintenant les balises html (#132)
 - Correction de l'impossibilité de supprimer un acteur s'il a une annotation (#137)
@@ -15,7 +15,7 @@ All notable changes to this project will be documented in this file.
 ### Evolutions
 - Déarchiver une séance (#138)
 - Si on ajoute une invitation apres l'enregistrement cela ajoute bien les administratifs et invites par defaut (#130)
-- label des champs fichiers dans la création d'une séance (#134)
+- Label des champs fichiers dans la création d'une séance (#134)
 - Mise à jour symfony 5.3.7
 
 
