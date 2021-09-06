@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 - Déarchiver une séance (#138)
 - Si on ajoute une invitation apres l'enregistrement cela ajoute bien les administratifs et invites par defaut (#130)
 - label des champs fichiers dans la création d'une séance (#134)
+- Mise à jour symfony 5.3.7
 
 
 ## [4.0.3] - 2021-08-27
