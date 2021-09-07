@@ -82,13 +82,17 @@ class LegacyWsService
         return $sitting;
     }
 
-    private function associateActorsToType($type, ?string $rawActors): void
+    private function associateActorsToType($type, $rawActors): void
     {
         if (empty($rawActors)) {
             return;
         }
 
-        $wsActors = $this->wsActorManager->validateAndFormatActor(json_decode($rawActors, true));
+        $wsActors = $rawActors;
+        if (is_string($wsActors)) {
+            $wsActors = $this->wsActorManager->validateAndFormatActor(json_decode($rawActors, true));
+        }
+
         if (!empty($wsActors)) {
             $this->wsActorManager->associateActorsToType($type, $wsActors);
         }

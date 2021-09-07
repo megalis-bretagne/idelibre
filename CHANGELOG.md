@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 
 
+## [4.0.5] - 2021-09-06
+### Correction
+- Connecteur legacy
+
+
 ## [4.0.4] - 2021-09-06
 ### Correction
 - L'aperçu de l'email de template en format text echappe maintenant les balises html (#132)
