@@ -89,7 +89,7 @@ class LegacyWsService
         }
 
         $wsActors = $rawActors;
-        if(is_string($wsActors)) {
+        if (is_string($wsActors)) {
             $wsActors = $this->wsActorManager->validateAndFormatActor(json_decode($rawActors, true));
         }
 
