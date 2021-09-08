@@ -180,7 +180,45 @@ class LegacyWsControllerTest extends WebTestCase
             'place' => '8 rue de la Mairie',
             'type_seance' => 'Commission webservice',
             'date_seance' => '2021-05-12 09:30',
-            'acteurs_convoques' => [],
+            'acteurs_convoques' => [
+                [
+                    "Acteur" => [
+                        "nom" => "MARTIN",
+                        "prenom" => "Philippe",
+                        "email" => "philippe.marton@example.org"
+                    ]
+                ],
+                [
+                    "Acteur" => [
+                        "nom" => "POMMIER",
+                        "prenom" => "Sarah",
+                        "email" => "sarah.pommier@example.org"
+                    ]
+                ],
+                [
+                    "Acteur" => [
+                        "nom" => "MARTINEZ",
+                        "prenom" => "Franck",
+                        "email" => "frank.martinez@gmail.com"
+                    ]
+                ],
+                [
+                    "Acteur" => [
+                        "nom" => "DURAND",
+                        "prenom" => "Thomas",
+                        "email" => "thomas.durand@example.org"
+                    ]
+                ],
+
+                [
+                    "Acteur" => [
+                        "nom" => "DUPONT",
+                        "prenom" => "Emilie",
+                        "email" => "emilie.dupont@example.org"
+                    ]
+                ],
+
+            ],
             'projets' => [
                 [
                     'ordre' => 0,
@@ -231,8 +269,14 @@ class LegacyWsControllerTest extends WebTestCase
 
         $sitting = $this->getOneSittingBy(['id' => $response->uuid]);
         $this->assertCount(3, $sitting->getProjects());
+        $this->assertCount(5, $sitting->getConvocations());
         $this->assertSame('2021-05-12 07:30', $sitting->getDate()->format('Y-m-d H:i'));
         $this->assertCount(2, $sitting->getProjects()[1]->getAnnexes());
+
+        $this->assertSame('t.durand@libriciel', $sitting->getProjects()[2]->getReporter()->getUsername());
+
+        $user = $this->getOneUserBy(['username' => 't.durand@libriciel']);
+        $this->assertNotNull($user);
 
         $themeRepository = $this->entityManager->getRepository(Theme::class);
 
