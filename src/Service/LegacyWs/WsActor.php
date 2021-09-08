@@ -20,8 +20,8 @@ class WsActor
 
         $this->firstName = trim($rawUser['Acteur']['prenom']);
         $this->lastName = trim($rawUser['Acteur']['nom']);
-        $this->title = $rawUser['Acteur']['titre'] ? trim($rawUser['Acteur']['titre']) : null;
+        $this->title = isset($rawUser['Acteur']['titre']) ? trim($rawUser['Acteur']['titre']) : null;
         $this->email = trim($rawUser['Acteur']['email']);
-        $this->phone = $rawUser['Acteur']['telmobile'] ? trim($rawUser['Acteur']['telmobile']) : null;
+        $this->phone = isset($rawUser['Acteur']['telmobile']) ? trim($rawUser['Acteur']['telmobile']) : null;
     }
 }

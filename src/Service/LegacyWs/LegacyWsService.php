@@ -8,7 +8,6 @@ use App\Repository\SittingRepository;
 use App\Service\Convocation\ConvocationManager;
 use App\Service\File\FileManager;
 use App\Service\Type\TypeManager;
-use DateTimeImmutable;
 use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -32,8 +31,7 @@ class LegacyWsService
         SittingRepository $sittingRepository,
         WsActorManager $wsActorManager,
         WsProjectManager $wsProjectManager
-    )
-    {
+    ) {
         $this->typeManager = $typeManager;
         $this->fileManager = $fileManager;
         $this->em = $em;
@@ -125,7 +123,6 @@ class LegacyWsService
 
     private function isAlreadyExistsSitting(array $rawSitting, Structure $structure): ?Sitting
     {
-
         $date = new \DateTime($rawSitting['date_seance'], new DateTimeZone($structure->getTimezone()->getName()));
         $date = $date->setTimezone(new DateTimeZone('UTC'));
 
