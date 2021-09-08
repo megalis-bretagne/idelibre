@@ -32,7 +32,8 @@ class LegacyWsService
         SittingRepository $sittingRepository,
         WsActorManager $wsActorManager,
         WsProjectManager $wsProjectManager
-    ) {
+    )
+    {
         $this->typeManager = $typeManager;
         $this->fileManager = $fileManager;
         $this->em = $em;
@@ -88,10 +89,12 @@ class LegacyWsService
             return;
         }
 
-        $wsActors = $rawActors;
-        if (is_string($wsActors)) {
-            $wsActors = $this->wsActorManager->validateAndFormatActor(json_decode($rawActors, true));
+        // fix connector wrong acteurs-convoqués type
+        if (!is_string($rawActors)) {
+            $rawActors = json_encode($rawActors);
         }
+
+        $wsActors = $this->wsActorManager->validateAndFormatActor(json_decode($rawActors, true));
 
         if (!empty($wsActors)) {
             $this->wsActorManager->associateActorsToType($type, $wsActors);
@@ -115,14 +118,6 @@ class LegacyWsService
             throw new BadRequestHttpException('convocation file is required');
         }
 
-        if (!empty($rawSitting['acteurs_convoques'])) {
-            try {
-                json_decode($rawSitting['acteurs_convoques']);
-            } catch (\Exception $e) {
-                throw new BadRequestHttpException('acteurs_convoques must be json format');
-            }
-        }
-
         if ($this->isAlreadyExistsSitting($rawSitting, $structure)) {
             throw new BadRequestHttpException('sitting same type same datetime already exists');
         }
@@ -130,9 +125,13 @@ class LegacyWsService
 
     private function isAlreadyExistsSitting(array $rawSitting, Structure $structure): ?Sitting
     {
+
+        $date = new \DateTime($rawSitting['date_seance'], new DateTimeZone($structure->getTimezone()->getName()));
+        $date = $date->setTimezone(new DateTimeZone('UTC'));
+
         return $this->sittingRepository->findOneBy([
             'name' => $rawSitting['type_seance'],
-            'date' => new DateTimeImmutable($rawSitting['date_seance']),
+            'date' => $date,
             'structure' => $structure,
         ]);
     }
