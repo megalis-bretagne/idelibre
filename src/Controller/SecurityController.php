@@ -148,4 +148,14 @@ class SecurityController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+
+    /**
+     * @Route("/srvusers/login", name="legacy_login_path")
+     */
+    public function legacyLoginPath(): Response
+    {
+        return $this->redirectToRoute('app_login');
+    }
+
 }
