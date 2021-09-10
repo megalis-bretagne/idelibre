@@ -149,7 +149,6 @@ class SecurityController extends AbstractController
         ]);
     }
 
-
     /**
      * @Route("/srvusers/login", name="legacy_login_path")
      */
@@ -157,5 +156,4 @@ class SecurityController extends AbstractController
     {
         return $this->redirectToRoute('app_login');
     }
-
 }
