@@ -5,8 +5,10 @@ namespace App\Tests\Controller\WebService;
 use App\DataFixtures\RoleFixtures;
 use App\DataFixtures\StructureFixtures;
 use App\DataFixtures\ThemeFixtures;
+use App\DataFixtures\TypeFixtures;
 use App\DataFixtures\UserFixtures;
 use App\Entity\Theme;
+use App\Entity\Type;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
 use Doctrine\Persistence\ObjectManager;
@@ -44,6 +46,7 @@ class LegacyWsControllerTest extends WebTestCase
             UserFixtures::class,
             RoleFixtures::class,
             ThemeFixtures::class,
+            TypeFixtures::class
         ]);
     }
 
@@ -150,6 +153,123 @@ class LegacyWsControllerTest extends WebTestCase
         $this->assertCount(1, $themeRepository->findBy(['name' => 'T1' ]));
 
 
+        $typeRepository = $this->entityManager->getRepository(Type::class);
+
+        /** @var Type $type */
+        $type = $typeRepository->findOneBy(['name' => "Commission webservice"]);
+        $this->assertNotEmpty($type);
+
+        $this->assertCount(5, $type->getAssociatedUsers());
+    }
+
+
+
+
+    public function testAddSittingExistingType()
+    {
+        $filesystem = new FileSystem();
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/convocation.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/project1.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/project2.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/project3.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/annex1.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/annex2.pdf');
+
+        $fileConvocation = new UploadedFile(__DIR__ . '/../../resources/convocation.pdf', 'convocation.pdf', 'application/pdf');
+        $fileProject1 = new UploadedFile(__DIR__ . '/../../resources/project1.pdf', 'project1.pdf', 'application/pdf');
+        $fileProject2 = new UploadedFile(__DIR__ . '/../../resources/project2.pdf', 'project2.pdf', 'application/pdf');
+        $fileProject3 = new UploadedFile(__DIR__ . '/../../resources/project3.pdf', 'project3.pdf', 'application/pdf');
+        $fileAnnex1 = new UploadedFile(__DIR__ . '/../../resources/annex1.pdf', 'annex1.pdf', 'application/pdf');
+        $fileAnnex2 = new UploadedFile(__DIR__ . '/../../resources/annex2.pdf', 'annex2.pdf', 'application/pdf');
+
+        $username = 'secretary1';
+        $password = 'password';
+        $conn = 'libriciel';
+
+        $sittingData = [
+            'place' => '8 rue de la Mairie',
+            'type_seance' => 'Conseil Communautaire Libriciel',
+            'date_seance' => '2021-05-12 09:30',
+            'acteurs_convoques' => '[
+            {"Acteur":{"nom":"DURAND","prenom":"Thomas","salutation":"Monsieur","titre":"Pr\\u00e9sident","email":"thomas.durand@example.org","telmobile":""}},
+            {"Acteur":{"nom":"DUPONT","prenom":"Emilie","salutation":"Madame","titre":"1ERE Vice-President","email":"emilie.dupont@example.org","telmobile":""}},
+            {"Acteur":{"nom":"MARTINEZ","prenom":"Franck","salutation":"Monsieur","titre":"","email":"frank.martinez@gmail.com","telmobile":""}},
+            {"Acteur":{"nom":"POMMIER","prenom":"Sarah","salutation":"Madame","titre":"","email":"sarah.pommier@example.org","telmobile":""}},
+            {"Acteur":{"nom":"MARTIN","prenom":"Philippe","salutation":"Monsieur","titre":"","email":"philippe.marton@example.org","telmobile":""}},
+            {"Acteur":{"nom":"Gille","prenom":"mauriceModify","salutation":"Monsieur","titre":"","email":"martin.gille@example.org","telmobile":""}}
+            ]',
+            'projets' => [
+                [
+                    'ordre' => 0,
+                    'libelle' => 'tarif cimetiere1',
+                    'theme' => 'T1, STA',
+                ],
+                [
+                    'ordre' => 1,
+                    'libelle' => 'tarif cimetiere2',
+                    'theme' => 'T1, STB , sstb',
+                    'annexes' => [['ordre' => 0], ['ordre' => 1]],
+                ],
+                [
+                    'ordre' => 2,
+                    'libelle' => 'tarif cimetiere3',
+                    'theme' => 'STA, ssta',
+                    'Rapporteur' => ['rapporteurlastname' => 'DURAND', 'rapporteurfirstname' => 'Thomas'],
+                ],
+            ],
+        ];
+
+        $this->client->request(
+            Request::METHOD_POST,
+            '/seances.json',
+            [
+                'username' => $username,
+                'password' => $password,
+                'conn' => $conn,
+                'jsonData' => json_encode($sittingData),
+            ],
+            [
+                'convocation' => $fileConvocation,
+                'projet_0_rapport' => $fileProject1,
+                'projet_1_rapport' => $fileProject2,
+                'projet_1_0_annexe' => $fileAnnex1,
+                'projet_1_1_annexe' => $fileAnnex2,
+                'projet_2_rapport' => $fileProject3,
+            ]
+        );
+
+        $this->assertResponseStatusCodeSame(200);
+
+        $response = json_decode($this->client->getResponse()->getContent());
+        $this->assertTrue($response->success);
+        $this->assertSame('Seance.add.ok', $response->code);
+        $this->assertSame('La séance a bien été ajoutée.', $response->message);
+        $this->assertNotEmpty($response->uuid);
+
+        $sitting = $this->getOneSittingBy(['id' => $response->uuid]);
+        $this->assertCount(3, $sitting->getProjects());
+        $this->assertCount(8, $sitting->getConvocations());
+        $this->assertSame('2021-05-12 07:30', $sitting->getDate()->format('Y-m-d H:i'));
+        $this->assertCount(2, $sitting->getProjects()[1]->getAnnexes());
+
+        $this->assertSame('t.durand@libriciel', $sitting->getProjects()[2]->getReporter()->getUsername());
+
+        $user = $this->getOneUserBy(['username' => 't.durand@libriciel']);
+        $this->assertNotNull($user);
+
+        $themeRepository = $this->entityManager->getRepository(Theme::class);
+
+        $this->assertCount(1, $themeRepository->findBy(['name' => 'T1' ]));
+
+
+        $typeRepository = $this->entityManager->getRepository(Type::class);
+
+        /** @var Type $type */
+        $type = $typeRepository->findOneBy(['name' => "Conseil Communautaire Libriciel"]);
+        $this->assertNotEmpty($type);
+
+
+        $this->assertCount(8, $type->getAssociatedUsers());
     }
 
 

@@ -199,6 +199,18 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($actorLibriciel3);
         $this->addReference(self::REFERENCE . 'actorLibriciel3', $actorLibriciel3);
 
+
+        $actorLibriciel4 = new User();
+        $actorLibriciel4->setEmail('m.gille@example.org')
+            ->setRole($roleActor)
+            ->setUsername('m.gillr@libriciel')
+            ->setFirstName('Maurice')
+            ->setLastname('Gille')
+            ->setStructure($structureLibriciel)
+            ->setPassword($password);
+        $manager->persist($actorLibriciel4);
+        $this->addReference(self::REFERENCE . 'mgilleLibriciel3', $actorLibriciel4);
+
         ////// Secretary ////
 
         $secretaryLibriciel1 = new User();
