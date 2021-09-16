@@ -2,9 +2,12 @@
 All notable changes to this project will be documented in this file.
 
 
-## [4.0.5] - 2021-09-06
-### Correction
-- Connecteur legacy
+## [4.0.5] - 2021-09-16
+### Evolution
+- Connecteur legacy : accepte les array et les string pour la clé acteurs-convoqués
+- Connecteur legacy : Si un username généré existe déja on considère que c'est le même élu
+- Redirections des anciennes routes vers les nouvelles pour eviter les 404 en favoris (srvusers/login et idelibre_client3)  
+
 
 
 ## [4.0.4] - 2021-09-06
