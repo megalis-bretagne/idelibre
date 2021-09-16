@@ -72,6 +72,8 @@ class LegacyWsService
             $sitting->setPlace($rawSitting['place']);
         }
 
+        $this->em->flush();
+
         $this->convocationManager->createConvocationsActors($sitting);
 
         $this->em->flush();
