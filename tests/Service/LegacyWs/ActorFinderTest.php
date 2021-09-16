@@ -7,6 +7,7 @@ use App\DataFixtures\UserFixtures;
 use App\Entity\Structure;
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Service\LegacyWs\WsActorManager;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
 use Doctrine\Persistence\ObjectManager;
@@ -23,7 +24,6 @@ class ActorFinderTest extends WebTestCase
      */
     private $entityManager;
     private UserRepository $userRepository;
-
 
     protected function setUp(): void
     {
@@ -47,15 +47,17 @@ class ActorFinderTest extends WebTestCase
     }
 
 
-    private function createUser(string $firstname, string $lastName, Structure $structure): User
+    private function createUser(string $firstname, string $lastName, Structure $structure, string $username = "usernameLibriciel"): User
     {
         $user = new User();
         $user->setPassword('fake')
-            ->setUsername('usernameLibriciel')
+            ->setUsername($username)
             ->setLastName($lastName)
             ->setFirstName($firstname)
             ->setEmail('email@exemple.org')
             ->setStructure($structure);
+
+
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();
@@ -67,7 +69,7 @@ class ActorFinderTest extends WebTestCase
     {
         $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
         $this->createUser("firstWS", "lastWS", $structure);
-        $actor = $this->userRepository->findByFirstNameLastNameAndStructure("firstWS", "lastWS", $structure);
+        $actor = $this->userRepository->findByFirstNameLastNameAndStructureOrUsername("firstWS", "lastWS", $structure, 'f.last@libriciel');
         $this->assertNotEmpty($actor);
     }
 
@@ -76,7 +78,7 @@ class ActorFinderTest extends WebTestCase
     {
         $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
         $this->createUser(" firstWS ", " lastWS  ", $structure);
-        $actor = $this->userRepository->findByFirstNameLastNameAndStructure("firstWS", "lastWS", $structure);
+        $actor = $this->userRepository->findByFirstNameLastNameAndStructureOrUsername("firstWS", "lastWS", $structure,'f.last@libriciel');
         $this->assertNotEmpty($actor);
     }
 
@@ -84,7 +86,7 @@ class ActorFinderTest extends WebTestCase
     {
         $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
         $this->createUser("firstWS", "lastWS", $structure);
-        $actor = $this->userRepository->findByFirstNameLastNameAndStructure("  firstWS ", " lastWS ", $structure);
+        $actor = $this->userRepository->findByFirstNameLastNameAndStructureOrUsername("  firstWS ", " lastWS ", $structure,'f.last@libriciel');
         $this->assertNotEmpty($actor);
     }
 
@@ -93,7 +95,7 @@ class ActorFinderTest extends WebTestCase
     {
         $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
         $this->createUser("first WS", "last WS", $structure);
-        $actor = $this->userRepository->findByFirstNameLastNameAndStructure("firstWS", "lastWS", $structure);
+        $actor = $this->userRepository->findByFirstNameLastNameAndStructureOrUsername("firstWS", "lastWS", $structure,'f.last@libriciel');
         $this->assertEmpty($actor);
     }
 
@@ -102,8 +104,27 @@ class ActorFinderTest extends WebTestCase
     {
         $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
         $this->createUser("firstws", "LASTWS", $structure);
-        $actor = $this->userRepository->findByFirstNameLastNameAndStructure("firstWS", "lastWS", $structure);
+        $actor = $this->userRepository->findByFirstNameLastNameAndStructureOrUsername("firstWS", "lastWS", $structure, 'f.last@libriciel');
         $this->assertNotEmpty($actor);
+    }
+
+
+    public function testFindByStructureDifferentNameSameUsername()
+    {
+        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
+        $this->createUser("firstws", "lastws", $structure, 'sameUsername');
+        $actor = $this->userRepository->findByFirstNameLastNameAndStructureOrUsername("other", "name same username", $structure, 'sameUsername');
+        $this->assertNotEmpty($actor);
+    }
+
+
+
+    public function testFindByStructureNewUser()
+    {
+        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
+        $this->createUser("firstws", "lastws", $structure);
+        $actor = $this->userRepository->findByFirstNameLastNameAndStructureOrUsername("news", "user", $structure, 'n.user@libriciel');
+        $this->assertEmpty($actor);
     }
 
 
@@ -112,7 +133,7 @@ class ActorFinderTest extends WebTestCase
         $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
         $this->createUser("firstWS", "firstWS", $structure);
         $structureMtp = $this->getOneStructureBy(['name' => 'Montpellier']);
-        $actor = $this->userRepository->findByFirstNameLastNameAndStructure("firstWS", "firstWS", $structureMtp);
+        $actor = $this->userRepository->findByFirstNameLastNameAndStructureOrUsername("firstWS", "firstWS", $structureMtp, 'f.last@libriciel');
         $this->assertEmpty($actor);
     }
 

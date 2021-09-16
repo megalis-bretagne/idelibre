@@ -48,7 +48,8 @@ class WsActorManager
     private function addWsActorsToType(array $wsActors, Type $type)
     {
         foreach ($wsActors as $wsActor) {
-            $existingActor = $this->actorFinder->findByStructure($wsActor, $type->getStructure());
+            $actorUsername = $this->generateUserName($wsActor->firstName, $wsActor->lastName, $type->getStructure()->getSuffix());
+            $existingActor = $this->actorFinder->findByStructure($wsActor, $type->getStructure(), $actorUsername);
 
             if ($existingActor) {
                 $type->addAssociatedUser($existingActor);
