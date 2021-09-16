@@ -14,8 +14,8 @@ class ActorFinder
         $this->userRepository = $userRepository;
     }
 
-    public function findByStructure(WsActor $actor, Structure $structure)
+    public function findByStructure(WsActor $actor, Structure $structure, string $username)
     {
-        return $this->userRepository->findByFirstNameLastNameAndStructure($actor->firstName, $actor->lastName, $structure);
+        return $this->userRepository->findByFirstNameLastNameAndStructureOrUsername($actor->firstName, $actor->lastName, $structure, $username);
     }
 }
