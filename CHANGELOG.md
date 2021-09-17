@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file.
 
 
+## [unversioning] - 2021-09-??
+### Evolution
+- Nombre de fichiers maximum par envoi est maintenant de 600 (#151)
+- Temps maximum d'execution d'un script est de 300s
+
+### Correction
+- Impossibilité d'ajouter 2 fois de suite le meme fichier sous chrome et edge (#150)
+
 ## [4.0.5] - 2021-09-16
 ### Evolution
 - Connecteur legacy : accepte les array et les string pour la clé acteurs-convoqués
