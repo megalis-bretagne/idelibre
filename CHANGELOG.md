@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 
 ### Correction
 - Impossibilité d'ajouter 2 fois de suite le meme fichier sous chrome et edge (#150)
+- correction de la source du fichier d'initialisation des certificats
 
 ## [4.0.5] - 2021-09-16
 ### Evolution
