@@ -5,9 +5,9 @@ namespace App\Service\Email;
 interface EmailServiceInterface
 {
     /**
-     * @param EmailData[] $emails
+     * @param EmailData[] $emailsData
      *
      * @throws EmailNotSendException
      */
-    public function sendBatch(array $emails): void;
+    public function sendBatch(array $emailsData): void;
 }

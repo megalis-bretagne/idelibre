@@ -14,6 +14,7 @@ class EmailData
     private string $format;
     private Attachment $attachment;
     private bool $isAttachment = false;
+    private string $calPath;
 
     public function __construct(string $subject, string $content, string $format = self::FORMAT_HTML)
     {
@@ -84,4 +85,17 @@ class EmailData
 
         return $this;
     }
+
+    public function getCalPath(): string
+    {
+        return $this->calPath;
+    }
+
+    public function setCalPath(string $calPath): EmailData
+    {
+        $this->calPath = $calPath;
+        return $this;
+    }
+
+
 }

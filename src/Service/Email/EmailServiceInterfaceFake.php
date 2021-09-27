@@ -5,9 +5,9 @@ namespace App\Service\Email;
 class EmailServiceInterfaceFake implements EmailServiceInterface
 {
     /**
-     * @param EmailData[] $emails
+     * @param EmailData[] $emailsData
      */
-    public function sendBatch(array $emails): void
+    public function sendBatch(array $emailsData): void
     {
     }
 }

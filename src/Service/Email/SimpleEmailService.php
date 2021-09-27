@@ -13,35 +13,38 @@ class SimpleEmailService implements EmailServiceInterface
 {
     private Swift_Mailer $mailer;
     private ParameterBagInterface $bag;
+    private IcalGenerator $icalGenerator;
 
-    public function __construct(Swift_Mailer $mailer, ParameterBagInterface $bag)
+    public function __construct(Swift_Mailer $mailer, ParameterBagInterface $bag, IcalGenerator $icalGenerator)
     {
         $this->mailer = $mailer;
         $this->bag = $bag;
+        $this->icalGenerator = $icalGenerator;
     }
 
     /**
-     * @param EmailData[] $emails
+     * @param EmailData[] $emailsData
      *
      * @throws EmailNotSendException
      */
-    public function sendBatch(array $emails): void
+    public function sendBatch(array $emailsData): void
     {
-        foreach ($emails as $email) {
+        foreach ($emailsData as $emailData) {
             try {
-                $message = (new Swift_Message($email->getSubject()))
+                $message = (new Swift_Message($emailData->getSubject()))
                     ->setFrom($this->bag->get('email_from'))
-                    ->setTo($email->getTo())
+                    ->setTo($emailData->getTo())
                     ->setBody(
-                        $this->getFormattedContent($email),
-                        $this->selectEmailFormat($email->getFormat())
+                        $this->getFormattedContent($emailData),
+                        $this->selectEmailFormat($emailData->getFormat())
                     );
 
-                if ($email->getReplyTo()) {
-                    $message->setReplyTo($email->getReplyTo());
+                if ($emailData->getReplyTo()) {
+                    $message->setReplyTo($emailData->getReplyTo());
                 }
 
-                $this->setAttachment($message, $email);
+                $this->setAttachment($message, $emailData);
+                $this->setCal($message, $emailData);
             } catch (Exception $e) {
                 throw new EmailNotSendException($e->getMessage());
             }
@@ -64,6 +67,7 @@ class SimpleEmailService implements EmailServiceInterface
             Swift_Attachment::fromPath($email->getAttachment()->getPath())
                 ->setFilename($email->getAttachment()->getFileName())
         );
+
     }
 
     private function getFormattedContent(EmailData $email): string
@@ -82,5 +86,17 @@ class SimpleEmailService implements EmailServiceInterface
         }
 
         return 'text/html';
+    }
+
+    private function setCal(Swift_Message $message, EmailData $emailData)
+    {
+        if (!$emailData->getCalPath()) {
+            return;
+        }
+
+        $message->attach(
+            Swift_Attachment::fromPath($emailData->getCalPath(), IcalGenerator::CONTENT_TYPE)
+                ->setFilename('cal.ics')
+        );
     }
 }

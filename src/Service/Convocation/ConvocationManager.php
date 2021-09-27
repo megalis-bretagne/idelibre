@@ -14,6 +14,7 @@ use App\Service\ClientNotifier\ClientNotifierInterface;
 use App\Service\Email\Attachment;
 use App\Service\Email\EmailNotSendException;
 use App\Service\Email\EmailServiceInterface;
+use App\Service\Email\IcalGenerator;
 use App\Service\EmailTemplate\EmailGenerator;
 use App\Service\Timestamp\TimestampManager;
 use Doctrine\DBAL\ConnectionException;
@@ -36,6 +37,7 @@ class ConvocationManager
     private UserRepository $userRepository;
     private ClientNotifierInterface $clientNotifier;
     private MessageBusInterface $messageBus;
+    private IcalGenerator $icalGenerator;
 
     public function __construct(
         EntityManagerInterface $em,
@@ -47,7 +49,8 @@ class ConvocationManager
         EmailGenerator $emailGenerator,
         UserRepository $userRepository,
         ClientNotifierInterface $clientNotifier,
-        MessageBusInterface $messageBus
+        MessageBusInterface $messageBus,
+        IcalGenerator $icalGenerator
     ) {
         $this->em = $em;
         $this->convocationRepository = $convocationRepository;
@@ -59,6 +62,7 @@ class ConvocationManager
         $this->userRepository = $userRepository;
         $this->clientNotifier = $clientNotifier;
         $this->messageBus = $messageBus;
+        $this->icalGenerator = $icalGenerator;
     }
 
     public function createConvocationsActors(Sitting $sitting): void
@@ -290,6 +294,7 @@ class ConvocationManager
             $email->setTo($convocation->getUser()->getEmail());
             $email->setReplyTo($sitting->getStructure()->getReplyTo());
             $email->setAttachment($this->getConvocationAttachment($convocation, $sitting));
+            $email->setCalPath($this->icalGenerator->generate($sitting));
             $emails[] = $email;
         }
 

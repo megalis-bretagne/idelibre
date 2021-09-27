@@ -22,13 +22,13 @@ class MailjetService implements EmailServiceInterface
     }
 
     /**
-     * @param EmailData[] $emails
+     * @param EmailData[] $emailsData
      *
      * @throws EmailNotSendException
      */
-    public function sendBatch(array $emails): void
+    public function sendBatch(array $emailsData): void
     {
-        $messages = $this->generateMailjetMessages($emails);
+        $messages = $this->generateMailjetMessages($emailsData);
         $response = $this->mailjetClient->post(Resources::$Email, ['body' => ['Messages' => $messages]]);
 
         if (!$response->success()) {
