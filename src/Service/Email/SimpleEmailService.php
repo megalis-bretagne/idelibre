@@ -67,7 +67,6 @@ class SimpleEmailService implements EmailServiceInterface
             Swift_Attachment::fromPath($email->getAttachment()->getPath())
                 ->setFilename($email->getAttachment()->getFileName())
         );
-
     }
 
     private function getFormattedContent(EmailData $email): string

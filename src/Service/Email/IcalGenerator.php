@@ -1,11 +1,8 @@
 <?php
 
-
 namespace App\Service\Email;
 
-
 use App\Entity\Sitting;
-use DateTimeImmutable;
 use Eluceo\iCal\Domain\Entity\Calendar;
 use Eluceo\iCal\Domain\Entity\Event;
 use Eluceo\iCal\Domain\ValueObject\Date as IcalDate;
@@ -15,7 +12,7 @@ use Ramsey\Uuid\Uuid;
 
 class IcalGenerator
 {
-    const CONTENT_TYPE = 'text/calendar';
+    public const CONTENT_TYPE = 'text/calendar';
 
     public function generate(Sitting $sitting): string
     {
@@ -30,7 +27,7 @@ class IcalGenerator
             );
 
         $calendar = new Calendar([$event]);
-        $calendar->setProductIdentifier("idelibre");
+        $calendar->setProductIdentifier('idelibre');
 
         $componentFactory = new CalendarFactory();
         $calendarComponent = $componentFactory->createCalendar($calendar);
