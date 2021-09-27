@@ -5,11 +5,9 @@ namespace App\Service\Email;
 use App\Entity\Sitting;
 use Eluceo\iCal\Domain\Entity\Calendar;
 use Eluceo\iCal\Domain\Entity\Event;
-use Eluceo\iCal\Domain\ValueObject\Date as IcalDate;
 use Eluceo\iCal\Domain\ValueObject\DateTime;
 use Eluceo\iCal\Domain\ValueObject\EmailAddress;
 use Eluceo\iCal\Domain\ValueObject\Organizer;
-use Eluceo\iCal\Domain\ValueObject\SingleDay;
 use Eluceo\iCal\Domain\ValueObject\TimeSpan;
 use Eluceo\iCal\Presentation\Factory\CalendarFactory;
 use Ramsey\Uuid\Uuid;
@@ -30,14 +28,13 @@ class IcalGenerator
             ->setOccurrence(
                 new TimeSpan(
                     new DateTime($sitting->getDate(), true),
-                    new DateTime(date_add($mutableDateTime, date_interval_create_from_date_string('2 hours')), true )
+                    new DateTime(date_add($mutableDateTime, date_interval_create_from_date_string('2 hours')), true)
                 )
             )
-        ->setOrganizer(new Organizer( new EmailAddress($sitting->getStructure()->getReplyTo()) ,$sitting->getStructure()->getName()));
+        ->setOrganizer(new Organizer(new EmailAddress($sitting->getStructure()->getReplyTo()), $sitting->getStructure()->getName()));
 
         $calendar = new Calendar([$event]);
         $calendar->setProductIdentifier('idelibre');
-
 
         $componentFactory = new CalendarFactory();
         $calendarComponent = $componentFactory->createCalendar($calendar);
