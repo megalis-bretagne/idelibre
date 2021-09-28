@@ -118,6 +118,11 @@ class Sitting
      */
     private $comelusId;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Calendar::class, mappedBy="sitting", cascade={"persist", "remove"})
+     */
+    private $calendar;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -323,5 +328,22 @@ class Sitting
         $dateTime->setTimestamp($this->getDate()->getTimestamp());
 
         return $this->name . ' ' . $dateTime->format('d/m/y');
+    }
+
+    public function getCalendar(): ?Calendar
+    {
+        return $this->calendar;
+    }
+
+    public function setCalendar(Calendar $calendar): self
+    {
+        // set the owning side of the relation if necessary
+        if ($calendar->getSitting() !== $this) {
+            $calendar->setSitting($this);
+        }
+
+        $this->calendar = $calendar;
+
+        return $this;
     }
 }
