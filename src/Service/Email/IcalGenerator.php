@@ -18,20 +18,22 @@ class IcalGenerator
 
     public function generate(Sitting $sitting): string
     {
-        $mutableDateTime = new \DateTime();
-        $mutableDateTime->setTimestamp($sitting->getDate()->getTimestamp());
 
-        // 1. Create Event domain entity
+        $timezone = $sitting->getStructure()->getTimezone()->getName();
+
+        $endDateTimeWithTz = $this->getEndDatetimeWithTz($sitting->getDate(), 90, $timezone);
+        $startDateTimeWithTz = $this->getStartDatetimeWithTz($sitting->getDate(), $timezone);
+
         $event = (new Event())
             ->setSummary($sitting->getName())
             ->setDescription($sitting->getName())
             ->setOccurrence(
                 new TimeSpan(
-                    new DateTime($sitting->getDate(), true),
-                    new DateTime(date_add($mutableDateTime, date_interval_create_from_date_string('2 hours')), true)
+                    new DateTime($startDateTimeWithTz, true),
+                    new DateTime($endDateTimeWithTz, true)
                 )
             )
-        ->setOrganizer(new Organizer(new EmailAddress($sitting->getStructure()->getReplyTo()), $sitting->getStructure()->getName()));
+            ->setOrganizer(new Organizer(new EmailAddress($sitting->getStructure()->getReplyTo()), $sitting->getStructure()->getName()));
 
         $calendar = new Calendar([$event]);
         $calendar->setProductIdentifier('idelibre');
@@ -45,4 +47,23 @@ class IcalGenerator
 
         return $fileName;
     }
+
+
+    public function getEndDatetimeWithTz(\DateTimeInterface $sittingDateTime, int $durationInMinutes, string $timezoneName): \DateTime
+    {
+        $mutableDateTime = new \DateTime();
+        $mutableDateTime->setTimestamp($sittingDateTime->getTimestamp());
+        $mutableDateTime->setTimezone(new \DateTimeZone($timezoneName));
+
+        return date_add($mutableDateTime, date_interval_create_from_date_string("$durationInMinutes minutes"));
+    }
+
+    public function getStartDatetimeWithTz(\DateTimeInterface $sittingDateTime, string $timezoneName): \DateTime
+    {
+        $mutableDateTime = new \DateTime();
+        $mutableDateTime->setTimestamp($sittingDateTime->getTimestamp());
+
+        return $mutableDateTime->setTimezone(new \DateTimeZone($timezoneName));
+    }
+
 }
