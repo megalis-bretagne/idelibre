@@ -3,21 +3,42 @@
 namespace App\Service\Email;
 
 use App\Entity\Sitting;
+use App\Service\Util\FileUtil;
 use Eluceo\iCal\Domain\Entity\Calendar;
 use Eluceo\iCal\Domain\Entity\Event;
 use Eluceo\iCal\Domain\ValueObject\DateTime;
 use Eluceo\iCal\Domain\ValueObject\EmailAddress;
+use Eluceo\iCal\Domain\ValueObject\Location;
 use Eluceo\iCal\Domain\ValueObject\Organizer;
 use Eluceo\iCal\Domain\ValueObject\TimeSpan;
 use Eluceo\iCal\Presentation\Factory\CalendarFactory;
+use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
+use Symfony\Component\Filesystem\Filesystem;
 
-class IcalGenerator
+class CalGenerator
 {
     public const CONTENT_TYPE = 'text/calendar';
+    public const DIRECTORY = '/tmp/cal/';
+
+    private Filesystem $filesystem;
+    private FileUtil $fileUtil;
+    private LoggerInterface $logger;
+
+    public function __construct(Filesystem $filesystem, FileUtil $fileUtil, LoggerInterface $logger)
+    {
+        $this->filesystem = $filesystem;
+        $this->fileUtil = $fileUtil;
+        $this->logger = $logger;
+    }
 
     public function generate(Sitting $sitting): string
     {
+
+        $this->filesystem->mkdir(self::DIRECTORY);
+
+        $this->randomCleanDirectory();
+
         $timezone = $sitting->getStructure()->getTimezone()->getName();
 
         $endDateTimeWithTz = $this->getEndDatetimeWithTz($sitting->getDate(), 90, $timezone);
@@ -34,13 +55,19 @@ class IcalGenerator
             )
             ->setOrganizer(new Organizer(new EmailAddress($sitting->getStructure()->getReplyTo()), $sitting->getStructure()->getName()));
 
+        if($sitting->getPlace()) {
+            $event->setLocation(new Location($sitting->getPlace()));
+        }
+
+
         $calendar = new Calendar([$event]);
         $calendar->setProductIdentifier('idelibre');
 
         $componentFactory = new CalendarFactory();
         $calendarComponent = $componentFactory->createCalendar($calendar);
 
-        $fileName = '/tmp/' . Uuid::NAMESPACE_DNS;
+
+        $fileName = self::DIRECTORY . Uuid::NAMESPACE_DNS;
 
         file_put_contents($fileName, $calendarComponent);
 
@@ -63,4 +90,16 @@ class IcalGenerator
 
         return $mutableDateTime->setTimezone(new \DateTimeZone($timezoneName));
     }
+
+    private function randomCleanDirectory()
+    {
+        try {
+            if (random_int(0, 100) === 42) {
+                $this->fileUtil->deleteFileInDirectory(self::DIRECTORY);
+            }
+        } catch (\Exception $e) {
+            $this->logger->error($e->getMessage());
+        }
+    }
+
 }

@@ -14,7 +14,7 @@ use App\Service\ClientNotifier\ClientNotifierInterface;
 use App\Service\Email\Attachment;
 use App\Service\Email\EmailNotSendException;
 use App\Service\Email\EmailServiceInterface;
-use App\Service\Email\IcalGenerator;
+use App\Service\Email\CalGenerator;
 use App\Service\EmailTemplate\EmailGenerator;
 use App\Service\Timestamp\TimestampManager;
 use Doctrine\DBAL\ConnectionException;
@@ -37,7 +37,7 @@ class ConvocationManager
     private UserRepository $userRepository;
     private ClientNotifierInterface $clientNotifier;
     private MessageBusInterface $messageBus;
-    private IcalGenerator $icalGenerator;
+    private CalGenerator $icalGenerator;
 
     public function __construct(
         EntityManagerInterface $em,
@@ -50,7 +50,7 @@ class ConvocationManager
         UserRepository $userRepository,
         ClientNotifierInterface $clientNotifier,
         MessageBusInterface $messageBus,
-        IcalGenerator $icalGenerator
+        CalGenerator $icalGenerator
     ) {
         $this->em = $em;
         $this->convocationRepository = $convocationRepository;

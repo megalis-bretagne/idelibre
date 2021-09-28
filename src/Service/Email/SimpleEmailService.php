@@ -13,9 +13,9 @@ class SimpleEmailService implements EmailServiceInterface
 {
     private Swift_Mailer $mailer;
     private ParameterBagInterface $bag;
-    private IcalGenerator $icalGenerator;
+    private CalGenerator $icalGenerator;
 
-    public function __construct(Swift_Mailer $mailer, ParameterBagInterface $bag, IcalGenerator $icalGenerator)
+    public function __construct(Swift_Mailer $mailer, ParameterBagInterface $bag, CalGenerator $icalGenerator)
     {
         $this->mailer = $mailer;
         $this->bag = $bag;
@@ -94,7 +94,7 @@ class SimpleEmailService implements EmailServiceInterface
         }
 
         $message->attach(
-            Swift_Attachment::fromPath($emailData->getCalPath(), IcalGenerator::CONTENT_TYPE)
+            Swift_Attachment::fromPath($emailData->getCalPath(), CalGenerator::CONTENT_TYPE)
                 ->setFilename('cal.ics')
         );
     }
