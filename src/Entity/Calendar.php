@@ -29,9 +29,15 @@ class Calendar
 
     /**
      * @ORM\OneToOne(targetEntity=Sitting::class, inversedBy="calendar", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $sitting;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Type::class, inversedBy="calendar", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     */
+    private $type;
 
     public function getId(): ?string
     {
@@ -70,6 +76,18 @@ class Calendar
     public function setSitting(Sitting $sitting): self
     {
         $this->sitting = $sitting;
+
+        return $this;
+    }
+
+    public function getType(): ?Type
+    {
+        return $this->type;
+    }
+
+    public function setType(Type $type): self
+    {
+        $this->type = $type;
 
         return $this;
     }

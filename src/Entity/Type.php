@@ -74,6 +74,11 @@ class Type
      */
     private $isComelus;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Calendar::class, mappedBy="type", cascade={"persist", "remove"})
+     */
+    private $calendar;
+
     public function __construct()
     {
         $this->associatedUsers = new ArrayCollection();
@@ -194,6 +199,23 @@ class Type
     public function setIsComelus(?bool $isComelus): self
     {
         $this->isComelus = $isComelus;
+
+        return $this;
+    }
+
+    public function getCalendar(): ?Calendar
+    {
+        return $this->calendar;
+    }
+
+    public function setCalendar(Calendar $calendar): self
+    {
+        // set the owning side of the relation if necessary
+        if ($calendar->getType() !== $this) {
+            $calendar->setType($this);
+        }
+
+        $this->calendar = $calendar;
 
         return $this;
     }

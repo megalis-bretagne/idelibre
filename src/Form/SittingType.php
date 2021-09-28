@@ -99,6 +99,12 @@ class SittingType extends AbstractType
                     'mimeTypesMessage' => 'Le fichier doit être un pdf',
                 ])],
             ])
+
+            ->add('calendar', CalendarType::class, [
+                'label' => false,
+
+            ])
+
             ->add('structure', HiddenType::class, [
                 'data' => $options['structure'],
                 'data_class' => null,

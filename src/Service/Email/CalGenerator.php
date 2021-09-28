@@ -32,8 +32,12 @@ class CalGenerator
         $this->logger = $logger;
     }
 
-    public function generate(Sitting $sitting): string
+    public function generate(Sitting $sitting): ?string
     {
+        if(!$sitting->getCalendar()->getIsActive()) {
+            return null;
+        }
+
         $this->filesystem->mkdir(self::DIRECTORY);
 
         $this->randomCleanDirectory();

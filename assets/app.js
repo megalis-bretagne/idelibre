@@ -15,7 +15,7 @@ import './js/expandable'
 $(document).ready(function () {
     let config = {
         enableTime: true,
-      //  altInput: true,
+        //  altInput: true,
         altFormat: "d/m/y : H:i",
         "locale": French
     };
@@ -23,6 +23,9 @@ $(document).ready(function () {
 
     bsCustomFileInput.init()
 })
+
+
+
 
 //const getMessage = require('./getMessage');
 //import getMessage from './getMessage'
