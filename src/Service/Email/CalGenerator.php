@@ -34,7 +34,6 @@ class CalGenerator
 
     public function generate(Sitting $sitting): string
     {
-
         $this->filesystem->mkdir(self::DIRECTORY);
 
         $this->randomCleanDirectory();
@@ -55,17 +54,15 @@ class CalGenerator
             )
             ->setOrganizer(new Organizer(new EmailAddress($sitting->getStructure()->getReplyTo()), $sitting->getStructure()->getName()));
 
-        if($sitting->getPlace()) {
+        if ($sitting->getPlace()) {
             $event->setLocation(new Location($sitting->getPlace()));
         }
-
 
         $calendar = new Calendar([$event]);
         $calendar->setProductIdentifier('idelibre');
 
         $componentFactory = new CalendarFactory();
         $calendarComponent = $componentFactory->createCalendar($calendar);
-
 
         $fileName = self::DIRECTORY . Uuid::NAMESPACE_DNS;
 
@@ -94,12 +91,11 @@ class CalGenerator
     private function randomCleanDirectory()
     {
         try {
-            if (random_int(0, 100) === 42) {
+            if (42 === random_int(0, 100)) {
                 $this->fileUtil->deleteFileInDirectory(self::DIRECTORY);
             }
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
         }
     }
-
 }
