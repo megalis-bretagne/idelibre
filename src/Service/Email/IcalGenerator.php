@@ -18,7 +18,6 @@ class IcalGenerator
 
     public function generate(Sitting $sitting): string
     {
-
         $timezone = $sitting->getStructure()->getTimezone()->getName();
 
         $endDateTimeWithTz = $this->getEndDatetimeWithTz($sitting->getDate(), 90, $timezone);
@@ -48,7 +47,6 @@ class IcalGenerator
         return $fileName;
     }
 
-
     public function getEndDatetimeWithTz(\DateTimeInterface $sittingDateTime, int $durationInMinutes, string $timezoneName): \DateTime
     {
         $mutableDateTime = new \DateTime();
@@ -65,5 +63,4 @@ class IcalGenerator
 
         return $mutableDateTime->setTimezone(new \DateTimeZone($timezoneName));
     }
-
 }
