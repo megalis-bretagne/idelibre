@@ -100,9 +100,8 @@ class SittingType extends AbstractType
                 ])],
             ])
 
-            ->add('calendar', CalendarType::class, [
+            ->add('calendar', CalendarSittingType::class, [
                 'label' => false,
-
             ])
 
             ->add('structure', HiddenType::class, [

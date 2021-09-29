@@ -29,13 +29,13 @@ class Calendar
 
     /**
      * @ORM\OneToOne(targetEntity=Sitting::class, inversedBy="calendar", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
     private $sitting;
 
     /**
      * @ORM\OneToOne(targetEntity=Type::class, inversedBy="calendar", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
     private $type;
 
@@ -49,8 +49,12 @@ class Calendar
         return $this->duration;
     }
 
-    public function setDuration(int $duration): self
+    public function setDuration(?int $duration): self
     {
+        if(!$duration) {
+            return $this;
+        }
+
         $this->duration = $duration;
 
         return $this;

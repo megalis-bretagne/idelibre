@@ -12,6 +12,7 @@ use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -115,6 +116,22 @@ class TypeController extends AbstractController
 
         return $this->redirectToRoute('type_index', [
             'page' => $request->get('page'),
+        ]);
+    }
+
+    /**
+     * @Route("/type/calendar/{id}", name="type_calendar", methods={"GET"})
+     * @IsGranted("ROLE_MANAGE_SITTINGS")
+     */
+    public function getCalendarInfo(Type $type) : JsonResponse
+    {
+        if(!$type->getCalendar()) {
+            return $this->json(['isActive' => false]);
+        }
+
+        return $this->json([
+            'isActive' => $type->getCalendar()->getIsActive(),
+            'duration' => $type->getCalendar()->getDuration()
         ]);
     }
 }

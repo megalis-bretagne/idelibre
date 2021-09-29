@@ -90,6 +90,11 @@ class TypeType extends AbstractType
                 'choice_label' => fn (User $user) => $this->formatUserString($user),
                 'multiple' => true,
             ])
+
+            ->add('calendar', CalendarType::class, [
+                'label' => false,
+            ])
+
             ->add('structure', HiddenType::class, [
                 'data' => $options['structure'],
                 'data_class' => null,

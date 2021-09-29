@@ -15,6 +15,7 @@
     {{ form_start(form, {attr:{'novalidate': true}}) }}
 
     {{ form_widget(form) }}
+
     <div class="float-right">
         {% block pageSaveReturn %}{{ macro.save('sitting_index') }}{% endblock %}
     </div>
@@ -27,5 +28,5 @@
 
 
 {% block javascripts %}
-    {{ encore_entry_script_tags('toggle-calendar') }}
+    {{ encore_entry_script_tags('toggle-calendar-new-sitting') }}
 {% endblock %}

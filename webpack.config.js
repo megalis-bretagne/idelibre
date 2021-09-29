@@ -31,6 +31,7 @@ Encore
     .addEntry('delete-user-batch', './assets/js/deleteBatch.js')
     .addEntry('select-all-users', './assets/js/selectAllUsers.js')
     .addEntry('toggle-calendar', './assets/js/toggleCalendar.js')
+    .addEntry('toggle-calendar-new-sitting', './assets/js/toggleCalendarNewSitting.js')
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')
