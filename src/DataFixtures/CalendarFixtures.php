@@ -2,7 +2,6 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Annex;
 use App\Entity\Calendar;
 use App\Entity\Type;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -31,7 +30,7 @@ class CalendarFixtures extends Fixture implements DependentFixtureInterface
     public function getDependencies()
     {
         return [
-            TypeFixtures::class
+            TypeFixtures::class,
         ];
     }
 }

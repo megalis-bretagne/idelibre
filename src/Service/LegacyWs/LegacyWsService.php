@@ -2,8 +2,10 @@
 
 namespace App\Service\LegacyWs;
 
+use App\Entity\Calendar;
 use App\Entity\Sitting;
 use App\Entity\Structure;
+use App\Entity\Type;
 use App\Repository\SittingRepository;
 use App\Service\Convocation\ConvocationManager;
 use App\Service\File\FileManager;
@@ -31,7 +33,8 @@ class LegacyWsService
         SittingRepository $sittingRepository,
         WsActorManager $wsActorManager,
         WsProjectManager $wsProjectManager
-    ) {
+    )
+    {
         $this->typeManager = $typeManager;
         $this->fileManager = $fileManager;
         $this->em = $em;
@@ -56,6 +59,8 @@ class LegacyWsService
 
         $type = $this->typeManager->getOrCreateType($rawSitting['type_seance'], $structure);
 
+        $this->addCalendar($type, $sitting);
+
         $this->associateActorsToType($type, $rawSitting['acteurs_convoques'] ?? null);
 
         $convocationFile = $this->fileManager->save($uploadedFiles['convocation'], $structure);
@@ -71,6 +76,7 @@ class LegacyWsService
         if (isset($rawSitting['place'])) {
             $sitting->setPlace($rawSitting['place']);
         }
+
 
         $this->em->flush();
 
@@ -133,5 +139,19 @@ class LegacyWsService
             'date' => $date,
             'structure' => $structure,
         ]);
+    }
+
+    private function addCalendar(Type $type, Sitting $sitting): void
+    {
+        if (!$type->getCalendar()) {
+            return;
+        }
+
+        $calendar = (new Calendar())
+            ->setSitting($sitting)
+            ->setIsActive($type->getCalendar()->getIsActive())
+            ->setDuration($type->getCalendar()->getDuration());
+
+        $this->em->persist($calendar);
     }
 }

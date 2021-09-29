@@ -30,15 +30,7 @@ class CalendarSittingType extends AbstractType
                 ->add('duration', ChoiceType::class, [
                     'label' => 'Durée',
                     'disabled' => !$this->isActive($calendar),
-                    'choices' => [
-                        '30 minutes' => 30,
-                        '1 heure' => 60,
-                        '90 minutes' => 90,
-                        '2 heures' => 120,
-                        '3 heures' => 180,
-                        '4 heures' => 240,
-                        '5 heures' => 300,
-                    ],
+                    'choices' => Calendar::VALUES,
                     'data' => $calendar ? $calendar->getDuration() : 120,
                 ]);
         });

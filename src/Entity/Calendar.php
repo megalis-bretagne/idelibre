@@ -10,6 +10,16 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Calendar
 {
+    const VALUES = [
+        '30 minutes' => 30,
+        '1 heure' => 60,
+        '90 minutes' => 90,
+        '2 heures' => 120,
+        '3 heures' => 180,
+        '4 heures' => 240,
+        '5 heures' => 300
+    ];
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="UUID")
