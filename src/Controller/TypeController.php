@@ -123,15 +123,15 @@ class TypeController extends AbstractController
      * @Route("/type/calendar/{id}", name="type_calendar", methods={"GET"})
      * @IsGranted("ROLE_MANAGE_SITTINGS")
      */
-    public function getCalendarInfo(Type $type) : JsonResponse
+    public function getCalendarInfo(Type $type): JsonResponse
     {
-        if(!$type->getCalendar()) {
+        if (!$type->getCalendar()) {
             return $this->json(['isActive' => false]);
         }
 
         return $this->json([
             'isActive' => $type->getCalendar()->getIsActive(),
-            'duration' => $type->getCalendar()->getDuration()
+            'duration' => $type->getCalendar()->getDuration(),
         ]);
     }
 }

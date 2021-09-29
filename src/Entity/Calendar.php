@@ -51,7 +51,7 @@ class Calendar
 
     public function setDuration(?int $duration): self
     {
-        if(!$duration) {
+        if (!$duration) {
             return $this;
         }
 

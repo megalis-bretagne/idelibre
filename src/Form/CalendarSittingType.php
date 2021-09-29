@@ -25,8 +25,7 @@ class CalendarSittingType extends AbstractType
                     'required' => false,
                     'label_attr' => ['class' => 'switch-custom'],
                     'label' => 'Ajouter au calendrier',
-                    'data' =>  $calendar ? $calendar->getIsActive() : false
-
+                    'data' => $calendar ? $calendar->getIsActive() : false,
                 ])
                 ->add('duration', ChoiceType::class, [
                     'label' => 'Durée',
@@ -40,7 +39,7 @@ class CalendarSittingType extends AbstractType
                         '4 heures' => 240,
                         '5 heures' => 300,
                     ],
-                    'data' => $calendar ? $calendar->getDuration() : 120
+                    'data' => $calendar ? $calendar->getDuration() : 120,
                 ]);
         });
     }
@@ -60,5 +59,4 @@ class CalendarSittingType extends AbstractType
 
         return false;
     }
-
 }
