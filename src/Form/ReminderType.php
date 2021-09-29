@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\Calendar;
+use App\Entity\Reminder;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -11,13 +11,13 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class CalendarType extends AbstractType
+class ReminderType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
-            /** @var Calendar|null $calendar */
-            $calendar = $event->getData();
+            /** @var Reminder|null $reminder */
+            $reminder = $event->getData();
 
             $form = $event->getForm();
             $form
@@ -28,8 +28,8 @@ class CalendarType extends AbstractType
                 ])
                 ->add('duration', ChoiceType::class, [
                     'label' => 'Durée',
-                    'disabled' => !$this->isActive($calendar),
-                    'choices' => Calendar::VALUES
+                    'disabled' => !$this->isActive($reminder),
+                    'choices' => Reminder::VALUES,
                 ]);
         });
     }
@@ -37,16 +37,16 @@ class CalendarType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Calendar::class,
+            'data_class' => Reminder::class,
         ]);
     }
 
-    private function isActive(?Calendar $calendar): bool
+    private function isActive(?Reminder $reminder): bool
     {
-        if (!$calendar) {
+        if (!$reminder) {
             return false;
         }
 
-        return $calendar->getIsActive();
+        return $reminder->getIsActive();
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\Calendar;
+use App\Entity\Reminder;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -11,13 +11,13 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class CalendarSittingType extends AbstractType
+class ReminderSittingType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
-            /** @var Calendar|null $calendar */
-            $calendar = $event->getData();
+            /** @var Reminder|null $reminder */
+            $reminder = $event->getData();
             $form = $event->getForm();
 
             $form
@@ -25,13 +25,13 @@ class CalendarSittingType extends AbstractType
                     'required' => false,
                     'label_attr' => ['class' => 'switch-custom'],
                     'label' => 'Ajouter au calendrier',
-                    'data' => $calendar ? $calendar->getIsActive() : false,
+                    'data' => $reminder ? $reminder->getIsActive() : false,
                 ])
                 ->add('duration', ChoiceType::class, [
                     'label' => 'Durée',
-                    'disabled' => !$this->isActive($calendar),
-                    'choices' => Calendar::VALUES,
-                    'data' => $calendar ? $calendar->getDuration() : 120,
+                    'disabled' => !$this->isActive($reminder),
+                    'choices' => Reminder::VALUES,
+                    'data' => $reminder ? $reminder->getDuration() : 120,
                 ]);
         });
     }
@@ -39,14 +39,14 @@ class CalendarSittingType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Calendar::class,
+            'data_class' => Reminder::class,
         ]);
     }
 
-    private function isActive(?Calendar $calendar): bool
+    private function isActive(?Reminder $reminder): bool
     {
-        if ($calendar) {
-            return $calendar->getIsActive();
+        if ($reminder) {
+            return $reminder->getIsActive();
         }
 
         return false;

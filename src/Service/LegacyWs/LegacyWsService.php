@@ -2,7 +2,7 @@
 
 namespace App\Service\LegacyWs;
 
-use App\Entity\Calendar;
+use App\Entity\Reminder;
 use App\Entity\Sitting;
 use App\Entity\Structure;
 use App\Entity\Type;
@@ -33,8 +33,7 @@ class LegacyWsService
         SittingRepository $sittingRepository,
         WsActorManager $wsActorManager,
         WsProjectManager $wsProjectManager
-    )
-    {
+    ) {
         $this->typeManager = $typeManager;
         $this->fileManager = $fileManager;
         $this->em = $em;
@@ -59,7 +58,7 @@ class LegacyWsService
 
         $type = $this->typeManager->getOrCreateType($rawSitting['type_seance'], $structure);
 
-        $this->addCalendar($type, $sitting);
+        $this->addReminder($type, $sitting);
 
         $this->associateActorsToType($type, $rawSitting['acteurs_convoques'] ?? null);
 
@@ -76,7 +75,6 @@ class LegacyWsService
         if (isset($rawSitting['place'])) {
             $sitting->setPlace($rawSitting['place']);
         }
-
 
         $this->em->flush();
 
@@ -141,17 +139,17 @@ class LegacyWsService
         ]);
     }
 
-    private function addCalendar(Type $type, Sitting $sitting): void
+    private function addReminder(Type $type, Sitting $sitting): void
     {
-        if (!$type->getCalendar()) {
+        if (!$type->getReminder()) {
             return;
         }
 
-        $calendar = (new Calendar())
+        $reminder = (new Reminder())
             ->setSitting($sitting)
-            ->setIsActive($type->getCalendar()->getIsActive())
-            ->setDuration($type->getCalendar()->getDuration());
+            ->setIsActive($type->getReminder()->getIsActive())
+            ->setDuration($type->getReminder()->getDuration());
 
-        $this->em->persist($calendar);
+        $this->em->persist($reminder);
     }
 }

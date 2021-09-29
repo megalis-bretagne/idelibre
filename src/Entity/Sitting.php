@@ -119,9 +119,9 @@ class Sitting
     private $comelusId;
 
     /**
-     * @ORM\OneToOne(targetEntity=Calendar::class, mappedBy="sitting", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Reminder::class, mappedBy="sitting", cascade={"persist", "remove"})
      */
-    private $calendar;
+    private $reminder;
 
     public function __construct()
     {
@@ -330,19 +330,19 @@ class Sitting
         return $this->name . ' ' . $dateTime->format('d/m/y');
     }
 
-    public function getCalendar(): ?Calendar
+    public function getReminder(): ?Reminder
     {
-        return $this->calendar;
+        return $this->reminder;
     }
 
-    public function setCalendar(Calendar $calendar): self
+    public function setReminder(Reminder $reminder): self
     {
         // set the owning side of the relation if necessary
-        if ($calendar->getSitting() !== $this) {
-            $calendar->setSitting($this);
+        if ($reminder->getSitting() !== $this) {
+            $reminder->setSitting($this);
         }
 
-        $this->calendar = $calendar;
+        $this->reminder = $reminder;
 
         return $this;
     }

@@ -100,7 +100,7 @@ class SittingType extends AbstractType
                 ])],
             ])
 
-            ->add('calendar', CalendarSittingType::class, [
+            ->add('reminder', ReminderSittingType::class, [
                 'label' => false,
             ])
 

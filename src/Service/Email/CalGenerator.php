@@ -34,7 +34,7 @@ class CalGenerator
 
     public function generate(Sitting $sitting): ?string
     {
-        if (!$sitting->getCalendar() || !$sitting->getCalendar()->getIsActive()) {
+        if (!$sitting->getReminder() || !$sitting->getReminder()->getIsActive()) {
             return null;
         }
 

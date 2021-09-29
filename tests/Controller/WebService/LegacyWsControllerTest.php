@@ -2,7 +2,7 @@
 
 namespace App\Tests\Controller\WebService;
 
-use App\DataFixtures\CalendarFixtures;
+use App\DataFixtures\ReminderFixtures;
 use App\DataFixtures\RoleFixtures;
 use App\DataFixtures\StructureFixtures;
 use App\DataFixtures\ThemeFixtures;
@@ -48,7 +48,7 @@ class LegacyWsControllerTest extends WebTestCase
             RoleFixtures::class,
             ThemeFixtures::class,
             TypeFixtures::class,
-            CalendarFixtures::class
+            ReminderFixtures::class
         ]);
     }
 
@@ -273,7 +273,7 @@ class LegacyWsControllerTest extends WebTestCase
 
         $this->assertCount(8, $type->getAssociatedUsers());
 
-        $this->assertNotEmpty($sitting->getCalendar());
+        $this->assertNotEmpty($sitting->getReminder());
     }
 
 

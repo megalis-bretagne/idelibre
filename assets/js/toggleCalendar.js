@@ -1,23 +1,23 @@
 import $ from 'jquery';
 
 
-$("#sitting_calendar_isActive").change(function (event) {
-    let $calendarDuration = $('#sitting_calendar_duration');
+$("#sitting_reminder_isActive").change(function (event) {
+    let $reminderDuration = $('#sitting_reminder_duration');
     if (event.currentTarget.checked) {
-        $calendarDuration.attr('disabled', false);
+        $reminderDuration.attr('disabled', false);
 
         return;
     }
-    $calendarDuration.attr('disabled', true);
+    $reminderDuration.attr('disabled', true);
 });
 
 
-$("#type_calendar_isActive").change(function (event) {
-    let $calendarDuration = $('#type_calendar_duration');
+$("#type_reminder_isActive").change(function (event) {
+    let $reminderDuration = $('#type_reminder_duration');
     if (event.currentTarget.checked) {
-        $calendarDuration.attr('disabled', false);
+        $reminderDuration.attr('disabled', false);
 
         return;
     }
-    $calendarDuration.attr('disabled', true);
+    $reminderDuration.attr('disabled', true);
 });

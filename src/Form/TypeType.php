@@ -91,7 +91,7 @@ class TypeType extends AbstractType
                 'multiple' => true,
             ])
 
-            ->add('calendar', CalendarType::class, [
+            ->add('reminder', ReminderType::class, [
                 'label' => false,
             ])
 

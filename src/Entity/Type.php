@@ -75,9 +75,9 @@ class Type
     private $isComelus;
 
     /**
-     * @ORM\OneToOne(targetEntity=Calendar::class, mappedBy="type", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Reminder::class, mappedBy="type", cascade={"persist", "remove"})
      */
-    private $calendar;
+    private $reminder;
 
     public function __construct()
     {
@@ -203,19 +203,19 @@ class Type
         return $this;
     }
 
-    public function getCalendar(): ?Calendar
+    public function getReminder(): ?Reminder
     {
-        return $this->calendar;
+        return $this->reminder;
     }
 
-    public function setCalendar(Calendar $calendar): self
+    public function setReminder(Reminder $reminder): self
     {
         // set the owning side of the relation if necessary
-        if ($calendar->getType() !== $this) {
-            $calendar->setType($this);
+        if ($reminder->getType() !== $this) {
+            $reminder->setType($this);
         }
 
-        $this->calendar = $calendar;
+        $this->reminder = $reminder;
 
         return $this;
     }

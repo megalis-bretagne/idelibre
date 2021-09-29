@@ -1,34 +1,34 @@
 import $ from 'jquery';
 
 
-$("#sitting_calendar_isActive").change(function (event) {
-    let $calendarDuration = $('#sitting_calendar_duration');
+$("#sitting_reminder_isActive").change(function (event) {
+    let $reminderDuration = $('#sitting_reminder_duration');
     if (event.currentTarget.checked) {
-        $calendarDuration.attr('disabled', false);
+        $reminderDuration.attr('disabled', false);
 
         return;
     }
-    $calendarDuration.attr('disabled', true);
+    $reminderDuration.attr('disabled', true);
 });
 
 
 $("document").ready(function () {
     let typeId = $('#sitting_type').val();
     if (!typeId) return;
-    updateCalendar(typeId);
+    updateReminder(typeId);
 })
 
 
 $('#sitting_type').change(function(event) {
-    updateCalendar(event.target.value)
+    updateReminder(event.target.value)
 })
 
-function updateCalendar(typeId) {
-    $.get('/type/calendar/' + typeId, function (res) {
+function updateReminder(typeId) {
+    $.get('/type/reminder/' + typeId, function (res) {
         console.log(res);
-        let $calendarDuration = $('#sitting_calendar_duration');
-        $('#sitting_calendar_isActive').attr('checked', res.isActive);
-        $calendarDuration.attr('disabled', !res.isActive)
-        $calendarDuration.val(res.duration ?? 120);
+        let $reminderDuration = $('#sitting_reminder_duration');
+        $('#sitting_reminder_isActive').attr('checked', res.isActive);
+        $reminderDuration.attr('disabled', !res.isActive)
+        $reminderDuration.val(res.duration ?? 120);
     });
 }

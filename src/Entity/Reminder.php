@@ -2,22 +2,22 @@
 
 namespace App\Entity;
 
-use App\Repository\CalendarRepository;
+use App\Repository\ReminderRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=CalendarRepository::class)
+ * @ORM\Entity(repositoryClass=ReminderRepository::class)
  */
-class Calendar
+class Reminder
 {
-    const VALUES = [
+    public const VALUES = [
         '30 minutes' => 30,
         '1 heure' => 60,
         '90 minutes' => 90,
         '2 heures' => 120,
         '3 heures' => 180,
         '4 heures' => 240,
-        '5 heures' => 300
+        '5 heures' => 300,
     ];
 
     /**
@@ -38,13 +38,13 @@ class Calendar
     private $isActive = false;
 
     /**
-     * @ORM\OneToOne(targetEntity=Sitting::class, inversedBy="calendar", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Sitting::class, inversedBy="reminder", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
     private $sitting;
 
     /**
-     * @ORM\OneToOne(targetEntity=Type::class, inversedBy="calendar", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Type::class, inversedBy="reminder", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
     private $type;
