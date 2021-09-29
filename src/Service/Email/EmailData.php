@@ -91,7 +91,7 @@ class EmailData
         return $this->calPath;
     }
 
-    public function setCalPath(string $calPath): EmailData
+    public function setCalPath(?string $calPath): EmailData
     {
         $this->calPath = $calPath;
 
