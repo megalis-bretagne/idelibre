@@ -15,7 +15,7 @@
     "doctrine/annotations": "^1.0",
     "doctrine/doctrine-bundle": "^2",
     "doctrine/doctrine-migrations-bundle": "^2",
-    "doctrine/orm": "^2",
+    "doctrine/orm": "^2.9",
     "guzzlehttp/guzzle": "^7.2",
     "knplabs/knp-paginator-bundle": "^5.3",
     "knplabs/knp-snappy-bundle": "^1.8",
