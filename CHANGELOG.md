@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Evolution
 - Nombre de fichiers maximum par envoi est maintenant de 600 (#151)
 - Temps maximum d'execution d'un script est de 300s
-- Symfony 5.3.9
+- symfony 5.3.9 (conservation de doctrine orm en 2.9 pour eviter erreur sur les arbres)
 
 ### Correction
 - Impossibilité d'ajouter 2 fois de suite le meme fichier sous chrome et edge (#150)
