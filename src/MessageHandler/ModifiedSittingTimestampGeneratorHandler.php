@@ -26,8 +26,7 @@ class ModifiedSittingTimestampGeneratorHandler implements MessageHandlerInterfac
         EntityManagerInterface $em,
         LoggerInterface $logger,
         SittingManager $sittingManager
-    )
-    {
+    ) {
         $this->timestampManager = $timestampManager;
         $this->sittingRepository = $sittingRepository;
         $this->em = $em;
