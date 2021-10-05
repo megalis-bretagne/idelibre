@@ -56,8 +56,6 @@ class TimestampManager
         return $timeStamp;
     }
 
-
-
     /**
      * @throws LsHorodatageException
      */
@@ -74,7 +72,6 @@ class TimestampManager
 
         return $timeStamp;
     }
-
 
     private function saveTimestampInFile(StreamInterface $tsToken, string $path): string
     {

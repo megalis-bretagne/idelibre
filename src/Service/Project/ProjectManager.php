@@ -142,7 +142,6 @@ class ProjectManager
 
         $this->em->persist($project);
 
-
         return $project;
     }
 

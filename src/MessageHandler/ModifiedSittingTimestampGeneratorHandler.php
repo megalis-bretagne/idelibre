@@ -20,8 +20,13 @@ class ModifiedSittingTimestampGeneratorHandler implements MessageHandlerInterfac
     private LoggerInterface $logger;
     private SittingManager $sittingManager;
 
-    public function __construct(TimestampManager $timestampManager, SittingRepository $sittingRepository,
-                                EntityManagerInterface $em, LoggerInterface $logger, SittingManager $sittingManager)
+    public function __construct(
+        TimestampManager $timestampManager,
+        SittingRepository $sittingRepository,
+        EntityManagerInterface $em,
+        LoggerInterface $logger,
+        SittingManager $sittingManager
+    )
     {
         $this->timestampManager = $timestampManager;
         $this->sittingRepository = $sittingRepository;
