@@ -200,7 +200,7 @@ class ConvocationManager
         $this->em->getConnection()->beginTransaction();
         try {
             $notSentConvocations = $this->filterNotSentConvocations($convocations);
-            $timeStamp = $this->timestampManager->createTimestamp($sitting, $notSentConvocations);
+            $timeStamp = $this->timestampManager->createConvocationTimestamp($sitting, $notSentConvocations);
 
             foreach ($notSentConvocations as $convocation) {
                 $convocation->setIsActive(true)

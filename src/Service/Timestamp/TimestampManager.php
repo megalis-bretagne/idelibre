@@ -42,10 +42,10 @@ class TimestampManager
      * @throws SyntaxError
      * @throws LsHorodatageException
      */
-    public function createTimestamp(Sitting $sitting, iterable $convocations): Timestamp
+    public function createConvocationTimestamp(Sitting $sitting, iterable $convocations): Timestamp
     {
         $timeStamp = new Timestamp();
-        $timeStamp->setFilePathContent($this->contentGenerator->generateFile($sitting, $convocations));
+        $timeStamp->setFilePathContent($this->contentGenerator->generateConvocationFile($sitting, $convocations));
 
         $tsTokenStream = $this->lshorodatage->createTimestampToken($timeStamp->getFilePathContent());
         $timeStamp->setFilePathTsa($this->saveTimestampInFile($tsTokenStream, $timeStamp->getFilePathContent()));
@@ -55,6 +55,26 @@ class TimestampManager
 
         return $timeStamp;
     }
+
+
+
+    /**
+     * @throws LsHorodatageException
+     */
+    public function createModifiedSittingTimestamp(Sitting $sitting): Timestamp
+    {
+        $timeStamp = new Timestamp();
+        $timeStamp->setFilePathContent($this->contentGenerator->generateModifiedSittingFile($sitting));
+
+        $tsTokenStream = $this->lshorodatage->createTimestampToken($timeStamp->getFilePathContent());
+        $timeStamp->setFilePathTsa($this->saveTimestampInFile($tsTokenStream, $timeStamp->getFilePathContent()));
+
+        $this->em->persist($timeStamp);
+        $this->em->flush();
+
+        return $timeStamp;
+    }
+
 
     private function saveTimestampInFile(StreamInterface $tsToken, string $path): string
     {

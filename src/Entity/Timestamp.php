@@ -48,6 +48,12 @@ class Timestamp
      */
     private $filePathTsa;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Sitting::class, inversedBy="updatedTimestamps")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     */
+    private $sitting;
+
     public function __construct()
     {
         $this->createdAt = new DateTimeImmutable();
@@ -83,6 +89,18 @@ class Timestamp
     public function setFilePathTsa(?string $filePathTsa): Timestamp
     {
         $this->filePathTsa = $filePathTsa;
+
+        return $this;
+    }
+
+    public function getSitting(): ?Sitting
+    {
+        return $this->sitting;
+    }
+
+    public function setSitting(?Sitting $sitting): self
+    {
+        $this->sitting = $sitting;
 
         return $this;
     }

@@ -1,0 +1,31 @@
+Date de modification de la séance : {{ "now" | date("d/m/Y à H:i") }} UTC
+Nom de la seance : {{ sitting.name }}
+Date de la seance : {{ sitting.date | date("d/m/Y à H:i") }} UTC
+
+Contenu de la séance après modification
+
+convocation :
+Fichier : {{ sitting.convocationFile.name}}
+Taille : {{ sitting.convocationFile.size }}
+UUID : {{ sitting.convocationFile.id }}
+
+Liste des projets
+{% for project in sitting.projects %}
+
+Rang : {{ project.rank + 1 }}
+Intitulé : {{ project.name }}
+Fichier : {{ project.file.name }}
+Taille : {{ project.file.size }}
+UUID : {{ project.id }}
+{% if project.annexes.count > 0 %}
+
+Annexes associées :
+{% for annex in project.annexes %}
+
+Fichier : {{ annex.file.name }}
+Taille : {{ annex.file.size }}
+UUID : {{ annex.id }}
+{% endfor %}
+{% endif %}
+----------------------------
+{% endfor %}

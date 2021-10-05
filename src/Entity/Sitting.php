@@ -123,11 +123,17 @@ class Sitting
      */
     private $reminder;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Timestamp::class, mappedBy="sitting")
+     */
+    private $updatedTimestamps;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->convocations = new ArrayCollection();
         $this->projects = new ArrayCollection();
+        $this->updatedTimestamps = new ArrayCollection();
     }
 
     public function getId(): ?string
@@ -343,6 +349,36 @@ class Sitting
         }
 
         $this->reminder = $reminder;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Timestamp[]
+     */
+    public function getUpdatedTimestamps(): Collection
+    {
+        return $this->updatedTimestamps;
+    }
+
+    public function addUpdatedTimestamp(Timestamp $updatedTimestamp): self
+    {
+        if (!$this->updatedTimestamps->contains($updatedTimestamp)) {
+            $this->updatedTimestamps[] = $updatedTimestamp;
+            $updatedTimestamp->setSitting($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUpdatedTimestamp(Timestamp $updatedTimestamp): self
+    {
+        if ($this->updatedTimestamps->removeElement($updatedTimestamp)) {
+            // set the owning side to null (unless already changed)
+            if ($updatedTimestamp->getSitting() === $this) {
+                $updatedTimestamp->setSitting(null);
+            }
+        }
 
         return $this;
     }

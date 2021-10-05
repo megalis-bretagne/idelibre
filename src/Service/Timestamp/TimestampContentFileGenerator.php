@@ -32,7 +32,7 @@ class TimestampContentFileGenerator
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function generateFile(Sitting $sitting, iterable $convocations): string
+    public function generateConvocationFile(Sitting $sitting, iterable $convocations): string
     {
         $txt = $this->twig->render('generate/sent_timestamp_template.txt.twig', [
             'sitting' => $sitting,
@@ -44,6 +44,23 @@ class TimestampContentFileGenerator
 
         return $path;
     }
+
+
+    public function generateModifiedSittingFile(Sitting $sitting): string
+    {
+        $txt = $this->twig->render('generate/modify_Sitting_timestamp_template.txt.twig', [
+            'sitting' => $sitting,
+        ]);
+
+        $path = $this->getAndCreateTokenDirectory($sitting) . "modified_" . Uuid::uuid4();
+        file_put_contents($path, $txt);
+
+        return $path;
+    }
+
+
+
+
 
     private function getAndCreateTokenDirectory(Sitting $sitting): string
     {
