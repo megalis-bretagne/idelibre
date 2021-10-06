@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.1.WIP] - 2022-??-??
+### Evolution
+- nouveau systeme d'authentification
+
+### Nauveautés
+- Fichier de rendez vous avec l'envoi du mail de convocation
+- Horodatage à chaque modification d'une séance envoyée
+
 
 ## [4.0.6] - 2021-10-04
 ### Evolution
