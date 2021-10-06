@@ -39,7 +39,7 @@ class TimestampContentFileGeneratorTest extends WebTestCase
     protected function setUp(): void
     {
         self::bootKernel();
-        $container = self::$container;
+        $container = self::getContainer();
 
         $this->environment = $container->get('twig');
         $this->entityManager = $container->get('doctrine')->getManager();

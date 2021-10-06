@@ -71,7 +71,7 @@ class ThemeManagerTest extends WebTestCase
         $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
 
         /** @var ThemeManager $themeManager */
-        $themeManager = self::$container->get(ThemeManager::class);
+        $themeManager = self::getContainer()->get(ThemeManager::class);
         $themeManager->createThemesFromString("addedTheme", $structure);
 
         $themeRepository = $this->entityManager->getRepository(Theme::class);
@@ -86,7 +86,7 @@ class ThemeManagerTest extends WebTestCase
         $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
 
         /** @var ThemeManager $themeManager */
-        $themeManager = self::$container->get(ThemeManager::class);
+        $themeManager = self::getContainer()->get(ThemeManager::class);
         $themeManager->createThemesFromString("Finance", $structure);
         $themeRepository = $this->entityManager->getRepository(Theme::class);
 
@@ -100,7 +100,7 @@ class ThemeManagerTest extends WebTestCase
         $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
 
         /** @var ThemeManager $themeManager */
-        $themeManager = self::$container->get(ThemeManager::class);
+        $themeManager = self::getContainer()->get(ThemeManager::class);
         $themeManager->createThemesFromString("addedTheme", $structure);
         $themeManager->createThemesFromString("addedTheme", $structure);
 

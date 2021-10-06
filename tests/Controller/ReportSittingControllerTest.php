@@ -77,14 +77,14 @@ class ReportSittingControllerTest extends WebTestCase
         $response = $this->client->getResponse();
         $this->assertTrue($response->headers->has('content-disposition'));
         $this->assertSame('attachment; filename="Conseil Libriciel_rapport.csv"', $response->headers->get('content-disposition'));
-        $this->assertSame('text/plain', $response->headers->get('content-type'));
+        $this->assertSame('application/csv', $response->headers->get('content-type'));
         $this->assertGreaterThan(20, intval($response->headers->get('content-length')));
     }
 
     public function testGetSittingZipTokens()
     {
         $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
-        $bag = self::$container->get('parameter_bag');
+        $bag = self::getContainer()->get('parameter_bag');
         $year = $sitting->getDate()->format('Y');
         $tokenPath = "{$bag->get('token_directory')}{$sitting->getStructure()->getId()}/$year/{$sitting->getId()}";
 
