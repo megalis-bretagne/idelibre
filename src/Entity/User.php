@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\UserRepository;
 use App\Validator\OneAtMax;
 use Doctrine\Common\Collections\ArrayCollection;

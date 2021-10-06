@@ -2,16 +2,28 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\StructureRepository")
  * @UniqueEntity("name")
  */
+#[ApiResource(
+    collectionOperations: ['get', 'post'],
+    itemOperations: [
+        'get' => ['normalization_context' => ['groups' =>'structure.item.read']],
+        'put'
+    ],
+    shortName: "structures",
+    denormalizationContext: ['groups' => ['structure.write']],
+    normalizationContext: ['groups' => ['structure.read']],
+)]
 class Structure
 {
     /**
@@ -19,6 +31,7 @@ class Structure
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid")
      */
+    #[Groups(["structure.read"])]
     private $id;
 
     /**
@@ -26,6 +39,7 @@ class Structure
      * @Assert\NotBlank
      * @Assert\Length(max="255")
      */
+    #[Groups(["structure.write", "structure.read"])]
     private $name;
 
     /**
@@ -34,6 +48,8 @@ class Structure
      * @Assert\Length(max="255")
      * @Assert\Email
      */
+
+    #[Groups(["structure.item.read"])]
     private $replyTo;
 
     /**
