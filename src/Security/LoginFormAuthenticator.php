@@ -55,16 +55,18 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         return 'app_login' === $request->attributes->get('_route') && $request->isMethod('POST');
     }
 
+    protected function getLoginUrl(Request $request): string
+    {
+        return $this->router->generate('app_login');
+    }
+
     public function authenticate(Request $request): PassportInterface
     {
         $username = $request->request->get('username');
         $plainPassword = $request->request->get('password');
         $csrfToken = $request->request->get('_csrf_token');
 
-        $request->getSession()->set(
-            Security::LAST_USERNAME,
-            $username
-        );
+        $request->getSession()->set( Security::LAST_USERNAME, $username );
 
         $token = new CsrfToken('authenticate', $csrfToken);
 
@@ -88,14 +90,7 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         return new RedirectResponse($this->router->generate('app_entrypoint'));
     }
 
-    /* public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
-     {
-         if ($request->hasSession()) {
-             $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);
-         }
-         return new RedirectResponse($this->router->generate('app_login'));
-     }
-*/
+
     private function checkCredentialsAndUpdateIfLegacy(string $username, string $plainPassword): bool
     {
         $user = $this->userRepository->findOneBy(['username' => $username, 'isActive' => true]);
@@ -111,8 +106,5 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         return $this->legacyPassword->checkAndUpdateCredentials($user, $plainPassword);
     }
 
-    protected function getLoginUrl(Request $request): string
-    {
-        return $this->router->generate('app_login');
-    }
+
 }
