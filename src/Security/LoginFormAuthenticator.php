@@ -11,7 +11,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Core\Security;
@@ -66,7 +65,7 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         $plainPassword = $request->request->get('password');
         $csrfToken = $request->request->get('_csrf_token');
 
-        $request->getSession()->set( Security::LAST_USERNAME, $username );
+        $request->getSession()->set(Security::LAST_USERNAME, $username);
 
         $token = new CsrfToken('authenticate', $csrfToken);
 
@@ -90,7 +89,6 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         return new RedirectResponse($this->router->generate('app_entrypoint'));
     }
 
-
     private function checkCredentialsAndUpdateIfLegacy(string $username, string $plainPassword): bool
     {
         $user = $this->userRepository->findOneBy(['username' => $username, 'isActive' => true]);
@@ -105,6 +103,4 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 
         return $this->legacyPassword->checkAndUpdateCredentials($user, $plainPassword);
     }
-
-
 }
