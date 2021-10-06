@@ -9,6 +9,9 @@ security:
                            ROLE_MANAGE_PREFERENCES, ROLE_MANAGE_THEMES, ROLE_MANAGE_SITTINGS, ROLE_MANAGE_CONNECTORS]
     ROLE_SECRETARY: [ROLE_MANAGE_SITTINGS, ROLE_MANAGE_PREFERENCES]
 
+
+  enable_authenticator_manager: true
+
   password_hashers:
     App\Entity\User:
       algorithm: argon2i
@@ -20,20 +23,22 @@ security:
     app_user_provider:
       entity:
         class: App\Entity\User
-        #property: username
+        property: username
   firewalls:
     dev:
       pattern: ^/(_(profiler|wdt)|css|images|js)/
       security: false
     main:
-      anonymous: true
       lazy: true
       provider: app_user_provider
-      guard:
-        authenticators:
-          - App\Security\LoginFormAuthenticator
 
-        entry_point: App\Security\LoginFormAuthenticator
+      custom_authenticators:
+        - App\Security\LoginFormAuthenticator
+#      guard:
+#        authenticators:
+#          - App\Security\LoginFormAuthenticator
+
+     # entry_point: App\Security\LoginFormAuthenticator
 
       logout:
         path: app_logout

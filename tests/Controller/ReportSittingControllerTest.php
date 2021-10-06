@@ -53,7 +53,8 @@ class ReportSittingControllerTest extends WebTestCase
      * Problem absolute_url with webpack. Can't access to localhost/build/app.xxx.css
      * works well in real life.
      */
-    /*public function testPdfReport()
+  /*
+    public function testPdfReport()
     {
         $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
         $this->loginAsAdminLibriciel();

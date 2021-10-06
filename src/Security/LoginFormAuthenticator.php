@@ -11,16 +11,18 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Core\Security;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
-use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticator;
+use Symfony\Component\Security\Http\Authenticator\AbstractLoginFormAuthenticator;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
+use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
+use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 
-class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
+class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 {
     private UserRepository $userRepository;
     private RouterInterface $router;
@@ -53,41 +55,28 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         return 'app_login' === $request->attributes->get('_route') && $request->isMethod('POST');
     }
 
-    public function getCredentials(Request $request): array
+    public function authenticate(Request $request): PassportInterface
     {
-        $credentials = [
-            'username' => $request->request->get('username'),
-            'password' => $request->request->get('password'),
-            'csrf_token' => $request->request->get('_csrf_token'),
-        ];
+        $username = $request->request->get('username');
+        $plainPassword = $request->request->get('password');
+        $csrfToken = $request->request->get('_csrf_token');
 
         $request->getSession()->set(
             Security::LAST_USERNAME,
-            $credentials['username']
+            $username
         );
 
-        return $credentials;
-    }
-
-    public function getUser($credentials, UserProviderInterface $userProvider)
-    {
-        $token = new CsrfToken('authenticate', $credentials['csrf_token']);
+        $token = new CsrfToken('authenticate', $csrfToken);
 
         if (!$this->csrfTokenManager->isTokenValid($token)) {
             throw new InvalidCsrfTokenException();
         }
 
-        return $this->userRepository->findOneBy(['username' => $credentials['username'], 'isActive' => true]);
-    }
-
-    public function checkCredentials($credentials, UserInterface $user): bool
-    {
-        /** @var $user PasswordAuthenticatedUserInterface|UserInterface */
-        if ($this->passwordHasher->isPasswordValid($user, $credentials['password'])) {
-            return true;
+        if ($this->checkCredentialsAndUpdateIfLegacy($username, $plainPassword)) {
+            return new SelfValidatingPassport(new UserBadge($username));
         }
 
-        return $this->legacyPassword->checkAndUpdateCredentials($user, $credentials['password']);
+        throw new CustomUserMessageAuthenticationException('invalid credentials');
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey): Response
@@ -99,12 +88,30 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         return new RedirectResponse($this->router->generate('app_entrypoint'));
     }
 
-    public function supportsRememberMe(): bool
+    /* public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
+     {
+         if ($request->hasSession()) {
+             $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);
+         }
+         return new RedirectResponse($this->router->generate('app_login'));
+     }
+*/
+    private function checkCredentialsAndUpdateIfLegacy(string $username, string $plainPassword): bool
     {
-        return false;
+        $user = $this->userRepository->findOneBy(['username' => $username, 'isActive' => true]);
+
+        if (!$user) {
+            return false;
+        }
+
+        if ($this->passwordHasher->isPasswordValid($user, $plainPassword)) {
+            return true;
+        }
+
+        return $this->legacyPassword->checkAndUpdateCredentials($user, $plainPassword);
     }
 
-    protected function getLoginUrl(): string
+    protected function getLoginUrl(Request $request): string
     {
         return $this->router->generate('app_login');
     }
