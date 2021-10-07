@@ -24,7 +24,8 @@ class UserDenormalizer implements ContextAwareDenormalizerInterface, Denormalize
         if (!empty($context[self::ALREADY_CALLED_DENORMALIZER])) {
             return false;
         }
-        return ($type === User::class);
+
+        return User::class === $type;
     }
 
     public function denormalize($data, string $type, string $format = null, array $context = []): User
@@ -32,12 +33,12 @@ class UserDenormalizer implements ContextAwareDenormalizerInterface, Denormalize
         $context[self::ALREADY_CALLED_DENORMALIZER] = true;
         /** @var User $user */
         $user = $this->denormalizer->denormalize($data, $type, $format, $context);
-        if (!empty ($data["password"])) {
-            $user->setPassword($this->passwordHasher->hashPassword($user, $data["password"]));
+        if (!empty($data['password'])) {
+            $user->setPassword($this->passwordHasher->hashPassword($user, $data['password']));
         }
-        if (!empty ($data["username"])) {
+        if (!empty($data['username'])) {
             $suffix = $this->security->getUser()->getStructure()->getSuffix();
-            $user->setUsername($data["username"] . "@$suffix");
+            $user->setUsername($data['username'] . "@$suffix");
         }
 
         return $user;

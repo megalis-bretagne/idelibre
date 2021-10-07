@@ -11,7 +11,6 @@ use Symfony\Component\Security\Core\Security;
 
 class CurrentStructureExtension implements QueryCollectionExtensionInterface
 {
-
     private Security $security;
 
     public function __construct(Security $security)
@@ -19,13 +18,12 @@ class CurrentStructureExtension implements QueryCollectionExtensionInterface
         $this->security = $security;
     }
 
-
     public function applyToCollection(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, string $operationName = null)
     {
-        if ($resourceClass === User::class) {
+        if (User::class === $resourceClass) {
             $alias = $queryBuilder->getRootAliases()[0];
             $queryBuilder->andWhere("$alias.structure = :currentStructure")
-                ->setParameter("currentStructure", $this->getStructure());
+                ->setParameter('currentStructure', $this->getStructure());
         }
     }
 
@@ -33,5 +31,4 @@ class CurrentStructureExtension implements QueryCollectionExtensionInterface
     {
         return $this->security->getUser()->getStructure();
     }
-
 }

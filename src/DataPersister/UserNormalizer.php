@@ -19,7 +19,7 @@ class UserNormalizer implements NormalizerInterface, CacheableSupportsMethodInte
     /**
      * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
      */
-    public function normalize($object, $format = null, array $context = array()): array
+    public function normalize($object, $format = null, array $context = []): array
     {
         /** @var User $user */
         $user = $object;
@@ -41,9 +41,10 @@ class UserNormalizer implements NormalizerInterface, CacheableSupportsMethodInte
 
     private function removeSuffix(string $username): string
     {
-        if (str_contains($username, "@")) {
+        if (str_contains($username, '@')) {
             return preg_replace('/@.*/', '', $username);
         }
+
         return $username;
     }
 }

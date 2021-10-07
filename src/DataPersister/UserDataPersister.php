@@ -10,7 +10,6 @@ use Symfony\Component\Security\Core\Security;
 
 class UserDataPersister implements DataPersisterInterface
 {
-
     public function __construct(private EntityManagerInterface $em, private Security $security)
     {
     }
@@ -18,7 +17,9 @@ class UserDataPersister implements DataPersisterInterface
     public function supports($data): bool
     {
         dump($data);
+
         return false;
+
         return $data instanceof User;
     }
 
@@ -37,6 +38,7 @@ class UserDataPersister implements DataPersisterInterface
     {
         /** @var User $user */
         $user = $this->security->getUser();
+
         return $user->getStructure();
     }
 }
