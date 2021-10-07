@@ -17,10 +17,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     collectionOperations: ['get', 'post'],
     itemOperations: [
-        'get' => ['normalization_context' => ['groups' =>'structure.item.read']],
-        'put'
+        'get' => ['normalization_context' => ['groups' => 'structure.item.read']],
+        'put',
     ],
-    shortName: "structures",
+    shortName: 'structures',
     denormalizationContext: ['groups' => ['structure.write']],
     normalizationContext: ['groups' => ['structure.read']],
 )]
@@ -31,7 +31,7 @@ class Structure
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid")
      */
-    #[Groups(["structure.read"])]
+    #[Groups(['structure.read'])]
     private $id;
 
     /**
@@ -39,7 +39,7 @@ class Structure
      * @Assert\NotBlank
      * @Assert\Length(max="255")
      */
-    #[Groups(["structure.write", "structure.read"])]
+    #[Groups(['structure.write', 'structure.read'])]
     private $name;
 
     /**
@@ -48,8 +48,7 @@ class Structure
      * @Assert\Length(max="255")
      * @Assert\Email
      */
-
-    #[Groups(["structure.item.read"])]
+    #[Groups(['structure.item.read'])]
     private $replyTo;
 
     /**

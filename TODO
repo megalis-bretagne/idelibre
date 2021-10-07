@@ -212,3 +212,54 @@ eenlever l'extension @ dans le type de seance dans la liste
 
 
 RENOMER CALENDAR en REMINDER pour le model
+
+
+
+
+
+
+{
+  "username": "string",
+  "email": "user@example.com",
+  "password": "string",
+  "firstName": "string",
+  "lastName": "string",
+  "structure": "string",
+  "group": uri,
+  "role": "string",
+  "party": uri,
+  "title": "string",
+  "gender": 0,
+  "isActive": true,
+  "phone": "string"
+}
+
+{
+    "username": "administratifAPI@libriciel",
+    "email": "api@gmail.com",
+    "firstName": "administratifApi",
+    "lastName": "administratifApi",
+    "structure": "/api/structures/3f79ab1b-3727-4f6d-a839-d7b3d3a6c44a",
+    "role": "/api/roles/811a1329-0cd0-49e8-b59b-5394219c50dd",
+    "party": null,
+    "title": null,
+    "gender": 2,
+    "isActive": true,
+    "phone": null
+  },
+
+
+,
+      "id": "29908610-beb2-4356-b884-413054029630",
+      "username": "elu9@libriciel",
+      "email": "remi.dubourget@gmail.com",
+      "firstName": "elu9",
+      "lastName": "Neuvième",
+      "structure": "/api/structures/3f79ab1b-3727-4f6d-a839-d7b3d3a6c44a",
+      "role": "/api/roles/230a1c1d-eaec-4fb7-9ba7-d7ac47dc97bb",
+      "associatedTypes": [],
+      "party": null,
+      "title": null,
+      "gender": null,
+      "isActive": true,
+      "phone": null

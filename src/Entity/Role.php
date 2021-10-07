@@ -5,7 +5,6 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\RoleRepository;
 use Doctrine\ORM\Mapping as ORM;
-use phpDocumentor\Reflection\DocBlock\Description;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -19,7 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     description: 'Visualisation des roles',
     collectionOperations: ['get', 'post'],
     itemOperations: ['get'],
-    shortName: "roles",
+    shortName: 'roles',
     denormalizationContext: ['groups' => ['role.write']],
     normalizationContext: ['groups' => ['role.read']],
 )]
@@ -48,7 +47,7 @@ class Role
      * @Assert\NotBlank
      * @Assert\Length(max="255")
      */
-    #[Groups(["role.read", "role.write"])]
+    #[Groups(['role.read', 'role.write'])]
     private $name;
 
     /**
