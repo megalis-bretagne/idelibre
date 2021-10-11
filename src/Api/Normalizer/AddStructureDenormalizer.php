@@ -3,7 +3,6 @@
 namespace App\Api\Normalizer;
 
 use App\Entity\Structure;
-use App\Entity\User;
 use Psr\Log\LoggerInterface;
 use ReflectionClass;
 use Symfony\Component\Security\Core\Security;

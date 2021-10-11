@@ -16,11 +16,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 #[ApiResource(
     description: 'Visualisation des roles',
-    collectionOperations: ['get', 'post'],
+    collectionOperations: ['get'],
     itemOperations: ['get'],
     shortName: 'roles',
-    denormalizationContext: ['groups' => ['role.write']],
-    normalizationContext: ['groups' => ['role.read']],
+    normalizationContext: ['groups' => ['role:read']],
 )]
 class Role
 {
@@ -40,6 +39,7 @@ class Role
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid")
      */
+    #[Groups(['role:read'])]
     private $id;
 
     /**
@@ -47,7 +47,7 @@ class Role
      * @Assert\NotBlank
      * @Assert\Length(max="255")
      */
-    #[Groups(['role.read', 'role.write'])]
+    #[Groups(['role:read'])]
     private $name;
 
     /**
@@ -60,11 +60,13 @@ class Role
      * @Assert\NotBlank
      * @Assert\Length(max="255")
      */
+    #[Groups(['role:read'])]
     private $prettyName;
 
     /**
      * @ORM\Column(type="boolean", nullable=false)
      */
+    #[Groups(['role:read'])]
     private $isInStructureRole = true;
 
     public function getId(): ?string

@@ -26,12 +26,12 @@ use Symfony\Component\Validator\Constraints as Assert;
     collectionOperations: ['get', 'post'],
     itemOperations: [
         'get' => [
-            'normalization_context' => ['groups' => ['type:item:get', 'type:read']]
+            'normalization_context' => ['groups' => ['type:item:get', 'type:read']],
         ],
         'put' => [
-            'normalization_context' => ['groups' => ['type:item:get', 'type:read']]
+            'normalization_context' => ['groups' => ['type:item:get', 'type:read']],
         ],
-        'delete'
+        'delete',
     ],
     shortName: 'types',
     attributes: ['order' => ['name' => 'ASC']],
