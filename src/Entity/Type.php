@@ -103,7 +103,7 @@ class Type
     /**
      * @ORM\OneToOne(targetEntity=Reminder::class, mappedBy="type", cascade={"persist", "remove"})
      */
-    #[Groups(['type:read'])]
+    #[Groups(['type:item:get', 'type:write'])]
     private $reminder;
 
     public function __construct()

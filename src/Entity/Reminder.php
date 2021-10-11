@@ -2,8 +2,12 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiProperty;
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\ReminderRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ReminderRepository::class)
@@ -30,11 +34,20 @@ class Reminder
     /**
      * @ORM\Column(type="integer")
      */
+    #[ApiProperty(attributes: [
+        'openapi_context' => [
+            'type' => 'integer',
+            "enum" => [60, 90, 120, 180, 240, 300]
+        ]
+    ])]
+    #[Assert\Choice(choices: [60, 90, 120, 180, 240, 300])]
+    #[Groups(['type:item:get', 'type:write'])]
     private $duration = 60;
 
     /**
      * @ORM\Column(type="boolean")
      */
+    #[Groups(['type:item:get', 'type:write'])]
     private $isActive = false;
 
     /**
