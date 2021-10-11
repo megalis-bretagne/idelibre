@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\ThemeRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
@@ -20,6 +21,27 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     })
  * @ORM\Entity(repositoryClass=ThemeRepository::class)
  */
+#[ApiResource(
+    collectionOperations: [
+        'get',
+        'post' => [
+            'denormalization_context' => ['groups' => ['theme:collection:post', 'theme:write']]
+        ]
+    ],
+    itemOperations: [
+        'get' => [
+            'normalization_context' => ['groups' => ['theme:item:get', 'theme:read']],
+        ],
+        'put' => [
+            'normalization_context' => ['groups' => ['theme:item:get', 'theme:read']],
+        ],
+        'delete',
+    ],
+    shortName: 'themes',
+    attributes: ['order' => ['name' => 'ASC']],
+    denormalizationContext: ['groups' => ['theme:write']],
+    normalizationContext: ['groups' => ['theme:read']]
+)]
 class Theme
 {
     /**
@@ -28,6 +50,7 @@ class Theme
      * @ORM\Column(type="guid")
      * @Groups({"theme"})
      */
+    #[Groups(['theme:read'])]
     private $id;
 
     /**
@@ -36,6 +59,7 @@ class Theme
      * @Assert\NotBlank
      * @Assert\Length(max="255")
      */
+    #[Groups(['theme:read', 'theme:write'])]
     private $name;
 
     /**
@@ -62,6 +86,7 @@ class Theme
      * @ORM\ManyToOne(targetEntity="App\Entity\Theme")
      * @ORM\JoinColumn(name="tree_root", referencedColumnName="id", onDelete="cascade")
      */
+    #[Groups(['theme:read'])]
     private $root;
 
     /**
@@ -69,6 +94,7 @@ class Theme
      * @ORM\ManyToOne(targetEntity="App\Entity\Theme", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="cascade")
      */
+    #[Groups(['theme:read', 'theme:collection:post'])]
     private $parent;
 
     /**
@@ -88,6 +114,7 @@ class Theme
      * @ORM\Column(type="string", length=512, nullable=true)
      * @Groups({"theme"})
      */
+    #[Groups(['theme:read'])]
     private $fullName;
 
     public function getId(): string
@@ -113,7 +140,7 @@ class Theme
         return $this;
     }
 
-    public function getParent(): Theme
+    public function getParent(): ?Theme
     {
         return $this->parent;
     }

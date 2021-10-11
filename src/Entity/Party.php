@@ -2,11 +2,13 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\PartyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -21,6 +23,22 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     errorPath="name",
  *     message="Ce nom de groupe politique existe déjà")
  */
+#[ApiResource(
+    collectionOperations: ['get', 'post'],
+    itemOperations: [
+        'get' => [
+            'normalization_context' => ['groups' => ['party:item:get', 'party:read']],
+        ],
+        'put' => [
+            'normalization_context' => ['groups' => ['party:item:get', 'party:read']],
+        ],
+        'delete',
+    ],
+    shortName: 'parties',
+    attributes: ['order' => ['name' => 'ASC']],
+    denormalizationContext: ['groups' => ['party:write']],
+    normalizationContext: ['groups' => ['party:read']]
+)]
 class Party
 {
     /**
@@ -28,6 +46,7 @@ class Party
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid")
      */
+    #[Groups(['party:read'])]
     private $id;
 
     /**
@@ -41,11 +60,14 @@ class Party
      * @Assert\Length(max="255")
      * @Assert\NotBlank
      */
+    #[Groups(['party:read', 'party:write'])]
     private $name;
 
     /**
      * @ORM\OneToMany(targetEntity=User::class, mappedBy="party")
+     * @ORM\OrderBy({"lastName"="ASC"})
      */
+    #[Groups(['party:item:get', 'party:write'])]
     private $actors;
 
     /**

@@ -27,20 +27,17 @@ use Symfony\Component\Validator\Constraints as Assert;
     ],
     shortName: 'users',
     //denormalizationContext: ['groups' => [self::colPost]],
-    normalizationContext: ['groups' => ['user.read']],
+    normalizationContext: ['groups' => ['user:read']],
 )]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    public const colGet = 'collection:get';
-    public const colPost = 'collection:post';
-
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid")
      * @Groups({"user"})
      */
-    #[Groups(['user.read', 'type:item:get'])]
+    #[Groups(['user:read', 'type:item:get', 'party:item:get'])]
     private $id;
 
     /**
@@ -50,7 +47,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @OneAtMax()
      * @Groups({"user"})
      */
-    #[Groups(['user.read', 'type:item:get'])]
+    #[Groups(['user:read', 'type:item:get', 'party:item:get'])]
     private $username;
 
     /**
@@ -60,7 +57,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @Assert\Email()
      * @Groups({"user"})
      */
-    #[Groups(['user.read', 'type:item:get'])]
+    #[Groups(['user:read', 'type:item:get', 'party:item:get'])]
     private $email;
 
     /**
@@ -76,7 +73,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @Groups({"user"})
      */
-    #[Groups(['user.read', 'type:item:get'])]
+    #[Groups(['user:read', 'type:item:get', 'party:item:get'])]
     private $firstName;
 
     /**
@@ -85,14 +82,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @Assert\Length(max=255)
      * @Groups({"user"})
      */
-    #[Groups(['user.read', 'type:item:get'])]
+    #[Groups(['user:read', 'type:item:get', 'party:item:get'])]
     private $lastName;
 
     /**
      * @ORM\ManyToOne(targetEntity=Structure::class, inversedBy="users")
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
-    #[Groups(['user.read'])]
+    #[Groups(['user:read'])]
     private $structure;
 
     /**
@@ -105,32 +102,32 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\ManyToOne(targetEntity=Role::class)
      * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
-    #[Groups(['user.read'])]
+    #[Groups(['user:read'])]
     private $role;
 
     /**
      * @ORM\ManyToMany(targetEntity=Type::class, mappedBy="associatedUsers")
      */
-    #[Groups(['user.read'])]
+    #[Groups(['user:read'])]
     private $associatedTypes;
 
     /**
      * @ORM\ManyToOne(targetEntity=Party::class, inversedBy="actors")
      * @ORM\JoinColumn(onDelete="SET NULL")
      */
-    #[Groups(['user.read'])]
+    #[Groups(['user:read'])]
     private $party;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    #[Groups(['user.read'])]
+    #[Groups(['user:read'])]
     private $title;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    #[Groups(['user.read'])]
+    #[Groups(['user:read'])]
     private $gender;
 
     /**
@@ -141,13 +138,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="boolean")
      */
-    #[Groups(['user.read'])]
+    #[Groups(['user:read'])]
     private $isActive = true;
 
     /**
      * @ORM\Column(type="string", length=30, nullable=true)
      */
-    #[Groups(['user.read'])]
+    #[Groups(['user:read'])]
     private $phone;
 
     public function __construct()

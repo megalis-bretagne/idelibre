@@ -22,7 +22,6 @@ final class Version20211005090129 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
-        $this->addSql('DROP SEQUENCE party_legacy_seq CASCADE');
         $this->addSql('ALTER TABLE "timestamp" ADD sitting_id UUID DEFAULT NULL');
         $this->addSql('ALTER TABLE "timestamp" ADD CONSTRAINT FK_A5D6E63E8014E66 FOREIGN KEY (sitting_id) REFERENCES sitting (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('CREATE INDEX IDX_A5D6E63E8014E66 ON "timestamp" (sitting_id)');
