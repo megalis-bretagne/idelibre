@@ -27,7 +27,7 @@ class AddStructureDenormalizer implements ContextAwareDenormalizerInterface, Den
             return false;
         }
 
-        if(!(isset($context['collection_operation_name'])) || $context['collection_operation_name'] !== "post") {
+        if (!(isset($context['collection_operation_name'])) || 'post' !== $context['collection_operation_name']) {
             return false;
         }
 
@@ -35,6 +35,7 @@ class AddStructureDenormalizer implements ContextAwareDenormalizerInterface, Den
             return (new ReflectionClass($type))->hasMethod('setStructure');
         } catch (\ReflectionException $e) {
             $this->logger->error($e);
+
             return false;
         }
     }
@@ -54,5 +55,4 @@ class AddStructureDenormalizer implements ContextAwareDenormalizerInterface, Den
     {
         return $this->security->getUser()->getStructure();
     }
-
 }
