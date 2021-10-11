@@ -27,7 +27,7 @@ class ThemeDenormalizer implements ContextAwareDenormalizerInterface, Denormaliz
             return false;
         }
 
-        return $type === Theme::class;
+        return Theme::class === $type;
     }
 
     public function denormalize($data, string $type, string $format = null, array $context = []): mixed
@@ -54,13 +54,13 @@ class ThemeDenormalizer implements ContextAwareDenormalizerInterface, Denormaliz
 
     private function setFullName(Theme $theme)
     {
-        if ($theme->getParent()->getName() === "ROOT") {
+        if ('ROOT' === $theme->getParent()->getName()) {
             $theme->setFullName($theme->getName());
+
             return;
         }
         $theme->setFullName($theme->getParent()->getFullName() . ', ' . $theme->getName());
     }
-
 
     private function getCurrentUserStructure(): Structure
     {

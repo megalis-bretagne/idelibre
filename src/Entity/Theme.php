@@ -25,8 +25,8 @@ use Symfony\Component\Validator\Constraints as Assert;
     collectionOperations: [
         'get',
         'post' => [
-            'denormalization_context' => ['groups' => ['theme:collection:post', 'theme:write']]
-        ]
+            'denormalization_context' => ['groups' => ['theme:collection:post', 'theme:write']],
+        ],
     ],
     itemOperations: [
         'get' => [
