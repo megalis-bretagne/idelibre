@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\TypeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -21,6 +22,22 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     errorPath="name",
  *     message="Ce type est déja utilisé dans cette structure")
  */
+#[ApiResource(
+    collectionOperations: ['get', 'post'],
+    itemOperations: [
+        'get' => [
+            'normalization_context' => ['groups' => ['type:item:get', 'type:read']]
+        ],
+        'put' => [
+            'normalization_context' => ['groups' => ['type:item:get', 'type:read']]
+        ],
+        'delete'
+    ],
+    shortName: 'types',
+    attributes: ['order' => ['name' => 'ASC']],
+    denormalizationContext: ['groups' => ['type:write']],
+    normalizationContext: ['groups' => ['type:read']]
+)]
 class Type
 {
     /**
@@ -29,6 +46,7 @@ class Type
      * @ORM\Column(type="guid")
      * @Groups({"sitting"})
      */
+    #[Groups(['type:read'])]
     private $id;
 
     /**
@@ -37,16 +55,20 @@ class Type
      * @Assert\Length(max="255")
      * @Groups({"sitting"})
      */
+    #[Groups(['type:read', 'type:write'])]
     private $name;
 
     /**
      * @ORM\ManyToMany(targetEntity=User::class, inversedBy="associatedTypes")
+     * @ORM\OrderBy({"lastName"="ASC"})
      */
+    #[Groups(['type:item:get', 'type:write'])]
     private $associatedUsers;
 
     /**
      * @ORM\OneToOne(targetEntity=EmailTemplate::class, mappedBy="type")
      */
+    #[Groups(['type:read'])]
     private $emailTemplate;
 
     /**
@@ -59,24 +81,29 @@ class Type
     /**
      * @ORM\JoinTable(name="type_secretary")
      * @ORM\ManyToMany(targetEntity=User::class, inversedBy="authorizedTypes")
+     * @ORM\OrderBy({"lastName"="ASC"})
      */
+    #[Groups(['type:item:get', 'type:write'])]
     private $authorizedSecretaries;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
      * @Groups({"sitting"})
      */
+    #[Groups(['type:read', 'type:write'])]
     private $isSms;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
      * @Groups({"sitting"})
      */
+    #[Groups(['type:read', 'type:write'])]
     private $isComelus;
 
     /**
      * @ORM\OneToOne(targetEntity=Reminder::class, mappedBy="type", cascade={"persist", "remove"})
      */
+    #[Groups(['type:read'])]
     private $reminder;
 
     public function __construct()
@@ -103,7 +130,7 @@ class Type
     }
 
     /**
-     * @return Collection|User[]
+     * @return Collection<User>
      */
     public function getAssociatedUsers(): Collection
     {
@@ -156,7 +183,7 @@ class Type
     }
 
     /**
-     * @return Collection|User[]
+     * @return Collection<User>
      */
     public function getAuthorizedSecretaries(): Collection
     {

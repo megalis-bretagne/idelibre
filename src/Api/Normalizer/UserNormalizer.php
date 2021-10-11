@@ -1,6 +1,6 @@
 <?php
 
-namespace App\DataPersister;
+namespace App\Api\Normalizer;
 
 use App\Entity\User;
 use Symfony\Component\Serializer\Normalizer\CacheableSupportsMethodInterface;

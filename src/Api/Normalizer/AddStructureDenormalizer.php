@@ -1,6 +1,6 @@
 <?php
 
-namespace App\DataPersister;
+namespace App\Api\Normalizer;
 
 use App\Entity\Structure;
 use App\Entity\User;
@@ -40,7 +40,7 @@ class AddStructureDenormalizer implements ContextAwareDenormalizerInterface, Den
         }
     }
 
-    public function denormalize($data, string $type, string $format = null, array $context = []): User
+    public function denormalize($data, string $type, string $format = null, array $context = []): mixed
     {
         $context[self::ALREADY_CALLED_DENORMALIZER] = true;
 
