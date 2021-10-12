@@ -37,7 +37,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="guid")
      * @Groups({"user"})
      */
-    #[Groups(['user:read', 'type:item:get', 'party:item:get'])]
+    #[Groups(['user:read', 'type:item:get', 'party:item:get', 'sitting:item:get'])]
     private $id;
 
     /**
@@ -47,7 +47,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @OneAtMax()
      * @Groups({"user"})
      */
-    #[Groups(['user:read', 'type:item:get', 'party:item:get'])]
+    #[Groups(['user:read', 'type:item:get', 'party:item:get', 'sitting:item:get'])]
     private $username;
 
     /**
@@ -73,7 +73,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @Groups({"user"})
      */
-    #[Groups(['user:read', 'type:item:get', 'party:item:get'])]
+    #[Groups(['user:read', 'type:item:get', 'party:item:get', 'sitting:item:get'])]
     private $firstName;
 
     /**
@@ -82,7 +82,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @Assert\Length(max=255)
      * @Groups({"user"})
      */
-    #[Groups(['user:read', 'type:item:get', 'party:item:get'])]
+    #[Groups(['user:read', 'type:item:get', 'party:item:get', 'sitting:item:get'])]
     private $lastName;
 
     /**
@@ -102,7 +102,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\ManyToOne(targetEntity=Role::class)
      * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
-    #[Groups(['user:read'])]
+    #[Groups(['user:read','sitting:item:get'])]
     private $role;
 
     /**

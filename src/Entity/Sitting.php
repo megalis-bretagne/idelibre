@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use App\Repository\SittingRepository;
 use DateTime;
 use DateTimeInterface;
@@ -25,6 +27,20 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     errorPath="name",
  *     message="Une séance du même type existe déja à la même heure")
  */
+#[ApiResource(
+    collectionOperations: ['get'],
+    itemOperations: [
+        'get' => [
+            'normalization_context' => ['groups' =>
+                ['sitting:item:get', 'sitting:read', 'project:read', 'theme:read']],
+        ],
+        'delete'
+    ],
+    shortName: 'sittings',
+    attributes: ['order' => ['date' => 'DESC']],
+    denormalizationContext: ['groups' => ['sitting:write']],
+    normalizationContext: ['groups' => ['sitting:read']]
+)]
 class Sitting
 {
     public const ARCHIVED = 'archived';
@@ -36,6 +52,7 @@ class Sitting
      * @ORM\Column(type="guid")
      * @Groups({"sitting"})
      */
+    #[Groups(['sitting:read'])]
     private $id;
 
     /**
@@ -43,6 +60,7 @@ class Sitting
      * @Assert\Length(max="255")
      * @Groups({"sitting"})
      */
+    #[Groups(['sitting:read'])]
     private $name;
 
     /**
@@ -50,18 +68,21 @@ class Sitting
      * @Assert\NotNull(message="La date et l'heure sont obligatoires")
      * @Groups({"sitting"})
      */
+    #[Groups(['sitting:read'])]
     private $date;
 
     /**
      * @ORM\Column(type="integer")
      * @Groups({"sitting"})
      */
+    #[Groups(['sitting:read'])]
     private $revision = 0;
 
     /**
      * @ORM\Column(type="boolean")
      * @Groups({"sitting"})
      */
+    #[Groups(['sitting:read'])]
     private $isArchived = false;
 
     /**
@@ -69,6 +90,7 @@ class Sitting
      * @Assert\Length(max="255")
      * @Groups({"sitting"})
      */
+    #[Groups(['sitting:read'])]
     private $place;
 
     /**
@@ -80,6 +102,7 @@ class Sitting
     /**
      * @ORM\OneToMany(targetEntity=Convocation::class, mappedBy="sitting")
      */
+    #[Groups(['sitting:item:get'])]
     private $convocations;
 
     /**
@@ -87,6 +110,7 @@ class Sitting
      * @ORM\JoinColumn(onDelete="SET NULL")
      * @Groups({"sitting"})
      */
+    #[Groups(['sitting:read'])]
     private $type;
 
     /**
@@ -99,33 +123,39 @@ class Sitting
     /**
      * @ORM\OneToOne(targetEntity=File::class, cascade={"persist", "remove"}, inversedBy="convocationSitting")
      */
+    #[Groups(['sitting:item:get'])]
     private $convocationFile;
 
     /**
      * @ORM\OneToMany(targetEntity=Project::class, mappedBy="sitting")
      * @ORM\OrderBy({"rank" = "ASC"})
      */
+    #[Groups(['sitting:item:get'])]
     private $projects;
 
     /**
      * @ORM\OneToOne(targetEntity=File::class, inversedBy="invitationSitting", cascade={"persist", "remove"})
      */
+    #[Groups(['sitting:item:get'])]
     private $invitationFile;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"sitting"})
      */
+    #[Groups(['sitting:read'])]
     private $comelusId;
 
     /**
      * @ORM\OneToOne(targetEntity=Reminder::class, mappedBy="sitting", cascade={"persist", "remove"})
      */
+    #[Groups(['sitting:item:get'])]
     private $reminder;
 
     /**
      * @ORM\OneToMany(targetEntity=Timestamp::class, mappedBy="sitting")
      */
+    #[Groups(['sitting:item:get'])]
     private $updatedTimestamps;
 
     public function __construct()

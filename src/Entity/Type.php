@@ -68,7 +68,6 @@ class Type
     /**
      * @ORM\OneToOne(targetEntity=EmailTemplate::class, mappedBy="type")
      */
-    #[Groups(['type:read'])]
     private $emailTemplate;
 
     /**

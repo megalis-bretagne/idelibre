@@ -2,13 +2,16 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\AnnexRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=AnnexRepository::class)
  */
+#[ApiResource]
 class Annex
 {
     /**
@@ -16,12 +19,14 @@ class Annex
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid")
      */
+    #[Groups(["sitting:item:get"])]
     private $id;
 
     /**
      * @ORM\Column(type="integer")
      * @Assert\NotBlank
      */
+    #[Groups(["sitting:item:get"])]
     private $rank;
 
     /**

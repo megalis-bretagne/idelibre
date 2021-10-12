@@ -7,6 +7,7 @@ use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -19,6 +20,7 @@ class Project
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid")
      */
+    #[Groups(["sitting:item:get"])]
     private $id;
 
     /**
@@ -26,12 +28,14 @@ class Project
      * @Assert\Length(max="512")
      * @Assert\NotBlank
      */
+    #[Groups(["sitting:item:get"])]
     private $name;
 
     /**
      * @ORM\Column(type="integer")
      * @Assert\NotNull
      */
+    #[Groups(["sitting:item:get"])]
     private $rank;
 
     /**
@@ -45,6 +49,7 @@ class Project
      * @ORM\ManyToOne(targetEntity=Theme::class)
      * @ORM\JoinColumn(onDelete="SET NULL")
      */
+    #[Groups(["sitting:item:get"])]
     private $theme;
 
     /**
@@ -56,6 +61,7 @@ class Project
     /**
      * @ORM\Column(type="datetime_immutable")
      */
+    #[Groups(["sitting:item:get"])]
     private $createdAt;
 
     /**
@@ -69,6 +75,7 @@ class Project
      * @ORM\OneToMany(targetEntity=Annex::class, mappedBy="project")
      * @ORM\OrderBy({"rank" = "ASC"})
      */
+    #[Groups(["sitting:item:get"])]
     private $annexes;
 
     public function __construct()

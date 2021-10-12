@@ -86,7 +86,6 @@ class Theme
      * @ORM\ManyToOne(targetEntity="App\Entity\Theme")
      * @ORM\JoinColumn(name="tree_root", referencedColumnName="id", onDelete="cascade")
      */
-    #[Groups(['theme:read'])]
     private $root;
 
     /**
@@ -94,7 +93,7 @@ class Theme
      * @ORM\ManyToOne(targetEntity="App\Entity\Theme", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="cascade")
      */
-    #[Groups(['theme:read', 'theme:collection:post'])]
+    #[Groups(['theme:collection:post'])]
     private $parent;
 
     /**
