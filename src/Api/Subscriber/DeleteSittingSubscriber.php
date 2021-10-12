@@ -9,7 +9,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
-
 //plus pour une action à faire en cas de champ modifé etc..
 final class DeleteSittingSubscriber implements EventSubscriberInterface
 {
@@ -29,17 +28,14 @@ final class DeleteSittingSubscriber implements EventSubscriberInterface
 
     public function deleteSitting(ViewEvent $event): void
     {
-
         return;
         dump('deleteSitting');
         /** @var Sitting $sitting */
         $sitting = $event->getControllerResult();
         $method = $event->getRequest()->getMethod();
 
-
         dump($sitting);
         dump($method);
-
 
         if (!$sitting instanceof Sitting || Request::METHOD_DELETE !== $method) {
             return;
@@ -48,6 +44,4 @@ final class DeleteSittingSubscriber implements EventSubscriberInterface
         //thing to delete when sitting is deleted
         dump($sitting->getConvocationFile());
     }
-
-
 }

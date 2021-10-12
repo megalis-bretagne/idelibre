@@ -6,7 +6,6 @@ use ApiPlatform\Core\DataPersister\DataPersisterInterface;
 
 class DeleteSittingProvider implements DataPersisterInterface
 {
-
     public function supports($data): bool
     {
         // TODO: Implement supports() method.

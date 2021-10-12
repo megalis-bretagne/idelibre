@@ -19,14 +19,14 @@ class Annex
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid")
      */
-    #[Groups(["sitting:item:get"])]
+    #[Groups(['sitting:item:get'])]
     private $id;
 
     /**
      * @ORM\Column(type="integer")
      * @Assert\NotBlank
      */
-    #[Groups(["sitting:item:get"])]
+    #[Groups(['sitting:item:get'])]
     private $rank;
 
     /**

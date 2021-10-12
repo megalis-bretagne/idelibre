@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Annotation\ApiSubresource;
 use App\Repository\SittingRepository;
 use DateTime;
 use DateTimeInterface;
@@ -31,10 +30,9 @@ use Symfony\Component\Validator\Constraints as Assert;
     collectionOperations: ['get'],
     itemOperations: [
         'get' => [
-            'normalization_context' => ['groups' =>
-                ['sitting:item:get', 'sitting:read', 'project:read', 'theme:read']],
+            'normalization_context' => ['groups' => ['sitting:item:get', 'sitting:read', 'project:read', 'theme:read']],
         ],
-        'delete'
+        'delete',
     ],
     shortName: 'sittings',
     attributes: ['order' => ['date' => 'DESC']],
