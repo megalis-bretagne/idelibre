@@ -5,11 +5,10 @@ namespace App\Api\DataPersister;
 use ApiPlatform\Core\DataPersister\DataPersisterInterface;
 use App\Entity\Sitting;
 use App\Service\Seance\SittingManager;
-use Doctrine\ORM\EntityManagerInterface;
 
-class DeleteSittingPersister implements DataPersisterInterface
+class SittingPersister implements DataPersisterInterface
 {
-    public function __construct(private EntityManagerInterface $entityManager, private SittingManager $sittingManager)
+    public function __construct(private SittingManager $sittingManager)
     {
     }
 
@@ -25,8 +24,6 @@ class DeleteSittingPersister implements DataPersisterInterface
 
     public function remove($data)
     {
-        //$this->entityManager->remove($data);
-        //$this->entityManager->flush();
         $this->sittingManager->delete($data);
     }
 }

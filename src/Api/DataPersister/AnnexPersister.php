@@ -4,11 +4,13 @@ namespace App\Api\DataPersister;
 
 use ApiPlatform\Core\DataPersister\DataPersisterInterface;
 use App\Entity\Project;
+use App\Service\Annex\AnnexManager;
+use App\Service\Project\ProjectManager;
 use Doctrine\ORM\EntityManagerInterface;
 
-class DeleteProjectPersister implements DataPersisterInterface
+class AnnexPersister implements DataPersisterInterface
 {
-    public function __construct(private EntityManagerInterface $entityManager)
+    public function __construct(private EntityManagerInterface $entityManager, private AnnexManager $annexManager)
     {
     }
 
@@ -24,9 +26,6 @@ class DeleteProjectPersister implements DataPersisterInterface
 
     public function remove($data)
     {
-        dump('removeProject');
-        dump($data);
-        $this->entityManager->remove($data);
-        $this->entityManager->flush();
+        $this->annexManager->deleteAnnexes([$data]);
     }
 }
