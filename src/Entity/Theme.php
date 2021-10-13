@@ -116,7 +116,7 @@ class Theme
     #[Groups(['theme:read'])]
     private $fullName;
 
-    public function getId(): string
+    public function getId(): ?string
     {
         return $this->id;
     }
