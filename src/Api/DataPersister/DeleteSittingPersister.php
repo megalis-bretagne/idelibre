@@ -9,7 +9,6 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class DeleteSittingPersister implements DataPersisterInterface
 {
-
     public function __construct(private EntityManagerInterface $entityManager, private SittingManager $sittingManager)
     {
     }

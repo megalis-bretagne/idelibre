@@ -4,12 +4,10 @@ namespace App\Api\DataPersister;
 
 use ApiPlatform\Core\DataPersister\DataPersisterInterface;
 use App\Entity\Project;
-use App\Entity\Sitting;
 use Doctrine\ORM\EntityManagerInterface;
 
 class DeleteProjectPersister implements DataPersisterInterface
 {
-
     public function __construct(private EntityManagerInterface $entityManager)
     {
     }
