@@ -5,7 +5,6 @@ namespace App\Api\DataPersister;
 use ApiPlatform\Core\DataPersister\DataPersisterInterface;
 use App\Entity\Project;
 use App\Service\Annex\AnnexManager;
-use App\Service\Project\ProjectManager;
 use Doctrine\ORM\EntityManagerInterface;
 
 class AnnexPersister implements DataPersisterInterface
