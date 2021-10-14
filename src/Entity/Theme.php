@@ -50,7 +50,7 @@ class Theme
      * @ORM\Column(type="guid")
      * @Groups({"theme"})
      */
-    #[Groups(['theme:read'])]
+    #[Groups(['theme:read', 'sitting:item:get'])]
     private $id;
 
     /**
@@ -59,7 +59,7 @@ class Theme
      * @Assert\NotBlank
      * @Assert\Length(max="255")
      */
-    #[Groups(['theme:read', 'theme:write'])]
+    #[Groups(['theme:read', 'sitting:item:get'])]
     private $name;
 
     /**
@@ -113,7 +113,7 @@ class Theme
      * @ORM\Column(type="string", length=512, nullable=true)
      * @Groups({"theme"})
      */
-    #[Groups(['theme:read'])]
+    #[Groups(['theme:read', 'sitting:item:get'])]
     private $fullName;
 
     public function getId(): ?string

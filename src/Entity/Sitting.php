@@ -3,8 +3,9 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Api\Controller\CloseSittingController;
+use App\Api\Controller\SendSittingController;
 use App\Repository\SittingRepository;
-use DateTime;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -30,9 +31,23 @@ use Symfony\Component\Validator\Constraints as Assert;
     collectionOperations: ['get'],
     itemOperations: [
         'get' => [
-            'normalization_context' => ['groups' => ['sitting:item:get', 'sitting:read', 'project:read', 'theme:read']],
+            'normalization_context' => ['groups' => ['sitting:item:get', 'sitting:read', 'theme:read']],
         ],
         'delete',
+        'send' => [
+            'method' => 'POST',
+            'path' => '/sittings/{id}/sent',
+            'controller' => SendSittingController::class,
+            'status' => 200,
+            'denormalization_context' => ['groups' => []]
+        ],
+        'close' => [
+            'method' => 'POST',
+            'path' => '/sittings/{id}/close',
+            'controller' => CloseSittingController::class,
+            'status' => 200,
+            'denormalization_context' => ['groups' => []]
+        ]
     ],
     shortName: 'sittings',
     attributes: ['order' => ['date' => 'DESC']],

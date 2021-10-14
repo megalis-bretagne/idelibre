@@ -31,7 +31,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         'put' => [
             'normalization_context' => ['groups' => ['type:item:get', 'type:read']],
         ],
-        'delete',
+        'delete'
     ],
     shortName: 'types',
     attributes: ['order' => ['name' => 'ASC']],
