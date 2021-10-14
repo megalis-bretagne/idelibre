@@ -4,7 +4,7 @@
   "type": "project",
   "license": "agpl",
   "require": {
-    "php": ">=7.4",
+    "php": ">=8.0",
     "ext-ctype": "*",
     "ext-iconv": "*",
     "ext-intl": "*",
