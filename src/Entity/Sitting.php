@@ -39,15 +39,15 @@ use Symfony\Component\Validator\Constraints as Assert;
             'path' => '/sittings/{id}/sent',
             'controller' => SendSittingController::class,
             'status' => 200,
-            'denormalization_context' => ['groups' => []]
+            'denormalization_context' => ['groups' => []],
         ],
         'close' => [
             'method' => 'POST',
             'path' => '/sittings/{id}/close',
             'controller' => CloseSittingController::class,
             'status' => 200,
-            'denormalization_context' => ['groups' => []]
-        ]
+            'denormalization_context' => ['groups' => []],
+        ],
     ],
     shortName: 'sittings',
     attributes: ['order' => ['date' => 'DESC']],

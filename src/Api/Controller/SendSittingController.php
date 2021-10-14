@@ -15,7 +15,7 @@ class SendSittingController extends AbstractController
     public function __invoke(Sitting $sitting): Sitting
     {
         $this->convocationManager->sendAllConvocations($sitting, null);
+
         return $sitting;
     }
-
 }
