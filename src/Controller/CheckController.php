@@ -72,9 +72,9 @@ class CheckController extends AbstractController
         return $this->redirectToRoute('check_index');
     }
 
-    #[Route("/check/serial", name: "check_serial")]
-    public function serial(DenormalizerInterface $denormalizer, TypeRepository $typeRepository, EntityManagerInterface $em, ValidatorInterface $validator):JsonResponse {
-
+    #[Route('/check/serial', name: 'check_serial')]
+    public function serial(DenormalizerInterface $denormalizer, TypeRepository $typeRepository, EntityManagerInterface $em, ValidatorInterface $validator): JsonResponse
+    {
         $format = 'application/json';
         $type = Type::class;
         $data = ['name' => ''];
@@ -85,14 +85,11 @@ class CheckController extends AbstractController
 
         $updatedType = $denormalizer->denormalize($data, $type, $format, $context);
 
-
         $res = $validator->validate(($updatedType));
 
-        if($res) {
-            Throw new ValidatorException("mon message");
+        if ($res) {
+            throw new ValidatorException('mon message');
         }
-
-
 
         $em->persist($updatedType);
         $em->flush();
@@ -100,7 +97,5 @@ class CheckController extends AbstractController
         dd($updatedType);
         dump($denormalizer);
         dd('ok');
-
     }
-
 }
