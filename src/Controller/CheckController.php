@@ -20,6 +20,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Validator\Exception\ValidatorException;
@@ -88,7 +89,7 @@ class CheckController extends AbstractController
         $res = $validator->validate(($updatedType));
 
         if ($res) {
-            throw new ValidatorException('mon message');
+            throw new BadRequestHttpException('Message');
         }
 
         $em->persist($updatedType);
