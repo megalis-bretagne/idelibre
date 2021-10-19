@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\RoleRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -30,6 +31,7 @@ class Role
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid")
      */
+    #[Groups(['role:read'])]
     private $id;
 
     /**
@@ -37,6 +39,7 @@ class Role
      * @Assert\NotBlank
      * @Assert\Length(max="255")
      */
+    #[Groups(['role:read'])]
     private $name;
 
     /**
@@ -49,6 +52,7 @@ class Role
      * @Assert\NotBlank
      * @Assert\Length(max="255")
      */
+    #[Groups(['role:read'])]
     private $prettyName;
 
     /**
