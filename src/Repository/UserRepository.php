@@ -333,4 +333,15 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
         return $users[0];
     }
+
+    public function findUsersByIds(Structure $structure, array $userIds): array
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.structure =:structure')
+            ->setParameter('structure', $structure)
+            ->andWhere('u.id in (:userIds)')
+            ->setParameter('userIds', $userIds)
+            ->getQuery()
+            ->getResult();
+    }
 }

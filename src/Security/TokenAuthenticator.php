@@ -5,7 +5,6 @@ namespace App\Security;
 use App\Repository\UserRepository;
 use App\Security\Password\LegacyPassword;
 use App\Service\User\ImpersonateStructure;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -13,12 +12,9 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
-use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Core\Security;
-use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
-use Symfony\Component\Security\Http\Authenticator\AbstractLoginFormAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
@@ -58,25 +54,20 @@ class TokenAuthenticator extends AbstractAuthenticator
 
     public function authenticate(Request $request): PassportInterface
     {
-
         $apiToken = $request->headers->get('X-AUTH-TOKEN');
 
         if (null === $apiToken) {
             throw new CustomUserMessageAuthenticationException('No API token provided');
         }
 
-        //if ($this->checkCredentialsAndUpdateIfLegacy($username, $plainPassword)) {
-            return new SelfValidatingPassport(new UserBadge('a.dasilva'));
-        //}
-
-        //throw new CustomUserMessageAuthenticationException('invalid credentials');
+        return new SelfValidatingPassport(new UserBadge($apiToken));
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey): ?Response
     {
+
         return null;
     }
-
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {

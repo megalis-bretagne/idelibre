@@ -24,10 +24,12 @@ security:
       entity:
         class: App\Entity\User
         property: username
+
     app_connector_provider:
       entity:
-        class: App\Entity\User
-        property: username
+        class: App\Entity\ApiUser
+        property: token
+
   firewalls:
     dev:
       pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -45,9 +47,6 @@ security:
 
       custom_authenticators:
         - App\Security\LoginFormAuthenticator
-#      guard:
-#        authenticators:
-#          - App\Security\LoginFormAuthenticator
 
      # entry_point: App\Security\LoginFormAuthenticator
 

@@ -44,6 +44,7 @@ class Type
     /**
      * @ORM\ManyToMany(targetEntity=User::class, inversedBy="associatedTypes")
      */
+    #[Groups(['type:detail'])]
     private $associatedUsers;
 
     /**

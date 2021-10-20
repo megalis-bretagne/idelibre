@@ -2,8 +2,8 @@
 
 namespace App\Controller\ApiV2;
 
-use App\Entity\User;
 use App\Entity\Structure;
+use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -40,7 +40,6 @@ class UserApiController extends AbstractController
     ): JsonResponse {
         return $this->json($user, context: ['groups' => ['user:detail', 'user:read']]);
     }
-
 
     #[Route('', name: 'add_user', methods: ['POST'])]
     public function add(Structure $structure, Request $request): JsonResponse
@@ -81,5 +80,4 @@ class UserApiController extends AbstractController
 
         return $this->json(null, status: 204);
     }
-
 }

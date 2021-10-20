@@ -46,3 +46,8 @@ INSERT INTO timezone (id, name)
 values (UUID_GENERATE_V4(), 'Pacific/Noumea');
 INSERT INTO timezone (id, name)
 values (UUID_GENERATE_V4(), 'Indian/Mayotte');
+
+insert into api_role (id, name, composites, pretty_name)
+  values ('ba98ff85-a720-4ca6-a877-c91de3ac4cf4', 'ApiStructureAdmin', '["ROLE_API_STRUCTURE_ADMIN"]', 'Administrateur api');
+
+

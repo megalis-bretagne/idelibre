@@ -26,7 +26,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="guid")
      * @Groups({"user"})
      */
-    #[Groups(['party:detail', 'user:read'])]
+    #[Groups(['party:detail', 'user:read', 'type:detail'])]
     private $id;
 
     /**
@@ -36,7 +36,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @OneAtMax()
      * @Groups({"user"})
      */
-    #[Groups(['party:detail', 'user:read'])]
+    #[Groups(['party:detail', 'user:read', 'type:detail'])]
     private $username;
 
     /**
@@ -46,7 +46,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @Assert\Email()
      * @Groups({"user"})
      */
-    #[Groups(['party:detail', 'user:read'])]
+    #[Groups(['party:detail', 'user:read', 'type:detail'])]
     private $email;
 
     /**
@@ -62,7 +62,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @Groups({"user"})
      */
-    #[Groups(['party:detail', 'user:read'])]
+    #[Groups(['party:detail', 'user:read', 'type:detail'])]
     private $firstName;
 
     /**
@@ -71,7 +71,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @Assert\Length(max=255)
      * @Groups({"user"})
      */
-    #[Groups(['party:detail', 'user:read'])]
+    #[Groups(['party:detail', 'user:read', 'type:detail'])]
     private $lastName;
 
     /**

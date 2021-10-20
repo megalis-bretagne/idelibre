@@ -41,7 +41,6 @@ class PartyApiController extends AbstractController
         return $this->json($party, context: ['groups' => ['party:detail', 'party:read']]);
     }
 
-
     #[Route('', name: 'add_party', methods: ['POST'])]
     public function add(Structure $structure, Request $request): JsonResponse
     {
@@ -81,5 +80,4 @@ class PartyApiController extends AbstractController
 
         return $this->json(null, status: 204);
     }
-
 }

@@ -5,6 +5,7 @@ namespace App\Controller\ApiV2;
 use App\Entity\Structure;
 use App\Entity\Type;
 use App\Repository\TypeRepository;
+use App\Service\User\UserManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -20,32 +21,37 @@ class TypeApiController extends AbstractController
     public function __construct(
         private DenormalizerInterface $denormalizer,
         private EntityManagerInterface $em,
+        private UserManager $userManager
     ) {
     }
 
     #[Route('/', name: 'get_all_types', methods: ['GET'])]
-    #[IsGranted('MY_STRUCTURE', subject: 'structure')]
-    public function getAll(Structure $structure, TypeRepository $typeRepository ): JsonResponse {
+    #[IsGranted('API_MY_STRUCTURE', subject: 'structure')]
+    public function getAll(Structure $structure, TypeRepository $typeRepository): JsonResponse
+    {
         $types = $typeRepository->findByStructure($structure)->getQuery()->getResult();
 
         return $this->json($types, context: ['groups' => 'type:read']);
     }
 
     #[Route('/{id}', name: 'get_type', methods: ['GET'])]
-    #[IsGranted('MY_STRUCTURE', subject: 'structure')]
-    public function getById(Structure $structure, Type $type): JsonResponse {
+    #[IsGranted('API_MY_STRUCTURE', subject: 'structure')]
+    public function getById(Structure $structure, Type $type): JsonResponse
+    {
         return $this->json($type, context: ['groups' => ['type:detail', 'type:read']]);
     }
 
     /**
-     * body {"name":"string","isSms":bool,"isComelus":bool,"reminder":{"duration":int,"isActive":bool}}.
+     * body {"name":"string","isSms":bool,"isComelus":bool,"reminder":{"duration":int,"isActive":bool}, 'actors'}.
      */
     #[Route('', name: 'add_type', methods: ['POST'])]
-    #[IsGranted('MY_STRUCTURE', subject: 'structure')]
+    #[IsGranted('API_MY_STRUCTURE', subject: 'structure')]
     public function add(Structure $structure, array $data): JsonResponse
     {
         $type = $this->denormalizer->denormalize($data, Type::class, context:['groups' => ['type:write']]);
         $type->setStructure($structure);
+
+        $this->userManager->associateTypeToUserIds($type, $data['associatedUsers'] ?? null);
 
         $this->em->persist($type);
         $this->em->flush();
@@ -57,13 +63,14 @@ class TypeApiController extends AbstractController
      * body {"name":"string","isSms":bool,"isComelus":bool,"reminder":{"duration":int,"isActive":bool}}.
      */
     #[Route('/{id}', name: 'edit_type', methods: ['PUT'])]
-    #[IsGranted('MY_STRUCTURE', subject: 'structure')]
-    public function edit(Structure $structure, Type $type, Array $data): JsonResponse
+    #[IsGranted('API_MY_STRUCTURE', subject: 'structure')]
+    public function edit(Structure $structure, Type $type, array $data): JsonResponse
     {
         $context = ['object_to_populate' => $type, 'groups' => ['type:write']];
 
         /** @var Type $type */
         $updatedType = $this->denormalizer->denormalize($data, Type::class, context: $context);
+        $this->userManager->associateTypeToUserIds($type, $data['associatedUsers'] ?? null);
 
         $this->em->persist($updatedType);
         $this->em->flush();
@@ -72,7 +79,7 @@ class TypeApiController extends AbstractController
     }
 
     #[Route('/{id}', name: 'delete_type', methods: ['DELETE'])]
-    #[IsGranted('MY_STRUCTURE', subject: 'structure')]
+    #[IsGranted('API_MY_STRUCTURE', subject: 'structure')]
     public function delete(Structure $structure, Type $type): JsonResponse
     {
         $this->em->remove($type);
@@ -80,5 +87,4 @@ class TypeApiController extends AbstractController
 
         return $this->json(null, status: 204);
     }
-
 }

@@ -9,27 +9,25 @@ use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 
 class DataArgumentResolver implements ArgumentValueResolverInterface
 {
-
     public function supports(Request $request, ArgumentMetadata $argument)
     {
-        if(!$this->isPostOrPut($request) || !$this->isApiPath($request)) {
+        if (!$this->isPostOrPut($request) || !$this->isApiPath($request)) {
             return false;
         }
 
-        return $argument->getName() === 'data' && $argument->getType() === 'array';
+        return 'data' === $argument->getName() && 'array' === $argument->getType();
     }
 
     public function resolve(Request $request, ArgumentMetadata $argument)
     {
         $data = json_decode($request->getContent(), true);
 
-        if(json_last_error()) {
-            Throw new BadRequestException("malformed Json", 400);
+        if (json_last_error()) {
+            throw new BadRequestException('malformed Json', 400);
         }
 
         yield $data;
     }
-
 
     private function isApiPath(Request $request): bool
     {

@@ -5,8 +5,9 @@ namespace App\Service\User;
 use App\Entity\Group;
 use App\Entity\Role;
 use App\Entity\Structure;
+use App\Entity\Type;
 use App\Entity\User;
-use App\Repository\TypeRepository;
+use App\Repository\UserRepository;
 use App\Service\role\RoleManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -15,24 +16,14 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class UserManager
 {
-    private EntityManagerInterface $em;
-    private UserPasswordHasherInterface $passwordHasher;
-    private ValidatorInterface $validator;
-    private RoleManager $roleManager;
-    private TypeRepository $typeRepository;
-
     public function __construct(
-        EntityManagerInterface $em,
-        UserPasswordHasherInterface $passwordHasher,
-        ValidatorInterface $validator,
-        RoleManager $roleManager,
-        TypeRepository $typeRepository
-    ) {
-        $this->em = $em;
-        $this->passwordHasher = $passwordHasher;
-        $this->validator = $validator;
-        $this->roleManager = $roleManager;
-        $this->typeRepository = $typeRepository;
+        private EntityManagerInterface      $em,
+        private UserPasswordHasherInterface $passwordHasher,
+        private ValidatorInterface          $validator,
+        private RoleManager                 $roleManager,
+        private UserRepository              $userRepository
+    )
+    {
     }
 
     public function save(User $user, ?string $plainPassword, ?Structure $structure): void
@@ -87,5 +78,18 @@ class UserManager
     {
         $this->em->remove($user);
         $this->em->flush();
+    }
+
+
+    public function associateTypeToUserIds(Type $type, ?array $userIds)
+    {
+        if ($userIds === null) {
+            return;
+        }
+        /** @var User[] $inStructureUsers */
+        $inStructureUsers = $this->userRepository->findUsersByIds($type->getStructure(), $userIds);
+
+        $type->setAssociatedUsers($inStructureUsers);
+
     }
 }

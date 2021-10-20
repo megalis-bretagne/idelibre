@@ -48,7 +48,6 @@ class Party
 
     /**
      * @ORM\OneToMany(targetEntity=User::class, mappedBy="party")
-     *
      */
     #[Groups(['party:detail'])]
     private $actors;

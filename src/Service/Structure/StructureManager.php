@@ -3,6 +3,7 @@
 namespace App\Service\Structure;
 
 use App\Entity\Structure;
+use App\Entity\Type;
 use App\Repository\StructureRepository;
 use App\Service\User\ImpersonateStructure;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,12 +19,13 @@ class StructureManager
     private ImpersonateStructure $impersonateStructure;
 
     public function __construct(
-        StructureRepository $structureRepository,
-        EntityManagerInterface $em,
+        StructureRepository         $structureRepository,
+        EntityManagerInterface      $em,
         UserPasswordHasherInterface $userPasswordHasher,
-        ValidatorInterface $validator,
-        ImpersonateStructure $impersonateStructure
-    ) {
+        ValidatorInterface          $validator,
+        ImpersonateStructure        $impersonateStructure
+    )
+    {
         $this->structureRepository = $structureRepository;
         $this->em = $em;
         $this->passwordHasher = $userPasswordHasher;
@@ -50,4 +52,7 @@ class StructureManager
         $this->em->persist($structure);
         $this->em->flush();
     }
+
+
+
 }
