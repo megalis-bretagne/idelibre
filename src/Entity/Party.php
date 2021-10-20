@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -28,6 +29,7 @@ class Party
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid")
      */
+    #[Groups(['party:read'])]
     private $id;
 
     /**
@@ -41,11 +43,14 @@ class Party
      * @Assert\Length(max="255")
      * @Assert\NotBlank
      */
+    #[Groups(['party:read', 'party:write'])]
     private $name;
 
     /**
      * @ORM\OneToMany(targetEntity=User::class, mappedBy="party")
+     *
      */
+    #[Groups(['party:detail'])]
     private $actors;
 
     /**

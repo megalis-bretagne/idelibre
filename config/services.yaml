@@ -81,3 +81,8 @@ services:
       - name: 'doctrine.orm.entity_listener'
         event: 'preFlush'
         entity: 'App\Entity\Party'
+
+
+  App\ArgumentResolver\DataArgumentResolver:
+    tags:
+      - { name: controller.argument_value_resolver, priority: 50 }

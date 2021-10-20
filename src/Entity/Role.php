@@ -31,7 +31,7 @@ class Role
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid")
      */
-    #[Groups(['role:read'])]
+    #[Groups(['role:read', 'user:read'])]
     private $id;
 
     /**
@@ -39,7 +39,7 @@ class Role
      * @Assert\NotBlank
      * @Assert\Length(max="255")
      */
-    #[Groups(['role:read'])]
+    #[Groups(['role:read', 'user:read'])]
     private $name;
 
     /**
@@ -52,7 +52,7 @@ class Role
      * @Assert\NotBlank
      * @Assert\Length(max="255")
      */
-    #[Groups(['role:read'])]
+    #[Groups(['role:read', 'user:read'])]
     private $prettyName;
 
     /**

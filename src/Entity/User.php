@@ -26,6 +26,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="guid")
      * @Groups({"user"})
      */
+    #[Groups(['party:detail', 'user:read'])]
     private $id;
 
     /**
@@ -35,6 +36,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @OneAtMax()
      * @Groups({"user"})
      */
+    #[Groups(['party:detail', 'user:read'])]
     private $username;
 
     /**
@@ -44,6 +46,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @Assert\Email()
      * @Groups({"user"})
      */
+    #[Groups(['party:detail', 'user:read'])]
     private $email;
 
     /**
@@ -59,6 +62,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @Groups({"user"})
      */
+    #[Groups(['party:detail', 'user:read'])]
     private $firstName;
 
     /**
@@ -67,6 +71,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @Assert\Length(max=255)
      * @Groups({"user"})
      */
+    #[Groups(['party:detail', 'user:read'])]
     private $lastName;
 
     /**
@@ -85,6 +90,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\ManyToOne(targetEntity=Role::class)
      * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
+    #[Groups(['user:read'])]
     private $role;
 
     /**
@@ -101,11 +107,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
+    #[Groups(['user:read'])]
     private $title;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
+    #[Groups(['user:read'])]
     private $gender;
 
     /**
@@ -116,11 +124,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="boolean")
      */
+    #[Groups(['user:read'])]
     private $isActive = true;
 
     /**
      * @ORM\Column(type="string", length=30, nullable=true)
      */
+    #[Groups(['user:read'])]
     private $phone;
 
     public function __construct()

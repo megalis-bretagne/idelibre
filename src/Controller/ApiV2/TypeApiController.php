@@ -6,10 +6,10 @@ use App\Entity\Structure;
 use App\Entity\Type;
 use App\Repository\TypeRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
@@ -24,22 +24,16 @@ class TypeApiController extends AbstractController
     }
 
     #[Route('/', name: 'get_all_types', methods: ['GET'])]
-    public function getAll(
-        Structure $structure,
-        TypeRepository $typeRepository
-    ): JsonResponse
-    {
+    #[IsGranted('MY_STRUCTURE', subject: 'structure')]
+    public function getAll(Structure $structure, TypeRepository $typeRepository ): JsonResponse {
         $types = $typeRepository->findByStructure($structure)->getQuery()->getResult();
 
         return $this->json($types, context: ['groups' => 'type:read']);
     }
 
     #[Route('/{id}', name: 'get_type', methods: ['GET'])]
-    public function getById(
-        Structure $structure,
-        Type $type
-    ): JsonResponse
-    {
+    #[IsGranted('MY_STRUCTURE', subject: 'structure')]
+    public function getById(Structure $structure, Type $type): JsonResponse {
         return $this->json($type, context: ['groups' => ['type:detail', 'type:read']]);
     }
 
@@ -47,12 +41,10 @@ class TypeApiController extends AbstractController
      * body {"name":"string","isSms":bool,"isComelus":bool,"reminder":{"duration":int,"isActive":bool}}.
      */
     #[Route('', name: 'add_type', methods: ['POST'])]
-    public function add(Structure $structure, Request $request): JsonResponse
+    #[IsGranted('MY_STRUCTURE', subject: 'structure')]
+    public function add(Structure $structure, array $data): JsonResponse
     {
-        $data = json_decode($request->getContent(), true);
-        /** @var Type $type */
         $type = $this->denormalizer->denormalize($data, Type::class, context:['groups' => ['type:write']]);
-
         $type->setStructure($structure);
 
         $this->em->persist($type);
@@ -65,10 +57,9 @@ class TypeApiController extends AbstractController
      * body {"name":"string","isSms":bool,"isComelus":bool,"reminder":{"duration":int,"isActive":bool}}.
      */
     #[Route('/{id}', name: 'edit_type', methods: ['PUT'])]
-    public function edit(Structure $structure, Type $type, Request $request): JsonResponse
+    #[IsGranted('MY_STRUCTURE', subject: 'structure')]
+    public function edit(Structure $structure, Type $type, Array $data): JsonResponse
     {
-        $data = json_decode($request->getContent(), true);
-
         $context = ['object_to_populate' => $type, 'groups' => ['type:write']];
 
         /** @var Type $type */
@@ -81,6 +72,7 @@ class TypeApiController extends AbstractController
     }
 
     #[Route('/{id}', name: 'delete_type', methods: ['DELETE'])]
+    #[IsGranted('MY_STRUCTURE', subject: 'structure')]
     public function delete(Structure $structure, Type $type): JsonResponse
     {
         $this->em->remove($type);
@@ -89,33 +81,4 @@ class TypeApiController extends AbstractController
         return $this->json(null, status: 204);
     }
 
-    /*
-    $structure->getName();
-         dd($structure);
-
-
-     $format = 'application/json';
-     $type = Type::class;
-     $data = ['name' => ''];
-
-     $typeObj = $typeRepository->findAll()[0];
-     dump($typeObj);
-     $context = ['object_to_populate' => $typeObj, 'groups' => ['type:read']];
-
-     $updatedType = $this->denormalizer->denormalize($data, $type, $format, $context);
-
-     $res = $validator->validate(($updatedType));
-
-     if ($res) {
-         throw new BadRequestHttpException('Message');
-     }
-
-     $em->persist($updatedType);
-     $em->flush();
-
-     dd($updatedType);
-     dump($denormalizer);
-     dd('ok');
-
- }*/
 }
