@@ -34,8 +34,7 @@ class MyStructureVoter extends Voter
         if (!$this->security->isGranted('ROLE_API_STRUCTURE_ADMIN')) {
             return false;
         }
+
         return $apiUser->getStructure()->getId() === $subject->getId();
     }
-
-
 }

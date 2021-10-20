@@ -65,7 +65,6 @@ class TokenAuthenticator extends AbstractAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey): ?Response
     {
-
         return null;
     }
 

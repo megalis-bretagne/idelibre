@@ -18,5 +18,4 @@ class ApiUserRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, ApiUser::class);
     }
-
 }

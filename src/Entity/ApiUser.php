@@ -8,7 +8,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=ApiUserRepository::class)
- *
  */
 class ApiUser implements UserInterface
 {
@@ -82,7 +81,7 @@ class ApiUser implements UserInterface
         return $this;
     }
 
-    public function getRoles():array
+    public function getRoles(): array
     {
         $roles = $this->getApiRole() ? $this->getApiRole()->getComposites() : [];
 

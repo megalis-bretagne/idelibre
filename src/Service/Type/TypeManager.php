@@ -10,20 +10,18 @@ use Doctrine\ORM\EntityManagerInterface;
 class TypeManager
 {
     public function __construct(
-        private TypeRepository         $typeRepository,
+        private TypeRepository $typeRepository,
         private EntityManagerInterface $em
-    )
-    {
+    ) {
     }
 
     public function save(
-        Type      $type,
-        iterable  $associatedActors,
-        iterable  $associatedEmployees,
-        iterable  $associatedGuests,
+        Type $type,
+        iterable $associatedActors,
+        iterable $associatedEmployees,
+        iterable $associatedGuests,
         Structure $structure
-    ): void
-    {
+    ): void {
         $type->setAssociatedUsers([...$associatedActors, ...$associatedEmployees, ...$associatedGuests]);
         $type->setStructure($structure);
         $this->em->persist($type);

@@ -17,13 +17,12 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class UserManager
 {
     public function __construct(
-        private EntityManagerInterface      $em,
+        private EntityManagerInterface $em,
         private UserPasswordHasherInterface $passwordHasher,
-        private ValidatorInterface          $validator,
-        private RoleManager                 $roleManager,
-        private UserRepository              $userRepository
-    )
-    {
+        private ValidatorInterface $validator,
+        private RoleManager $roleManager,
+        private UserRepository $userRepository
+    ) {
     }
 
     public function save(User $user, ?string $plainPassword, ?Structure $structure): void
@@ -80,16 +79,14 @@ class UserManager
         $this->em->flush();
     }
 
-
     public function associateTypeToUserIds(Type $type, ?array $userIds)
     {
-        if ($userIds === null) {
+        if (null === $userIds) {
             return;
         }
         /** @var User[] $inStructureUsers */
         $inStructureUsers = $this->userRepository->findUsersByIds($type->getStructure(), $userIds);
 
         $type->setAssociatedUsers($inStructureUsers);
-
     }
 }
