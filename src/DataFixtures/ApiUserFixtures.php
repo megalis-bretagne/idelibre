@@ -21,7 +21,7 @@ class ApiUserFixtures extends Fixture implements DependentFixtureInterface
          * @var ApiRole   $roleApiStructureAdmin
          */
         $structureLibriciel = $this->getReference(StructureFixtures::REFERENCE . 'libriciel');
-        $structureMontpellier = $this->getReference(StructureFixtures::REFERENCE . 'montpellier');
+       // $structureMontpellier = $this->getReference(StructureFixtures::REFERENCE . 'montpellier');
         $roleApiStructureAdmin = $this->getReference(ApiRoleFixtures::REFERENCE . 'apiStructureAdmin');
 
         //////  apiStructureAdmin ///////
@@ -34,13 +34,7 @@ class ApiUserFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($apiAdminLibriciel);
         $this->addReference(self::REFERENCE . 'apiAdminLibriciel', $apiAdminLibriciel);
 
-        $apiAdminMontpellier = (new ApiUser())
-            ->setApiRole($roleApiStructureAdmin)
-            ->setStructure($structureMontpellier)
-            ->setName('connecteur api montpellier')
-            ->setToken('1234Montpellier');
-        $manager->persist($apiAdminLibriciel);
-        $this->addReference(self::REFERENCE . 'apiAdminMontpellier', $apiAdminMontpellier);
+        $manager->flush();
     }
 
     public function getDependencies()

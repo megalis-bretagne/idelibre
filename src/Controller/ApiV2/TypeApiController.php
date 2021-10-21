@@ -23,7 +23,7 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
  * 'associatedUsers':[{userIds}]
  * }.
  */
-#[Route('/api/v2/structure/{structureId}/types')]
+#[Route('/api/v2/structures/{structureId}/types')]
 #[ParamConverter('structure', class: Structure::class, options: ['id' => 'structureId'])]
 class TypeApiController extends AbstractController
 {
@@ -34,7 +34,7 @@ class TypeApiController extends AbstractController
     ) {
     }
 
-    #[Route('/', name: 'get_all_types', methods: ['GET'])]
+    #[Route('', name: 'get_all_types', methods: ['GET'])]
     #[IsGranted('API_MY_STRUCTURE', subject: 'structure')]
     public function getAll(Structure $structure, TypeRepository $typeRepository): JsonResponse
     {
@@ -67,7 +67,7 @@ class TypeApiController extends AbstractController
 
     #[Route('/{id}', name: 'edit_type', methods: ['PUT'])]
     #[IsGranted('API_MY_STRUCTURE', subject: 'structure')]
-    public function edit(Structure $structure, Type $type, array $data): JsonResponse
+    public function update(Structure $structure, Type $type, array $data): JsonResponse
     {
         $context = ['object_to_populate' => $type, 'groups' => ['type:write']];
 
