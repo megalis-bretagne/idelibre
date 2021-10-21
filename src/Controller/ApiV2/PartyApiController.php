@@ -6,10 +6,10 @@ use App\Entity\Party;
 use App\Entity\Structure;
 use App\Repository\PartyRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
@@ -24,6 +24,7 @@ class PartyApiController extends AbstractController
     }
 
     #[Route('/', name: 'get_all_parties', methods: ['GET'])]
+    #[IsGranted('API_MY_STRUCTURE', subject: 'structure')]
     public function getAll(
         Structure $structure,
         PartyRepository $partyRepository
@@ -34,6 +35,7 @@ class PartyApiController extends AbstractController
     }
 
     #[Route('/{id}', name: 'get_party', methods: ['GET'])]
+    #[IsGranted('API_MY_STRUCTURE', subject: 'structure')]
     public function getById(
         Structure $structure,
         Party $party
@@ -42,9 +44,9 @@ class PartyApiController extends AbstractController
     }
 
     #[Route('', name: 'add_party', methods: ['POST'])]
-    public function add(Structure $structure, Request $request): JsonResponse
+    #[IsGranted('API_MY_STRUCTURE', subject: 'structure')]
+    public function add(Structure $structure, array $data): JsonResponse
     {
-        $data = json_decode($request->getContent(), true);
         /** @var Party $party */
         $party = $this->denormalizer->denormalize($data, Party::class, context:['groups' => ['party:write']]);
 
@@ -57,10 +59,9 @@ class PartyApiController extends AbstractController
     }
 
     #[Route('/{id}', name: 'edit_party', methods: ['PUT'])]
-    public function edit(Structure $structure, Party $party, Request $request): JsonResponse
+    #[IsGranted('API_MY_STRUCTURE', subject: 'structure')]
+    public function edit(Structure $structure, Party $party, array $data): JsonResponse
     {
-        $data = json_decode($request->getContent(), true);
-
         $context = ['object_to_populate' => $party, 'groups' => ['party:write']];
 
         /** @var Party $updatedParty */
@@ -73,6 +74,7 @@ class PartyApiController extends AbstractController
     }
 
     #[Route('/{id}', name: 'delete_party', methods: ['DELETE'])]
+    #[IsGranted('API_MY_STRUCTURE', subject: 'structure')]
     public function delete(Structure $structure, Party $party): JsonResponse
     {
         $this->em->remove($party);
