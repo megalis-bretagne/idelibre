@@ -13,7 +13,7 @@ class ApiRoleFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $roleApiStructureAdmin = new ApiRole();
-        $roleApiStructureAdmin->setName("ApiStructureAdmin")
+        $roleApiStructureAdmin->setName('ApiStructureAdmin')
             ->setPrettyName('Administrateur api')
             ->setComposites(['ROLE_API_STRUCTURE_ADMIN']);
 
@@ -22,5 +22,4 @@ class ApiRoleFixtures extends Fixture
 
         $manager->flush();
     }
-
 }
