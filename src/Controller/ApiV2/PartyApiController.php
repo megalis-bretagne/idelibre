@@ -13,7 +13,13 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
-#[Route('/api/v2/structure/{structureId}/parties')]
+/**
+ * body {
+ *   "name":"string",
+ * }
+ */
+
+#[Route('/api/v2/structures/{structureId}/parties')]
 #[ParamConverter('structure', class: Structure::class, options: ['id' => 'structureId'])]
 class PartyApiController extends AbstractController
 {
@@ -23,7 +29,7 @@ class PartyApiController extends AbstractController
     ) {
     }
 
-    #[Route('/', name: 'get_all_parties', methods: ['GET'])]
+    #[Route('', name: 'get_all_parties', methods: ['GET'])]
     #[IsGranted('API_MY_STRUCTURE', subject: 'structure')]
     public function getAll(
         Structure $structure,
@@ -60,7 +66,7 @@ class PartyApiController extends AbstractController
 
     #[Route('/{id}', name: 'edit_party', methods: ['PUT'])]
     #[IsGranted('API_MY_STRUCTURE', subject: 'structure')]
-    public function edit(Structure $structure, Party $party, array $data): JsonResponse
+    public function update(Structure $structure, Party $party, array $data): JsonResponse
     {
         $context = ['object_to_populate' => $party, 'groups' => ['party:write']];
 

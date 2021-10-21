@@ -50,7 +50,7 @@ class TypeApiControllerTest extends WebTestCase
     public function testGetAll()
     {
         $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $apiUser = $this->getOneApiUser(['token' => '1234']);
+        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
 
         $this->client->request(Request::METHOD_GET, "/api/v2/structures/{$structure->getId()}/types", [], [], [
             "HTTP_X-AUTH-TOKEN" => $apiUser->getToken()
@@ -69,7 +69,7 @@ class TypeApiControllerTest extends WebTestCase
     {
         $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
         $type = $this->getOneTypeBy(['name' => 'Conseil Communautaire Libriciel']);
-        $apiUser = $this->getOneApiUser(['token' => '1234']);
+        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
 
         $this->client->request(Request::METHOD_GET, "/api/v2/structures/{$structure->getId()}/types/{$type->getId()}", [], [], [
             "HTTP_X-AUTH-TOKEN" => $apiUser->getToken()
@@ -87,7 +87,7 @@ class TypeApiControllerTest extends WebTestCase
     public function testPost()
     {
         $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $apiUser = $this->getOneApiUser(['token' => '1234']);
+        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
         $actorLs = $this->getOneUserBy(['username' => 'actor1@libriciel']);
 
         $data = [
@@ -120,7 +120,7 @@ class TypeApiControllerTest extends WebTestCase
     public function testPostAssociateNotSameStructureUsers()
     {
         $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $apiUser = $this->getOneApiUser(['token' => '1234']);
+        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
         $userMtp = $this->getOneUserBy(['username' => 'user@montpellier']);
 
         $data = [
@@ -153,7 +153,7 @@ class TypeApiControllerTest extends WebTestCase
     public function testUpdate()
     {
         $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $apiUser = $this->getOneApiUser(['token' => '1234']);
+        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
         $actorLs = $this->getOneUserBy(['username' => 'actor1@libriciel']);
         $type = $this->getOneTypeBy(['name' => 'Conseil Communautaire Libriciel']);
 
@@ -188,7 +188,7 @@ class TypeApiControllerTest extends WebTestCase
     public function testDelete()
     {
         $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $apiUser = $this->getOneApiUser(['token' => '1234']);
+        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
         $type = $this->getOneTypeBy(['name' => 'Conseil Communautaire Libriciel']);
 
         $this->client->request(Request::METHOD_DELETE, "/api/v2/structures/{$structure->getId()}/types/{$type->getId()}",
@@ -196,6 +196,7 @@ class TypeApiControllerTest extends WebTestCase
             [],
             ["HTTP_X-AUTH-TOKEN" => $apiUser->getToken()]);
         $this->assertResponseStatusCodeSame(204);
+        $this->assertEmpty($this->getOneTypeBy(['name' => 'Conseil Communautaire Libriciel']));
     }
 
 

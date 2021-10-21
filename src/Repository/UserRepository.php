@@ -344,4 +344,20 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getQuery()
             ->getResult();
     }
+
+    public function findActorsByIds(Structure $structure, array $actorIds): array
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.structure =:structure')
+            ->setParameter('structure', $structure)
+            ->andWhere('u.id in (:actorIds)')
+            ->setParameter('actorIds', $actorIds)
+            ->leftJoin('u.role', 'r')
+            ->andWhere(' r.name =:actor')
+            ->setParameter('actor', 'Actor')
+            ->getQuery()
+            ->getResult();
+    }
+
+
 }

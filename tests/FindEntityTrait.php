@@ -6,6 +6,7 @@ use App\Entity\Annex;
 use App\Entity\ApiUser;
 use App\Entity\Convocation;
 use App\Entity\Group;
+use App\Entity\Party;
 use App\Entity\Project;
 use App\Entity\Sitting;
 use App\Entity\Structure;
@@ -64,8 +65,13 @@ trait FindEntityTrait
         return $this->getOneEntityBy(Group::class, $criteria);
     }
 
-    public function getOneApiUser(array $criteria): ?ApiUser
+    public function getOneApiUserBy(array $criteria): ?ApiUser
     {
         return $this->getOneEntityBy(ApiUser::class, $criteria);
+    }
+
+    public function getOnePartyBy(array $criteria): ?Party
+    {
+        return $this->getOneEntityBy(Party::class, $criteria);
     }
 }
