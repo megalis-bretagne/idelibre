@@ -31,6 +31,8 @@ class ExceptionListener implements EventSubscriberInterface
 
     private function isJsonContentTypeOrAccept(ExceptionEvent $event)
     {
+        dd($event->getRequest()->getContentType());
+
         return in_array('application/json', $event->getRequest()->getAcceptableContentTypes()) ||
             'application/json' === $event->getRequest()->getContentType();
     }

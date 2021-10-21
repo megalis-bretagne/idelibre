@@ -79,14 +79,4 @@ class UserManager
         $this->em->flush();
     }
 
-    public function associateTypeToUserIds(Type $type, ?array $userIds)
-    {
-        if (null === $userIds) {
-            return;
-        }
-        /** @var User[] $inStructureUsers */
-        $inStructureUsers = $this->userRepository->findUsersByIds($type->getStructure(), $userIds);
-
-        $type->setAssociatedUsers($inStructureUsers);
-    }
 }

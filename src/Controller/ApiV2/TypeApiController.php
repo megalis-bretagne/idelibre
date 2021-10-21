@@ -30,7 +30,6 @@ class TypeApiController extends AbstractController
     public function __construct(
         private DenormalizerInterface $denormalizer,
         private EntityManagerInterface $em,
-        private UserManager $userManager
     ) {
     }
 
@@ -52,12 +51,11 @@ class TypeApiController extends AbstractController
 
     #[Route('', name: 'add_type', methods: ['POST'])]
     #[IsGranted('API_MY_STRUCTURE', subject: 'structure')]
+    #[IsGranted('API_RELATION_USERS', subject: ['structure' => 'structure', 'data' => 'data'])]
     public function add(Structure $structure, array $data): JsonResponse
     {
-        $type = $this->denormalizer->denormalize($data, Type::class, context: ['groups' => ['type:write']]);
+        $type = $this->denormalizer->denormalize($data, Type::class, context: ['groups' => ['type:write'], 'normalize_relations' => true]);
         $type->setStructure($structure);
-
-        $this->userManager->associateTypeToUserIds($type, $data['associatedUsers'] ?? null);
 
         $this->em->persist($type);
         $this->em->flush();
@@ -69,11 +67,10 @@ class TypeApiController extends AbstractController
     #[IsGranted('API_MY_STRUCTURE', subject: 'structure')]
     public function update(Structure $structure, Type $type, array $data): JsonResponse
     {
-        $context = ['object_to_populate' => $type, 'groups' => ['type:write']];
+        $context = ['object_to_populate' => $type, 'groups' => ['type:write'], 'normalize_relations' => true];
 
         /** @var Type $type */
         $updatedType = $this->denormalizer->denormalize($data, Type::class, context: $context);
-        $this->userManager->associateTypeToUserIds($type, $data['associatedUsers'] ?? null);
 
         $this->em->persist($updatedType);
         $this->em->flush();

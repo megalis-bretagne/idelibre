@@ -10,9 +10,13 @@ use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
 use Doctrine\Persistence\ObjectManager;
 use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpClient\Psr18Client;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class TypeApiControllerTest extends WebTestCase
 {
@@ -131,22 +135,44 @@ class TypeApiControllerTest extends WebTestCase
             'associatedUsers' => [$userMtp->getId()]
         ];
 
+
+        $client = self::getContainer()->get(HttpClientInterface::class);
+
+        $res = $client->request(Request::METHOD_POST, "https://localhost/api/v2/structures/{$structure->getId()}/types", [
+            'body' => json_encode($data),
+            'headers' => ['Content-Type' => 'application/json']
+        ]);
+
+        dd($res);
+
+        //$request = new \Nyholm\Psr7\Request(Request::METHOD_POST, "/api/v2/structures/{$structure->getId()}/types",
+       // ['Content-Type' => 'application/json'], json_encode($data))  ;
+
+        //dd($response);
+
+        //$request = $client->createRequest(Request::METHOD_POST, "/api/v2/structures/{$structure->getId()}/types");
+        //$request->withBody(json_encode($data))
+
         $this->client->request(Request::METHOD_POST, "/api/v2/structures/{$structure->getId()}/types",
             [],
             [],
-            ["HTTP_X-AUTH-TOKEN" => $apiUser->getToken()],
+            [
+                "HTTP_X-AUTH-TOKEN" => $apiUser->getToken(),
+                'HTTP_Accept' => 'application/json',
+                'HTTP_Content-Type' => 'application/json'
+
+            ],
             json_encode($data)
         );
-        $this->assertResponseStatusCodeSame(201);
+        $this->assertResponseStatusCodeSame(403);
 
         $response = $this->client->getResponse();
-        $type = json_decode($response->getContent(), true);
 
-        $this->assertNotEmpty($type['id']);
-        $this->assertTrue($type['isSms']);
-        $this->assertTrue($type['isComelus']);
-        $this->assertSame(180, $type['reminder']['duration']);
-        $this->assertCount(0, $type['associatedUsers']);
+        dd($response->getContent());
+        $error = json_decode($response->getContent(), true);
+
+
+
     }
 
 

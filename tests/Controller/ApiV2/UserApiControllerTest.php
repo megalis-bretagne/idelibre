@@ -4,6 +4,7 @@ namespace App\Tests\Controller\ApiV2;
 
 use App\DataFixtures\ApiUserFixtures;
 use App\DataFixtures\PartyFixtures;
+use App\DataFixtures\RoleFixtures;
 use App\DataFixtures\StructureFixtures;
 use App\DataFixtures\UserFixtures;
 use App\Tests\FindEntityTrait;
@@ -14,7 +15,7 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
 
-class PartyApiControllerTest extends WebTestCase
+class UserApiControllerTest extends WebTestCase
 {
     use FindEntityTrait;
     use LoginTrait;
@@ -40,6 +41,7 @@ class PartyApiControllerTest extends WebTestCase
         $databaseTool->loadFixtures([
             UserFixtures::class,
             PartyFixtures::class,
+            RoleFixtures::class,
             ApiUserFixtures::class,
             StructureFixtures::class
         ]);
@@ -52,52 +54,66 @@ class PartyApiControllerTest extends WebTestCase
         $this->entityManager->close();
     }
 
-
     public function testGetAll()
     {
         $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
         $apiUser = $this->getOneApiUserBy(['token' => '1234']);
 
-        $this->client->request(Request::METHOD_GET, "/api/v2/structures/{$structure->getId()}/parties", [], [], [
+        $this->client->request(Request::METHOD_GET, "/api/v2/structures/{$structure->getId()}/users", [], [], [
             "HTTP_X-AUTH-TOKEN" => $apiUser->getToken()
         ]);
 
         $this->assertResponseStatusCodeSame(200);
 
         $response = $this->client->getResponse();
-        $parties = json_decode($response->getContent(), true);
+        $users = json_decode($response->getContent(), true);
 
-        $this->assertCount(2, $parties);
+        $this->assertCount(12, $users);
     }
 
     public function testGetById()
     {
         $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $party = $this->getOnePartyBy(['name' => 'Majorité', 'structure' => $structure]);
+        $actorLs = $this->getOneUserBy(['username' => 'actor1@libriciel']);
         $apiUser = $this->getOneApiUserBy(['token' => '1234']);
 
-        $this->client->request(Request::METHOD_GET, "/api/v2/structures/{$structure->getId()}/parties/{$party->getId()}", [], [], [
+        $this->client->request(Request::METHOD_GET, "/api/v2/structures/{$structure->getId()}/users/{$actorLs->getId()}", [], [], [
             "HTTP_X-AUTH-TOKEN" => $apiUser->getToken()
         ]);
         $this->assertResponseStatusCodeSame(200);
 
         $response = $this->client->getResponse();
-        $party = json_decode($response->getContent(), true);
+        $user = json_decode($response->getContent(), true);
 
-        $this->assertNotEmpty($party);
-        $this->assertCount(1, $party['actors']);
+        $this->assertNotEmpty($user);
+        $this->assertNotEmpty($user['role']);
+        $this->assertNotEmpty($user['party']);
     }
+
 
     public function testPost()
     {
         $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
         $apiUser = $this->getOneApiUserBy(['token' => '1234']);
+        $roleActor = $this->getOneRoleBy(['name' => 'Actor']);
+        $party = $this->getOnePartyBy(['name' => 'Majorité', 'structure' => $structure]);
+
 
         $data = [
-            'name' => 'new party',
+            'username' => 'newUser',
+            'email' => 'newUser@exemple.org',
+            'firstName' => 'newFirstName',
+            'lastName' => 'newLastName',
+            'role' => $roleActor->getId(),
+            'party' => $party->getId(),
+            'title' => 'Madame la vice présidente',
+            'gender' => 1,
+            'isActive' => true,
+            'phone' => '0607080919'
         ];
 
-        $this->client->request(Request::METHOD_POST, "/api/v2/structures/{$structure->getId()}/parties",
+
+        $this->client->request(Request::METHOD_POST, "/api/v2/structures/{$structure->getId()}/users",
             [],
             [],
             ["HTTP_X-AUTH-TOKEN" => $apiUser->getToken()],
@@ -106,52 +122,18 @@ class PartyApiControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(201);
 
         $response = $this->client->getResponse();
-        $party = json_decode($response->getContent(), true);
+        $user = json_decode($response->getContent(), true);
+
+        dd($user);
+
+        $userBdd = $this->getOneUserBy(['id' => $user['id']]);
+        dd($userBdd);
 
         $this->assertNotEmpty($party['id']);
-        $this->assertSame('new party', $party['name'] );
+        $this->assertSame('new party', $party['name']);
 
     }
 
 
-    public function testUpdate()
-    {
-        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $party = $this->getOnePartyBy(['name' => 'Majorité', 'structure' => $structure]);
-        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
-
-        $data = [
-            'name' => 'updated',
-        ];
-
-        $this->client->request(Request::METHOD_PUT, "/api/v2/structures/{$structure->getId()}/parties/{$party->getId()}",
-            [],
-            [],
-            ["HTTP_X-AUTH-TOKEN" => $apiUser->getToken()],
-            json_encode($data)
-        );
-        $this->assertResponseStatusCodeSame(200);
-
-        $response = $this->client->getResponse();
-        $party = json_decode($response->getContent(), true);
-
-        $this->assertSame('updated', $party['name'] );
-
-    }
-
-    public function testDelete()
-    {
-        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
-        $party = $this->getOnePartyBy(['name' => 'Majorité', 'structure' => $structure]);
-
-        $this->client->request(Request::METHOD_DELETE, "/api/v2/structures/{$structure->getId()}/parties/{$party->getId()}",
-            [],
-            [],
-            ["HTTP_X-AUTH-TOKEN" => $apiUser->getToken()]);
-        $this->assertResponseStatusCodeSame(204);
-
-        $this->assertEmpty($this->getOnePartyBy(['name' => 'Majorité', 'structure' => $structure]));
-    }
 
 }

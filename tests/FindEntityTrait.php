@@ -8,6 +8,7 @@ use App\Entity\Convocation;
 use App\Entity\Group;
 use App\Entity\Party;
 use App\Entity\Project;
+use App\Entity\Role;
 use App\Entity\Sitting;
 use App\Entity\Structure;
 use App\Entity\Type;
@@ -73,5 +74,10 @@ trait FindEntityTrait
     public function getOnePartyBy(array $criteria): ?Party
     {
         return $this->getOneEntityBy(Party::class, $criteria);
+    }
+
+    public function getOneRoleBy(array $criteria): ?Role
+    {
+        return $this->getOneEntityBy(Role::class, $criteria);
     }
 }

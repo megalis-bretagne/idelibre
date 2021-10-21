@@ -44,7 +44,7 @@ class Type
     /**
      * @ORM\ManyToMany(targetEntity=User::class, inversedBy="associatedTypes")
      */
-    #[Groups(['type:detail'])]
+    #[Groups(['type:detail', 'type:write'])]
     private $associatedUsers;
 
     /**

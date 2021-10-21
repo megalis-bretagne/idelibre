@@ -224,16 +224,5 @@ RENOMER CALENDAR en REMINDER pour le model
 insert into api_user(id, structure_id, name, token, api_role_id)
   values('3f79ab1b-3727-4f6d-a839-d7b3d3a6c46f', '3f79ab1b-3727-4f6d-a839-d7b3d3a6c44a', 'libriciel api', '1234', 'ba98ff85-a720-4ca6-a877-c91de3ac4cf4');
 
-ba98ff85-a720-4ca6-a877-c91de3ac4cf4
 
-
-
-
-
-
-
-            "id": "f972afc7-faaf-4ada-bbed-78d425a5c901",
-            "id": "6a3edee5-991c-47e7-b1da-2c5db7fe62df",
-            "id": "29908610-beb2-4356-b884-413054029630",
-            "id": "6d726120-0883-4ce3-8e4a-2c92a472fb3b",
-            "id": "c15cb217-5c67-4aa8-89b2-c01a0843a1ae",
+TODO EMPECHER d'utiliser des données interdite exemple. associer un utilisateur d'une autre structure idem pour un party ou mettre un droit trop haut !

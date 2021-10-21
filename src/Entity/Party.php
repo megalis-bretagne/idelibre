@@ -29,7 +29,7 @@ class Party
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid")
      */
-    #[Groups(['party:read'])]
+    #[Groups(['party:read','user:detail'])]
     private $id;
 
     /**
@@ -43,7 +43,7 @@ class Party
      * @Assert\Length(max="255")
      * @Assert\NotBlank
      */
-    #[Groups(['party:read', 'party:write'])]
+    #[Groups(['party:read', 'party:write', 'user:detail'])]
     private $name;
 
     /**

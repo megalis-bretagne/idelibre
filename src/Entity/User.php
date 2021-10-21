@@ -36,7 +36,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @OneAtMax()
      * @Groups({"user"})
      */
-    #[Groups(['party:detail', 'user:read', 'type:detail'])]
+    #[Groups(['party:detail', 'user:read', 'type:detail', 'user:write'])]
     private $username;
 
     /**
@@ -46,7 +46,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @Assert\Email()
      * @Groups({"user"})
      */
-    #[Groups(['party:detail', 'user:read', 'type:detail'])]
+    #[Groups(['party:detail', 'user:read', 'type:detail', 'user:write'])]
     private $email;
 
     /**
@@ -62,7 +62,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @Groups({"user"})
      */
-    #[Groups(['party:detail', 'user:read', 'type:detail'])]
+    #[Groups(['party:detail', 'user:read', 'type:detail', 'user:write'])]
     private $firstName;
 
     /**
@@ -71,7 +71,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @Assert\Length(max=255)
      * @Groups({"user"})
      */
-    #[Groups(['party:detail', 'user:read', 'type:detail'])]
+    #[Groups(['party:detail', 'user:read', 'type:detail', 'user:write'])]
     private $lastName;
 
     /**
@@ -90,7 +90,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\ManyToOne(targetEntity=Role::class)
      * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
-    #[Groups(['user:read'])]
+    #[Groups(['user:read', 'user:write'])]
     private $role;
 
     /**
@@ -102,18 +102,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\ManyToOne(targetEntity=Party::class, inversedBy="actors")
      * @ORM\JoinColumn(onDelete="SET NULL")
      */
+    #[Groups(['user:detail', 'user:write'])]
     private $party;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    #[Groups(['user:read'])]
+    #[Groups(['user:read', 'user:write'])]
     private $title;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    #[Groups(['user:read'])]
+    #[Groups(['user:read', 'user:write'])]
     private $gender;
 
     /**
@@ -124,13 +125,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="boolean")
      */
-    #[Groups(['user:read'])]
+    #[Groups(['user:read', 'user:write'])]
     private $isActive = true;
 
     /**
      * @ORM\Column(type="string", length=30, nullable=true)
      */
-    #[Groups(['user:read'])]
+    #[Groups(['user:read', 'user:write'])]
     private $phone;
 
     public function __construct()

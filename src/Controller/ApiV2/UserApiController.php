@@ -10,24 +10,28 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
-#[Route('/api/v2/structure/{structureId}/users')]
+#[Route('/api/v2/structures/{structureId}/users')]
 #[ParamConverter('structure', class: Structure::class, options: ['id' => 'structureId'])]
 class UserApiController extends AbstractController
 {
     public function __construct(
-        private DenormalizerInterface $denormalizer,
+        private DenormalizerInterface  $denormalizer,
         private EntityManagerInterface $em,
-    ) {
+        private UserPasswordHasherInterface $passwordHasher
+    )
+    {
     }
 
-    #[Route('/', name: 'get_all_users', methods: ['GET'])]
+    #[Route('', name: 'get_all_users', methods: ['GET'])]
     public function getAll(
-        Structure $structure,
+        Structure      $structure,
         UserRepository $userRepository
-    ): JsonResponse {
+    ): JsonResponse
+    {
         $users = $userRepository->findByStructure($structure)->getQuery()->getResult();
 
         return $this->json($users, context: ['groups' => 'user:read']);
@@ -36,19 +40,24 @@ class UserApiController extends AbstractController
     #[Route('/{id}', name: 'get_user', methods: ['GET'])]
     public function getById(
         Structure $structure,
-        User $user
-    ): JsonResponse {
+        User      $user
+    ): JsonResponse
+    {
         return $this->json($user, context: ['groups' => ['user:detail', 'user:read']]);
     }
 
     #[Route('', name: 'add_user', methods: ['POST'])]
-    public function add(Structure $structure, Request $request): JsonResponse
+    public function add(Structure $structure, ?array $data): JsonResponse
     {
-        $data = json_decode($request->getContent(), true);
         /** @var User $user */
-        $user = $this->denormalizer->denormalize($data, User::class, context:['groups' => ['user:write']]);
-
+        $user = $this->denormalizer->denormalize($data, User::class, context: ['groups' => ['user:write'], 'normalize_relations' => true]);
         $user->setStructure($structure);
+
+        $user->setPassword("No Password");
+        if(!empty($data['password'])) {
+            $user->setPassword($this->passwordHasher->hashPassword($user, $data['password']));
+        }
+
 
         $this->em->persist($user);
         $this->em->flush();
@@ -57,7 +66,7 @@ class UserApiController extends AbstractController
     }
 
     #[Route('/{id}', name: 'edit_user', methods: ['PUT'])]
-    public function edit(Structure $structure, User $user, Request $request): JsonResponse
+    public function update(Structure $structure, User $user, Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
@@ -65,6 +74,10 @@ class UserApiController extends AbstractController
 
         /** @var User $updatedUser */
         $updatedUser = $this->denormalizer->denormalize($data, User::class, context: $context);
+
+        if(!isset($data['password'])) {
+            $user->setPassword($this->passwordHasher->hashPassword($user, $data['password']));
+        }
 
         $this->em->persist($updatedUser);
         $this->em->flush();
