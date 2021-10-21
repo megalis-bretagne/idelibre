@@ -3,7 +3,6 @@
 namespace App\Service\User;
 
 use App\Entity\Group;
-use App\Entity\Party;
 use App\Entity\Role;
 use App\Entity\Structure;
 use App\Entity\Type;
@@ -90,5 +89,4 @@ class UserManager
 
         $type->setAssociatedUsers($inStructureUsers);
     }
-
 }

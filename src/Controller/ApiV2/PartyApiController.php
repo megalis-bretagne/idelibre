@@ -16,9 +16,8 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 /**
  * body {
  *   "name":"string",
- * }
+ * }.
  */
-
 #[Route('/api/v2/structures/{structureId}/parties')]
 #[ParamConverter('structure', class: Structure::class, options: ['id' => 'structureId'])]
 class PartyApiController extends AbstractController
