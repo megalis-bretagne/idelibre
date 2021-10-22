@@ -24,7 +24,6 @@ class ThemeRelationVoter extends Voter
      */
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token): bool
     {
-
         /** @var Structure $structure */
         $structure = $subject['structure'];
         $data = $subject['data'];
@@ -34,7 +33,7 @@ class ThemeRelationVoter extends Voter
 
     private function VerifyParentTheme(?string $themeId, Structure $structure): bool
     {
-        if(!$themeId) {
+        if (!$themeId) {
             return true;
         }
 
@@ -45,5 +44,4 @@ class ThemeRelationVoter extends Voter
 
         return !empty($theme);
     }
-
 }

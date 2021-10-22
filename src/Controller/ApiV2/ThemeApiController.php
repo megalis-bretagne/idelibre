@@ -2,7 +2,6 @@
 
 namespace App\Controller\ApiV2;
 
-use App\Entity\Party;
 use App\Entity\Structure;
 use App\Entity\Theme;
 use App\Repository\ThemeRepository;
@@ -25,20 +24,19 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 class ThemeApiController extends AbstractController
 {
     public function __construct(
-        private DenormalizerInterface  $denormalizer,
+        private DenormalizerInterface $denormalizer,
         private EntityManagerInterface $em,
         private ThemeRepository $themeRepository
-    )
-    {
+    ) {
     }
 
     #[Route('', name: 'get_all_themes', methods: ['GET'])]
     public function getAll(
-        Structure       $structure,
+        Structure $structure,
         ThemeRepository $themeRepository
-    ): JsonResponse
-    {
+    ): JsonResponse {
         $themes = $themeRepository->findChildrenFromStructure($structure)->getQuery()->getResult();
+
         return $this->json($themes, context: ['groups' => 'theme:read']);
     }
 
@@ -46,17 +44,15 @@ class ThemeApiController extends AbstractController
     #[IsGranted('API_SAME_STRUCTURE', subject: ['structure', 'theme'])]
     public function getById(
         Structure $structure,
-        Theme     $theme
-    ): JsonResponse
-    {
+        Theme $theme
+    ): JsonResponse {
         return $this->json($theme, context: ['groups' => ['theme:read', 'theme:detail']]);
     }
 
     #[Route('', name: 'add_theme', methods: ['POST'])]
     #[IsGranted('API_RELATION_THEME', subject: ['structure', 'data'])]
-    public function add(Structure $structure, ThemeRepository $themeRepository ,array $data): JsonResponse
+    public function add(Structure $structure, ThemeRepository $themeRepository, array $data): JsonResponse
     {
-
         $context = ['groups' => ['theme:write', 'theme:write:post'], 'normalize_relations' => true];
         /** @var Theme $theme */
         $theme = $this->denormalizer->denormalize($data, Theme::class, context: $context);
@@ -69,8 +65,7 @@ class ThemeApiController extends AbstractController
         $this->em->persist($theme);
         $this->em->flush();
 
-        return $this->json($theme, status: 201 ,context: ['groups' => ['theme:read', 'theme:detail']]);
-
+        return $this->json($theme, status: 201, context: ['groups' => ['theme:read', 'theme:detail']]);
     }
 
     #[Route('/{id}', name: 'edit_theme', methods: ['PUT'])]
@@ -87,7 +82,6 @@ class ThemeApiController extends AbstractController
         $this->em->persist($updatedTheme);
         $this->em->flush();
 
-
         return $this->json($updatedTheme, context: ['groups' => ['theme:detail', 'theme:read']]);
     }
 
@@ -101,7 +95,6 @@ class ThemeApiController extends AbstractController
         return $this->json(null, status: 204);
     }
 
-
     private function setParent(Theme $theme, Structure $structure): void
     {
         if ($theme->getParent()) {
@@ -112,7 +105,6 @@ class ThemeApiController extends AbstractController
         $theme->setParent($root);
     }
 
-
     private function setFullName(Theme $theme)
     {
         if ('ROOT' === $theme->getParent()->getName()) {
@@ -122,6 +114,4 @@ class ThemeApiController extends AbstractController
         }
         $theme->setFullName($theme->getParent()->getFullName() . ', ' . $theme->getName());
     }
-
-
 }
