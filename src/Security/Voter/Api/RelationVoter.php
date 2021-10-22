@@ -2,15 +2,11 @@
 
 namespace App\Security\Voter\Api;
 
-use App\Entity\ApiUser;
 use App\Entity\Structure;
-use App\Entity\Type;
 use App\Repository\UserRepository;
 use App\Security\Http403Exception;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
-use Symfony\Component\Security\Core\Security;
-use function PHPUnit\Framework\isEmpty;
 
 class RelationVoter extends Voter
 {
@@ -20,7 +16,7 @@ class RelationVoter extends Voter
 
     protected function supports($attribute, $subject): bool
     {
-        return in_array($attribute, ['API_RELATION_USERS']) && ($subject['structure'] instanceof Structure && is_array($subject['data']) );
+        return in_array($attribute, ['API_RELATION_TYPE_USERS']) && ($subject['structure'] instanceof Structure && is_array($subject['data']));
     }
 
     /**
@@ -32,18 +28,17 @@ class RelationVoter extends Voter
         $structure = $subject['structure'];
         $data = $subject['data'];
 
-        if(empty($data['associatedUsers'])) {
+        if (empty($data['associatedUsers'])) {
             return true;
         }
 
         $inDatabaseUsersWithId = $this->userRepository->findUsersByIds($structure, $data['associatedUsers']);
-        $inDataBaseIds = array_map(fn($el) => $el['id'] ,$inDatabaseUsersWithId);
+        $inDataBaseIds = array_map(fn ($el) => $el['id'], $inDatabaseUsersWithId);
 
         $diff = array_diff($data['associatedUsers'], $inDataBaseIds);
 
-        if(!empty($diff)) {
+        if (!empty($diff)) {
             throw new Http403Exception('some users does not belong to your structure : ' . implode(', ', $diff));
-
         }
 
         return empty($diff);

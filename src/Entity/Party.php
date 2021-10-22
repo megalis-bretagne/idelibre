@@ -29,7 +29,7 @@ class Party
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid")
      */
-    #[Groups(['party:read','user:detail'])]
+    #[Groups(['party:read', 'user:detail'])]
     private $id;
 
     /**

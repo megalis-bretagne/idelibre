@@ -90,7 +90,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\ManyToOne(targetEntity=Role::class)
      * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
-    #[Groups(['user:read', 'user:write'])]
+    #[Groups(['user:read', 'user:write:post'])]
     private $role;
 
     /**

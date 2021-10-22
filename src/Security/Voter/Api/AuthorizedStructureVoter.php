@@ -8,7 +8,7 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
 
-class MyStructureVoter extends Voter
+class AuthorizedStructureVoter extends Voter
 {
     public function __construct(private Security $security)
     {
@@ -16,7 +16,7 @@ class MyStructureVoter extends Voter
 
     protected function supports($attribute, $subject): bool
     {
-        return in_array($attribute, ['API_MY_STRUCTURE']) && ($subject instanceof Structure);
+        return in_array($attribute, ['API_AUTHORIZED_STRUCTURE']) && ($subject instanceof Structure);
     }
 
     /**

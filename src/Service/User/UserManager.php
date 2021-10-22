@@ -5,7 +5,6 @@ namespace App\Service\User;
 use App\Entity\Group;
 use App\Entity\Role;
 use App\Entity\Structure;
-use App\Entity\Type;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Service\role\RoleManager;
@@ -78,5 +77,4 @@ class UserManager
         $this->em->remove($user);
         $this->em->flush();
     }
-
 }

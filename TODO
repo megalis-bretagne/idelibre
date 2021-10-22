@@ -226,3 +226,5 @@ insert into api_user(id, structure_id, name, token, api_role_id)
 
 
 TODO EMPECHER d'utiliser des données interdite exemple. associer un utilisateur d'une autre structure idem pour un party ou mettre un droit trop haut !
+
+EMPECHER DE MODIFIER UN ELEMENT QUI N'EST PAS DANS LA STRUCTURE DE L'URL !
