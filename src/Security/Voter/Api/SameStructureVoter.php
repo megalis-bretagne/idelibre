@@ -2,12 +2,9 @@
 
 namespace App\Security\Voter\Api;
 
-use App\Entity\ApiUser;
 use App\Entity\Structure;
-use Symfony\Bundle\MakerBundle\Str;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
-use Symfony\Component\Security\Core\Security;
 
 class SameStructureVoter extends Voter
 {
@@ -21,8 +18,6 @@ class SameStructureVoter extends Voter
      */
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token): bool
     {
-
-
         /** @var Structure $structure */
         $structure = $subject['structure'];
 

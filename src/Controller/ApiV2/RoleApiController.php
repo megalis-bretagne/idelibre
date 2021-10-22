@@ -17,11 +17,11 @@ class RoleApiController extends AbstractController
 {
     #[Route('', name: 'get_all_roles', methods: ['GET'])]
     public function getAll(
-        Structure      $structure,
+        Structure $structure,
         RoleRepository $roleRepository
-    ): JsonResponse
-    {
+    ): JsonResponse {
         $roles = $roleRepository->findInStructureQueryBuilder()->getQuery()->getResult();
+
         return $this->json($roles, context: ['groups' => 'role:read']);
     }
 }

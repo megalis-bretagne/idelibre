@@ -31,13 +31,14 @@ class UserRelationVoter extends Voter
         $data = $subject['data'];
 
         $role = $this->checkRole($data['role'] ?? null);
+
         return $this->checkParty($data['party'] ?? null, $structure, $role);
     }
 
     private function checkRole(?string $roleId)
     {
         if (!$roleId) {
-            throw new \Exception("Role must be set", 400);
+            throw new \Exception('Role must be set', 400);
         }
 
         $role = $this->roleRepository->find($roleId);
@@ -48,20 +49,19 @@ class UserRelationVoter extends Voter
         return $role;
     }
 
-
     private function checkParty(?string $partyId, Structure $structure, Role $role): bool
     {
         if (!$partyId) {
             return true;
         }
 
-        if($role->getName() !== 'Actor') {
-            throw new \Exception("Party must be linked to actor", 400);
+        if ('Actor' !== $role->getName()) {
+            throw new \Exception('Party must be linked to actor', 400);
         }
 
         $party = $this->partyRepository->findBy(['id' => $partyId, 'structure' => $structure]);
 
-        if(empty($party)) {
+        if (empty($party)) {
             throw new \Exception("You can't use party : $partyId", 400);
         }
 

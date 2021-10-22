@@ -38,7 +38,7 @@ class UserApiController extends AbstractController
     }
 
     #[Route('/{id}', name: 'get_user', methods: ['GET'])]
-    #[IsGranted('API_SAME_STRUCTURE', subject: ['structure','user'])]
+    #[IsGranted('API_SAME_STRUCTURE', subject: ['structure', 'user'])]
     public function getById(
         Structure $structure,
         User $user
@@ -66,8 +66,8 @@ class UserApiController extends AbstractController
     }
 
     #[Route('/{id}', name: 'edit_user', methods: ['PUT'])]
-    #[IsGranted('API_SAME_STRUCTURE', subject: ['structure','user'])]
-    #[IsGranted('API_RELATION_USERS', subject: ['structure','data'])]
+    #[IsGranted('API_SAME_STRUCTURE', subject: ['structure', 'user'])]
+    #[IsGranted('API_RELATION_USERS', subject: ['structure', 'data'])]
     public function update(Structure $structure, User $user, Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);

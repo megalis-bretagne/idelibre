@@ -6,5 +6,5 @@ use App\Entity\Structure;
 
 interface StructurableInterface
 {
-    public function getStructure() : Structure;
+    public function getStructure(): Structure;
 }
