@@ -11,6 +11,7 @@ use App\Entity\Project;
 use App\Entity\Role;
 use App\Entity\Sitting;
 use App\Entity\Structure;
+use App\Entity\Theme;
 use App\Entity\Type;
 use App\Entity\User;
 
@@ -79,5 +80,10 @@ trait FindEntityTrait
     public function getOneRoleBy(array $criteria): ?Role
     {
         return $this->getOneEntityBy(Role::class, $criteria);
+    }
+
+    public function getOneThemeBy(array $criteria): ?Theme
+    {
+        return $this->getOneEntityBy(Theme::class, $criteria);
     }
 }
