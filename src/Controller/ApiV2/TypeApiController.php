@@ -16,7 +16,7 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 /**
  * body {
- * "name":"string",
+ * "name": string,
  * "isSms":bool,
  * "isComelus":bool,
  * "reminder":{"duration":<60, 90, 120, 180, 240, 300>,"isActive":bool},

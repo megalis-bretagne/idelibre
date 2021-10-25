@@ -69,16 +69,14 @@ class UserApiController extends AbstractController
     #[Route('/{id}', name: 'edit_user', methods: ['PUT'])]
     #[IsGranted('API_SAME_STRUCTURE', subject: ['structure', 'user'])]
     #[IsGranted('API_RELATION_USERS', subject: ['structure', 'data'])]
-    public function update(Structure $structure, User $user, Request $request): JsonResponse
+    public function update(Structure $structure, User $user, array $data): JsonResponse
     {
-        $data = json_decode($request->getContent(), true);
-
-        $context = ['object_to_populate' => $user, 'groups' => ['user:write']];
+        $context = ['object_to_populate' => $user, 'groups' => ['user:write'], 'normalize_relations' => true];
 
         /** @var User $updatedUser */
         $updatedUser = $this->denormalizer->denormalize($data, User::class, context: $context);
 
-        if (!isset($data['password'])) {
+        if (isset($data['password'])) {
             $user->setPassword($this->passwordHasher->hashPassword($user, $data['password']));
         }
 

@@ -2,7 +2,6 @@
 
 namespace App\Security\Voter\Api;
 
-use App\Entity\Role;
 use App\Entity\Structure;
 use App\Repository\PartyRepository;
 use App\Repository\RoleRepository;
@@ -37,7 +36,7 @@ class UserRelationVoter extends Voter
 
     private function checkRole(?string $roleId)
     {
-        if(!$roleId) {
+        if (!$roleId) {
             return;
         }
 

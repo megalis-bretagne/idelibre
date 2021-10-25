@@ -136,9 +136,6 @@ class UserApiControllerTest extends WebTestCase
     }
 
 
-
-
-
     public function testAddNoUsernameAndEmail()
     {
         $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
@@ -178,13 +175,6 @@ class UserApiControllerTest extends WebTestCase
         );
     }
 
-
-
-
-
-
-
-
     public function testAddNoRole()
     {
         $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
@@ -214,7 +204,7 @@ class UserApiControllerTest extends WebTestCase
 
         $response = $this->client->getResponse();
         $error = json_decode($response->getContent(), true);
-        $this->assertSame('Cette valeur ne doit pas être nulle. ( role : "")', $error['message'] );
+        $this->assertSame('Cette valeur ne doit pas être nulle. ( role : "")', $error['message']);
 
     }
 
@@ -292,6 +282,138 @@ class UserApiControllerTest extends WebTestCase
         $this->assertSame("You can't use party : 216ddd2a-2ee8-4dd3-840d-efdd6f710ca0", $error['message']);
 
     }
+
+
+    public function testUpdate()
+    {
+        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
+        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
+        $actorLs = $this->getOneUserBy(['username' => 'actor1@libriciel']);
+
+        $data = [
+            'username' => 'updatedUserName',
+            'email' => 'updated@exemple.org',
+            'firstName' => 'updatedFirstName',
+            'lastName' => 'updatedLastName',
+            //         'party' => null,
+            'title' => 'Madame la vice présidente',
+            'gender' => 1,
+            'isActive' => true,
+            'phone' => '0607080919'
+        ];
+
+
+        $this->client->request(Request::METHOD_PUT, "/api/v2/structures/{$structure->getId()}/users/{$actorLs->getId()}",
+            [],
+            [],
+            [
+                "HTTP_X-AUTH-TOKEN" => $apiUser->getToken(),
+                'CONTENT_TYPE' => 'application/json',
+            ],
+            json_encode($data)
+        );
+
+        $this->assertResponseStatusCodeSame(200);
+        $response = $this->client->getResponse();
+        $user = json_decode($response->getContent(), true);
+
+
+        $this->assertSame($user['username'], 'updatedUserName');
+        $this->assertNotEmpty($user['party']);
+        $this->assertNotEmpty($user['role']);
+    }
+
+
+    public function testUpdateParty()
+    {
+        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
+        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
+        $actorLs = $this->getOneUserBy(['username' => 'actor1@libriciel']);
+        $partyOpposition = $this->getOnePartyBy(['name' => 'Opposition', 'structure' => $structure]);
+
+        $data = [
+            'party' => $partyOpposition->getId(),
+        ];
+
+        $this->client->request(Request::METHOD_PUT, "/api/v2/structures/{$structure->getId()}/users/{$actorLs->getId()}",
+            [],
+            [],
+            [
+                "HTTP_X-AUTH-TOKEN" => $apiUser->getToken(),
+                'CONTENT_TYPE' => 'application/json',
+            ],
+            json_encode($data)
+        );
+
+        $this->assertResponseStatusCodeSame(200);
+        $response = $this->client->getResponse();
+        $user = json_decode($response->getContent(), true);
+
+        $this->assertSame($user['party']['name'], 'Opposition');
+
+    }
+
+
+    public function testRemoveParty()
+    {
+        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
+        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
+        $actorLs = $this->getOneUserBy(['username' => 'actor1@libriciel']);
+
+        $data = [
+            'party' => null,
+        ];
+
+        $this->client->request(Request::METHOD_PUT, "/api/v2/structures/{$structure->getId()}/users/{$actorLs->getId()}",
+            [],
+            [],
+            [
+                "HTTP_X-AUTH-TOKEN" => $apiUser->getToken(),
+                'CONTENT_TYPE' => 'application/json',
+            ],
+            json_encode($data)
+        );
+
+        $this->assertResponseStatusCodeSame(200);
+        $response = $this->client->getResponse();
+        $user = json_decode($response->getContent(), true);
+
+        $this->assertEmpty($user['party']);
+
+    }
+
+
+    public function testUpdateRoleDoesNothing()
+    {
+        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
+        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
+        $actorLs = $this->getOneUserBy(['username' => 'actor1@libriciel']);
+        $roleSecretary = $this->getOneRoleBy(['name' => 'Secretary']);
+
+
+        $data = [
+            'role' => $roleSecretary->getId()
+        ];
+
+        $this->client->request(Request::METHOD_PUT, "/api/v2/structures/{$structure->getId()}/users/{$actorLs->getId()}",
+            [],
+            [],
+            [
+                "HTTP_X-AUTH-TOKEN" => $apiUser->getToken(),
+                'CONTENT_TYPE' => 'application/json',
+            ],
+            json_encode($data)
+        );
+
+        $this->assertResponseStatusCodeSame(200);
+        $response = $this->client->getResponse();
+        $user = json_decode($response->getContent(), true);
+
+        $this->assertSame('Actor', $user['role']['name']);
+
+    }
+
+
 }
 
 

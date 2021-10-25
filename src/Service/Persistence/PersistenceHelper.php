@@ -3,7 +3,6 @@
 namespace App\Service\Persistence;
 
 use App\Security\Http400Exception;
-use App\Security\Http403Exception;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -18,22 +17,17 @@ class PersistenceHelper
     {
         $validationErrors = $this->validator->validate($entity);
 
-
-        if($validationErrors->count()) {
+        if ($validationErrors->count()) {
             $errors = [];
             /** @var ConstraintViolation $validationError */
             foreach ($validationErrors as $validationError) {
                 $errors[] = "{$validationError->getMessage()} ( {$validationError->getPropertyPath()} : \"{$validationError->getInvalidValue()}\")";
             }
 
-            throw new Http400Exception(
-                implode(', ', $errors)
-            );
+            throw new Http400Exception(implode(', ', $errors));
         }
 
         $this->em->persist($entity);
         $this->em->flush();
     }
-
-
 }

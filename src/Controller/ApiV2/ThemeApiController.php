@@ -16,7 +16,8 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 /**
  * body {
- *   "name":"string",
+ *   "name": string,
+ *   "parent": uuid
  * }.
  */
 #[Route('/api/v2/structures/{structureId}/themes')]

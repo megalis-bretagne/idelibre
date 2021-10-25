@@ -16,7 +16,7 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 /**
  * body {
- *   "name":"string",
+ *   "name": string,
  * }.
  */
 #[Route('/api/v2/structures/{structureId}/parties')]
