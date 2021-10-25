@@ -52,7 +52,7 @@ class Sitting
      * @Assert\NotNull(message="La date et l'heure sont obligatoires")
      * @Groups({"sitting"})
      */
-    #[Groups(['sitting:read'])]
+    #[Groups(['sitting:read', 'sitting:write'])]
     private $date;
 
     /**
@@ -74,7 +74,7 @@ class Sitting
      * @Assert\Length(max="255")
      * @Groups({"sitting"})
      */
-    #[Groups(['sitting:detail'])]
+    #[Groups(['sitting:detail', 'sitting:write'])]
     private $place;
 
     /**
@@ -94,7 +94,7 @@ class Sitting
      * @ORM\JoinColumn(onDelete="SET NULL")
      * @Groups({"sitting"})
      */
-    #[Groups(['sitting:detail'])]
+    #[Groups(['sitting:detail', 'sitting:write:post'])]
     private $type;
 
     /**

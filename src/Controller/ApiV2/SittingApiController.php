@@ -7,24 +7,33 @@ use App\Entity\Structure;
 use App\Repository\ConvocationRepository;
 use App\Repository\ProjectRepository;
 use App\Repository\SittingRepository;
+use App\Security\Http400Exception;
+use App\Service\Seance\SittingManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 #[Route('/api/v2/structures/{structureId}/sittings')]
 #[ParamConverter('structure', class: Structure::class, options: ['id' => 'structureId'])]
 #[IsGranted('API_AUTHORIZED_STRUCTURE', subject: 'structure')]
 class SittingApiController extends AbstractController
 {
+
+    public function __construct(private DenormalizerInterface $denormalizer)
+    {
+    }
+
     #[Route('', name: 'get_all_sittings', methods: ['GET'])]
     public function getAll(
-        Structure $structure,
-        Request $request,
+        Structure         $structure,
+        Request           $request,
         SittingRepository $sittingRepository
-    ): JsonResponse {
+    ): JsonResponse
+    {
         $sittings = $sittingRepository->findByStructure($structure, null, $request->query->get('status'))
             ->getQuery()->getResult();
 
@@ -35,8 +44,9 @@ class SittingApiController extends AbstractController
     #[IsGranted('API_SAME_STRUCTURE', subject: ['structure', 'sitting'])]
     public function getById(
         Structure $structure,
-        Sitting $sitting
-    ): JsonResponse {
+        Sitting   $sitting
+    ): JsonResponse
+    {
         return $this->json($sitting, context: ['groups' => ['sitting:detail', 'sitting:read']]);
     }
 
@@ -44,10 +54,11 @@ class SittingApiController extends AbstractController
     #[ParamConverter('sitting', class: Sitting::class, options: ['id' => 'sittingId'])]
     #[IsGranted('API_SAME_STRUCTURE', subject: ['structure', 'sitting'])]
     public function getAllConvocations(
-        Structure $structure,
-        Sitting $sitting,
+        Structure             $structure,
+        Sitting               $sitting,
         ConvocationRepository $convocationRepository
-    ): JsonResponse {
+    ): JsonResponse
+    {
         $convocations = $convocationRepository->getConvocationsWithUserBySitting($sitting);
 
         return $this->json($convocations, context: ['groups' => 'convocation:read']);
@@ -57,10 +68,11 @@ class SittingApiController extends AbstractController
     #[ParamConverter('sitting', class: Sitting::class, options: ['id' => 'sittingId'])]
     #[IsGranted('API_SAME_STRUCTURE', subject: ['structure', 'sitting'])]
     public function getAllProjects(
-        Structure $structure,
-        Sitting $sitting,
+        Structure         $structure,
+        Sitting           $sitting,
         ProjectRepository $projectRepository
-    ): JsonResponse {
+    ): JsonResponse
+    {
         $projects = $projectRepository->getProjectsBySitting($sitting);
 
         return $this->json($projects, context: ['groups' => 'project:read']);
@@ -68,10 +80,52 @@ class SittingApiController extends AbstractController
 
     #[Route('', name: 'add_sitting', methods: ['POST'])]
     public function addSitting(
-        Structure $structure,
-        Request $request,
-    ) {
-        dd($request->files->all());
-        dd($request->request->all());
+        Structure      $structure,
+        Request        $request,
+        SittingManager $sittingManager
+    )
+    {
+        $context = ['groups' => ['sitting:write', 'sitting:write:post'], 'normalize_relations' => true];
+        /** @var Sitting $sitting */
+        $sitting = $this->denormalizer->denormalize($request->request->all(), Sitting::class, context: $context);
+
+        if (!$request->files->get('convocationFile')) {
+            throw new Http400Exception('File with key convocationFile is required');
+        }
+
+        $sittingManager->save(
+            $sitting,
+            $request->files->get('convocationFile'),
+            $request->files->get('invitationFile') ?? null,
+            $structure
+        );
+
+        return $this->json($sitting, context: ['groups' => ['sitting:detail', 'sitting:read']]);
+
+    }
+
+
+    #[Route('/{id}', name: 'update_sitting', methods: ['PUT'])]
+    #[IsGranted('API_SAME_STRUCTURE', subject: ['structure', 'sitting'])]
+    public function updateSitting(
+        Structure      $structure,
+        Sitting        $sitting,
+        Request        $request,
+        SittingManager $sittingManager
+    )
+    {
+        $context = ['object_to_populate' => $sitting, 'groups' => ['sitting:write']];
+
+        /** @var Sitting $sitting */
+        $sitting = $this->denormalizer->denormalize($request->request->all(), Sitting::class, context: $context);
+
+
+        $sittingManager->update(
+            $sitting,
+            $request->files->get('convocationFile') ?? null,
+            $request->files->get('invitationFile') ?? null
+        );
+
+        return $this->json($sitting, context: ['groups' => ['sitting:detail', 'sitting:read']]);
     }
 }

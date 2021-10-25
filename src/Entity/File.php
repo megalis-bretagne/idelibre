@@ -39,6 +39,7 @@ class File
      * @Assert\NotBlank
      * @Assert\Length(max="125")
      */
+    #[Groups(['sitting:detail', 'project:read'])]
     private $name;
 
     /**

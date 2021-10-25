@@ -155,8 +155,12 @@ class SittingApiControllerTest extends WebTestCase
         $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/convocation.pdf');
 
 
+
         $invitationFile = new UploadedFile(__DIR__ . '/../../resources/invitation.pdf', 'invitation.pdf', 'application/pdf');
         $convocationFile = new UploadedFile(__DIR__ . '/../../resources/convocation.pdf', 'convocation.pdf', 'application/pdf');
+
+
+
 
         $this->client->request(Request::METHOD_POST,
             "/api/v2/structures/{$structure->getId()}/sittings",
@@ -166,20 +170,67 @@ class SittingApiControllerTest extends WebTestCase
                 'place' => 'salle du conseil'
             ],
             [
-               'invitation_file' => $invitationFile,
-               'convocation_file' => $convocationFile
+               'invitationFile' => $invitationFile,
+               'convocationFile' => $convocationFile
             ],
             [
                 "HTTP_ACCEPT" => 'application/json',
                 "HTTP_X-AUTH-TOKEN" => $apiUser->getToken(),
             ],
         );
-            //json_encode($data));
 
         $response = $this->client->getResponse();
-        $projects = json_decode($response->getContent(), true);
+        $sitting = json_decode($response->getContent(), true);
 
-        $this->assertCount(2, $projects);
+        $this->assertNotEmpty($sitting['id']);
+        $this->assertSame($sitting['name'], "Conseil Communautaire Libriciel");
+        $this->assertNotEmpty($sitting['convocationFile']);
+        $this->assertNotEmpty($sitting['invitationFile']);
+    }
+
+
+
+    public function testUpdateSitting()
+    {
+        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
+        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
+        $sittingConseil = $this->getOneSittingBy(['name' => 'Conseil Libriciel', 'structure' => $structure]);
+       // $type = $this->getOneTypeBy(['name' => 'Conseil Communautaire Libriciel']);
+
+        $filesystem = new Filesystem();
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/invitation_updated.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/convocation_updated.pdf');
+
+
+
+        $invitationFile = new UploadedFile(__DIR__ . '/../../resources/invitation_updated.pdf', 'invitation_updated.pdf', 'application/pdf');
+        $convocationFile = new UploadedFile(__DIR__ . '/../../resources/convocation_updated.pdf', 'convocation_updated.pdf', 'application/pdf');
+
+
+        $this->client->request(Request::METHOD_PUT,
+            "/api/v2/structures/{$structure->getId()}/sittings/{$sittingConseil->getId()}",
+            [
+                'date' => '2020-10-22 17:30:00',
+                'place' => 'salle de la mairie'
+            ],
+            [
+               'invitationFile' => $invitationFile,
+               'convocationFile' => $convocationFile
+            ],
+            [
+                "HTTP_ACCEPT" => 'application/json',
+                "HTTP_X-AUTH-TOKEN" => $apiUser->getToken(),
+            ],
+        );
+
+        $response = $this->client->getResponse();
+        $sitting = json_decode($response->getContent(), true);
+dd($sitting);
+
+        $this->assertNotEmpty($sitting['id']);
+        $this->assertSame($sitting['name'], "Conseil Communautaire Libriciel");
+        $this->assertNotEmpty($sitting['convocationFile']);
+        $this->assertNotEmpty($sitting['invitationFile']);
     }
 
 }
