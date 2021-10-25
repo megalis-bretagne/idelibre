@@ -5,6 +5,7 @@ namespace App\Controller\ApiV2;
 use App\Entity\Structure;
 use App\Entity\Theme;
 use App\Repository\ThemeRepository;
+use App\Service\Persistence\PersistenceHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -26,7 +27,8 @@ class ThemeApiController extends AbstractController
     public function __construct(
         private DenormalizerInterface $denormalizer,
         private EntityManagerInterface $em,
-        private ThemeRepository $themeRepository
+        private ThemeRepository $themeRepository,
+        private PersistenceHelper $persistenceHelper
     ) {
     }
 
@@ -62,8 +64,7 @@ class ThemeApiController extends AbstractController
         $this->setParent($theme, $structure);
         $this->setFullName($theme);
 
-        $this->em->persist($theme);
-        $this->em->flush();
+        $this->persistenceHelper->validateAndPersist($theme);
 
         return $this->json($theme, status: 201, context: ['groups' => ['theme:read', 'theme:detail']]);
     }
@@ -79,8 +80,7 @@ class ThemeApiController extends AbstractController
 
         $this->setFullName($updatedTheme);
 
-        $this->em->persist($updatedTheme);
-        $this->em->flush();
+        $this->persistenceHelper->validateAndPersist($updatedTheme);
 
         return $this->json($updatedTheme, context: ['groups' => ['theme:detail', 'theme:read']]);
     }

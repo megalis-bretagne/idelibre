@@ -5,6 +5,7 @@ namespace App\Controller\ApiV2;
 use App\Entity\Structure;
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Service\Persistence\PersistenceHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -23,7 +24,8 @@ class UserApiController extends AbstractController
     public function __construct(
         private DenormalizerInterface $denormalizer,
         private EntityManagerInterface $em,
-        private UserPasswordHasherInterface $passwordHasher
+        private UserPasswordHasherInterface $passwordHasher,
+        private PersistenceHelper $persistenceHelper
     ) {
     }
 
@@ -59,8 +61,7 @@ class UserApiController extends AbstractController
             $user->setPassword($this->passwordHasher->hashPassword($user, $data['password']));
         }
 
-        $this->em->persist($user);
-        $this->em->flush();
+        $this->persistenceHelper->validateAndPersist($user);
 
         return $this->json($user, status: 201, context: ['groups' => ['user:detail', 'user:read']]);
     }
@@ -81,8 +82,7 @@ class UserApiController extends AbstractController
             $user->setPassword($this->passwordHasher->hashPassword($user, $data['password']));
         }
 
-        $this->em->persist($updatedUser);
-        $this->em->flush();
+        $this->persistenceHelper->validateAndPersist($updatedUser);
 
         return $this->json($user, context: ['groups' => ['user:detail', 'user:read']]);
     }

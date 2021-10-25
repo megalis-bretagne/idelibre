@@ -89,7 +89,7 @@ class PartyApiControllerTest extends WebTestCase
         $this->assertCount(1, $party['actors']);
     }
 
-    public function testPost()
+    public function testAdd()
     {
         $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
         $apiUser = $this->getOneApiUserBy(['token' => '1234']);
@@ -112,6 +112,33 @@ class PartyApiControllerTest extends WebTestCase
         $this->assertNotEmpty($party['id']);
         $this->assertSame('new party', $party['name'] );
 
+    }
+
+
+    public function testAddNoName()
+    {
+        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
+        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
+
+        $data = [
+            'name' => '',
+        ];
+
+        $this->client->request(Request::METHOD_POST, "/api/v2/structures/{$structure->getId()}/parties",
+            [],
+            [],
+            [
+                "HTTP_X-AUTH-TOKEN" => $apiUser->getToken(),
+                "CONTENT_TYPE" => "application/json"
+            ],
+            json_encode($data)
+        );
+        $this->assertResponseStatusCodeSame(400);
+
+        $response = $this->client->getResponse();
+        $error = json_decode($response->getContent(), true);
+
+        $this->assertSame("Cette valeur ne doit pas être vide. ( name : \"\")", $error['message']);
     }
 
 

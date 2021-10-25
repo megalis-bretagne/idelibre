@@ -137,7 +137,55 @@ class UserApiControllerTest extends WebTestCase
 
 
 
-    public function testPostNoRole()
+
+
+    public function testAddNoUsernameAndEmail()
+    {
+        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
+        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
+        $roleActor = $this->getOneRoleBy(['name' => 'Actor']);
+        $party = $this->getOnePartyBy(['name' => 'Majorité', 'structure' => $structure]);
+
+
+        $data = [
+            'firstName' => 'newFirstName',
+            'lastName' => 'newLastName',
+            'role' => $roleActor->getId(),
+            'party' => $party->getId(),
+            'title' => 'Madame la vice présidente',
+            'gender' => 1,
+            'isActive' => true,
+            'phone' => '0607080919'
+        ];
+
+        $this->client->request(Request::METHOD_POST, "/api/v2/structures/{$structure->getId()}/users",
+            [],
+            [],
+            [
+                "HTTP_X-AUTH-TOKEN" => $apiUser->getToken(),
+                'CONTENT_TYPE' => 'application/json',
+            ],
+            json_encode($data)
+        );
+        $this->assertResponseStatusCodeSame(400);
+
+        $response = $this->client->getResponse();
+        $error = json_decode($response->getContent(), true);
+
+        $this->assertSame(
+            "Cette valeur ne doit pas être vide. ( username : \"\"), Cette valeur ne doit pas être vide. ( email : \"\")",
+            $error["message"]
+        );
+    }
+
+
+
+
+
+
+
+
+    public function testAddNoRole()
     {
         $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
         $apiUser = $this->getOneApiUserBy(['token' => '1234']);
@@ -166,11 +214,11 @@ class UserApiControllerTest extends WebTestCase
 
         $response = $this->client->getResponse();
         $error = json_decode($response->getContent(), true);
-        $this->assertSame('Role must be set', $error['message'] );
+        $this->assertSame('Cette valeur ne doit pas être nulle. ( role : "")', $error['message'] );
 
     }
 
-    public function testPostForbiddenRole()
+    public function testAddForbiddenRole()
     {
         $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
         $apiUser = $this->getOneApiUserBy(['token' => '1234']);
@@ -206,7 +254,7 @@ class UserApiControllerTest extends WebTestCase
     }
 
 
-    public function testPostBadPartyId()
+    public function testAddBadPartyId()
     {
         $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
         $apiUser = $this->getOneApiUserBy(['token' => '1234']);
@@ -236,10 +284,11 @@ class UserApiControllerTest extends WebTestCase
             ],
             json_encode($data)
         );
-        $this->assertResponseStatusCodeSame(400);
+        $this->assertResponseStatusCodeSame(403);
 
         $response = $this->client->getResponse();
         $error = json_decode($response->getContent(), true);
+
         $this->assertSame("You can't use party : 216ddd2a-2ee8-4dd3-840d-efdd6f710ca0", $error['message']);
 
     }

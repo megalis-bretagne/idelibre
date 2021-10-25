@@ -30,39 +30,33 @@ class UserRelationVoter extends Voter
         $structure = $subject['structure'];
         $data = $subject['data'];
 
-        $role = $this->checkRole($data['role'] ?? null);
+        $this->checkRole($data['role'] ?? null);
 
-        return $this->checkParty($data['party'] ?? null, $structure, $role);
+        return $this->checkParty($data['party'] ?? null, $structure);
     }
 
     private function checkRole(?string $roleId)
     {
-        if (!$roleId) {
-            throw new \Exception('Role must be set', 400);
+        if(!$roleId) {
+            return;
         }
 
         $role = $this->roleRepository->find($roleId);
         if (!$role->getIsInStructureRole()) {
             throw new Http403Exception("You can't give role : $roleId");
         }
-
-        return $role;
     }
 
-    private function checkParty(?string $partyId, Structure $structure, Role $role): bool
+    private function checkParty(?string $partyId, Structure $structure): bool
     {
         if (!$partyId) {
             return true;
         }
 
-        if ('Actor' !== $role->getName()) {
-            throw new \Exception('Party must be linked to actor', 400);
-        }
-
         $party = $this->partyRepository->findBy(['id' => $partyId, 'structure' => $structure]);
 
         if (empty($party)) {
-            throw new \Exception("You can't use party : $partyId", 400);
+            throw new Http403Exception("You can't use party : $partyId");
         }
 
         return !empty($party);

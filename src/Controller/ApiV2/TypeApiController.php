@@ -5,6 +5,7 @@ namespace App\Controller\ApiV2;
 use App\Entity\Structure;
 use App\Entity\Type;
 use App\Repository\TypeRepository;
+use App\Service\Persistence\PersistenceHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -30,6 +31,7 @@ class TypeApiController extends AbstractController
     public function __construct(
         private DenormalizerInterface $denormalizer,
         private EntityManagerInterface $em,
+        private PersistenceHelper $persistenceHelper
     ) {
     }
 
@@ -55,8 +57,7 @@ class TypeApiController extends AbstractController
         $type = $this->denormalizer->denormalize($data, Type::class, context: ['groups' => ['type:write'], 'normalize_relations' => true]);
         $type->setStructure($structure);
 
-        $this->em->persist($type);
-        $this->em->flush();
+        $this->persistenceHelper->validateAndPersist($type);
 
         return $this->json($type, status: 201, context: ['groups' => ['type:detail', 'type:read']]);
     }
@@ -71,8 +72,7 @@ class TypeApiController extends AbstractController
         /** @var Type $type */
         $updatedType = $this->denormalizer->denormalize($data, Type::class, context: $context);
 
-        $this->em->persist($updatedType);
-        $this->em->flush();
+        $this->persistenceHelper->validateAndPersist($updatedType);
 
         return $this->json($type, context: ['groups' => ['type:detail', 'type:read']]);
     }

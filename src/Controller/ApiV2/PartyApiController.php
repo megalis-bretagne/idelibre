@@ -5,6 +5,7 @@ namespace App\Controller\ApiV2;
 use App\Entity\Party;
 use App\Entity\Structure;
 use App\Repository\PartyRepository;
+use App\Service\Persistence\PersistenceHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -26,6 +27,7 @@ class PartyApiController extends AbstractController
     public function __construct(
         private DenormalizerInterface $denormalizer,
         private EntityManagerInterface $em,
+        private PersistenceHelper $persistenceHelper
     ) {
     }
 
@@ -56,8 +58,7 @@ class PartyApiController extends AbstractController
 
         $party->setStructure($structure);
 
-        $this->em->persist($party);
-        $this->em->flush();
+        $this->persistenceHelper->validateAndPersist($party);
 
         return $this->json($party, status: 201, context: ['groups' => ['party:detail', 'party:read']]);
     }
@@ -71,8 +72,7 @@ class PartyApiController extends AbstractController
         /** @var Party $updatedParty */
         $updatedParty = $this->denormalizer->denormalize($data, Party::class, context: $context);
 
-        $this->em->persist($updatedParty);
-        $this->em->flush();
+        $this->persistenceHelper->validateAndPersist($updatedParty);
 
         return $this->json($party, context: ['groups' => ['party:detail', 'party:read']]);
     }
