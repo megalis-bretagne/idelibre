@@ -27,12 +27,14 @@ class Convocation
      * @ORM\Column(type="guid")
      * @Groups({"convocation"})
      */
+    #[Groups(['convocation:read'])]
     private $id;
 
     /**
      * @ORM\Column(type="boolean")
      * @Groups({"convocation"})
      */
+    #[Groups(['convocation:read'])]
     private $isRead = false;
 
     /**
@@ -44,12 +46,14 @@ class Convocation
      * @ORM\Column(type="boolean")
      * @Groups({"convocation"})
      */
+    #[Groups(['convocation:read'])]
     private $isActive = false;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
      * @Groups({"convocation"})
      */
+    #[Groups(['convocation:read'])]
     private $isEmailed = false;
 
     /**
@@ -65,6 +69,7 @@ class Convocation
      * @Groups({"convocation"})
      * @Assert\NotNull
      */
+    #[Groups(['convocation:read'])]
     private $user;
 
     /**
@@ -72,6 +77,7 @@ class Convocation
      * @ORM\JoinColumn(onDelete="SET NULL")
      * @Groups({"convocation"})
      */
+    #[Groups(['convocation:read'])]
     private $sentTimestamp;
 
     /**
@@ -79,6 +85,7 @@ class Convocation
      * @ORM\JoinColumn(onDelete="SET NULL")
      * @Groups({"convocation"})
      */
+    #[Groups(['convocation:read'])]
     private $receivedTimestamp;
 
     /**
@@ -86,18 +93,21 @@ class Convocation
      * @Groups({"convocation"})
      * @Assert\NotBlank
      */
+    #[Groups(['convocation:read'])]
     private $category;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"convocation"})
      */
+    #[Groups(['convocation:read'])]
     private $attendance;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"convocation"})
      */
+    #[Groups(['convocation:read'])]
     private $deputy;
 
     public function __construct()

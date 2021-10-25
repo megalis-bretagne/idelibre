@@ -36,6 +36,7 @@ class Sitting
      * @ORM\Column(type="guid")
      * @Groups({"sitting"})
      */
+    #[Groups(["sitting:read"])]
     private $id;
 
     /**
@@ -43,6 +44,7 @@ class Sitting
      * @Assert\Length(max="255")
      * @Groups({"sitting"})
      */
+    #[Groups(["sitting:read"])]
     private $name;
 
     /**
@@ -50,18 +52,21 @@ class Sitting
      * @Assert\NotNull(message="La date et l'heure sont obligatoires")
      * @Groups({"sitting"})
      */
+    #[Groups(["sitting:read"])]
     private $date;
 
     /**
      * @ORM\Column(type="integer")
      * @Groups({"sitting"})
      */
+    #[Groups(['sitting:detail'])]
     private $revision = 0;
 
     /**
      * @ORM\Column(type="boolean")
      * @Groups({"sitting"})
      */
+    #[Groups(["sitting:read"])]
     private $isArchived = false;
 
     /**
@@ -69,12 +74,14 @@ class Sitting
      * @Assert\Length(max="255")
      * @Groups({"sitting"})
      */
+    #[Groups(['sitting:detail'])]
     private $place;
 
     /**
      * @ORM\Column(type="datetime")
      * @Groups({"sitting"})
      */
+    #[Groups(['sitting:detail'])]
     private $createdAt;
 
     /**
@@ -87,6 +94,7 @@ class Sitting
      * @ORM\JoinColumn(onDelete="SET NULL")
      * @Groups({"sitting"})
      */
+    #[Groups(['sitting:detail'])]
     private $type;
 
     /**
@@ -99,6 +107,7 @@ class Sitting
     /**
      * @ORM\OneToOne(targetEntity=File::class, cascade={"persist", "remove"}, inversedBy="convocationSitting")
      */
+    #[Groups(['sitting:detail'])]
     private $convocationFile;
 
     /**
@@ -110,17 +119,20 @@ class Sitting
     /**
      * @ORM\OneToOne(targetEntity=File::class, inversedBy="invitationSitting", cascade={"persist", "remove"})
      */
+    #[Groups(['sitting:detail'])]
     private $invitationFile;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"sitting"})
      */
+    #[Groups(['sitting:detail'])]
     private $comelusId;
 
     /**
      * @ORM\OneToOne(targetEntity=Reminder::class, mappedBy="sitting", cascade={"persist", "remove"})
      */
+    #[Groups(['sitting:detail'])]
     private $reminder;
 
     /**

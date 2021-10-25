@@ -26,19 +26,19 @@ class Reminder
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid")
      */
-    #[Groups(['type:detail', 'type:write'])]
+    #[Groups(['type:detail', 'type:write', 'sitting:detail'])]
     private $id;
 
     /**
      * @ORM\Column(type="integer")
      */
-    #[Groups(['type:detail', 'type:write'])]
+    #[Groups(['type:detail', 'type:write', 'sitting:detail'])]
     private $duration = 60;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    #[Groups(['type:detail', 'type:write'])]
+    #[Groups(['type:detail', 'type:write', 'sitting:detail'])]
     private $isActive = false;
 
     /**

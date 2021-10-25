@@ -410,7 +410,6 @@ class UserApiControllerTest extends WebTestCase
         $user = json_decode($response->getContent(), true);
 
         $this->assertSame('Actor', $user['role']['name']);
-
     }
 
 

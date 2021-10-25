@@ -29,7 +29,7 @@ class Type
      * @ORM\Column(type="guid")
      * @Groups({"sitting"})
      */
-    #[Groups(['type:read'])]
+    #[Groups(['type:read', 'sitting:detail'])]
     private $id;
 
     /**
@@ -38,7 +38,7 @@ class Type
      * @Assert\Length(max="255")
      * @Groups({"sitting"})
      */
-    #[Groups(['type:read', 'type:write'])]
+    #[Groups(['type:read', 'type:write', 'sitting:detail'])]
     private $name;
 
     /**
