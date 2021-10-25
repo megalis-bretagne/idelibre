@@ -28,7 +28,7 @@ class Theme
      * @ORM\Column(type="guid")
      * @Groups({"theme"})
      */
-    #[Groups(['theme:read','project:read'])]
+    #[Groups(['theme:read', 'project:read'])]
     private $id;
 
     /**

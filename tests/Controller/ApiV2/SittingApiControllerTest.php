@@ -10,8 +10,10 @@ use App\DataFixtures\ProjectFixtures;
 use App\DataFixtures\SittingFixtures;
 use App\DataFixtures\StructureFixtures;
 use App\DataFixtures\TimestampFixtures;
+use App\DataFixtures\TypeFixtures;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
+use DateTimeImmutable;
 use Doctrine\Persistence\ObjectManager;
 use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -51,6 +53,7 @@ class SittingApiControllerTest extends WebTestCase
             FileFixtures::class,
             ProjectFixtures::class,
             AnnexFixtures::class,
+            TypeFixtures::class
         ]);
     }
 
@@ -114,8 +117,6 @@ class SittingApiControllerTest extends WebTestCase
         $response = $this->client->getResponse();
         $convocations = json_decode($response->getContent(), true);
 
-
-
         $this->assertCount(2, $convocations);
     }
 
@@ -141,5 +142,29 @@ class SittingApiControllerTest extends WebTestCase
     }
 
 
+    public function testAddSitting()
+    {
+        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
+        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
+        $type = $this->getOneTypeBy(['name' => 'Conseil Communautaire Libriciel']);
+        $data = [
+            'date' => "2020-10-22 11:00:00",
+            'type' => $type->getId()
+        ];
+
+        $this->client->request(Request::METHOD_POST,
+            "/api/v2/structures/{$structure->getId()}/sittings",
+            [], [],
+            [
+                "HTTP_ACCEPT" => 'application/json',
+                "HTTP_X-AUTH-TOKEN" => $apiUser->getToken(),
+            ],
+            json_encode($data));
+
+        $response = $this->client->getResponse();
+        $projects = json_decode($response->getContent(), true);
+
+        $this->assertCount(2, $projects);
+    }
 
 }

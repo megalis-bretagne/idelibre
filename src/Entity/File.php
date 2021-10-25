@@ -18,7 +18,6 @@ class File
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid")
      */
-
     #[Groups(['sitting:detail', 'project:read'])]
     private $id;
 
