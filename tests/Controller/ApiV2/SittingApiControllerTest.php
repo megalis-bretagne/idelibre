@@ -18,6 +18,8 @@ use Doctrine\Persistence\ObjectManager;
 use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 
 class SittingApiControllerTest extends WebTestCase
@@ -147,19 +149,32 @@ class SittingApiControllerTest extends WebTestCase
         $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
         $apiUser = $this->getOneApiUserBy(['token' => '1234']);
         $type = $this->getOneTypeBy(['name' => 'Conseil Communautaire Libriciel']);
-        $data = [
-            'date' => "2020-10-22 11:00:00",
-            'type' => $type->getId()
-        ];
+
+        $filesystem = new Filesystem();
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/invitation.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/convocation.pdf');
+
+
+        $invitationFile = new UploadedFile(__DIR__ . '/../../resources/invitation.pdf', 'invitation.pdf', 'application/pdf');
+        $convocationFile = new UploadedFile(__DIR__ . '/../../resources/convocation.pdf', 'convocation.pdf', 'application/pdf');
 
         $this->client->request(Request::METHOD_POST,
             "/api/v2/structures/{$structure->getId()}/sittings",
-            [], [],
+            [
+                'date' => '2020-10-22 11:00:00',
+                'type' => $type->getId(),
+                'place' => 'salle du conseil'
+            ],
+            [
+               'invitation_file' => $invitationFile,
+               'convocation_file' => $convocationFile
+            ],
             [
                 "HTTP_ACCEPT" => 'application/json',
                 "HTTP_X-AUTH-TOKEN" => $apiUser->getToken(),
             ],
-            json_encode($data));
+        );
+            //json_encode($data));
 
         $response = $this->client->getResponse();
         $projects = json_decode($response->getContent(), true);

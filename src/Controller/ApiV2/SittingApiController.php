@@ -21,11 +21,10 @@ class SittingApiController extends AbstractController
 {
     #[Route('', name: 'get_all_sittings', methods: ['GET'])]
     public function getAll(
-        Structure         $structure,
-        Request           $request,
+        Structure $structure,
+        Request $request,
         SittingRepository $sittingRepository
-    ): JsonResponse
-    {
+    ): JsonResponse {
         $sittings = $sittingRepository->findByStructure($structure, null, $request->query->get('status'))
             ->getQuery()->getResult();
 
@@ -36,9 +35,8 @@ class SittingApiController extends AbstractController
     #[IsGranted('API_SAME_STRUCTURE', subject: ['structure', 'sitting'])]
     public function getById(
         Structure $structure,
-        Sitting   $sitting
-    ): JsonResponse
-    {
+        Sitting $sitting
+    ): JsonResponse {
         return $this->json($sitting, context: ['groups' => ['sitting:detail', 'sitting:read']]);
     }
 
@@ -46,11 +44,10 @@ class SittingApiController extends AbstractController
     #[ParamConverter('sitting', class: Sitting::class, options: ['id' => 'sittingId'])]
     #[IsGranted('API_SAME_STRUCTURE', subject: ['structure', 'sitting'])]
     public function getAllConvocations(
-        Structure             $structure,
-        Sitting               $sitting,
+        Structure $structure,
+        Sitting $sitting,
         ConvocationRepository $convocationRepository
-    ): JsonResponse
-    {
+    ): JsonResponse {
         $convocations = $convocationRepository->getConvocationsWithUserBySitting($sitting);
 
         return $this->json($convocations, context: ['groups' => 'convocation:read']);
@@ -60,11 +57,10 @@ class SittingApiController extends AbstractController
     #[ParamConverter('sitting', class: Sitting::class, options: ['id' => 'sittingId'])]
     #[IsGranted('API_SAME_STRUCTURE', subject: ['structure', 'sitting'])]
     public function getAllProjects(
-        Structure         $structure,
-        Sitting           $sitting,
+        Structure $structure,
+        Sitting $sitting,
         ProjectRepository $projectRepository
-    ): JsonResponse
-    {
+    ): JsonResponse {
         $projects = $projectRepository->getProjectsBySitting($sitting);
 
         return $this->json($projects, context: ['groups' => 'project:read']);
@@ -73,12 +69,9 @@ class SittingApiController extends AbstractController
     #[Route('', name: 'add_sitting', methods: ['POST'])]
     public function addSitting(
         Structure $structure,
-        array     $data,
-        Request $request
-    )
-    {
-        dd($request->getAcceptableContentTypes());
+        Request $request,
+    ) {
+        dd($request->files->all());
+        dd($request->request->all());
     }
-
-
 }
