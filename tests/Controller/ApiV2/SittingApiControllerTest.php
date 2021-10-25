@@ -2,9 +2,11 @@
 
 namespace App\Tests\Controller\ApiV2;
 
+use App\DataFixtures\AnnexFixtures;
 use App\DataFixtures\ApiUserFixtures;
 use App\DataFixtures\ConvocationFixtures;
 use App\DataFixtures\FileFixtures;
+use App\DataFixtures\ProjectFixtures;
 use App\DataFixtures\SittingFixtures;
 use App\DataFixtures\StructureFixtures;
 use App\DataFixtures\TimestampFixtures;
@@ -46,7 +48,9 @@ class SittingApiControllerTest extends WebTestCase
             StructureFixtures::class,
             ConvocationFixtures::class,
             TimestampFixtures::class,
-            FileFixtures::class
+            FileFixtures::class,
+            ProjectFixtures::class,
+            AnnexFixtures::class,
         ]);
     }
 
@@ -116,6 +120,25 @@ class SittingApiControllerTest extends WebTestCase
     }
 
 
+    public function testGetAllProjects()
+    {
+        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
+        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
+        $sittingConseil = $this->getOneSittingBy(['name' => 'Conseil Libriciel', 'structure' => $structure]);
+
+        $this->client->request(Request::METHOD_GET,
+            "/api/v2/structures/{$structure->getId()}/sittings/{$sittingConseil->getId()}/projects",
+            [], [],
+            [
+                "HTTP_X-AUTH-TOKEN" => $apiUser->getToken(),
+                "CONTENT_TYPE" => 'application/json'
+            ]);
+
+        $response = $this->client->getResponse();
+        $projects = json_decode($response->getContent(), true);
+
+        $this->assertCount(2, $projects);
+    }
 
 
 

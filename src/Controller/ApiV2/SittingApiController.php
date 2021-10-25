@@ -5,6 +5,7 @@ namespace App\Controller\ApiV2;
 use App\Entity\Sitting;
 use App\Entity\Structure;
 use App\Repository\ConvocationRepository;
+use App\Repository\ProjectRepository;
 use App\Repository\SittingRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -39,7 +40,6 @@ class SittingApiController extends AbstractController
         return $this->json($sitting, context: ['groups' => ['sitting:detail', 'sitting:read']]);
     }
 
-
     #[Route('/{sittingId}/convocations', name: 'get_all_convocations_by_sitting', methods: ['GET'])]
     #[ParamConverter('sitting', class: Sitting::class, options: ['id' => 'sittingId'])]
     #[IsGranted('API_SAME_STRUCTURE', subject: ['structure', 'sitting'])]
@@ -53,19 +53,16 @@ class SittingApiController extends AbstractController
         return $this->json($convocations, context: ['groups' => 'convocation:read']);
     }
 
-
-
-    #[Route('/{sittingId}/convocations', name: 'get_all_convocations_by_sitting', methods: ['GET'])]
+    #[Route('/{sittingId}/projects', name: 'get_all_projects_by_sitting', methods: ['GET'])]
     #[ParamConverter('sitting', class: Sitting::class, options: ['id' => 'sittingId'])]
     #[IsGranted('API_SAME_STRUCTURE', subject: ['structure', 'sitting'])]
     public function getAllProjects(
         Structure $structure,
         Sitting $sitting,
-        ConvocationRepository $convocationRepository
+        ProjectRepository $projectRepository
     ): JsonResponse {
-        $convocations = $convocationRepository->getConvocationsWithUserBySitting($sitting);
+        $projects = $projectRepository->getProjectsBySitting($sitting);
 
-        return $this->json($convocations, context: ['groups' => 'convocation:read']);
+        return $this->json($projects, context: ['groups' => 'project:read']);
     }
-
 }

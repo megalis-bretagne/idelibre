@@ -7,6 +7,7 @@ use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -19,6 +20,7 @@ class Project
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid")
      */
+    #[Groups(['project:read'])]
     private $id;
 
     /**
@@ -26,12 +28,14 @@ class Project
      * @Assert\Length(max="512")
      * @Assert\NotBlank
      */
+    #[Groups(['project:read'])]
     private $name;
 
     /**
      * @ORM\Column(type="integer")
      * @Assert\NotNull
      */
+    #[Groups(['project:read'])]
     private $rank;
 
     /**
@@ -39,18 +43,21 @@ class Project
      * @ORM\JoinColumn(nullable=false)
      * @Assert\NotNull
      */
+    #[Groups(['project:read'])]
     private $file;
 
     /**
      * @ORM\ManyToOne(targetEntity=Theme::class)
      * @ORM\JoinColumn(onDelete="SET NULL")
      */
+    #[Groups(['project:read'])]
     private $theme;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class)
      * @ORM\JoinColumn(onDelete="SET NULL")
      */
+    #[Groups(['project:read'])]
     private $reporter;
 
     /**
@@ -69,6 +76,7 @@ class Project
      * @ORM\OneToMany(targetEntity=Annex::class, mappedBy="project")
      * @ORM\OrderBy({"rank" = "ASC"})
      */
+    #[Groups(['project:read'])]
     private $annexes;
 
     public function __construct()

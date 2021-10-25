@@ -61,4 +61,19 @@ class ProjectRepository extends ServiceEntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    public function getProjectsBySitting(Sitting $sitting): array
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.sitting = :sitting')
+            ->setParameter('sitting', $sitting)
+            ->leftjoin('p.annexes', 'a')
+            ->addSelect('a')
+            ->leftJoin('a.file', 'fa')
+            ->addSelect('fa')
+            ->leftJoin('p.file', 'fp')
+            ->addSelect('fp')
+            ->getQuery()
+            ->getResult();
+    }
 }

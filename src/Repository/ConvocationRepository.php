@@ -92,7 +92,6 @@ class ConvocationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-
     public function getConvocationsWithUserBySitting(Sitting $sitting): array
     {
         return $this->createQueryBuilder('c')
@@ -107,5 +106,6 @@ class ConvocationRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
 
 }

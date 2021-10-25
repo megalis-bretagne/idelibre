@@ -36,7 +36,7 @@ class Sitting
      * @ORM\Column(type="guid")
      * @Groups({"sitting"})
      */
-    #[Groups(["sitting:read"])]
+    #[Groups(['sitting:read'])]
     private $id;
 
     /**
@@ -44,7 +44,7 @@ class Sitting
      * @Assert\Length(max="255")
      * @Groups({"sitting"})
      */
-    #[Groups(["sitting:read"])]
+    #[Groups(['sitting:read'])]
     private $name;
 
     /**
@@ -52,7 +52,7 @@ class Sitting
      * @Assert\NotNull(message="La date et l'heure sont obligatoires")
      * @Groups({"sitting"})
      */
-    #[Groups(["sitting:read"])]
+    #[Groups(['sitting:read'])]
     private $date;
 
     /**
@@ -66,7 +66,7 @@ class Sitting
      * @ORM\Column(type="boolean")
      * @Groups({"sitting"})
      */
-    #[Groups(["sitting:read"])]
+    #[Groups(['sitting:read'])]
     private $isArchived = false;
 
     /**

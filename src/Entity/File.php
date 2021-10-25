@@ -18,7 +18,8 @@ class File
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid")
      */
-    #[Groups(['sitting:detail'])]
+
+    #[Groups(['sitting:detail', 'project:read'])]
     private $id;
 
     /**
@@ -31,6 +32,7 @@ class File
     /**
      * @ORM\Column(type="float", nullable=true)
      */
+    #[Groups(['sitting:detail', 'project:read'])]
     private $size;
 
     /**

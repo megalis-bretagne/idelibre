@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\AnnexRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -16,12 +17,14 @@ class Annex
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid")
      */
+    #[Groups(['project:read'])]
     private $id;
 
     /**
      * @ORM\Column(type="integer")
      * @Assert\NotBlank
      */
+    #[Groups(['project:read'])]
     private $rank;
 
     /**
@@ -29,6 +32,7 @@ class Annex
      * @ORM\JoinColumn(nullable=false)
      * @Assert\NotNull
      */
+    #[Groups(['project:read'])]
     private $file;
 
     /**
