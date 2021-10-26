@@ -208,9 +208,12 @@ class CsvControllerTest extends WebTestCase
         $title = $crawler->filter('html:contains("Erreurs lors de l\'import")');
         $this->assertCount(1, $title);
 
-
-        $errorMsg = $crawler->filter('html:contains("Il est obligatoire de définir un role parmi les valeurs 1, 2 ou 3.")');
+        $errorMsg = $crawler->filter('html:contains("Cette valeur ne doit pas être nulle.")');
         $this->assertCount(1, $errorMsg);
+        $errorMsg = $crawler->filter('html:contains("Champ en erreur : role")');
+        $this->assertCount(1, $errorMsg);
+
+
     }
 
 

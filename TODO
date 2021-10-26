@@ -212,3 +212,19 @@ eenlever l'extension @ dans le type de seance dans la liste
 
 
 RENOMER CALENDAR en REMINDER pour le model
+
+
+                  id                  |             structure_id             |          name          | token
+--------------------------------------+--------------------------------------+------------------------+-------
+ 3f79ab1b-3727-4f6d-a839-d7b3d3a6c46f | 3f79ab1b-3727-4f6d-a839-d7b3d3a6c44a | api tructure libriciel | 1234
+(1 row)
+
+
+
+insert into api_user(id, structure_id, name, token, api_role_id)
+  values('3f79ab1b-3727-4f6d-a839-d7b3d3a6c46f', '3f79ab1b-3727-4f6d-a839-d7b3d3a6c44a', 'libriciel api', '1234', 'ba98ff85-a720-4ca6-a877-c91de3ac4cf4');
+
+
+TODO EMPECHER d'utiliser des données interdite exemple. associer un utilisateur d'une autre structure idem pour un party ou mettre un droit trop haut !
+
+EMPECHER DE MODIFIER UN ELEMENT QUI N'EST PAS DANS LA STRUCTURE DE L'URL !

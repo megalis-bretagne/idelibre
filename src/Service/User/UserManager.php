@@ -6,7 +6,7 @@ use App\Entity\Group;
 use App\Entity\Role;
 use App\Entity\Structure;
 use App\Entity\User;
-use App\Repository\TypeRepository;
+use App\Repository\UserRepository;
 use App\Service\role\RoleManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -15,24 +15,13 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class UserManager
 {
-    private EntityManagerInterface $em;
-    private UserPasswordHasherInterface $passwordHasher;
-    private ValidatorInterface $validator;
-    private RoleManager $roleManager;
-    private TypeRepository $typeRepository;
-
     public function __construct(
-        EntityManagerInterface $em,
-        UserPasswordHasherInterface $passwordHasher,
-        ValidatorInterface $validator,
-        RoleManager $roleManager,
-        TypeRepository $typeRepository
+        private EntityManagerInterface $em,
+        private UserPasswordHasherInterface $passwordHasher,
+        private ValidatorInterface $validator,
+        private RoleManager $roleManager,
+        private UserRepository $userRepository
     ) {
-        $this->em = $em;
-        $this->passwordHasher = $passwordHasher;
-        $this->validator = $validator;
-        $this->roleManager = $roleManager;
-        $this->typeRepository = $typeRepository;
     }
 
     public function save(User $user, ?string $plainPassword, ?Structure $structure): void

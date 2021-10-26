@@ -21,6 +21,8 @@ services:
       - ./config:/app/config
       - ./vendor:/app/vendor
       - ./migrations:/app/migrations
+      - ./composer.json:/app/composer.json
+      - ./composer.lock:/app/composer.lock
 
     command: ["/app/docker-resources/initApp.sh"]
 

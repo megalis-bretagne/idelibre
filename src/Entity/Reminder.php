@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ReminderRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=ReminderRepository::class)
@@ -25,16 +26,19 @@ class Reminder
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid")
      */
+    #[Groups(['type:detail', 'type:write', 'sitting:detail'])]
     private $id;
 
     /**
      * @ORM\Column(type="integer")
      */
+    #[Groups(['type:detail', 'type:write', 'sitting:detail'])]
     private $duration = 60;
 
     /**
      * @ORM\Column(type="boolean")
      */
+    #[Groups(['type:detail', 'type:write', 'sitting:detail'])]
     private $isActive = false;
 
     /**

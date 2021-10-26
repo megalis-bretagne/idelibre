@@ -3,11 +3,15 @@
 namespace App\Tests;
 
 use App\Entity\Annex;
+use App\Entity\ApiUser;
 use App\Entity\Convocation;
 use App\Entity\Group;
+use App\Entity\Party;
 use App\Entity\Project;
+use App\Entity\Role;
 use App\Entity\Sitting;
 use App\Entity\Structure;
+use App\Entity\Theme;
 use App\Entity\Type;
 use App\Entity\User;
 
@@ -61,5 +65,25 @@ trait FindEntityTrait
     public function getOneGroupBy(array $criteria): ?Group
     {
         return $this->getOneEntityBy(Group::class, $criteria);
+    }
+
+    public function getOneApiUserBy(array $criteria): ?ApiUser
+    {
+        return $this->getOneEntityBy(ApiUser::class, $criteria);
+    }
+
+    public function getOnePartyBy(array $criteria): ?Party
+    {
+        return $this->getOneEntityBy(Party::class, $criteria);
+    }
+
+    public function getOneRoleBy(array $criteria): ?Role
+    {
+        return $this->getOneEntityBy(Role::class, $criteria);
+    }
+
+    public function getOneThemeBy(array $criteria): ?Theme
+    {
+        return $this->getOneEntityBy(Theme::class, $criteria);
     }
 }

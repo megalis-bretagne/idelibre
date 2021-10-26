@@ -65,14 +65,14 @@ class SittingRepositoryTest extends WebTestCase
         $this->assertCount(0, $this->sittingRepository->findWithTypesByStructure($structureLs, [])->getQuery()->getResult());
         $this->assertCount(0, $this->sittingRepository->findWithTypesByStructure($structureLs, [$typeNotUsed])->getQuery()->getResult());
         $this->assertCount(1, $this->sittingRepository->findWithTypesByStructure($structureLs, [$typeConseil])->getQuery()->getResult());
-        $this->assertCount(2, $this->sittingRepository->findWithTypesByStructure($structureLs, [$typeConseil, $typeBureau])->getQuery()->getResult());
+        $this->assertCount(3, $this->sittingRepository->findWithTypesByStructure($structureLs, [$typeConseil, $typeBureau])->getQuery()->getResult());
     }
 
     public function testFindByStructure()
     {
         $structureLs = $this->getOneStructureBy(['name' => 'Libriciel']);
 
-        $this->assertCount(2, $this->sittingRepository->findByStructure($structureLs)->getQuery()->getResult());
+        $this->assertCount(3, $this->sittingRepository->findByStructure($structureLs)->getQuery()->getResult());
     }
 
     public function testFindActiveFromStructure()

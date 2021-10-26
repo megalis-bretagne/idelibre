@@ -9,15 +9,10 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class TypeManager
 {
-    private TypeRepository $typeRepository;
-    private EntityManagerInterface $em;
-
     public function __construct(
-        TypeRepository $typeRepository,
-        EntityManagerInterface $em
+        private TypeRepository $typeRepository,
+        private EntityManagerInterface $em
     ) {
-        $this->typeRepository = $typeRepository;
-        $this->em = $em;
     }
 
     public function save(

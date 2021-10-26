@@ -28,6 +28,7 @@ class Theme
      * @ORM\Column(type="guid")
      * @Groups({"theme"})
      */
+    #[Groups(['theme:read', 'project:read'])]
     private $id;
 
     /**
@@ -36,6 +37,7 @@ class Theme
      * @Assert\NotBlank
      * @Assert\Length(max="255")
      */
+    #[Groups(['theme:read', 'theme:write', 'project:read'])]
     private $name;
 
     /**
@@ -69,6 +71,7 @@ class Theme
      * @ORM\ManyToOne(targetEntity="App\Entity\Theme", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="cascade")
      */
+    #[Groups('theme:write:post')]
     private $parent;
 
     /**
@@ -88,6 +91,7 @@ class Theme
      * @ORM\Column(type="string", length=512, nullable=true)
      * @Groups({"theme"})
      */
+    #[Groups(['theme:read', 'project:read'])]
     private $fullName;
 
     public function getId(): string
@@ -113,7 +117,7 @@ class Theme
         return $this;
     }
 
-    public function getParent(): Theme
+    public function getParent(): ?Theme
     {
         return $this->parent;
     }
@@ -162,7 +166,7 @@ class Theme
         return $this->fullName;
     }
 
-    public function setFullName(string $fullName): self
+    public function setFullName(?string $fullName): self
     {
         $this->fullName = $fullName;
 

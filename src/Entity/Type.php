@@ -29,6 +29,7 @@ class Type
      * @ORM\Column(type="guid")
      * @Groups({"sitting"})
      */
+    #[Groups(['type:read', 'sitting:detail'])]
     private $id;
 
     /**
@@ -37,11 +38,13 @@ class Type
      * @Assert\Length(max="255")
      * @Groups({"sitting"})
      */
+    #[Groups(['type:read', 'type:write', 'sitting:detail'])]
     private $name;
 
     /**
      * @ORM\ManyToMany(targetEntity=User::class, inversedBy="associatedTypes")
      */
+    #[Groups(['type:detail', 'type:write'])]
     private $associatedUsers;
 
     /**
@@ -66,17 +69,20 @@ class Type
      * @ORM\Column(type="boolean", nullable=true)
      * @Groups({"sitting"})
      */
+    #[Groups(['type:read', 'type:write'])]
     private $isSms;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
      * @Groups({"sitting"})
      */
+    #[Groups(['type:read', 'type:write'])]
     private $isComelus;
 
     /**
      * @ORM\OneToOne(targetEntity=Reminder::class, mappedBy="type", cascade={"persist", "remove"})
      */
+    #[Groups(['type:detail', 'type:write'])]
     private $reminder;
 
     public function __construct()

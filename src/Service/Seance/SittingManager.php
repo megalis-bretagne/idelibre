@@ -6,6 +6,7 @@ use App\Entity\Sitting;
 use App\Entity\Structure;
 use App\Entity\User;
 use App\Message\UpdatedSitting;
+use App\Repository\ProjectRepository;
 use App\Repository\SittingRepository;
 use App\Service\Convocation\ConvocationManager;
 use App\Service\File\FileManager;
@@ -20,36 +21,18 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 class SittingManager
 {
-    private ConvocationManager $convocationManager;
-    private FileManager $fileManager;
-    private EntityManagerInterface $em;
-    private MessageBusInterface $messageBus;
-    private ProjectManager $projectManager;
-    private RoleManager $roleManager;
-    private SittingRepository $sittingRepository;
-    private PdfSittingGenerator $pdfSittingGenerator;
-    private ZipSittingGenerator $zipSittingGenerator;
-
     public function __construct(
-        ConvocationManager $convocationManager,
-        FileManager $fileManager,
-        EntityManagerInterface $em,
-        MessageBusInterface $messageBus,
-        ProjectManager $projectManager,
-        RoleManager $roleManager,
-        SittingRepository $sittingRepository,
-        PdfSittingGenerator $pdfSittingGenerator,
-        ZipSittingGenerator $zipSittingGenerator
+        private ConvocationManager $convocationManager,
+        private FileManager $fileManager,
+        private EntityManagerInterface $em,
+        private MessageBusInterface $messageBus,
+        private ProjectManager $projectManager,
+        private RoleManager $roleManager,
+        private SittingRepository $sittingRepository,
+        private PdfSittingGenerator $pdfSittingGenerator,
+        private ZipSittingGenerator $zipSittingGenerator,
+        private ProjectRepository $projectRepository
     ) {
-        $this->convocationManager = $convocationManager;
-        $this->fileManager = $fileManager;
-        $this->em = $em;
-        $this->messageBus = $messageBus;
-        $this->projectManager = $projectManager;
-        $this->roleManager = $roleManager;
-        $this->sittingRepository = $sittingRepository;
-        $this->pdfSittingGenerator = $pdfSittingGenerator;
-        $this->zipSittingGenerator = $zipSittingGenerator;
     }
 
     public function save(
@@ -186,5 +169,17 @@ class SittingManager
         }
 
         return false;
+    }
+
+    public function reorderProjects(Sitting $sitting): void
+    {
+        $projects = $this->projectRepository->getProjectsBySitting($sitting);
+
+        foreach ($projects as $pos => $project) {
+            $project->setRank($pos);
+            $this->em->persist($project);
+        }
+
+        $this->em->flush();
     }
 }

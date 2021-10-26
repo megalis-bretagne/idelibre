@@ -21,6 +21,7 @@ class Timestamp
      *
      * @var string|null
      */
+    #[Groups(['convocation:read'])]
     private $id;
 
     /**
@@ -29,6 +30,7 @@ class Timestamp
      *
      * @var DateTimeInterface
      */
+    #[Groups(['convocation:read'])]
     private $createdAt;
 
     /**
@@ -59,7 +61,7 @@ class Timestamp
         $this->createdAt = new DateTimeImmutable();
     }
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }

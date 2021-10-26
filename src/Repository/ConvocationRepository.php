@@ -91,4 +91,19 @@ class ConvocationRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function getConvocationsWithUserBySitting(Sitting $sitting): array
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.sitting = :sitting')
+            ->setParameter('sitting', $sitting)
+            ->join('c.user', 'user')
+            ->addSelect('user')
+            ->leftJoin('c.sentTimestamp', 'sent')
+            ->addSelect('sent')
+            ->leftJoin('c.receivedTimestamp', 'received')
+            ->addSelect('received')
+            ->getQuery()
+            ->getResult();
+    }
 }
