@@ -17,8 +17,7 @@ class LegacyWsAuthentication
         private UserRepository $userRepository,
         private UserPasswordHasherInterface $passwordHasher,
         private LegacyPassword $legacyPassword
-    )
-    {
+    ) {
     }
 
     public function getStructureFromLegacyConnection(string $legacyConnectionName): ?Structure

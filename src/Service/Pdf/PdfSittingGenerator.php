@@ -16,8 +16,7 @@ class PdfSittingGenerator
         private ParameterBagInterface $bag,
         private Filesystem $filesystem,
         private LoggerInterface $logger
-    )
-    {
+    ) {
     }
 
     public function generateFullSittingPdf(Sitting $sitting): void

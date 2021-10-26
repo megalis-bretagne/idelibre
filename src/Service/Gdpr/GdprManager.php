@@ -11,8 +11,7 @@ class GdprManager
     public function __construct(
         private GdprRepository $gdprRepository,
         private EntityManagerInterface $em
-    )
-    {
+    ) {
     }
 
     public function getGdpr(): ?Gdpr

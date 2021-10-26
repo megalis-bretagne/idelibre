@@ -17,8 +17,7 @@ class StructureManager
         private UserPasswordHasherInterface $passwordHasher,
         private ValidatorInterface $validator,
         private ImpersonateStructure $impersonateStructure
-    )
-    {
+    ) {
     }
 
     public function save(Structure $structure): void

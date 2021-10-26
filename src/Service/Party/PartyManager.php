@@ -13,8 +13,7 @@ class PartyManager
     public function __construct(
         private EntityManagerInterface $em,
         private UserRepository $userRepository
-    )
-    {
+    ) {
     }
 
     public function save(Party $party, Structure $structure): void

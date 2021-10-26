@@ -13,8 +13,7 @@ class PdfSittingReport
         private Pdf $pdf,
         private Environment $twig,
         private ConvocationRepository $convocationRepository
-    )
-    {
+    ) {
     }
 
     public function generate(Sitting $sitting): string

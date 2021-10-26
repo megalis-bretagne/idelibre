@@ -19,8 +19,7 @@ class TimestampManager
         private EntityManagerInterface $em,
         private TimestampContentFileGenerator $contentGenerator,
         private LshorodatageInterface $lshorodatage
-    )
-    {
+    ) {
     }
 
     public function delete(Timestamp $timestamp): void

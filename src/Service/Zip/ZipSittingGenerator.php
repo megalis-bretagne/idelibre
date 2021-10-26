@@ -12,8 +12,7 @@ class ZipSittingGenerator
     public function __construct(
         private ParameterBagInterface $bag,
         private Filesystem $filesystem
-    )
-    {
+    ) {
     }
 
     public function generateZipSitting(Sitting $sitting): string

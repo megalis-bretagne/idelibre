@@ -19,8 +19,7 @@ class GroupManager
         private ValidatorInterface $validator,
         private StructureRepository $structureRepository,
         private RoleManager $roleManager
-    )
-    {
+    ) {
     }
 
     public function save(Group $group): void

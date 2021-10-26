@@ -16,8 +16,7 @@ class WsActorManager
         private UserRepository $userRepository,
         private RoleManager $roleManager,
         private ActorFinder $actorFinder
-    )
-    {
+    ) {
     }
 
     /**

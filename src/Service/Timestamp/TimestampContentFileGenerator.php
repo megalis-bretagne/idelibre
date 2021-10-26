@@ -18,8 +18,7 @@ class TimestampContentFileGenerator
         private Environment $twig,
         private ParameterBagInterface $bag,
         private Filesystem $filesystem
-    )
-    {
+    ) {
     }
 
     /**

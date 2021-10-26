@@ -32,8 +32,7 @@ class ProjectManager
         private AnnexManager $annexManager,
         private EntityManagerInterface $em,
         private ClientNotifierInterface $clientNotifier
-    )
-    {
+    ) {
     }
 
     /**

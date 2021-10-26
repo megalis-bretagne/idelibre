@@ -12,8 +12,7 @@ class ThemeManager
     public function __construct(
         private ThemeRepository $themeRepository,
         private EntityManagerInterface $em
-    )
-    {
+    ) {
     }
 
     public function save(Theme $theme, Structure $structure, ?Theme $parentTheme = null): Theme

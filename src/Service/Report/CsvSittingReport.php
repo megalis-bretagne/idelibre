@@ -15,8 +15,7 @@ class CsvSittingReport
     public function __construct(
         private ConvocationRepository $convocationRepository,
         private DateUtil $dateUtil
-    )
-    {
+    ) {
     }
 
     public function generate(Sitting $sitting): string

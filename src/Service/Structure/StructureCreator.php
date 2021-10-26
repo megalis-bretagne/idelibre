@@ -25,8 +25,7 @@ class StructureCreator
         private ComelusConnectorManager $comelusConnectorManager,
         private LsmessageConnectorManager $lsmessageConnectorManager,
         private DefaultTemplateCreator $defaultTemplateCreator
-    )
-    {
+    ) {
     }
 
     /**

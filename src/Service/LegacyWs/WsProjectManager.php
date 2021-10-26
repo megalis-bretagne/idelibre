@@ -21,8 +21,7 @@ class WsProjectManager
         private ThemeManager $themeManager,
         private FileManager $fileManager,
         private UserRepository $userRepository
-    )
-    {
+    ) {
     }
 
     /**

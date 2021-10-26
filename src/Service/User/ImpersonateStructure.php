@@ -14,8 +14,7 @@ class ImpersonateStructure
         private EntityManagerInterface $em,
         private Security $security,
         private UserRepository $userRepository
-    )
-    {
+    ) {
     }
 
     public function logInStructure(Structure $structure): bool

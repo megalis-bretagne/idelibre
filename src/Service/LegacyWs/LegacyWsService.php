@@ -26,8 +26,7 @@ class LegacyWsService
         private SittingRepository $sittingRepository,
         private WsActorManager $wsActorManager,
         private WsProjectManager $wsProjectManager
-    )
-    {
+    ) {
     }
 
     /**
