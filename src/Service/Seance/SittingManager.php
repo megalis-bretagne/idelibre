@@ -21,30 +21,26 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 class SittingManager
 {
-
     public function __construct(
-        private ConvocationManager     $convocationManager,
-        private FileManager            $fileManager,
+        private ConvocationManager $convocationManager,
+        private FileManager $fileManager,
         private EntityManagerInterface $em,
-        private MessageBusInterface    $messageBus,
-        private ProjectManager         $projectManager,
-        private RoleManager            $roleManager,
-        private SittingRepository      $sittingRepository,
-        private PdfSittingGenerator    $pdfSittingGenerator,
-        private ZipSittingGenerator    $zipSittingGenerator,
-        private ProjectRepository      $projectRepository
-    )
-    {
-
+        private MessageBusInterface $messageBus,
+        private ProjectManager $projectManager,
+        private RoleManager $roleManager,
+        private SittingRepository $sittingRepository,
+        private PdfSittingGenerator $pdfSittingGenerator,
+        private ZipSittingGenerator $zipSittingGenerator,
+        private ProjectRepository $projectRepository
+    ) {
     }
 
     public function save(
-        Sitting       $sitting,
-        UploadedFile  $uploadedConvocationFile,
+        Sitting $sitting,
+        UploadedFile $uploadedConvocationFile,
         ?UploadedFile $uploadedInvitationFile,
-        Structure     $structure
-    ): string
-    {
+        Structure $structure
+    ): string {
         // TODO remove file if transaction failed
         $convocationFile = $this->fileManager->save($uploadedConvocationFile, $structure);
 
@@ -65,10 +61,9 @@ class SittingManager
 
     private function createInvitationsInvitableEmployeesAndGuests(
         ?UploadedFile $uploadedInvitationFile,
-        Sitting       $sitting,
-        Structure     $structure
-    )
-    {
+        Sitting $sitting,
+        Structure $structure
+    ) {
         if ($uploadedInvitationFile) {
             $invitationFile = $this->fileManager->save($uploadedInvitationFile, $structure);
             $this->convocationManager->createConvocationsInvitableEmployees($sitting);
@@ -187,6 +182,4 @@ class SittingManager
 
         $this->em->flush();
     }
-
-
 }
