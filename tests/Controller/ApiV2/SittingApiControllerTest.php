@@ -330,4 +330,30 @@ class SittingApiControllerTest extends WebTestCase
         $this->assertSame('Sitting already contain projects', $error['message']);
     }
 
+    public function testDeleteProject()
+    {
+        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
+        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
+        $sittingConseil = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
+        $projectId = $this->getOneProjectBy(['name' => 'Project 1'])->getId();
+
+        $this->client->request(Request::METHOD_DELETE,
+            "/api/v2/structures/{$structure->getId()}/sittings/{$sittingConseil->getId()}/projects/{$projectId}",
+            [],
+            [],
+            [
+                "HTTP_ACCEPT" => 'application/json',
+                "HTTP_X-AUTH-TOKEN" => $apiUser->getToken(),
+            ],
+        );
+
+        $this->assertResponseStatusCodeSame(204);
+
+        $deleted = $this->getOneProjectBy(['name' => 'Project 1']);
+        $this->assertEmpty($deleted);
+
+        $updatedRank = $this->getOneProjectBy(['name' => 'Project 2']);
+        $this->assertSame(0, $updatedRank->getRank());
+    }
+
 }

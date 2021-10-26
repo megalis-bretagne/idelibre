@@ -62,6 +62,9 @@ class ProjectRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    /**
+     * @return Project[]
+     */
     public function getProjectsBySitting(Sitting $sitting): array
     {
         return $this->createQueryBuilder('p')
@@ -73,6 +76,7 @@ class ProjectRepository extends ServiceEntityRepository
             ->addSelect('fa')
             ->leftJoin('p.file', 'fp')
             ->addSelect('fp')
+            ->orderBy('p.rank', 'ASC')
             ->getQuery()
             ->getResult();
     }
