@@ -23,7 +23,6 @@ class SuperUserType extends AbstractType
     {
     }
 
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -31,7 +30,7 @@ class SuperUserType extends AbstractType
                 'label' => 'Prénom de l\'administrateur',
             ])
             ->add('lastName', TextType::class, [
-                'label' => 'Nom de l\'administrateur',])
+                'label' => 'Nom de l\'administrateur', ])
             ->add('username', TextType::class, [
                 'label' => 'Nom d\'utilisateur (sans @suffixe)',
                 'constraints' => [
@@ -39,7 +38,7 @@ class SuperUserType extends AbstractType
                 ],
             ])
             ->add('email', EmailType::class, [
-                'label' => 'Email',])
+                'label' => 'Email', ])
             ->add('plainPassword', RepeatedType::class, [
                 'mapped' => false,
                 'type' => PasswordType::class,
@@ -54,10 +53,9 @@ class SuperUserType extends AbstractType
                 'data_class' => null,
             ])
             ->get('role')->addModelTransformer(new CallbackTransformer(
-                fn() => '',
-                fn() => $this->roleManager->getSuperAdminRole()
+                fn () => '',
+                fn () => $this->roleManager->getSuperAdminRole()
             ));
-
 
         if ($options['isGroupChoice']) {
             $builder->add('group', EntityType::class, [

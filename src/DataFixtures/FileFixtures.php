@@ -54,7 +54,6 @@ class FileFixtures extends Fixture
         $manager->persist($fileConvocation2);
         $this->addReference(self::REFERENCE . 'convocation2', $fileConvocation2);
 
-
         $fileConvocation3 = (new File())
             ->setName('fichier de convocation')
             ->setSize(100)

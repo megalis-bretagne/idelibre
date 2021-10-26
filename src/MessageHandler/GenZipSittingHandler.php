@@ -13,12 +13,11 @@ use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 class GenZipSittingHandler implements MessageHandlerInterface
 {
     public function __construct(
-        private ZipSittingGenerator    $zipSittingGenerator,
-        private SittingRepository      $sittingRepository,
+        private ZipSittingGenerator $zipSittingGenerator,
+        private SittingRepository $sittingRepository,
         private EntityManagerInterface $em,
-        private LoggerInterface        $logger
-    )
-    {
+        private LoggerInterface $logger
+    ) {
     }
 
     public function __invoke(UpdatedSitting $genZipSitting)

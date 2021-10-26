@@ -49,7 +49,6 @@ class SittingFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($sittingBureauLibriciel);
         $this->addReference(self::REFERENCE . 'sittingBureauLibriciel', $sittingBureauLibriciel);
 
-
         $sittingBureauLibricielWithoutProjectsAndConvocations = (new Sitting())
             ->setName('Bureau Libriciel sans projets')
             ->setDate(new DateTimeImmutable('2020-10-23'))
@@ -58,8 +57,6 @@ class SittingFixtures extends Fixture implements DependentFixtureInterface
             ->setPlace('Salle du conseil')
             ->setType($typeBureauLibriciel);
         $manager->persist($sittingBureauLibricielWithoutProjectsAndConvocations);
-
-
 
         $manager->flush();
     }
