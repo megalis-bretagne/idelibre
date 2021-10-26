@@ -3,41 +3,34 @@
 namespace App\Entity;
 
 use App\Repository\ApiUserRepository;
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\ManyToOne;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-/**
- * @ORM\Entity(repositoryClass=ApiUserRepository::class)
- */
+#[Entity(repositoryClass: ApiUserRepository::class)]
 class ApiUser implements UserInterface
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="UUID")
-     * @ORM\Column(type="guid")
-     */
+    #[Id]
+    #[GeneratedValue(strategy: 'UUID')]
+    #[Column(type: 'guid')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[Column(type: 'string', length: 255)]
     private $name;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[Column(type: 'string', length: 255)]
     private $token;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Structure::class)
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
-     */
+    #[ManyToOne(targetEntity: Structure::class)]
+    #[JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private $structure;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=ApiRole::class)
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ManyToOne(targetEntity: ApiRole::class)]
+    #[JoinColumn(nullable: false)]
     private $apiRole;
 
     public function getId(): ?string

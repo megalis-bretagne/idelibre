@@ -5,82 +5,70 @@ namespace App\Entity;
 use App\Repository\PartyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\OneToMany;
+use Doctrine\ORM\Mapping\Table;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\NotNull;
 
-/**
- * @ORM\Entity(repositoryClass=PartyRepository::class)
- * @ORM\Table(
- *     uniqueConstraints={@ORM\UniqueConstraint(
- *         name="IDX_PARTY_NAME_STRUCTURE",
- *         columns={"name", "structure_id"}
- *     )})
- * @UniqueEntity(
- *     fields={"name", "structure"},
- *     errorPath="name",
- *     message="Ce nom de groupe politique existe déjà")
- */
+
+#[Entity(repositoryClass: PartyRepository::class)]
+#[Table]
+#[UniqueEntity(fields: ['name', 'structure'], message: "Ce nom de groupe politique existe déjà", errorPath: 'name')]
+#[UniqueConstraint(name: 'IDX_PARTY_NAME_STRUCTURE', columns: ['name', 'structure_id'])]
 class Party
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="UUID")
-     * @ORM\Column(type="guid")
-     */
+    #[Id]
+    #[GeneratedValue(strategy: 'UUID')]
+    #[Column(type: 'guid')]
     #[Groups(['party:read', 'user:detail'])]
     private $id;
 
-    /**
-     * @ORM\Column(type="integer")
-     * On cree la sequence correspondante (party_legacy_seq) manuellement dans la migration Version20210430085944
-     */
+    #[Column(type: 'integer')]
     private $legacyId;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\Length(max="255")
-     * @Assert\NotBlank
-     */
+    #[Column(type: 'string', length: 255)]
+    #[Length(max: '255')]
+    #[NotBlank]
     #[Groups(['party:read', 'party:write', 'user:detail'])]
     private $name;
 
-    /**
-     * @ORM\OneToMany(targetEntity=User::class, mappedBy="party")
-     */
+    #[OneToMany(mappedBy: 'party', targetEntity: User::class)]
     #[Groups(['party:detail'])]
     private $actors;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Structure::class)
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
-     * @Assert\NotNull
-     */
+    #[ManyToOne(targetEntity: Structure::class)]
+    #[JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    #[NotNull]
     private $structure;
 
     public function __construct()
     {
         $this->actors = new ArrayCollection();
     }
-
     public function getId(): ?string
     {
         return $this->id;
     }
-
     public function getName(): ?string
     {
         return $this->name;
     }
-
     public function setName(string $name): self
     {
         $this->name = $name;
 
         return $this;
     }
-
     /**
      * @return Collection|User[]
      */
@@ -88,7 +76,6 @@ class Party
     {
         return $this->actors;
     }
-
     public function addActor(User $actor): self
     {
         if (!$this->actors->contains($actor)) {
@@ -98,7 +85,6 @@ class Party
 
         return $this;
     }
-
     public function removeActor(User $actor): self
     {
         if ($this->actors->contains($actor)) {
@@ -111,24 +97,20 @@ class Party
 
         return $this;
     }
-
     public function getStructure(): ?Structure
     {
         return $this->structure;
     }
-
     public function setStructure(?Structure $structure): self
     {
         $this->structure = $structure;
 
         return $this;
     }
-
     public function getLegacyId(): ?int
     {
         return $this->legacyId;
     }
-
     /**
      * @return Party
      */

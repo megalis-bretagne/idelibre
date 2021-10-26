@@ -4,87 +4,69 @@ namespace App\Entity;
 
 use App\Repository\EmailTemplateRepository;
 use App\Service\Email\EmailData;
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\OneToOne;
+use Doctrine\ORM\Mapping\Table;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 use Exception;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\NotNull;
 
-/**
- * @ORM\Entity(repositoryClass=EmailTemplateRepository::class)
- *
- * @ORM\Table(
- *     uniqueConstraints={@ORM\UniqueConstraint(
- *         name="IDX_EMAIL_NAME_STRUCTURE",
- *         columns={"name", "structure_id"}
- *     )})
- * @UniqueEntity(
- *     fields={"name", "structure"},
- *     errorPath="name",
- *     message="l'intitulé doit être unique")
- */
+
+#[Entity(repositoryClass: EmailTemplateRepository::class)]
+#[Table]
+#[UniqueEntity(fields: ['name', 'structure'], message: "l'intitulé doit être unique", errorPath: 'name')]
+#[UniqueConstraint(name: 'IDX_EMAIL_NAME_STRUCTURE', columns: ['name', 'structure_id'])]
 class EmailTemplate
 {
     public const CATEGORY_CONVOCATION = 'convocation';
     public const CATEGORY_INVITATION = 'invitation';
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="UUID")
-     * @ORM\Column(type="guid")
-     */
+    #[Id]
+    #[GeneratedValue(strategy: 'UUID')]
+    #[Column(type: 'guid')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank
-     * @Assert\Length(max="255")
-     */
+    #[Column(type: 'string', length: 255)]
+    #[NotBlank]
+    #[Length(max: '255')]
     private $name;
 
-    /**
-     * @ORM\Column(type="text")
-     * @Assert\NotBlank
-     */
+    #[Column(type: 'text')]
+    #[NotBlank]
     private $content;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Structure::class)
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
-     * @Assert\NotNull
-     */
+    #[ManyToOne(targetEntity: Structure::class)]
+    #[JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    #[NotNull]
     private $structure;
 
-    /**
-     * @ORM\OneToOne(targetEntity=Type::class,inversedBy="emailTemplate")
-     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
-     */
+    #[OneToOne(inversedBy: 'emailTemplate', targetEntity: Type::class)]
+    #[JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private $type;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank
-     * @Assert\Length(max="255")
-     */
+    #[Column(type: 'string', length: 255)]
+    #[NotBlank]
+    #[Length(max: '255')]
     private $subject;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[Column(type: 'boolean')]
     private $isDefault = false;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[Column(type: 'string', length: 255)]
     private $category = self::CATEGORY_CONVOCATION;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[Column(type: 'boolean')]
     private $isAttachment = false;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[Column(type: 'string', length: 255)]
     private $format = EmailData::FORMAT_HTML;
 
     public function getId(): ?string

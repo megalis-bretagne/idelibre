@@ -2,6 +2,14 @@
 
 namespace App\Entity;
 
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\Table;
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\Column;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -9,39 +17,29 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\GroupRepository")
- * @ORM\Table(name="`group`")
  * @UniqueEntity("name")
  */
+#[Entity(repositoryClass: 'App\Repository\GroupRepository')]
+#[Table(name: '`group`')]
 class Group
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue(strategy="UUID")
-     * @ORM\Column(type="guid")
-     */
+    #[Id]
+    #[GeneratedValue(strategy: 'UUID')]
+    #[Column(type: 'guid')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255, unique=true)
-     * @Assert\Length(max="255")
-     * @Assert\NotBlank
-     */
+    #[Column(type: 'string', length: 255, unique: true)]
+    #[Length(max: '255')]
+    #[NotBlank]
     private $name;
 
-    /**
-     * @ORM\OneToMany(targetEntity=User::class, mappedBy="group")
-     */
+    #[OneToMany(mappedBy: 'group', targetEntity: User::class)]
     private $users;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Structure::class, mappedBy="group")
-     */
+    #[OneToMany(mappedBy: 'group', targetEntity: Structure::class)]
     private $structures;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[Column(type: 'boolean')]
     private $isStructureCreator = false;
 
     public function __construct()
@@ -49,24 +47,20 @@ class Group
         $this->users = new ArrayCollection();
         $this->structures = new ArrayCollection();
     }
-
     public function getId(): ?string
     {
         return $this->id;
     }
-
     public function getName(): ?string
     {
         return $this->name;
     }
-
     public function setName(string $name): self
     {
         $this->name = $name;
 
         return $this;
     }
-
     /**
      * @return Collection|User[]
      */
@@ -74,7 +68,6 @@ class Group
     {
         return $this->users;
     }
-
     public function addUser(User $user): self
     {
         if (!$this->users->contains($user)) {
@@ -84,7 +77,6 @@ class Group
 
         return $this;
     }
-
     public function removeUser(User $user): self
     {
         if ($this->users->contains($user)) {
@@ -97,7 +89,6 @@ class Group
 
         return $this;
     }
-
     /**
      * @return Collection|Structure[]
      */
@@ -105,7 +96,6 @@ class Group
     {
         return $this->structures;
     }
-
     public function addStructure(Structure $structure): self
     {
         if (!$this->structures->contains($structure)) {
@@ -115,7 +105,6 @@ class Group
 
         return $this;
     }
-
     public function removeStructure(Structure $structure): self
     {
         if ($this->structures->contains($structure)) {
@@ -128,12 +117,10 @@ class Group
 
         return $this;
     }
-
     public function getIsStructureCreator(): ?bool
     {
         return $this->isStructureCreator;
     }
-
     public function setIsStructureCreator(bool $isStructureCreator): self
     {
         $this->isStructureCreator = $isStructureCreator;

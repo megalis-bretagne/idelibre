@@ -2,9 +2,17 @@
 
 namespace App\Entity;
 
+use App\Repository\AnnotationRepository;
+use App\Repository\ConvocationRepository;
 use App\Repository\ThemeRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\Index;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\ManyToOne;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -20,30 +28,29 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     })
  * @ORM\Entity(repositoryClass=ThemeRepository::class)
  */
+#[Entity(repositoryClass: ThemeRepository::class)]
 class Theme
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="UUID")
-     * @ORM\Column(type="guid")
-     * @Groups({"theme"})
-     */
-    #[Groups(['theme:read', 'project:read'])]
+    #[Id]
+    #[GeneratedValue(strategy: 'UUID')]
+    #[Column(type: 'guid')]
+    #[Groups(['theme','theme:read', 'project:read'])]
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
      * @Groups({"theme"})
      * @Assert\NotBlank
      * @Assert\Length(max="255")
      */
+    #[Column(type: 'string', length: 255)]
     #[Groups(['theme:read', 'theme:write', 'project:read'])]
-    private $name;
+    private ?string $name;
 
     /**
      * @Gedmo\TreeLeft()
      * @ORM\Column(type="integer")
      */
+    #[Column(type: 'integer')]
     private $lft;
 
     /**
@@ -51,12 +58,14 @@ class Theme
      * @ORM\Column(type="integer")
      * @Groups({"theme"})
      */
+    #[Column(type: 'integer')]
     private $lvl;
 
     /**
      * @Gedmo\TreeRight()
      * @ORM\Column(type="integer")
      */
+    #[Column(type: 'integer')]
     private $rgt;
 
     /**
@@ -64,6 +73,8 @@ class Theme
      * @ORM\ManyToOne(targetEntity="App\Entity\Theme")
      * @ORM\JoinColumn(name="tree_root", referencedColumnName="id", onDelete="cascade")
      */
+    #[ManyToOne(targetEntity: Theme::class)]
+    #[JoinColumn(name: 'tree_root', referencedColumnName: 'id', onDelete: 'CASCADE')]
     private $root;
 
     /**
@@ -71,6 +82,8 @@ class Theme
      * @ORM\ManyToOne(targetEntity="App\Entity\Theme", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="cascade")
      */
+    #[ManyToOne(targetEntity: Theme::class, inversedBy: 'children')]
+    #[JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     #[Groups('theme:write:post')]
     private $parent;
 
@@ -78,6 +91,7 @@ class Theme
      * @ORM\OneToMany(targetEntity="App\Entity\Theme", mappedBy="parent")
      * @ORM\OrderBy({"name" = "ASC"})
      */
+    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: Theme::class)]
     private $children;
 
     /**
@@ -85,12 +99,14 @@ class Theme
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      * @Assert\NotNull
      */
+    #[ManyToOne(targetEntity: Structure::class)]
+    #[JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private $structure;
 
     /**
-     * @ORM\Column(type="string", length=512, nullable=true)
      * @Groups({"theme"})
      */
+    #[Column(type: 'string', length: 512, nullable: true)]
     #[Groups(['theme:read', 'project:read'])]
     private $fullName;
 

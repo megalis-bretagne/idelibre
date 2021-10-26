@@ -6,32 +6,27 @@ use App\Entity\Connector\Exception\ComelusConnectorException;
 use App\Entity\Structure;
 use App\Repository\Connector\ComelusConnectorRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\ManyToOne;
 
-/**
- * @ORM\Entity(repositoryClass=ComelusConnectorRepository::class)
- */
+#[Entity(repositoryClass: ComelusConnectorRepository::class)]
 class ComelusConnector extends Connector
 {
     public const NAME = 'comelus';
     public const MAX_URL_LENGTH = 255;
     public const MAX_API_KEY_LENGTH = 255;
     public const MAX_DESCRIPTION_LENGTH = 1000;
-
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="UUID")
-     * @ORM\Column(type="guid")
-     */
+    #[Id]
+    #[GeneratedValue(strategy: 'UUID')]
+    #[Column(type: 'guid')]
     protected $id;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[Column(type: 'string', length: 255)]
     protected $name = self::NAME;
-
-    /**
-     * @ORM\Column(type="json", options={"jsonb"=true})
-     */
+    #[Column(type: 'json', options: ['jsonb' => true])]
     protected $fields = [
         'url' => null,
         'api_key' => null,
@@ -39,11 +34,12 @@ class ComelusConnector extends Connector
         'mailing_list_id' => null,
         'active' => false,
     ];
-
     /**
      * @ORM\ManyToOne(targetEntity=Structure::class)
      * @ORM\JoinColumn(nullable=false)
      */
+    #[ManyToOne(targetEntity: Structure::class)]
+    #[JoinColumn(nullable: false, onDelete: 'CASCADE')]
     protected $structure;
 
     public function __construct(Structure $structure)

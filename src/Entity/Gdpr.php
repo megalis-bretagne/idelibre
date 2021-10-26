@@ -2,184 +2,150 @@
 
 namespace App\Entity;
 
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\Column;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\Email;
 use App\Repository\GdprRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass=GdprRepository::class)
- */
+#[Entity(repositoryClass: GdprRepository::class)]
 class Gdpr
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="UUID")
-     * @ORM\Column(type="guid")
-     */
+    #[Id]
+    #[GeneratedValue(strategy: 'UUID')]
+    #[Column(type: 'guid')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\Length(max="255")
-     */
+    #[Column(type: 'string', length: 255)]
+    #[Length(max: '255')]
     private $companyName;
 
-    /**
-     * @ORM\Column(type="string", length=512)
-     * @Assert\Length(max="512")
-     */
+    #[Column(type: 'string', length: 512)]
+    #[Length(max: '512')]
     private $address;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\Length(max="255")
-     */
+    #[Column(type: 'string', length: 255)]
+    #[Length(max: '255')]
     private $representative;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\Length(max="255")
-     */
+    #[Column(type: 'string', length: 255)]
+    #[Length(max: '255')]
     private $quality;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\Length(max="255")
-     */
+    #[Column(type: 'string', length: 255)]
+    #[Length(max: '255')]
     private $siret;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\Length(max="255")
-     */
+    #[Column(type: 'string', length: 255)]
+    #[Length(max: '255')]
     private $ape;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\Length(max="255")
-     */
+    #[Column(type: 'string', length: 255)]
+    #[Length(max: '255')]
     private $companyPhone;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\Length(max="255")
-     * @Assert\Email
-     */
+    #[Column(type: 'string', length: 255)]
+    #[Length(max: '255')]
+    #[Email]
     private $companyEmail;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\Length(max="255")
-     * @Assert\Email
-     */
+    #[Column(type: 'string', length: 255)]
+    #[Length(max: '255')]
+    #[Email]
     private $dpoEmail;
 
     public function getId(): ?string
     {
         return $this->id;
     }
-
     public function getCompanyName(): ?string
     {
         return $this->companyName;
     }
-
     public function setCompanyName(string $companyName): self
     {
         $this->companyName = $companyName;
 
         return $this;
     }
-
     public function getAddress(): ?string
     {
         return $this->address;
     }
-
     public function setAddress(string $address): self
     {
         $this->address = $address;
 
         return $this;
     }
-
     public function getRepresentative(): ?string
     {
         return $this->representative;
     }
-
     public function setRepresentative(string $representative): self
     {
         $this->representative = $representative;
 
         return $this;
     }
-
     public function getQuality(): ?string
     {
         return $this->quality;
     }
-
     public function setQuality(string $quality): self
     {
         $this->quality = $quality;
 
         return $this;
     }
-
     public function getSiret(): ?string
     {
         return $this->siret;
     }
-
     public function setSiret(string $siret): self
     {
         $this->siret = $siret;
 
         return $this;
     }
-
     public function getApe(): ?string
     {
         return $this->ape;
     }
-
     public function setApe(string $ape): self
     {
         $this->ape = $ape;
 
         return $this;
     }
-
     public function getCompanyPhone(): ?string
     {
         return $this->companyPhone;
     }
-
     public function setCompanyPhone(string $companyPhone): self
     {
         $this->companyPhone = $companyPhone;
 
         return $this;
     }
-
     public function getCompanyEmail(): ?string
     {
         return $this->companyEmail;
     }
-
     public function setCompanyEmail(string $companyEmail): self
     {
         $this->companyEmail = $companyEmail;
 
         return $this;
     }
-
     public function getDpoEmail(): ?string
     {
         return $this->dpoEmail;
     }
-
     public function setDpoEmail(string $dpoEmail): self
     {
         $this->dpoEmail = $dpoEmail;
