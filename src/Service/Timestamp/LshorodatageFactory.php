@@ -7,13 +7,11 @@ use Libriciel\LshorodatageApiWrapper\LshorodatageInterface;
 
 class LshorodatageFactory
 {
-    private LsHorodatage $lsHorodatage;
-    private FakeLshorodatage $fakeLshorodatage;
-
-    public function __construct(LsHorodatage $lsHorodatage, FakeLshorodatage $fakeLshorodatage)
+    public function __construct(
+        private LsHorodatage $lsHorodatage,
+        private FakeLshorodatage $fakeLshorodatage
+    )
     {
-        $this->lsHorodatage = $lsHorodatage;
-        $this->fakeLshorodatage = $fakeLshorodatage;
     }
 
     public function chooseImplementation(): LshorodatageInterface

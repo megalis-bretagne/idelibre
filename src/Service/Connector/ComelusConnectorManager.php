@@ -18,27 +18,14 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class ComelusConnectorManager
 {
-    private EntityManagerInterface $em;
-    private ComelusConnectorRepository $comelusConnectorRepository;
-    private ComelusWrapper $comelusWrapper;
-    private LoggerInterface $logger;
-    private FileManager $fileManager;
-    private DateUtil $dateUtil;
-
     public function __construct(
-        EntityManagerInterface $em,
-        ComelusConnectorRepository $comelusConnectorRepository,
-        ComelusWrapper $comelusWrapper,
-        LoggerInterface $logger,
-        FileManager $fileManager,
-        DateUtil $dateUtil
+        private EntityManagerInterface $em,
+        private ComelusConnectorRepository $comelusConnectorRepository,
+        private ComelusWrapper $comelusWrapper,
+        private LoggerInterface $logger,
+        private FileManager $fileManager,
+        private DateUtil $dateUtil
     ) {
-        $this->em = $em;
-        $this->comelusConnectorRepository = $comelusConnectorRepository;
-        $this->comelusWrapper = $comelusWrapper;
-        $this->logger = $logger;
-        $this->fileManager = $fileManager;
-        $this->dateUtil = $dateUtil;
     }
 
     /**

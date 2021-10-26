@@ -10,15 +10,11 @@ use App\Service\Util\GenderConverter;
 
 class EmailGenerator
 {
-    private DateUtil $dateUtil;
-    private GenderConverter $genderConverter;
-    private EmailTemplateManager $emailTemplateManager;
-
-    public function __construct(DateUtil $dateUtil, GenderConverter $genderConverter, EmailTemplateManager $emailTemplateManager)
-    {
-        $this->dateUtil = $dateUtil;
-        $this->genderConverter = $genderConverter;
-        $this->emailTemplateManager = $emailTemplateManager;
+    public function __construct(
+        private DateUtil $dateUtil,
+        private GenderConverter $genderConverter,
+        private EmailTemplateManager $emailTemplateManager
+    ) {
     }
 
     /**

@@ -9,13 +9,11 @@ use ZipArchive;
 
 class ZipSittingGenerator
 {
-    private ParameterBagInterface $bag;
-    private Filesystem $filesystem;
-
-    public function __construct(ParameterBagInterface $bag, Filesystem $filesystem)
+    public function __construct(
+        private ParameterBagInterface $bag,
+        private Filesystem $filesystem
+    )
     {
-        $this->bag = $bag;
-        $this->filesystem = $filesystem;
     }
 
     public function generateZipSitting(Sitting $sitting): string

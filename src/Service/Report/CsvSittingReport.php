@@ -12,13 +12,11 @@ use League\Csv\Writer;
 
 class CsvSittingReport
 {
-    private ConvocationRepository $convocationRepository;
-    private DateUtil $dateUtil;
-
-    public function __construct(ConvocationRepository $convocationRepository, DateUtil $dateUtil)
+    public function __construct(
+        private ConvocationRepository $convocationRepository,
+        private DateUtil $dateUtil
+    )
     {
-        $this->convocationRepository = $convocationRepository;
-        $this->dateUtil = $dateUtil;
     }
 
     public function generate(Sitting $sitting): string

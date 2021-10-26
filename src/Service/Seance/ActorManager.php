@@ -8,11 +8,8 @@ use App\Repository\UserRepository;
 
 class ActorManager
 {
-    private UserRepository $userRepository;
-
-    public function __construct(UserRepository $userRepository)
+    public function __construct(private UserRepository $userRepository)
     {
-        $this->userRepository = $userRepository;
     }
 
     /**

@@ -7,11 +7,8 @@ use App\Repository\UserRepository;
 
 class ActorFinder
 {
-    private UserRepository $userRepository;
-
-    public function __construct(UserRepository $userRepository)
+    public function __construct(private UserRepository $userRepository)
     {
-        $this->userRepository = $userRepository;
     }
 
     public function findByStructure(WsActor $actor, Structure $structure, string $username)

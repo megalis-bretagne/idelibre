@@ -12,17 +12,16 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 class ClientNotifier implements ClientNotifierInterface
 {
     private string $passphrase;
-    private HttpClientInterface $httpClient;
     private string $baseNotificationUrl;
-    private LoggerInterface $logger;
     private string $nodejsUrl;
 
-    public function __construct(ParameterBagInterface $bag, HttpClientInterface $httpClient, LoggerInterface $logger)
-    {
+    public function __construct(
+        ParameterBagInterface $bag,
+        private HttpClientInterface $httpClient,
+        private LoggerInterface $logger
+    ) {
         $this->passphrase = $bag->get('nodejs_passphrase');
-        $this->httpClient = $httpClient;
         $this->baseNotificationUrl = $bag->get('nodejs_notification_url');
-        $this->logger = $logger;
         $this->nodejsUrl = $bag->get('nodejs_host');
     }
 

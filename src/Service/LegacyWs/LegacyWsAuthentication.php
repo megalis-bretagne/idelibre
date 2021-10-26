@@ -12,21 +12,13 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class LegacyWsAuthentication
 {
-    private StructureRepository $structureRepository;
-    private UserRepository $userRepository;
-    private UserPasswordHasherInterface $passwordHasher;
-    private LegacyPassword $legacyPassword;
-
     public function __construct(
-        StructureRepository $structureRepository,
-        UserRepository $userRepository,
-        UserPasswordHasherInterface $passwordEncoder,
-        LegacyPassword $legacyPassword
-    ) {
-        $this->structureRepository = $structureRepository;
-        $this->userRepository = $userRepository;
-        $this->passwordHasher = $passwordEncoder;
-        $this->legacyPassword = $legacyPassword;
+        private StructureRepository $structureRepository,
+        private UserRepository $userRepository,
+        private UserPasswordHasherInterface $passwordHasher,
+        private LegacyPassword $legacyPassword
+    )
+    {
     }
 
     public function getStructureFromLegacyConnection(string $legacyConnectionName): ?Structure

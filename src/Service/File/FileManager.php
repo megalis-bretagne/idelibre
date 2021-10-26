@@ -14,15 +14,11 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class FileManager
 {
-    private Filesystem $filesystem;
-    private EntityManagerInterface $em;
-    private ParameterBagInterface $bag;
-
-    public function __construct(Filesystem $filesystem, EntityManagerInterface $em, ParameterBagInterface $bag)
-    {
-        $this->filesystem = $filesystem;
-        $this->em = $em;
-        $this->bag = $bag;
+    public function __construct(
+        private Filesystem $filesystem,
+        private EntityManagerInterface $em,
+        private ParameterBagInterface $bag
+    ) {
     }
 
     public function save(UploadedFile $uploadedFile, Structure $structure): File

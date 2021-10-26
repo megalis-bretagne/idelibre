@@ -15,18 +15,12 @@ use Twig\Error\SyntaxError;
 
 class TimestampManager
 {
-    private EntityManagerInterface $em;
-    private TimestampContentFileGenerator $contentGenerator;
-    private LshorodatageInterface $lshorodatage;
-
     public function __construct(
-        EntityManagerInterface $em,
-        TimestampContentFileGenerator $contentGenerator,
-        LshorodatageInterface $lshorodatage
-    ) {
-        $this->em = $em;
-        $this->contentGenerator = $contentGenerator;
-        $this->lshorodatage = $lshorodatage;
+        private EntityManagerInterface $em,
+        private TimestampContentFileGenerator $contentGenerator,
+        private LshorodatageInterface $lshorodatage
+    )
+    {
     }
 
     public function delete(Timestamp $timestamp): void

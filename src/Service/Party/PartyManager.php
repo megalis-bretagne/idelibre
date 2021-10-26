@@ -10,13 +10,11 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class PartyManager
 {
-    private EntityManagerInterface $em;
-    private UserRepository $userRepository;
-
-    public function __construct(EntityManagerInterface $em, UserRepository $userRepository)
+    public function __construct(
+        private EntityManagerInterface $em,
+        private UserRepository $userRepository
+    )
     {
-        $this->em = $em;
-        $this->userRepository = $userRepository;
     }
 
     public function save(Party $party, Structure $structure): void

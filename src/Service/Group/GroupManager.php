@@ -13,24 +13,14 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class GroupManager
 {
-    private EntityManagerInterface $em;
-    private UserPasswordHasherInterface $passwordHasher;
-    private ValidatorInterface $validator;
-    private StructureRepository $structureRepository;
-    private RoleManager $roleManager;
-
     public function __construct(
-        EntityManagerInterface $em,
-        UserPasswordHasherInterface $passwordHasher,
-        ValidatorInterface $validator,
-        StructureRepository $structureRepository,
-        RoleManager $roleManager
-    ) {
-        $this->em = $em;
-        $this->passwordHasher = $passwordHasher;
-        $this->validator = $validator;
-        $this->structureRepository = $structureRepository;
-        $this->roleManager = $roleManager;
+        private EntityManagerInterface $em,
+        private UserPasswordHasherInterface $passwordHasher,
+        private ValidatorInterface $validator,
+        private StructureRepository $structureRepository,
+        private RoleManager $roleManager
+    )
+    {
     }
 
     public function save(Group $group): void

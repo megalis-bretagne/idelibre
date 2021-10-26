@@ -4,6 +4,8 @@ namespace App\Service\Email;
 
 use App\Entity\Sitting;
 use App\Service\Util\FileUtil;
+use DateTimeInterface;
+use DateTimeZone;
 use Eluceo\iCal\Domain\Entity\Calendar;
 use Eluceo\iCal\Domain\Entity\Event;
 use Eluceo\iCal\Domain\ValueObject\DateTime;
@@ -12,6 +14,7 @@ use Eluceo\iCal\Domain\ValueObject\Location;
 use Eluceo\iCal\Domain\ValueObject\Organizer;
 use Eluceo\iCal\Domain\ValueObject\TimeSpan;
 use Eluceo\iCal\Presentation\Factory\CalendarFactory;
+use Exception;
 use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Filesystem\Filesystem;
@@ -21,15 +24,11 @@ class CalGenerator
     public const CONTENT_TYPE = 'text/calendar';
     public const DIRECTORY = '/tmp/cal/';
 
-    private Filesystem $filesystem;
-    private FileUtil $fileUtil;
-    private LoggerInterface $logger;
-
-    public function __construct(Filesystem $filesystem, FileUtil $fileUtil, LoggerInterface $logger)
-    {
-        $this->filesystem = $filesystem;
-        $this->fileUtil = $fileUtil;
-        $this->logger = $logger;
+    public function __construct(
+        private Filesystem $filesystem,
+        private FileUtil $fileUtil,
+        private LoggerInterface $logger
+    ) {
     }
 
     public function generate(Sitting $sitting): ?string
@@ -75,21 +74,21 @@ class CalGenerator
         return $fileName;
     }
 
-    public function getEndDatetimeWithTz(\DateTimeInterface $sittingDateTime, int $durationInMinutes, string $timezoneName): \DateTime
+    public function getEndDatetimeWithTz(DateTimeInterface $sittingDateTime, int $durationInMinutes, string $timezoneName): \DateTime
     {
         $mutableDateTime = new \DateTime();
         $mutableDateTime->setTimestamp($sittingDateTime->getTimestamp());
-        $mutableDateTime->setTimezone(new \DateTimeZone($timezoneName));
+        $mutableDateTime->setTimezone(new DateTimeZone($timezoneName));
 
         return date_add($mutableDateTime, date_interval_create_from_date_string("$durationInMinutes minutes"));
     }
 
-    public function getStartDatetimeWithTz(\DateTimeInterface $sittingDateTime, string $timezoneName): \DateTime
+    public function getStartDatetimeWithTz(DateTimeInterface $sittingDateTime, string $timezoneName): \DateTime
     {
         $mutableDateTime = new \DateTime();
         $mutableDateTime->setTimestamp($sittingDateTime->getTimestamp());
 
-        return $mutableDateTime->setTimezone(new \DateTimeZone($timezoneName));
+        return $mutableDateTime->setTimezone(new DateTimeZone($timezoneName));
     }
 
     private function randomCleanDirectory()
@@ -98,7 +97,7 @@ class CalGenerator
             if (42 === random_int(0, 100)) {
                 $this->fileUtil->deleteFileInDirectory(self::DIRECTORY);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->error($e->getMessage());
         }
     }

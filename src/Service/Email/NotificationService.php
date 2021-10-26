@@ -6,11 +6,8 @@ use App\Entity\Sitting;
 
 class NotificationService
 {
-    private EmailServiceInterface $emailService;
-
-    public function __construct(EmailServiceInterface $emailService)
+    public function __construct(private EmailServiceInterface $emailService)
     {
-        $this->emailService = $emailService;
     }
 
     private function generateEmailDataList(Sitting $sitting, string $subject, string $content): array

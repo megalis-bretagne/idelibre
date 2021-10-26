@@ -8,13 +8,11 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class GdprManager
 {
-    private GdprRepository $gdprRepository;
-    private EntityManagerInterface $em;
-
-    public function __construct(GdprRepository $gdprRepository, EntityManagerInterface $em)
+    public function __construct(
+        private GdprRepository $gdprRepository,
+        private EntityManagerInterface $em
+    )
     {
-        $this->gdprRepository = $gdprRepository;
-        $this->em = $em;
     }
 
     public function getGdpr(): ?Gdpr

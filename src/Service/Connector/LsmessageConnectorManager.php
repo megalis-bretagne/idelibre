@@ -8,6 +8,7 @@ use App\Entity\Sitting;
 use App\Entity\Structure;
 use App\Repository\Connector\LsmessageConnectorRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Libriciel\LsMessageWrapper\LsMessageException;
 use Libriciel\LsMessageWrapper\LsMessageWrapper;
 use Libriciel\LsMessageWrapper\Sms;
@@ -15,22 +16,12 @@ use Psr\Log\LoggerInterface;
 
 class LsmessageConnectorManager
 {
-    private EntityManagerInterface $em;
-    private LsmessageConnectorRepository $lsmessageConnectorRepository;
-
-    private LsMessageWrapper $lsMessageWrapper;
-    private LoggerInterface $logger;
-
     public function __construct(
-        EntityManagerInterface $em,
-        LsmessageConnectorRepository $lsmessageConnectorRepository,
-        LsMessageWrapper $lsMessageWrapper,
-        LoggerInterface $logger
+        private EntityManagerInterface $em,
+        private LsmessageConnectorRepository $lsmessageConnectorRepository,
+        private LsMessageWrapper $lsMessageWrapper,
+        private LoggerInterface $logger
     ) {
-        $this->em = $em;
-        $this->lsmessageConnectorRepository = $lsmessageConnectorRepository;
-        $this->lsMessageWrapper = $lsMessageWrapper;
-        $this->logger = $logger;
     }
 
     /**
@@ -82,7 +73,7 @@ class LsmessageConnectorManager
         $this->lsMessageWrapper->setApiKey($lsmessageConnector->getApiKey());
         try {
             $this->lsMessageWrapper->sendMultiple($smsList);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $this->logger->error($exception->getMessage());
         }
     }

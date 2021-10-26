@@ -12,15 +12,12 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class PdfSittingGenerator
 {
-    private ParameterBagInterface $bag;
-    private Filesystem $filesystem;
-    private LoggerInterface $logger;
-
-    public function __construct(ParameterBagInterface $bag, Filesystem $filesystem, LoggerInterface $logger)
+    public function __construct(
+        private ParameterBagInterface $bag,
+        private Filesystem $filesystem,
+        private LoggerInterface $logger
+    )
     {
-        $this->bag = $bag;
-        $this->filesystem = $filesystem;
-        $this->logger = $logger;
     }
 
     public function generateFullSittingPdf(Sitting $sitting): void

@@ -10,15 +10,12 @@ use Symfony\Component\Security\Core\Security;
 
 class ImpersonateStructure
 {
-    private EntityManagerInterface $em;
-    private Security $security;
-    private UserRepository $userRepository;
-
-    public function __construct(EntityManagerInterface $em, Security $security, UserRepository $userRepository)
+    public function __construct(
+        private EntityManagerInterface $em,
+        private Security $security,
+        private UserRepository $userRepository
+    )
     {
-        $this->em = $em;
-        $this->security = $security;
-        $this->userRepository = $userRepository;
     }
 
     public function logInStructure(Structure $structure): bool

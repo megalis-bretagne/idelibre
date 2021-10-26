@@ -2,16 +2,14 @@
 
 namespace App\Service\ApiEntity;
 
-use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class AnnexApi
 {
     public ?string $id = null;
 
     public ?string $linkedFileKey = null;
-    /**
-     * @Assert\NotBlank()
-     */
+    #[NotBlank]
     public ?int $rank = null;
 
     public ?string $fileName = null;

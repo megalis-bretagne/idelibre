@@ -8,11 +8,8 @@ use ZipArchive;
 
 class ZipTokenGenerator
 {
-    private ParameterBagInterface $bag;
-
-    public function __construct(ParameterBagInterface $bag)
+    public function __construct(private ParameterBagInterface $bag)
     {
-        $this->bag = $bag;
     }
 
     public function generateZipToken(Sitting $sitting): string

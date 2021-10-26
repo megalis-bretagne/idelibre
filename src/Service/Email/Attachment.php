@@ -4,15 +4,11 @@ namespace App\Service\Email;
 
 class Attachment
 {
-    private string $fileName;
-    private string $path;
-    private string $contentType;
-
-    public function __construct(string $fileName, string $path, string $contentType = 'application/pdf')
-    {
-        $this->fileName = $fileName;
-        $this->path = $path;
-        $this->contentType = $contentType;
+    public function __construct(
+        private string $fileName,
+        private string $path,
+        private string $contentType = 'application/pdf'
+    ) {
     }
 
     public function getFileName(): string

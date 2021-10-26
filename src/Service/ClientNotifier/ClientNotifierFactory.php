@@ -4,13 +4,10 @@ namespace App\Service\ClientNotifier;
 
 class ClientNotifierFactory
 {
-    private ClientNotifier $clientNotifier;
-    private FakeClientNotifier $fakeClientNotifier;
-
-    public function __construct(ClientNotifier $clientNotifier, FakeClientNotifier $fakeClientNotifier)
-    {
-        $this->clientNotifier = $clientNotifier;
-        $this->fakeClientNotifier = $fakeClientNotifier;
+    public function __construct(
+        private ClientNotifier $clientNotifier,
+        private FakeClientNotifier $fakeClientNotifier
+    ) {
     }
 
     public function chooseImplementation(): ClientNotifierInterface

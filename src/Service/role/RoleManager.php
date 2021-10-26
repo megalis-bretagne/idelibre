@@ -7,11 +7,8 @@ use App\Repository\RoleRepository;
 
 class RoleManager
 {
-    private RoleRepository $roleRepository;
-
-    public function __construct(RoleRepository $roleRepository)
+    public function __construct(private RoleRepository $roleRepository)
     {
-        $this->roleRepository = $roleRepository;
     }
 
     public function getSuperAdminRole(): Role
