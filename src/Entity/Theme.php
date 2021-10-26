@@ -11,22 +11,22 @@ use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\Index;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\OneToMany;
+use Doctrine\ORM\Mapping\OrderBy;
+use Doctrine\ORM\Mapping\Table;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\NotNull;
 
 /**
  * @Gedmo\Tree(type="nested")
- * @ORM\Table(
- *     name="theme",
- *     indexes={
- *          @Index(name="lft_ix", columns={"lft"}),
- *          @Index(name="rgt_ix", columns={"rgt"}),
- *          @Index(name="lvl_ix", columns={"lvl"})
- *     })
- * @ORM\Entity(repositoryClass=ThemeRepository::class)
  */
 #[Entity(repositoryClass: ThemeRepository::class)]
+#[Index(columns: ["lft"], name: "lft_ix")]
+#[Index(columns: ["rgt"], name: "rgt_ix")]
+#[Index(columns: ["lvl"], name: "lvl_ix")]
 class Theme
 {
     #[Id]
@@ -35,41 +35,34 @@ class Theme
     #[Groups(['theme', 'theme:read', 'project:read'])]
     private $id;
 
-    /**
-     * @Groups({"theme"})
-     * @Assert\NotBlank
-     * @Assert\Length(max="255")
-     */
+
     #[Column(type: 'string', length: 255)]
-    #[Groups(['theme:read', 'theme:write', 'project:read'])]
+    #[NotBlank]
+    #[Length(max: 255)]
+    #[Groups(['theme','theme:read', 'theme:write', 'project:read'])]
     private ?string $name;
 
     /**
      * @Gedmo\TreeLeft()
-     * @ORM\Column(type="integer")
      */
     #[Column(type: 'integer')]
     private $lft;
 
     /**
      * @Gedmo\TreeLevel()
-     * @ORM\Column(type="integer")
-     * @Groups({"theme"})
      */
     #[Column(type: 'integer')]
+    #[Groups(['theme'])]
     private $lvl;
 
     /**
      * @Gedmo\TreeRight()
-     * @ORM\Column(type="integer")
      */
     #[Column(type: 'integer')]
     private $rgt;
 
     /**
      * @Gedmo\TreeRoot()
-     * @ORM\ManyToOne(targetEntity="App\Entity\Theme")
-     * @ORM\JoinColumn(name="tree_root", referencedColumnName="id", onDelete="cascade")
      */
     #[ManyToOne(targetEntity: Theme::class)]
     #[JoinColumn(name: 'tree_root', referencedColumnName: 'id', onDelete: 'CASCADE')]
@@ -77,8 +70,6 @@ class Theme
 
     /**
      * @Gedmo\TreeParent()
-     * @ORM\ManyToOne(targetEntity="App\Entity\Theme", inversedBy="children")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="cascade")
      */
     #[ManyToOne(targetEntity: Theme::class, inversedBy: 'children')]
     #[JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
@@ -87,25 +78,18 @@ class Theme
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Theme", mappedBy="parent")
-     * @ORM\OrderBy({"name" = "ASC"})
      */
-    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: Theme::class)]
+    #[OneToMany(mappedBy: 'parent', targetEntity: Theme::class)]
+    #[OrderBy(value: ["name" => "ASC"])]
     private $children;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Structure::class)
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
-     * @Assert\NotNull
-     */
     #[ManyToOne(targetEntity: Structure::class)]
     #[JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    #[NotNull]
     private $structure;
 
-    /**
-     * @Groups({"theme"})
-     */
     #[Column(type: 'string', length: 512, nullable: true)]
-    #[Groups(['theme:read', 'project:read'])]
+    #[Groups(['theme', 'theme:read', 'project:read'])]
     private $fullName;
 
     public function getId(): string
