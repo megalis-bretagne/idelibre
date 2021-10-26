@@ -57,38 +57,46 @@ class Timestamp
     {
         $this->createdAt = new DateTimeImmutable();
     }
+
     public function getId(): ?string
     {
         return $this->id;
     }
+
     public function getCreatedAt(): ?DateTimeInterface
     {
         return $this->createdAt;
     }
+
     public function getFilePathContent(): ?string
     {
         return $this->filePathContent;
     }
+
     public function setFilePathContent(?string $filePathContent): Timestamp
     {
         $this->filePathContent = $filePathContent;
 
         return $this;
     }
+
     public function getFilePathTsa(): ?string
     {
         return $this->filePathTsa;
     }
+
     public function setFilePathTsa(?string $filePathTsa): Timestamp
     {
         $this->filePathTsa = $filePathTsa;
 
         return $this;
     }
+
     public function getSitting(): ?Sitting
     {
         return $this->sitting;
     }
+
     public function setSitting(?Sitting $sitting): self
     {
         $this->sitting = $sitting;

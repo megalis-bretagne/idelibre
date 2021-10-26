@@ -19,7 +19,6 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotNull;
 
-
 #[Entity(repositoryClass: EmailTemplateRepository::class)]
 #[Table]
 #[UniqueEntity(fields: ['name', 'structure'], message: "l'intitulé doit être unique", errorPath: 'name')]

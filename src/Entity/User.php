@@ -24,7 +24,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotNull;
 
 #[Entity(repositoryClass: UserRepository::class)]
-#[UniqueEntity("username", message: "Ce nom d'utilisateur est déjà utilisé")]
+#[UniqueEntity('username', message: "Ce nom d'utilisateur est déjà utilisé")]
 #[Table(name: '`user`')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -139,7 +139,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUsername(): string
     {
-        return (string)$this->username;
+        return (string) $this->username;
     }
 
     public function setUsername(string $username): self
@@ -166,7 +166,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getPassword(): string
     {
-        return (string)$this->password;
+        return (string) $this->password;
     }
 
     public function setPassword(string $password): self

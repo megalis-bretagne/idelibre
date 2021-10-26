@@ -2,17 +2,15 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\Id;
-use Doctrine\ORM\Mapping\GeneratedValue;
+use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\OneToOne;
 use Symfony\Component\Validator\Constraints\Length;
-use DateTime;
-use DateTimeInterface;
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 #[Entity(repositoryClass: 'App\Repository\ForgetTokenRepository')]
 class ForgetToken
@@ -30,7 +28,7 @@ class ForgetToken
     private $expireAt;
 
     #[OneToOne(targetEntity: User::class, cascade: ['persist'])]
-    #[JoinColumn(nullable: false, onDelete: "CASCADE")]
+    #[JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private $user;
 
     public function __construct(User $user)
@@ -44,18 +42,22 @@ class ForgetToken
     {
         return $this->id;
     }
+
     public function getToken(): ?string
     {
         return $this->token;
     }
+
     public function getExpireAt(): ?DateTimeInterface
     {
         return $this->expireAt;
     }
+
     public function getUser(): ?User
     {
         return $this->user;
     }
+
     public function setToken(string $newToken)
     {
         $this->token = $newToken;

@@ -2,14 +2,13 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\Id;
-use Doctrine\ORM\Mapping\GeneratedValue;
-use Doctrine\ORM\Mapping\Column;
-use Doctrine\ORM\Mapping\OneToOne;
-use Doctrine\ORM\Mapping\JoinColumn;
 use App\Repository\ReminderRepository;
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\OneToOne;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[Entity(repositoryClass: ReminderRepository::class)]
@@ -50,10 +49,12 @@ class Reminder
     {
         return $this->id;
     }
+
     public function getDuration(): ?int
     {
         return $this->duration;
     }
+
     public function setDuration(?int $duration): self
     {
         if (!$duration) {
@@ -64,30 +65,36 @@ class Reminder
 
         return $this;
     }
+
     public function getIsActive(): ?bool
     {
         return $this->isActive;
     }
+
     public function setIsActive(bool $isActive): self
     {
         $this->isActive = $isActive;
 
         return $this;
     }
+
     public function getSitting(): ?Sitting
     {
         return $this->sitting;
     }
+
     public function setSitting(Sitting $sitting): self
     {
         $this->sitting = $sitting;
 
         return $this;
     }
+
     public function getType(): ?Type
     {
         return $this->type;
     }
+
     public function setType(Type $type): self
     {
         $this->type = $type;

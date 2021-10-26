@@ -2,18 +2,16 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\Id;
-use Doctrine\ORM\Mapping\GeneratedValue;
-use Doctrine\ORM\Mapping\Column;
-use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\Length;
-use Doctrine\ORM\Mapping\OneToOne;
 use DateTimeImmutable;
 use DateTimeInterface;
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\OneToOne;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 #[Entity(repositoryClass: 'App\Repository\FileRepository')]
 class File
@@ -67,44 +65,53 @@ class File
     {
         $this->createdAt = new DateTimeImmutable();
     }
+
     public function getId(): ?string
     {
         return $this->id;
     }
+
     public function getPath(): ?string
     {
         return $this->path;
     }
+
     public function setPath(string $path): self
     {
         $this->path = $path;
 
         return $this;
     }
+
     public function getSize(): ?float
     {
         return $this->size;
     }
+
     public function setSize(?float $size): self
     {
         $this->size = $size;
 
         return $this;
     }
+
     public function getName(): ?string
     {
         return $this->name;
     }
+
     public function setName(string $name): self
     {
         $this->name = $name;
 
         return $this;
     }
+
     public function getCreatedAt(): ?DateTimeInterface
     {
         return $this->createdAt;
     }
+
     public function getStructure(): Structure
     {
         if ($this->project) {
@@ -120,6 +127,7 @@ class File
 
         return $this->invitationSitting->getStructure();
     }
+
     public function getInvitationSitting(): ?Sitting
     {
         return $this->invitationSitting;

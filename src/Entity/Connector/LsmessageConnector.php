@@ -2,13 +2,13 @@
 
 namespace App\Entity\Connector;
 
-use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\Id;
-use Doctrine\ORM\Mapping\GeneratedValue;
-use Doctrine\ORM\Mapping\Column;
 use App\Entity\Structure;
 use App\Repository\Connector\LsmessageConnectorRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
 
@@ -46,52 +46,63 @@ class LsmessageConnector extends Connector
     {
         $this->structure = $structure;
     }
+
     public function getId(): ?int
     {
         return $this->id;
     }
+
     public function getName(): ?string
     {
         return $this->name;
     }
+
     public function getStructure(): ?Structure
     {
         return $this->structure;
     }
+
     public function getUrl(): ?string
     {
         return $this->fields['url'];
     }
+
     public function setUrl(?string $url): self
     {
         $this->fields['url'] = $url;
 
         return $this;
     }
+
     public function getApiKey(): ?string
     {
         return $this->fields['api_key'];
     }
+
     public function setApiKey(?string $apiKey): self
     {
         $this->fields['api_key'] = $apiKey;
 
         return $this;
     }
+
     public function getcontent(): ?string
     {
         return $this->fields['content'];
     }
+
     public function setContent(?string $content): self
     {
         $this->fields['content'] = $content;
 
         return $this;
     }
+
     public function getSender(): ?string
     {
         return $this->fields['sender'];
     }
+
     /**
      * @return $this
      */
@@ -101,10 +112,12 @@ class LsmessageConnector extends Connector
 
         return $this;
     }
+
     public function getActive(): bool
     {
         return $this->fields['active'] ?? false;
     }
+
     public function setActive(bool $active = false): self
     {
         $this->fields['active'] = $active;

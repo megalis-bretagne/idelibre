@@ -20,10 +20,9 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotNull;
 
-
 #[Entity(repositoryClass: PartyRepository::class)]
 #[Table]
-#[UniqueEntity(fields: ['name', 'structure'], message: "Ce nom de groupe politique existe déjà", errorPath: 'name')]
+#[UniqueEntity(fields: ['name', 'structure'], message: 'Ce nom de groupe politique existe déjà', errorPath: 'name')]
 #[UniqueConstraint(name: 'IDX_PARTY_NAME_STRUCTURE', columns: ['name', 'structure_id'])]
 class Party
 {
@@ -55,20 +54,24 @@ class Party
     {
         $this->actors = new ArrayCollection();
     }
+
     public function getId(): ?string
     {
         return $this->id;
     }
+
     public function getName(): ?string
     {
         return $this->name;
     }
+
     public function setName(string $name): self
     {
         $this->name = $name;
 
         return $this;
     }
+
     /**
      * @return Collection|User[]
      */
@@ -76,6 +79,7 @@ class Party
     {
         return $this->actors;
     }
+
     public function addActor(User $actor): self
     {
         if (!$this->actors->contains($actor)) {
@@ -85,6 +89,7 @@ class Party
 
         return $this;
     }
+
     public function removeActor(User $actor): self
     {
         if ($this->actors->contains($actor)) {
@@ -97,20 +102,24 @@ class Party
 
         return $this;
     }
+
     public function getStructure(): ?Structure
     {
         return $this->structure;
     }
+
     public function setStructure(?Structure $structure): self
     {
         $this->structure = $structure;
 
         return $this;
     }
+
     public function getLegacyId(): ?int
     {
         return $this->legacyId;
     }
+
     /**
      * @return Party
      */

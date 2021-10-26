@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 #[Entity(repositoryClass: 'App\Repository\TimezoneRepository')]
-#[UniqueEntity("name")]
+#[UniqueEntity('name')]
 class Timezone
 {
     #[Id]
@@ -32,20 +32,24 @@ class Timezone
     {
         return $this->id;
     }
+
     public function getName(): ?string
     {
         return $this->name;
     }
+
     public function setName(string $name): self
     {
         $this->name = $name;
 
         return $this;
     }
+
     public function getInfo(): ?string
     {
         return $this->info;
     }
+
     public function setInfo(string $info): self
     {
         $this->info = $info;

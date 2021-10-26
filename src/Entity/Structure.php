@@ -65,30 +65,36 @@ class Structure
     {
         $this->users = new ArrayCollection();
     }
+
     public function getId(): ?string
     {
         return $this->id;
     }
+
     public function getName(): ?string
     {
         return $this->name;
     }
+
     public function setName(string $name): self
     {
         $this->name = $name;
 
         return $this;
     }
+
     public function getReplyTo(): ?string
     {
         return $this->replyTo;
     }
+
     public function setReplyTo(?string $replyTo): self
     {
         $this->replyTo = $replyTo;
 
         return $this;
     }
+
     /**
      * @return Collection|User[]
      */
@@ -96,6 +102,7 @@ class Structure
     {
         return $this->users;
     }
+
     public function addUser(User $user): self
     {
         if (!$this->users->contains($user)) {
@@ -105,6 +112,7 @@ class Structure
 
         return $this;
     }
+
     public function removeUser(User $user): self
     {
         if ($this->users->contains($user)) {
@@ -117,50 +125,60 @@ class Structure
 
         return $this;
     }
+
     public function getGroup(): ?Group
     {
         return $this->group;
     }
+
     public function setGroup(?Group $group): self
     {
         $this->group = $group;
 
         return $this;
     }
+
     public function getTimezone(): ?Timezone
     {
         return $this->timezone;
     }
+
     public function setTimezone(?Timezone $timezone): self
     {
         $this->timezone = $timezone;
 
         return $this;
     }
+
     public function getSuffix(): ?string
     {
         return $this->suffix;
     }
+
     public function setSuffix(string $suffix): self
     {
         $this->suffix = $suffix;
 
         return $this;
     }
+
     public function getSiren(): ?string
     {
         return $this->siren;
     }
+
     public function setSiren($siren): self
     {
         $this->siren = $siren;
 
         return $this;
     }
+
     public function getLegacyConnectionName(): ?string
     {
         return $this->legacyConnectionName;
     }
+
     public function setLegacyConnectionName(string $legacyConnectionName): self
     {
         $this->legacyConnectionName = $legacyConnectionName;

@@ -2,25 +2,23 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\Id;
-use Doctrine\ORM\Mapping\GeneratedValue;
-use Doctrine\ORM\Mapping\Column;
-use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\NotNull;
-use Doctrine\ORM\Mapping\OneToOne;
-use Doctrine\ORM\Mapping\JoinColumn;
-use Doctrine\ORM\Mapping\ManyToOne;
-use Doctrine\ORM\Mapping\OneToMany;
-use Doctrine\ORM\Mapping\OrderBy;
 use App\Repository\ProjectRepository;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\OneToMany;
+use Doctrine\ORM\Mapping\OneToOne;
+use Doctrine\ORM\Mapping\OrderBy;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\NotNull;
 
 #[Entity(repositoryClass: ProjectRepository::class)]
 class Project
@@ -76,74 +74,89 @@ class Project
         $this->createdAt = new DateTimeImmutable();
         $this->annexes = new ArrayCollection();
     }
+
     public function getId(): ?string
     {
         return $this->id;
     }
+
     public function getName(): ?string
     {
         return $this->name;
     }
+
     public function setName(string $name): self
     {
         $this->name = $name;
 
         return $this;
     }
+
     public function getRank(): ?int
     {
         return $this->rank;
     }
+
     public function setRank(int $rank): self
     {
         $this->rank = $rank;
 
         return $this;
     }
+
     public function getFile(): ?File
     {
         return $this->file;
     }
+
     public function setFile(File $file): self
     {
         $this->file = $file;
 
         return $this;
     }
+
     public function getTheme(): ?Theme
     {
         return $this->theme;
     }
+
     public function setTheme(?Theme $theme): self
     {
         $this->theme = $theme;
 
         return $this;
     }
+
     public function getReporter(): ?User
     {
         return $this->reporter;
     }
+
     public function setReporter(?User $reporter): self
     {
         $this->reporter = $reporter;
 
         return $this;
     }
+
     public function getCreatedAt(): ?DateTimeImmutable
     {
         return $this->createdAt;
     }
+
     public function getSitting(): ?Sitting
     {
         return $this->sitting;
     }
+
     public function setSitting(?Sitting $sitting): self
     {
         $this->sitting = $sitting;
 
         return $this;
     }
+
     /**
      * @return Collection|Annex[]
      */
@@ -151,6 +164,7 @@ class Project
     {
         return $this->annexes;
     }
+
     public function addAnnex(Annex $annex): self
     {
         if (!$this->annexes->contains($annex)) {
@@ -160,6 +174,7 @@ class Project
 
         return $this;
     }
+
     /**
      * @param Annex[] $annexes
      */
@@ -171,6 +186,7 @@ class Project
 
         return $this;
     }
+
     public function removeAnnex(Annex $annex): self
     {
         if ($this->annexes->contains($annex)) {

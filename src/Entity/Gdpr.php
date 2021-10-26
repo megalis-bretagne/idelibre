@@ -2,15 +2,13 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\Id;
-use Doctrine\ORM\Mapping\GeneratedValue;
-use Doctrine\ORM\Mapping\Column;
-use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Validator\Constraints\Email;
 use App\Repository\GdprRepository;
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\Id;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\Length;
 
 #[Entity(repositoryClass: GdprRepository::class)]
 class Gdpr
@@ -62,90 +60,108 @@ class Gdpr
     {
         return $this->id;
     }
+
     public function getCompanyName(): ?string
     {
         return $this->companyName;
     }
+
     public function setCompanyName(string $companyName): self
     {
         $this->companyName = $companyName;
 
         return $this;
     }
+
     public function getAddress(): ?string
     {
         return $this->address;
     }
+
     public function setAddress(string $address): self
     {
         $this->address = $address;
 
         return $this;
     }
+
     public function getRepresentative(): ?string
     {
         return $this->representative;
     }
+
     public function setRepresentative(string $representative): self
     {
         $this->representative = $representative;
 
         return $this;
     }
+
     public function getQuality(): ?string
     {
         return $this->quality;
     }
+
     public function setQuality(string $quality): self
     {
         $this->quality = $quality;
 
         return $this;
     }
+
     public function getSiret(): ?string
     {
         return $this->siret;
     }
+
     public function setSiret(string $siret): self
     {
         $this->siret = $siret;
 
         return $this;
     }
+
     public function getApe(): ?string
     {
         return $this->ape;
     }
+
     public function setApe(string $ape): self
     {
         $this->ape = $ape;
 
         return $this;
     }
+
     public function getCompanyPhone(): ?string
     {
         return $this->companyPhone;
     }
+
     public function setCompanyPhone(string $companyPhone): self
     {
         $this->companyPhone = $companyPhone;
 
         return $this;
     }
+
     public function getCompanyEmail(): ?string
     {
         return $this->companyEmail;
     }
+
     public function setCompanyEmail(string $companyEmail): self
     {
         $this->companyEmail = $companyEmail;
 
         return $this;
     }
+
     public function getDpoEmail(): ?string
     {
         return $this->dpoEmail;
     }
+
     public function setDpoEmail(string $dpoEmail): self
     {
         $this->dpoEmail = $dpoEmail;

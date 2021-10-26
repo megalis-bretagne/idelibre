@@ -2,19 +2,17 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\Table;
-use Doctrine\ORM\Mapping\Id;
-use Doctrine\ORM\Mapping\GeneratedValue;
-use Doctrine\ORM\Mapping\Column;
-use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Validator\Constraints\NotBlank;
-use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\OneToMany;
+use Doctrine\ORM\Mapping\Table;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * @UniqueEntity("name")
@@ -47,20 +45,24 @@ class Group
         $this->users = new ArrayCollection();
         $this->structures = new ArrayCollection();
     }
+
     public function getId(): ?string
     {
         return $this->id;
     }
+
     public function getName(): ?string
     {
         return $this->name;
     }
+
     public function setName(string $name): self
     {
         $this->name = $name;
 
         return $this;
     }
+
     /**
      * @return Collection|User[]
      */
@@ -68,6 +70,7 @@ class Group
     {
         return $this->users;
     }
+
     public function addUser(User $user): self
     {
         if (!$this->users->contains($user)) {
@@ -77,6 +80,7 @@ class Group
 
         return $this;
     }
+
     public function removeUser(User $user): self
     {
         if ($this->users->contains($user)) {
@@ -89,6 +93,7 @@ class Group
 
         return $this;
     }
+
     /**
      * @return Collection|Structure[]
      */
@@ -96,6 +101,7 @@ class Group
     {
         return $this->structures;
     }
+
     public function addStructure(Structure $structure): self
     {
         if (!$this->structures->contains($structure)) {
@@ -105,6 +111,7 @@ class Group
 
         return $this;
     }
+
     public function removeStructure(Structure $structure): self
     {
         if ($this->structures->contains($structure)) {
@@ -117,10 +124,12 @@ class Group
 
         return $this;
     }
+
     public function getIsStructureCreator(): ?bool
     {
         return $this->isStructureCreator;
     }
+
     public function setIsStructureCreator(bool $isStructureCreator): self
     {
         $this->isStructureCreator = $isStructureCreator;

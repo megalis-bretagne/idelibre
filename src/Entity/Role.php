@@ -2,17 +2,15 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\Id;
-use Doctrine\ORM\Mapping\GeneratedValue;
-use Doctrine\ORM\Mapping\Column;
-use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\Length;
 use App\Repository\RoleRepository;
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\Id;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 #[Entity(repositoryClass: RoleRepository::class)]
 #[UniqueEntity('name')]
@@ -57,6 +55,7 @@ class Role
     {
         return $this->id;
     }
+
     /**
      * @return string
      */
@@ -64,22 +63,26 @@ class Role
     {
         return $this->name;
     }
+
     public function setName(string $name): self
     {
         $this->name = $name;
 
         return $this;
     }
+
     public function getComposites(): array
     {
         return $this->composites;
     }
+
     public function setComposites(array $composites): self
     {
         $this->composites = $composites;
 
         return $this;
     }
+
     public function addComposite(string $composite): self
     {
         if (!in_array($composite, $this->composites)) {
@@ -88,20 +91,24 @@ class Role
 
         return $this;
     }
+
     public function getPrettyName(): ?string
     {
         return $this->prettyName;
     }
+
     public function setPrettyName(?string $prettyName): self
     {
         $this->prettyName = $prettyName;
 
         return $this;
     }
+
     public function getIsInStructureRole(): ?bool
     {
         return $this->isInStructureRole;
     }
+
     public function setIsInStructureRole(bool $isInStructureRole): self
     {
         $this->isInStructureRole = $isInStructureRole;

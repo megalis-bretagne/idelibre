@@ -26,7 +26,7 @@ use Symfony\Component\Validator\Constraints\NotNull;
 
 #[Entity(repositoryClass: SittingRepository::class)]
 #[Table]
-#[UniqueEntity(fields: ['type', 'structure', 'date'], message: "Une séance du même type existe déja à la même heure", errorPath: 'name')]
+#[UniqueEntity(fields: ['type', 'structure', 'date'], message: 'Une séance du même type existe déja à la même heure', errorPath: 'name')]
 #[UniqueConstraint(name: 'IDX_SITTING_NAME_DATE_STRUCTURE', columns: ['name', 'structure_id', 'date'])]
 class Sitting
 {
@@ -36,7 +36,7 @@ class Sitting
     #[Id]
     #[GeneratedValue(strategy: 'UUID')]
     #[Column(type: 'guid')]
-    #[Groups(['sitting','sitting:read'])]
+    #[Groups(['sitting', 'sitting:read'])]
     private $id;
 
     #[Column(type: 'string', length: 255)]
@@ -59,9 +59,8 @@ class Sitting
 
     #[Column(type: 'string', length: 255, nullable: true)]
     #[Length(max: '255')]
-    #[Groups(['sitting','sitting:detail', 'sitting:write'])]
+    #[Groups(['sitting', 'sitting:detail', 'sitting:write'])]
     private $place;
-
 
     #[Column(type: 'datetime')]
     #[Groups(groups: ['sitting', 'sitting:detail'])]
@@ -93,7 +92,7 @@ class Sitting
     private $invitationFile;
 
     #[Column(type: 'string', length: 255, nullable: true)]
-    #[Groups(['sitting','sitting:detail'])]
+    #[Groups(['sitting', 'sitting:detail'])]
     private $comelusId;
 
     #[OneToOne(mappedBy: 'sitting', targetEntity: Reminder::class, cascade: ['persist', 'remove'])]
@@ -110,64 +109,77 @@ class Sitting
         $this->projects = new ArrayCollection();
         $this->updatedTimestamps = new ArrayCollection();
     }
+
     public function getId(): ?string
     {
         return $this->id;
     }
+
     public function getName(): ?string
     {
         return $this->name;
     }
+
     public function setName(string $name): self
     {
         $this->name = $name;
 
         return $this;
     }
+
     public function getDate(): ?DateTimeInterface
     {
         return $this->date;
     }
+
     public function setDate(?DateTimeInterface $date): self
     {
         $this->date = $date;
 
         return $this;
     }
+
     public function getRevision(): ?int
     {
         return $this->revision;
     }
+
     public function setRevision(int $revision): self
     {
         $this->revision = $revision;
 
         return $this;
     }
+
     public function getIsArchived(): ?bool
     {
         return $this->isArchived;
     }
+
     public function setIsArchived(bool $isArchived): self
     {
         $this->isArchived = $isArchived;
 
         return $this;
     }
+
     public function getPlace(): ?string
     {
         return $this->place;
     }
+
     public function setPlace(?string $place): self
     {
         $this->place = $place;
 
         return $this;
     }
+
     public function getCreatedAt(): ?DateTimeInterface
     {
         return $this->createdAt;
     }
+
     /**
      * @return Collection|Convocation[]
      */
@@ -175,6 +187,7 @@ class Sitting
     {
         return $this->convocations;
     }
+
     public function addConvocation(Convocation $convocation): self
     {
         if (!$this->convocations->contains($convocation)) {
@@ -184,6 +197,7 @@ class Sitting
 
         return $this;
     }
+
     public function removeConvocation(Convocation $convocation): self
     {
         if ($this->convocations->contains($convocation)) {
@@ -196,36 +210,43 @@ class Sitting
 
         return $this;
     }
+
     public function getType(): ?Type
     {
         return $this->type;
     }
+
     public function setType(?Type $type): self
     {
         $this->type = $type;
 
         return $this;
     }
+
     public function getStructure(): ?Structure
     {
         return $this->structure;
     }
+
     public function setStructure(?Structure $structure): self
     {
         $this->structure = $structure;
 
         return $this;
     }
+
     public function getConvocationFile(): ?File
     {
         return $this->convocationFile;
     }
+
     public function setConvocationFile(?File $convocationFile): self
     {
         $this->convocationFile = $convocationFile;
 
         return $this;
     }
+
     /**
      * @return Collection|Project[]
      */
@@ -233,6 +254,7 @@ class Sitting
     {
         return $this->projects;
     }
+
     public function addProject(Project $project): self
     {
         if (!$this->projects->contains($project)) {
@@ -242,6 +264,7 @@ class Sitting
 
         return $this;
     }
+
     public function removeProject(Project $project): self
     {
         if ($this->projects->contains($project)) {
@@ -254,26 +277,31 @@ class Sitting
 
         return $this;
     }
+
     public function getInvitationFile(): ?File
     {
         return $this->invitationFile;
     }
+
     public function setInvitationFile(?File $invitationFile): self
     {
         $this->invitationFile = $invitationFile;
 
         return $this;
     }
+
     public function getComelusId(): ?string
     {
         return $this->comelusId;
     }
+
     public function setComelusId(?string $comelusId): self
     {
         $this->comelusId = $comelusId;
 
         return $this;
     }
+
     public function getNameWithDate(): string
     {
         $dateTime = new \DateTime(null, new DateTimeZone($this->getStructure()->getTimezone()->getName()));
@@ -281,10 +309,12 @@ class Sitting
 
         return $this->name . ' ' . $dateTime->format('d/m/y');
     }
+
     public function getReminder(): ?Reminder
     {
         return $this->reminder;
     }
+
     public function setReminder(Reminder $reminder): self
     {
         // set the owning side of the relation if necessary
@@ -296,6 +326,7 @@ class Sitting
 
         return $this;
     }
+
     /**
      * @return Collection|Timestamp[]
      */
@@ -303,6 +334,7 @@ class Sitting
     {
         return $this->updatedTimestamps;
     }
+
     public function addUpdatedTimestamp(Timestamp $updatedTimestamp): self
     {
         if (!$this->updatedTimestamps->contains($updatedTimestamp)) {
@@ -312,6 +344,7 @@ class Sitting
 
         return $this;
     }
+
     public function removeUpdatedTimestamp(Timestamp $updatedTimestamp): self
     {
         if ($this->updatedTimestamps->removeElement($updatedTimestamp)) {

@@ -2,8 +2,6 @@
 
 namespace App\Entity;
 
-use App\Repository\AnnotationRepository;
-use App\Repository\ConvocationRepository;
 use App\Repository\ThemeRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Column;
@@ -34,7 +32,7 @@ class Theme
     #[Id]
     #[GeneratedValue(strategy: 'UUID')]
     #[Column(type: 'guid')]
-    #[Groups(['theme','theme:read', 'project:read'])]
+    #[Groups(['theme', 'theme:read', 'project:read'])]
     private $id;
 
     /**

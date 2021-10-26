@@ -22,17 +22,16 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotNull;
 
-
 #[Entity(repositoryClass: TypeRepository::class)]
 #[Table]
-#[UniqueEntity(fields: ['name', 'structure'], message: "Ce type est déja utilisé dans cette structure", errorPath: 'name')]
+#[UniqueEntity(fields: ['name', 'structure'], message: 'Ce type est déja utilisé dans cette structure', errorPath: 'name')]
 #[UniqueConstraint(name: 'IDX_TYPE_NAME_STRUCTURE', columns: ['name', 'structure_id'])]
 class Type
 {
     #[Id]
     #[GeneratedValue(strategy: 'UUID')]
     #[Column(type: 'guid')]
-    #[Groups(['sitting','type:read', 'sitting:detail'])]
+    #[Groups(['sitting', 'type:read', 'sitting:detail'])]
     private $id;
 
     #[Column(type: 'string', length: 255, nullable: false)]
@@ -74,20 +73,24 @@ class Type
         $this->associatedUsers = new ArrayCollection();
         $this->authorizedSecretaries = new ArrayCollection();
     }
+
     public function getId(): ?string
     {
         return $this->id;
     }
+
     public function getName(): ?string
     {
         return $this->name;
     }
+
     public function setName(string $name): self
     {
         $this->name = $name;
 
         return $this;
     }
+
     /**
      * @return Collection|User[]
      */
@@ -95,12 +98,14 @@ class Type
     {
         return $this->associatedUsers;
     }
+
     public function setAssociatedUsers(iterable $users): self
     {
         $this->associatedUsers = $users;
 
         return $this;
     }
+
     public function addAssociatedUser(User $associatedUser): self
     {
         if (!$this->associatedUsers->contains($associatedUser)) {
@@ -109,6 +114,7 @@ class Type
 
         return $this;
     }
+
     public function removeAssociatedUser(User $associatedUser): self
     {
         if ($this->associatedUsers->contains($associatedUser)) {
@@ -117,16 +123,19 @@ class Type
 
         return $this;
     }
+
     public function getStructure(): ?Structure
     {
         return $this->structure;
     }
+
     public function setStructure(?Structure $structure): self
     {
         $this->structure = $structure;
 
         return $this;
     }
+
     /**
      * @return mixed
      */
@@ -134,6 +143,7 @@ class Type
     {
         return $this->emailTemplate;
     }
+
     /**
      * @return Collection|User[]
      */
@@ -141,6 +151,7 @@ class Type
     {
         return $this->authorizedSecretaries;
     }
+
     public function addAuthorizedSecretary(User $authorizedSecretary): self
     {
         if (!$this->authorizedSecretaries->contains($authorizedSecretary)) {
@@ -149,36 +160,43 @@ class Type
 
         return $this;
     }
+
     public function removeAuthorizedSecretary(User $authorizedSecretary): self
     {
         $this->authorizedSecretaries->removeElement($authorizedSecretary);
 
         return $this;
     }
+
     public function getIsSms(): bool
     {
         return $this->isSms ?? false;
     }
+
     public function setIsSms(bool $isSms): self
     {
         $this->isSms = $isSms;
 
         return $this;
     }
+
     public function getIsComelus(): bool
     {
         return $this->isComelus ?? false;
     }
+
     public function setIsComelus(?bool $isComelus): self
     {
         $this->isComelus = $isComelus;
 
         return $this;
     }
+
     public function getReminder(): ?Reminder
     {
         return $this->reminder;
     }
+
     public function setReminder(Reminder $reminder): self
     {
         // set the owning side of the relation if necessary
