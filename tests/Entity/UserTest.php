@@ -2,6 +2,7 @@
 
 namespace App\Tests\Entity;
 
+use App\DataFixtures\RoleFixtures;
 use App\DataFixtures\UserFixtures;
 use App\Entity\User;
 use App\Tests\FindEntityTrait;
@@ -29,12 +30,14 @@ class UserTest extends WebTestCase
         $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
         $databaseTool->loadFixtures([
             UserFixtures::class,
+            RoleFixtures::class
         ]);
     }
 
     public function testValidNoAtUsername()
     {
         $user = (new User())
+            ->setRole($this->getOneRoleBy(['name' => 'Secretary']))
             ->setFirstName('new firstName')
             ->setLastName('new lastName')
             ->setUsername('new username')
@@ -46,6 +49,7 @@ class UserTest extends WebTestCase
     public function testValidOneAtUsername()
     {
         $user = (new User())
+            ->setRole($this->getOneRoleBy(['name' => 'Secretary']))
             ->setFirstName('new firstName')
             ->setLastName('new lastName')
             ->setUsername('new username@toto')
@@ -57,6 +61,7 @@ class UserTest extends WebTestCase
     public function testInvalidTwoAtUsername()
     {
         $user = (new User())
+            ->setRole($this->getOneRoleBy(['name' => 'Secretary']))
             ->setFirstName('new firstName')
             ->setLastName('new lastName')
             ->setUsername('new username@toto@extrasuffix')
@@ -68,6 +73,7 @@ class UserTest extends WebTestCase
     public function testInvalidUsernameAlreadyExists()
     {
         $user = (new User())
+            ->setRole($this->getOneRoleBy(['name' => 'Secretary']))
             ->setFirstName('new firstName')
             ->setLastName('new lastName')
             ->setUsername('admin@libriciel')
@@ -79,6 +85,7 @@ class UserTest extends WebTestCase
     public function testInvalidEmptyUsername()
     {
         $user = (new User())
+            ->setRole($this->getOneRoleBy(['name' => 'Secretary']))
             ->setFirstName('new firstName')
             ->setLastName('new lastName')
             ->setUsername('')
@@ -90,6 +97,7 @@ class UserTest extends WebTestCase
     public function testInvalidNoUsername()
     {
         $user = (new User())
+            ->setRole($this->getOneRoleBy(['name' => 'Secretary']))
             ->setFirstName('new firstName')
             ->setLastName('new lastName')
             ->setEmail('email@example.org');
@@ -100,6 +108,7 @@ class UserTest extends WebTestCase
     public function testInvalidUsernameTooLong()
     {
         $user = (new User())
+            ->setRole($this->getOneRoleBy(['name' => 'Secretary']))
             ->setFirstName('new firstName')
             ->setLastName('new lastName')
             ->setUsername($this->genString(256))
@@ -111,6 +120,7 @@ class UserTest extends WebTestCase
     public function testInvalidEmptyFirstName()
     {
         $user = (new User())
+            ->setRole($this->getOneRoleBy(['name' => 'Secretary']))
             ->setFirstName('')
             ->setLastName('new lastName')
             ->setUsername('new username')
@@ -122,6 +132,7 @@ class UserTest extends WebTestCase
     public function testInvalidNoFirstName()
     {
         $user = (new User())
+            ->setRole($this->getOneRoleBy(['name' => 'Secretary']))
             ->setLastName('new lastName')
             ->setUsername('new username')
             ->setEmail('email@example.org');
@@ -132,6 +143,7 @@ class UserTest extends WebTestCase
     public function testInvalidFirstNameTooLong()
     {
         $user = (new User())
+            ->setRole($this->getOneRoleBy(['name' => 'Secretary']))
             ->setFirstName($this->genString(256))
             ->setLastName('new lastName')
             ->setUsername('new username')
@@ -143,6 +155,7 @@ class UserTest extends WebTestCase
     public function testInvalidEmptyLastName()
     {
         $user = (new User())
+            ->setRole($this->getOneRoleBy(['name' => 'Secretary']))
             ->setFirstName('new firstName')
             ->setLastName('')
             ->setUsername('new username')
@@ -154,6 +167,7 @@ class UserTest extends WebTestCase
     public function testInvalidLastNameTooLong()
     {
         $user = (new User())
+            ->setRole($this->getOneRoleBy(['name' => 'Secretary']))
             ->setFirstName('new firstName')
             ->setLastName($this->genString(256))
             ->setUsername('new username')
@@ -165,6 +179,7 @@ class UserTest extends WebTestCase
     public function testInvalidNoLastName()
     {
         $user = (new User())
+            ->setRole($this->getOneRoleBy(['name' => 'Secretary']))
             ->setFirstName('new firstName')
             ->setUsername('new username')
             ->setEmail('email@example.org');
@@ -175,6 +190,7 @@ class UserTest extends WebTestCase
     public function testInvalidEmailNotAnEmail()
     {
         $user = (new User())
+            ->setRole($this->getOneRoleBy(['name' => 'Secretary']))
             ->setFirstName('new firstName')
             ->setLastName('new lastName')
             ->setUsername('new username')

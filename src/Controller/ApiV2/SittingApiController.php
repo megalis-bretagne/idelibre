@@ -4,26 +4,35 @@ namespace App\Controller\ApiV2;
 
 use App\Entity\Sitting;
 use App\Entity\Structure;
+use App\Message\UpdatedSitting;
 use App\Repository\ConvocationRepository;
 use App\Repository\ProjectRepository;
 use App\Repository\SittingRepository;
 use App\Security\Http400Exception;
+use App\Service\ApiEntity\ProjectApi;
+use App\Service\Pdf\PdfValidator;
+use App\Service\Project\ProjectManager;
 use App\Service\Seance\SittingManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('/api/v2/structures/{structureId}/sittings')]
 #[ParamConverter('structure', class: Structure::class, options: ['id' => 'structureId'])]
 #[IsGranted('API_AUTHORIZED_STRUCTURE', subject: 'structure')]
 class SittingApiController extends AbstractController
 {
-
-    public function __construct(private DenormalizerInterface $denormalizer)
+    public function __construct(
+        private DenormalizerInterface $denormalizer,
+        private MessageBusInterface   $messageBus,
+        private PdfValidator          $pdfValidator,
+    )
     {
     }
 
@@ -101,17 +110,16 @@ class SittingApiController extends AbstractController
         );
 
         return $this->json($sitting, context: ['groups' => ['sitting:detail', 'sitting:read']]);
-
     }
-
 
     #[Route('/{id}', name: 'update_sitting', methods: ['PUT'])]
     #[IsGranted('API_SAME_STRUCTURE', subject: ['structure', 'sitting'])]
     public function updateSitting(
-        Structure      $structure,
-        Sitting        $sitting,
-        Request        $request,
-        SittingManager $sittingManager
+        Structure         $structure,
+        Sitting           $sitting,
+        Request           $request,
+        SittingManager    $sittingManager,
+        SittingRepository $sittingRepository
     )
     {
         $context = ['object_to_populate' => $sitting, 'groups' => ['sitting:write']];
@@ -119,13 +127,52 @@ class SittingApiController extends AbstractController
         /** @var Sitting $sitting */
         $sitting = $this->denormalizer->denormalize($request->request->all(), Sitting::class, context: $context);
 
-
         $sittingManager->update(
             $sitting,
             $request->files->get('convocationFile') ?? null,
             $request->files->get('invitationFile') ?? null
         );
 
-        return $this->json($sitting, context: ['groups' => ['sitting:detail', 'sitting:read']]);
+        $updatedSitting = $sittingRepository->find($sitting->getId());
+
+        return $this->json($updatedSitting, context: ['groups' => ['sitting:detail', 'sitting:read']]);
+    }
+
+
+    #[Route('/{sittingId}/projects', name: 'add_projects_to_sitting', methods: ['POST'])]
+    #[ParamConverter('sitting', class: Sitting::class, options: ['id' => 'sittingId'])]
+    #[IsGranted('API_SAME_STRUCTURE', subject: ['structure', 'sitting'])]
+    public function addProjectsToSitting(
+        Structure           $structure,
+        Sitting             $sitting,
+        Request             $request,
+        SerializerInterface $serializer,
+        ProjectManager      $projectManager,
+        ProjectRepository   $projectRepository,
+        SittingManager      $sittingManager
+
+    ): JsonResponse
+    {
+        if (count($sitting->getProjects())) {
+            throw new Http400Exception("Sitting already contain projects");
+        }
+
+        if($sittingManager->isAlreadySent($sitting)) {
+            throw new Http400Exception("Sitting is already sent");
+        }
+
+        $rawProjects = $request->get('projects');
+        $projects = $serializer->deserialize($rawProjects, ProjectApi::class . '[]', 'json');
+        if (!$this->pdfValidator->isProjectsPdf($projects)) {
+            return $this->json(['success' => false, 'message' => 'Au moins un projet n\'est pas un pdf'], 400);
+        }
+
+        $projectManager->update($projects, $request->files->all(), $sitting);
+
+        $this->messageBus->dispatch(new UpdatedSitting($sitting->getId()));
+
+        $updated = $projectRepository->getProjectsBySitting($sitting);
+
+        return $this->json($updated, status: 201, context: ['groups' => 'project:read']);
     }
 }

@@ -27,6 +27,7 @@ class SittingFixtures extends Fixture implements DependentFixtureInterface
         $typeBureauLibriciel = $this->getReference(TypeFixtures::REFERENCE . 'bureauLibriciel');
         $fileConvocationConseilLs = $this->getReference(FileFixtures::REFERENCE . 'convocation');
         $fileConvocationBureauLs = $this->getReference(FileFixtures::REFERENCE . 'convocation2');
+        $fileConvocationBureauLsWithoutProjects = $this->getReference(FileFixtures::REFERENCE . 'convocation3');
 
         $sittingConseilLibriciel = (new Sitting())
             ->setName('Conseil Libriciel')
@@ -47,6 +48,18 @@ class SittingFixtures extends Fixture implements DependentFixtureInterface
             ->setType($typeBureauLibriciel);
         $manager->persist($sittingBureauLibriciel);
         $this->addReference(self::REFERENCE . 'sittingBureauLibriciel', $sittingBureauLibriciel);
+
+
+        $sittingBureauLibricielWithoutProjectsAndConvocations = (new Sitting())
+            ->setName('Bureau Libriciel sans projets')
+            ->setDate(new DateTimeImmutable('2020-10-23'))
+            ->setStructure($structureLibriciel)
+            ->setConvocationFile($fileConvocationBureauLsWithoutProjects)
+            ->setPlace('Salle du conseil')
+            ->setType($typeBureauLibriciel);
+        $manager->persist($sittingBureauLibricielWithoutProjectsAndConvocations);
+
+
 
         $manager->flush();
     }
