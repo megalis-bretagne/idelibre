@@ -13,7 +13,6 @@ use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\OrderBy;
-use Doctrine\ORM\Mapping\Table;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints\Length;
@@ -24,9 +23,9 @@ use Symfony\Component\Validator\Constraints\NotNull;
  * @Gedmo\Tree(type="nested")
  */
 #[Entity(repositoryClass: ThemeRepository::class)]
-#[Index(columns: ["lft"], name: "lft_ix")]
-#[Index(columns: ["rgt"], name: "rgt_ix")]
-#[Index(columns: ["lvl"], name: "lvl_ix")]
+#[Index(columns: ['lft'], name: 'lft_ix')]
+#[Index(columns: ['rgt'], name: 'rgt_ix')]
+#[Index(columns: ['lvl'], name: 'lvl_ix')]
 class Theme
 {
     #[Id]
@@ -35,11 +34,10 @@ class Theme
     #[Groups(['theme', 'theme:read', 'project:read'])]
     private $id;
 
-
     #[Column(type: 'string', length: 255)]
     #[NotBlank]
     #[Length(max: 255)]
-    #[Groups(['theme','theme:read', 'theme:write', 'project:read'])]
+    #[Groups(['theme', 'theme:read', 'theme:write', 'project:read'])]
     private ?string $name;
 
     /**
@@ -80,7 +78,7 @@ class Theme
      * @ORM\OneToMany(targetEntity="App\Entity\Theme", mappedBy="parent")
      */
     #[OneToMany(mappedBy: 'parent', targetEntity: Theme::class)]
-    #[OrderBy(value: ["name" => "ASC"])]
+    #[OrderBy(value: ['name' => 'ASC'])]
     private $children;
 
     #[ManyToOne(targetEntity: Structure::class)]
