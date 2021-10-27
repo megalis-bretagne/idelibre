@@ -4,73 +4,61 @@ namespace App\Entity;
 
 use DateTimeImmutable;
 use DateTimeInterface;
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\OneToOne;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\FileRepository")
- */
+#[Entity(repositoryClass: 'App\Repository\FileRepository')]
 class File
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue(strategy="UUID")
-     * @ORM\Column(type="guid")
-     */
+    #[Id]
+    #[GeneratedValue(strategy: 'UUID')]
+    #[Column(type: 'guid')]
     #[Groups(['sitting:detail', 'project:read'])]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=512)
-     * @Assert\NotBlank
-     * @Assert\Length(max="512")
-     */
+    #[Column(type: 'string', length: 512)]
+    #[NotBlank]
+    #[Length(max: '512')]
     private $path;
 
-    /**
-     * @ORM\Column(type="float", nullable=true)
-     */
+    #[Column(type: 'float', nullable: true)]
     #[Groups(['sitting:detail', 'project:read'])]
     private $size;
 
-    /**
-     * @ORM\Column(type="string", length=512)
-     * @Assert\NotBlank
-     * @Assert\Length(max="125")
-     */
+    #[Column(type: 'string', length: 512)]
+    #[NotBlank]
+    #[Length(max: '125')]
     #[Groups(['sitting:detail', 'project:read'])]
     private $name;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[Column(type: 'datetime')]
     private $createdAt;
 
     /**
-     * @ORM\OneToOne(targetEntity=Project::class, mappedBy="file")
-     *
      * @var Project|null
      */
+    #[OneToOne(mappedBy: 'file', targetEntity: Project::class)]
     private $project;
 
     /**
-     * @ORM\OneToOne(targetEntity=Annex::class, mappedBy="file")
-     *
      * @var Annex|null
      */
+    #[OneToOne(mappedBy: 'file', targetEntity: Annex::class)]
     private $annex;
 
     /**
-     * @ORM\OneToOne(targetEntity=Sitting::class, mappedBy="convocationFile")
-     *
      * @var Sitting|null
      */
+    #[OneToOne(mappedBy: 'convocationFile', targetEntity: Sitting::class)]
     private $convocationSitting;
 
-    /**
-     * @ORM\OneToOne(targetEntity=Sitting::class, mappedBy="invitationFile", cascade={"persist", "remove"})
-     */
+    #[OneToOne(mappedBy: 'invitationFile', targetEntity: Sitting::class, cascade: ['persist', 'remove'])]
     private $invitationSitting;
 
     public function __construct()

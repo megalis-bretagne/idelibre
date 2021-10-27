@@ -14,14 +14,12 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Breadcrumb("Notice RGPD")
- * @Sidebar(active={"platform-nav","gdpr-nav"})
  */
+#[Sidebar(active: ['platform-nav', 'gdpr-nav'])]
 class GdprController extends AbstractController
 {
-    /**
-     * @Route("/gdpr/notice", name="gdpr_notice")
-     * @Sidebar(reset=true)
-     */
+    #[Route(path: '/gdpr/notice', name: 'gdpr_notice')]
+    #[Sidebar(reset: true)]
     public function notice(GdprManager $gdprManager): Response
     {
         return $this->render('gdpr/notice.html.twig', [
@@ -30,10 +28,10 @@ class GdprController extends AbstractController
     }
 
     /**
-     * @Route("/gdpr/edit", name="gdpr_edit")
-     * @IsGranted("ROLE_SUPERADMIN")
      * @Breadcrumb("Modifier")
      */
+    #[Route(path: '/gdpr/edit', name: 'gdpr_edit')]
+    #[IsGranted(data: 'ROLE_SUPERADMIN')]
     public function edit(GdprManager $gdprManager, Request $request): Response
     {
         $form = $this->createForm(GdprType::class, $gdprManager->getGdpr());

@@ -14,15 +14,11 @@ use Twig\Error\SyntaxError;
 
 class TimestampContentFileGenerator
 {
-    private Environment $twig;
-    private ParameterBagInterface $bag;
-    private Filesystem $filesystem;
-
-    public function __construct(Environment $twig, ParameterBagInterface $bag, Filesystem $filesystem)
-    {
-        $this->twig = $twig;
-        $this->bag = $bag;
-        $this->filesystem = $filesystem;
+    public function __construct(
+        private Environment $twig,
+        private ParameterBagInterface $bag,
+        private Filesystem $filesystem
+    ) {
     }
 
     /**

@@ -11,16 +11,11 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class AnnexManager
 {
-    private EntityManagerInterface $em;
-    private FileManager $fileManager;
-
-    private AnnexRepository $annexRepository;
-
-    public function __construct(EntityManagerInterface $em, FileManager $fileManager, AnnexRepository $annexRepository)
-    {
-        $this->em = $em;
-        $this->fileManager = $fileManager;
-        $this->annexRepository = $annexRepository;
+    public function __construct(
+        private EntityManagerInterface $em,
+        private FileManager $fileManager,
+        private AnnexRepository $annexRepository
+    ) {
     }
 
     /**

@@ -16,25 +16,20 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Breadcrumb("Configuration des connecteurs", routeName="connector_index")
- * @Sidebar(active={"connector-nav"})
  */
+#[Sidebar(active: ['connector-nav'])]
 class LsmessageConnectorController extends AbstractController
 {
     /**
-     * @Route("/connector/lsmessage", name="lsmessage_connector")
-     * @IsGranted("ROLE_MANAGE_CONNECTORS")
      * @Breadcrumb("Lsmessage")
      */
-    public function edit(
-        LsmessageConnectorRepository $lsmessageConnectorRepository,
-        LsmessageConnectorManager $lsmessageConnectorManager,
-        Request $request
-    ): Response {
+    #[Route(path: '/connector/lsmessage', name: 'lsmessage_connector')]
+    #[IsGranted(data: 'ROLE_MANAGE_CONNECTORS')]
+    public function edit(LsmessageConnectorRepository $lsmessageConnectorRepository, LsmessageConnectorManager $lsmessageConnectorManager, Request $request): Response
+    {
         $connector = $lsmessageConnectorRepository->findOneBy(['structure' => $this->getUser()->getStructure()]);
-
         $form = $this->createForm(LsmessageConnectorType::class, $connector);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $lsmessageConnectorManager->save($form->getData());
             $this->addFlash('success', 'Le connecteur a bien été modifié');
@@ -47,17 +42,13 @@ class LsmessageConnectorController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/connector/lsmessage/check/", name="lsmessage_connector_check")
-     * @IsGranted("ROLE_MANAGE_CONNECTORS")
-     */
+    #[Route(path: '/connector/lsmessage/check/', name: 'lsmessage_connector_check')]
+    #[IsGranted(data: 'ROLE_MANAGE_CONNECTORS')]
     public function isValidApiKey(LsmessageConnectorManager $lsmessageConnectorManager, Request $request): JsonResponse
     {
         $url = $request->query->get('url');
         $apiKey = $request->query->get('apiKey');
-
         $lsmessageInfo = $lsmessageConnectorManager->checkApiKey($url, $apiKey);
-
         if (null === $lsmessageInfo) {
             return $this->json(null, 400);
         }

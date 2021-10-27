@@ -19,18 +19,15 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Breadcrumb("Types de séance", routeName="type_index")
- * @Sidebar(active={"type-nav"})
  */
+#[Sidebar(active: ['type-nav'])]
 class TypeController extends AbstractController
 {
-    /**
-     * @Route("/type", name="type_index", methods={"GET"})
-     * @IsGranted("ROLE_MANAGE_TYPES")
-     */
+    #[Route(path: '/type', name: 'type_index', methods: ['GET'])]
+    #[IsGranted(data: 'ROLE_MANAGE_TYPES')]
     public function index(TypeRepository $typeRepository, PaginatorInterface $paginator, Request $request): Response
     {
         $formSearch = $this->createForm(SearchType::class);
-
         $types = $paginator->paginate(
             $typeRepository->findByStructure($this->getUser()->getStructure(), $request->query->get('search')),
             $request->query->getInt('page', 1),
@@ -49,10 +46,10 @@ class TypeController extends AbstractController
     }
 
     /**
-     * @Route("/type/add", name="type_add")
-     * @IsGranted("ROLE_MANAGE_TYPES")
      * @Breadcrumb("Ajouter")
      */
+    #[Route(path: '/type/add', name: 'type_add')]
+    #[IsGranted(data: 'ROLE_MANAGE_TYPES')]
     public function add(Request $request, TypeManager $typeManager): Response
     {
         $form = $this->createForm(TypeType::class, null, ['structure' => $this->getUser()->getStructure()]);
@@ -77,10 +74,10 @@ class TypeController extends AbstractController
     }
 
     /**
-     * @Route("/type/edit/{id}", name="type_edit")
-     * @IsGranted("MANAGE_TYPES", subject="type")
      * @Breadcrumb("Modifier {type.name}")
      */
+    #[Route(path: '/type/edit/{id}', name: 'type_edit')]
+    #[IsGranted(data: 'MANAGE_TYPES', subject: 'type')]
     public function edit(Type $type, Request $request, TypeManager $typeManager): Response
     {
         $form = $this->createForm(TypeType::class, $type, ['structure' => $this->getUser()->getStructure()]);
@@ -105,10 +102,8 @@ class TypeController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/type/delete/{id}", name="type_delete", methods={"DELETE"})
-     * @IsGranted("MANAGE_TYPES", subject="type")
-     */
+    #[Route(path: '/type/delete/{id}', name: 'type_delete', methods: ['DELETE'])]
+    #[IsGranted(data: 'MANAGE_TYPES', subject: 'type')]
     public function delete(Type $type, TypeManager $typeManager, Request $request): Response
     {
         $typeManager->delete($type);
@@ -119,10 +114,8 @@ class TypeController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/type/reminder/{id}", name="type_reminder", methods={"GET"})
-     * @IsGranted("ROLE_MANAGE_SITTINGS")
-     */
+    #[Route(path: '/type/reminder/{id}', name: 'type_reminder', methods: ['GET'])]
+    #[IsGranted(data: 'ROLE_MANAGE_SITTINGS')]
     public function getReminderInfo(Type $type): JsonResponse
     {
         if (!$type->getReminder()) {

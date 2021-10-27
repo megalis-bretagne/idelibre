@@ -17,18 +17,15 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Breadcrumb("Thèmes", routeName="theme_index")
- * @Sidebar(active={"theme-nav"})
  */
+#[Sidebar(active: ['theme-nav'])]
 class ThemeController extends AbstractController
 {
-    /**
-     * @Route("/theme/index", name="theme_index")
-     * @IsGranted("ROLE_MANAGE_THEMES")
-     */
+    #[Route(path: '/theme/index', name: 'theme_index')]
+    #[IsGranted(data: 'ROLE_MANAGE_THEMES')]
     public function index(ThemeRepository $themeRepository): Response
     {
         $root = $themeRepository->findOneBy(['name' => 'ROOT', 'structure' => $this->getUser()->getStructure()]);
-
         if (!empty($root)) {
             $themes = $themeRepository->getChildren($root, false, ['fullName']);
         }
@@ -39,10 +36,10 @@ class ThemeController extends AbstractController
     }
 
     /**
-     * @Route("/theme/add", name="theme_add")
-     * @IsGranted("ROLE_MANAGE_THEMES")
      * @Breadcrumb("Ajouter")
      */
+    #[Route(path: '/theme/add', name: 'theme_add')]
+    #[IsGranted(data: 'ROLE_MANAGE_THEMES')]
     public function add(ThemeManager $themeManager, Request $request): Response
     {
         $form = $this->createForm(ThemeWithParentType::class, null, ['structure' => $this->getUser()->getStructure()]);
@@ -61,10 +58,10 @@ class ThemeController extends AbstractController
     }
 
     /**
-     * @Route("/theme/edit/{id}", name="theme_edit")
-     * @IsGranted("MANAGE_THEMES", subject="theme")
      * @Breadcrumb("Modifier {theme.name}")
      */
+    #[Route(path: '/theme/edit/{id}', name: 'theme_edit')]
+    #[IsGranted(data: 'MANAGE_THEMES', subject: 'theme')]
     public function edit(Theme $theme, ThemeManager $themeManager, Request $request): Response
     {
         $form = $this->createForm(ThemeType::class, $theme);
@@ -82,10 +79,8 @@ class ThemeController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/theme/delete/{id}", name="theme_delete", methods={"DELETE"})
-     * @IsGranted("MANAGE_THEMES", subject="theme")
-     */
+    #[Route(path: '/theme/delete/{id}', name: 'theme_delete', methods: ['DELETE'])]
+    #[IsGranted(data: 'MANAGE_THEMES', subject: 'theme')]
     public function delete(Theme $theme, ThemeManager $themeManager): Response
     {
         $themeManager->delete($theme);

@@ -4,72 +4,61 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\OneToMany;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\NotNull;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\StructureRepository")
- * @UniqueEntity("name")
- */
+#[Entity(repositoryClass: 'App\Repository\StructureRepository')]
+#[UniqueEntity('name')]
 class Structure
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue(strategy="UUID")
-     * @ORM\Column(type="guid")
-     */
+    #[Id]
+    #[GeneratedValue(strategy: 'UUID')]
+    #[Column(type: 'guid')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255, unique=true)
-     * @Assert\NotBlank
-     * @Assert\Length(max="255")
-     */
+    #[Column(type: 'string', length: 255, unique: true)]
+    #[NotBlank]
+    #[Length(max: '255')]
     private $name;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=false)
-     * @Assert\NotBlank
-     * @Assert\Length(max="255")
-     * @Assert\Email
-     */
+    #[Column(type: 'string', length: 255, nullable: false)]
+    #[NotBlank]
+    #[Length(max: '255')]
+    #[Email]
     private $replyTo;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\Length(max="255")
-     */
+    #[Column(type: 'string', length: 255, nullable: true)]
+    #[Length(max: '255')]
     private $siren;
 
-    /**
-     * @ORM\OneToMany(targetEntity=User::class, mappedBy="structure")
-     */
+    #[OneToMany(mappedBy: 'structure', targetEntity: User::class)]
     private $users;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Group::class, inversedBy="structures")
-     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
-     */
+    #[ManyToOne(targetEntity: Group::class, inversedBy: 'structures')]
+    #[JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private $group;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Timezone::class)
-     * @ORM\JoinColumn(nullable=false)
-     * @Assert\NotNull
-     */
+    #[ManyToOne(targetEntity: Timezone::class)]
+    #[JoinColumn(nullable: false)]
+    #[NotNull]
     private $timezone;
 
-    /**
-     * @ORM\Column(type="string", length=255, unique=true)
-     * @Assert\NotBlank
-     * @Assert\Length(max="255")
-     */
+    #[Column(type: 'string', length: 255, unique: true)]
+    #[NotBlank]
+    #[Length(max: '255')]
     private $suffix;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[Column(type: 'string', length: 255)]
     private $legacyConnectionName;
 
     public function __construct()

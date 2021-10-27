@@ -19,16 +19,14 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Breadcrumb("Groupes", routeName="group_index")
- * @Sidebar(active={"platform-nav","group-nav"})
  */
+#[Sidebar(active: ['platform-nav', 'group-nav'])]
 class GroupController extends AbstractController
 {
     use ValidationTrait;
 
-    /**
-     * @Route("/group", name="group_index")
-     * @IsGranted("ROLE_SUPERADMIN")
-     */
+    #[Route(path: '/group', name: 'group_index')]
+    #[IsGranted(data: 'ROLE_SUPERADMIN')]
     public function index(GroupRepository $groupRepository, PaginatorInterface $paginator, Request $request): Response
     {
         $groupQueryAll = $groupRepository->findAllQuery();
@@ -44,15 +42,14 @@ class GroupController extends AbstractController
     }
 
     /**
-     * @Route("/group/add", name="group_add")
-     * @IsGranted("ROLE_SUPERADMIN")
      * @Breadcrumb("Ajouter")
      */
+    #[Route(path: '/group/add', name: 'group_add')]
+    #[IsGranted(data: 'ROLE_SUPERADMIN')]
     public function add(Request $request, GroupManager $groupManager): Response
     {
         $form = $this->createForm(GroupType::class, null, ['isNew' => true]);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $errors = $groupManager->create(
                 $form->getData(),
@@ -79,15 +76,14 @@ class GroupController extends AbstractController
     }
 
     /**
-     * @Route("/group/manage/{id}", name="group_manage")
-     * @IsGranted("ROLE_SUPERADMIN")
      * @Breadcrumb("Gérer {group.name}")
      */
+    #[Route(path: '/group/manage/{id}', name: 'group_manage')]
+    #[IsGranted(data: 'ROLE_SUPERADMIN')]
     public function manage(Group $group, Request $request, GroupManager $groupManager): Response
     {
         $form = $this->createForm(GroupStructureType::class, $group);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $groupManager->associateStructure($form->getData());
             $this->addFlash('success', 'Les structures ont bien été mises à jour');
@@ -101,15 +97,14 @@ class GroupController extends AbstractController
     }
 
     /**
-     * @Route("/group/edit/{id}", name="group_edit")
-     * @IsGranted("ROLE_SUPERADMIN")
      * @Breadcrumb("Modifier {group.name}")
      */
+    #[Route(path: '/group/edit/{id}', name: 'group_edit')]
+    #[IsGranted(data: 'ROLE_SUPERADMIN')]
     public function edit(Group $group, Request $request, GroupManager $groupManager): Response
     {
         $form = $this->createForm(GroupType::class, $group);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $groupManager->save($form->getData());
             $this->addFlash('success', 'Le groupe a bien été modifié');
@@ -122,10 +117,8 @@ class GroupController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/group/delete/{id}", name="group_delete", methods={"DELETE"})
-     * @IsGranted("ROLE_SUPERADMIN")
-     */
+    #[Route(path: '/group/delete/{id}', name: 'group_delete', methods: ['DELETE'])]
+    #[IsGranted(data: 'ROLE_SUPERADMIN')]
     public function delete(Group $group, GroupManager $groupManager, Request $request): Response
     {
         $groupManager->delete($group);

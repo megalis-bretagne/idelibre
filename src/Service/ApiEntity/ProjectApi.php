@@ -2,24 +2,21 @@
 
 namespace App\Service\ApiEntity;
 
-use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ProjectApi
 {
     private ?string $id = null;
-    /**
-     * @Assert\NotBlank(message="Un projet doit avoir un nom")
-     * @Assert\Length(max="Le nom du projet ne doit pas excéder 500 carractères")
-     */
+    #[NotBlank(message: 'Un projet doit avoir un nom')]
+    #[Length(max: 'Le nom du projet ne doit pas excéder 500 carractères')]
     private ?string $name;
     private ?string $themeId = null;
     private ?string $reporterId = null;
     private ?string $linkedFileKey = null;
     private ?string $fileName = null;
 
-    /**
-     * @Assert\NotBlank()
-     */
+    #[NotBlank]
     private ?int $rank = null;
 
     /**

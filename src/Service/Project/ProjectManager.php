@@ -23,33 +23,16 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ProjectManager
 {
-    private ProjectRepository $projectRepository;
-    private UserRepository $userRepository;
-    private ThemeRepository $themeRepository;
-    private FileManager $fileManager;
-    private EntityManagerInterface $em;
-    private AnnexRepository $annexRepository;
-    private AnnexManager $annexManager;
-    private ClientNotifierInterface $clientNotifier;
-
     public function __construct(
-        ProjectRepository $projectRepository,
-        UserRepository $userRepository,
-        AnnexRepository $annexRepository,
-        ThemeRepository $themeRepository,
-        FileManager $fileManager,
-        AnnexManager $annexManager,
-        EntityManagerInterface $em,
-        ClientNotifierInterface $clientNotifier
+        private ProjectRepository $projectRepository,
+        private UserRepository $userRepository,
+        private AnnexRepository $annexRepository,
+        private ThemeRepository $themeRepository,
+        private FileManager $fileManager,
+        private AnnexManager $annexManager,
+        private EntityManagerInterface $em,
+        private ClientNotifierInterface $clientNotifier
     ) {
-        $this->projectRepository = $projectRepository;
-        $this->userRepository = $userRepository;
-        $this->themeRepository = $themeRepository;
-        $this->fileManager = $fileManager;
-        $this->em = $em;
-        $this->annexRepository = $annexRepository;
-        $this->annexManager = $annexManager;
-        $this->clientNotifier = $clientNotifier;
     }
 
     /**

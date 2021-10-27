@@ -11,15 +11,10 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class SimpleEmailService implements EmailServiceInterface
 {
-    private Swift_Mailer $mailer;
-    private ParameterBagInterface $bag;
-    private CalGenerator $icalGenerator;
-
-    public function __construct(Swift_Mailer $mailer, ParameterBagInterface $bag, CalGenerator $icalGenerator)
-    {
-        $this->mailer = $mailer;
-        $this->bag = $bag;
-        $this->icalGenerator = $icalGenerator;
+    public function __construct(
+        private Swift_Mailer $mailer,
+        private ParameterBagInterface $bag
+    ) {
     }
 
     /**

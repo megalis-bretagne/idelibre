@@ -3,33 +3,26 @@
 namespace App\Entity;
 
 use App\Repository\ApiRoleRepository;
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\Id;
 
-/**
- * @ORM\Entity(repositoryClass=ApiRoleRepository::class)
- */
+#[Entity(repositoryClass: ApiRoleRepository::class)]
 class ApiRole
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="UUID")
-     * @ORM\Column(type="guid")
-     */
+    #[Id]
+    #[GeneratedValue(strategy: 'UUID')]
+    #[Column(type: 'guid')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[Column(type: 'string', length: 255)]
     private $name;
 
-    /**
-     * @ORM\Column(type="json", options={"jsonb"=true})
-     */
+    #[Column(type: 'json', options: ['jsonb' => true])]
     private $composites = [];
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[Column(type: 'string', length: 255)]
     private $prettyName;
 
     public function getId(): ?string

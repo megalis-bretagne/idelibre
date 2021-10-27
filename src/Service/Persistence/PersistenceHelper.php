@@ -9,8 +9,10 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class PersistenceHelper
 {
-    public function __construct(private ValidatorInterface $validator, private EntityManagerInterface $em)
-    {
+    public function __construct(
+        private ValidatorInterface $validator,
+        private EntityManagerInterface $em
+    ) {
     }
 
     public function validateAndPersist(mixed $entity)

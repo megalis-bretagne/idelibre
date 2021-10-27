@@ -6,76 +6,66 @@ use App\Repository\ProjectRepository;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\OneToMany;
+use Doctrine\ORM\Mapping\OneToOne;
+use Doctrine\ORM\Mapping\OrderBy;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\NotNull;
 
-/**
- * @ORM\Entity(repositoryClass=ProjectRepository::class)
- */
+#[Entity(repositoryClass: ProjectRepository::class)]
 class Project
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="UUID")
-     * @ORM\Column(type="guid")
-     */
+    #[Id]
+    #[GeneratedValue(strategy: 'UUID')]
+    #[Column(type: 'guid')]
     #[Groups(['project:read'])]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=512)
-     * @Assert\Length(max="512")
-     * @Assert\NotBlank
-     */
+    #[Column(type: 'string', length: 512)]
+    #[Length(max: '512')]
+    #[NotBlank]
     #[Groups(['project:read'])]
     private $name;
 
-    /**
-     * @ORM\Column(type="integer")
-     * @Assert\NotNull
-     */
+    #[Column(type: 'integer')]
+    #[NotNull]
     #[Groups(['project:read'])]
     private $rank;
 
-    /**
-     * @ORM\OneToOne(targetEntity=File::class, cascade={"persist", "remove"}, inversedBy="project")
-     * @ORM\JoinColumn(nullable=false)
-     * @Assert\NotNull
-     */
+    #[OneToOne(inversedBy: 'project', targetEntity: File::class, cascade: ['persist', 'remove'])]
+    #[JoinColumn(nullable: false)]
+    #[NotNull]
     #[Groups(['project:read'])]
     private $file;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Theme::class)
-     * @ORM\JoinColumn(onDelete="SET NULL")
-     */
+    #[ManyToOne(targetEntity: Theme::class)]
+    #[JoinColumn(onDelete: 'SET NULL')]
     #[Groups(['project:read'])]
     private $theme;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class)
-     * @ORM\JoinColumn(onDelete="SET NULL")
-     */
+    #[ManyToOne(targetEntity: User::class)]
+    #[JoinColumn(onDelete: 'SET NULL')]
     #[Groups(['project:read'])]
     private $reporter;
 
-    /**
-     * @ORM\Column(type="datetime_immutable")
-     */
+    #[Column(type: 'datetime_immutable')]
     private $createdAt;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Sitting::class, inversedBy="projects")
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
-     * @Assert\NotNull
-     */
+    #[ManyToOne(targetEntity: Sitting::class, inversedBy: 'projects')]
+    #[JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    #[NotNull]
     private $sitting;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Annex::class, mappedBy="project")
-     * @ORM\OrderBy({"rank" = "ASC"})
-     */
+    #[OneToMany(mappedBy: 'project', targetEntity: Annex::class)]
+    #[OrderBy(value: ['rank' => 'ASC'])]
     #[Groups(['project:read'])]
     private $annexes;
 

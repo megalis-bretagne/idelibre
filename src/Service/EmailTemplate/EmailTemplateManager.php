@@ -9,13 +9,10 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class EmailTemplateManager
 {
-    private EmailTemplateRepository $templateRepository;
-    private EntityManagerInterface $em;
-
-    public function __construct(EmailTemplateRepository $templateRepository, EntityManagerInterface $em)
-    {
-        $this->templateRepository = $templateRepository;
-        $this->em = $em;
+    public function __construct(
+        private EmailTemplateRepository $templateRepository,
+        private EntityManagerInterface $em
+    ) {
     }
 
     public function initDefaultTemplates(Structure $structure): void

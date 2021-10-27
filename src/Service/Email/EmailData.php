@@ -6,21 +6,17 @@ class EmailData
 {
     public const FORMAT_HTML = 'html';
     public const FORMAT_TEXT = 'text';
-
-    private string $subject;
-    private string $content;
     private ?string $to;
     private ?string $replyTo;
-    private string $format;
     private Attachment $attachment;
     private bool $isAttachment = false;
     private ?string $calPath = null;
 
-    public function __construct(string $subject, string $content, string $format = self::FORMAT_HTML)
-    {
-        $this->subject = $subject;
-        $this->content = $content;
-        $this->format = $format;
+    public function __construct(
+        private string $subject,
+        private string $content,
+        private string $format = self::FORMAT_HTML
+    ) {
     }
 
     public function getSubject(): string

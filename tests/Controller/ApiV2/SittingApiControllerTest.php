@@ -124,6 +124,8 @@ class SittingApiControllerTest extends WebTestCase
                 "CONTENT_TYPE" => 'application/json'
             ]);
 
+        $this->assertResponseStatusCodeSame(200);
+
         $response = $this->client->getResponse();
         $convocations = json_decode($response->getContent(), true);
 

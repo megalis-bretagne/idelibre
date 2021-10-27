@@ -23,28 +23,14 @@ class CsvManager
 {
     public const TYPE_SEPARATOR = '|';
 
-    private EntityManagerInterface $em;
-    private UserRepository $userRepository;
-    private ValidatorInterface $validator;
-    private UserPasswordHasherInterface $passwordHasher
-    ;
-    private RoleManager $roleManager;
-    private TypeRepository $typeRepository;
-
     public function __construct(
-        EntityManagerInterface $em,
-        ValidatorInterface $validator,
-        UserRepository $userRepository,
-        TypeRepository $typeRepository,
-        UserPasswordHasherInterface $passwordHasher,
-        RoleManager $roleManager
+        private EntityManagerInterface $em,
+        private ValidatorInterface $validator,
+        private UserRepository $userRepository,
+        private TypeRepository $typeRepository,
+        private UserPasswordHasherInterface $passwordHasher,
+        private RoleManager $roleManager
     ) {
-        $this->em = $em;
-        $this->userRepository = $userRepository;
-        $this->validator = $validator;
-        $this->passwordHasher = $passwordHasher;
-        $this->roleManager = $roleManager;
-        $this->typeRepository = $typeRepository;
     }
 
     /**

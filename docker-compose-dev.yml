@@ -23,6 +23,7 @@ services:
       - ./migrations:/app/migrations
       - ./composer.json:/app/composer.json
       - ./composer.lock:/app/composer.lock
+      - ./rector.php:/app/rector.php
 
     command: ["/app/docker-resources/initApp.sh"]
 

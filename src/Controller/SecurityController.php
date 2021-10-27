@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Role;
 use App\Entity\Structure;
-use App\Entity\User;
 use App\Form\UserPasswordType;
 use App\Security\Password\ResetPassword;
 use App\Security\Password\TimeoutException;
@@ -23,19 +22,15 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
-    /**
-     * @Route("/", name="app_entrypoint")
-     */
+    #[Route(path: '/', name: 'app_entrypoint')]
     public function entryPoint(Security $security): Response
     {
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
-
         if (Role::NAME_ROLE_ACTOR === $this->getUser()->getRole()->getName()) {
             return $this->render('security/noActors.html.twig');
         }
-
         if ($this->isGranted('ROLE_MANAGE_STRUCTURES')) {
             return $this->redirectToRoute('structure_index');
         }
@@ -43,18 +38,14 @@ class SecurityController extends AbstractController
         return $this->redirectToRoute('sitting_index', ['status' => 'active']);
     }
 
-    /**
-     * @Route("/login", name="app_login")
-     */
+    #[Route(path: '/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
-
         if ($error) {
             $this->addFlash('error', 'erreur d\'identification');
         }
-
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
@@ -64,17 +55,13 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/logout", name="app_logout")
-     */
+    #[Route(path: '/logout', name: 'app_logout')]
     public function logout()
     {
     }
 
-    /**
-     * @Route("/security/impersonate/{id}", name="security_impersonate")
-     * @IsGranted("MY_GROUP", subject="structure")
-     */
+    #[Route(path: '/security/impersonate/{id}', name: 'security_impersonate')]
+    #[IsGranted(data: 'MY_GROUP', subject: 'structure')]
     public function impersonateAs(Structure $structure, ImpersonateStructure $impersonateStructure): Response
     {
         $impersonateStructure->logInStructure($structure);
@@ -83,10 +70,8 @@ class SecurityController extends AbstractController
         return $this->redirectToRoute('structure_index');
     }
 
-    /**
-     * @Route("/security/impersonateExit", name="security_impersonate_exit")
-     * @IsGranted("ROLE_MANAGE_STRUCTURES")
-     */
+    #[Route(path: '/security/impersonateExit', name: 'security_impersonate_exit')]
+    #[IsGranted(data: 'ROLE_MANAGE_STRUCTURES')]
     public function impersonateExit(ImpersonateStructure $impersonateStructure): Response
     {
         $impersonateStructure->logoutStructure();
@@ -96,10 +81,9 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route("/forget", name="app_forget")
-     *
      * @throws EntityNotFoundException
      */
+    #[Route(path: '/forget', name: 'app_forget')]
     public function forgetPassword(Request $request, ResetPassword $resetPassword, LoggerInterface $logger): Response
     {
         if ($request->isMethod('post')) {
@@ -120,10 +104,9 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route("/reset/{token}", name="app_reset")
-     *
      * @throws Exception
      */
+    #[Route(path: '/reset/{token}', name: 'app_reset')]
     public function resetPassword(string $token, ResetPassword $resetPassword, Request $request): Response
     {
         try {
@@ -133,10 +116,8 @@ class SecurityController extends AbstractController
         } catch (EntityNotFoundException $e) {
             throw new NotFoundHttpException('this token does not exist');
         }
-
         $form = $this->createForm(UserPasswordType::class, $user);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $resetPassword->setNewPassword($user, $form->get('plainPassword')->getData());
             $this->addFlash('success', 'Modifiée avec succès');
@@ -149,9 +130,7 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/srvusers/login", name="legacy_login_path")
-     */
+    #[Route(path: '/srvusers/login', name: 'legacy_login_path')]
     public function legacyLoginPath(): Response
     {
         return $this->redirectToRoute('app_login');

@@ -3,62 +3,48 @@
 namespace App\Entity;
 
 use App\Repository\AnnotationRepository;
-use Doctrine\ORM\Mapping as ORM;
+use DateTimeInterface;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\ManyToOne;
 
-/**
- * @ORM\Entity(repositoryClass=AnnotationRepository::class)
- */
+#[Entity(repositoryClass: AnnotationRepository::class)]
 class Annotation
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="UUID")
-     * @ORM\Column(type="guid")
-     */
+    #[Id]
+    #[GeneratedValue(strategy: 'UUID')]
+    #[Column(type: 'guid')]
     private $id;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
+    #[Column(type: 'integer', nullable: true)]
     private $page;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[Column(type: 'text', nullable: true)]
     private $text;
 
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
+    #[Column(type: 'datetime', nullable: true)]
     private $createdAt;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class)
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
-     */
+    #[ManyToOne(targetEntity: User::class)]
+    #[JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private $author;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Project::class)
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     */
+    #[ManyToOne(targetEntity: Project::class)]
+    #[JoinColumn(onDelete: 'CASCADE')]
     private $project;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Annex::class)
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     */
+    #[ManyToOne(targetEntity: Annex::class)]
+    #[JoinColumn(onDelete: 'CASCADE')]
     private $annex;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Sitting::class)
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     */
+    #[ManyToOne(targetEntity: Sitting::class)]
+    #[JoinColumn(onDelete: 'CASCADE')]
     private $sitting;
 
-    /**
-     * @ORM\Column(type="json", options={"jsonb"=true})
-     */
+    #[Column(type: 'json', options: ['jsonb' => true])]
     private $rect;
 
     public function getId(): ?string
@@ -90,12 +76,12 @@ class Annotation
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): ?DateTimeInterface
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(?\DateTimeInterface $createdAt): self
+    public function setCreatedAt(?DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
 

@@ -5,84 +5,67 @@ namespace App\Entity;
 use App\Repository\TypeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\JoinTable;
+use Doctrine\ORM\Mapping\ManyToMany;
+use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\OneToOne;
+use Doctrine\ORM\Mapping\Table;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\NotNull;
 
-/**
- * @ORM\Entity(repositoryClass=TypeRepository::class)
- * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(
- *     name="IDX_TYPE_NAME_STRUCTURE",
- *     columns={"name", "structure_id"} )})
- *
- * @UniqueEntity(
- *     fields={"name", "structure"},
- *     errorPath="name",
- *     message="Ce type est déja utilisé dans cette structure")
- */
+#[Entity(repositoryClass: TypeRepository::class)]
+#[Table]
+#[UniqueEntity(fields: ['name', 'structure'], message: 'Ce type est déja utilisé dans cette structure', errorPath: 'name')]
+#[UniqueConstraint(name: 'IDX_TYPE_NAME_STRUCTURE', columns: ['name', 'structure_id'])]
 class Type
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="UUID")
-     * @ORM\Column(type="guid")
-     * @Groups({"sitting"})
-     */
-    #[Groups(['type:read', 'sitting:detail'])]
+    #[Id]
+    #[GeneratedValue(strategy: 'UUID')]
+    #[Column(type: 'guid')]
+    #[Groups(['sitting', 'type:read', 'sitting:detail'])]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=false)
-     * @Assert\NotBlank()
-     * @Assert\Length(max="255")
-     * @Groups({"sitting"})
-     */
-    #[Groups(['type:read', 'type:write', 'sitting:detail'])]
+    #[Column(type: 'string', length: 255, nullable: false)]
+    #[NotBlank]
+    #[Length(max: '255')]
+    #[Groups(['sitting', 'type:read', 'type:write', 'sitting:detail'])]
     private $name;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="associatedTypes")
-     */
+    #[ManyToMany(targetEntity: User::class, inversedBy: 'associatedTypes')]
     #[Groups(['type:detail', 'type:write'])]
     private $associatedUsers;
 
-    /**
-     * @ORM\OneToOne(targetEntity=EmailTemplate::class, mappedBy="type")
-     */
+    #[OneToOne(targetEntity: EmailTemplate::class, mappedBy: 'type')]
     private $emailTemplate;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Structure::class)
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
-     * @Assert\NotNull
-     */
+    #[ManyToOne(targetEntity: Structure::class)]
+    #[JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    #[NotNull]
     private $structure;
 
-    /**
-     * @ORM\JoinTable(name="type_secretary")
-     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="authorizedTypes")
-     */
+    #[JoinTable(name: 'type_secretary')]
+    #[ManyToMany(targetEntity: User::class, inversedBy: 'authorizedTypes')]
     private $authorizedSecretaries;
 
-    /**
-     * @ORM\Column(type="boolean", nullable=true)
-     * @Groups({"sitting"})
-     */
-    #[Groups(['type:read', 'type:write'])]
+    #[Column(type: 'boolean', nullable: true)]
+    #[Groups(['sitting', 'type:read', 'type:write'])]
     private $isSms;
 
-    /**
-     * @ORM\Column(type="boolean", nullable=true)
-     * @Groups({"sitting"})
-     */
-    #[Groups(['type:read', 'type:write'])]
+    #[Column(type: 'boolean', nullable: true)]
+    #[Groups(['sitting', 'type:read', 'type:write'])]
     private $isComelus;
 
-    /**
-     * @ORM\OneToOne(targetEntity=Reminder::class, mappedBy="type", cascade={"persist", "remove"})
-     */
     #[Groups(['type:detail', 'type:write'])]
+    #[OneToOne(targetEntity: Reminder::class, mappedBy: 'type', cascade: ['persist', 'remove'])]
     private $reminder;
 
     public function __construct()

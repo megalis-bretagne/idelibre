@@ -9,15 +9,11 @@ use Twig\Environment;
 
 class PdfSittingReport
 {
-    private Pdf $pdf;
-    private Environment $twig;
-    private ConvocationRepository $convocationRepository;
-
-    public function __construct(Pdf $pdf, Environment $twig, ConvocationRepository $convocationRepository)
-    {
-        $this->pdf = $pdf;
-        $this->twig = $twig;
-        $this->convocationRepository = $convocationRepository;
+    public function __construct(
+        private Pdf $pdf,
+        private Environment $twig,
+        private ConvocationRepository $convocationRepository
+    ) {
     }
 
     public function generate(Sitting $sitting): string

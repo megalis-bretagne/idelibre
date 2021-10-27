@@ -3,75 +3,57 @@
 namespace App\Entity;
 
 use App\Repository\GdprRepository;
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\Id;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\Length;
 
-/**
- * @ORM\Entity(repositoryClass=GdprRepository::class)
- */
+#[Entity(repositoryClass: GdprRepository::class)]
 class Gdpr
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="UUID")
-     * @ORM\Column(type="guid")
-     */
+    #[Id]
+    #[GeneratedValue(strategy: 'UUID')]
+    #[Column(type: 'guid')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\Length(max="255")
-     */
+    #[Column(type: 'string', length: 255)]
+    #[Length(max: '255')]
     private $companyName;
 
-    /**
-     * @ORM\Column(type="string", length=512)
-     * @Assert\Length(max="512")
-     */
+    #[Column(type: 'string', length: 512)]
+    #[Length(max: '512')]
     private $address;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\Length(max="255")
-     */
+    #[Column(type: 'string', length: 255)]
+    #[Length(max: '255')]
     private $representative;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\Length(max="255")
-     */
+    #[Column(type: 'string', length: 255)]
+    #[Length(max: '255')]
     private $quality;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\Length(max="255")
-     */
+    #[Column(type: 'string', length: 255)]
+    #[Length(max: '255')]
     private $siret;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\Length(max="255")
-     */
+    #[Column(type: 'string', length: 255)]
+    #[Length(max: '255')]
     private $ape;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\Length(max="255")
-     */
+    #[Column(type: 'string', length: 255)]
+    #[Length(max: '255')]
     private $companyPhone;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\Length(max="255")
-     * @Assert\Email
-     */
+    #[Column(type: 'string', length: 255)]
+    #[Length(max: '255')]
+    #[Email]
     private $companyEmail;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\Length(max="255")
-     * @Assert\Email
-     */
+    #[Column(type: 'string', length: 255)]
+    #[Length(max: '255')]
+    #[Email]
     private $dpoEmail;
 
     public function getId(): ?string

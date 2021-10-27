@@ -6,132 +6,104 @@ use App\Repository\UserRepository;
 use App\Validator\OneAtMax;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\ManyToMany;
+use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\Table;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\NotNull;
 
-/**
- * @ORM\Entity(repositoryClass=UserRepository::class)
- * @ORM\Table(name="`user`")
- * @UniqueEntity("username", message="Ce nom d'utilisateur est déjà utilisé")
- */
+#[Entity(repositoryClass: UserRepository::class)]
+#[UniqueEntity('username', message: "Ce nom d'utilisateur est déjà utilisé")]
+#[Table(name: '`user`')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue(strategy="UUID")
-     * @ORM\Column(type="guid")
-     * @Groups({"user"})
-     */
-    #[Groups(['party:detail', 'user:read', 'type:detail', 'convocation:read'])]
+    #[Id]
+    #[GeneratedValue(strategy: 'UUID')]
+    #[Column(type: 'guid')]
+    #[Groups(['user', 'party:detail', 'user:read', 'type:detail', 'convocation:read'])]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255, unique=true)
-     * @Assert\NotBlank()
-     * @Assert\Length(max=255)
-     * @OneAtMax()
-     * @Groups({"user"})
-     */
-    #[Groups(['party:detail', 'user:read', 'type:detail', 'user:write', 'convocation:read'])]
+    #[Column(type: 'string', length: 255, unique: true)]
+    #[NotBlank]
+    #[Length(max: 255)]
+    #[OneAtMax]
+    #[Groups(['user', 'party:detail', 'user:read', 'type:detail', 'user:write', 'convocation:read'])]
     private $username;
 
-    /**
-     * @ORM\Column(type="string", length=180)
-     * @Assert\NotBlank()
-     * @Assert\Length(max=255)
-     * @Assert\Email()
-     * @Groups({"user"})
-     */
-    #[Groups(['party:detail', 'user:read', 'type:detail', 'user:write'])]
+    #[Column(type: 'string', length: 180)]
+    #[NotBlank]
+    #[Length(max: 255)]
+    #[Email]
+    #[Groups(['user', 'party:detail', 'user:read', 'type:detail', 'user:write'])]
     private $email;
 
     /**
      * @var string The hashed password
-     * @ORM\Column(type="string")
      */
+    #[Column(type: 'string')]
     private $password;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank()
-     * @Assert\Length(max=255)
-     *
-     * @Groups({"user"})
-     */
-    #[Groups(['party:detail', 'user:read', 'type:detail', 'user:write', 'convocation:read'])]
+    #[Column(type: 'string', length: 255)]
+    #[NotBlank]
+    #[Length(max: 255)]
+    #[Groups(['user', 'party:detail', 'user:read', 'type:detail', 'user:write', 'convocation:read'])]
     private $firstName;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank()
-     * @Assert\Length(max=255)
-     * @Groups({"user"})
-     */
-    #[Groups(['party:detail', 'user:read', 'type:detail', 'user:write', 'convocation:read'])]
+    #[Column(type: 'string', length: 255)]
+    #[NotBlank]
+    #[Length(max: 255)]
+    #[Groups(['user', 'party:detail', 'user:read', 'type:detail', 'user:write', 'convocation:read'])]
     private $lastName;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Structure::class, inversedBy="users")
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     */
+    #[ManyToOne(targetEntity: Structure::class, inversedBy: 'users')]
+    #[JoinColumn(onDelete: 'CASCADE')]
     private $structure;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Group::class, inversedBy="users")
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     */
+    #[ManyToOne(targetEntity: Group::class, inversedBy: 'users')]
+    #[JoinColumn(onDelete: 'CASCADE')]
     private $group;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Role::class)
-     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
-     * @Assert\NotNull
-     */
+    #[ManyToOne(targetEntity: Role::class)]
+    #[JoinColumn(nullable: true, onDelete: 'SET NULL')]
+    #[NotNull]
     #[Groups(['user:read', 'user:write:post'])]
     private $role;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Type::class, mappedBy="associatedUsers")
-     */
+    #[ManyToMany(targetEntity: Type::class, mappedBy: 'associatedUsers')]
     private $associatedTypes;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Party::class, inversedBy="actors")
-     * @ORM\JoinColumn(onDelete="SET NULL")
-     */
+    #[ManyToOne(targetEntity: Party::class, inversedBy: 'actors')]
+    #[JoinColumn(onDelete: 'SET NULL')]
     #[Groups(['user:detail', 'user:write'])]
     private $party;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[Column(type: 'string', length: 255, nullable: true)]
     #[Groups(['user:read', 'user:write'])]
     private $title;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
+    #[Column(type: 'integer', nullable: true)]
     #[Groups(['user:read', 'user:write'])]
     private $gender;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Type::class, mappedBy="authorizedSecretaries")
-     */
+    #[ManyToMany(targetEntity: Type::class, mappedBy: 'authorizedSecretaries')]
     private $authorizedTypes;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[Column(type: 'boolean')]
     #[Groups(['user:read', 'user:write'])]
     private $isActive = true;
 
-    /**
-     * @ORM\Column(type="string", length=30, nullable=true)
-     */
+    #[Column(type: 'string', length: 30, nullable: true)]
     #[Groups(['user:read', 'user:write'])]
     private $phone;
 

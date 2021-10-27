@@ -27,42 +27,19 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 class ConvocationManager
 {
-    private EntityManagerInterface $em;
-    private ConvocationRepository $convocationRepository;
-    private TimestampManager $timestampManager;
-    private LoggerInterface $logger;
-    private ParameterBagInterface $bag;
-    private EmailServiceInterface $emailService;
-    private EmailGenerator $emailGenerator;
-    private UserRepository $userRepository;
-    private ClientNotifierInterface $clientNotifier;
-    private MessageBusInterface $messageBus;
-    private CalGenerator $icalGenerator;
-
     public function __construct(
-        EntityManagerInterface $em,
-        ConvocationRepository $convocationRepository,
-        TimestampManager $timestampManager,
-        LoggerInterface $logger,
-        ParameterBagInterface $bag,
-        EmailServiceInterface $emailService,
-        EmailGenerator $emailGenerator,
-        UserRepository $userRepository,
-        ClientNotifierInterface $clientNotifier,
-        MessageBusInterface $messageBus,
-        CalGenerator $icalGenerator
+        private EntityManagerInterface $em,
+        private ConvocationRepository $convocationRepository,
+        private TimestampManager $timestampManager,
+        private LoggerInterface $logger,
+        private ParameterBagInterface $bag,
+        private EmailServiceInterface $emailService,
+        private EmailGenerator $emailGenerator,
+        private UserRepository $userRepository,
+        private ClientNotifierInterface $clientNotifier,
+        private MessageBusInterface $messageBus,
+        private CalGenerator $icalGenerator
     ) {
-        $this->em = $em;
-        $this->convocationRepository = $convocationRepository;
-        $this->timestampManager = $timestampManager;
-        $this->logger = $logger;
-        $this->bag = $bag;
-        $this->emailService = $emailService;
-        $this->emailGenerator = $emailGenerator;
-        $this->userRepository = $userRepository;
-        $this->clientNotifier = $clientNotifier;
-        $this->messageBus = $messageBus;
-        $this->icalGenerator = $icalGenerator;
     }
 
     public function createConvocationsActors(Sitting $sitting): void

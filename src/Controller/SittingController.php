@@ -27,14 +27,12 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Breadcrumb("Séances", routeName="sitting_index")
- * @Sidebar(active={"sitting-nav"})
  */
+#[Sidebar(active: ['sitting-nav'])]
 class SittingController extends AbstractController
 {
-    /**
-     * @Route("/sitting", name="sitting_index")
-     * @IsGranted("ROLE_MANAGE_SITTINGS")
-     */
+    #[Route(path: '/sitting', name: 'sitting_index')]
+    #[IsGranted(data: 'ROLE_MANAGE_SITTINGS')]
     public function index(PaginatorInterface $paginator, Request $request, SittingManager $sittingManager, SidebarState $sidebarState): Response
     {
         $formSearch = $this->createForm(SearchType::class);
@@ -47,7 +45,6 @@ class SittingController extends AbstractController
                 'defaultSortDirection' => 'desc',
             ]
         );
-
         if ($status = $request->query->get('status')) {
             $sidebarState->addActiveNavs(['sitting-nav', "sitting-${status}-nav"]);
         }
@@ -61,11 +58,11 @@ class SittingController extends AbstractController
     }
 
     /**
-     * @Route("/sitting/add", name="sitting_add")
-     * @IsGranted("ROLE_MANAGE_SITTINGS")
      * @Breadcrumb("Ajouter")
-     * @Sidebar(active={"sitting-active-nav"})
      */
+    #[Route(path: '/sitting/add', name: 'sitting_add')]
+    #[IsGranted(data: 'ROLE_MANAGE_SITTINGS')]
+    #[Sidebar(active: ['sitting-active-nav'])]
     public function createSitting(Request $request, SittingManager $sittingManager): Response
     {
         $form = $this->createForm(SittingType::class, null, ['structure' => $this->getUser()->getStructure(), 'user' => $this->getUser()]);
@@ -87,11 +84,11 @@ class SittingController extends AbstractController
     }
 
     /**
-     * @Route("/sitting/edit/{id}/actors", name="edit_sitting_actor", methods={"GET"})
-     * @IsGranted("ROLE_MANAGE_SITTINGS")
      * @Breadcrumb("Modifier {sitting.nameWithDate}")
-     * @Sidebar(active={"sitting-active-nav"})
      */
+    #[Route(path: '/sitting/edit/{id}/actors', name: 'edit_sitting_actor', methods: ['GET'])]
+    #[IsGranted(data: 'ROLE_MANAGE_SITTINGS')]
+    #[Sidebar(active: ['sitting-active-nav'])]
     public function editUsers(Sitting $sitting, Request $request, ActorManager $actorManager, ConvocationManager $convocationManager): Response
     {
         if ($sitting->getIsArchived()) {
@@ -104,11 +101,10 @@ class SittingController extends AbstractController
     }
 
     /**
-     * @Route("/sitting/edit/{id}/projects", name="edit_sitting_project")
-     * IsGranted("ROLE_MANAGE_SITTINGS")
      * @Breadcrumb("Modifier {sitting.nameWithDate}")
-     * @Sidebar(active={"sitting-active-nav"})
      */
+    #[Route(path: '/sitting/edit/{id}/projects', name: 'edit_sitting_project')]
+    #[Sidebar(active: ['sitting-active-nav'])]
     public function editProjects(Sitting $sitting): Response
     {
         if ($sitting->getIsArchived()) {
@@ -121,20 +117,18 @@ class SittingController extends AbstractController
     }
 
     /**
-     * @Route("/sitting/edit/{id}", name="edit_sitting_information")
-     * @IsGranted("MANAGE_SITTINGS", subject="sitting")
      * @Breadcrumb("Modifier {sitting.nameWithDate}")
-     * @Sidebar(active={"sitting-active-nav"})
      */
+    #[Route(path: '/sitting/edit/{id}', name: 'edit_sitting_information')]
+    #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
+    #[Sidebar(active: ['sitting-active-nav'])]
     public function editInformation(Sitting $sitting, Request $request, SittingManager $sittingManager): Response
     {
         if ($sitting->getIsArchived()) {
             throw new InvalidArgumentException('Impossible de modifier une séance archivée');
         }
-
         $form = $this->createForm(SittingType::class, $sitting, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $sittingManager->update(
                 $form->getData(),
@@ -153,10 +147,8 @@ class SittingController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/sitting/edit/{id}/cancel", name="edit_sitting_information_cancel")
-     * @IsGranted("MANAGE_SITTINGS", subject="sitting")
-     */
+    #[Route(path: '/sitting/edit/{id}/cancel', name: 'edit_sitting_information_cancel')]
+    #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
     public function editInformationCancel(Sitting $sitting): Response
     {
         $this->addFlash('success', 'Modifications annulées');
@@ -164,25 +156,22 @@ class SittingController extends AbstractController
         return $this->redirectToRoute('edit_sitting_information', ['id' => $sitting->getId()]);
     }
 
-    /**
-     * @Route("/sitting/delete/{id}", name="sitting_delete", methods={"DELETE"})
-     * @IsGranted("MANAGE_SITTINGS", subject="sitting")
-     */
+    #[Route(path: '/sitting/delete/{id}', name: 'sitting_delete', methods: ['DELETE'])]
+    #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
     public function delete(Sitting $sitting, SittingManager $sittingManager, Request $request): Response
     {
         $sittingManager->delete($sitting);
         $this->addFlash('success', 'La séance a bien été supprimée');
-
         $referer = $request->headers->get('referer');
 
         return $referer ? $this->redirect($referer) : $this->redirectToRoute('sitting_index');
     }
 
     /**
-     * @Route("/sitting/show/{id}/information", name="sitting_show_information", methods={"GET"})
-     * @IsGranted("MANAGE_SITTINGS", subject="sitting")
      * @Breadcrumb("Détail {sitting.nameWithDate}")
      */
+    #[Route(path: '/sitting/show/{id}/information', name: 'sitting_show_information', methods: ['GET'])]
+    #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
     public function showInformation(Sitting $sitting, SittingManager $sittingManager, SidebarState $sidebarState): Response
     {
         $sidebarState->addActiveNavs(['sitting-nav', $this->activeSidebarNav($sitting->getIsArchived())]);
@@ -195,10 +184,10 @@ class SittingController extends AbstractController
     }
 
     /**
-     * @Route("/sitting/show/{id}/actors", name="sitting_show_actors", methods={"GET"})
-     * @IsGranted("MANAGE_SITTINGS", subject="sitting")
      * @Breadcrumb("Détail {sitting.nameWithDate}")
      */
+    #[Route(path: '/sitting/show/{id}/actors', name: 'sitting_show_actors', methods: ['GET'])]
+    #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
     public function showActors(Sitting $sitting, ConvocationRepository $convocationRepository, SidebarState $sidebarState): Response
     {
         $sidebarState->addActiveNavs(['sitting-nav', $this->activeSidebarNav($sitting->getIsArchived())]);
@@ -209,10 +198,10 @@ class SittingController extends AbstractController
     }
 
     /**
-     * @Route("/sitting/show/{id}/projects", name="sitting_show_projects", methods={"GET"})
-     * @IsGranted("MANAGE_SITTINGS", subject="sitting")
      * @Breadcrumb("Détail {sitting.nameWithDate}")
      */
+    #[Route(path: '/sitting/show/{id}/projects', name: 'sitting_show_projects', methods: ['GET'])]
+    #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
     public function showProjects(Sitting $sitting, ConvocationRepository $convocationRepository, ProjectRepository $projectRepository, SidebarState $sidebarState): Response
     {
         $sidebarState->addActiveNavs(['sitting-nav', $this->activeSidebarNav($sitting->getIsArchived())]);
@@ -223,10 +212,8 @@ class SittingController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/sitting/zip/{id}", name="sitting_zip", methods={"GET"})
-     * @IsGranted("MANAGE_SITTINGS", subject="sitting")
-     */
+    #[Route(path: '/sitting/zip/{id}', name: 'sitting_zip', methods: ['GET'])]
+    #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
     public function getZipSitting(Sitting $sitting, ZipSittingGenerator $zipSittingGenerator): Response
     {
         $zipPath = $zipSittingGenerator->getAndCreateZipPath($sitting);
@@ -235,16 +222,13 @@ class SittingController extends AbstractController
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
             $sitting->getName() . '.zip'
         );
-
         $response->headers->set('X-Accel-Redirect', $zipPath);
 
         return $response;
     }
 
-    /**
-     * @Route("/sitting/pdf/{id}", name="sitting_full_pdf", methods={"GET"})
-     * @IsGranted("MANAGE_SITTINGS", subject="sitting")
-     */
+    #[Route(path: '/sitting/pdf/{id}', name: 'sitting_full_pdf', methods: ['GET'])]
+    #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
     public function getFullPdfSitting(Sitting $sitting, PdfSittingGenerator $pdfSittingGenerator): Response
     {
         $pdfPath = $pdfSittingGenerator->getPdfPath($sitting);
@@ -253,16 +237,13 @@ class SittingController extends AbstractController
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
             $sitting->getName() . '.pdf'
         );
-
         $response->headers->set('X-Accel-Redirect', $pdfPath);
 
         return $response;
     }
 
-    /**
-     * @Route("/sitting/archive/{id}", name="sitting_archive", methods={"POST"})
-     * @IsGranted("MANAGE_SITTINGS", subject="sitting")
-     */
+    #[Route(path: '/sitting/archive/{id}', name: 'sitting_archive', methods: ['POST'])]
+    #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
     public function archiveSitting(Sitting $sitting, SittingManager $sittingManager, Request $request): Response
     {
         $sittingManager->archive($sitting);
@@ -272,10 +253,8 @@ class SittingController extends AbstractController
         return $referer ? $this->redirect($referer) : $this->redirectToRoute('sitting_index');
     }
 
-    /**
-     * @Route("/sitting/unarchive/{id}", name="sitting_unarchive", methods={"POST"})
-     * @IsGranted("ROLE_SUPERADMIN")
-     */
+    #[Route(path: '/sitting/unarchive/{id}', name: 'sitting_unarchive', methods: ['POST'])]
+    #[IsGranted(data: 'ROLE_SUPERADMIN')]
     public function unArchiveSitting(Sitting $sitting, SittingManager $sittingManager, Request $request)
     {
         $sittingManager->unArchive($sitting);

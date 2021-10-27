@@ -9,13 +9,10 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class ThemeManager
 {
-    private ThemeRepository $themeRepository;
-    private EntityManagerInterface $em;
-
-    public function __construct(ThemeRepository $themeRepository, EntityManagerInterface $em)
-    {
-        $this->themeRepository = $themeRepository;
-        $this->em = $em;
+    public function __construct(
+        private ThemeRepository $themeRepository,
+        private EntityManagerInterface $em
+    ) {
     }
 
     public function save(Theme $theme, Structure $structure, ?Theme $parentTheme = null): Theme

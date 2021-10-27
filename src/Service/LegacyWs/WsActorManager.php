@@ -11,21 +11,12 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class WsActorManager
 {
-    private EntityManagerInterface $em;
-    private UserRepository $userRepository;
-    private RoleManager $roleManager;
-    private ActorFinder $actorFinder;
-
     public function __construct(
-        EntityManagerInterface $em,
-        UserRepository $userRepository,
-        RoleManager $roleManager,
-        ActorFinder $actorFinder
+        private EntityManagerInterface $em,
+        private UserRepository $userRepository,
+        private RoleManager $roleManager,
+        private ActorFinder $actorFinder
     ) {
-        $this->em = $em;
-        $this->userRepository = $userRepository;
-        $this->roleManager = $roleManager;
-        $this->actorFinder = $actorFinder;
     }
 
     /**

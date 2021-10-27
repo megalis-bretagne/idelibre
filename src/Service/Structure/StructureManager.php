@@ -11,24 +11,13 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class StructureManager
 {
-    private StructureRepository $structureRepository;
-    private EntityManagerInterface $em;
-    private UserPasswordHasherInterface $passwordHasher;
-    private ValidatorInterface $validator;
-    private ImpersonateStructure $impersonateStructure;
-
     public function __construct(
-        StructureRepository $structureRepository,
-        EntityManagerInterface $em,
-        UserPasswordHasherInterface $userPasswordHasher,
-        ValidatorInterface $validator,
-        ImpersonateStructure $impersonateStructure
+        private StructureRepository $structureRepository,
+        private EntityManagerInterface $em,
+        private UserPasswordHasherInterface $passwordHasher,
+        private ValidatorInterface $validator,
+        private ImpersonateStructure $impersonateStructure
     ) {
-        $this->structureRepository = $structureRepository;
-        $this->em = $em;
-        $this->passwordHasher = $userPasswordHasher;
-        $this->validator = $validator;
-        $this->impersonateStructure = $impersonateStructure;
     }
 
     public function save(Structure $structure): void

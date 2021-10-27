@@ -2,34 +2,30 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\Id;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\TimezoneRepository")
- * @UniqueEntity("name")
- */
+#[Entity(repositoryClass: 'App\Repository\TimezoneRepository')]
+#[UniqueEntity('name')]
 class Timezone
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue(strategy="UUID")
-     * @ORM\Column(type="guid")
-     */
+    #[Id]
+    #[GeneratedValue(strategy: 'UUID')]
+    #[Column(type: 'guid')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255, unique=true)
-     * @Assert\NotBlank
-     * @Assert\Length(max="255")
-     */
+    #[Column(type: 'string', length: 255, unique: true)]
+    #[NotBlank]
+    #[Length(max: '255')]
     private $name;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\Length(max="255")
-     */
+    #[Column(type: 'string', length: 255, nullable: true)]
+    #[Length(max: '255')]
     private $info;
 
     public function getId(): ?string

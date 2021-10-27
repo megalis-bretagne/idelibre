@@ -4,44 +4,40 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\OneToMany;
+use Doctrine\ORM\Mapping\Table;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\GroupRepository")
- * @ORM\Table(name="`group`")
  * @UniqueEntity("name")
  */
+#[Entity(repositoryClass: 'App\Repository\GroupRepository')]
+#[Table(name: '`group`')]
 class Group
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue(strategy="UUID")
-     * @ORM\Column(type="guid")
-     */
+    #[Id]
+    #[GeneratedValue(strategy: 'UUID')]
+    #[Column(type: 'guid')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255, unique=true)
-     * @Assert\Length(max="255")
-     * @Assert\NotBlank
-     */
+    #[Column(type: 'string', length: 255, unique: true)]
+    #[Length(max: '255')]
+    #[NotBlank]
     private $name;
 
-    /**
-     * @ORM\OneToMany(targetEntity=User::class, mappedBy="group")
-     */
+    #[OneToMany(mappedBy: 'group', targetEntity: User::class)]
     private $users;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Structure::class, mappedBy="group")
-     */
+    #[OneToMany(mappedBy: 'group', targetEntity: Structure::class)]
     private $structures;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[Column(type: 'boolean')]
     private $isStructureCreator = false;
 
     public function __construct()

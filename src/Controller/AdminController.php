@@ -19,18 +19,15 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Breadcrumb("Administrateurs", routeName="admin_index" )
- * @Sidebar(active={"platform-nav","admin-nav"})
  */
+#[Sidebar(active: ['platform-nav', 'admin-nav'])]
 class AdminController extends AbstractController
 {
-    /**
-     * @Route("/admin", name="admin_index")
-     * @IsGranted("ROLE_MANAGE_STRUCTURES")
-     */
+    #[Route(path: '/admin', name: 'admin_index')]
+    #[IsGranted(data: 'ROLE_MANAGE_STRUCTURES')]
     public function index(UserRepository $userRepository, PaginatorInterface $paginator, Request $request): Response
     {
         $formSearch = $this->createForm(SearchType::class);
-
         $admins = $paginator->paginate(
             $userRepository->findSuperAdminAndGroupAdmin(
                 $this->getUser()->getGroup(),
@@ -52,10 +49,10 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/admin/add", name="admin_add")
-     * @IsGranted("ROLE_SUPERADMIN")
      * @Breadcrumb("Ajouter")
      */
+    #[Route(path: '/admin/add', name: 'admin_add')]
+    #[IsGranted(data: 'ROLE_SUPERADMIN')]
     public function add(Request $request, UserManager $userManager, RoleManager $roleManager): Response
     {
         $form = $this->createForm(SuperUserType::class);
@@ -78,10 +75,10 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/admin/group/add", name="admin_goup_add")
-     * @IsGranted("ROLE_MANAGE_STRUCTURES")
      * @Breadcrumb("Ajouter un administrateur de groupe")
      */
+    #[Route(path: '/admin/group/add', name: 'admin_goup_add')]
+    #[IsGranted(data: 'ROLE_MANAGE_STRUCTURES')]
     public function addGroupAdmin(Request $request, UserManager $userManager, RoleManager $roleManager): Response
     {
         $isGroupChoice = in_array('ROLE_SUPERADMIN', $this->getUser()->getRoles());
@@ -109,10 +106,10 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/admin/edit/{id}", name="admin_edit")
-     * @IsGranted("MY_GROUP", subject="user")
      * @Breadcrumb("Modifier {user.firstName} {user.lastName}")
      */
+    #[Route(path: '/admin/edit/{id}', name: 'admin_edit')]
+    #[IsGranted(data: 'MY_GROUP', subject: 'user')]
     public function edit(User $user, Request $request, UserManager $userManager): Response
     {
         $form = $this->createForm(SuperUserType::class, $user, ['isEditMode' => true]);
@@ -134,10 +131,8 @@ class AdminController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/admin/delete/{id}", name="admin_delete", methods={"DELETE"})
-     * @IsGranted("MY_GROUP", subject="user")
-     */
+    #[Route(path: '/admin/delete/{id}', name: 'admin_delete', methods: ['DELETE'])]
+    #[IsGranted(data: 'MY_GROUP', subject: 'user')]
     public function delete(User $user, UserManager $userManager, Request $request): Response
     {
         if ($this->getUser()->getid() == $user->getId()) {

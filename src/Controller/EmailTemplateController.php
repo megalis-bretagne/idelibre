@@ -19,14 +19,12 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Breadcrumb("Modèles d'email", routeName="email_template_index")
- * @Sidebar(active={"email-template-nav"})
  */
+#[Sidebar(active: ['email-template-nav'])]
 class EmailTemplateController extends AbstractController
 {
-    /**
-     * @Route("/emailTemplate", name="email_template_index", methods={"GET"})
-     * @IsGranted("ROLE_MANAGE_EMAIL_TEMPLATES")
-     */
+    #[Route(path: '/emailTemplate', name: 'email_template_index', methods: ['GET'])]
+    #[IsGranted(data: 'ROLE_MANAGE_EMAIL_TEMPLATES')]
     public function index(EmailTemplateRepository $repository, PaginatorInterface $paginator, Request $request): Response
     {
         $emailTemplates = $paginator->paginate(
@@ -45,15 +43,14 @@ class EmailTemplateController extends AbstractController
     }
 
     /**
-     * @Route("/emailTemplate/add", name="email_template_add")
-     * @IsGranted("ROLE_MANAGE_EMAIL_TEMPLATES")
      * @Breadcrumb("Ajouter")
      */
+    #[Route(path: '/emailTemplate/add', name: 'email_template_add')]
+    #[IsGranted(data: 'ROLE_MANAGE_EMAIL_TEMPLATES')]
     public function add(Request $request, EmailTemplateManager $templateManager): Response
     {
         $form = $this->createForm(EmailTemplateType::class, null, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $templateManager->save($form->getData(), $this->getUser()->getStructure());
             $this->addFlash('success', 'Votre modèle d\'email a été enregistré');
@@ -67,15 +64,14 @@ class EmailTemplateController extends AbstractController
     }
 
     /**
-     * @Route("/emailTemplate/edit/{id}", name="email_template_edit", methods={"GET","POST"})
-     * @IsGranted("MANAGE_EMAIL_TEMPLATES", subject="emailTemplate")
      * @Breadcrumb("Modifier {emailTemplate.name}")
      */
+    #[Route(path: '/emailTemplate/edit/{id}', name: 'email_template_edit', methods: ['GET', 'POST'])]
+    #[IsGranted(data: 'MANAGE_EMAIL_TEMPLATES', subject: 'emailTemplate')]
     public function edit(Request $request, EmailTemplate $emailTemplate, EmailTemplateManager $templateManager): Response
     {
         $form = $this->createForm(EmailTemplateType::class, $emailTemplate, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $templateManager->save($form->getData(), $this->getUser()->getStructure());
             $this->addFlash('success', 'Votre modèle d\'email a été modifié');
@@ -89,10 +85,8 @@ class EmailTemplateController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/emailTemplate/delete/{id}", name="email_template_delete", methods={"DELETE"})
-     * @IsGranted("MANAGE_EMAIL_TEMPLATES", subject="emailTemplate")
-     */
+    #[Route(path: '/emailTemplate/delete/{id}', name: 'email_template_delete', methods: ['DELETE'])]
+    #[IsGranted(data: 'MANAGE_EMAIL_TEMPLATES', subject: 'emailTemplate')]
     public function delete(EmailTemplate $emailTemplate, EmailTemplateManager $emailTemplateManager, Request $request): Response
     {
         $emailTemplateManager->delete($emailTemplate);
@@ -104,10 +98,10 @@ class EmailTemplateController extends AbstractController
     }
 
     /**
-     * @Route("/emailTemplate/preview/{id}", name="email_template_preview", methods={"GET"})
-     * @IsGranted("MANAGE_EMAIL_TEMPLATES", subject="emailTemplate")
      * @Breadcrumb("Visualiser {emailTemplate.name}")
      */
+    #[Route(path: '/emailTemplate/preview/{id}', name: 'email_template_preview', methods: ['GET'])]
+    #[IsGranted(data: 'MANAGE_EMAIL_TEMPLATES', subject: 'emailTemplate')]
     public function preview(EmailTemplate $emailTemplate): Response
     {
         return $this->render('email_template/preview.html.twig', [
@@ -115,10 +109,8 @@ class EmailTemplateController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/emailTemplate/iframe/preview/{id}", name="email_template_iframe_preview", methods={"GET"})
-     * @IsGranted("MANAGE_EMAIL_TEMPLATES", subject="emailTemplate")
-     */
+    #[Route(path: '/emailTemplate/iframe/preview/{id}', name: 'email_template_iframe_preview', methods: ['GET'])]
+    #[IsGranted(data: 'MANAGE_EMAIL_TEMPLATES', subject: 'emailTemplate')]
     public function iframePreview(EmailTemplate $emailTemplate, EmailGenerator $generator): Response
     {
         $emailData = $generator->generateFromTemplate($emailTemplate, [
@@ -133,9 +125,7 @@ class EmailTemplateController extends AbstractController
             '#titre#' => 'Monsieur le Maire',
             '#civilite#' => 'Monsieur',
         ]);
-
         $content = $emailData->getContent();
-
         if (EmailData::FORMAT_TEXT === $emailData->getFormat()) {
             $content = htmlspecialchars($content);
             $content = nl2br($content);

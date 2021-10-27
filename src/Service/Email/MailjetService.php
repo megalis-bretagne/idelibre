@@ -10,15 +10,11 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class MailjetService implements EmailServiceInterface
 {
-    private Client $mailjetClient;
-    private ParameterBagInterface $bag;
-    private LoggerInterface $logger;
-
-    public function __construct(Client $mailjetClient, ParameterBagInterface $bag, LoggerInterface $logger)
-    {
-        $this->mailjetClient = $mailjetClient;
-        $this->bag = $bag;
-        $this->logger = $logger;
+    public function __construct(
+        private Client $mailjetClient,
+        private ParameterBagInterface $bag,
+        private LoggerInterface $logger
+    ) {
     }
 
     /**

@@ -18,27 +18,14 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 class StructureCreator
 {
-    private UserManager $userManager;
-    private EntityManagerInterface $em;
-    private ThemeManager $themeManager;
-    private ComelusConnectorManager $comelusConnectorManager;
-    private LsmessageConnectorManager $lsmessageConnectorManager;
-    private DefaultTemplateCreator $defaultTemplateCreator;
-
     public function __construct(
-        UserManager $userManager,
-        EntityManagerInterface $em,
-        ThemeManager $themeManager,
-        ComelusConnectorManager $comelusConnectorManager,
-        LsmessageConnectorManager $lsmessageConnectorManager,
-        DefaultTemplateCreator $defaultTemplateCreator
+        private UserManager $userManager,
+        private EntityManagerInterface $em,
+        private ThemeManager $themeManager,
+        private ComelusConnectorManager $comelusConnectorManager,
+        private LsmessageConnectorManager $lsmessageConnectorManager,
+        private DefaultTemplateCreator $defaultTemplateCreator
     ) {
-        $this->userManager = $userManager;
-        $this->em = $em;
-        $this->themeManager = $themeManager;
-        $this->comelusConnectorManager = $comelusConnectorManager;
-        $this->lsmessageConnectorManager = $lsmessageConnectorManager;
-        $this->defaultTemplateCreator = $defaultTemplateCreator;
     }
 
     /**

@@ -6,13 +6,10 @@ class EmailServiceFactory
 {
     public const MAILJET = 'mailjet';
 
-    private SimpleEmailService $simpleEmailService;
-    private MailjetService $mailjetService;
-
-    public function __construct(SimpleEmailService $simpleEmailService, MailjetService $mailjetService)
-    {
-        $this->simpleEmailService = $simpleEmailService;
-        $this->mailjetService = $mailjetService;
+    public function __construct(
+        private SimpleEmailService $simpleEmailService,
+        private MailjetService $mailjetService
+    ) {
     }
 
     public function chooseImplementation(): EmailServiceInterface

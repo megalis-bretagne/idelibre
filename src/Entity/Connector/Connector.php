@@ -3,38 +3,31 @@
 namespace App\Entity\Connector;
 
 use App\Entity\Structure;
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\DiscriminatorMap;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\InheritanceType;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\Table;
 
-/**
- * @ORM\Entity()
- * @ORM\Table(name="connector")
- * @InheritanceType("SINGLE_TABLE")
- * @DiscriminatorMap({"comelus" = "ComelusConnector", "lsmessage" = "LsmessageConnector"})
- */
+#[Entity]
+#[Table(name: 'connector')]
+#[InheritanceType(value: 'SINGLE_TABLE')]
+#[DiscriminatorMap(value: ['comelus' => 'ComelusConnector', 'lsmessage' => 'LsmessageConnector'])]
 abstract class Connector implements ConnectorInterface
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="UUID")
-     * @ORM\Column(type="guid")
-     */
+    #[Id]
+    #[GeneratedValue(strategy: 'UUID')]
+    #[Column(type: 'guid')]
     protected $id;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[Column(type: 'string', length: 255)]
     protected $name;
-
-    /**
-     * @ORM\Column(type="json", options={"jsonb"=true})
-     */
+    #[Column(type: 'json', options: ['jsonb' => true])]
     protected $fields = [];
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Structure::class)
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
-     */
+    #[ManyToOne(targetEntity: Structure::class)]
+    #[JoinColumn(nullable: false, onDelete: 'CASCADE')]
     protected $structure;
 }

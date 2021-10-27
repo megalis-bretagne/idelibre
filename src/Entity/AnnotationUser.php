@@ -3,35 +3,30 @@
 namespace App\Entity;
 
 use App\Repository\AnnotationUserRepository;
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\ManyToOne;
 
-/**
- * @ORM\Entity(repositoryClass=AnnotationUserRepository::class)
- */
+#[Entity(repositoryClass: AnnotationUserRepository::class)]
 class AnnotationUser
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="UUID")
-     * @ORM\Column(type="guid")
-     */
+    #[Id]
+    #[GeneratedValue(strategy: 'UUID')]
+    #[Column(type: 'guid')]
     private $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Annotation::class)
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
-     */
+    #[ManyToOne(targetEntity: Annotation::class)]
+    #[JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private $annotation;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class)
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
-     */
+    #[ManyToOne(targetEntity: User::class)]
+    #[JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private $user;
 
-    /**
-     * @ORM\Column(type="boolean", nullable=true)
-     */
+    #[Column(type: 'boolean', nullable: true)]
     private $isRead;
 
     public function getId(): ?string

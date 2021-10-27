@@ -14,10 +14,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ConvocationController extends AbstractController
 {
-    /**
-     * @Route("/api/convocations/{id}", name="api_convocation_sitting", methods={"GET"})
-     * @IsGranted("MANAGE_SITTINGS", subject="sitting")
-     */
+    #[Route(path: '/api/convocations/{id}', name: 'api_convocation_sitting', methods: ['GET'])]
+    #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
     public function getConvocations(Sitting $sitting, ConvocationRepository $convocationRepository): JsonResponse
     {
         return $this->json(
@@ -32,10 +30,8 @@ class ConvocationController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/api/convocations/{id}/send", name="api_convocation_send", methods={"POST"})
-     * @IsGranted("MANAGE_CONVOCATIONS", subject="convocation")
-     */
+    #[Route(path: '/api/convocations/{id}/send', name: 'api_convocation_send', methods: ['POST'])]
+    #[IsGranted(data: 'MANAGE_CONVOCATIONS', subject: 'convocation')]
     public function sendConvocation(Convocation $convocation, ConvocationManager $convocationManager): JsonResponse
     {
         $convocationManager->sendConvocation($convocation);
@@ -43,10 +39,8 @@ class ConvocationController extends AbstractController
         return $this->json($convocation, 200, [], ['groups' => ['convocation', 'user']]);
     }
 
-    /**
-     * @Route("/api/convocations/attendance", name="api_convocation_attendance", methods={"POST", "PUT"})
-     * @IsGranted("MANAGE_ATTENDANCE", subject="request")
-     */
+    #[Route(path: '/api/convocations/attendance', name: 'api_convocation_attendance', methods: ['POST', 'PUT'])]
+    #[IsGranted(data: 'MANAGE_ATTENDANCE', subject: 'request')]
     public function setAttendance(ConvocationManager $convocationManager, Request $request): JsonResponse
     {
         $convocationManager->updateConvocationAttendances($request->toArray());

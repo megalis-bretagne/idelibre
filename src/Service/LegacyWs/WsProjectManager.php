@@ -16,21 +16,12 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class WsProjectManager
 {
-    private EntityManagerInterface $em;
-    private ThemeManager $themeManager;
-    private FileManager $fileManager;
-    private UserRepository $userRepository;
-
     public function __construct(
-        EntityManagerInterface $em,
-        ThemeManager $themeManager,
-        FileManager $fileManager,
-        UserRepository $userRepository
+        private EntityManagerInterface $em,
+        private ThemeManager $themeManager,
+        private FileManager $fileManager,
+        private UserRepository $userRepository
     ) {
-        $this->em = $em;
-        $this->themeManager = $themeManager;
-        $this->fileManager = $fileManager;
-        $this->userRepository = $userRepository;
     }
 
     /**
