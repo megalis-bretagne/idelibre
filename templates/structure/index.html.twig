@@ -47,14 +47,16 @@
 
                     {{ macros.editButton('structure_edit', structure.id) }}
 
-                    {{ macros.button_open_modal_delete(
-                        structure.id,
-                        "Confirmer suppression de la structure.",
-                        "structure_delete",
-                        "Confirmer la suppression de " ~ structure.name ~
-                        ". Cela supprimera la structure et l'ensemble de ce qui lui est lié.",
-                        structures.currentPageNumber
-                    ) }}
+                    {% if is_granted('ROLE_SUPERADMIN') %}
+                        {{ macros.button_open_modal_delete(
+                            structure.id,
+                            "Confirmer suppression de la structure.",
+                            "structure_delete",
+                            "Confirmer la suppression de " ~ structure.name ~
+                            ". Cela supprimera la structure et l'ensemble de ce qui lui est lié.",
+                            structures.currentPageNumber
+                        ) }}
+                    {% endif %}
 
                 </td>
             </tr>
