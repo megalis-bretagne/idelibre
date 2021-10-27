@@ -18,6 +18,10 @@ All notable changes to this project will be documented in this file.
 - Apiv2 (avec recupération des jetons d'horodatage)
 - Jeton d'horodatage lors de l'ajout de document dans une séance déja envoyée (#156)
 
+### Correction  
+- Format de la date lors de la création et modification d'une séance (#167)   
+
+
 ## [4.0.6] - 2021-10-04
 ### Evolution
 - Nombre de fichiers maximum par envoi est maintenant de 600 (#151)
