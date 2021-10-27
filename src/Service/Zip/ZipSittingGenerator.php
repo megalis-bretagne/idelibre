@@ -24,6 +24,7 @@ class ZipSittingGenerator
         $zip->addFile($sitting->getConvocationFile()->getPath(), $sitting->getConvocationFile()->getName());
         $this->addProjectAndAnnexesFiles($zip, $sitting);
         $zip->close();
+
         return $zipPath;
     }
 
