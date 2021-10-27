@@ -42,6 +42,7 @@ class ComelusConnectorController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
     #[Route(path: '/connector/comelus/check/', name: 'comelus_connector_check')]
     #[IsGranted(data: 'ROLE_MANAGE_CONNECTORS')]
     public function isValidApiKey(ComelusConnectorManager $comelusConnectorManager, Request $request): JsonResponse
@@ -54,6 +55,7 @@ class ComelusConnectorController extends AbstractController
 
         return $this->json(null, 400);
     }
+
     #[Route(path: '/connector/comelus/mailingLists', name: 'comelus_connector_mailing_lists')]
     #[IsGranted(data: 'ROLE_MANAGE_CONNECTORS')]
     public function getAvailableMailingLists(ComelusConnectorManager $comelusConnectorManager, Request $request): JsonResponse

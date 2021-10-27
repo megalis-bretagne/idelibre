@@ -44,6 +44,7 @@ class TypeController extends AbstractController
             'searchTerm' => $request->query->get('search') ?? '',
         ]);
     }
+
     /**
      * @Breadcrumb("Ajouter")
      */
@@ -71,6 +72,7 @@ class TypeController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
     /**
      * @Breadcrumb("Modifier {type.name}")
      */
@@ -99,6 +101,7 @@ class TypeController extends AbstractController
             'user' => $type,
         ]);
     }
+
     #[Route(path: '/type/delete/{id}', name: 'type_delete', methods: ['DELETE'])]
     #[IsGranted(data: 'MANAGE_TYPES', subject: 'type')]
     public function delete(Type $type, TypeManager $typeManager, Request $request): Response
@@ -110,6 +113,7 @@ class TypeController extends AbstractController
             'page' => $request->get('page'),
         ]);
     }
+
     #[Route(path: '/type/reminder/{id}', name: 'type_reminder', methods: ['GET'])]
     #[IsGranted(data: 'ROLE_MANAGE_SITTINGS')]
     public function getReminderInfo(Type $type): JsonResponse

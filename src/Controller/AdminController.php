@@ -47,6 +47,7 @@ class AdminController extends AbstractController
             'searchTerm' => $request->query->get('search') ?? '',
         ]);
     }
+
     /**
      * @Breadcrumb("Ajouter")
      */
@@ -72,6 +73,7 @@ class AdminController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
     /**
      * @Breadcrumb("Ajouter un administrateur de groupe")
      */
@@ -102,6 +104,7 @@ class AdminController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
     /**
      * @Breadcrumb("Modifier {user.firstName} {user.lastName}")
      */
@@ -127,6 +130,7 @@ class AdminController extends AbstractController
             'user' => $user,
         ]);
     }
+
     #[Route(path: '/admin/delete/{id}', name: 'admin_delete', methods: ['DELETE'])]
     #[IsGranted(data: 'MY_GROUP', subject: 'user')]
     public function delete(User $user, UserManager $userManager, Request $request): Response

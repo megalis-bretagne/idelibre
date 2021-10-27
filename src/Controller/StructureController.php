@@ -28,6 +28,7 @@ class StructureController extends AbstractController
 {
     use ValidationTrait;
     use RoleTrait;
+
     #[Route(path: '/structure', name: 'structure_index')]
     #[IsGranted(data: 'ROLE_MANAGE_STRUCTURES')]
     public function index(StructureRepository $structureRepository, PaginatorInterface $paginator, Request $request): Response
@@ -55,6 +56,7 @@ class StructureController extends AbstractController
             'isStructureCreator' => $this->isSuperAdmin($this->getUser()) || $this->getUser()->getGroup()->getIsStructureCreator(),
         ]);
     }
+
     /**
      * @Breadcrumb("Ajouter")
      */
@@ -88,6 +90,7 @@ class StructureController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
     /**
      * @Breadcrumb("Modifier {structure.name}")
      */
@@ -108,6 +111,7 @@ class StructureController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
     #[Route(path: '/structure/delete/{id}', name: 'structure_delete', methods: ['DELETE'])]
     #[IsGranted(data: 'MY_GROUP', subject: 'structure')]
     public function delete(Structure $structure, StructureManager $structureManager, Request $request): Response
@@ -119,6 +123,7 @@ class StructureController extends AbstractController
             'page' => $request->get('page'),
         ]);
     }
+
     /**
      * @Breadcrumb("Préférences")
      */

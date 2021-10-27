@@ -41,6 +41,7 @@ class EmailTemplateController extends AbstractController
             'templates' => $emailTemplates,
         ]);
     }
+
     /**
      * @Breadcrumb("Ajouter")
      */
@@ -61,6 +62,7 @@ class EmailTemplateController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
     /**
      * @Breadcrumb("Modifier {emailTemplate.name}")
      */
@@ -82,6 +84,7 @@ class EmailTemplateController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
     #[Route(path: '/emailTemplate/delete/{id}', name: 'email_template_delete', methods: ['DELETE'])]
     #[IsGranted(data: 'MANAGE_EMAIL_TEMPLATES', subject: 'emailTemplate')]
     public function delete(EmailTemplate $emailTemplate, EmailTemplateManager $emailTemplateManager, Request $request): Response
@@ -93,6 +96,7 @@ class EmailTemplateController extends AbstractController
             'page' => $request->get('page'),
         ]);
     }
+
     /**
      * @Breadcrumb("Visualiser {emailTemplate.name}")
      */
@@ -104,6 +108,7 @@ class EmailTemplateController extends AbstractController
             'emailTemplate' => $emailTemplate,
         ]);
     }
+
     #[Route(path: '/emailTemplate/iframe/preview/{id}', name: 'email_template_iframe_preview', methods: ['GET'])]
     #[IsGranted(data: 'MANAGE_EMAIL_TEMPLATES', subject: 'emailTemplate')]
     public function iframePreview(EmailTemplate $emailTemplate, EmailGenerator $generator): Response

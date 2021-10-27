@@ -56,6 +56,7 @@ class SittingController extends AbstractController
             'timezone' => $this->getUser()->getStructure()->getTimezone()->getName(),
         ]);
     }
+
     /**
      * @Breadcrumb("Ajouter")
      */
@@ -81,6 +82,7 @@ class SittingController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
     /**
      * @Breadcrumb("Modifier {sitting.nameWithDate}")
      */
@@ -97,6 +99,7 @@ class SittingController extends AbstractController
             'sitting' => $sitting,
         ]);
     }
+
     /**
      * @Breadcrumb("Modifier {sitting.nameWithDate}")
      */
@@ -112,6 +115,7 @@ class SittingController extends AbstractController
             'sitting' => $sitting,
         ]);
     }
+
     /**
      * @Breadcrumb("Modifier {sitting.nameWithDate}")
      */
@@ -142,6 +146,7 @@ class SittingController extends AbstractController
             'sitting' => $sitting,
         ]);
     }
+
     #[Route(path: '/sitting/edit/{id}/cancel', name: 'edit_sitting_information_cancel')]
     #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
     public function editInformationCancel(Sitting $sitting): Response
@@ -150,6 +155,7 @@ class SittingController extends AbstractController
 
         return $this->redirectToRoute('edit_sitting_information', ['id' => $sitting->getId()]);
     }
+
     #[Route(path: '/sitting/delete/{id}', name: 'sitting_delete', methods: ['DELETE'])]
     #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
     public function delete(Sitting $sitting, SittingManager $sittingManager, Request $request): Response
@@ -160,6 +166,7 @@ class SittingController extends AbstractController
 
         return $referer ? $this->redirect($referer) : $this->redirectToRoute('sitting_index');
     }
+
     /**
      * @Breadcrumb("Détail {sitting.nameWithDate}")
      */
@@ -175,6 +182,7 @@ class SittingController extends AbstractController
             'timezone' => $sitting->getStructure()->getTimezone()->getName(),
         ]);
     }
+
     /**
      * @Breadcrumb("Détail {sitting.nameWithDate}")
      */
@@ -188,6 +196,7 @@ class SittingController extends AbstractController
             'sitting' => $sitting,
         ]);
     }
+
     /**
      * @Breadcrumb("Détail {sitting.nameWithDate}")
      */
@@ -202,6 +211,7 @@ class SittingController extends AbstractController
             'projects' => $projectRepository->getProjectsWithAssociatedEntities($sitting),
         ]);
     }
+
     #[Route(path: '/sitting/zip/{id}', name: 'sitting_zip', methods: ['GET'])]
     #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
     public function getZipSitting(Sitting $sitting, ZipSittingGenerator $zipSittingGenerator): Response
@@ -216,6 +226,7 @@ class SittingController extends AbstractController
 
         return $response;
     }
+
     #[Route(path: '/sitting/pdf/{id}', name: 'sitting_full_pdf', methods: ['GET'])]
     #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
     public function getFullPdfSitting(Sitting $sitting, PdfSittingGenerator $pdfSittingGenerator): Response
@@ -230,6 +241,7 @@ class SittingController extends AbstractController
 
         return $response;
     }
+
     #[Route(path: '/sitting/archive/{id}', name: 'sitting_archive', methods: ['POST'])]
     #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
     public function archiveSitting(Sitting $sitting, SittingManager $sittingManager, Request $request): Response
@@ -240,6 +252,7 @@ class SittingController extends AbstractController
 
         return $referer ? $this->redirect($referer) : $this->redirectToRoute('sitting_index');
     }
+
     #[Route(path: '/sitting/unarchive/{id}', name: 'sitting_unarchive', methods: ['POST'])]
     #[IsGranted(data: 'ROLE_SUPERADMIN')]
     public function unArchiveSitting(Sitting $sitting, SittingManager $sittingManager, Request $request)
@@ -250,6 +263,7 @@ class SittingController extends AbstractController
 
         return $referer ? $this->redirect($referer) : $this->redirectToRoute('sitting_index');
     }
+
     private function activeSidebarNav(bool $isArchived): string
     {
         if ($isArchived) {

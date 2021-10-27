@@ -26,6 +26,7 @@ class GdprController extends AbstractController
             'gdpr' => $gdprManager->getGdpr(),
         ]);
     }
+
     /**
      * @Breadcrumb("Modifier")
      */

@@ -34,6 +34,7 @@ class ThemeController extends AbstractController
             'themes' => $themes ?? null,
         ]);
     }
+
     /**
      * @Breadcrumb("Ajouter")
      */
@@ -55,6 +56,7 @@ class ThemeController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
     /**
      * @Breadcrumb("Modifier {theme.name}")
      */
@@ -76,6 +78,7 @@ class ThemeController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
     #[Route(path: '/theme/delete/{id}', name: 'theme_delete', methods: ['DELETE'])]
     #[IsGranted(data: 'MANAGE_THEMES', subject: 'theme')]
     public function delete(Theme $theme, ThemeManager $themeManager): Response

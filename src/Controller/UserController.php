@@ -44,6 +44,7 @@ class UserController extends AbstractController
             'searchTerm' => $request->query->get('search'),
         ]);
     }
+
     /**
      * @Breadcrumb("Ajouter")
      */
@@ -70,6 +71,7 @@ class UserController extends AbstractController
             'suffix' => $this->getUser()->getStructure()->getSuffix(),
         ]);
     }
+
     /**
      * @Breadcrumb("Modifier {user.firstName} {user.lastName}")
      */
@@ -96,6 +98,7 @@ class UserController extends AbstractController
             'suffix' => $this->getUser()->getStructure()->getSuffix(),
         ]);
     }
+
     #[Route(path: '/user/delete/{id}', name: 'user_delete', methods: ['DELETE'])]
     #[IsGranted(data: 'MANAGE_USERS', subject: 'user')]
     public function delete(User $user, UserManager $manageUser, Request $request): Response
@@ -112,6 +115,7 @@ class UserController extends AbstractController
             'page' => $request->get('page'),
         ]);
     }
+
     /**
      * @Breadcrumb("Suppression par lot")
      */
@@ -131,6 +135,7 @@ class UserController extends AbstractController
             'actors' => $actors,
         ]);
     }
+
     /**
      * @Breadcrumb()
      * @Breadcrumb("Préférences utilisateur")

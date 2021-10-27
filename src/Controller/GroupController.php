@@ -24,6 +24,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class GroupController extends AbstractController
 {
     use ValidationTrait;
+
     #[Route(path: '/group', name: 'group_index')]
     #[IsGranted(data: 'ROLE_SUPERADMIN')]
     public function index(GroupRepository $groupRepository, PaginatorInterface $paginator, Request $request): Response
@@ -39,6 +40,7 @@ class GroupController extends AbstractController
             'groups' => $groups,
         ]);
     }
+
     /**
      * @Breadcrumb("Ajouter")
      */
@@ -72,6 +74,7 @@ class GroupController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
     /**
      * @Breadcrumb("Gérer {group.name}")
      */
@@ -92,6 +95,7 @@ class GroupController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
     /**
      * @Breadcrumb("Modifier {group.name}")
      */
@@ -112,6 +116,7 @@ class GroupController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
     #[Route(path: '/group/delete/{id}', name: 'group_delete', methods: ['DELETE'])]
     #[IsGranted(data: 'ROLE_SUPERADMIN')]
     public function delete(Group $group, GroupManager $groupManager, Request $request): Response

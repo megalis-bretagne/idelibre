@@ -41,6 +41,7 @@ class LsmessageConnectorController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
     #[Route(path: '/connector/lsmessage/check/', name: 'lsmessage_connector_check')]
     #[IsGranted(data: 'ROLE_MANAGE_CONNECTORS')]
     public function isValidApiKey(LsmessageConnectorManager $lsmessageConnectorManager, Request $request): JsonResponse

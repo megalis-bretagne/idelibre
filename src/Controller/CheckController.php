@@ -2,28 +2,21 @@
 
 namespace App\Controller;
 
-use App\Entity\Type;
-use App\Repository\TypeRepository;
 use App\Service\ClientNotifier\ClientNotifier;
 use App\Service\Email\EmailData;
 use App\Service\Email\EmailServiceInterface;
 use App\Service\ServiceInfo\ServiceInfo;
 use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
-use Doctrine\ORM\EntityManagerInterface;
 use Libriciel\LshorodatageApiWrapper\LsHorodatageException;
 use Libriciel\LshorodatageApiWrapper\LshorodatageInterface;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[Sidebar(active: ['platform-nav', 'check-nav'])]
 class CheckController extends AbstractController
@@ -63,5 +56,4 @@ class CheckController extends AbstractController
 
         return $this->redirectToRoute('check_index');
     }
-
 }

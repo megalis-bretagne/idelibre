@@ -39,6 +39,7 @@ class PartyController extends AbstractController
             'parties' => $parties,
         ]);
     }
+
     /**
      * @Breadcrumb("Ajouter")
      */
@@ -59,6 +60,7 @@ class PartyController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
     /**
      * @Breadcrumb("Modifier {party.name}")
      */
@@ -79,6 +81,7 @@ class PartyController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
     #[Route(path: '/party/delete/{id}', name: 'party_delete')]
     #[IsGranted(data: 'MANAGE_PARTIES', subject: 'party')]
     public function delete(Party $party, PartyManager $partyManager, Request $request): Response
