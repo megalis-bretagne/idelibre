@@ -25,14 +25,13 @@ class CsvManager
     public const TYPE_SEPARATOR = '|';
 
     public function __construct(
-        private EntityManagerInterface      $em,
-        private ValidatorInterface          $validator,
-        private UserRepository              $userRepository,
-        private TypeRepository              $typeRepository,
+        private EntityManagerInterface $em,
+        private ValidatorInterface $validator,
+        private UserRepository $userRepository,
+        private TypeRepository $typeRepository,
         private UserPasswordHasherInterface $passwordHasher,
-        private RoleManager                 $roleManager
-    )
-    {
+        private RoleManager $roleManager
+    ) {
     }
 
     /**
