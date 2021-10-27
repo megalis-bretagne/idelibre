@@ -13,7 +13,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Libriciel\ComelusApiWrapper\ComelusException;
 use Libriciel\ComelusApiWrapper\ComelusWrapper;
 use Nyholm\Psr7\UploadedFile;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class ComelusConnectorManager
@@ -22,7 +21,6 @@ class ComelusConnectorManager
         private EntityManagerInterface $em,
         private ComelusConnectorRepository $comelusConnectorRepository,
         private ComelusWrapper $comelusWrapper,
-        private LoggerInterface $logger,
         private FileManager $fileManager,
         private DateUtil $dateUtil
     ) {
