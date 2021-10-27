@@ -101,7 +101,7 @@ class CsvManager
     private function missingRoleViolation($record): ConstraintViolationList
     {
         $violation = new ConstraintViolation(
-            'Il est obligatoire de définir un role parmi les valeurs 1, 2 ou 3.',
+            'Il est obligatoire de définir un role parmi les valeurs 1, 2, 3, 4 ou 5.',
             null,
             $record,
             null,
@@ -133,22 +133,15 @@ class CsvManager
         if (0 === $roleId) {
             return null;
         }
-        $role = null;
-        switch ($roleId) {
-            case Role::CODE_ROLE_SECRETARY:
-                $role = $this->roleManager->getSecretaryRole();
-                break;
-            case Role::CODE_ROLE_STRUCTURE_ADMIN:
-                $role = $this->roleManager->getStructureAdminRole();
-                break;
-            case Role::CODE_ROLE_ACTOR:
-                $role = $this->roleManager->getActorRole();
-                break;
-            default:
-                $role = null;
-        }
 
-        return $role;
+        return match ($roleId) {
+            Role::CODE_ROLE_SECRETARY => $this->roleManager->getSecretaryRole(),
+            Role::CODE_ROLE_STRUCTURE_ADMIN => $this->roleManager->getStructureAdminRole(),
+            Role::CODE_ROLE_ACTOR => $this->roleManager->getActorRole(),
+            Role::CODE_ROLE_EMPLOYEE => $this->roleManager->getEmployeeRole(),
+            Role::CODE_ROLE_GUEST => $this->roleManager->getGuestRole(),
+            default => null,
+        };
     }
 
     private function isUsernameTwiceInCsv(array $csvEmails, string $email, User $user): ?ConstraintViolationListInterface
