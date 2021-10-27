@@ -15,9 +15,10 @@ import './js/expandable'
 $(document).ready(function () {
     let config = {
         enableTime: true,
-        //  altInput: true,
-        altFormat: "d/m/y : H:i",
-        "locale": French
+        altInput: true,
+        altFormat: "d/m/Y : H:i",
+        "locale": French,
+        allowInput: true
     };
     flatpickr($('input[type=datetime-local]'), config);
 
