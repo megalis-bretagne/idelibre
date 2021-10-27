@@ -22,7 +22,6 @@ class ComelusConnectorManager
         private EntityManagerInterface $em,
         private ComelusConnectorRepository $comelusConnectorRepository,
         private ComelusWrapper $comelusWrapper,
-        private LoggerInterface $logger,
         private FileManager $fileManager,
         private DateUtil $dateUtil
     ) {
