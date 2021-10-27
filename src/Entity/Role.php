@@ -20,6 +20,8 @@ class Role
     public const CODE_ROLE_SECRETARY = 1;
     public const CODE_ROLE_STRUCTURE_ADMIN = 2;
     public const CODE_ROLE_ACTOR = 3;
+    public const CODE_ROLE_EMPLOYEE = 4;
+    public const CODE_ROLE_GUEST = 5;
     public const NAME_ROLE_SECRETARY = 'Secretary';
     public const NAME_ROLE_STRUCTURE_ADMINISTRATOR = 'Admin';
     public const NAME_ROLE_ACTOR = 'Actor';
