@@ -39,5 +39,20 @@ var DateUtils = function () {
 
     }
 
+    utils.formattedDateZip = function (timestamp) {
+        var date = new Date(parseInt(timestamp));
+        var month = parseInt(date.getMonth()) + 1;
+        if (month < 10) {
+            month = "0" + month;
+        }
+        var dayDate = date.getDate();
+        if (dayDate < 10) {
+            dayDate = "0" + dayDate;
+        }
+        var fdate = "" + dayDate + "_" + month + "_" + date.getFullYear();
+        return fdate;
+    }
+
+
     return utils;
 }();

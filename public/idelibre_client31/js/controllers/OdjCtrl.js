@@ -173,12 +173,10 @@
 
         $scope.downloadZipSeance = function(){
             //function (account, url, filename, mimeType, callback, callbackError)
-
             var url = account.url + '/nodejs/' + config.API_LEVEL + '/zips/dlZip/' +  $scope.seanceId;
-            var filename = 'seance.zip';
+            var filename = seance.name + '_' + DateUtils.formattedDateZip(seance.date) + '.zip';
             $rootScope.$broadcast('notify', {class: 'info', content: "<b>" + account.name + "</b>" + Messages.DONWLOAD_ZIP});
             dlOriginalSrv.dlPDF(account, url, filename, 'application/zip', "idelibre/", callbackSuccess, callbackError);
-
         };
 
 
