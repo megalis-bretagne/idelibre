@@ -38,6 +38,7 @@ services:
     volumes:
       #- ../idelibre4-nodejs:/app:ro
       - /home/rdubourget/dataFiles:/data
+      - /tmp/data/zip:/data/zip:ro
       #- /tmp/docker:/tmp
     env_file:
       #- docker-resources/.env.test
@@ -63,6 +64,8 @@ services:
       #- data-public:/app/public:ro
       - ./public:/app/public
       - /tmp/data/pdf:/data/pdf:ro
+      - /tmp/data/zip:/data/zip:ro
+      - /home/rdubourget/dataFiles/workspace:/data/workspace:ro
 
   certbot:
     image: certbot/certbot
