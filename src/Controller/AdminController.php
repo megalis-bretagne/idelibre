@@ -19,13 +19,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Breadcrumb("Administrateurs", routeName="admin_index" )
- * @Sidebar(active={"platform-nav","admin-nav"})
  */
+#[Sidebar(active: ['platform-nav', 'admin-nav'])]
 class AdminController extends AbstractController
 {
     #[Route(path: '/admin', name: 'admin_index')]
     #[IsGranted(data: 'ROLE_MANAGE_STRUCTURES')]
-    public function index(UserRepository $userRepository, PaginatorInterface $paginator, Request $request) : Response
+    public function index(UserRepository $userRepository, PaginatorInterface $paginator, Request $request): Response
     {
         $formSearch = $this->createForm(SearchType::class);
         $admins = $paginator->paginate(
@@ -40,19 +40,19 @@ class AdminController extends AbstractController
                 'defaultSortDirection' => 'asc',
             ]
         );
+
         return $this->render('admin/index.html.twig', [
             'users' => $admins,
             'formSearch' => $formSearch->createView(),
             'searchTerm' => $request->query->get('search') ?? '',
         ]);
     }
-
     /**
      * @Breadcrumb("Ajouter")
      */
     #[Route(path: '/admin/add', name: 'admin_add')]
     #[IsGranted(data: 'ROLE_SUPERADMIN')]
-    public function add(Request $request, UserManager $userManager, RoleManager $roleManager) : Response
+    public function add(Request $request, UserManager $userManager, RoleManager $roleManager): Response
     {
         $form = $this->createForm(SuperUserType::class);
         $form->handleRequest($request);
@@ -67,17 +67,17 @@ class AdminController extends AbstractController
 
             return $this->redirectToRoute('admin_index');
         }
+
         return $this->render('admin/add.html.twig', [
             'form' => $form->createView(),
         ]);
     }
-
     /**
      * @Breadcrumb("Ajouter un administrateur de groupe")
      */
     #[Route(path: '/admin/group/add', name: 'admin_goup_add')]
     #[IsGranted(data: 'ROLE_MANAGE_STRUCTURES')]
-    public function addGroupAdmin(Request $request, UserManager $userManager, RoleManager $roleManager) : Response
+    public function addGroupAdmin(Request $request, UserManager $userManager, RoleManager $roleManager): Response
     {
         $isGroupChoice = in_array('ROLE_SUPERADMIN', $this->getUser()->getRoles());
         $form = $this->createForm(SuperUserType::class, null, ['isGroupChoice' => $isGroupChoice]);
@@ -97,17 +97,17 @@ class AdminController extends AbstractController
 
             return $this->redirectToRoute('admin_index');
         }
+
         return $this->render('admin/add.html.twig', [
             'form' => $form->createView(),
         ]);
     }
-
     /**
      * @Breadcrumb("Modifier {user.firstName} {user.lastName}")
      */
     #[Route(path: '/admin/edit/{id}', name: 'admin_edit')]
     #[IsGranted(data: 'MY_GROUP', subject: 'user')]
-    public function edit(User $user, Request $request, UserManager $userManager) : Response
+    public function edit(User $user, Request $request, UserManager $userManager): Response
     {
         $form = $this->createForm(SuperUserType::class, $user, ['isEditMode' => true]);
         $form->handleRequest($request);
@@ -121,15 +121,15 @@ class AdminController extends AbstractController
 
             return $this->redirectToRoute('admin_index');
         }
+
         return $this->render('admin/edit.html.twig', [
             'form' => $form->createView(),
             'user' => $user,
         ]);
     }
-
     #[Route(path: '/admin/delete/{id}', name: 'admin_delete', methods: ['DELETE'])]
     #[IsGranted(data: 'MY_GROUP', subject: 'user')]
-    public function delete(User $user, UserManager $userManager, Request $request) : Response
+    public function delete(User $user, UserManager $userManager, Request $request): Response
     {
         if ($this->getUser()->getid() == $user->getId()) {
             $this->addFlash('error', 'Impossible de supprimer son propre utilisateur');
@@ -138,6 +138,7 @@ class AdminController extends AbstractController
         }
         $userManager->delete($user);
         $this->addFlash('success', 'L\'utilisateur a bien été supprimé');
+
         return $this->redirectToRoute('admin_index', [
             'page' => $request->get('page'),
         ]);

@@ -31,6 +31,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         new \Rector\Php80\ValueObject\AnnotationToAttribute('required', 'Symfony\\Contracts\\Service\\Attribute\\Required'),
         new \Rector\Php80\ValueObject\AnnotationToAttribute('Symfony\\Component\\Routing\\Annotation\\Route'),
         new AnnotationToAttribute('Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted', 'Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted'),
+        new AnnotationToAttribute('App\Sidebar\Annotation\Sidebar', 'App\Sidebar\Annotation\Sidebar'),
     ])]]);
 
 

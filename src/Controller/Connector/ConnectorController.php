@@ -13,13 +13,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Breadcrumb("Configuration des connecteurs")
- * @Sidebar(active={"connector-nav"})
  */
+#[Sidebar(active: ['connector-nav'])]
 class ConnectorController extends AbstractController
 {
     #[Route(path: '/connector', name: 'connector_index')]
     #[IsGranted(data: 'ROLE_MANAGE_CONNECTORS')]
-    public function index(ComelusConnectorRepository $comelusConnectorRepository, LsmessageConnectorRepository $lsmessageConnectorRepository) : Response
+    public function index(ComelusConnectorRepository $comelusConnectorRepository, LsmessageConnectorRepository $lsmessageConnectorRepository): Response
     {
         return $this->render('connector/connector_index.html.twig', [
             'comelus' => $comelusConnectorRepository->findOneBy(['structure' => $this->getUser()->getStructure()]),

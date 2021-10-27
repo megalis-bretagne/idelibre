@@ -17,13 +17,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Breadcrumb("Groupes politiques")
- * @Sidebar(active={"party-nav"})
  */
+#[Sidebar(active: ['party-nav'])]
 class PartyController extends AbstractController
 {
     #[Route(path: '/party/index', name: 'party_index')]
     #[IsGranted(data: 'ROLE_MANAGE_PARTIES')]
-    public function index(PartyRepository $partyRepository, PaginatorInterface $paginator, Request $request) : Response
+    public function index(PartyRepository $partyRepository, PaginatorInterface $paginator, Request $request): Response
     {
         $parties = $paginator->paginate(
             $partyRepository->findByStructure($this->getUser()->getStructure()),
@@ -34,17 +34,17 @@ class PartyController extends AbstractController
                 'defaultSortDirection' => 'asc',
             ]
         );
+
         return $this->render('party/index.html.twig', [
             'parties' => $parties,
         ]);
     }
-
     /**
      * @Breadcrumb("Ajouter")
      */
     #[Route(path: '/party/add', name: 'party_add')]
     #[IsGranted(data: 'ROLE_MANAGE_PARTIES')]
-    public function add(Request $request, PartyManager $partyManager) : Response
+    public function add(Request $request, PartyManager $partyManager): Response
     {
         $form = $this->createForm(PartyType::class, null, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
@@ -54,17 +54,17 @@ class PartyController extends AbstractController
 
             return $this->redirectToRoute('party_index');
         }
+
         return $this->render('party/add.html.twig', [
             'form' => $form->createView(),
         ]);
     }
-
     /**
      * @Breadcrumb("Modifier {party.name}")
      */
     #[Route(path: '/party/edit/{id}', name: 'party_edit')]
     #[IsGranted(data: 'MANAGE_PARTIES', subject: 'party')]
-    public function edit(Party $party, Request $request, PartyManager $partyManager) : Response
+    public function edit(Party $party, Request $request, PartyManager $partyManager): Response
     {
         $form = $this->createForm(PartyType::class, $party, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
@@ -74,17 +74,18 @@ class PartyController extends AbstractController
 
             return $this->redirectToRoute('party_index');
         }
+
         return $this->render('party/edit.html.twig', [
             'form' => $form->createView(),
         ]);
     }
-
     #[Route(path: '/party/delete/{id}', name: 'party_delete')]
     #[IsGranted(data: 'MANAGE_PARTIES', subject: 'party')]
-    public function delete(Party $party, PartyManager $partyManager, Request $request) : Response
+    public function delete(Party $party, PartyManager $partyManager, Request $request): Response
     {
         $partyManager->delete($party);
         $this->addFlash('success', 'Le groupe politique a bien été supprimé');
+
         return $this->redirectToRoute('party_index', [
             'page' => $request->get('page'),
         ]);

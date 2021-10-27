@@ -19,13 +19,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Breadcrumb("Types de séance", routeName="type_index")
- * @Sidebar(active={"type-nav"})
  */
+#[Sidebar(active: ['type-nav'])]
 class TypeController extends AbstractController
 {
     #[Route(path: '/type', name: 'type_index', methods: ['GET'])]
     #[IsGranted(data: 'ROLE_MANAGE_TYPES')]
-    public function index(TypeRepository $typeRepository, PaginatorInterface $paginator, Request $request) : Response
+    public function index(TypeRepository $typeRepository, PaginatorInterface $paginator, Request $request): Response
     {
         $formSearch = $this->createForm(SearchType::class);
         $types = $paginator->paginate(
@@ -37,19 +37,19 @@ class TypeController extends AbstractController
                 'defaultSortDirection' => 'asc',
             ]
         );
+
         return $this->render('type/index.html.twig', [
             'types' => $types,
             'formSearch' => $formSearch->createView(),
             'searchTerm' => $request->query->get('search') ?? '',
         ]);
     }
-
     /**
      * @Breadcrumb("Ajouter")
      */
     #[Route(path: '/type/add', name: 'type_add')]
     #[IsGranted(data: 'ROLE_MANAGE_TYPES')]
-    public function add(Request $request, TypeManager $typeManager) : Response
+    public function add(Request $request, TypeManager $typeManager): Response
     {
         $form = $this->createForm(TypeType::class, null, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
@@ -66,17 +66,17 @@ class TypeController extends AbstractController
 
             return $this->redirectToRoute('type_index');
         }
+
         return $this->render('type/add.html.twig', [
             'form' => $form->createView(),
         ]);
     }
-
     /**
      * @Breadcrumb("Modifier {type.name}")
      */
     #[Route(path: '/type/edit/{id}', name: 'type_edit')]
     #[IsGranted(data: 'MANAGE_TYPES', subject: 'type')]
-    public function edit(Type $type, Request $request, TypeManager $typeManager) : Response
+    public function edit(Type $type, Request $request, TypeManager $typeManager): Response
     {
         $form = $this->createForm(TypeType::class, $type, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
@@ -93,30 +93,31 @@ class TypeController extends AbstractController
 
             return $this->redirectToRoute('type_index');
         }
+
         return $this->render('type/edit.html.twig', [
             'form' => $form->createView(),
             'user' => $type,
         ]);
     }
-
     #[Route(path: '/type/delete/{id}', name: 'type_delete', methods: ['DELETE'])]
     #[IsGranted(data: 'MANAGE_TYPES', subject: 'type')]
-    public function delete(Type $type, TypeManager $typeManager, Request $request) : Response
+    public function delete(Type $type, TypeManager $typeManager, Request $request): Response
     {
         $typeManager->delete($type);
         $this->addFlash('success', 'Le type a bien été supprimé');
+
         return $this->redirectToRoute('type_index', [
             'page' => $request->get('page'),
         ]);
     }
-
     #[Route(path: '/type/reminder/{id}', name: 'type_reminder', methods: ['GET'])]
     #[IsGranted(data: 'ROLE_MANAGE_SITTINGS')]
-    public function getReminderInfo(Type $type) : JsonResponse
+    public function getReminderInfo(Type $type): JsonResponse
     {
         if (!$type->getReminder()) {
             return $this->json(['isActive' => false]);
         }
+
         return $this->json([
             'isActive' => $type->getReminder()->getIsActive(),
             'duration' => $type->getReminder()->getDuration(),

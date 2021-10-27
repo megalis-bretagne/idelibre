@@ -13,9 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Sidebar(active={"board-nav"})
- */
+#[Sidebar(active: ['board-nav'])]
 class BoardController extends AbstractController
 {
     /**
@@ -23,7 +21,7 @@ class BoardController extends AbstractController
      */
     #[Route(path: '/board', name: 'board_index')]
     #[IsGranted(data: 'ROLE_MANAGE_SITTINGS')]
-    public function index(SittingRepository $sittingRepository, PaginatorInterface $paginator, Request $request) : Response
+    public function index(SittingRepository $sittingRepository, PaginatorInterface $paginator, Request $request): Response
     {
         /** @var Structure $structure */
         $structure = $this->getUser()->getStructure();
@@ -36,6 +34,7 @@ class BoardController extends AbstractController
                 'defaultSortDirection' => 'desc',
             ]
         );
+
         return $this->render('board/index.html.twig', [
             'sittings' => $sittings,
             'timezone' => $structure->getTimezone()->getName(),

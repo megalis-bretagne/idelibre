@@ -22,16 +22,15 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Breadcrumb("Structures", routeName="structure_index")
- * @Sidebar(active={"platform-nav","structure-nav"})
  */
+#[Sidebar(active: ['platform-nav', 'structure-nav'])]
 class StructureController extends AbstractController
 {
     use ValidationTrait;
     use RoleTrait;
-
     #[Route(path: '/structure', name: 'structure_index')]
     #[IsGranted(data: 'ROLE_MANAGE_STRUCTURES')]
-    public function index(StructureRepository $structureRepository, PaginatorInterface $paginator, Request $request) : Response
+    public function index(StructureRepository $structureRepository, PaginatorInterface $paginator, Request $request): Response
     {
         $formSearch = $this->createForm(SearchType::class);
         if ($this->isSuperAdmin($this->getUser())) {
@@ -48,6 +47,7 @@ class StructureController extends AbstractController
                 'defaultSortDirection' => 'asc',
             ]
         );
+
         return $this->render('structure/index.html.twig', [
             'structures' => $structures,
             'formSearch' => $formSearch->createView(),
@@ -55,13 +55,12 @@ class StructureController extends AbstractController
             'isStructureCreator' => $this->isSuperAdmin($this->getUser()) || $this->getUser()->getGroup()->getIsStructureCreator(),
         ]);
     }
-
     /**
      * @Breadcrumb("Ajouter")
      */
     #[Route(path: '/structure/add', name: 'structure_add')]
     #[IsGranted(data: 'CREATE_STRUCTURE')]
-    public function add(Request $request, StructureCreator $structureCreator) : Response
+    public function add(Request $request, StructureCreator $structureCreator): Response
     {
         $form = $this->createForm(StructureType::class);
         $form->handleRequest($request);
@@ -84,17 +83,17 @@ class StructureController extends AbstractController
 
             return $this->redirectToRoute('structure_index');
         }
+
         return $this->render('structure/add.html.twig', [
             'form' => $form->createView(),
         ]);
     }
-
     /**
      * @Breadcrumb("Modifier {structure.name}")
      */
     #[Route(path: '/structure/edit/{id}', name: 'structure_edit')]
     #[IsGranted(data: 'MY_GROUP', subject: 'structure')]
-    public function edit(Structure $structure, Request $request, StructureManager $structureManager) : Response
+    public function edit(Structure $structure, Request $request, StructureManager $structureManager): Response
     {
         $form = $this->createForm(StructureType::class, $structure);
         $form->handleRequest($request);
@@ -104,29 +103,29 @@ class StructureController extends AbstractController
 
             return $this->redirectToRoute('structure_index');
         }
+
         return $this->render('structure/edit.html.twig', [
             'form' => $form->createView(),
         ]);
     }
-
     #[Route(path: '/structure/delete/{id}', name: 'structure_delete', methods: ['DELETE'])]
     #[IsGranted(data: 'MY_GROUP', subject: 'structure')]
-    public function delete(Structure $structure, StructureManager $structureManager, Request $request) : Response
+    public function delete(Structure $structure, StructureManager $structureManager, Request $request): Response
     {
         $structureManager->delete($structure);
         $this->addFlash('success', 'La structure a bien été supprimée');
+
         return $this->redirectToRoute('structure_index', [
             'page' => $request->get('page'),
         ]);
     }
-
     /**
      * @Breadcrumb("Préférences")
-     * @Sidebar(reset=true, active={"structure-preference-nav"})
      */
     #[Route(path: '/structure/preferences', name: 'structure_preferences')]
     #[IsGranted(data: 'ROLE_STRUCTURE_ADMIN')]
-    public function preferences(Request $request, StructureManager $structureManager) : Response
+    #[Sidebar(reset: true, active: ['structure-preference-nav'])]
+    public function preferences(Request $request, StructureManager $structureManager): Response
     {
         $form = $this->createForm(StructureInformationType::class, $this->getUser()->getStructure());
         $form->handleRequest($request);
@@ -136,6 +135,7 @@ class StructureController extends AbstractController
 
             return $this->redirectToRoute('app_entrypoint');
         }
+
         return $this->render('structure/preferences.html.twig', [
             'form' => $form->createView(),
         ]);

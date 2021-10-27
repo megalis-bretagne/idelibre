@@ -16,8 +16,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Breadcrumb("Configuration des connecteurs", routeName="connector_index")
- * @Sidebar(active={"connector-nav"})
  */
+#[Sidebar(active: ['connector-nav'])]
 class LsmessageConnectorController extends AbstractController
 {
     /**
@@ -25,7 +25,7 @@ class LsmessageConnectorController extends AbstractController
      */
     #[Route(path: '/connector/lsmessage', name: 'lsmessage_connector')]
     #[IsGranted(data: 'ROLE_MANAGE_CONNECTORS')]
-    public function edit(LsmessageConnectorRepository $lsmessageConnectorRepository, LsmessageConnectorManager $lsmessageConnectorManager, Request $request) : Response
+    public function edit(LsmessageConnectorRepository $lsmessageConnectorRepository, LsmessageConnectorManager $lsmessageConnectorManager, Request $request): Response
     {
         $connector = $lsmessageConnectorRepository->findOneBy(['structure' => $this->getUser()->getStructure()]);
         $form = $this->createForm(LsmessageConnectorType::class, $connector);
@@ -36,14 +36,14 @@ class LsmessageConnectorController extends AbstractController
 
             return $this->redirectToRoute('connector_index');
         }
+
         return $this->render('connector/lsmessage.html.twig', [
             'form' => $form->createView(),
         ]);
     }
-
     #[Route(path: '/connector/lsmessage/check/', name: 'lsmessage_connector_check')]
     #[IsGranted(data: 'ROLE_MANAGE_CONNECTORS')]
-    public function isValidApiKey(LsmessageConnectorManager $lsmessageConnectorManager, Request $request) : JsonResponse
+    public function isValidApiKey(LsmessageConnectorManager $lsmessageConnectorManager, Request $request): JsonResponse
     {
         $url = $request->query->get('url');
         $apiKey = $request->query->get('apiKey');
@@ -51,6 +51,7 @@ class LsmessageConnectorController extends AbstractController
         if (null === $lsmessageInfo) {
             return $this->json(null, 400);
         }
+
         return $this->json(['balance' => $lsmessageInfo['balance']]);
     }
 }

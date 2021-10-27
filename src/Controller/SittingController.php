@@ -27,13 +27,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Breadcrumb("Séances", routeName="sitting_index")
- * @Sidebar(active={"sitting-nav"})
  */
+#[Sidebar(active: ['sitting-nav'])]
 class SittingController extends AbstractController
 {
     #[Route(path: '/sitting', name: 'sitting_index')]
     #[IsGranted(data: 'ROLE_MANAGE_SITTINGS')]
-    public function index(PaginatorInterface $paginator, Request $request, SittingManager $sittingManager, SidebarState $sidebarState) : Response
+    public function index(PaginatorInterface $paginator, Request $request, SittingManager $sittingManager, SidebarState $sidebarState): Response
     {
         $formSearch = $this->createForm(SearchType::class);
         $sittings = $paginator->paginate(
@@ -48,6 +48,7 @@ class SittingController extends AbstractController
         if ($status = $request->query->get('status')) {
             $sidebarState->addActiveNavs(['sitting-nav', "sitting-${status}-nav"]);
         }
+
         return $this->render('sitting/index.html.twig', [
             'sittings' => $sittings,
             'formSearch' => $formSearch->createView(),
@@ -55,14 +56,13 @@ class SittingController extends AbstractController
             'timezone' => $this->getUser()->getStructure()->getTimezone()->getName(),
         ]);
     }
-
     /**
      * @Breadcrumb("Ajouter")
-     * @Sidebar(active={"sitting-active-nav"})
      */
     #[Route(path: '/sitting/add', name: 'sitting_add')]
     #[IsGranted(data: 'ROLE_MANAGE_SITTINGS')]
-    public function createSitting(Request $request, SittingManager $sittingManager) : Response
+    #[Sidebar(active: ['sitting-active-nav'])]
+    public function createSitting(Request $request, SittingManager $sittingManager): Response
     {
         $form = $this->createForm(SittingType::class, null, ['structure' => $this->getUser()->getStructure(), 'user' => $this->getUser()]);
         $form->handleRequest($request);
@@ -76,49 +76,49 @@ class SittingController extends AbstractController
 
             return $this->redirectToRoute('edit_sitting_actor', ['id' => $sittingId]);
         }
+
         return $this->render('sitting/add.html.twig', [
             'form' => $form->createView(),
         ]);
     }
-
     /**
      * @Breadcrumb("Modifier {sitting.nameWithDate}")
-     * @Sidebar(active={"sitting-active-nav"})
      */
     #[Route(path: '/sitting/edit/{id}/actors', name: 'edit_sitting_actor', methods: ['GET'])]
     #[IsGranted(data: 'ROLE_MANAGE_SITTINGS')]
-    public function editUsers(Sitting $sitting, Request $request, ActorManager $actorManager, ConvocationManager $convocationManager) : Response
+    #[Sidebar(active: ['sitting-active-nav'])]
+    public function editUsers(Sitting $sitting, Request $request, ActorManager $actorManager, ConvocationManager $convocationManager): Response
     {
         if ($sitting->getIsArchived()) {
             throw new InvalidArgumentException('Impossible de modifier une séance archivée');
         }
+
         return $this->render('sitting/edit_actors.html.twig', [
             'sitting' => $sitting,
         ]);
     }
-
     /**
      * @Breadcrumb("Modifier {sitting.nameWithDate}")
-     * @Sidebar(active={"sitting-active-nav"})
      */
     #[Route(path: '/sitting/edit/{id}/projects', name: 'edit_sitting_project')]
-    public function editProjects(Sitting $sitting) : Response
+    #[Sidebar(active: ['sitting-active-nav'])]
+    public function editProjects(Sitting $sitting): Response
     {
         if ($sitting->getIsArchived()) {
             throw new InvalidArgumentException('Impossible de modifier une séance archivée');
         }
+
         return $this->render('sitting/edit_projects.html.twig', [
             'sitting' => $sitting,
         ]);
     }
-
     /**
      * @Breadcrumb("Modifier {sitting.nameWithDate}")
-     * @Sidebar(active={"sitting-active-nav"})
      */
     #[Route(path: '/sitting/edit/{id}', name: 'edit_sitting_information')]
     #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
-    public function editInformation(Sitting $sitting, Request $request, SittingManager $sittingManager) : Response
+    #[Sidebar(active: ['sitting-active-nav'])]
+    public function editInformation(Sitting $sitting, Request $request, SittingManager $sittingManager): Response
     {
         if ($sitting->getIsArchived()) {
             throw new InvalidArgumentException('Impossible de modifier une séance archivée');
@@ -136,75 +136,75 @@ class SittingController extends AbstractController
 
             return $this->redirectToRoute('edit_sitting_information', ['id' => $sitting->getId()]);
         }
+
         return $this->render('sitting/edit_information.html.twig', [
             'form' => $form->createView(),
             'sitting' => $sitting,
         ]);
     }
-
     #[Route(path: '/sitting/edit/{id}/cancel', name: 'edit_sitting_information_cancel')]
     #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
-    public function editInformationCancel(Sitting $sitting) : Response
+    public function editInformationCancel(Sitting $sitting): Response
     {
         $this->addFlash('success', 'Modifications annulées');
+
         return $this->redirectToRoute('edit_sitting_information', ['id' => $sitting->getId()]);
     }
-
     #[Route(path: '/sitting/delete/{id}', name: 'sitting_delete', methods: ['DELETE'])]
     #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
-    public function delete(Sitting $sitting, SittingManager $sittingManager, Request $request) : Response
+    public function delete(Sitting $sitting, SittingManager $sittingManager, Request $request): Response
     {
         $sittingManager->delete($sitting);
         $this->addFlash('success', 'La séance a bien été supprimée');
         $referer = $request->headers->get('referer');
+
         return $referer ? $this->redirect($referer) : $this->redirectToRoute('sitting_index');
     }
-
     /**
      * @Breadcrumb("Détail {sitting.nameWithDate}")
      */
     #[Route(path: '/sitting/show/{id}/information', name: 'sitting_show_information', methods: ['GET'])]
     #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
-    public function showInformation(Sitting $sitting, SittingManager $sittingManager, SidebarState $sidebarState) : Response
+    public function showInformation(Sitting $sitting, SittingManager $sittingManager, SidebarState $sidebarState): Response
     {
         $sidebarState->addActiveNavs(['sitting-nav', $this->activeSidebarNav($sitting->getIsArchived())]);
+
         return $this->render('sitting/details_information.html.twig', [
             'isAlreadySent' => $sittingManager->isAlreadySent($sitting),
             'sitting' => $sitting,
             'timezone' => $sitting->getStructure()->getTimezone()->getName(),
         ]);
     }
-
     /**
      * @Breadcrumb("Détail {sitting.nameWithDate}")
      */
     #[Route(path: '/sitting/show/{id}/actors', name: 'sitting_show_actors', methods: ['GET'])]
     #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
-    public function showActors(Sitting $sitting, ConvocationRepository $convocationRepository, SidebarState $sidebarState) : Response
+    public function showActors(Sitting $sitting, ConvocationRepository $convocationRepository, SidebarState $sidebarState): Response
     {
         $sidebarState->addActiveNavs(['sitting-nav', $this->activeSidebarNav($sitting->getIsArchived())]);
+
         return $this->render('sitting/details_actors.html.twig', [
             'sitting' => $sitting,
         ]);
     }
-
     /**
      * @Breadcrumb("Détail {sitting.nameWithDate}")
      */
     #[Route(path: '/sitting/show/{id}/projects', name: 'sitting_show_projects', methods: ['GET'])]
     #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
-    public function showProjects(Sitting $sitting, ConvocationRepository $convocationRepository, ProjectRepository $projectRepository, SidebarState $sidebarState) : Response
+    public function showProjects(Sitting $sitting, ConvocationRepository $convocationRepository, ProjectRepository $projectRepository, SidebarState $sidebarState): Response
     {
         $sidebarState->addActiveNavs(['sitting-nav', $this->activeSidebarNav($sitting->getIsArchived())]);
+
         return $this->render('sitting/details_projects.html.twig', [
             'sitting' => $sitting,
             'projects' => $projectRepository->getProjectsWithAssociatedEntities($sitting),
         ]);
     }
-
     #[Route(path: '/sitting/zip/{id}', name: 'sitting_zip', methods: ['GET'])]
     #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
-    public function getZipSitting(Sitting $sitting, ZipSittingGenerator $zipSittingGenerator) : Response
+    public function getZipSitting(Sitting $sitting, ZipSittingGenerator $zipSittingGenerator): Response
     {
         $zipPath = $zipSittingGenerator->getAndCreateZipPath($sitting);
         $response = new BinaryFileResponse($zipPath);
@@ -213,12 +213,12 @@ class SittingController extends AbstractController
             $sitting->getName() . '.zip'
         );
         $response->headers->set('X-Accel-Redirect', $zipPath);
+
         return $response;
     }
-
     #[Route(path: '/sitting/pdf/{id}', name: 'sitting_full_pdf', methods: ['GET'])]
     #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
-    public function getFullPdfSitting(Sitting $sitting, PdfSittingGenerator $pdfSittingGenerator) : Response
+    public function getFullPdfSitting(Sitting $sitting, PdfSittingGenerator $pdfSittingGenerator): Response
     {
         $pdfPath = $pdfSittingGenerator->getPdfPath($sitting);
         $response = new BinaryFileResponse($pdfPath);
@@ -227,19 +227,19 @@ class SittingController extends AbstractController
             $sitting->getName() . '.pdf'
         );
         $response->headers->set('X-Accel-Redirect', $pdfPath);
+
         return $response;
     }
-
     #[Route(path: '/sitting/archive/{id}', name: 'sitting_archive', methods: ['POST'])]
     #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
-    public function archiveSitting(Sitting $sitting, SittingManager $sittingManager, Request $request) : Response
+    public function archiveSitting(Sitting $sitting, SittingManager $sittingManager, Request $request): Response
     {
         $sittingManager->archive($sitting);
         $this->addFlash('success', 'La séance a été classée');
         $referer = $request->headers->get('referer');
+
         return $referer ? $this->redirect($referer) : $this->redirectToRoute('sitting_index');
     }
-
     #[Route(path: '/sitting/unarchive/{id}', name: 'sitting_unarchive', methods: ['POST'])]
     #[IsGranted(data: 'ROLE_SUPERADMIN')]
     public function unArchiveSitting(Sitting $sitting, SittingManager $sittingManager, Request $request)
@@ -247,9 +247,9 @@ class SittingController extends AbstractController
         $sittingManager->unArchive($sitting);
         $this->addFlash('success', 'La séance a été déclassée');
         $referer = $request->headers->get('referer');
+
         return $referer ? $this->redirect($referer) : $this->redirectToRoute('sitting_index');
     }
-
     private function activeSidebarNav(bool $isArchived): string
     {
         if ($isArchived) {

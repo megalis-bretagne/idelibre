@@ -4,28 +4,23 @@ namespace App\Sidebar\Listener;
 
 use App\Sidebar\Annotation\Sidebar;
 use App\Sidebar\State\SidebarState;
-use Doctrine\Common\Annotations\Reader;
+use ReflectionAttribute;
 use ReflectionClass;
 use ReflectionException;
 use RuntimeException;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
-use Twig\Environment;
 
 class SidebarListener
 {
-    private Environment $twig;
-    private Reader $annotationReader;
     private array $activeNavs = [];
     private SidebarState $sidebarState;
 
-    public function __construct(Environment $twig, Reader $annotationReader, SidebarState $sidebarState)
+    public function __construct(SidebarState $sidebarState)
     {
-        $this->twig = $twig;
-        $this->annotationReader = $annotationReader;
         $this->sidebarState = $sidebarState;
     }
 
-    public function onKernelRequest(ControllerEvent $event)
+    public function onKernelRequest(ControllerEvent $event): void
     {
         if (!$event->isMainRequest()) {
             return;
@@ -42,32 +37,34 @@ class SidebarListener
         $this->sidebarState->addActiveNavs($this->activeNavs);
     }
 
-    private function handleAnnotation(iterable $controllers)
+    private function handleAnnotation(iterable $controllers): void
     {
         list($controller, $method) = $controllers;
-
 
         try {
             $controller = new ReflectionClass($controller);
         } catch (ReflectionException $e) {
-            throw new RuntimeException('Failed to read annotation!');
+            throw new RuntimeException('Failed to read class annotation! : ' . $e->getMessage());
         }
         $this->setActiveNav($controller->getAttributes(Sidebar::class));
 
         try {
             $method = $controller->getMethod($method);
         } catch (ReflectionException $e) {
-            throw new RuntimeException('Failed to read annotation!');
+            throw new RuntimeException('Failed to read method annotation!  ' . $e->getMessage());
         }
 
         $this->setActiveNav($method->getAttributes(Sidebar::class));
     }
 
-    private function setActiveNav(array $attributes)
+    /**
+     * @param ReflectionAttribute[] $attributes
+     */
+    private function setActiveNav(array $attributes): void
     {
-        /** @var \ReflectionAttribute $attribute */
+        /** @var ReflectionAttribute $attribute */
         foreach ($attributes as $attribute) {
-            if ($attribute->getName() !== Sidebar::class) {
+            if (Sidebar::class !== $attribute->getName()) {
                 continue;
             }
             $sidebar = $attribute->newInstance();

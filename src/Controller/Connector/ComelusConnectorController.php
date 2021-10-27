@@ -17,8 +17,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Breadcrumb("Configuration des connecteurs", routeName="connector_index")
- * @Sidebar(active={"connector-nav"})
  */
+#[Sidebar(active: ['connector-nav'])]
 class ComelusConnectorController extends AbstractController
 {
     /**
@@ -26,7 +26,7 @@ class ComelusConnectorController extends AbstractController
      */
     #[Route(path: '/connector/comelus', name: 'comelus_connector')]
     #[IsGranted(data: 'ROLE_MANAGE_CONNECTORS')]
-    public function edit(ComelusConnectorRepository $comelusConnectorRepository, ComelusConnectorManager $comelusConnectorManager, Request $request) : Response
+    public function edit(ComelusConnectorRepository $comelusConnectorRepository, ComelusConnectorManager $comelusConnectorManager, Request $request): Response
     {
         $connector = $comelusConnectorRepository->findOneBy(['structure' => $this->getUser()->getStructure()]);
         $form = $this->createForm(ComelusConnectorType::class, $connector);
@@ -37,26 +37,26 @@ class ComelusConnectorController extends AbstractController
 
             return $this->redirectToRoute('connector_index');
         }
+
         return $this->render('connector/comelus.html.twig', [
             'form' => $form->createView(),
         ]);
     }
-
     #[Route(path: '/connector/comelus/check/', name: 'comelus_connector_check')]
     #[IsGranted(data: 'ROLE_MANAGE_CONNECTORS')]
-    public function isValidApiKey(ComelusConnectorManager $comelusConnectorManager, Request $request) : JsonResponse
+    public function isValidApiKey(ComelusConnectorManager $comelusConnectorManager, Request $request): JsonResponse
     {
         $url = $request->query->get('url');
         $apiKey = $request->query->get('apiKey');
         if ($comelusConnectorManager->checkApiKey($url, $apiKey)) {
             return $this->json(null);
         }
+
         return $this->json(null, 400);
     }
-
     #[Route(path: '/connector/comelus/mailingLists', name: 'comelus_connector_mailing_lists')]
     #[IsGranted(data: 'ROLE_MANAGE_CONNECTORS')]
-    public function getAvailableMailingLists(ComelusConnectorManager $comelusConnectorManager, Request $request) : JsonResponse
+    public function getAvailableMailingLists(ComelusConnectorManager $comelusConnectorManager, Request $request): JsonResponse
     {
         $url = $request->query->get('url');
         $apiKey = $request->query->get('apiKey');

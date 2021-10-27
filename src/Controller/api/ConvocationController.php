@@ -16,7 +16,7 @@ class ConvocationController extends AbstractController
 {
     #[Route(path: '/api/convocations/{id}', name: 'api_convocation_sitting', methods: ['GET'])]
     #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
-    public function getConvocations(Sitting $sitting, ConvocationRepository $convocationRepository) : JsonResponse
+    public function getConvocations(Sitting $sitting, ConvocationRepository $convocationRepository): JsonResponse
     {
         return $this->json(
             [
@@ -32,17 +32,19 @@ class ConvocationController extends AbstractController
 
     #[Route(path: '/api/convocations/{id}/send', name: 'api_convocation_send', methods: ['POST'])]
     #[IsGranted(data: 'MANAGE_CONVOCATIONS', subject: 'convocation')]
-    public function sendConvocation(Convocation $convocation, ConvocationManager $convocationManager) : JsonResponse
+    public function sendConvocation(Convocation $convocation, ConvocationManager $convocationManager): JsonResponse
     {
         $convocationManager->sendConvocation($convocation);
+
         return $this->json($convocation, 200, [], ['groups' => ['convocation', 'user']]);
     }
 
     #[Route(path: '/api/convocations/attendance', name: 'api_convocation_attendance', methods: ['POST', 'PUT'])]
     #[IsGranted(data: 'MANAGE_ATTENDANCE', subject: 'request')]
-    public function setAttendance(ConvocationManager $convocationManager, Request $request) : JsonResponse
+    public function setAttendance(ConvocationManager $convocationManager, Request $request): JsonResponse
     {
         $convocationManager->updateConvocationAttendances($request->toArray());
+
         return $this->json(['success' => 'true']);
     }
 }

@@ -2,11 +2,11 @@
 
 namespace App\Controller\WebService;
 
-use Exception;
 use App\Message\UpdatedSitting;
 use App\Security\Http403Exception;
 use App\Service\LegacyWs\LegacyWsAuthentication;
 use App\Service\LegacyWs\LegacyWsService;
+use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -20,7 +20,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class LegacyWsController extends AbstractController
 {
     #[Route(path: '/{slash}seances.json', name: 'wd_connector', requirements: ['slash' => '\/?'])]
-    public function addSitting(Request $request, LegacyWsService $wsService, LegacyWsAuthentication $legacyWsAuthentication, LoggerInterface $logger, MessageBusInterface $messageBus) : JsonResponse
+    public function addSitting(Request $request, LegacyWsService $wsService, LegacyWsAuthentication $legacyWsAuthentication, LoggerInterface $logger, MessageBusInterface $messageBus): JsonResponse
     {
         $username = $request->request->get('username');
         $plainPassword = $request->request->get('password');
@@ -50,6 +50,7 @@ class LegacyWsController extends AbstractController
             ], 400);
         }
         $messageBus->dispatch(new UpdatedSitting($sitting->getId()));
+
         return $this->json([
             'success' => true,
             'code' => 'Seance.add.ok',
@@ -60,14 +61,14 @@ class LegacyWsController extends AbstractController
 
     #[Route(path: '/{slash}api300/ping', name: 'api_300_ping', requirements: ['slash' => '\/?'])]
     #[Route(path: '/{slash}Api300/ping', name: 'Api_300_ping', requirements: ['slash' => '\/?'])]
-    public function ping() : Response
+    public function ping(): Response
     {
         return new Response('ping');
     }
 
     #[Route(path: '/{slash}api300/version', name: 'api_300_version', requirements: ['slash' => '\/?'])]
     #[Route(path: '/{slash}Api300/version', name: 'Api_300_version', requirements: ['slash' => '\/?'])]
-    public function version(ParameterBagInterface $bag) : Response
+    public function version(ParameterBagInterface $bag): Response
     {
         return new Response($bag->get('version'));
     }
@@ -81,7 +82,7 @@ class LegacyWsController extends AbstractController
      */
     #[Route(path: '/{slash}api300/check', name: 'api_300_check', requirements: ['slash' => '\/?'])]
     #[Route(path: '/{slash}Api300/check', name: 'Api_300_check', requirements: ['slash' => '\/?'])]
-    public function check(Request $request, LegacyWsAuthentication $legacyWsAuthentication) : Response
+    public function check(Request $request, LegacyWsAuthentication $legacyWsAuthentication): Response
     {
         $legacyConnection = $request->request->get('conn');
         $plainPassword = $request->request->get('password');
@@ -92,6 +93,7 @@ class LegacyWsController extends AbstractController
         } catch (Http403Exception $e) {
             return new Response($e->getMessage(), $e->getCode());
         }
+
         return new Response('success');
     }
 }

@@ -12,7 +12,7 @@ class ThemeController extends AbstractController
 {
     #[Route(path: '/api/themes', name: 'api_theme_index', methods: ['GET'])]
     #[IsGranted(data: 'ROLE_MANAGE_SITTINGS')]
-    public function getThemes(ThemeManager $themeManager) : JsonResponse
+    public function getThemes(ThemeManager $themeManager): JsonResponse
     {
         return $this->json(
             $themeManager->getThemesFromStructure($this->getUser()->getStructure()),

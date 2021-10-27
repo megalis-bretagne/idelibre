@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Role;
 use App\Entity\Structure;
-use App\Entity\User;
 use App\Form\UserPasswordType;
 use App\Security\Password\ResetPassword;
 use App\Security\Password\TimeoutException;
@@ -24,7 +23,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class SecurityController extends AbstractController
 {
     #[Route(path: '/', name: 'app_entrypoint')]
-    public function entryPoint(Security $security) : Response
+    public function entryPoint(Security $security): Response
     {
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
@@ -35,11 +34,12 @@ class SecurityController extends AbstractController
         if ($this->isGranted('ROLE_MANAGE_STRUCTURES')) {
             return $this->redirectToRoute('structure_index');
         }
+
         return $this->redirectToRoute('sitting_index', ['status' => 'active']);
     }
 
     #[Route(path: '/login', name: 'app_login')]
-    public function login(AuthenticationUtils $authenticationUtils) : Response
+    public function login(AuthenticationUtils $authenticationUtils): Response
     {
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
@@ -48,6 +48,7 @@ class SecurityController extends AbstractController
         }
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
+
         return $this->render('security/Login_ls.html.twig', [
             'last_username' => $lastUsername,
             'error' => $error,
@@ -61,19 +62,21 @@ class SecurityController extends AbstractController
 
     #[Route(path: '/security/impersonate/{id}', name: 'security_impersonate')]
     #[IsGranted(data: 'MY_GROUP', subject: 'structure')]
-    public function impersonateAs(Structure $structure, ImpersonateStructure $impersonateStructure) : Response
+    public function impersonateAs(Structure $structure, ImpersonateStructure $impersonateStructure): Response
     {
         $impersonateStructure->logInStructure($structure);
         $this->addFlash('success', 'Vous êtes connecté dans la structure ' . $structure->getName());
+
         return $this->redirectToRoute('structure_index');
     }
 
     #[Route(path: '/security/impersonateExit', name: 'security_impersonate_exit')]
     #[IsGranted(data: 'ROLE_MANAGE_STRUCTURES')]
-    public function impersonateExit(ImpersonateStructure $impersonateStructure) : Response
+    public function impersonateExit(ImpersonateStructure $impersonateStructure): Response
     {
         $impersonateStructure->logoutStructure();
         $this->addFlash('success', 'Vous n\'êtes plus connecté dans une structure');
+
         return $this->redirectToRoute('structure_index');
     }
 
@@ -81,7 +84,7 @@ class SecurityController extends AbstractController
      * @throws EntityNotFoundException
      */
     #[Route(path: '/forget', name: 'app_forget')]
-    public function forgetPassword(Request $request, ResetPassword $resetPassword, LoggerInterface $logger) : Response
+    public function forgetPassword(Request $request, ResetPassword $resetPassword, LoggerInterface $logger): Response
     {
         if ($request->isMethod('post')) {
             $username = $request->request->get('username');
@@ -95,6 +98,7 @@ class SecurityController extends AbstractController
 
             return $this->redirectToRoute('app_login');
         }
+
         return $this->render('security/forget_ls.html.twig', [
         ]);
     }
@@ -103,7 +107,7 @@ class SecurityController extends AbstractController
      * @throws Exception
      */
     #[Route(path: '/reset/{token}', name: 'app_reset')]
-    public function resetPassword(string $token, ResetPassword $resetPassword, Request $request) : Response
+    public function resetPassword(string $token, ResetPassword $resetPassword, Request $request): Response
     {
         try {
             $user = $resetPassword->getUserFromToken($token);
@@ -120,13 +124,14 @@ class SecurityController extends AbstractController
 
             return $this->redirectToRoute('app_login');
         }
+
         return $this->render('security/reset_ls.html.twig', [
             'form' => $form->createView(),
         ]);
     }
 
     #[Route(path: '/srvusers/login', name: 'legacy_login_path')]
-    public function legacyLoginPath() : Response
+    public function legacyLoginPath(): Response
     {
         return $this->redirectToRoute('app_login');
     }

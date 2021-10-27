@@ -19,7 +19,7 @@ class ProjectController extends AbstractController
 {
     #[Route(path: '/api/projects/{id}', name: 'api_project_add', methods: ['POST'])]
     #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
-    public function edit(Sitting $sitting, Request $request, SerializerInterface $serializer, ProjectManager $projectManager, MessageBusInterface $messageBus, PdfValidator $pdfValidator) : JsonResponse
+    public function edit(Sitting $sitting, Request $request, SerializerInterface $serializer, ProjectManager $projectManager, MessageBusInterface $messageBus, PdfValidator $pdfValidator): JsonResponse
     {
         $rawProjects = $request->request->get('projects');
         $projects = $serializer->deserialize($rawProjects, ProjectApi::class . '[]', 'json');
@@ -28,14 +28,16 @@ class ProjectController extends AbstractController
         }
         $projectManager->update($projects, $request->files->all(), $sitting);
         $messageBus->dispatch(new UpdatedSitting($sitting->getId()));
+
         return $this->json(['success' => true]);
     }
 
     #[Route(path: '/api/projects/{id}', name: 'api_project_get', methods: ['GET'])]
     #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
-    public function getProjectsFromSitting(Sitting $sitting, SerializerInterface $serializer, ProjectManager $projectManager) : JsonResponse
+    public function getProjectsFromSitting(Sitting $sitting, SerializerInterface $serializer, ProjectManager $projectManager): JsonResponse
     {
         $projectsApi = $projectManager->getApiProjectsFromProjects($projectManager->getProjectsFromSitting($sitting));
+
         return $this->json($projectsApi);
     }
 }

@@ -19,13 +19,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Breadcrumb("Modèles d'email", routeName="email_template_index")
- * @Sidebar(active={"email-template-nav"})
  */
+#[Sidebar(active: ['email-template-nav'])]
 class EmailTemplateController extends AbstractController
 {
     #[Route(path: '/emailTemplate', name: 'email_template_index', methods: ['GET'])]
     #[IsGranted(data: 'ROLE_MANAGE_EMAIL_TEMPLATES')]
-    public function index(EmailTemplateRepository $repository, PaginatorInterface $paginator, Request $request) : Response
+    public function index(EmailTemplateRepository $repository, PaginatorInterface $paginator, Request $request): Response
     {
         $emailTemplates = $paginator->paginate(
             $repository->findAllByStructure($this->getUser()->getStructure()),
@@ -36,17 +36,17 @@ class EmailTemplateController extends AbstractController
                 'defaultSortDirection' => 'asc',
             ]
         );
+
         return $this->render('email_template/index.html.twig', [
             'templates' => $emailTemplates,
         ]);
     }
-
     /**
      * @Breadcrumb("Ajouter")
      */
     #[Route(path: '/emailTemplate/add', name: 'email_template_add')]
     #[IsGranted(data: 'ROLE_MANAGE_EMAIL_TEMPLATES')]
-    public function add(Request $request, EmailTemplateManager $templateManager) : Response
+    public function add(Request $request, EmailTemplateManager $templateManager): Response
     {
         $form = $this->createForm(EmailTemplateType::class, null, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
@@ -56,17 +56,17 @@ class EmailTemplateController extends AbstractController
 
             return $this->redirectToRoute('email_template_index');
         }
+
         return $this->render('email_template/add.html.twig', [
             'form' => $form->createView(),
         ]);
     }
-
     /**
      * @Breadcrumb("Modifier {emailTemplate.name}")
      */
     #[Route(path: '/emailTemplate/edit/{id}', name: 'email_template_edit', methods: ['GET', 'POST'])]
     #[IsGranted(data: 'MANAGE_EMAIL_TEMPLATES', subject: 'emailTemplate')]
-    public function edit(Request $request, EmailTemplate $emailTemplate, EmailTemplateManager $templateManager) : Response
+    public function edit(Request $request, EmailTemplate $emailTemplate, EmailTemplateManager $templateManager): Response
     {
         $form = $this->createForm(EmailTemplateType::class, $emailTemplate, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
@@ -76,38 +76,37 @@ class EmailTemplateController extends AbstractController
 
             return $this->redirectToRoute('email_template_index');
         }
+
         return $this->render('email_template/edit.html.twig', [
             'email_template' => $emailTemplate,
             'form' => $form->createView(),
         ]);
     }
-
     #[Route(path: '/emailTemplate/delete/{id}', name: 'email_template_delete', methods: ['DELETE'])]
     #[IsGranted(data: 'MANAGE_EMAIL_TEMPLATES', subject: 'emailTemplate')]
-    public function delete(EmailTemplate $emailTemplate, EmailTemplateManager $emailTemplateManager, Request $request) : Response
+    public function delete(EmailTemplate $emailTemplate, EmailTemplateManager $emailTemplateManager, Request $request): Response
     {
         $emailTemplateManager->delete($emailTemplate);
         $this->addFlash('success', 'Le modèle d\'email a bien été supprimé');
+
         return $this->redirectToRoute('email_template_index', [
             'page' => $request->get('page'),
         ]);
     }
-
     /**
      * @Breadcrumb("Visualiser {emailTemplate.name}")
      */
     #[Route(path: '/emailTemplate/preview/{id}', name: 'email_template_preview', methods: ['GET'])]
     #[IsGranted(data: 'MANAGE_EMAIL_TEMPLATES', subject: 'emailTemplate')]
-    public function preview(EmailTemplate $emailTemplate) : Response
+    public function preview(EmailTemplate $emailTemplate): Response
     {
         return $this->render('email_template/preview.html.twig', [
             'emailTemplate' => $emailTemplate,
         ]);
     }
-
     #[Route(path: '/emailTemplate/iframe/preview/{id}', name: 'email_template_iframe_preview', methods: ['GET'])]
     #[IsGranted(data: 'MANAGE_EMAIL_TEMPLATES', subject: 'emailTemplate')]
-    public function iframePreview(EmailTemplate $emailTemplate, EmailGenerator $generator) : Response
+    public function iframePreview(EmailTemplate $emailTemplate, EmailGenerator $generator): Response
     {
         $emailData = $generator->generateFromTemplate($emailTemplate, [
             '#linkUrl#' => '<a href="#">Accéder aux dossiers</a>',
@@ -126,6 +125,7 @@ class EmailTemplateController extends AbstractController
             $content = htmlspecialchars($content);
             $content = nl2br($content);
         }
+
         return new Response($content);
     }
 }
