@@ -113,7 +113,7 @@ class StructureController extends AbstractController
     }
 
     #[Route(path: '/structure/delete/{id}', name: 'structure_delete', methods: ['DELETE'])]
-    #[IsGranted(data: 'MY_GROUP', subject: 'structure')]
+    #[IsGranted(data: 'ROLE_SUPERADMIN')]
     public function delete(Structure $structure, StructureManager $structureManager, Request $request): Response
     {
         $structureManager->delete($structure);
