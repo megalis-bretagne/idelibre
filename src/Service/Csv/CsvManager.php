@@ -9,6 +9,7 @@ use App\Entity\User;
 use App\Repository\TypeRepository;
 use App\Repository\UserRepository;
 use App\Service\role\RoleManager;
+use App\Service\Util\GenderConverter;
 use Doctrine\ORM\EntityManagerInterface;
 use ForceUTF8\Encoding;
 use League\Csv\Reader;
@@ -51,7 +52,7 @@ class CsvManager
                 continue;
             }
 
-            $username = $this->sanitize($record[0] ?? '') . '@' . $structure->getSuffix();
+            $username = $this->sanitize($record[1] ?? '') . '@' . $structure->getSuffix();
             if (!$this->isExistUsername($username, $structure)) {
                 $user = $this->createUserFromRecord($structure, $record);
 
@@ -70,7 +71,7 @@ class CsvManager
                     continue;
                 }
                 $csvEmails[] = $username;
-                $this->associateActorToTypeSeances($user, $record[6] ?? null, $structure);
+                $this->associateActorToTypeSeances($user, $record[7] ?? null, $structure);
                 $this->em->persist($user);
             }
         }
@@ -81,7 +82,7 @@ class CsvManager
 
     private function isMissingFields(array $record): bool
     {
-        return 6 > count($record);
+        return 7 > count($record);
     }
 
     private function missingFieldViolation($record): ConstraintViolationList
@@ -187,12 +188,13 @@ class CsvManager
     private function createUserFromRecord(Structure $structure, array $record): User
     {
         $user = new User();
-        $user->setUsername($this->sanitize($record[0] ?? '') . '@' . $structure->getSuffix())
-            ->setFirstName($this->sanitize($record[1] ?? ''))
-            ->setLastName($this->sanitize($record[2] ?? ''))
-            ->setEmail($this->sanitize($record[3] ?? ''))
-            ->setPassword($this->getPassword($user, $record[4] ?? ''))
-            ->setRole($this->getRoleFromCode(intval($record[5] ?? 0)))
+        $user->setUsername($this->sanitize($record[1] ?? '') . '@' . $structure->getSuffix())
+            ->setFirstName($this->sanitize($record[2] ?? ''))
+            ->setLastName($this->sanitize($record[3] ?? ''))
+            ->setEmail($this->sanitize($record[4] ?? ''))
+            ->setPassword($this->getPassword($user, $record[5] ?? ''))
+            ->setRole($this->getRoleFromCode(intval($record[6] ?? 0)))
+            ->setGender($this->getGenderCode(intval($record[0] ?? 0)))
             ->setStructure($structure);
 
         return $user;
@@ -205,6 +207,19 @@ class CsvManager
             return 'NotInitialized';
         }
 
-        return  $this->passwordHasher->hashPassword($user, $sanitizedPassword);
+        return $this->passwordHasher->hashPassword($user, $sanitizedPassword);
+    }
+
+    private function getGenderCode(?int $code): ?int
+    {
+        if (null === $code) {
+            return null;
+        }
+
+        if (in_array($code, [GenderConverter::NOT_DEFINED, GenderConverter::FEMALE, GenderConverter::FEMALE])) {
+            return $code;
+        }
+
+        return null;
     }
 }
