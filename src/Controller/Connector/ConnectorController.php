@@ -17,14 +17,10 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ConnectorController extends AbstractController
 {
-    /**
-     * @Route("/connector", name="connector_index")
-     * @IsGranted("ROLE_MANAGE_CONNECTORS")
-     */
-    public function index(
-        ComelusConnectorRepository $comelusConnectorRepository,
-        LsmessageConnectorRepository $lsmessageConnectorRepository
-    ): Response {
+    #[Route(path: '/connector', name: 'connector_index')]
+    #[IsGranted(data: 'ROLE_MANAGE_CONNECTORS')]
+    public function index(ComelusConnectorRepository $comelusConnectorRepository, LsmessageConnectorRepository $lsmessageConnectorRepository) : Response
+    {
         return $this->render('connector/connector_index.html.twig', [
             'comelus' => $comelusConnectorRepository->findOneBy(['structure' => $this->getUser()->getStructure()]),
             'lsmessage' => $lsmessageConnectorRepository->findOneBy(['structure' => $this->getUser()->getStructure()]),

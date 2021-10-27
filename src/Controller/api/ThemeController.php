@@ -10,11 +10,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ThemeController extends AbstractController
 {
-    /**
-     * @Route("/api/themes", name="api_theme_index", methods={"GET"})
-     * @IsGranted("ROLE_MANAGE_SITTINGS")
-     */
-    public function getThemes(ThemeManager $themeManager): JsonResponse
+    #[Route(path: '/api/themes', name: 'api_theme_index', methods: ['GET'])]
+    #[IsGranted(data: 'ROLE_MANAGE_SITTINGS')]
+    public function getThemes(ThemeManager $themeManager) : JsonResponse
     {
         return $this->json(
             $themeManager->getThemesFromStructure($this->getUser()->getStructure()),

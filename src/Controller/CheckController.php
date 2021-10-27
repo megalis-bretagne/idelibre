@@ -25,22 +25,17 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-/**
- * @Sidebar(active={"platform-nav","check-nav"})
- */
+
+#[Sidebar(active: ["platform-nav","check-nav"])]
 class CheckController extends AbstractController
 {
     /**
-     * @Route("/check", name="check_index")
-     * @IsGranted("ROLE_SUPERADMIN")
      * @Breadcrumb("Vérification de la plateforme")
      */
-    public function index(
-        ClientNotifier $clientNotifier,
-        LshorodatageInterface $lshorodatage,
-        LoggerInterface $logger,
-        ServiceInfo $serviceInfo
-    ): Response {
+    #[Route(path: '/check', name: 'check_index')]
+    #[IsGranted(data: 'ROLE_SUPERADMIN')]
+    public function index(ClientNotifier $clientNotifier, LshorodatageInterface $lshorodatage, LoggerInterface $logger, ServiceInfo $serviceInfo) : Response
+    {
         $isNodejs = $clientNotifier->checkConnection();
         $isLshorodatage = true;
         try {
@@ -49,7 +44,6 @@ class CheckController extends AbstractController
             $isLshorodatage = false;
             $logger->error($e->getMessage());
         }
-
         return $this->render('check/index.html.twig', [
             'isNodejs' => $isNodejs,
             'isLshorodatage' => $isLshorodatage,
@@ -57,18 +51,15 @@ class CheckController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/check/email", name="check_email", methods={"POST"})
-     * @IsGranted("ROLE_SUPERADMIN")
-     */
-    public function testMail(Request $request, EmailServiceInterface $emailService, ParameterBagInterface $bag): Response
+    #[Route(path: '/check/email', name: 'check_email', methods: ['POST'])]
+    #[IsGranted(data: 'ROLE_SUPERADMIN')]
+    public function testMail(Request $request, EmailServiceInterface $emailService, ParameterBagInterface $bag) : Response
     {
         $email = $request->request->get('email');
         $emailData = new EmailData('Test email idelibre', 'email de verification', EmailData::FORMAT_TEXT);
         $emailData->setTo($email)->setReplyTo($bag->get('email_from'));
         $emailService->sendBatch([$emailData]);
         $this->addFlash('success', 'Email de vérification envoyé');
-
         return $this->redirectToRoute('check_index');
     }
 

@@ -46,28 +46,35 @@ class SidebarListener
     {
         list($controller, $method) = $controllers;
 
+
         try {
             $controller = new ReflectionClass($controller);
         } catch (ReflectionException $e) {
             throw new RuntimeException('Failed to read annotation!');
         }
+        $this->setActiveNav($controller->getAttributes(Sidebar::class));
 
-        $this->setActiveNav($this->annotationReader->getClassAnnotations($controller));
+        try {
+            $method = $controller->getMethod($method);
+        } catch (ReflectionException $e) {
+            throw new RuntimeException('Failed to read annotation!');
+        }
 
-        $method = $controller->getMethod($method);
-        $this->setActiveNav($this->annotationReader->getMethodAnnotations($method));
+        $this->setActiveNav($method->getAttributes(Sidebar::class));
     }
 
-    private function setActiveNav(array $annotations)
+    private function setActiveNav(array $attributes)
     {
-        foreach ($annotations as $annotation) {
-            if (!($annotation instanceof Sidebar)) {
+        /** @var \ReflectionAttribute $attribute */
+        foreach ($attributes as $attribute) {
+            if ($attribute->getName() !== Sidebar::class) {
                 continue;
             }
-            if ($annotation->reset) {
+            $sidebar = $attribute->newInstance();
+            if ($sidebar->reset) {
                 $this->activeNavs = [];
             }
-            $this->activeNavs = array_merge($this->activeNavs, $annotation->active);
+            $this->activeNavs = array_merge($this->activeNavs, $sidebar->active);
         }
     }
 }

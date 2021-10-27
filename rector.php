@@ -18,16 +18,23 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER,
         __DIR__ . '/var/cache/dev/App_KernelDevDebugContainer.xml'
     );
-    $containerConfigurator->import(SymfonySetList::SYMFONY_52);
+  /*  $containerConfigurator->import(SymfonySetList::SYMFONY_52);
     $containerConfigurator->import(SymfonySetList::SYMFONY_CODE_QUALITY);
     $containerConfigurator->import(SymfonySetList::SYMFONY_CONSTRUCTOR_INJECTION);
     $containerConfigurator->import(DoctrineSetList::DOCTRINE_ORM_29);
-
+*/
 
     $parameters->set(Option::AUTO_IMPORT_NAMES, true);
 
     $services = $containerConfigurator->services();
-    $services->set(ClassPropertyAssignToConstructorPromotionRector::class);
+    $services->set(\Rector\Php80\Rector\Class_\AnnotationToAttributeRector::class)->call('configure', [[\Rector\Php80\Rector\Class_\AnnotationToAttributeRector::ANNOTATION_TO_ATTRIBUTE => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([
+        new \Rector\Php80\ValueObject\AnnotationToAttribute('required', 'Symfony\\Contracts\\Service\\Attribute\\Required'),
+        new \Rector\Php80\ValueObject\AnnotationToAttribute('Symfony\\Component\\Routing\\Annotation\\Route'),
+        new AnnotationToAttribute('Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted', 'Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted'),
+    ])]]);
+
+
+    //$services->set(ClassPropertyAssignToConstructorPromotionRector::class);
 
     //ClassPropertyAssignToConstructorPromotionRector
 
@@ -99,6 +106,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 
 
+$services->set(AnnotationToAttributeRector::class)
+          ->call('configure', [[
+              AnnotationToAttributeRector::ANNOTATION_TO_ATTRIBUTE => ValueObjectInliner::inline([
+  //                new AnnotationToAttribute('Symfony\Component\Serializer\Annotation\Groups', 'Symfony\Component\Serializer\Annotation\Groups'),
+  //                new AnnotationToAttribute('Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted', 'Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted'),
+              ]),
+          ]]);
 
 
  */

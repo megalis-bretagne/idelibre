@@ -19,10 +19,10 @@ use Symfony\Component\Routing\Annotation\Route;
 class GdprController extends AbstractController
 {
     /**
-     * @Route("/gdpr/notice", name="gdpr_notice")
      * @Sidebar(reset=true)
      */
-    public function notice(GdprManager $gdprManager): Response
+    #[Route(path: '/gdpr/notice', name: 'gdpr_notice')]
+    public function notice(GdprManager $gdprManager) : Response
     {
         return $this->render('gdpr/notice.html.twig', [
             'gdpr' => $gdprManager->getGdpr(),
@@ -30,11 +30,11 @@ class GdprController extends AbstractController
     }
 
     /**
-     * @Route("/gdpr/edit", name="gdpr_edit")
-     * @IsGranted("ROLE_SUPERADMIN")
      * @Breadcrumb("Modifier")
      */
-    public function edit(GdprManager $gdprManager, Request $request): Response
+    #[Route(path: '/gdpr/edit', name: 'gdpr_edit')]
+    #[IsGranted(data: 'ROLE_SUPERADMIN')]
+    public function edit(GdprManager $gdprManager, Request $request) : Response
     {
         $form = $this->createForm(GdprType::class, $gdprManager->getGdpr());
         $form->handleRequest($request);
@@ -45,7 +45,6 @@ class GdprController extends AbstractController
 
             return $this->redirectToRoute('gdpr_notice');
         }
-
         return $this->render('gdpr/edit.html.twig', [
             'form' => $form->createView(),
         ]);

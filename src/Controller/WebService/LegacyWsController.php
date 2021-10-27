@@ -2,6 +2,7 @@
 
 namespace App\Controller\WebService;
 
+use Exception;
 use App\Message\UpdatedSitting;
 use App\Security\Http403Exception;
 use App\Service\LegacyWs\LegacyWsAuthentication;
@@ -18,21 +19,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class LegacyWsController extends AbstractController
 {
-    /**
-     * @Route("/{slash}seances.json", name="wd_connector", requirements={"slash"="\/?"})
-     */
-    public function addSitting(
-        Request $request,
-        LegacyWsService $wsService,
-        LegacyWsAuthentication $legacyWsAuthentication,
-        LoggerInterface $logger,
-        MessageBusInterface $messageBus
-    ): JsonResponse {
+    #[Route(path: '/{slash}seances.json', name: 'wd_connector', requirements: ['slash' => '\/?'])]
+    public function addSitting(Request $request, LegacyWsService $wsService, LegacyWsAuthentication $legacyWsAuthentication, LoggerInterface $logger, MessageBusInterface $messageBus) : JsonResponse
+    {
         $username = $request->request->get('username');
         $plainPassword = $request->request->get('password');
         $conn = $request->request->get('conn');
         $jsonData = $request->request->get('jsonData');
-
         try {
             if (!$username || !$plainPassword || !$conn || !$jsonData) {
                 $logger->error('fields jsonData, username, password and conn must be set');
@@ -47,7 +40,7 @@ class LegacyWsController extends AbstractController
                 throw new BadRequestHttpException('jsonData is not a valid json');
             }
             $sitting = $wsService->createSitting($rawSitting, $request->files->all(), $structure);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $logger->error($e->getMessage());
 
             return $this->json([
@@ -56,9 +49,7 @@ class LegacyWsController extends AbstractController
                 'message' => $e->getMessage(),
             ], 400);
         }
-
         $messageBus->dispatch(new UpdatedSitting($sitting->getId()));
-
         return $this->json([
             'success' => true,
             'code' => 'Seance.add.ok',
@@ -67,20 +58,16 @@ class LegacyWsController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{slash}api300/ping", name="api_300_ping", requirements={"slash"="\/?"})
-     * @Route("/{slash}Api300/ping", name="Api_300_ping", requirements={"slash"="\/?"})
-     */
-    public function ping(): Response
+    #[Route(path: '/{slash}api300/ping', name: 'api_300_ping', requirements: ['slash' => '\/?'])]
+    #[Route(path: '/{slash}Api300/ping', name: 'Api_300_ping', requirements: ['slash' => '\/?'])]
+    public function ping() : Response
     {
         return new Response('ping');
     }
 
-    /**
-     * @Route("/{slash}api300/version", name="api_300_version", requirements={"slash"="\/?"})
-     * @Route("/{slash}Api300/version", name="Api_300_version", requirements={"slash"="\/?"})
-     */
-    public function version(ParameterBagInterface $bag): Response
+    #[Route(path: '/{slash}api300/version', name: 'api_300_version', requirements: ['slash' => '\/?'])]
+    #[Route(path: '/{slash}Api300/version', name: 'Api_300_version', requirements: ['slash' => '\/?'])]
+    public function version(ParameterBagInterface $bag) : Response
     {
         return new Response($bag->get('version'));
     }
@@ -91,23 +78,20 @@ class LegacyWsController extends AbstractController
      *          username : "secretaire"
      *          password : "idelibre"
      * return string :(success, error_database //database missing, error_user //auth error).
-     *
-     * @Route("/{slash}api300/check", name="api_300_check", requirements={"slash"="\/?"})
-     * @Route("/{slash}Api300/check", name="Api_300_check", requirements={"slash"="\/?"})
      */
-    public function check(Request $request, LegacyWsAuthentication $legacyWsAuthentication): Response
+    #[Route(path: '/{slash}api300/check', name: 'api_300_check', requirements: ['slash' => '\/?'])]
+    #[Route(path: '/{slash}Api300/check', name: 'Api_300_check', requirements: ['slash' => '\/?'])]
+    public function check(Request $request, LegacyWsAuthentication $legacyWsAuthentication) : Response
     {
         $legacyConnection = $request->request->get('conn');
         $plainPassword = $request->request->get('password');
         $username = $request->request->get('username');
-
         try {
             $structure = $legacyWsAuthentication->getStructureFromLegacyConnection($legacyConnection);
             $legacyWsAuthentication->loginUser($structure, $username . '@' . $structure->getSuffix(), $plainPassword);
         } catch (Http403Exception $e) {
             return new Response($e->getMessage(), $e->getCode());
         }
-
         return new Response('success');
     }
 }

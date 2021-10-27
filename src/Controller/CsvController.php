@@ -20,15 +20,14 @@ use Symfony\Component\Routing\Annotation\Route;
 class CsvController extends AbstractController
 {
     /**
-     * @Route("/csv/importUsers", name="csv_add_users")
-     * @IsGranted("ROLE_MANAGE_USERS")
      * @Breadcrumb("Importer des utilisateurs via csv")
      */
-    public function importUsers(Request $request, CsvManager $csvManager, Session $session): Response
+    #[Route(path: '/csv/importUsers', name: 'csv_add_users')]
+    #[IsGranted(data: 'ROLE_MANAGE_USERS')]
+    public function importUsers(Request $request, CsvManager $csvManager, Session $session) : Response
     {
         $form = $this->createForm(CsvType::class);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $errors = $csvManager->importUsers($form->get('csv')->getData(), $this->getUser()->getStructure());
             if (empty($errors)) {
@@ -40,27 +39,23 @@ class CsvController extends AbstractController
 
             return $this->redirectToRoute('user_csv_error');
         }
-
         return $this->render('csv/importCsv.html.twig', [
             'form' => $form->createView(),
         ]);
     }
 
     /**
-     * @Route("/csv/errors", name="user_csv_error")
-     * @IsGranted("ROLE_MANAGE_USERS")
      * @Breadcrumb("Erreurs lors de l'import")
      */
-    public function csvError(Session $session): Response
+    #[Route(path: '/csv/errors', name: 'user_csv_error')]
+    #[IsGranted(data: 'ROLE_MANAGE_USERS')]
+    public function csvError(Session $session) : Response
     {
         $errors = $session->get('errors_csv');
-
         if (empty($errors)) {
             return $this->redirectToRoute('user_index');
         }
-
         $session->remove('errors_csv');
-
         return $this->render('csv/importCsvErrors.html.twig', [
             'errors' => $errors,
         ]);

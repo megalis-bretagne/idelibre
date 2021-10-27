@@ -23,14 +23,11 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class UserController extends AbstractController
 {
-    /**
-     * @Route("/user", name="user_index")
-     * @IsGranted("ROLE_MANAGE_USERS")
-     */
-    public function index(UserRepository $userRepository, PaginatorInterface $paginator, Request $request): Response
+    #[Route(path: '/user', name: 'user_index')]
+    #[IsGranted(data: 'ROLE_MANAGE_USERS')]
+    public function index(UserRepository $userRepository, PaginatorInterface $paginator, Request $request) : Response
     {
         $formSearch = $this->createForm(SearchType::class);
-
         $users = $paginator->paginate(
             $userRepository->findByStructure($this->getUser()->getStructure(), $request->query->get('search')),
             $request->query->getInt('page', 1),
@@ -40,7 +37,6 @@ class UserController extends AbstractController
                 'defaultSortDirection' => 'asc',
             ]
         );
-
         return $this->render('user/index.html.twig', [
             'users' => $users,
             'formSearch' => $formSearch->createView(),
@@ -49,11 +45,11 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/user/add", name="user_add")
-     * @IsGranted("ROLE_MANAGE_USERS")
      * @Breadcrumb("Ajouter")
      */
-    public function add(Request $request, UserManager $manageUser): Response
+    #[Route(path: '/user/add', name: 'user_add')]
+    #[IsGranted(data: 'ROLE_MANAGE_USERS')]
+    public function add(Request $request, UserManager $manageUser) : Response
     {
         $form = $this->createForm(UserType::class, new User(), ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
@@ -68,7 +64,6 @@ class UserController extends AbstractController
 
             return $this->redirectToRoute('user_index');
         }
-
         return $this->render('user/add.html.twig', [
             'form' => $form->createView(),
             'suffix' => $this->getUser()->getStructure()->getSuffix(),
@@ -76,11 +71,11 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/user/edit/{id}", name="user_edit")
-     * @IsGranted("MANAGE_USERS", subject="user")
      * @Breadcrumb("Modifier {user.firstName} {user.lastName}")
      */
-    public function edit(User $user, Request $request, UserManager $manageUser): Response
+    #[Route(path: '/user/edit/{id}', name: 'user_edit')]
+    #[IsGranted(data: 'MANAGE_USERS', subject: 'user')]
+    public function edit(User $user, Request $request, UserManager $manageUser) : Response
     {
         $form = $this->createForm(UserType::class, $user, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
@@ -95,18 +90,15 @@ class UserController extends AbstractController
 
             return $this->redirectToRoute('user_index');
         }
-
         return $this->render('user/edit.html.twig', [
             'form' => $form->createView(),
             'suffix' => $this->getUser()->getStructure()->getSuffix(),
         ]);
     }
 
-    /**
-     * @Route("/user/delete/{id}", name="user_delete", methods={"DELETE"})
-     * @IsGranted("MANAGE_USERS", subject="user")
-     */
-    public function delete(User $user, UserManager $manageUser, Request $request): Response
+    #[Route(path: '/user/delete/{id}', name: 'user_delete', methods: ['DELETE'])]
+    #[IsGranted(data: 'MANAGE_USERS', subject: 'user')]
+    public function delete(User $user, UserManager $manageUser, Request $request) : Response
     {
         if ($this->getUser()->getid() == $user->getId()) {
             $this->addFlash('error', 'Impossible de supprimer son propre utilisateur');
@@ -115,18 +107,17 @@ class UserController extends AbstractController
         }
         $manageUser->delete($user);
         $this->addFlash('success', 'L\'utilisateur a bien été supprimé');
-
         return $this->redirectToRoute('user_index', [
             'page' => $request->get('page'),
         ]);
     }
 
     /**
-     * @Route("/user/deleteBatch", name="user_delete_batch")
      * @Breadcrumb("Suppression par lot")
-     * @IsGranted("ROLE_MANAGE_USERS")
      */
-    public function deleteBatch(UserRepository $userRepository, Request $request): Response
+    #[Route(path: '/user/deleteBatch', name: 'user_delete_batch')]
+    #[IsGranted(data: 'ROLE_MANAGE_USERS')]
+    public function deleteBatch(UserRepository $userRepository, Request $request) : Response
     {
         if ($request->isMethod('POST')) {
             $userRepository->deleteActorsByStructure($this->getUser()->getStructure(), $request->request->all('users') ?? []);
@@ -134,21 +125,19 @@ class UserController extends AbstractController
 
             return $this->redirectToRoute('user_index');
         }
-
         $actors = $userRepository->findActorsByStructure($this->getUser()->getStructure())->getQuery()->getResult();
-
         return $this->render('user/deleteBatch.html.twig', [
             'actors' => $actors,
         ]);
     }
 
     /**
-     * @Route("/user/preferences", name="user_preferences")
-     * @IsGranted("ROLE_MANAGE_PREFERENCES")
      * @Breadcrumb()
      * @Breadcrumb("Préférences utilisateur")
      */
-    public function preferences(Request $request, UserManager $userManager): Response
+    #[Route(path: '/user/preferences', name: 'user_preferences')]
+    #[IsGranted(data: 'ROLE_MANAGE_PREFERENCES')]
+    public function preferences(Request $request, UserManager $userManager) : Response
     {
         $form = $this->createForm(UserPreferenceType::class, $this->getUser());
         $form->handleRequest($request);
@@ -163,7 +152,6 @@ class UserController extends AbstractController
 
             return $this->redirectToRoute('app_entrypoint');
         }
-
         return $this->render('user/preferences.html.twig', [
             'form' => $form->createView(),
             'suffix' => $this->isGranted('ROLE_MANAGE_STRUCTURES') ? null : $this->getUser()->getStructure()->getSuffix(),

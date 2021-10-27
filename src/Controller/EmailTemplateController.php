@@ -23,11 +23,9 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class EmailTemplateController extends AbstractController
 {
-    /**
-     * @Route("/emailTemplate", name="email_template_index", methods={"GET"})
-     * @IsGranted("ROLE_MANAGE_EMAIL_TEMPLATES")
-     */
-    public function index(EmailTemplateRepository $repository, PaginatorInterface $paginator, Request $request): Response
+    #[Route(path: '/emailTemplate', name: 'email_template_index', methods: ['GET'])]
+    #[IsGranted(data: 'ROLE_MANAGE_EMAIL_TEMPLATES')]
+    public function index(EmailTemplateRepository $repository, PaginatorInterface $paginator, Request $request) : Response
     {
         $emailTemplates = $paginator->paginate(
             $repository->findAllByStructure($this->getUser()->getStructure()),
@@ -38,88 +36,78 @@ class EmailTemplateController extends AbstractController
                 'defaultSortDirection' => 'asc',
             ]
         );
-
         return $this->render('email_template/index.html.twig', [
             'templates' => $emailTemplates,
         ]);
     }
 
     /**
-     * @Route("/emailTemplate/add", name="email_template_add")
-     * @IsGranted("ROLE_MANAGE_EMAIL_TEMPLATES")
      * @Breadcrumb("Ajouter")
      */
-    public function add(Request $request, EmailTemplateManager $templateManager): Response
+    #[Route(path: '/emailTemplate/add', name: 'email_template_add')]
+    #[IsGranted(data: 'ROLE_MANAGE_EMAIL_TEMPLATES')]
+    public function add(Request $request, EmailTemplateManager $templateManager) : Response
     {
         $form = $this->createForm(EmailTemplateType::class, null, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $templateManager->save($form->getData(), $this->getUser()->getStructure());
             $this->addFlash('success', 'Votre modèle d\'email a été enregistré');
 
             return $this->redirectToRoute('email_template_index');
         }
-
         return $this->render('email_template/add.html.twig', [
             'form' => $form->createView(),
         ]);
     }
 
     /**
-     * @Route("/emailTemplate/edit/{id}", name="email_template_edit", methods={"GET","POST"})
-     * @IsGranted("MANAGE_EMAIL_TEMPLATES", subject="emailTemplate")
      * @Breadcrumb("Modifier {emailTemplate.name}")
      */
-    public function edit(Request $request, EmailTemplate $emailTemplate, EmailTemplateManager $templateManager): Response
+    #[Route(path: '/emailTemplate/edit/{id}', name: 'email_template_edit', methods: ['GET', 'POST'])]
+    #[IsGranted(data: 'MANAGE_EMAIL_TEMPLATES', subject: 'emailTemplate')]
+    public function edit(Request $request, EmailTemplate $emailTemplate, EmailTemplateManager $templateManager) : Response
     {
         $form = $this->createForm(EmailTemplateType::class, $emailTemplate, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $templateManager->save($form->getData(), $this->getUser()->getStructure());
             $this->addFlash('success', 'Votre modèle d\'email a été modifié');
 
             return $this->redirectToRoute('email_template_index');
         }
-
         return $this->render('email_template/edit.html.twig', [
             'email_template' => $emailTemplate,
             'form' => $form->createView(),
         ]);
     }
 
-    /**
-     * @Route("/emailTemplate/delete/{id}", name="email_template_delete", methods={"DELETE"})
-     * @IsGranted("MANAGE_EMAIL_TEMPLATES", subject="emailTemplate")
-     */
-    public function delete(EmailTemplate $emailTemplate, EmailTemplateManager $emailTemplateManager, Request $request): Response
+    #[Route(path: '/emailTemplate/delete/{id}', name: 'email_template_delete', methods: ['DELETE'])]
+    #[IsGranted(data: 'MANAGE_EMAIL_TEMPLATES', subject: 'emailTemplate')]
+    public function delete(EmailTemplate $emailTemplate, EmailTemplateManager $emailTemplateManager, Request $request) : Response
     {
         $emailTemplateManager->delete($emailTemplate);
         $this->addFlash('success', 'Le modèle d\'email a bien été supprimé');
-
         return $this->redirectToRoute('email_template_index', [
             'page' => $request->get('page'),
         ]);
     }
 
     /**
-     * @Route("/emailTemplate/preview/{id}", name="email_template_preview", methods={"GET"})
-     * @IsGranted("MANAGE_EMAIL_TEMPLATES", subject="emailTemplate")
      * @Breadcrumb("Visualiser {emailTemplate.name}")
      */
-    public function preview(EmailTemplate $emailTemplate): Response
+    #[Route(path: '/emailTemplate/preview/{id}', name: 'email_template_preview', methods: ['GET'])]
+    #[IsGranted(data: 'MANAGE_EMAIL_TEMPLATES', subject: 'emailTemplate')]
+    public function preview(EmailTemplate $emailTemplate) : Response
     {
         return $this->render('email_template/preview.html.twig', [
             'emailTemplate' => $emailTemplate,
         ]);
     }
 
-    /**
-     * @Route("/emailTemplate/iframe/preview/{id}", name="email_template_iframe_preview", methods={"GET"})
-     * @IsGranted("MANAGE_EMAIL_TEMPLATES", subject="emailTemplate")
-     */
-    public function iframePreview(EmailTemplate $emailTemplate, EmailGenerator $generator): Response
+    #[Route(path: '/emailTemplate/iframe/preview/{id}', name: 'email_template_iframe_preview', methods: ['GET'])]
+    #[IsGranted(data: 'MANAGE_EMAIL_TEMPLATES', subject: 'emailTemplate')]
+    public function iframePreview(EmailTemplate $emailTemplate, EmailGenerator $generator) : Response
     {
         $emailData = $generator->generateFromTemplate($emailTemplate, [
             '#linkUrl#' => '<a href="#">Accéder aux dossiers</a>',
@@ -133,14 +121,11 @@ class EmailTemplateController extends AbstractController
             '#titre#' => 'Monsieur le Maire',
             '#civilite#' => 'Monsieur',
         ]);
-
         $content = $emailData->getContent();
-
         if (EmailData::FORMAT_TEXT === $emailData->getFormat()) {
             $content = htmlspecialchars($content);
             $content = nl2br($content);
         }
-
         return new Response($content);
     }
 }

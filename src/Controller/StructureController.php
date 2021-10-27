@@ -29,20 +29,16 @@ class StructureController extends AbstractController
     use ValidationTrait;
     use RoleTrait;
 
-    /**
-     * @Route("/structure", name="structure_index")
-     * @IsGranted("ROLE_MANAGE_STRUCTURES")
-     */
-    public function index(StructureRepository $structureRepository, PaginatorInterface $paginator, Request $request): Response
+    #[Route(path: '/structure', name: 'structure_index')]
+    #[IsGranted(data: 'ROLE_MANAGE_STRUCTURES')]
+    public function index(StructureRepository $structureRepository, PaginatorInterface $paginator, Request $request) : Response
     {
         $formSearch = $this->createForm(SearchType::class);
-
         if ($this->isSuperAdmin($this->getUser())) {
             $structureQueryList = $structureRepository->findAllQueryBuilder($request->query->get('search'));
         } else {
             $structureQueryList = $structureRepository->findByGroupQueryBuilder($this->getUser()->getGroup(), $request->query->get('search'));
         }
-
         $structures = $paginator->paginate(
             $structureQueryList,
             $request->query->getInt('page', 1),
@@ -52,7 +48,6 @@ class StructureController extends AbstractController
                 'defaultSortDirection' => 'asc',
             ]
         );
-
         return $this->render('structure/index.html.twig', [
             'structures' => $structures,
             'formSearch' => $formSearch->createView(),
@@ -62,15 +57,14 @@ class StructureController extends AbstractController
     }
 
     /**
-     * @Route("/structure/add", name="structure_add")
-     * @IsGranted("CREATE_STRUCTURE")
      * @Breadcrumb("Ajouter")
      */
-    public function add(Request $request, StructureCreator $structureCreator): Response
+    #[Route(path: '/structure/add', name: 'structure_add')]
+    #[IsGranted(data: 'CREATE_STRUCTURE')]
+    public function add(Request $request, StructureCreator $structureCreator) : Response
     {
         $form = $this->createForm(StructureType::class);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $errors = $structureCreator->create(
                 $form->getData(),
@@ -90,66 +84,58 @@ class StructureController extends AbstractController
 
             return $this->redirectToRoute('structure_index');
         }
-
         return $this->render('structure/add.html.twig', [
             'form' => $form->createView(),
         ]);
     }
 
     /**
-     * @Route("/structure/edit/{id}", name="structure_edit")
-     * @IsGranted("MY_GROUP", subject="structure")
      * @Breadcrumb("Modifier {structure.name}")
      */
-    public function edit(Structure $structure, Request $request, StructureManager $structureManager): Response
+    #[Route(path: '/structure/edit/{id}', name: 'structure_edit')]
+    #[IsGranted(data: 'MY_GROUP', subject: 'structure')]
+    public function edit(Structure $structure, Request $request, StructureManager $structureManager) : Response
     {
         $form = $this->createForm(StructureType::class, $structure);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $structureManager->save($form->getData());
             $this->addFlash('success', 'La structure a été modifiée');
 
             return $this->redirectToRoute('structure_index');
         }
-
         return $this->render('structure/edit.html.twig', [
             'form' => $form->createView(),
         ]);
     }
 
-    /**
-     * @Route("/structure/delete/{id}", name="structure_delete", methods={"DELETE"})
-     * @IsGranted("MY_GROUP", subject="structure")
-     */
-    public function delete(Structure $structure, StructureManager $structureManager, Request $request): Response
+    #[Route(path: '/structure/delete/{id}', name: 'structure_delete', methods: ['DELETE'])]
+    #[IsGranted(data: 'MY_GROUP', subject: 'structure')]
+    public function delete(Structure $structure, StructureManager $structureManager, Request $request) : Response
     {
         $structureManager->delete($structure);
         $this->addFlash('success', 'La structure a bien été supprimée');
-
         return $this->redirectToRoute('structure_index', [
             'page' => $request->get('page'),
         ]);
     }
 
     /**
-     * @Route("/structure/preferences", name="structure_preferences")
-     * @IsGranted("ROLE_STRUCTURE_ADMIN")
      * @Breadcrumb("Préférences")
      * @Sidebar(reset=true, active={"structure-preference-nav"})
      */
-    public function preferences(Request $request, StructureManager $structureManager): Response
+    #[Route(path: '/structure/preferences', name: 'structure_preferences')]
+    #[IsGranted(data: 'ROLE_STRUCTURE_ADMIN')]
+    public function preferences(Request $request, StructureManager $structureManager) : Response
     {
         $form = $this->createForm(StructureInformationType::class, $this->getUser()->getStructure());
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $structureManager->save($form->getData());
             $this->addFlash('success', 'Les informations de la structure ont été mises à jour');
 
             return $this->redirectToRoute('app_entrypoint');
         }
-
         return $this->render('structure/preferences.html.twig', [
             'form' => $form->createView(),
         ]);

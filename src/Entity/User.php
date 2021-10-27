@@ -34,12 +34,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['user', 'party:detail', 'user:read', 'type:detail', 'convocation:read'])]
     private $id;
 
-    /**
-     * @OneAtMax()
-     */
     #[Column(type: 'string', length: 255, unique: true)]
     #[NotBlank]
     #[Length(max: 255)]
+    #[OneAtMax]
     #[Groups(['user', 'party:detail', 'user:read', 'type:detail', 'user:write', 'convocation:read'])]
     private $username;
 

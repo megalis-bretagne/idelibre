@@ -23,14 +23,11 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class TypeController extends AbstractController
 {
-    /**
-     * @Route("/type", name="type_index", methods={"GET"})
-     * @IsGranted("ROLE_MANAGE_TYPES")
-     */
-    public function index(TypeRepository $typeRepository, PaginatorInterface $paginator, Request $request): Response
+    #[Route(path: '/type', name: 'type_index', methods: ['GET'])]
+    #[IsGranted(data: 'ROLE_MANAGE_TYPES')]
+    public function index(TypeRepository $typeRepository, PaginatorInterface $paginator, Request $request) : Response
     {
         $formSearch = $this->createForm(SearchType::class);
-
         $types = $paginator->paginate(
             $typeRepository->findByStructure($this->getUser()->getStructure(), $request->query->get('search')),
             $request->query->getInt('page', 1),
@@ -40,7 +37,6 @@ class TypeController extends AbstractController
                 'defaultSortDirection' => 'asc',
             ]
         );
-
         return $this->render('type/index.html.twig', [
             'types' => $types,
             'formSearch' => $formSearch->createView(),
@@ -49,11 +45,11 @@ class TypeController extends AbstractController
     }
 
     /**
-     * @Route("/type/add", name="type_add")
-     * @IsGranted("ROLE_MANAGE_TYPES")
      * @Breadcrumb("Ajouter")
      */
-    public function add(Request $request, TypeManager $typeManager): Response
+    #[Route(path: '/type/add', name: 'type_add')]
+    #[IsGranted(data: 'ROLE_MANAGE_TYPES')]
+    public function add(Request $request, TypeManager $typeManager) : Response
     {
         $form = $this->createForm(TypeType::class, null, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
@@ -70,18 +66,17 @@ class TypeController extends AbstractController
 
             return $this->redirectToRoute('type_index');
         }
-
         return $this->render('type/add.html.twig', [
             'form' => $form->createView(),
         ]);
     }
 
     /**
-     * @Route("/type/edit/{id}", name="type_edit")
-     * @IsGranted("MANAGE_TYPES", subject="type")
      * @Breadcrumb("Modifier {type.name}")
      */
-    public function edit(Type $type, Request $request, TypeManager $typeManager): Response
+    #[Route(path: '/type/edit/{id}', name: 'type_edit')]
+    #[IsGranted(data: 'MANAGE_TYPES', subject: 'type')]
+    public function edit(Type $type, Request $request, TypeManager $typeManager) : Response
     {
         $form = $this->createForm(TypeType::class, $type, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
@@ -98,37 +93,30 @@ class TypeController extends AbstractController
 
             return $this->redirectToRoute('type_index');
         }
-
         return $this->render('type/edit.html.twig', [
             'form' => $form->createView(),
             'user' => $type,
         ]);
     }
 
-    /**
-     * @Route("/type/delete/{id}", name="type_delete", methods={"DELETE"})
-     * @IsGranted("MANAGE_TYPES", subject="type")
-     */
-    public function delete(Type $type, TypeManager $typeManager, Request $request): Response
+    #[Route(path: '/type/delete/{id}', name: 'type_delete', methods: ['DELETE'])]
+    #[IsGranted(data: 'MANAGE_TYPES', subject: 'type')]
+    public function delete(Type $type, TypeManager $typeManager, Request $request) : Response
     {
         $typeManager->delete($type);
         $this->addFlash('success', 'Le type a bien été supprimé');
-
         return $this->redirectToRoute('type_index', [
             'page' => $request->get('page'),
         ]);
     }
 
-    /**
-     * @Route("/type/reminder/{id}", name="type_reminder", methods={"GET"})
-     * @IsGranted("ROLE_MANAGE_SITTINGS")
-     */
-    public function getReminderInfo(Type $type): JsonResponse
+    #[Route(path: '/type/reminder/{id}', name: 'type_reminder', methods: ['GET'])]
+    #[IsGranted(data: 'ROLE_MANAGE_SITTINGS')]
+    public function getReminderInfo(Type $type) : JsonResponse
     {
         if (!$type->getReminder()) {
             return $this->json(['isActive' => false]);
         }
-
         return $this->json([
             'isActive' => $type->getReminder()->getIsActive(),
             'duration' => $type->getReminder()->getDuration(),
