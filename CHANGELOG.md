@@ -4,11 +4,19 @@ All notable changes to this project will be documented in this file.
 ## [4.1.WIP] - 2022-??-??
 ### Evolution
 - nouveau systeme d'authentification
+- Php8
+- Dans modele de mail replacer la denomination balises par variables (#165)
+- Les utilisateurs personnel administratif et invité peuvent etre crée via csv (#162)
+- La civilité peut etre renseignée via csv (#161)
+- Un admin de groupe ne peut plus supprimer une structure (#160)
+- Depuis le client web Nommage plus explicite  du fichier zip de la séance (#154)
+
 
 ### Nauveautés
 - Fichier de rendez vous avec l'envoi du mail de convocation
 - Horodatage à chaque modification d'une séance envoyée
-
+- Apiv2 (avec recupération des jetons d'horodatage)
+- Jeton d'horodatage lors de l'ajout de document dans une séance déja envoyée (#156)
 
 ## [4.0.6] - 2021-10-04
 ### Evolution
