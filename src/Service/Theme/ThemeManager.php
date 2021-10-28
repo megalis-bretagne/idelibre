@@ -34,6 +34,13 @@ class ThemeManager
     {
         $this->em->persist($theme);
         $this->em->flush();
+
+        $this->addFullNameToTheme($theme, $this->generateFullName($theme));
+
+        $subThemes = $this->themeRepository->getChildren($theme);
+        foreach ($subThemes as $subTheme) {
+            $this->addFullNameToTheme($subTheme, $this->generateFullName($subTheme));
+        }
     }
 
     public function delete(Theme $theme): void
