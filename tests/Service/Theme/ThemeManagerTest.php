@@ -111,5 +111,23 @@ class ThemeManagerTest extends WebTestCase
 
     }
 
+    public function testUpdate()
+    {
+        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
+        $theme = $this->getOneThemeBy(['name' => 'Finance', 'structure' => $structure ]);
+
+        /** @var ThemeManager $themeManager */
+        $themeManager = self::getContainer()->get(ThemeManager::class);
+
+        $theme->setName('updated name');
+        $themeManager->update($theme);
+
+        $this->entityManager->refresh($theme);
+        $this->assertSame('updated name', $theme->getFullName());
+
+        $subThemeBudget= $this->getOneThemeBy(['name' => 'budget', 'structure' => $structure ]);
+
+        $this->assertSame('updated name, budget', $subThemeBudget->getFullName());
+    }
 
 }
