@@ -20,7 +20,7 @@ All notable changes to this project will be documented in this file.
 
 ### Correction  
 - Format de la date lors de la création et modification d'une séance (#167)   
-
+- mise à jour du nom complet des sous themes lors de la mise à jour du nom d'un theme (#159)
 
 ## [4.0.6] - 2021-10-04
 ### Evolution

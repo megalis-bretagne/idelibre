@@ -6,6 +6,7 @@ use App\Entity\Structure;
 use App\Entity\Theme;
 use App\Repository\ThemeRepository;
 use App\Service\Persistence\PersistenceHelper;
+use App\Service\Theme\ThemeManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -26,18 +27,20 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 class ThemeApiController extends AbstractController
 {
     public function __construct(
-        private DenormalizerInterface $denormalizer,
+        private DenormalizerInterface  $denormalizer,
         private EntityManagerInterface $em,
-        private ThemeRepository $themeRepository,
-        private PersistenceHelper $persistenceHelper
-    ) {
+        private PersistenceHelper      $persistenceHelper,
+        private ThemeManager           $themeManager
+    )
+    {
     }
 
     #[Route('', name: 'get_all_themes', methods: ['GET'])]
     public function getAll(
-        Structure $structure,
+        Structure       $structure,
         ThemeRepository $themeRepository
-    ): JsonResponse {
+    ): JsonResponse
+    {
         $themes = $themeRepository->findChildrenFromStructure($structure)->getQuery()->getResult();
 
         return $this->json($themes, context: ['groups' => 'theme:read']);
@@ -47,8 +50,9 @@ class ThemeApiController extends AbstractController
     #[IsGranted('API_SAME_STRUCTURE', subject: ['structure', 'theme'])]
     public function getById(
         Structure $structure,
-        Theme $theme
-    ): JsonResponse {
+        Theme     $theme
+    ): JsonResponse
+    {
         return $this->json($theme, context: ['groups' => ['theme:read', 'theme:detail']]);
     }
 
@@ -59,13 +63,9 @@ class ThemeApiController extends AbstractController
         $context = ['groups' => ['theme:write', 'theme:write:post'], 'normalize_relations' => true];
         /** @var Theme $theme */
         $theme = $this->denormalizer->denormalize($data, Theme::class, context: $context);
-
         $theme->setStructure($structure);
-
-        $this->setParent($theme, $structure);
-        $this->setFullName($theme);
-
-        $this->persistenceHelper->validateAndPersist($theme);
+        $this->persistenceHelper->validate($theme);
+        $this->themeManager->save($theme, $structure, $theme->getParent());
 
         return $this->json($theme, status: 201, context: ['groups' => ['theme:read', 'theme:detail']]);
     }
@@ -78,10 +78,8 @@ class ThemeApiController extends AbstractController
 
         /** @var Theme $updatedTheme */
         $updatedTheme = $this->denormalizer->denormalize($data, Theme::class, context: $context);
-
-        $this->setFullName($updatedTheme);
-
-        $this->persistenceHelper->validateAndPersist($updatedTheme);
+        $this->persistenceHelper->validate($updatedTheme);
+        $this->themeManager->update($updatedTheme);
 
         return $this->json($updatedTheme, context: ['groups' => ['theme:detail', 'theme:read']]);
     }
@@ -94,25 +92,5 @@ class ThemeApiController extends AbstractController
         $this->em->flush();
 
         return $this->json(null, status: 204);
-    }
-
-    private function setParent(Theme $theme, Structure $structure): void
-    {
-        if ($theme->getParent()) {
-            return;
-        }
-
-        $root = $this->themeRepository->findRootNodeByStructure($structure);
-        $theme->setParent($root);
-    }
-
-    private function setFullName(Theme $theme)
-    {
-        if ('ROOT' === $theme->getParent()->getName()) {
-            $theme->setFullName($theme->getName());
-
-            return;
-        }
-        $theme->setFullName($theme->getParent()->getFullName() . ', ' . $theme->getName());
     }
 }

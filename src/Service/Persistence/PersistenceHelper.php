@@ -17,6 +17,14 @@ class PersistenceHelper
 
     public function validateAndPersist(mixed $entity)
     {
+        $this->validate($entity);
+
+        $this->em->persist($entity);
+        $this->em->flush();
+    }
+
+    public function validate(mixed $entity)
+    {
         $validationErrors = $this->validator->validate($entity);
 
         if ($validationErrors->count()) {
@@ -28,8 +36,6 @@ class PersistenceHelper
 
             throw new Http400Exception(implode(', ', $errors));
         }
-
-        $this->em->persist($entity);
-        $this->em->flush();
     }
+
 }
