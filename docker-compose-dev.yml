@@ -36,7 +36,7 @@ services:
     #  - 4000:3000
     image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/idelibre/idelibre-nodejs:main
     volumes:
-      #- ../idelibre4-nodejs:/app:ro
+      - ../idelibre4-nodejs:/app:ro
       - /home/rdubourget/dataFiles:/data
       - /tmp/data/zip:/data/zip:ro
       #- /tmp/docker:/tmp

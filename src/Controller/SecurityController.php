@@ -103,6 +103,23 @@ class SecurityController extends AbstractController
         ]);
     }
 
+    #[Route(path: '/forgetPasswordJson', name: 'app_forget_json', methods: ['POST'])]
+    public function forgetPasswordJson(Request $request, ResetPassword $resetPassword, LoggerInterface $logger): Response
+    {
+        $data = json_decode($request->getContent(), true);
+        if (empty($data['username'])) {
+            return $this->json(['message' => 'username is required'], 400);
+        }
+
+        try {
+            $resetPassword->reset($data['username']);
+        } catch (EntityNotFoundException $e) {
+            $logger->info('this username does not exist : ' . $data['username']);
+        }
+
+        return $this->json(['message' => 'email sent if username exists']);
+    }
+
     /**
      * @throws Exception
      */

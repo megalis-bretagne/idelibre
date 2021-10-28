@@ -20,8 +20,8 @@
 
                 $scope.menu = [
                     {titre: 'identification', lien: '#\identification', icon: 'fa fa-key'},
-                    {titre: 'Accueil', lien: '#\accueil', icon: 'fa fa-home'}
-
+                    {titre: 'Accueil', lien: '#\accueil', icon: 'fa fa-home'},
+                    {titre: 'Mot de passe oublié', lien: '#\forgetPassword', icon: 'fa fa-question'}
                 ];
 
 
