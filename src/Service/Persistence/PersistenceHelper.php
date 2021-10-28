@@ -37,5 +37,4 @@ class PersistenceHelper
             throw new Http400Exception(implode(', ', $errors));
         }
     }
-
 }

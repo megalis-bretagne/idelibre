@@ -27,20 +27,18 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 class ThemeApiController extends AbstractController
 {
     public function __construct(
-        private DenormalizerInterface  $denormalizer,
+        private DenormalizerInterface $denormalizer,
         private EntityManagerInterface $em,
-        private PersistenceHelper      $persistenceHelper,
-        private ThemeManager           $themeManager
-    )
-    {
+        private PersistenceHelper $persistenceHelper,
+        private ThemeManager $themeManager
+    ) {
     }
 
     #[Route('', name: 'get_all_themes', methods: ['GET'])]
     public function getAll(
-        Structure       $structure,
+        Structure $structure,
         ThemeRepository $themeRepository
-    ): JsonResponse
-    {
+    ): JsonResponse {
         $themes = $themeRepository->findChildrenFromStructure($structure)->getQuery()->getResult();
 
         return $this->json($themes, context: ['groups' => 'theme:read']);
@@ -50,9 +48,8 @@ class ThemeApiController extends AbstractController
     #[IsGranted('API_SAME_STRUCTURE', subject: ['structure', 'theme'])]
     public function getById(
         Structure $structure,
-        Theme     $theme
-    ): JsonResponse
-    {
+        Theme $theme
+    ): JsonResponse {
         return $this->json($theme, context: ['groups' => ['theme:read', 'theme:detail']]);
     }
 
