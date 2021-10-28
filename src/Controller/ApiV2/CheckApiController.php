@@ -18,7 +18,7 @@ class CheckApiController extends AbstractController
     }
 
     #[Route('/me', name: 'api_me', methods: ['GET'])]
-    #[IsGranted("ROLE_API")]
+    #[IsGranted('ROLE_API')]
     public function me(): JsonResponse
     {
         /** @var ApiUser $userApi */
@@ -29,10 +29,10 @@ class CheckApiController extends AbstractController
                 'name' => $apiUser->getName(),
                 'structure' => [
                     'id' => $apiUser->getStructure()->getId(),
-                    'name' => $apiUser->getStructure()->getName()
+                    'name' => $apiUser->getStructure()->getName(),
                     ],
-                'role' => $apiUser->getRoles()
-           ]);
+                'role' => $apiUser->getRoles(),
+           ]
+        );
     }
-
 }

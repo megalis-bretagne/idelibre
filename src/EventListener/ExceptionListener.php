@@ -21,7 +21,6 @@ class ExceptionListener implements EventSubscriberInterface
             return;
         }
 
-
         $response = new JsonResponse(
             ['message' => $event->getThrowable()->getMessage()],
             $this->getStatusCode($event->getThrowable())
@@ -31,13 +30,13 @@ class ExceptionListener implements EventSubscriberInterface
         $event->setResponse($response);
     }
 
-    private function getStatusCode(\Throwable $throwable) {
-        if($throwable instanceof HttpException) {
+    private function getStatusCode(\Throwable $throwable)
+    {
+        if ($throwable instanceof HttpException) {
             return $throwable->getStatusCode();
         }
 
         return $throwable->getCode() > 100 ? $throwable->getCode() : 500;
-
     }
 
     private function isJsonContentTypeOrAccept(ExceptionEvent $event)
