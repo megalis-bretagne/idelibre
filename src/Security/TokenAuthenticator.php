@@ -70,6 +70,6 @@ class TokenAuthenticator extends AbstractAuthenticator
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
-        throw new Http403Exception('Erruer d\'authententification oui je sais il faudrait un 401');
+        throw new Http401Exception("Erreur d'authententification");
     }
 }
