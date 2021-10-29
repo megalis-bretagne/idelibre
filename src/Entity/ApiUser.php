@@ -10,6 +10,9 @@ use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\NotNull;
 
 #[Entity(repositoryClass: ApiUserRepository::class)]
 class ApiUser implements UserInterface
@@ -20,17 +23,25 @@ class ApiUser implements UserInterface
     private $id;
 
     #[Column(type: 'string', length: 255)]
+    #[NotBlank]
+    #[NotNull]
+    #[Length(max: 255)]
     private $name;
 
     #[Column(type: 'string', length: 255)]
+    #[NotBlank]
+    #[NotNull]
+    #[Length(max: 255)]
     private $token;
 
     #[ManyToOne(targetEntity: Structure::class)]
     #[JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    #[NotNull]
     private $structure;
 
     #[ManyToOne(targetEntity: ApiRole::class)]
     #[JoinColumn(nullable: false)]
+    #[NotNull]
     private $apiRole;
 
     public function getId(): ?string

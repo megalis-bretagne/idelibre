@@ -2,12 +2,16 @@
 
 namespace App\Service\role;
 
+use App\Entity\ApiRole;
 use App\Entity\Role;
+use App\Repository\ApiRoleRepository;
 use App\Repository\RoleRepository;
 
 class RoleManager
 {
-    public function __construct(private RoleRepository $roleRepository)
+    public function __construct(private RoleRepository    $roleRepository,
+                                private ApiRoleRepository $apiRoleRepository
+    )
     {
     }
 
@@ -44,5 +48,10 @@ class RoleManager
     public function getGuestRole(): Role
     {
         return $this->roleRepository->findOneBy(['name' => 'Guest']);
+    }
+
+    public function getApiStructureAdminRole(): ApiRole
+    {
+        return $this->apiRoleRepository->findOneBy(['name' => 'ApiStructureAdmin']);
     }
 }

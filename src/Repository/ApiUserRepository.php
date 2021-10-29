@@ -3,7 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\ApiUser;
+use App\Entity\Structure;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -17,5 +19,13 @@ class ApiUserRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, ApiUser::class);
+    }
+
+    public function findByStructure(Structure $structure): QueryBuilder
+    {
+        return $this->createQueryBuilder('au')
+            ->andWhere('au.structure =:structure')
+            ->setParameter('structure', $structure)
+            ->orderBy('au.name', 'ASC');
     }
 }

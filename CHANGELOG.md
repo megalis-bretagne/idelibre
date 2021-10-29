@@ -12,11 +12,11 @@ All notable changes to this project will be documented in this file.
 - Depuis le client web Nommage plus explicite  du fichier zip de la séance (#154)
 
 
-### Nauveautés
+### Nouveautés
 - Fichier de rendez vous avec l'envoi du mail de convocation
-- Horodatage à chaque modification d'une séance envoyée
-- Apiv2 (avec recupération des jetons d'horodatage)
 - Jeton d'horodatage lors de l'ajout de document dans une séance déja envoyée (#156)
+- Apiv2 (avec recupération des jetons d'horodatage)
+
 
 ### Correction  
 - Format de la date lors de la création et modification d'une séance (#167)   
