@@ -9,10 +9,10 @@ use App\Repository\RoleRepository;
 
 class RoleManager
 {
-    public function __construct(private RoleRepository    $roleRepository,
-                                private ApiRoleRepository $apiRoleRepository
-    )
-    {
+    public function __construct(
+        private RoleRepository $roleRepository,
+        private ApiRoleRepository $apiRoleRepository
+    ) {
     }
 
     public function getSuperAdminRole(): Role

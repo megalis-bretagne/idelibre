@@ -76,11 +76,9 @@ class ApiUserController extends AbstractController
         ]);
     }
 
-
     #[Route(path: '/apikey/delete', name: 'apiUser_delete')]
     public function delete(): Response
     {
         return new Response();
     }
-
 }

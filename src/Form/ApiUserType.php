@@ -20,10 +20,7 @@ class ApiUserType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-
         $isNew = !isset($options['data']);
-
-
 
         $builder
             ->add('name', TextType::class, [
@@ -31,7 +28,7 @@ class ApiUserType extends AbstractType
             ])
             ->add('token', TextType::class, [
                 'label' => "Clé d'api",
-                'data' => $this->getTokenValue($options)
+                'data' => $this->getTokenValue($options),
             ]);
 
         $builder->add('structure', HiddenType::class, [
@@ -39,8 +36,8 @@ class ApiUserType extends AbstractType
             'data_class' => null,
         ])
             ->get('structure')->addModelTransformer(new CallbackTransformer(
-                fn() => '',
-                fn() => $options['structure']
+                fn () => '',
+                fn () => $options['structure']
             ));
 
         $builder->add('apiRole', HiddenType::class, [
@@ -48,8 +45,8 @@ class ApiUserType extends AbstractType
             'data_class' => null,
         ])
             ->get('apiRole')->addModelTransformer(new CallbackTransformer(
-                fn() => '',
-                fn() => $this->roleManager->getApiStructureAdminRole()
+                fn () => '',
+                fn () => $this->roleManager->getApiStructureAdminRole()
             ));
     }
 
@@ -64,13 +61,13 @@ class ApiUserType extends AbstractType
     private function getTokenValue(array $options)
     {
         //$isNew ? TokenUtil::genToken() : $options['data']->getToken()
-        if(!isset($options['data'])) {
+        if (!isset($options['data'])) {
             return TokenUtil::genToken();
         }
 
         /** @var ApiUser $apiUser */
         $apiUser = $options['data'];
+
         return $apiUser->getToken();
     }
-
 }
