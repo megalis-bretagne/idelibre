@@ -21,7 +21,6 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Sidebar(active: ['connector-nav', 'connector-api-key-nav'])]
 class ApiUserController extends AbstractController
 {
-
     #[Route(path: '/apikey', name: 'apiUser_index', methods: ['GET'])]
     #[IsGranted(data: 'ROLE_MANAGE_API_USER')]
     public function index(PaginatorInterface $paginator, ApiUserRepository $apiUserRepository, Request $request): Response
