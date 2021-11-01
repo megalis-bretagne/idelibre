@@ -14,7 +14,8 @@
     <table class="table table-striped bg-white">
         <thead>
         <tr class="d-flex">
-            <th class="col-10">Intitulé</th>
+            <th class="col-6">Intitulé</th>
+            <th class="col-4">Role</th>
             <th class="col-2">Actions</th>
         </tr>
         </thead>
@@ -24,7 +25,8 @@
 
         {% for apiUser in apiUsers %}
             <tr class="d-flex">
-                <td class="col-10">{{ apiUser.name }} </td>
+                <td class="col-6">{{ apiUser.name }} </td>
+                <td class="col-4">{{ apiUser.apiRole.prettyName }} </td>
                 <td class="col-2">
                     {{ macros.editButton('apiUser_edit', apiUser.id) }}
 

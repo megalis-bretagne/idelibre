@@ -105,11 +105,25 @@
 
                     {% if is_granted('ROLE_MANAGE_CONNECTORS') %}
                         <li class="{{ 'connector-nav' in activeNavs ? 'active' : '' }}">
-                            <a href="{{ path('connector_index') }}">
+                            <a href="#">
                                 <i class="fas fa-cog"></i>
                                 <span>Connecteurs</span>
                             </a>
                             <ul class="sub-menu">
+
+
+                                <li class="{{ 'connector-configuration-nav' in activeNavs ? 'active' : '' }}">
+                                    <a href="{{ path('connector_index') }}">
+                                        Configuration
+                                    </a>
+                                </li>
+                                <li class="{{ 'connector-api-key-nav' in activeNavs ? 'active' : '' }}">
+                                    <a href="{{ path('apiUser_index') }}">
+                                        Clés d'api
+                                    </a>
+                                </li>
+
+
                             </ul>
                         </li>
                     {% endif %}

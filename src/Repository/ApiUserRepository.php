@@ -26,6 +26,8 @@ class ApiUserRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('au')
             ->andWhere('au.structure =:structure')
             ->setParameter('structure', $structure)
+            ->leftJoin('au.apiRole', 'ar')
+            ->addSelect('ar')
             ->orderBy('au.name', 'ASC');
     }
 }
