@@ -10,13 +10,14 @@ All notable changes to this project will be documented in this file.
 - La civilité peut etre renseignée via csv (#161)
 - Un admin de groupe ne peut plus supprimer une structure (#160)
 - Depuis le client web Nommage plus explicite  du fichier zip de la séance (#154)
+- Ajout de la reecriture de l'host dans le vhost
 
-
-### Nauveautés
+### Nouveautés
 - Fichier de rendez vous avec l'envoi du mail de convocation
-- Horodatage à chaque modification d'une séance envoyée
-- Apiv2 (avec recupération des jetons d'horodatage)
 - Jeton d'horodatage lors de l'ajout de document dans une séance déja envoyée (#156)
+- Apiv2 (avec recupération des jetons d'horodatage)
+- Gestion des clés d'api
+
 
 ### Correction  
 - Format de la date lors de la création et modification d'une séance (#167)   

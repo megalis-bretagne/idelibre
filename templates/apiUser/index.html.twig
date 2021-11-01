@@ -1,0 +1,47 @@
+{% extends 'dataview.html.twig' %}
+{% import 'macro/_forms.html.twig' as macros %}
+
+{% block pageTitle "Clés d'api" %}
+
+{% block pageActions %}
+    <a href="{{ path('apiUser_add') }}" class="btn btn-primary"><span
+                class="fa fa-plus-circle"></span>
+        Ajouter</a>
+{% endblock %}
+
+{% block pageTable %}
+
+    <table class="table table-striped bg-white">
+        <thead>
+        <tr class="d-flex">
+            <th class="col-6">Intitulé</th>
+            <th class="col-4">Role</th>
+            <th class="col-2">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {{ macros.emptyList(apiUsers, "Aucune clé d'api à afficher") }}
+
+        {% for apiUser in apiUsers %}
+            <tr class="d-flex">
+                <td class="col-6">{{ apiUser.name }} </td>
+                <td class="col-4">{{ apiUser.apiRole.prettyName }} </td>
+                <td class="col-2">
+                    {{ macros.editButton('apiUser_edit', apiUser.id) }}
+
+                    {{ macros.button_open_modal_delete(
+                        apiUser.id,
+                        'Suppression de la clé d\'api',
+                        'apiUser_delete',
+                        'Voulez-vous vraiment supprimer cette clé d\'api ?',
+                        apiUsers.currentPageNumber
+                    ) }}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block pagePagination knp_pagination_render(apiUsers) %}

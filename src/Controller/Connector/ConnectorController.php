@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Breadcrumb("Configuration des connecteurs")
  */
-#[Sidebar(active: ['connector-nav'])]
+#[Sidebar(active: ['connector-nav', 'connector-configuration-nav'])]
 class ConnectorController extends AbstractController
 {
     #[Route(path: '/connector', name: 'connector_index')]
