@@ -77,7 +77,7 @@ class ReportSittingControllerTest extends WebTestCase
         $response = $this->client->getResponse();
         $this->assertTrue($response->headers->has('content-disposition'));
         $this->assertSame('attachment; filename="Conseil Libriciel_rapport.csv"', $response->headers->get('content-disposition'));
-        $this->assertSame('text/plain', $response->headers->get('content-type'));
+        $this->assertSame('application/csv', $response->headers->get('content-type'));
         $this->assertGreaterThan(20, intval($response->headers->get('content-length')));
     }
 

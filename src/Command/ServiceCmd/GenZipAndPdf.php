@@ -9,6 +9,7 @@ use App\Repository\StructureRepository;
 use App\Service\Pdf\PdfSittingGenerator;
 use App\Service\Zip\ZipSittingGenerator;
 use DateTime;
+use Doctrine\ORM\EntityNotFoundException;
 
 class GenZipAndPdf
 {
@@ -19,10 +20,11 @@ class GenZipAndPdf
 
     public function __construct(
         StructureRepository $structureRepository,
-        SittingRepository $sittingRepository,
+        SittingRepository   $sittingRepository,
         PdfSittingGenerator $pdfSittingGenerator,
         ZipSittingGenerator $zipSittingGenerator
-    ) {
+    )
+    {
         $this->structureRepository = $structureRepository;
         $this->sittingRepository = $sittingRepository;
         $this->pdfSittingGenerator = $pdfSittingGenerator;
@@ -59,6 +61,22 @@ class GenZipAndPdf
         dump('Sitting count : ' . count($this->listActiveSittingsByStructure($structure)));
 
         foreach ($this->listActiveSittingsByStructure($structure) as $key => $sitting) {
+            dump('Sitting num : ' . $key);
+            $this->pdfSittingGenerator->generateFullSittingPdf($sitting);
+            $this->zipSittingGenerator->generateZipSitting($sitting);
+        }
+    }
+
+    public function genAllTimeZipPdfByStructureId(string $structureId)
+    {
+        $structure = $this->structureRepository->find($structureId);
+        if (!$structure) {
+            throw new EntityNotFoundException("Structure with id {$structureId} does not exist");
+        }
+
+        $sittings = $this->sittingRepository->findByStructure($structure)->getQuery()->getResult();
+
+        foreach ($sittings as $key => $sitting) {
             dump('Sitting num : ' . $key);
             $this->pdfSittingGenerator->generateFullSittingPdf($sitting);
             $this->zipSittingGenerator->generateZipSitting($sitting);
