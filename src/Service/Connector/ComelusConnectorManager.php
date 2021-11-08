@@ -22,7 +22,8 @@ class ComelusConnectorManager
         private ComelusConnectorRepository $comelusConnectorRepository,
         private ComelusWrapper $comelusWrapper,
         private FileManager $fileManager,
-        private DateUtil $dateUtil
+        private DateUtil $dateUtil,
+        private ComelusContentGenerator $comelusContentGenerator
     ) {
     }
 
