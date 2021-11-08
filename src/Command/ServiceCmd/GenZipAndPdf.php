@@ -20,11 +20,10 @@ class GenZipAndPdf
 
     public function __construct(
         StructureRepository $structureRepository,
-        SittingRepository   $sittingRepository,
+        SittingRepository $sittingRepository,
         PdfSittingGenerator $pdfSittingGenerator,
         ZipSittingGenerator $zipSittingGenerator
-    )
-    {
+    ) {
         $this->structureRepository = $structureRepository;
         $this->sittingRepository = $sittingRepository;
         $this->pdfSittingGenerator = $pdfSittingGenerator;

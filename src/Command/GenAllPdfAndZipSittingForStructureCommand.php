@@ -37,6 +37,7 @@ class GenAllPdfAndZipSittingForStructureCommand extends Command
         $this->genZipAndPdf->genAllTimeZipPdfByStructureId($structureId);
 
         $io->success('OK');
+
         return Command::SUCCESS;
     }
 }
