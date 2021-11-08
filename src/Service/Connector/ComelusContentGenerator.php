@@ -9,11 +9,9 @@ use JetBrains\PhpStorm\ArrayShape;
 
 class ComelusContentGenerator
 {
-
     public function __construct(
         private DateUtil $dateUtil,
-    )
-    {
+    ) {
     }
 
     public function createDescription(string $description, Sitting $sitting): string
@@ -21,12 +19,11 @@ class ComelusContentGenerator
         return $this->generate($description, $this->getParams($sitting));
     }
 
-
     #[ArrayShape([
-        TemplateTag::SITTING_TYPE => "null|string",
-        TemplateTag::SITTING_DATE => "string",
-        TemplateTag::SITTING_TIME => "string",
-        TemplateTag::SITTING_PLACE => "string"
+        TemplateTag::SITTING_TYPE => 'null|string',
+        TemplateTag::SITTING_DATE => 'string',
+        TemplateTag::SITTING_TIME => 'string',
+        TemplateTag::SITTING_PLACE => 'string',
     ])]
     private function getParams(Sitting $sitting): array
     {
@@ -48,6 +45,4 @@ class ComelusContentGenerator
     {
         return strtr($content, $params);
     }
-
-
 }
