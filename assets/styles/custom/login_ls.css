@@ -2,25 +2,30 @@
 .hidden {
     display: none !important;
 }
+
 .soft-logo {
     text-align: center;
     height: 100%;
 }
+
 .connection-page {
     height: calc(100vh - 40px);
     position: relative;
     display: flex;
     flex-direction: column;
 }
+
 span.btn {
     cursor: pointer;
 }
+
 .main {
     flex-grow: 1;
     flex-shrink: 1;
     width: 100%;
     display: flex;
 }
+
 .coll-side {
     width: 30%;
     display: -ms-grid;
@@ -32,6 +37,7 @@ span.btn {
     align-items: center;
     grid-gap: 1rem;
 }
+
 .coll-side .img-container {
     -ms-grid-row: 1;
     -ms-grid-column: 1;
@@ -57,6 +63,7 @@ span.btn {
     padding: 1rem;
     align-self: baseline;
 }
+
 .form-side {
     display: flex;
     justify-content: center;
@@ -64,9 +71,11 @@ span.btn {
     flex-grow: 1;
     background-color: white;
 }
+
 .form-side .form-content-padding {
     padding-top: 100px !important;
 }
+
 .form-side .form-content {
     display: flex;
     flex-direction: column;
@@ -74,6 +83,7 @@ span.btn {
     padding-top: 50px;
     padding-bottom: 50px;
 }
+
 .form-side .form-content .page-title {
     font-size: 1rem;
     font-weight: normal;
@@ -81,12 +91,14 @@ span.btn {
     padding-bottom: 1.5rem;
     text-align: center;
 }
+
 .floating-message {
     left: 10%;
     right: 10%;
     top: 5%;
     position: absolute;
 }
+
 .floating-message div {
     align-items: center;
     display: flex;
@@ -94,16 +106,30 @@ span.btn {
     padding-top: 1rem;
     padding-bottom: 1rem;
 }
+
 .floating-message div i {
     padding-right: 20px;
 }
+
 #libriciel-logo {
     height: auto;
     width: 100%;
     max-width: 100%;
 }
+
+.eye-password {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    z-index: 10;
+    color: var(--ls-grey-500)
+}
+
+
 @media screen and (max-width: 800px) {
     .coll-side {
         display: none;
     }
 }
+
+
