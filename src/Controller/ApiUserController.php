@@ -6,11 +6,13 @@ use App\Entity\ApiUser;
 use App\Form\ApiUserType;
 use App\Repository\ApiUserRepository;
 use App\Sidebar\Annotation\Sidebar;
+use App\Util\TokenUtil;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -93,5 +95,11 @@ class ApiUserController extends AbstractController
         $this->addFlash('success', 'La clé d\'api a été supprimée');
 
         return $this->redirectToRoute('apiUser_index');
+    }
+
+    #[Route(path: '/apikey/refresh', name: 'apiUser_refresh', methods: ['GET'])]
+    public function refreshApiKey(): JsonResponse
+    {
+        return $this->json(['apiKey' => TokenUtil::genToken()]);
     }
 }

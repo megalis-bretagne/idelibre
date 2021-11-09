@@ -11,6 +11,7 @@ import './js/ls-file'
 import './js/comelus'
 import './js/lsmessage'
 import './js/expandable'
+import './js/refreshApiKey'
 
 $(document).ready(function () {
     let config = {
