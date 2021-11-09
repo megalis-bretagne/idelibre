@@ -105,7 +105,7 @@
 
                     {% if is_granted('ROLE_MANAGE_CONNECTORS') %}
                         <li class="{{ 'connector-nav' in activeNavs ? 'active' : '' }}">
-                            <a href="#">
+                            <a href="{{ path('connector_index') }}">
                                 <i class="fas fa-cog"></i>
                                 <span>Connecteurs</span>
                             </a>
