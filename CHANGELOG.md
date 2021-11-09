@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - Suppression de la limite du nombre de carractere dans la description du connecteur comelus
 - Champs de publipostage disponible dans la description du connecteur comelus
 - Client web, nouveau logo idelibre
+- Afficher / masquer le mot de passe
 
 ### Nouveautés
 - Fichier de rendez vous avec l'envoi du mail de convocation
