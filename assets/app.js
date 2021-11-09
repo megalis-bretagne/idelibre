@@ -12,6 +12,7 @@ import './js/comelus'
 import './js/lsmessage'
 import './js/expandable'
 import './js/refreshApiKey'
+import './js/showPassword'
 
 $(document).ready(function () {
     let config = {
