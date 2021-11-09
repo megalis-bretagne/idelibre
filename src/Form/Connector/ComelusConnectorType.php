@@ -49,7 +49,6 @@ class ComelusConnectorType extends AbstractType
                 'attr' => [
                     'rows' => 5,
                 ],
-                'constraints' => [new Length(['max' => ComelusConnector::MAX_DESCRIPTION_LENGTH])],
             ])
             ->add('active', CheckboxType::class, [
                 'required' => false,
