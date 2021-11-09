@@ -6,6 +6,7 @@ use App\Entity\Sitting;
 use App\Service\EmailTemplate\TemplateTag;
 use App\Service\Util\DateUtil;
 use JetBrains\PhpStorm\ArrayShape;
+use JetBrains\PhpStorm\Pure;
 
 class ComelusContentGenerator
 {

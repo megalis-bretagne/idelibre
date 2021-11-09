@@ -87,7 +87,12 @@ class ComelusConnectorManager
         $this->comelusWrapper->setApiKey($comelusConnetor->getApiKey());
         $this->comelusWrapper->setUrl($comelusConnetor->getUrl());
 
-        $response = $this->comelusWrapper->createDocument($this->getDocumentName($sitting), $comelusConnetor->getMailingListId(), $comelusConnetor->getDescription(), $uploadedFiles);
+        $response = $this->comelusWrapper->createDocument(
+            $this->getDocumentName($sitting),
+            $comelusConnetor->getMailingListId(),
+            $this->comelusContentGenerator->createDescription($comelusConnetor->getDescription(), $sitting),
+            $uploadedFiles
+        );
 
         $comelusId = $response['id'] ?? null;
 
