@@ -1,27 +1,31 @@
-<div  ng-show="visible" style="position: fixed; left:15px; top:-5px; z-index: 2000; color: white"  title="Liste des projets" ng-click="toggleLeftDrawer()" id="openNavigationDrawerBtn2" class="navbar-text nav fa fa-bars fa-3x pull-left" >
+<div ng-show="visible" style="position: fixed; left:15px; top:-5px; z-index: 2000; color: white" title="Liste des projets"
+     ng-click="toggleLeftDrawer()" id="openNavigationDrawerBtn2" class="navbar-text nav fa fa-bars fa-3x pull-left">
 </div>
 
-<div ng-show="visible" style="position: fixed; right:15px; top:-5px; z-index: 2000; color: white"  title="Liste des annotations" ng-click="toggleRightDrawer()" id="openLeftDrawerBtn2" class="navbar-text nav fa fa-bars fa-3x pull-left" >
+<div ng-show="visible" style="position: fixed; right:15px; top:-5px; z-index: 2000; color: white" title="Liste des annotations"
+     ng-click="toggleRightDrawer()" id="openLeftDrawerBtn2" class="navbar-text nav fa fa-bars fa-3x pull-left">
 </div>
-<div class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container">
+<div class="navbar navbar-inverse navbar-fixed-top" style="background-color: #222!important;">
+    <div class="container-fluid">
         <div class="navbar-header">
-             <ul class="nav navbar-nav">
-                    <!--<li ng-show="visible" title="Liste des projets" ng-click="toggleLeftDrawer()" id="openNavigationDrawerBtn" class="navbar-text nav fa fa-bars fa-2x " >-->
-                    <!--</li>-->
-                </ul>
-            <span class="navbar-brand" > <a ng-click="brand()" href="#/accueil" ><img src="lib/images/logo-idelibre_inv.png" alt="idelibre"> </a></span>
+            <ul class="nav navbar-nav" >
+            </ul>
+            <span class="navbar-brand" style="margin-left: 150px">
+                <a ng-click="brand()" href="#/accueil">
+                <img src="lib/images/id-color-white.png" alt="idelibre" style="width: 100px">
+            </a>
+            </span>
         </div>
         <div collapse="isCollapsed" class="navbar-collapse collapse" id="navbar-main">
 
             <ul class="nav navbar-nav">
 
-                <li> <p class="navbar-text nav breadcumb"> {{name}}</p> </li>
+                <li><p class="navbar-text nav breadcumb"> {{ name }}</p></li>
 
             </ul>
 
 
-            <ul class="nav navbar-nav navbar-right">
+            <ul class="nav navbar-nav navbar-right" style="margin-right: 150px">
 
                 <li class="dropdown nav">
 
@@ -34,16 +38,15 @@
 
                         <li ng-repeat="item in menu">
 
-                            <a  class="{{item.icon}}" ng-href="{{item.lien}}">  {{item.titre}}</a>
+                            <a class="{{item.icon}}" ng-href="{{item.lien}}"> {{ item.titre }}</a>
                         </li>
                         <hr>
-                        <li><a class='fa fa-info-circle'  ng-click="about()"> À propos </a>
+                        <li><a class='fa fa-info-circle' ng-click="about()"> À propos </a>
                         </li>
 
                     </ul>
 
-                </li>  
-                <li> <p class="navbar-text nav " ><b><i class="{{certif.class}}"> {{certif.name}}</i></b></p> </li>
+                </li>
 
                 <ul ng-show="visible" class="nav navbar-nav">
                     <!--<li ng-click="toggleRightDrawer()" title="Liste des annotations" id="openLeftDrawerBtn" class="navbar-text nav fa fa-bars fa-2x " >-->

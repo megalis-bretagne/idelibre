@@ -45,7 +45,7 @@
              
 
                 $scope.about = function () {
-                    $rootScope.$broadcast('modalOpen', {title: 'A propos', content: 'idelibre: v3.2.0', about: true});
+                    $rootScope.$broadcast('modalOpen', {title: 'À propos', content: 'idelibre: v4.1.0', about: true});
                 };
 
 
