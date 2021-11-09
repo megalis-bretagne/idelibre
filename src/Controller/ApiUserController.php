@@ -100,6 +100,6 @@ class ApiUserController extends AbstractController
     #[Route(path: '/apikey/refresh', name: 'apiUser_refresh', methods: ['GET'])]
     public function refreshApiKey(): JsonResponse
     {
-        return $this->json(["apiKey" => TokenUtil::genToken()]);
+        return $this->json(['apiKey' => TokenUtil::genToken()]);
     }
 }
