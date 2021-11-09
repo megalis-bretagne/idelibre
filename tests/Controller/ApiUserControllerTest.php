@@ -132,4 +132,15 @@ class ApiUserControllerTest extends WebTestCase
         $this->assertSame('updated name', $userApi->getName());
         $this->assertSame('updated token', $userApi->getToken());
     }
+
+
+
+    public function testRefreshApiKey()
+    {
+        $this->client->request(Request::METHOD_GET, '/apikey/refresh');
+        $this->assertResponseStatusCodeSame(200);
+        $response = $this->client->getResponse();
+        $key = json_decode($response->getContent(), true);
+        $this->assertNotEmpty($key['apiKey']);
+    }
 }
