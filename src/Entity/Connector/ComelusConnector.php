@@ -19,7 +19,6 @@ class ComelusConnector extends Connector
     public const NAME = 'comelus';
     public const MAX_URL_LENGTH = 255;
     public const MAX_API_KEY_LENGTH = 255;
-    public const MAX_DESCRIPTION_LENGTH = 1000;
     #[Id]
     #[GeneratedValue(strategy: 'UUID')]
     #[Column(type: 'guid')]
@@ -95,7 +94,6 @@ class ComelusConnector extends Connector
 
     public function setDescription(?string $description): self
     {
-        $this->validateLength($description, self::MAX_DESCRIPTION_LENGTH);
         $this->fields['description'] = $description;
 
         return $this;
