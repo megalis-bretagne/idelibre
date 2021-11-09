@@ -73,6 +73,10 @@
                 //    alert('response');
             }).catch(function (err) {
                 console.log(err);
+                if(err.status === 500) {
+                    alert("Votre navigateur n'accepte pas qu'idelibre télécharge les documents dans sa mémoire. " +
+                        "Peut etre etes vous en mode navigation privée.");
+                }
             });
         };
 

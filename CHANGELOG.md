@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 - Champs de publipostage disponible dans la description du connecteur comelus
 - Client web, nouveau logo idelibre
 - Afficher / masquer le mot de passe
+- Alerte si jamais le navigateur ne permet pas de télécharger les fichiers
 
 ### Nouveautés
 - Fichier de rendez vous avec l'envoi du mail de convocation
