@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - Ajout de la reecriture de l'host dans le vhost
 - Suppression de la limite du nombre de carractere dans la description du connecteur comelus
 - Champs de publipostage disponible dans la description du connecteur comelus
+- Client web, nouveau logo idelibre
 
 ### Nouveautés
 - Fichier de rendez vous avec l'envoi du mail de convocation
