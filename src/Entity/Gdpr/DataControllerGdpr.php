@@ -9,8 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
 class DataControllerGdpr
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'UUID')]
+    #[ORM\Column(type: 'guid')]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
@@ -43,7 +43,7 @@ class DataControllerGdpr
     #[ORM\Column(type: 'string', length: 255)]
     private $dpoEmail;
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }
