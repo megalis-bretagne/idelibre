@@ -55,15 +55,14 @@ class GdprControllerTest extends WebTestCase
 
         $form = $crawler->selectButton('Enregistrer')->form();
 
-        $form['gdpr[companyName]'] = 'Libriciel';
-        $form['gdpr[address]'] = '836 rue du mas de verchant';
-        $form['gdpr[companyPhone]'] = '0102030405';
-        $form['gdpr[companyEmail]'] = 'email@exemple.org';
-        $form['gdpr[representative]'] = 'el presidente';
-        $form['gdpr[quality]'] = 'president';
-        $form['gdpr[siret]'] = '1234544';
-        $form['gdpr[ape]'] = '345';
-        $form['gdpr[dpoEmail]'] = 'dpo@example.org';
+        $form['gdpr_hosting[companyName]'] = 'Libriciel';
+        $form['gdpr_hosting[address]'] = '836 rue du mas de verchant';
+        $form['gdpr_hosting[companyPhone]'] = '0102030405';
+        $form['gdpr_hosting[companyEmail]'] = 'email@exemple.org';
+        $form['gdpr_hosting[representative]'] = 'el presidente';
+        $form['gdpr_hosting[quality]'] = 'president';
+        $form['gdpr_hosting[siret]'] = '1234544';
+        $form['gdpr_hosting[ape]'] = '345';
 
         $this->client->submit($form);
 

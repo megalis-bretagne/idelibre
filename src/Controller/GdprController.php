@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Form\GdprType;
+use App\Form\GdprHostingType;
 use App\Service\Gdpr\GdprManager;
 use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
@@ -34,7 +34,7 @@ class GdprController extends AbstractController
     #[IsGranted(data: 'ROLE_SUPERADMIN')]
     public function edit(GdprManager $gdprManager, Request $request): Response
     {
-        $form = $this->createForm(GdprType::class, $gdprManager->getGdpr());
+        $form = $this->createForm(GdprHostingType::class, $gdprManager->getGdpr());
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $gdprManager->save($form->getData());

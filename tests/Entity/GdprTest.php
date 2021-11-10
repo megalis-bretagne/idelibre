@@ -2,7 +2,7 @@
 
 namespace App\Tests\Entity;
 
-use App\Entity\Gdpr;
+use App\Entity\GdprHosting;
 use App\Tests\HasValidationError;
 use App\Tests\StringTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -23,14 +23,14 @@ class GdprTest extends WebTestCase
 
     public function testValid()
     {
-        $file = new Gdpr();
+        $file = new GdprHosting();
 
         $this->assertHasValidationErrors($file, 0);
     }
 
     public function testInvalidAddressTooLong()
     {
-        $file = (new Gdpr())
+        $file = (new GdprHosting())
             ->setAddress($this->genString(515));
 
         $this->assertHasValidationErrors($file, 1);
@@ -38,7 +38,7 @@ class GdprTest extends WebTestCase
 
     public function testInvalidApeTooLong()
     {
-        $file = (new Gdpr())
+        $file = (new GdprHosting())
             ->setApe($this->genString(256));
 
         $this->assertHasValidationErrors($file, 1);
@@ -46,7 +46,7 @@ class GdprTest extends WebTestCase
 
     public function testInvalidPhoneTooLong()
     {
-        $file = (new Gdpr())
+        $file = (new GdprHosting())
             ->setCompanyPhone($this->genString(256));
 
         $this->assertHasValidationErrors($file, 1);
@@ -54,16 +54,8 @@ class GdprTest extends WebTestCase
 
     public function testCompanyEmailWrongFormat()
     {
-        $file = (new Gdpr())
+        $file = (new GdprHosting())
             ->setCompanyEmail('email.toto.fr');
-
-        $this->assertHasValidationErrors($file, 1);
-    }
-
-    public function testDpoEmailWrongFormat()
-    {
-        $file = (new Gdpr())
-            ->setDpoEmail('email.toto.fr');
 
         $this->assertHasValidationErrors($file, 1);
     }
