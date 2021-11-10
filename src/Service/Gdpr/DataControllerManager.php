@@ -8,11 +8,9 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class DataControllerManager
 {
-
     public function __construct(
         private EntityManagerInterface $em
-    )
-    {
+    ) {
     }
 
     public function save(DataControllerGdpr $dataControllerGdpr, Structure $structure)
@@ -21,5 +19,4 @@ class DataControllerManager
         $this->em->persist($dataControllerGdpr);
         $this->em->flush();
     }
-
 }

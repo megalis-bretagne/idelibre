@@ -31,7 +31,7 @@ class GdprController extends AbstractController
 
         return $this->render('gdpr/notice.html.twig', [
             'gdprHosting' => $gdprManager->getGdpr(),
-            'dataController' => $structure->getDataControllerGdpr()
+            'dataController' => $structure->getDataControllerGdpr(),
         ]);
     }
 
