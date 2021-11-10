@@ -2,7 +2,7 @@
 
 namespace App\Tests\Entity;
 
-use App\Entity\GdprHosting;
+use App\Entity\Gdpr\GdprHosting;
 use App\Tests\HasValidationError;
 use App\Tests\StringTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -30,7 +30,7 @@ class GdprTest extends WebTestCase
 
     public function testInvalidAddressTooLong()
     {
-        $file = (new GdprHosting())
+        $file = (new \App\Entity\Gdpr\GdprHosting())
             ->setAddress($this->genString(515));
 
         $this->assertHasValidationErrors($file, 1);
@@ -54,7 +54,7 @@ class GdprTest extends WebTestCase
 
     public function testCompanyEmailWrongFormat()
     {
-        $file = (new GdprHosting())
+        $file = (new \App\Entity\Gdpr\GdprHosting())
             ->setCompanyEmail('email.toto.fr');
 
         $this->assertHasValidationErrors($file, 1);

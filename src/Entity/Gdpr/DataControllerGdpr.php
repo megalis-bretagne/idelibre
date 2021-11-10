@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Gdpr;
 
 use App\Repository\DataControllerGdprRepository;
 use Doctrine\ORM\Mapping as ORM;

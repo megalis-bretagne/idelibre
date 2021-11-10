@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Gdpr;
 
 use App\Repository\GdprHostingRepository;
 use Doctrine\ORM\Mapping\Column;
@@ -50,7 +50,6 @@ class GdprHosting
     #[Length(max: '255')]
     #[Email]
     private $companyEmail;
-
 
     public function getId(): ?string
     {

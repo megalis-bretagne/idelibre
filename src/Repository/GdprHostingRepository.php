@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\GdprHosting;
+use App\Entity\Gdpr\GdprHosting;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

@@ -2,14 +2,14 @@
 
 namespace App\Service\Gdpr;
 
-use App\Entity\GdprHosting;
+use App\Entity\Gdpr\GdprHosting;
 use App\Repository\GdprHostingRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 class GdprManager
 {
     public function __construct(
-        private GdprHostingRepository  $gdprRepository,
+        private GdprHostingRepository $gdprRepository,
         private EntityManagerInterface $em
     ) {
     }
