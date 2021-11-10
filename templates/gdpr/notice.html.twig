@@ -16,6 +16,7 @@
 
         <div class="row mt-4">
             <div class="col-10 offset-1 form-white">
+                <h2 class="mt-3">Politique de confidentialité</h2>
 
                 La création de votre compte utilisateur sur idelibRE demande la
                 saisie de données personnelles vous concernant. Vous trouverez ci-dessous le
@@ -29,6 +30,25 @@
                 de la plateforme de vous communiquer l'ensemble des informations collectées pour
                 la création de votre compte.
 
+
+                <h2 class="mt-3">Responsable des traitements</h2>
+                <h3>Entité :</h3>
+                {{ dataController.name ?? 'Non renseignée' }} <br>
+                {{ dataController.address ?? 'Non renseignée' }} <br>
+                Numéro SIRET : {{ dataController.siret ?? 'Non renseignée' }} <br>
+                Code APE : {{ dataController.ape ?? 'Non renseignée' }} <br>
+                Numéro de téléphone : {{ dataController.phone ?? 'Non renseignée' }} <br>
+                E-mail : {{ dataController.email ?? 'Non renseignée' }} <br>
+
+                <h3>Responsable de l'entité \ Responsable des traitements :</h3>
+                {{ dataController.representative ?? 'Non renseignée' }}
+                {{ dataController.quality ?? 'Non renseignée' }}
+
+                <h3>Délégué à la protection des données de l'entité (DPD / DPO) :</h3>
+                {{ dataController.dpoName ?? 'Non renseignée' }}
+                {{ dataController.dpoEmail ?? 'Non renseignée' }}
+
+
                 <h2 class="mt-3">Article 1 - Mentions légales</h2>
                 <h3 class="mt-3">1.1 Logiciel (ci-après « le logiciel ») :</h3>
                 idelibRE
@@ -41,9 +61,7 @@
 
                 <h2 class="mt-3">Article 2 - Hébergement</h2>
 
-
                 <h3 class="mt-3">2.1 Hébergeur (ci-après « l'hébergeur ») :</h3>
-                Vos données sont hébergées chez plusieurs de nos sous-traitants, uniquement sur le territoire Français.
                 idelibRE est hébergée par : <br>
                 {{ gdpr.companyName ?? 'Non renseignée' }} <br>
                 {{ gdpr.address ?? 'Non renseignée' }} <br>
@@ -58,10 +76,7 @@
                 n° de téléphone : {{ gdpr.companyPhone ?? 'Non renseignée' }} <br>
 
                 e-mail : {{ gdpr.companyEmail ?? 'Non renseignée' }} <br>
-                <h3 class="mt-3">2.2 Délégué à la protection des données (DPO) :</h3>
-                Vous pouvez contacter notre Délégué à la Protection des Données à l'adresse mail suivante : <br>
 
-                {{ gdpr.dpoEmail ?? 'Non renseignée' }}
 
 
                 <h2 class="mt-3">Article 3 - Collecte</h2>
@@ -92,7 +107,18 @@
                 <br>
 
 
-                <h2 class="mt-3">Article 5 - Droit à l'oubli</h2>
+
+                <h2 class="mt-3">Article 5 - Cookies</h2>
+                <h3 class="mt-3">5.1 Cookies strictement nécessaires :</h3>
+
+                Ces cookies sont nécessaires au fonctionnement de l'application et ne peuvent pas être désactivés.
+                Nous utilisons un cookie de session qui est utilisé pour stocker des informations de votre la session en cours.
+                Les informations, telles que les données de connexion ou les formulaires en ligne déjà remplis, sont également conservées pendant la session.
+                Toutefois, si vous mettez fin à votre session de navigation ou que votre session expire (30 minutes par défaut),
+                l’identifiant de session et toutes les autres données stockées seront effacés.
+
+
+                <h2 class="mt-3">Article 6 - Droit à l'oubli</h2>
                 Sur votre demande ou à la demande de l’administrateur de idelibRE, votre compte utilisateur peut être
                 supprimé définitivement. <br>
 
@@ -115,7 +141,7 @@
                 pouvez contacter le Délégué à la Protection des Données (DPO), à l’adresse
                 suivante : <br>
 
-                {{ gdpr.dpoEmail ?? 'Non renseignée' }}
+                {{ dataController.dpoEmail }}
 
                 Réclamation (plainte) auprès de la CNIL
                 Si vous estimez, après nous avoir contacté, que vos droits sur vos données ne

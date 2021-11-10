@@ -2,46 +2,70 @@
 
 namespace App\Entity\Gdpr;
 
+use App\Entity\Structure;
 use App\Repository\DataControllerGdprRepository;
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\OneToOne;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\Length;
 
-#[ORM\Entity(repositoryClass: DataControllerGdprRepository::class)]
+#[Entity(repositoryClass: DataControllerGdprRepository::class)]
 class DataControllerGdpr
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: 'UUID')]
-    #[ORM\Column(type: 'guid')]
+    #[Id]
+    #[GeneratedValue(strategy: 'UUID')]
+    #[Column(type: 'guid')]
     private $id;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[Column(type: 'string', length: 255)]
+    #[Length(max: '255')]
     private $name;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[Column(type: 'string', length: 512)]
+    #[Length(max: '512')]
     private $address;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[Column(type: 'string', length: 255)]
+    #[Length(max: '255')]
     private $siret;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[Column(type: 'string', length: 255)]
+    #[Length(max: '255')]
     private $ape;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[Column(type: 'string', length: 255)]
+    #[Length(max: '255')]
     private $phone;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[Column(type: 'string', length: 255)]
+    #[Length(max: '255')]
+    #[Email]
     private $email;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[Column(type: 'string', length: 255)]
+    #[Length(max: '255')]
     private $representative;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[Column(type: 'string', length: 255)]
+    #[Length(max: '255')]
     private $quality;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[Column(type: 'string', length: 255)]
+    #[Length(max: '255')]
     private $dpoName;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[Column(type: 'string', length: 255)]
+    #[Length(max: '255')]
+    #[Email]
     private $dpoEmail;
+
+    #[OneToOne(inversedBy: 'dataControllerGdpr', targetEntity: Structure::class, cascade: ['persist', 'remove'])]
+    #[JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    private $structure;
 
     public function getId(): ?string
     {
@@ -164,6 +188,18 @@ class DataControllerGdpr
     public function setDpoEmail(string $dpoEmail): self
     {
         $this->dpoEmail = $dpoEmail;
+
+        return $this;
+    }
+
+    public function getStructure(): ?Structure
+    {
+        return $this->structure;
+    }
+
+    public function setStructure(Structure $structure): self
+    {
+        $this->structure = $structure;
 
         return $this;
     }
