@@ -16,138 +16,201 @@
 
         <div class="row mt-4">
             <div class="col-10 offset-1 form-white">
-                <h2 class="mt-3">Politique de confidentialité</h2>
 
-                La création de votre compte utilisateur sur idelibRE demande la
-                saisie de données personnelles vous concernant. Vous trouverez ci-dessous le
-                détail des informations collectées ainsi que les traitements effectués. Ces
-                données sont collectées uniquement dans le cadre de votre activité
-                professionnelle et pour l'utilisation exclusive de
-                l'application idelibre.
-                Le fonctionnement dans les conditions nominales et recommandées de
-                l'application, ne permet pas de partager ou de diffuser à un tiers vos
-                informations personnelles. Vous pouvez demander à tout moment à l'administrateur
-                de la plateforme de vous communiquer l'ensemble des informations collectées pour
-                la création de votre compte.
-
-
-                <h2 class="mt-3">Responsable des traitements</h2>
-                <h3>Entité :</h3>
-                {{ dataController.name ?? 'Non renseignée' }} <br>
-                {{ dataController.address ?? 'Non renseignée' }} <br>
-                Numéro SIRET : {{ dataController.siret ?? 'Non renseignée' }} <br>
-                Code APE : {{ dataController.ape ?? 'Non renseignée' }} <br>
-                Numéro de téléphone : {{ dataController.phone ?? 'Non renseignée' }} <br>
-                E-mail : {{ dataController.email ?? 'Non renseignée' }} <br>
-
-                <h3>Responsable de l'entité \ Responsable des traitements :</h3>
-                {{ dataController.representative ?? 'Non renseignée' }}
-                {{ dataController.quality ?? 'Non renseignée' }}
-
-                <h3>Délégué à la protection des données de l'entité (DPD / DPO) :</h3>
-                {{ dataController.dpoName ?? 'Non renseignée' }}
-                {{ dataController.dpoEmail ?? 'Non renseignée' }}
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h3>Politique de confidentialité</h3>
+                    </div>
+                    <div class="card-body">
+                        La création de votre compte utilisateur sur idelibRE demande la
+                        saisie de données personnelles vous concernant. Vous trouverez ci-dessous le
+                        détail des informations collectées ainsi que les traitements effectués. Ces
+                        données sont collectées uniquement dans le cadre de votre activité
+                        professionnelle et pour l'utilisation exclusive de
+                        l'application idelibre.
+                        Le fonctionnement dans les conditions nominales et recommandées de
+                        l'application, ne permet pas de partager ou de diffuser à un tiers vos
+                        informations personnelles. Vous pouvez demander à tout moment à l'administrateur
+                        de la plateforme de vous communiquer l'ensemble des informations collectées pour
+                        la création de votre compte.
+                    </div>
+                </div>
 
 
-                <h2 class="mt-3">Article 1 - Mentions légales</h2>
-                <h3 class="mt-3">1.1 Logiciel (ci-après « le logiciel ») :</h3>
-                idelibRE
-                <h3 class="mt-3">1.2 Éditeur (ci-après « l'éditeur ») :</h3>
-                LIBRICIEL SCOP<br>
-
-                836 Rue du Mas de Verchant - 34000 Montpellier<br>
-
-                numéro SIRET : 491 011 698 00025 <br>
-
-                <h2 class="mt-3">Article 2 - Hébergement</h2>
-
-                <h3 class="mt-3">2.1 Hébergeur (ci-après « l'hébergeur ») :</h3>
-                idelibRE est hébergée par : <br>
-                {{ gdpr.companyName ?? 'Non renseignée' }} <br>
-                {{ gdpr.address ?? 'Non renseignée' }} <br>
-
-                représentée par : {{ gdpr.representative ?? 'Non renseignée' }}, en sa qualité de :
-                {{ gdpr.quality ?? 'Non renseignée' }} <br>
-
-                numéro SIRET : {{ gdpr.siret ?? 'Non renseignée' }} <br>
-
-                code APE : {{ gdpr.ape ?? 'Non renseignée' }} <br>
-
-                n° de téléphone : {{ gdpr.companyPhone ?? 'Non renseignée' }} <br>
-
-                e-mail : {{ gdpr.companyEmail ?? 'Non renseignée' }} <br>
-
+                <div class="card mt-4">
+                    <div class="card-header bg-primary text-white">
+                        <h3>Responsable des traitements</h3>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-subtitle mb-2 text-muted">Entité : </h5>
+                        <div class="ml-3">
+                            {{ dataController.name ?? 'Non renseignée' }} <br>
+                            {{ dataController.address ?? 'Non renseignée' }} <br>
+                            Numéro SIRET : {{ dataController.siret ?? 'Non renseignée' }} <br>
+                            Code APE : {{ dataController.ape ?? 'Non renseignée' }} <br>
+                            Numéro de téléphone : {{ dataController.phone ?? 'Non renseignée' }} <br>
+                            E-mail : {{ dataController.email ?? 'Non renseignée' }}
+                        </div>
+                        <h5 class="card-subtitle mb-2 text-muted mt-2">Responsable de l'entité \ Responsable des traitements :</h5>
+                        <div class="ml-3">
+                            {{ dataController.representative ?? 'Non renseignée' }}
+                            {{ dataController.quality ?? 'Non renseignée' }}
+                        </div>
+                        <h5 class="card-subtitle mb-2 text-muted  mt-2">Délégué à la protection des données de l'entité (DPD / DPO) :</h5>
+                        <div class="ml-3">
+                            {{ dataController.dpoName ?? 'Non renseignée' }}
+                            {{ dataController.dpoEmail ?? 'Non renseignée' }}
+                        </div>
+                    </div>
+                </div>
 
 
-                <h2 class="mt-3">Article 3 - Collecte</h2>
-                Création d'un utilisateur : <br>
-                Lors de la création de votre compte utilisateur, les informations suivantes sont collectées
-                obligatoirement
-                : <br>
+                <div class="card mt-4">
+                    <div class="card-header bg-primary text-white">
+                        <h3>Article 1 - Mentions légales</h3>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-subtitle mb-2 text-muted">1.1 Logiciel (ci-après « le logiciel ») : </h5>
+                        <div class="ml-3">
+                            idelibRE
+                        </div>
+                        <h5 class="card-subtitle mb-2 text-muted mt-2">1.2 Éditeur (ci-après « l'éditeur ») :</h5>
+                        <div class="ml-3">
+                            LIBRICIEL SCOP<br>
+                            836 Rue du Mas de Verchant - 34000 Montpellier<br>
+                            numéro SIRET : 491 011 698 00025 <br>
+                        </div>
 
-                Nom d'utilisateur <br>
-                Prénom de l'utilisateur <br>
-                Adresse de messagerie <br>
-                Identifiant <br>
-
-
-                <h2 class="mt-3">Article 4 - Traitements</h2>
-                Vos informations personnelles sont utilisées pour le bon fonctionnement de idelibRE dans les cas listés
-                ci-après :
-
-                lister les utilisateurs de l'application : <br>
-                votre prénom, votre nom et votre adresse de messagerie apparaissent dans la liste. <br><br>
-
-                Envoyer des convocation : <br>
-                votre prénom, votre nom et votre adresse sont utilisés pour l'envoi <br>
-                <br>
-
-                Gestions des séances : <br>
-                votre prénom, votre nom et votre adresse apparaissent dans la liste <br>
-                <br>
+                    </div>
+                </div>
 
 
+                <div class="card mt-4">
+                    <div class="card-header bg-primary text-white">
+                        <h3>Article 2 - Hébergement</h3>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-subtitle mb-2 text-muted">2.1 Hébergeur (ci-après « l'hébergeur ») :</h5>
+                        <div class="ml-3">
+                            idelibRE est hébergée par : <br>
+                            {{ gdpr.companyName ?? 'Non renseignée' }} <br>
+                            {{ gdpr.address ?? 'Non renseignée' }} <br>
 
-                <h2 class="mt-3">Article 5 - Cookies</h2>
-                <h3 class="mt-3">5.1 Cookies strictement nécessaires :</h3>
+                            représentée par : {{ gdpr.representative ?? 'Non renseignée' }}, en sa qualité de :
+                            {{ gdpr.quality ?? 'Non renseignée' }} <br>
 
-                Ces cookies sont nécessaires au fonctionnement de l'application et ne peuvent pas être désactivés.
-                Nous utilisons un cookie de session qui est utilisé pour stocker des informations de votre la session en cours.
-                Les informations, telles que les données de connexion ou les formulaires en ligne déjà remplis, sont également conservées pendant la session.
-                Toutefois, si vous mettez fin à votre session de navigation ou que votre session expire (30 minutes par défaut),
-                l’identifiant de session et toutes les autres données stockées seront effacés.
+                            numéro SIRET : {{ gdpr.siret ?? 'Non renseignée' }} <br>
+
+                            code APE : {{ gdpr.ape ?? 'Non renseignée' }} <br>
+
+                            n° de téléphone : {{ gdpr.companyPhone ?? 'Non renseignée' }} <br>
+
+                            e-mail : {{ gdpr.companyEmail ?? 'Non renseignée' }}
+                        </div>
+                    </div>
+                </div>
 
 
-                <h2 class="mt-3">Article 6 - Droit à l'oubli</h2>
-                Sur votre demande ou à la demande de l’administrateur de idelibRE, votre compte utilisateur peut être
-                supprimé définitivement. <br>
+                <div class="card mt-4">
+                    <div class="card-header bg-primary text-white">
+                        <h3>Article 3 - Collecte</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="ml-3">
+                            Création d'un utilisateur : <br>
+                            Lors de la création de votre compte utilisateur, les informations suivantes sont collectées
+                            obligatoirement : <br>
+                            Nom d'utilisateur <br>
+                            Prénom de l'utilisateur <br>
+                            Adresse de messagerie <br>
+                            Identifiant <br>
+                        </div>
+                    </div>
+                </div>
 
-                La suppression de votre compte laissera les traces de votre activité : <br>
 
-                dans le journal des évenements pendant une durée de 6 mois après la suppression de l'utilisateur <br>
+                <div class="card mt-4">
+                    <div class="card-header bg-primary text-white">
+                        <h3>Article 4 - Traitements</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="ml-3">
+                            Vos informations personnelles sont utilisées pour le bon fonctionnement de idelibRE dans les cas listés
+                            ci-après :
 
-                <h2 class="mt-3">Article 6 - Vos droits sur les données vous concernant</h2>
-                Vous pouvez accéder et obtenir une copie des données vous concernant, vous opposer au traitement de ces
-                données,
-                les faire rectifier ou les faire effacer. Vous disposez également d'un droit à la limitation du
-                traitement
-                de vos données.
-                <a href="https://www.cnil.fr/fr/les-droits-pour-maitriser-vos-donnees-personnelles"> Comprendre vos
-                    droits
-                    informatique et libertés</a>
-                <br>
+                            lister les utilisateurs de l'application : <br>
+                            votre prénom, votre nom et votre adresse de messagerie apparaissent dans la liste. <br><br>
 
-                Pour exercer vos droits sur les données personnelles vous concernant, vous
-                pouvez contacter le Délégué à la Protection des Données (DPO), à l’adresse
-                suivante : <br>
+                            Envoyer des convocation : <br>
+                            votre prénom, votre nom et votre adresse sont utilisés pour l'envoi <br>
+                            <br>
 
-                {{ dataController.dpoEmail }}
+                            Gestions des séances : <br>
+                            votre prénom, votre nom et votre adresse apparaissent dans la liste
+                        </div>
+                    </div>
+                </div>
 
-                Réclamation (plainte) auprès de la CNIL
-                Si vous estimez, après nous avoir contacté, que vos droits sur vos données ne
-                sont pas respectés, vous pouvez <a href="https://www.cnil.fr/fr/plaintes">adresser une réclamation
-                    (plainte)
-                    à la CNIL</a>.
+
+                <div class="card mt-4">
+                    <div class="card-header bg-primary text-white">
+                        <h3>Article 5 - Cookies</h3>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-subtitle mb-2 text-muted">5.1 Cookies strictement nécessaires :</h5>
+                        <div class="ml-3">
+                            Ces cookies sont nécessaires au fonctionnement de l'application et ne peuvent pas être désactivés.
+                            Nous utilisons un cookie de session qui est utilisé pour stocker des informations de votre la session en cours.
+                            Les informations, telles que les données de connexion ou les formulaires en ligne déjà remplis, sont également
+                            conservées
+                            pendant la session.
+                            Toutefois, si vous mettez fin à votre session de navigation ou que votre session expire (30 minutes par défaut),
+                            l’identifiant de session et toutes les autres données stockées seront effacés.
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="card mt-4">
+                    <div class="card-header bg-primary text-white">
+                        <h3>Article 6 - Droit à l'oubli</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="ml-3">
+                            Sur votre demande ou à la demande de l’administrateur de idelibRE, votre compte utilisateur peut être
+                            supprimé définitivement. <br>
+                            La suppression de votre compte laissera les traces de votre activité : <br>
+                            dans le journal des évenements pendant une durée de 6 mois après la suppression de l'utilisateur.
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="card mt-4">
+                    <div class="card-header bg-primary text-white">
+                        <h3>Article 7 - Vos droits sur les données vous concernant</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="ml-3">
+                            Vous pouvez accéder et obtenir une copie des données vous concernant, vous opposer au traitement de ces
+                            données,
+                            les faire rectifier ou les faire effacer. Vous disposez également d'un droit à la limitation du
+                            traitement de vos données.
+                            <a href="https://www.cnil.fr/fr/les-droits-pour-maitriser-vos-donnees-personnelles"> Comprendre vos
+                                droits informatique et libertés</a>
+                            <br>
+
+                            Pour exercer vos droits sur les données personnelles vous concernant, vous
+                            pouvez contacter le Délégué à la Protection des Données (DPO), à l’adresse
+                            suivante : <br>
+                            {{ dataController.dpoEmail ?? 'Non renseignée'}}
+                            Réclamation (plainte) auprès de la CNIL.
+                            Si vous estimez, après nous avoir contacté, que vos droits sur vos données ne sont pas respectés,
+                            vous pouvez <a href="https://www.cnil.fr/fr/plaintes">adresser une réclamation (plainte) à la CNIL</a>.
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

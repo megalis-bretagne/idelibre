@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Gdpr\DataControllerGdpr;
 use App\Entity\Structure;
 use App\Form\DataControllerGdprType;
 use App\Form\GdprHostingType;
@@ -31,7 +32,7 @@ class GdprController extends AbstractController
 
         return $this->render('gdpr/notice.html.twig', [
             'gdprHosting' => $gdprManager->getGdpr(),
-            'dataController' => $structure->getDataControllerGdpr(),
+            'dataController' => $structure ?  $structure->getDataControllerGdpr() : new DataControllerGdpr(),
         ]);
     }
 
