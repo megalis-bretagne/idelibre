@@ -2,7 +2,9 @@
 
 namespace App\Form;
 
+use App\Entity\ApiRole;
 use App\Entity\ApiUser;
+use App\Entity\Structure;
 use App\Service\role\RoleManager;
 use App\Util\TokenUtil;
 use Symfony\Component\Form\AbstractType;
@@ -31,23 +33,26 @@ class ApiUserType extends AbstractType
                 'data' => $this->getTokenValue($options),
             ]);
 
-        $builder->add('structure', HiddenType::class, [
-            'data' => $options['structure'],
-            'data_class' => null,
-        ])
-            ->get('structure')->addModelTransformer(new CallbackTransformer(
-                fn () => '',
-                fn () => $options['structure']
-            ));
 
-        $builder->add('apiRole', HiddenType::class, [
+
+        $builder->add('apiRole', HiddenEntityType::class, [
             'data' => $this->roleManager->getApiStructureAdminRole(),
             'data_class' => null,
-        ])
-            ->get('apiRole')->addModelTransformer(new CallbackTransformer(
-                fn () => '',
-                fn () => $this->roleManager->getApiStructureAdminRole()
-            ));
+            'class_name' => ApiRole::class
+        ]);
+
+        $builder->add('structure', HiddenEntityType::class, [
+            'data' => $options['structure'],
+            'data_class' => null,
+            'class_name' => Structure::class,
+        ]);
+
+
+
+
+
+
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void

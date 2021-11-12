@@ -3,12 +3,12 @@
 namespace App\Form;
 
 use App\Entity\EmailTemplate;
+use App\Entity\Structure;
 use App\Entity\Type;
 use App\Repository\TypeRepository;
 use App\Service\Email\EmailData;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -72,15 +72,11 @@ class EmailTemplateType extends AbstractType
             'label' => $this->isConvocation($options['data'] ?? null) ? 'Joindre le fichier de convocation' : 'Joindre le fichier d\'invitation',
         ]);
 
-        $builder->add('structure', HiddenType::class, [
+        $builder->add('structure', HiddenEntityType::class, [
             'data' => $options['structure'],
             'data_class' => null,
+            'class_name' => Structure::class
         ]);
-
-        $builder->get('structure')->addModelTransformer(new CallbackTransformer(
-            fn () => '',
-            fn () => $options['structure']
-        ));
     }
 
     public function configureOptions(OptionsResolver $resolver)
