@@ -2,13 +2,13 @@
 
 namespace App\Form;
 
-use App\Entity\Gdpr;
+use App\Entity\Gdpr\GdprHosting;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class GdprType extends AbstractType
+class GdprHostingType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -36,16 +36,13 @@ class GdprType extends AbstractType
             ])
             ->add('ape', TextType::class, [
                 'label' => 'Code ape',
-            ])
-            ->add('dpoEmail', TextType::class, [
-                'label' => 'Adresse email du dpo',
             ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Gdpr::class,
+            'data_class' => GdprHosting::class,
         ]);
     }
 }

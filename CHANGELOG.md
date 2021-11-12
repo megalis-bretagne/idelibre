@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 - Client web, nouveau logo idelibre
 - Afficher / masquer le mot de passe
 - Alerte si jamais le navigateur ne permet pas de télécharger les fichiers
+- Politique de confidentialité configurable par structure (#113)
 
 ### Nouveautés
 - Fichier de rendez vous avec l'envoi du mail de convocation

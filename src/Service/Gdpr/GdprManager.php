@@ -2,24 +2,24 @@
 
 namespace App\Service\Gdpr;
 
-use App\Entity\Gdpr;
-use App\Repository\GdprRepository;
+use App\Entity\Gdpr\GdprHosting;
+use App\Repository\GdprHostingRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 class GdprManager
 {
     public function __construct(
-        private GdprRepository $gdprRepository,
+        private GdprHostingRepository $gdprRepository,
         private EntityManagerInterface $em
     ) {
     }
 
-    public function getGdpr(): ?Gdpr
+    public function getGdpr(): ?GdprHosting
     {
         return $this->gdprRepository->findOneBy([]);
     }
 
-    public function save(Gdpr $gdpr): void
+    public function save(GdprHosting $gdpr): void
     {
         $this->em->persist($gdpr);
         $this->em->flush();

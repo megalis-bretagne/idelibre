@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Gdpr;
 
-use App\Repository\GdprRepository;
+use App\Repository\GdprHostingRepository;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
@@ -10,8 +10,8 @@ use Doctrine\ORM\Mapping\Id;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
 
-#[Entity(repositoryClass: GdprRepository::class)]
-class Gdpr
+#[Entity(repositoryClass: GdprHostingRepository::class)]
+class GdprHosting
 {
     #[Id]
     #[GeneratedValue(strategy: 'UUID')]
@@ -50,11 +50,6 @@ class Gdpr
     #[Length(max: '255')]
     #[Email]
     private $companyEmail;
-
-    #[Column(type: 'string', length: 255)]
-    #[Length(max: '255')]
-    #[Email]
-    private $dpoEmail;
 
     public function getId(): ?string
     {
@@ -153,18 +148,6 @@ class Gdpr
     public function setCompanyEmail(string $companyEmail): self
     {
         $this->companyEmail = $companyEmail;
-
-        return $this;
-    }
-
-    public function getDpoEmail(): ?string
-    {
-        return $this->dpoEmail;
-    }
-
-    public function setDpoEmail(string $dpoEmail): self
-    {
-        $this->dpoEmail = $dpoEmail;
 
         return $this;
     }

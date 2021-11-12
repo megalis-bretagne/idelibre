@@ -129,6 +129,18 @@
                     {% endif %}
 
 
+                    {% if is_granted('ROLE_MANAGE_GDPR') %}
+                        <li class="{{ 'gdpr-data-controller-nav' in activeNavs ? 'active' : '' }}">
+                            <a href="{{ path('gdpr_controller_edit') }}">
+                                <i class="fas fa-tachometer-alt"></i>
+                                <span>RGPD</span>
+                            </a>
+                            <ul class="sub-menu">
+                            </ul>
+                        </li>
+                    {% endif %}
+
+
                     {% if is_granted('ROLE_MANAGE_SITTINGS') %}
                         <li class="{{ 'board-nav' in activeNavs ? 'active' : '' }}">
                             <a href="{{ path('board_index') }}">

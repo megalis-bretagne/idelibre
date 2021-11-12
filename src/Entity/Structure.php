@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Gdpr\DataControllerGdpr;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping\Column;
@@ -11,6 +12,7 @@ use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
+use Doctrine\ORM\Mapping\OneToOne;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
@@ -60,6 +62,9 @@ class Structure
 
     #[Column(type: 'string', length: 255)]
     private $legacyConnectionName;
+
+    #[OneToOne(mappedBy: 'structure', targetEntity: DataControllerGdpr::class, cascade: ['persist', 'remove'])]
+    private $dataControllerGdpr;
 
     public function __construct()
     {
@@ -184,5 +189,10 @@ class Structure
         $this->legacyConnectionName = $legacyConnectionName;
 
         return $this;
+    }
+
+    public function getDataControllerGdpr(): ?DataControllerGdpr
+    {
+        return $this->dataControllerGdpr;
     }
 }

@@ -2,7 +2,11 @@
 
 namespace App\Controller;
 
-use App\Form\GdprType;
+use App\Entity\Gdpr\DataControllerGdpr;
+use App\Entity\Structure;
+use App\Form\DataControllerGdprType;
+use App\Form\GdprHostingType;
+use App\Service\Gdpr\DataControllerManager;
 use App\Service\Gdpr\GdprManager;
 use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
@@ -20,21 +24,26 @@ class GdprController extends AbstractController
 {
     #[Route(path: '/gdpr/notice', name: 'gdpr_notice')]
     #[Sidebar(reset: true)]
+    #[IsGranted(data: 'ROLE_DEFAULT')]
     public function notice(GdprManager $gdprManager): Response
     {
+        /** @var Structure $structure */
+        $structure = $this->getUser()->getStructure();
+
         return $this->render('gdpr/notice.html.twig', [
-            'gdpr' => $gdprManager->getGdpr(),
+            'gdprHosting' => $gdprManager->getGdpr(),
+            'dataController' => $structure ? $structure->getDataControllerGdpr() : new DataControllerGdpr(),
         ]);
     }
 
     /**
      * @Breadcrumb("Modifier")
      */
-    #[Route(path: '/gdpr/edit', name: 'gdpr_edit')]
+    #[Route(path: '/gdpr/editHosting', name: 'gdpr_edit')]
     #[IsGranted(data: 'ROLE_SUPERADMIN')]
-    public function edit(GdprManager $gdprManager, Request $request): Response
+    public function editHosting(GdprManager $gdprManager, Request $request): Response
     {
-        $form = $this->createForm(GdprType::class, $gdprManager->getGdpr());
+        $form = $this->createForm(GdprHostingType::class, $gdprManager->getGdpr());
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $gdprManager->save($form->getData());
@@ -45,6 +54,32 @@ class GdprController extends AbstractController
         }
 
         return $this->render('gdpr/edit.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Breadcrumb("Modifier")
+     */
+    #[Route(path: '/gdpr/editController', name: 'gdpr_controller_edit')]
+    #[IsGranted(data: 'ROLE_MANAGE_GDPR')]
+    #[Sidebar(active: ['gdpr-data-controller-nav'], reset: true)]
+    public function editDataController(Request $request, DataControllerManager $dataControllerManager): Response
+    {
+        /** @var Structure $structure */
+        $structure = $this->getUser()->getStructure();
+
+        $form = $this->createForm(DataControllerGdprType::class, $structure->getDataControllerGdpr());
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $dataControllerManager->save($form->getData(), $structure);
+
+            $this->addFlash('success', 'Vos informations RGPD ont été mises à jour');
+
+            return $this->redirectToRoute('gdpr_notice');
+        }
+
+        return $this->render('gdpr/editDataController.html.twig', [
             'form' => $form->createView(),
         ]);
     }
