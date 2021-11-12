@@ -45,7 +45,7 @@ class GdprControllerTest extends WebTestCase
         $this->entityManager->close();
     }
 
-    public function testEdit()
+    public function testEditHosting()
     {
         $this->loginAsSuperAdmin();
         $crawler = $this->client->request(Request::METHOD_GET, '/gdpr/edit');
@@ -63,6 +63,38 @@ class GdprControllerTest extends WebTestCase
         $form['gdpr_hosting[quality]'] = 'president';
         $form['gdpr_hosting[siret]'] = '1234544';
         $form['gdpr_hosting[ape]'] = '345';
+
+        $this->client->submit($form);
+
+        $this->assertTrue($this->client->getResponse()->isRedirect());
+
+        $crawler = $this->client->followRedirect();
+        $this->assertResponseStatusCodeSame(200);
+
+        $successMsg = $crawler->filter('html:contains("Vos informations RGPD ont été mises à jour")');
+        $this->assertCount(1, $successMsg);
+    }
+
+    public function testEditDataController()
+    {
+        $this->loginAsAdminLibriciel();
+        $crawler = $this->client->request(Request::METHOD_GET, '/gdpr/editController');
+        $this->assertResponseStatusCodeSame(200);
+        $item = $crawler->filter('html:contains("Modifier les informations RGPD du responsable des traitements")');
+        $this->assertCount(1, $item);
+
+        $form = $crawler->selectButton('Enregistrer')->form();
+
+        $form['data_controller_gdpr[name]'] = 'Ville de Montpellier';
+        $form['data_controller_gdpr[address]'] = '836 rue du mas de verchant';
+        $form['data_controller_gdpr[phone]'] = '0102030405';
+        $form['data_controller_gdpr[email]'] = 'email@exemple.org';
+        $form['data_controller_gdpr[representative]'] = 'el presidente';
+        $form['data_controller_gdpr[quality]'] = 'president';
+        $form['data_controller_gdpr[siret]'] = '1234544';
+        $form['data_controller_gdpr[ape]'] = '345';
+        $form['data_controller_gdpr[dpoName]'] = 'M. Thomas Durant';
+        $form['data_controller_gdpr[dpoEmail]'] = 't.durant@exemple.org';
 
         $this->client->submit($form);
 
