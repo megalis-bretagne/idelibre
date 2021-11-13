@@ -6,13 +6,13 @@ use App\Entity\Sitting;
 use App\Entity\Structure;
 use App\Entity\Type;
 use App\Entity\User;
+use App\Form\Type\HiddenEntityType;
+use App\Form\Type\LsFileType;
 use App\Repository\TypeRepository;
 use App\Service\role\RoleManager;
 use App\Service\Seance\SittingManager;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\CallbackTransformer;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -99,19 +99,13 @@ class SittingType extends AbstractType
                     'mimeTypesMessage' => 'Le fichier doit être un pdf',
                 ])],
             ])
-
             ->add('reminder', ReminderSittingType::class, [
                 'label' => false,
             ])
-
-            ->add('structure', HiddenType::class, [
+            ->add('structure', HiddenEntityType::class, [
                 'data' => $options['structure'],
-                'data_class' => null,
-            ])
-            ->get('structure')->addModelTransformer(new CallbackTransformer(
-                fn () => '',
-                fn () => $options['structure']
-            ));
+                'class_name' => Structure::class,
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

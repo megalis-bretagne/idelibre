@@ -52,7 +52,7 @@ class EmailTemplateController extends AbstractController
         $form = $this->createForm(EmailTemplateType::class, null, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $templateManager->save($form->getData(), $this->getUser()->getStructure());
+            $templateManager->save($form->getData());
             $this->addFlash('success', 'Votre modèle d\'email a été enregistré');
 
             return $this->redirectToRoute('email_template_index');
@@ -73,7 +73,7 @@ class EmailTemplateController extends AbstractController
         $form = $this->createForm(EmailTemplateType::class, $emailTemplate, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $templateManager->save($form->getData(), $this->getUser()->getStructure());
+            $templateManager->save($form->getData());
             $this->addFlash('success', 'Votre modèle d\'email a été modifié');
 
             return $this->redirectToRoute('email_template_index');

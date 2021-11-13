@@ -2,14 +2,14 @@
 
 namespace App\Form;
 
+use App\Entity\Structure;
 use App\Entity\Type;
 use App\Entity\User;
+use App\Form\Type\HiddenEntityType;
 use App\Repository\UserRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -41,7 +41,6 @@ class TypeType extends AbstractType
                 'mapped' => false,
                 'data' => $this->userRepository->getAssociatedActorsWithType($options['data'] ?? null),
             ])
-
             ->add('associatedEmployees', EntityType::class, [
                 'placeholder' => 'Sélectionner les personnels administratifs',
                 'required' => false,
@@ -54,7 +53,6 @@ class TypeType extends AbstractType
                 'multiple' => true,
                 'mapped' => false,
             ])
-
             ->add('associatedGuests', EntityType::class, [
                 'placeholder' => 'Sélectionner les Invités',
                 'required' => false,
@@ -67,19 +65,16 @@ class TypeType extends AbstractType
                 'multiple' => true,
                 'mapped' => false,
             ])
-
             ->add('isComelus', CheckboxType::class, [
                 'required' => false,
                 'label_attr' => ['class' => 'switch-custom'],
                 'label' => 'Envoyer le dossier via comelus',
             ])
-
             ->add('isSms', CheckboxType::class, [
                 'required' => false,
                 'label_attr' => ['class' => 'switch-custom'],
                 'label' => 'Notifier les élus via sms',
             ])
-
             ->add('authorizedSecretaries', EntityType::class, [
                 'placeholder' => 'Sélectionner les gestionnaires de séance autorisés',
                 'required' => false,
@@ -90,19 +85,13 @@ class TypeType extends AbstractType
                 'choice_label' => fn (User $user) => $this->formatUserString($user),
                 'multiple' => true,
             ])
-
             ->add('reminder', ReminderType::class, [
                 'label' => false,
             ])
-
-            ->add('structure', HiddenType::class, [
+            ->add('structure', HiddenEntityType::class, [
                 'data' => $options['structure'],
-                'data_class' => null,
-            ])
-            ->get('structure')->addModelTransformer(new CallbackTransformer(
-                fn () => '',
-                fn () => $options['structure']
-            ));
+                'class_name' => Structure::class,
+            ]);
     }
 
     private function formatUserString(User $user): string

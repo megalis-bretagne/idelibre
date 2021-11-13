@@ -2,12 +2,12 @@
 
 namespace App\Form;
 
+use App\Entity\Structure;
 use App\Entity\Theme;
+use App\Form\Type\HiddenEntityType;
 use App\Repository\ThemeRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\CallbackTransformer;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -44,14 +44,10 @@ class ThemeWithParentType extends AbstractType
                 'multiple' => false,
                 'query_builder' => $this->themeRepository->findChildrenFromStructure($options['structure']),
             ])
-            ->add('structure', HiddenType::class, [
+            ->add('structure', HiddenEntityType::class, [
                 'data' => $options['structure'],
-                'data_class' => null,
-            ])
-            ->get('structure')->addModelTransformer(new CallbackTransformer(
-                fn () => '',
-                fn () => $options['structure']
-            ));
+                'class_name' => Structure::class,
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

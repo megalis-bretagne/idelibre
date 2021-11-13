@@ -3,13 +3,13 @@
 namespace App\Form;
 
 use App\Entity\Group;
+use App\Entity\Role;
 use App\Entity\User;
+use App\Form\Type\HiddenEntityType;
 use App\Service\role\RoleManager;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -48,14 +48,10 @@ class SuperUserType extends AbstractType
                 'first_options' => ['label' => 'Mot de passe'],
                 'second_options' => ['label' => 'Confirmer'],
             ])
-            ->add('role', HiddenType::class, [
+            ->add('role', HiddenEntityType::class, [
                 'data' => $this->roleManager->getSuperAdminRole(),
-                'data_class' => null,
-            ])
-            ->get('role')->addModelTransformer(new CallbackTransformer(
-                fn () => '',
-                fn () => $this->roleManager->getSuperAdminRole()
-            ));
+                'class_name' => Role::class,
+            ]);
 
         if ($options['isGroupChoice']) {
             $builder->add('group', EntityType::class, [

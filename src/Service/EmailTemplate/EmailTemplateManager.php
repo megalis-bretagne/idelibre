@@ -38,9 +38,8 @@ Un dossier a été mis à votre disposition. veuillez cliquez sur le lien pour l
         $this->em->flush();
     }
 
-    public function save(EmailTemplate $template, Structure $structure): void
+    public function save(EmailTemplate $template): void
     {
-        $template->setStructure($structure);
         $this->em->persist($template);
         $this->em->flush();
     }
