@@ -11,8 +11,7 @@ class HiddenEntityTransformer implements DataTransformerInterface
     public function __construct(
         private string $entityName,
         private ManagerRegistry $managerRegistry
-    )
-    {
+    ) {
     }
 
     public function transform(mixed $value)
