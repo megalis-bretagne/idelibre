@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\EmailTemplate;
 use App\Entity\Structure;
 use App\Entity\Type;
+use App\Form\Type\HiddenEntityType;
 use App\Repository\TypeRepository;
 use App\Service\Email\EmailData;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -74,7 +75,6 @@ class EmailTemplateType extends AbstractType
 
         $builder->add('structure', HiddenEntityType::class, [
             'data' => $options['structure'],
-            'data_class' => null,
             'class_name' => Structure::class
         ]);
     }

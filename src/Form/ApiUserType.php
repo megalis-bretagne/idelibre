@@ -5,11 +5,10 @@ namespace App\Form;
 use App\Entity\ApiRole;
 use App\Entity\ApiUser;
 use App\Entity\Structure;
+use App\Form\Type\HiddenEntityType;
 use App\Service\role\RoleManager;
 use App\Util\TokenUtil;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\CallbackTransformer;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -37,13 +36,11 @@ class ApiUserType extends AbstractType
 
         $builder->add('apiRole', HiddenEntityType::class, [
             'data' => $this->roleManager->getApiStructureAdminRole(),
-            'data_class' => null,
             'class_name' => ApiRole::class
         ]);
 
         $builder->add('structure', HiddenEntityType::class, [
             'data' => $options['structure'],
-            'data_class' => null,
             'class_name' => Structure::class,
         ]);
 
