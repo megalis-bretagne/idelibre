@@ -36,7 +36,7 @@ class TypeType extends AbstractType
                 'class' => User::class,
                 'query_builder' => $this->userRepository
                     ->findActorsByStructure($options['structure']),
-                'choice_label' => fn(User $user) => $this->formatUserString($user),
+                'choice_label' => fn (User $user) => $this->formatUserString($user),
                 'multiple' => true,
                 'mapped' => false,
                 'data' => $this->userRepository->getAssociatedActorsWithType($options['data'] ?? null),
@@ -49,7 +49,7 @@ class TypeType extends AbstractType
                 'query_builder' => $this->userRepository
                     ->findInvitableEmployeesByStructure($options['structure']),
                 'data' => $this->userRepository->getAssociatedInvitableEmployeesWithType($options['data'] ?? null),
-                'choice_label' => fn(User $user) => $this->formatUserString($user),
+                'choice_label' => fn (User $user) => $this->formatUserString($user),
                 'multiple' => true,
                 'mapped' => false,
             ])
@@ -61,7 +61,7 @@ class TypeType extends AbstractType
                 'query_builder' => $this->userRepository
                     ->findGuestsByStructure($options['structure']),
                 'data' => $this->userRepository->getAssociatedGuestWithType($options['data'] ?? null),
-                'choice_label' => fn(User $user) => $this->formatUserString($user),
+                'choice_label' => fn (User $user) => $this->formatUserString($user),
                 'multiple' => true,
                 'mapped' => false,
             ])
@@ -82,7 +82,7 @@ class TypeType extends AbstractType
                 'class' => User::class,
                 'query_builder' => $this->userRepository
                     ->findSecretariesByStructure($options['structure']),
-                'choice_label' => fn(User $user) => $this->formatUserString($user),
+                'choice_label' => fn (User $user) => $this->formatUserString($user),
                 'multiple' => true,
             ])
             ->add('reminder', ReminderType::class, [
@@ -90,7 +90,7 @@ class TypeType extends AbstractType
             ])
             ->add('structure', HiddenEntityType::class, [
                 'data' => $options['structure'],
-                'class_name' => Structure::class
+                'class_name' => Structure::class,
             ]);
     }
 

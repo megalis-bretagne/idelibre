@@ -78,7 +78,7 @@ class SittingType extends AbstractType
                         new File([
                             'mimeTypes' => ['application/pdf'],
                             'mimeTypesMessage' => 'Le fichier doit être un pdf',
-                        ]),] :
+                        ]), ] :
                     [new File([
                         'mimeTypes' => ['application/pdf'],
                         'mimeTypesMessage' => 'Le fichier doit être un pdf',
@@ -104,7 +104,7 @@ class SittingType extends AbstractType
             ])
             ->add('structure', HiddenEntityType::class, [
                 'data' => $options['structure'],
-                'class_name' => Structure::class
+                'class_name' => Structure::class,
             ]);
     }
 

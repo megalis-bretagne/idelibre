@@ -32,24 +32,15 @@ class ApiUserType extends AbstractType
                 'data' => $this->getTokenValue($options),
             ]);
 
-
-
         $builder->add('apiRole', HiddenEntityType::class, [
             'data' => $this->roleManager->getApiStructureAdminRole(),
-            'class_name' => ApiRole::class
+            'class_name' => ApiRole::class,
         ]);
 
         $builder->add('structure', HiddenEntityType::class, [
             'data' => $options['structure'],
             'class_name' => Structure::class,
         ]);
-
-
-
-
-
-
-
     }
 
     public function configureOptions(OptionsResolver $resolver): void

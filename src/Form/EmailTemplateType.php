@@ -75,7 +75,7 @@ class EmailTemplateType extends AbstractType
 
         $builder->add('structure', HiddenEntityType::class, [
             'data' => $options['structure'],
-            'class_name' => Structure::class
+            'class_name' => Structure::class,
         ]);
     }
 

@@ -30,7 +30,7 @@ class SuperUserType extends AbstractType
                 'label' => 'Prénom de l\'administrateur',
             ])
             ->add('lastName', TextType::class, [
-                'label' => 'Nom de l\'administrateur',])
+                'label' => 'Nom de l\'administrateur', ])
             ->add('username', TextType::class, [
                 'label' => 'Nom d\'utilisateur (sans @suffixe)',
                 'constraints' => [
@@ -38,7 +38,7 @@ class SuperUserType extends AbstractType
                 ],
             ])
             ->add('email', EmailType::class, [
-                'label' => 'Email',])
+                'label' => 'Email', ])
             ->add('plainPassword', RepeatedType::class, [
                 'mapped' => false,
                 'type' => PasswordType::class,
@@ -50,7 +50,7 @@ class SuperUserType extends AbstractType
             ])
             ->add('role', HiddenEntityType::class, [
                 'data' => $this->roleManager->getSuperAdminRole(),
-                'class_name' => Role::class
+                'class_name' => Role::class,
             ]);
 
         if ($options['isGroupChoice']) {

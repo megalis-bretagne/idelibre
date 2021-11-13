@@ -46,7 +46,7 @@ class ThemeWithParentType extends AbstractType
             ])
             ->add('structure', HiddenEntityType::class, [
                 'data' => $options['structure'],
-                'class_name' => Structure::class
+                'class_name' => Structure::class,
             ]);
     }
 

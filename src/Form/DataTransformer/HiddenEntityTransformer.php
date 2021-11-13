@@ -8,13 +8,12 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 
 class HiddenEntityTransformer implements DataTransformerInterface
 {
-
     public function __construct(
-        private string          $entityName,
-        private ManagerRegistry $managerRegistry)
+        private string $entityName,
+        private ManagerRegistry $managerRegistry
+    )
     {
     }
-
 
     public function transform(mixed $value)
     {
@@ -23,19 +22,18 @@ class HiddenEntityTransformer implements DataTransformerInterface
         }
 
         return $value->getId();
-
     }
 
     public function reverseTransform($value)
     {
         try {
             $repository = $this->managerRegistry->getRepository($this->entityName);
-            $entity = $repository->findOneBy(["id" => $value]);
+            $entity = $repository->findOneBy(['id' => $value]);
         } catch (\Exception $e) {
             throw new TransformationFailedException($e->getMessage());
         }
 
-        if ($entity === null) {
+        if (null === $entity) {
             throw new TransformationFailedException(sprintf('A %s with id "%s" does not exist!', $this->entityName, $value));
         }
 

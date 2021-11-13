@@ -8,10 +8,8 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-
 class HiddenEntityType extends HiddenType
 {
-
     public function __construct(private ManagerRegistry $managerRegistry)
     {
     }
@@ -22,7 +20,7 @@ class HiddenEntityType extends HiddenType
 
         $resolver->setDefaults([
             'class_name' => null,
-            'data_class' => null
+            'data_class' => null,
         ]);
     }
 

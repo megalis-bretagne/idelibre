@@ -32,13 +32,13 @@ class PartyType extends AbstractType
                 'label' => 'Elus associés',
                 'required' => false,
                 'class' => User::class,
-                'choice_label' => fn(User $user) => $user->getFirstName() . ' ' . $user->getLastName(),
+                'choice_label' => fn (User $user) => $user->getFirstName() . ' ' . $user->getLastName(),
                 'multiple' => true,
                 'query_builder' => $this->userRepository->findActorsByStructure($options['structure']),
             ])
             ->add('structure', HiddenEntityType::class, [
                 'data' => $options['structure'],
-                'class_name' => Structure::class
+                'class_name' => Structure::class,
             ]);
     }
 
