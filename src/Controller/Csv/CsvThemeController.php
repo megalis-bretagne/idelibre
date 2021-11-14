@@ -4,7 +4,6 @@ namespace App\Controller\Csv;
 
 use App\Form\CsvType;
 use App\Service\Csv\CsvThemeManager;
-use App\Service\Csv\CsvUserManager;
 use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -30,18 +29,18 @@ class CsvThemeController extends AbstractController
         $form = $this->createForm(CsvType::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $errors = $csvManager->importUsers($form->get('csv')->getData(), $this->getUser()->getStructure());
+            $errors = $csvThemeManager->importThemes($form->get('csv')->getData(), $this->getUser()->getStructure());
             if (empty($errors)) {
                 $this->addFlash('success', 'Fichier csv importé avec succès');
 
-                return $this->redirectToRoute('user_index');
+                return $this->redirectToRoute('theme_index');
             }
-            $session->set('errors_csv', $errors);
+            $session->set('errors_theme_csv', $errors);
 
-            return $this->redirectToRoute('user_csv_error');
+            return $this->redirectToRoute('theme_csv_error');
         }
 
-        return $this->render('csv/importCsv.html.twig', [
+        return $this->render('csv/importThemeCsv.html.twig', [
             'form' => $form->createView(),
         ]);
     }
@@ -53,13 +52,13 @@ class CsvThemeController extends AbstractController
     #[IsGranted(data: 'ROLE_MANAGE_THEMES')]
     public function csvUsersError(Session $session): Response
     {
-        $errors = $session->get('errors_csv');
+        $errors = $session->get('theme_csv_error');
         if (empty($errors)) {
-            return $this->redirectToRoute('user_index');
+            return $this->redirectToRoute('theme_index');
         }
-        $session->remove('errors_csv');
+        $session->remove('theme_csv_error');
 
-        return $this->render('csv/importCsvErrors.html.twig', [
+        return $this->render('csv/importThemeCsvErrors.html.twig', [
             'errors' => $errors,
         ]);
     }

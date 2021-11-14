@@ -3,6 +3,7 @@
 namespace App\Service\Csv;
 
 use App\Entity\Structure;
+use App\Entity\Theme;
 use App\Service\Theme\ThemeManager;
 use ForceUTF8\Encoding;
 use League\Csv\Reader;
@@ -10,11 +11,13 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class CsvThemeManager
 {
     public function __construct(
-        private ThemeManager $themeManager
+        private ThemeManager       $themeManager,
+        private ValidatorInterface $validator
     )
     {
     }
@@ -25,6 +28,7 @@ class CsvThemeManager
     public function importThemes(UploadedFile $file, Structure $structure): array
     {
         $errors = [];
+
 
         /** @var Reader $csv */
         $csv = Reader::createFromPath($file->getRealPath(), 'r');
@@ -37,6 +41,16 @@ class CsvThemeManager
             }
 
             $themeName = $this->sanitize($record[0] ?? '');
+            $toValidateTheme = (new Theme())
+                ->setName($themeName)
+                ->setStructure($structure);
+
+            if (0 !== $this->validator->validate($toValidateTheme)->count()) {
+                $errors[] = $this->validator->validate($toValidateTheme);
+                continue;
+            }
+
+
             $this->themeManager->createThemesFromString($themeName, $structure);
         }
 
@@ -62,10 +76,10 @@ class CsvThemeManager
         return new ConstraintViolationList([$violation]);
     }
 
-
     private function sanitize(string $content): string
     {
         $trim_content = trim($content);
+
         return Encoding::toUTF8($trim_content);
     }
 }
