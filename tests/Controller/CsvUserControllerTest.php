@@ -16,7 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 
-class CsvControllerTest extends WebTestCase
+class CsvUserControllerTest extends WebTestCase
 {
     use FindEntityTrait;
     use LoginTrait;
@@ -224,7 +224,7 @@ class CsvControllerTest extends WebTestCase
     public function testCsvErrorWithNoError()
     {
         $this->loginAsAdminLibriciel();
-        $this->client->request(Request::METHOD_GET, '/csv/errors');
+        $this->client->request(Request::METHOD_GET, '/csv/userErrors');
         $this->assertTrue($this->client->getResponse()->isRedirect());
 
         $crawler = $this->client->followRedirect();

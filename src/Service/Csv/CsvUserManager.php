@@ -20,7 +20,7 @@ use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class CsvManager
+class CsvUserManager
 {
     public const TYPE_SEPARATOR = '|';
 
