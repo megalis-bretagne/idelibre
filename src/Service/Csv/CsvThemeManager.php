@@ -16,10 +16,9 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class CsvThemeManager
 {
     public function __construct(
-        private ThemeManager       $themeManager,
+        private ThemeManager $themeManager,
         private ValidatorInterface $validator
-    )
-    {
+    ) {
     }
 
     /**
@@ -28,7 +27,6 @@ class CsvThemeManager
     public function importThemes(UploadedFile $file, Structure $structure): array
     {
         $errors = [];
-
 
         /** @var Reader $csv */
         $csv = Reader::createFromPath($file->getRealPath(), 'r');
@@ -49,7 +47,6 @@ class CsvThemeManager
                 $errors[] = $this->validator->validate($toValidateTheme);
                 continue;
             }
-
 
             $this->themeManager->createThemesFromString($themeName, $structure);
         }
