@@ -11,24 +11,27 @@ All notable changes to this project will be documented in this file.
 - Un admin de groupe ne peut plus supprimer une structure (#160)
 - Depuis le client web Nommage plus explicite  du fichier zip de la séance (#154)
 - Ajout de la reecriture de l'host dans le vhost
-- Suppression de la limite du nombre de carractere dans la description du connecteur comelus
-- Champs de publipostage disponible dans la description du connecteur comelus
+- Suppression de la limite du nombre de carractere dans la description du connecteur comelus (#176)
+- Champs de publipostage disponible dans la description du connecteur comelus (#164)
 - Client web, nouveau logo idelibre
-- Afficher / masquer le mot de passe
-- Alerte si jamais le navigateur ne permet pas de télécharger les fichiers
+- Afficher / masquer le mot de passe (#84)
+- Alerte si jamais le navigateur ne permet pas de télécharger les fichiers (#172)
 - Politique de confidentialité configurable par structure (#113)
 - Assignation de bon onwer sur le repertoire file monté sur le docker si il n'est pas correcte (#178)
 
 ### Nouveautés
-- Fichier de rendez vous avec l'envoi du mail de convocation
+- Fichier de rendez vous avec l'envoi du mail de convocation (#152)
 - Jeton d'horodatage lors de l'ajout de document dans une séance déja envoyée (#156)
 - Apiv2 (avec recupération des jetons d'horodatage)
 - Gestion des clés d'api
+- Ajout des thèmes via csv (#179)
+- Mot de passe oublié client web (#158)
 
 
 ### Correction  
 - Format de la date lors de la création et modification d'une séance (#167)   
 - mise à jour du nom complet des sous themes lors de la mise à jour du nom d'un theme (#159)
+- Docker : Creation des repertoires au demarage s'ils n'existent pas (#178)
 
 ## [4.0.6] - 2021-10-04
 ### Evolution

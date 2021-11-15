@@ -1,0 +1,36 @@
+{% extends 'form.html.twig' %}
+{% import 'macro/_forms.html.twig' as macro %}
+
+{% block pageTitle 'Erreurs lors de l\'import' %}
+
+
+{% block pageActions %}
+    {{ macro.backButton('theme_index') }}
+{% endblock %}
+
+{% block pageDetails %}
+    <div class="alert alert-primary">
+        Certains thèmes n'ont pas pu être importés
+    </div>
+
+    {% for error in errors %}
+        <div class="alert alert-danger">
+
+            {% for violation in error %}
+                Entrée : {{ violation.parameters | join(',') }} <br>
+                Message: {{ violation.message }} <br>
+
+                {% if not loop.last %}
+                    <hr>
+                {% endif %}
+
+            {% endfor %}
+
+        </div>
+    {% endfor %}
+{% endblock %}
+
+{% block pageForm %}
+{% endblock %}
+
+

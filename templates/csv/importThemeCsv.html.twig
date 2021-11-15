@@ -1,0 +1,55 @@
+{% extends 'form.html.twig' %}
+{% import 'macro/_forms.html.twig' as macro %}
+
+{% block pageTitle 'Importer des thèmes via csv' %}
+
+{% block pageActions %}
+    {{ macro.backButton('user_index') }}
+{% endblock %}
+
+{% block pageDetails %}
+
+    <div class="alert alert-info">
+        Information : Votre csv doit être contruit de la manière suivante : <br>
+
+        champ 1 : Intitulé du theme
+    </div>
+{% endblock %}
+
+
+
+{% block pageForm %}
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <div class="alert alert-warning">Attention : L'import des themes peut durer plusieurs dizaines de secondes</div>
+
+    <div class="float-right">
+        {% block pageSaveReturn %}{{ macro.save('theme_index') }}{% endblock %}
+    </div>
+
+    {{ form_end(form) }}
+
+{% endblock %}
+
+
+
+{% block javascripts %}
+    <script>
+        let freezeClick = false;
+
+        let formCsv = document.getElementsByName("csv")[0];
+        formCsv.onsubmit = () => {
+            freezeClick = true;
+        }
+
+        document.addEventListener("click", e => {
+            if (freezeClick) {
+                console.log('clicks are disabled');
+                e.stopPropagation();
+                e.preventDefault();
+            }
+        }, true);
+    </script>
+{% endblock %}
+
