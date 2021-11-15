@@ -4,9 +4,17 @@
 {% block pageTitle 'Thèmes' %}
 
 {% block pageActions %}
-    <a href="{{ path('theme_add') }}" class="btn btn-primary"><span
-                class="fa fa-plus-circle"></span>
-        Ajouter</a>
+    <div class=" pull-left">
+        <a href="{{ path('theme_add') }}" class="btn btn-primary"><span
+                    class="fa fa-plus-circle"></span>
+            Ajouter</a>
+        <a href="{{ path('csv_add_themes') }}" class="btn btn-outline-primary"><span
+                    class="fa fa-plus-circle"></span>
+            Ajouter via csv</a>
+
+    </div>
+
+
 {% endblock %}
 
 {% block pageTable %}

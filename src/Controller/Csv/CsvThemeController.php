@@ -37,6 +37,7 @@ class CsvThemeController extends AbstractController
             }
             $session->set('errors_theme_csv', $errors);
 
+
             return $this->redirectToRoute('theme_csv_error');
         }
 
@@ -52,7 +53,7 @@ class CsvThemeController extends AbstractController
     #[IsGranted(data: 'ROLE_MANAGE_THEMES')]
     public function csvUsersError(Session $session): Response
     {
-        $errors = $session->get('theme_csv_error');
+        $errors = $session->get('errors_theme_csv');
         if (empty($errors)) {
             return $this->redirectToRoute('theme_index');
         }

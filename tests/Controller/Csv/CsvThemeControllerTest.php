@@ -3,7 +3,6 @@
 namespace App\Tests\Controller\Csv;
 
 use App\DataFixtures\ThemeFixtures;
-use App\DataFixtures\TypeFixtures;
 use App\DataFixtures\UserFixtures;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
@@ -103,7 +102,6 @@ class CsvThemeControllerTest extends WebTestCase
         $this->assertTrue($this->client->getResponse()->isRedirect());
 
         $crawler = $this->client->followRedirect();
-       dd($crawler);
         $this->assertResponseStatusCodeSame(200);
 
         $successMsg = $crawler->filter('html:contains("Certains thèmes n\'ont pas pu être importés")');
