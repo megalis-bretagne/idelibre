@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Csv;
 
 use App\Form\CsvType;
 use App\Service\Csv\CsvUserManager;

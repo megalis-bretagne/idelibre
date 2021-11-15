@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Controller;
+namespace App\Tests\Controller\Csv;
 
 use App\DataFixtures\RoleFixtures;
 use App\DataFixtures\TypeFixtures;
@@ -54,7 +54,7 @@ class CsvUserControllerTest extends WebTestCase
 
     public function testImportUsers()
     {
-        $csvFile = new UploadedFile(__DIR__ . '/../resources/user_success.csv', 'user_success.csv');
+        $csvFile = new UploadedFile(__DIR__ . '/../../resources/user_success.csv', 'user_success.csv');
         $this->assertNotEmpty($csvFile);
 
         $this->loginAsAdminLibriciel();
@@ -88,7 +88,7 @@ class CsvUserControllerTest extends WebTestCase
 
     public function testImportUsersBlankPassword()
     {
-        $csvFile = new UploadedFile(__DIR__ . '/../resources/user_blank_password.csv', 'user.csv');
+        $csvFile = new UploadedFile(__DIR__ . '/../../resources/user_blank_password.csv', 'user.csv');
         $this->assertNotEmpty($csvFile);
 
         $this->loginAsAdminLibriciel();
@@ -123,7 +123,7 @@ class CsvUserControllerTest extends WebTestCase
 
     public function testImportUsersMissingEmail()
     {
-        $csvFile = new UploadedFile(__DIR__ . '/../resources/user_email_missing.csv', 'user.csv');
+        $csvFile = new UploadedFile(__DIR__ . '/../../resources/user_email_missing.csv', 'user.csv');
         $this->assertNotEmpty($csvFile);
 
         $this->loginAsAdminLibriciel();
@@ -155,7 +155,7 @@ class CsvUserControllerTest extends WebTestCase
 
     public function testImportUserCsvMissingField()
     {
-        $csvFile = new UploadedFile(__DIR__ . '/../resources/user_missing_fields.csv', 'user.csv');
+        $csvFile = new UploadedFile(__DIR__ . '/../../resources/user_missing_fields.csv', 'user.csv');
         $this->assertNotEmpty($csvFile);
 
         $this->loginAsAdminLibriciel();
@@ -186,7 +186,7 @@ class CsvUserControllerTest extends WebTestCase
 
     public function testImportUserCsvNoRole()
     {
-        $csvFile = new UploadedFile(__DIR__ . '/../resources/user_no_role.csv', 'user.csv');
+        $csvFile = new UploadedFile(__DIR__ . '/../../resources/user_no_role.csv', 'user.csv');
         $this->assertNotEmpty($csvFile);
 
         $this->loginAsAdminLibriciel();
