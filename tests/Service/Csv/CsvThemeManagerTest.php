@@ -65,6 +65,28 @@ class CsvThemeManagerTest extends WebTestCase
     }
 
 
+
+    public function testImportThemesWithSubThemes()
+    {
+        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
+
+        $csvFile = new UploadedFile(__DIR__ . '/../../resources/theme_withSubTheme.csv', 'theme_withSubTheme.csv');
+        $this->assertNotEmpty($csvFile);
+
+        $errors = $this->csvThemeManager->importThemes($csvFile, $structure);
+
+        $this->assertEmpty($errors);
+
+        $addedTheme2 = $this->getOneThemeBy(['name' => 'AddedTheme2', 'structure' => $structure]);
+        $this->assertNotEmpty($addedTheme2);
+
+        $addedTheme2SubTheme1 = $this->getOneThemeBy(['name' => 'AddedTheme2_SubTheme1', 'structure' => $structure]);
+        $this->assertNotEmpty($addedTheme2SubTheme1);
+        $this->assertSame('AddedTheme2, AddedTheme2_SubTheme1', $addedTheme2SubTheme1->getFullName());
+        $this->assertSame($addedTheme2->getId(), $addedTheme2SubTheme1->getParent()->getId());
+    }
+
+
     public function testImportThemesNoName()
     {
         $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
