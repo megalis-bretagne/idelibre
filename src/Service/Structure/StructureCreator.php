@@ -7,6 +7,7 @@ use App\Entity\Connector\Exception\LsmessageConnectorException;
 use App\Entity\Group;
 use App\Entity\Structure;
 use App\Entity\User;
+use App\Service\Configuration\ConfigurationManager;
 use App\Service\Connector\ComelusConnectorManager;
 use App\Service\Connector\LsmessageConnectorManager;
 use App\Service\EmailTemplate\DefaultTemplateCreator;
@@ -24,7 +25,8 @@ class StructureCreator
         private ThemeManager $themeManager,
         private ComelusConnectorManager $comelusConnectorManager,
         private LsmessageConnectorManager $lsmessageConnectorManager,
-        private DefaultTemplateCreator $defaultTemplateCreator
+        private DefaultTemplateCreator $defaultTemplateCreator,
+        private ConfigurationManager $configurationManager
     ) {
     }
 
@@ -78,5 +80,6 @@ class StructureCreator
         $this->comelusConnectorManager->createConnector($structure);
         $this->lsmessageConnectorManager->createConnector($structure);
         $this->defaultTemplateCreator->initDefaultTemplates($structure);
+        $this->configurationManager->createConfiguration($structure);
     }
 }

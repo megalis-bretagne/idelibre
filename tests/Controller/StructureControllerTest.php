@@ -100,7 +100,14 @@ class StructureControllerTest extends WebTestCase
         $successMsg = $crawler->filter('html:contains("La structure a été créée")');
         $this->assertCount(1, $successMsg);
 
-        $this->assertNotEmpty($this->getOneEntityBy(Structure::class, ['name' => 'New structure']));
+        $newStructure = $this->getOneStructureBy(['name' => 'New structure']);
+
+        $this->assertNotEmpty($newStructure);
+
+
+
+        $this->assertNotEmpty($newStructure->getConfiguration());
+        $this->assertSame(true, $newStructure->getConfiguration()->getIsSharedAnnotation());
     }
 
 
