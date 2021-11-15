@@ -8,11 +8,9 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class ConfigurationManager
 {
-
     public function __construct(
         private EntityManagerInterface $em
-    )
-    {
+    ) {
     }
 
     public function createConfiguration(Structure $structure): void
@@ -25,5 +23,4 @@ class ConfigurationManager
 
         $this->em->flush();
     }
-
 }
