@@ -17,28 +17,14 @@
         <div class="alert alert-danger">
 
             {% for violation in error %}
-{#                {% if violation.root.username is defined %}#}
-{#                    Entrée : {{ violation.root.username }}, {{ violation.root.firstName }}, {{ violation.root.lastName }}#}
-{#                    , {{ violation.root.lastName }} <br>#}
-{#                    Message : {{ violation.message }} <br>#}
-{#                    Champ en erreur : {{ violation.propertyPath }} <br>#}
-{#                    Valeur du champ : {{ violation.invalidValue }} <br>#}
-
-{#                {% else%}#}
-
-                    Entrée : {{ violation.parameters | join(',') }} <br>
-                    Message: {{ violation.message }} <br>
-
-
-{#                {% endif %}#}
+                Entrée : {{ violation.parameters | join(',') }} <br>
+                Message: {{ violation.message }} <br>
 
                 {% if not loop.last %}
                     <hr>
                 {% endif %}
 
             {% endfor %}
-
-
 
         </div>
     {% endfor %}
