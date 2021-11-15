@@ -37,7 +37,6 @@ class CsvThemeController extends AbstractController
             }
             $session->set('errors_theme_csv', $errors);
 
-
             return $this->redirectToRoute('theme_csv_error');
         }
 
