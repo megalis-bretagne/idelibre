@@ -13,7 +13,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ConfigurationController extends AbstractController
 {
-
     #[Route('/configuration', name: 'configuration_index')]
     #[IsGranted('ROLE_MANAGE_CONFIGURATION')]
     public function index(ConfigurationManager $configurationManager): Response
@@ -22,11 +21,9 @@ class ConfigurationController extends AbstractController
         $structure = $this->getUser()->getStructure();
 
         return $this->render('configuration/index.html.twig', [
-            'configuration' => $structure->getConfiguration()
+            'configuration' => $structure->getConfiguration(),
         ]);
     }
-
-
 
     #[Route('/configuration/edit', name: 'configuration_edit')]
     #[IsGranted('ROLE_MANAGE_CONFIGURATION')]
@@ -38,15 +35,15 @@ class ConfigurationController extends AbstractController
         $form = $this->createForm(ConfigurationType::class, $structure->getConfiguration(), ['structure' => $structure]);
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $configurationManager->update($form->getData());
             $this->addFlash('success', 'La configuration a été mise à jour');
+
             return $this->redirectToRoute('configuration_index');
         }
 
-
         return $this->render('configuration/edit.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 }

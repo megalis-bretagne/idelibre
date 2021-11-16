@@ -26,7 +26,6 @@ class ConfigurationFixtures extends Fixture implements DependentFixtureInterface
 
         $manager->persist($configurationLibriciel);
 
-
         $configurationMontpellier = (new Configuration())
             ->setStructure($structureMontpellier)
             ->setIsSharedAnnotation(true);
