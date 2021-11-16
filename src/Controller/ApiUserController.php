@@ -20,7 +20,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Breadcrumb("Clés d'api", routeName="apiUser_index")
  */
-#[Sidebar(active: ['connector-nav', 'connector-api-key-nav'])]
+#[Sidebar(active: ['configurations-nav', 'connector-api-key-nav'])]
 class ApiUserController extends AbstractController
 {
     #[Route(path: '/apikey', name: 'apiUser_index', methods: ['GET'])]

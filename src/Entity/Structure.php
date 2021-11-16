@@ -66,6 +66,9 @@ class Structure
     #[OneToOne(mappedBy: 'structure', targetEntity: DataControllerGdpr::class, cascade: ['persist', 'remove'])]
     private $dataControllerGdpr;
 
+    #[OneToOne(mappedBy: 'structure', targetEntity: Configuration::class, cascade: ['persist', 'remove'])]
+    private $configuration;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -194,5 +197,10 @@ class Structure
     public function getDataControllerGdpr(): ?DataControllerGdpr
     {
         return $this->dataControllerGdpr;
+    }
+
+    public function getConfiguration(): ?Configuration
+    {
+        return $this->configuration;
     }
 }

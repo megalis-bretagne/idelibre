@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Breadcrumb("Configuration des connecteurs", routeName="connector_index")
  */
-#[Sidebar(active: ['connector-nav'])]
+#[Sidebar(active: ['configurations-nav'])]
 class LsmessageConnectorController extends AbstractController
 {
     /**
