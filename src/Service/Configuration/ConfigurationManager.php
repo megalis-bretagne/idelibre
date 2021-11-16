@@ -20,7 +20,12 @@ class ConfigurationManager
             ->setIsSharedAnnotation(true);
 
         $this->em->persist($configuration);
+        $this->em->flush();
+    }
 
+    public function update(Configuration $configuration)
+    {
+        $this->em->persist($configuration);
         $this->em->flush();
     }
 }
