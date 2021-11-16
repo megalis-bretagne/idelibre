@@ -5,12 +5,18 @@ namespace App\Controller;
 use App\Entity\Structure;
 use App\Form\ConfigurationType;
 use App\Service\Configuration\ConfigurationManager;
+use App\Sidebar\Annotation\Sidebar;
+use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Breadcrumb("Configuration de la structure")
+ */
+#[Sidebar(active: ['configurations-nav', 'configuration-nav'])]
 class ConfigurationController extends AbstractController
 {
     #[Route('/configuration', name: 'configuration_index')]

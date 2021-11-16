@@ -2,13 +2,13 @@
 
 namespace App\Tests\Controller;
 
+use App\DataFixtures\ConfigurationFixtures;
 use App\DataFixtures\StructureFixtures;
 use App\DataFixtures\UserFixtures;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
 use Doctrine\Persistence\ObjectManager;
 use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
-use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,7 +40,7 @@ class ConfigurationControllerTest extends WebTestCase
         $databaseTool->loadFixtures([
             UserFixtures::class,
             StructureFixtures::class,
-            //   ConfigurationFixtures::class
+            ConfigurationFixtures::class
         ]);
     }
 
