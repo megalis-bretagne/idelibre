@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 ### Correction
 - Crash si plusieur fois un nouveau type dans le csv utilisateur (#188)
+- A la création d'une structure Erreur 500 si meme suffix (#187)
 
 
 ## [4.0.6] - 2021-10-04
