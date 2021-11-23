@@ -77,12 +77,18 @@ class CsvUserControllerTest extends WebTestCase
         $successMsg = $crawler->filter('html:contains("Fichier csv importé avec succès")');
         $this->assertCount(1, $successMsg);
 
-        /** @var User $user */
-        $user = $this->getOneEntityBy(User::class, ['username' => 't.martin@libriciel']);
+
+        $user = $this->getOneUserBy(['username' => 't.martin@libriciel']);
         $this->assertNotEmpty($user);
         $this->assertSame(1, $user->getGender());
         $this->assertCount(4, $user->getAssociatedTypes()->toArray());
         $this->assertNotEmpty($this->getOneEntityBy(Type::class, ['name' => 'New type']));
+
+
+        $user2 = $this->getOneUserBy(['username' => 'e.dupont@libriciel']);
+        $this->assertNotEmpty($user2);
+        $this->assertCount(1, $user2->getAssociatedTypes()->toArray());
+
     }
 
 
