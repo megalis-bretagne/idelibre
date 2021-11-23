@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 - symfony 5.3.10
 - Script pour regeneré tous les zip et pdf complet d'une structure. (#169)
 
+### Correction
+- Crash si plusieur fois un nouveau type dans le csv utilisateur (#188)
+
 
 ## [4.0.6] - 2021-10-04
 ### Evolution
