@@ -86,9 +86,9 @@ class CsvManager
                 $csvEmails[] = $username;
                 $this->associateActorToTypeSeances($user, $record[6] ?? null, $structure);
                 $this->em->persist($user);
+                $this->em->flush();
             }
         }
-        $this->em->flush();
 
         return $errors;
     }
