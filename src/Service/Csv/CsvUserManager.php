@@ -76,9 +76,7 @@ class CsvUserManager
 
                 $this->em->flush();
             }
-
         }
-
 
         return $errors;
     }
