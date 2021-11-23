@@ -21,6 +21,7 @@ use Symfony\Component\Validator\Constraints\NotNull;
 
 #[Entity(repositoryClass: 'App\Repository\StructureRepository')]
 #[UniqueEntity('name')]
+#[UniqueEntity('suffix')]
 class Structure
 {
     #[Id]

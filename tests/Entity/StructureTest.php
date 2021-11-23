@@ -55,6 +55,18 @@ class StructureTest extends WebTestCase
         $this->assertHasValidationErrors($structure, 1);
     }
 
+    public function testInvalidSuffixAlreadyExists()
+    {
+        $structure = (new Structure())
+            ->setName('new')
+            ->setReplyTo('replyto@exemple.org')
+            ->setSuffix('libriciel')
+            ->setTimezone(new Timezone());
+
+        $this->assertHasValidationErrors($structure, 1);
+    }
+
+
     public function testInvalidNameTooLong()
     {
         $structure = (new Structure())
