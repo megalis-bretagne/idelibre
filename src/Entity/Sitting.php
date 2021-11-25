@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTime;
 use App\Repository\SittingRepository;
 use DateTimeImmutable;
 use DateTimeInterface;
@@ -304,7 +305,7 @@ class Sitting
 
     public function getNameWithDate(): string
     {
-        $dateTime = new \DateTime(null, new DateTimeZone($this->getStructure()->getTimezone()->getName()));
+        $dateTime = new DateTime(null, new DateTimeZone($this->getStructure()->getTimezone()->getName()));
         $dateTime->setTimestamp($this->getDate()->getTimestamp());
 
         return $this->name . ' ' . $dateTime->format('d/m/y');

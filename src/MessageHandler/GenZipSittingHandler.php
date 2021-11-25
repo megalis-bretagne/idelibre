@@ -2,6 +2,7 @@
 
 namespace App\MessageHandler;
 
+use Exception;
 use App\Message\UpdatedSitting;
 use App\Repository\SittingRepository;
 use App\Service\Zip\ZipSittingGenerator;
@@ -30,7 +31,7 @@ class GenZipSittingHandler implements MessageHandlerInterface
 
         try {
             $this->zipSittingGenerator->generateZipSitting($sitting);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $this->logger->error($exception->getMessage());
         }
     }

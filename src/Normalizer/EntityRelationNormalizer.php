@@ -2,6 +2,7 @@
 
 namespace App\Normalizer;
 
+use Exception;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Serializer\Normalizer\ContextAwareDenormalizerInterface;
 
@@ -19,7 +20,7 @@ class EntityRelationNormalizer implements ContextAwareDenormalizerInterface
     {
         $entity = $this->getEntityById($type, $data);
         if (!$entity) {
-            throw new \Exception("entity $type with id $data not found");
+            throw new Exception("entity $type with id $data not found");
         }
 
         return $this->getEntityById($type, $data);

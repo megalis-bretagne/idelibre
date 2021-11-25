@@ -2,6 +2,7 @@
 
 namespace App\EventListener;
 
+use Throwable;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
@@ -30,7 +31,7 @@ class ExceptionListener implements EventSubscriberInterface
         $event->setResponse($response);
     }
 
-    private function getStatusCode(\Throwable $throwable)
+    private function getStatusCode(Throwable $throwable)
     {
         if ($throwable instanceof HttpException) {
             return $throwable->getStatusCode();
