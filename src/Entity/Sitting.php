@@ -2,8 +2,8 @@
 
 namespace App\Entity;
 
-use DateTime;
 use App\Repository\SittingRepository;
+use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;

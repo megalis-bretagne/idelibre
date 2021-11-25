@@ -2,11 +2,11 @@
 
 namespace App\MessageHandler;
 
-use Exception;
 use App\Message\UpdatedSitting;
 use App\Repository\SittingRepository;
 use App\Service\Zip\ZipSittingGenerator;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;

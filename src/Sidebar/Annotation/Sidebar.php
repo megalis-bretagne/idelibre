@@ -3,6 +3,7 @@
 namespace App\Sidebar\Annotation;
 
 use Attribute;
+
 /**
  * @Annotation
  */

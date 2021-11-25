@@ -2,8 +2,8 @@
 
 namespace App\Security;
 
-use Throwable;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Throwable;
 
 class Http403Exception extends HttpException
 {

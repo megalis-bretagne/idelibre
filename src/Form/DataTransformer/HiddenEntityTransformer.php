@@ -2,8 +2,8 @@
 
 namespace App\Form\DataTransformer;
 
-use Exception;
 use Doctrine\Persistence\ManagerRegistry;
+use Exception;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 

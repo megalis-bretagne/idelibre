@@ -2,12 +2,12 @@
 
 namespace App\Repository;
 
-use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
 use App\Entity\Structure;
 use App\Entity\Theme;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\QueryBuilder;
+use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
 
 /**
  * @method Theme|null find($id, $lockMode = null, $lockVersion = null)
