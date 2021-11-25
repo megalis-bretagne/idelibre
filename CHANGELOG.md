@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 
 ## [4.0.7] - 2021-??-??
 ### Evolution
-- symfony 5.3.10
+- symfony 5.3.12
 - Script pour regeneré tous les zip et pdf complet d'une structure. (#169)
 
 ### Correction
