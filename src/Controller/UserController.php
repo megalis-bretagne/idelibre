@@ -130,7 +130,7 @@ class UserController extends AbstractController
 
     #[Route(path: '/user/preferences', name: 'user_preferences')]
     #[IsGranted(data: 'ROLE_MANAGE_PREFERENCES')]
-    #[Breadcrumb]
+    #[Breadcrumb(null)]
     #[Breadcrumb(title: 'Préférences utilisateur')]
     public function preferences(Request $request, UserManager $userManager): Response
     {
