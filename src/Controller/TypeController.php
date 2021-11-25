@@ -17,10 +17,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Breadcrumb("Types de séance", routeName="type_index")
- */
 #[Sidebar(active: ['type-nav'])]
+#[Breadcrumb(title: 'Types de séance', routeName: 'type_index')]
 class TypeController extends AbstractController
 {
     #[Route(path: '/type', name: 'type_index', methods: ['GET'])]
@@ -45,11 +43,9 @@ class TypeController extends AbstractController
         ]);
     }
 
-    /**
-     * @Breadcrumb("Ajouter")
-     */
     #[Route(path: '/type/add', name: 'type_add')]
     #[IsGranted(data: 'ROLE_MANAGE_TYPES')]
+    #[Breadcrumb(title: 'Ajouter')]
     public function add(Request $request, TypeManager $typeManager): Response
     {
         $form = $this->createForm(TypeType::class, null, ['structure' => $this->getUser()->getStructure()]);
@@ -73,11 +69,9 @@ class TypeController extends AbstractController
         ]);
     }
 
-    /**
-     * @Breadcrumb("Modifier {type.name}")
-     */
     #[Route(path: '/type/edit/{id}', name: 'type_edit')]
     #[IsGranted(data: 'MANAGE_TYPES', subject: 'type')]
+    #[Breadcrumb(title: 'Modifier {type.name}')]
     public function edit(Type $type, Request $request, TypeManager $typeManager): Response
     {
         $form = $this->createForm(TypeType::class, $type, ['structure' => $this->getUser()->getStructure()]);

@@ -2,10 +2,12 @@
 
 namespace App\Sidebar\Annotation;
 
+use Attribute;
+
 /**
  * @Annotation
  */
-#[\Attribute(\Attribute::IS_REPEATABLE | \Attribute::TARGET_CLASS | \Attribute::TARGET_METHOD)]
+#[Attribute(Attribute::IS_REPEATABLE | Attribute::TARGET_CLASS | Attribute::TARGET_METHOD)]
 class Sidebar
 {
     public array $active = [];

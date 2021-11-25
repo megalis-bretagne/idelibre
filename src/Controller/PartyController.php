@@ -15,10 +15,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Breadcrumb("Groupes politiques")
- */
 #[Sidebar(active: ['party-nav'])]
+#[Breadcrumb(title: 'Groupes politiques')]
 class PartyController extends AbstractController
 {
     #[Route(path: '/party/index', name: 'party_index')]
@@ -40,11 +38,9 @@ class PartyController extends AbstractController
         ]);
     }
 
-    /**
-     * @Breadcrumb("Ajouter")
-     */
     #[Route(path: '/party/add', name: 'party_add')]
     #[IsGranted(data: 'ROLE_MANAGE_PARTIES')]
+    #[Breadcrumb(title: 'Ajouter')]
     public function add(Request $request, PartyManager $partyManager): Response
     {
         $form = $this->createForm(PartyType::class, null, ['structure' => $this->getUser()->getStructure()]);
@@ -61,11 +57,9 @@ class PartyController extends AbstractController
         ]);
     }
 
-    /**
-     * @Breadcrumb("Modifier {party.name}")
-     */
     #[Route(path: '/party/edit/{id}', name: 'party_edit')]
     #[IsGranted(data: 'MANAGE_PARTIES', subject: 'party')]
+    #[Breadcrumb(title: 'Modifier {party.name}')]
     public function edit(Party $party, Request $request, PartyManager $partyManager): Response
     {
         $form = $this->createForm(PartyType::class, $party, ['structure' => $this->getUser()->getStructure()]);

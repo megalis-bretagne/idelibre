@@ -3,6 +3,7 @@
 namespace App\Form\DataTransformer;
 
 use Doctrine\Persistence\ManagerRegistry;
+use Exception;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
@@ -28,7 +29,7 @@ class HiddenEntityTransformer implements DataTransformerInterface
         try {
             $repository = $this->managerRegistry->getRepository($this->entityName);
             $entity = $repository->findOneBy(['id' => $value]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new TransformationFailedException($e->getMessage());
         }
 

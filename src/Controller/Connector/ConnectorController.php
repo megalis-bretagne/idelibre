@@ -11,10 +11,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Breadcrumb("Configuration des connecteurs")
- */
 #[Sidebar(active: ['configurations-nav', 'connector-configuration-nav'])]
+#[Breadcrumb(title: 'Configuration des connecteurs')]
 class ConnectorController extends AbstractController
 {
     #[Route(path: '/connector', name: 'connector_index')]

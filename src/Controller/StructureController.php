@@ -20,10 +20,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Breadcrumb("Structures", routeName="structure_index")
- */
 #[Sidebar(active: ['platform-nav', 'structure-nav'])]
+#[Breadcrumb(title: 'Structures', routeName: 'structure_index')]
 class StructureController extends AbstractController
 {
     use ValidationTrait;
@@ -57,11 +55,9 @@ class StructureController extends AbstractController
         ]);
     }
 
-    /**
-     * @Breadcrumb("Ajouter")
-     */
     #[Route(path: '/structure/add', name: 'structure_add')]
     #[IsGranted(data: 'CREATE_STRUCTURE')]
+    #[Breadcrumb(title: 'Ajouter')]
     public function add(Request $request, StructureCreator $structureCreator): Response
     {
         $form = $this->createForm(StructureType::class);
@@ -91,11 +87,9 @@ class StructureController extends AbstractController
         ]);
     }
 
-    /**
-     * @Breadcrumb("Modifier {structure.name}")
-     */
     #[Route(path: '/structure/edit/{id}', name: 'structure_edit')]
     #[IsGranted(data: 'MY_GROUP', subject: 'structure')]
+    #[Breadcrumb(title: 'Modifier {structure.name}')]
     public function edit(Structure $structure, Request $request, StructureManager $structureManager): Response
     {
         $form = $this->createForm(StructureType::class, $structure);
@@ -124,12 +118,10 @@ class StructureController extends AbstractController
         ]);
     }
 
-    /**
-     * @Breadcrumb("Préférences")
-     */
     #[Route(path: '/structure/preferences', name: 'structure_preferences')]
     #[IsGranted(data: 'ROLE_STRUCTURE_ADMIN')]
     #[Sidebar(reset: true, active: ['structure-preference-nav'])]
+    #[Breadcrumb(title: 'Préférences')]
     public function preferences(Request $request, StructureManager $structureManager): Response
     {
         $form = $this->createForm(StructureInformationType::class, $this->getUser()->getStructure());

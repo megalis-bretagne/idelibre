@@ -16,11 +16,9 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Sidebar(active: ['board-nav'])]
 class BoardController extends AbstractController
 {
-    /**
-     * @Breadcrumb("Tableau de bord", routeName="board_index")
-     */
     #[Route(path: '/board', name: 'board_index')]
     #[IsGranted(data: 'ROLE_MANAGE_SITTINGS')]
+    #[Breadcrumb(title: 'Tableau de bord', routeName: 'board_index')]
     public function index(SittingRepository $sittingRepository, PaginatorInterface $paginator, Request $request): Response
     {
         /** @var Structure $structure */

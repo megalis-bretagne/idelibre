@@ -7,6 +7,7 @@ use App\Entity\Theme;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\QueryBuilder;
+use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
 
 /**
  * @method Theme|null find($id, $lockMode = null, $lockVersion = null)
@@ -14,7 +15,7 @@ use Doctrine\ORM\QueryBuilder;
  * @method Theme[]    findAll()
  * @method Theme[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ThemeRepository extends \Gedmo\Tree\Entity\Repository\NestedTreeRepository
+class ThemeRepository extends NestedTreeRepository
 {
     public function __construct(EntityManagerInterface $em)
     {

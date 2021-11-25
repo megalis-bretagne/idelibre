@@ -16,10 +16,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Breadcrumb("Notice RGPD")
- */
 #[Sidebar(active: ['platform-nav', 'gdpr-nav'])]
+#[Breadcrumb(title: 'Notice RGPD')]
 class GdprController extends AbstractController
 {
     #[Route(path: '/gdpr/notice', name: 'gdpr_notice')]
@@ -36,11 +34,9 @@ class GdprController extends AbstractController
         ]);
     }
 
-    /**
-     * @Breadcrumb("Modifier")
-     */
     #[Route(path: '/gdpr/editHosting', name: 'gdpr_edit')]
     #[IsGranted(data: 'ROLE_SUPERADMIN')]
+    #[Breadcrumb(title: 'Modifier')]
     public function editHosting(GdprManager $gdprManager, Request $request): Response
     {
         $form = $this->createForm(GdprHostingType::class, $gdprManager->getGdpr());
@@ -58,12 +54,10 @@ class GdprController extends AbstractController
         ]);
     }
 
-    /**
-     * @Breadcrumb("Modifier")
-     */
     #[Route(path: '/gdpr/editController', name: 'gdpr_controller_edit')]
     #[IsGranted(data: 'ROLE_MANAGE_GDPR')]
     #[Sidebar(active: ['gdpr-data-controller-nav'], reset: true)]
+    #[Breadcrumb(title: 'Modifier')]
     public function editDataController(Request $request, DataControllerManager $dataControllerManager): Response
     {
         /** @var Structure $structure */

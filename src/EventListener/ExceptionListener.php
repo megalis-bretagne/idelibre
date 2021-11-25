@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Throwable;
 
 class ExceptionListener implements EventSubscriberInterface
 {
@@ -30,7 +31,7 @@ class ExceptionListener implements EventSubscriberInterface
         $event->setResponse($response);
     }
 
-    private function getStatusCode(\Throwable $throwable)
+    private function getStatusCode(Throwable $throwable)
     {
         if ($throwable instanceof HttpException) {
             return $throwable->getStatusCode();
