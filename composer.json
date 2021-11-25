@@ -10,7 +10,7 @@
     "ext-intl": "*",
     "ext-json": "*",
     "ext-zip": "*",
-    "apy/breadcrumbtrail-bundle": "^1.6",
+    "apy/breadcrumbtrail-bundle": "1.6.*",
     "composer/package-versions-deprecated": "^1.11",
     "doctrine/annotations": "^1.0",
     "doctrine/doctrine-bundle": "^2",
