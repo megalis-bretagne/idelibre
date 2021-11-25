@@ -25,10 +25,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Breadcrumb("Séances", routeName="sitting_index")
- */
 #[Sidebar(active: ['sitting-nav'])]
+#[Breadcrumb(title: 'Séances', routeName: 'sitting_index')]
 class SittingController extends AbstractController
 {
     #[Route(path: '/sitting', name: 'sitting_index')]
@@ -57,12 +55,10 @@ class SittingController extends AbstractController
         ]);
     }
 
-    /**
-     * @Breadcrumb("Ajouter")
-     */
     #[Route(path: '/sitting/add', name: 'sitting_add')]
     #[IsGranted(data: 'ROLE_MANAGE_SITTINGS')]
     #[Sidebar(active: ['sitting-active-nav'])]
+    #[Breadcrumb(title: 'Ajouter')]
     public function createSitting(Request $request, SittingManager $sittingManager): Response
     {
         $form = $this->createForm(SittingType::class, null, ['structure' => $this->getUser()->getStructure(), 'user' => $this->getUser()]);
@@ -83,12 +79,10 @@ class SittingController extends AbstractController
         ]);
     }
 
-    /**
-     * @Breadcrumb("Modifier {sitting.nameWithDate}")
-     */
     #[Route(path: '/sitting/edit/{id}/actors', name: 'edit_sitting_actor', methods: ['GET'])]
     #[IsGranted(data: 'ROLE_MANAGE_SITTINGS')]
     #[Sidebar(active: ['sitting-active-nav'])]
+    #[Breadcrumb(title: 'Modifier {sitting.nameWithDate}')]
     public function editUsers(Sitting $sitting, Request $request, ActorManager $actorManager, ConvocationManager $convocationManager): Response
     {
         if ($sitting->getIsArchived()) {
@@ -100,11 +94,9 @@ class SittingController extends AbstractController
         ]);
     }
 
-    /**
-     * @Breadcrumb("Modifier {sitting.nameWithDate}")
-     */
     #[Route(path: '/sitting/edit/{id}/projects', name: 'edit_sitting_project')]
     #[Sidebar(active: ['sitting-active-nav'])]
+    #[Breadcrumb(title: 'Modifier {sitting.nameWithDate}')]
     public function editProjects(Sitting $sitting): Response
     {
         if ($sitting->getIsArchived()) {
@@ -116,12 +108,10 @@ class SittingController extends AbstractController
         ]);
     }
 
-    /**
-     * @Breadcrumb("Modifier {sitting.nameWithDate}")
-     */
     #[Route(path: '/sitting/edit/{id}', name: 'edit_sitting_information')]
     #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
     #[Sidebar(active: ['sitting-active-nav'])]
+    #[Breadcrumb(title: 'Modifier {sitting.nameWithDate}')]
     public function editInformation(Sitting $sitting, Request $request, SittingManager $sittingManager): Response
     {
         if ($sitting->getIsArchived()) {
@@ -167,11 +157,9 @@ class SittingController extends AbstractController
         return $referer ? $this->redirect($referer) : $this->redirectToRoute('sitting_index');
     }
 
-    /**
-     * @Breadcrumb("Détail {sitting.nameWithDate}")
-     */
     #[Route(path: '/sitting/show/{id}/information', name: 'sitting_show_information', methods: ['GET'])]
     #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
+    #[Breadcrumb(title: 'Détail {sitting.nameWithDate}')]
     public function showInformation(Sitting $sitting, SittingManager $sittingManager, SidebarState $sidebarState): Response
     {
         $sidebarState->addActiveNavs(['sitting-nav', $this->activeSidebarNav($sitting->getIsArchived())]);
@@ -183,11 +171,9 @@ class SittingController extends AbstractController
         ]);
     }
 
-    /**
-     * @Breadcrumb("Détail {sitting.nameWithDate}")
-     */
     #[Route(path: '/sitting/show/{id}/actors', name: 'sitting_show_actors', methods: ['GET'])]
     #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
+    #[Breadcrumb(title: 'Détail {sitting.nameWithDate}')]
     public function showActors(Sitting $sitting, ConvocationRepository $convocationRepository, SidebarState $sidebarState): Response
     {
         $sidebarState->addActiveNavs(['sitting-nav', $this->activeSidebarNav($sitting->getIsArchived())]);
@@ -197,11 +183,9 @@ class SittingController extends AbstractController
         ]);
     }
 
-    /**
-     * @Breadcrumb("Détail {sitting.nameWithDate}")
-     */
     #[Route(path: '/sitting/show/{id}/projects', name: 'sitting_show_projects', methods: ['GET'])]
     #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
+    #[Breadcrumb(title: 'Détail {sitting.nameWithDate}')]
     public function showProjects(Sitting $sitting, ConvocationRepository $convocationRepository, ProjectRepository $projectRepository, SidebarState $sidebarState): Response
     {
         $sidebarState->addActiveNavs(['sitting-nav', $this->activeSidebarNav($sitting->getIsArchived())]);

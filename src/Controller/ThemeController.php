@@ -15,10 +15,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Breadcrumb("Thèmes", routeName="theme_index")
- */
 #[Sidebar(active: ['theme-nav'])]
+#[Breadcrumb(title: 'Thèmes', routeName: 'theme_index')]
 class ThemeController extends AbstractController
 {
     #[Route(path: '/theme/index', name: 'theme_index')]
@@ -35,11 +33,9 @@ class ThemeController extends AbstractController
         ]);
     }
 
-    /**
-     * @Breadcrumb("Ajouter")
-     */
     #[Route(path: '/theme/add', name: 'theme_add')]
     #[IsGranted(data: 'ROLE_MANAGE_THEMES')]
+    #[Breadcrumb(title: 'Ajouter')]
     public function add(ThemeManager $themeManager, Request $request): Response
     {
         $form = $this->createForm(ThemeWithParentType::class, null, ['structure' => $this->getUser()->getStructure()]);
@@ -57,11 +53,9 @@ class ThemeController extends AbstractController
         ]);
     }
 
-    /**
-     * @Breadcrumb("Modifier {theme.name}")
-     */
     #[Route(path: '/theme/edit/{id}', name: 'theme_edit')]
     #[IsGranted(data: 'MANAGE_THEMES', subject: 'theme')]
+    #[Breadcrumb(title: 'Modifier {theme.name}')]
     public function edit(Theme $theme, ThemeManager $themeManager, Request $request): Response
     {
         $form = $this->createForm(ThemeType::class, $theme);

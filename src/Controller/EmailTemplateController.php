@@ -17,10 +17,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Breadcrumb("Modèles d'email", routeName="email_template_index")
- */
 #[Sidebar(active: ['email-template-nav'])]
+#[Breadcrumb(title: "Modèles d'email", routeName: 'email_template_index')]
 class EmailTemplateController extends AbstractController
 {
     #[Route(path: '/emailTemplate', name: 'email_template_index', methods: ['GET'])]
@@ -42,11 +40,9 @@ class EmailTemplateController extends AbstractController
         ]);
     }
 
-    /**
-     * @Breadcrumb("Ajouter")
-     */
     #[Route(path: '/emailTemplate/add', name: 'email_template_add')]
     #[IsGranted(data: 'ROLE_MANAGE_EMAIL_TEMPLATES')]
+    #[Breadcrumb(title: 'Ajouter')]
     public function add(Request $request, EmailTemplateManager $templateManager): Response
     {
         $form = $this->createForm(EmailTemplateType::class, null, ['structure' => $this->getUser()->getStructure()]);
@@ -63,11 +59,9 @@ class EmailTemplateController extends AbstractController
         ]);
     }
 
-    /**
-     * @Breadcrumb("Modifier {emailTemplate.name}")
-     */
     #[Route(path: '/emailTemplate/edit/{id}', name: 'email_template_edit', methods: ['GET', 'POST'])]
     #[IsGranted(data: 'MANAGE_EMAIL_TEMPLATES', subject: 'emailTemplate')]
+    #[Breadcrumb(title: 'Modifier {emailTemplate.name}')]
     public function edit(Request $request, EmailTemplate $emailTemplate, EmailTemplateManager $templateManager): Response
     {
         $form = $this->createForm(EmailTemplateType::class, $emailTemplate, ['structure' => $this->getUser()->getStructure()]);
@@ -97,11 +91,9 @@ class EmailTemplateController extends AbstractController
         ]);
     }
 
-    /**
-     * @Breadcrumb("Visualiser {emailTemplate.name}")
-     */
     #[Route(path: '/emailTemplate/preview/{id}', name: 'email_template_preview', methods: ['GET'])]
     #[IsGranted(data: 'MANAGE_EMAIL_TEMPLATES', subject: 'emailTemplate')]
+    #[Breadcrumb(title: 'Visualiser {emailTemplate.name}')]
     public function preview(EmailTemplate $emailTemplate): Response
     {
         return $this->render('email_template/preview.html.twig', [

@@ -13,17 +13,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Breadcrumb("Utilisateurs", routeName="user_index")
- */
 #[Sidebar(active: ['theme-nav'])]
+#[Breadcrumb(title: 'Utilisateurs', routeName: 'user_index')]
 class CsvThemeController extends AbstractController
 {
-    /**
-     * @Breadcrumb("Importer des utilisateurs via csv")
-     */
     #[Route(path: '/csv/importTheme', name: 'csv_add_themes')]
     #[IsGranted(data: 'ROLE_MANAGE_THEMES')]
+    #[Breadcrumb(title: 'Importer des utilisateurs via csv')]
     public function importTheme(Request $request, CsvThemeManager $csvThemeManager, Session $session): Response
     {
         $form = $this->createForm(CsvType::class);
@@ -45,11 +41,9 @@ class CsvThemeController extends AbstractController
         ]);
     }
 
-    /**
-     * @Breadcrumb("Erreurs lors de l'import")
-     */
     #[Route(path: '/csv/themeErrors', name: 'theme_csv_error')]
     #[IsGranted(data: 'ROLE_MANAGE_THEMES')]
+    #[Breadcrumb(title: "Erreurs lors de l'import")]
     public function csvUsersError(Session $session): Response
     {
         $errors = $session->get('errors_theme_csv');

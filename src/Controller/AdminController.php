@@ -17,10 +17,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Breadcrumb("Administrateurs", routeName="admin_index" )
- */
 #[Sidebar(active: ['platform-nav', 'admin-nav'])]
+#[Breadcrumb(title: 'Administrateurs', routeName: 'admin_index')]
 class AdminController extends AbstractController
 {
     #[Route(path: '/admin', name: 'admin_index')]
@@ -48,11 +46,9 @@ class AdminController extends AbstractController
         ]);
     }
 
-    /**
-     * @Breadcrumb("Ajouter")
-     */
     #[Route(path: '/admin/add', name: 'admin_add')]
     #[IsGranted(data: 'ROLE_SUPERADMIN')]
+    #[Breadcrumb(title: 'Ajouter')]
     public function add(Request $request, UserManager $userManager, RoleManager $roleManager): Response
     {
         $form = $this->createForm(SuperUserType::class);
@@ -74,11 +70,9 @@ class AdminController extends AbstractController
         ]);
     }
 
-    /**
-     * @Breadcrumb("Ajouter un administrateur de groupe")
-     */
     #[Route(path: '/admin/group/add', name: 'admin_goup_add')]
     #[IsGranted(data: 'ROLE_MANAGE_STRUCTURES')]
+    #[Breadcrumb(title: 'Ajouter un administrateur de groupe')]
     public function addGroupAdmin(Request $request, UserManager $userManager, RoleManager $roleManager): Response
     {
         $isGroupChoice = in_array('ROLE_SUPERADMIN', $this->getUser()->getRoles());
@@ -105,11 +99,9 @@ class AdminController extends AbstractController
         ]);
     }
 
-    /**
-     * @Breadcrumb("Modifier {user.firstName} {user.lastName}")
-     */
     #[Route(path: '/admin/edit/{id}', name: 'admin_edit')]
     #[IsGranted(data: 'MY_GROUP', subject: 'user')]
+    #[Breadcrumb(title: 'Modifier {user.firstName} {user.lastName}')]
     public function edit(User $user, Request $request, UserManager $userManager): Response
     {
         $form = $this->createForm(SuperUserType::class, $user, ['isEditMode' => true]);

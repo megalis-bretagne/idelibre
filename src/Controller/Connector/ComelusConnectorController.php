@@ -15,17 +15,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Breadcrumb("Configuration des connecteurs", routeName="connector_index")
- */
 #[Sidebar(active: ['configurations-nav'])]
+#[Breadcrumb(title: 'Configuration des connecteurs', routeName: 'connector_index')]
 class ComelusConnectorController extends AbstractController
 {
-    /**
-     * @Breadcrumb("Comelus")
-     */
     #[Route(path: '/connector/comelus', name: 'comelus_connector')]
     #[IsGranted(data: 'ROLE_MANAGE_CONNECTORS')]
+    #[Breadcrumb(title: 'Comelus')]
     public function edit(ComelusConnectorRepository $comelusConnectorRepository, ComelusConnectorManager $comelusConnectorManager, Request $request): Response
     {
         $connector = $comelusConnectorRepository->findOneBy(['structure' => $this->getUser()->getStructure()]);

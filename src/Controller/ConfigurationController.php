@@ -13,10 +13,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Breadcrumb("Configuration de la structure")
- */
 #[Sidebar(active: ['configurations-nav', 'configuration-nav'])]
+#[Breadcrumb(title: 'Configuration de la structure')]
 class ConfigurationController extends AbstractController
 {
     #[Route('/configuration', name: 'configuration_index')]

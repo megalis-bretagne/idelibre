@@ -17,10 +17,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Breadcrumb("Groupes", routeName="group_index")
- */
 #[Sidebar(active: ['platform-nav', 'group-nav'])]
+#[Breadcrumb(title: 'Groupes', routeName: 'group_index')]
 class GroupController extends AbstractController
 {
     use ValidationTrait;
@@ -41,11 +39,9 @@ class GroupController extends AbstractController
         ]);
     }
 
-    /**
-     * @Breadcrumb("Ajouter")
-     */
     #[Route(path: '/group/add', name: 'group_add')]
     #[IsGranted(data: 'ROLE_SUPERADMIN')]
+    #[Breadcrumb(title: 'Ajouter')]
     public function add(Request $request, GroupManager $groupManager): Response
     {
         $form = $this->createForm(GroupType::class, null, ['isNew' => true]);
@@ -75,11 +71,9 @@ class GroupController extends AbstractController
         ]);
     }
 
-    /**
-     * @Breadcrumb("Gérer {group.name}")
-     */
     #[Route(path: '/group/manage/{id}', name: 'group_manage')]
     #[IsGranted(data: 'ROLE_SUPERADMIN')]
+    #[Breadcrumb(title: 'Gérer {group.name}')]
     public function manage(Group $group, Request $request, GroupManager $groupManager): Response
     {
         $form = $this->createForm(GroupStructureType::class, $group);
@@ -96,11 +90,9 @@ class GroupController extends AbstractController
         ]);
     }
 
-    /**
-     * @Breadcrumb("Modifier {group.name}")
-     */
     #[Route(path: '/group/edit/{id}', name: 'group_edit')]
     #[IsGranted(data: 'ROLE_SUPERADMIN')]
+    #[Breadcrumb(title: 'Modifier {group.name}')]
     public function edit(Group $group, Request $request, GroupManager $groupManager): Response
     {
         $form = $this->createForm(GroupType::class, $group);

@@ -13,17 +13,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Breadcrumb("Utilisateurs", routeName="user_index")
- */
 #[Sidebar(active: ['user-nav'])]
+#[Breadcrumb(title: 'Utilisateurs', routeName: 'user_index')]
 class CsvUserController extends AbstractController
 {
-    /**
-     * @Breadcrumb("Importer des utilisateurs via csv")
-     */
     #[Route(path: '/csv/importUsers', name: 'csv_add_users')]
     #[IsGranted(data: 'ROLE_MANAGE_USERS')]
+    #[Breadcrumb(title: 'Importer des utilisateurs via csv')]
     public function importUsers(Request $request, CsvUserManager $csvUserManager, Session $session): Response
     {
         $form = $this->createForm(CsvType::class);
@@ -45,11 +41,9 @@ class CsvUserController extends AbstractController
         ]);
     }
 
-    /**
-     * @Breadcrumb("Erreurs lors de l'import")
-     */
     #[Route(path: '/csv/userErrors', name: 'user_csv_error')]
     #[IsGranted(data: 'ROLE_MANAGE_USERS')]
+    #[Breadcrumb(title: "Erreurs lors de l'import")]
     public function csvUsersError(Session $session): Response
     {
         $errors = $session->get('errors_csv');

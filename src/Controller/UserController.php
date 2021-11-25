@@ -17,10 +17,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Breadcrumb("Utilisateurs", routeName="user_index")
- */
 #[Sidebar(active: ['user-nav'])]
+#[Breadcrumb(title: 'Utilisateurs', routeName: 'user_index')]
 class UserController extends AbstractController
 {
     #[Route(path: '/user', name: 'user_index')]
@@ -45,11 +43,9 @@ class UserController extends AbstractController
         ]);
     }
 
-    /**
-     * @Breadcrumb("Ajouter")
-     */
     #[Route(path: '/user/add', name: 'user_add')]
     #[IsGranted(data: 'ROLE_MANAGE_USERS')]
+    #[Breadcrumb(title: 'Ajouter')]
     public function add(Request $request, UserManager $manageUser): Response
     {
         $form = $this->createForm(UserType::class, new User(), ['structure' => $this->getUser()->getStructure()]);
@@ -72,11 +68,9 @@ class UserController extends AbstractController
         ]);
     }
 
-    /**
-     * @Breadcrumb("Modifier {user.firstName} {user.lastName}")
-     */
     #[Route(path: '/user/edit/{id}', name: 'user_edit')]
     #[IsGranted(data: 'MANAGE_USERS', subject: 'user')]
+    #[Breadcrumb(title: 'Modifier {user.firstName} {user.lastName}')]
     public function edit(User $user, Request $request, UserManager $manageUser): Response
     {
         $form = $this->createForm(UserType::class, $user, ['structure' => $this->getUser()->getStructure()]);
@@ -116,11 +110,9 @@ class UserController extends AbstractController
         ]);
     }
 
-    /**
-     * @Breadcrumb("Suppression par lot")
-     */
     #[Route(path: '/user/deleteBatch', name: 'user_delete_batch')]
     #[IsGranted(data: 'ROLE_MANAGE_USERS')]
+    #[Breadcrumb(title: 'Suppression par lot')]
     public function deleteBatch(UserRepository $userRepository, Request $request): Response
     {
         if ($request->isMethod('POST')) {
@@ -136,12 +128,10 @@ class UserController extends AbstractController
         ]);
     }
 
-    /**
-     * @Breadcrumb()
-     * @Breadcrumb("Préférences utilisateur")
-     */
     #[Route(path: '/user/preferences', name: 'user_preferences')]
     #[IsGranted(data: 'ROLE_MANAGE_PREFERENCES')]
+    #[Breadcrumb]
+    #[Breadcrumb(title: 'Préférences utilisateur')]
     public function preferences(Request $request, UserManager $userManager): Response
     {
         $form = $this->createForm(UserPreferenceType::class, $this->getUser());
