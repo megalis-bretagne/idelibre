@@ -75,14 +75,17 @@ class MigrateFrom40Command extends Command
         return 0;
     }
 
-    private function isInit()
+    private function isInit():bool
     {
         $pdo = $this->entityManager->getConnection()->getWrappedConnection();
-        $statement = $pdo->prepare('select * from "user"');
-        $statement->execute();
-        $count = $statement->rowCount();
 
-        return $count > 0;
+        try {
+            $pdo->exec('select * from "user"');
+        } catch (Exception) {
+            return false;
+        }
+
+        return true;
     }
 
     private function alreadyExistDoctrineMigrationTable(): bool
