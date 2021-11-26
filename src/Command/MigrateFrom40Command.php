@@ -75,7 +75,7 @@ class MigrateFrom40Command extends Command
         return 0;
     }
 
-    private function isInit():bool
+    private function isInit(): bool
     {
         $pdo = $this->entityManager->getConnection()->getWrappedConnection();
 
