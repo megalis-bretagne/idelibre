@@ -8,11 +8,9 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use function file_get_contents;
 
 class MigrateFrom40Command extends Command
 {
-
     protected static $defaultName = 'migrate:from40';
     /**
      * @var EntityManagerInterface
@@ -49,19 +47,18 @@ class MigrateFrom40Command extends Command
             return 0;
         }
 
-
         $io->text('Beginning update');
         $pdo = $this->entityManager->getConnection()->getWrappedConnection();
-        $sqlCreate = "
+        $sqlCreate = '
             create table doctrine_migration_versions(
                 version character VARYING(191) PRIMARY KEY not null,
                 executed_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NULL,
                 execution_time integer              
             );
-";
+';
 
         $sqlCopyDataToNewMigrationTable = "INSERT INTO doctrine_migration_versions (version, executed_at, execution_time)
- SELECT concat('DoctrineMigrations\Version', version), executed_at, 1 FROM migration_versions;";;
+ SELECT concat('DoctrineMigrations\Version', version), executed_at, 1 FROM migration_versions;";
 
         $pdo->beginTransaction();
         try {
@@ -74,9 +71,8 @@ class MigrateFrom40Command extends Command
         }
 
         $io->success('update migration table done');
+
         return 0;
-
-
     }
 
     private function isInit()
@@ -89,13 +85,13 @@ class MigrateFrom40Command extends Command
         return $count > 0;
     }
 
-    private function alreadyExistDoctrineMigrationTable():bool
+    private function alreadyExistDoctrineMigrationTable(): bool
     {
         $pdo = $this->entityManager->getConnection()->getWrappedConnection();
 
-        try{
+        try {
             $pdo->exec('select * from doctrine_migration_versions');
-        }catch (Exception) {
+        } catch (Exception) {
             return false;
         }
 
