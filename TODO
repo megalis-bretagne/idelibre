@@ -239,3 +239,20 @@ public function configureOptions(OptionsResolver $resolver)
             'class_name' => null
         ]);
     }
+
+
+
+
+MIGRATION 4.1
+-> ajouter au vhost dans le location php tout en bas (on pourrait essayer de le faire au start si on est chaud !)
+fastcgi_param  HTTP_HOST URL;
+
+
+Demarer le container fpm-idelibre
+//docker-compose -f docker-compose-dev.yml up -d fpm-idelibre
+// mieux encore dans l'netry point
+Si pas doctrine_migration_versions table alors
+bin/console doctrine:migrations:sync-metadata-storage
+
+INSERT INTO doctrine_migration_versions (version, executed_at, execution_time) SELECT concat('DoctrineMigrations\Version', version), executed_at, 1 FROM migration_versions;
+
