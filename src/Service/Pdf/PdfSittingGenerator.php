@@ -5,6 +5,7 @@ namespace App\Service\Pdf;
 use App\Entity\Annex;
 use App\Entity\Project;
 use App\Entity\Sitting;
+use App\Service\Util\DateUtil;
 use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -15,7 +16,8 @@ class PdfSittingGenerator
     public function __construct(
         private ParameterBagInterface $bag,
         private Filesystem $filesystem,
-        private LoggerInterface $logger
+        private LoggerInterface $logger,
+        private DateUtil $dateUtil
     ) {
     }
 
@@ -88,5 +90,10 @@ class PdfSittingGenerator
     {
         $path = $this->getPdfPath($sitting);
         $this->filesystem->remove($path);
+    }
+
+    public function createName(Sitting $sitting)
+    {
+        return $sitting->getName() . '_' . $this->dateUtil->getUnderscoredDate($sitting->getDate()) . '.pdf';
     }
 }

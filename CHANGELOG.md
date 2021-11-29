@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 - Alerte si jamais le navigateur ne permet pas de télécharger les fichiers (#172)
 - Politique de confidentialité configurable par structure (#113)
 - Assignation de bon onwer sur le repertoire file monté sur le docker si il n'est pas correcte (#178)
+- Renomage des zip et pdf complet de la seance au format : nomSeance_DateSeance (#192)
 
 ### Nouveautés
 - Fichier de rendez vous avec l'envoi du mail de convocation (#152)
