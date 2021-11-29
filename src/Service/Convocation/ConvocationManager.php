@@ -159,7 +159,6 @@ class ConvocationManager
         $this->messageBus->dispatch(new ConvocationSent([$convocation->getId()], $convocation->getSitting()->getId()));
     }
 
-
     /**
      * @throws ConnectionException
      */

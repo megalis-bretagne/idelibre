@@ -12,15 +12,15 @@ class FileUtil
         }
 
         while (false !== ($file = readdir($handle))) {
-            if($this->isFileOlderThan2Days($path, $file)) {
+            if ($this->isFileOlderThan2Days($path, $file)) {
                 unlink($path . $file);
             }
         }
     }
 
-    private function isFileOlderThan2Days(string $path, false|string $file):bool
+    private function isFileOlderThan2Days(string $path, false|string $file): bool
     {
-        if (!is_file($path . $file)){
+        if (!is_file($path . $file)) {
             return false;
         }
 
