@@ -18,33 +18,4 @@ class DataControllerGdprRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, DataControllerGdpr::class);
     }
-
-    // /**
-    //  * @return DataControllerGdpr[] Returns an array of DataControllerGdpr objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('d')
-            ->andWhere('d.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('d.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?DataControllerGdpr
-    {
-        return $this->createQueryBuilder('d')
-            ->andWhere('d.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }
