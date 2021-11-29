@@ -7,7 +7,6 @@ use App\Sidebar\State\SidebarState;
 use ReflectionAttribute;
 use ReflectionClass;
 use ReflectionException;
-use RuntimeException;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 
 class SidebarListener
