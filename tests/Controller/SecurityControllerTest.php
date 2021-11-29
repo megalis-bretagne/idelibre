@@ -5,6 +5,7 @@ namespace App\Tests\Controller;
 use App\DataFixtures\ForgetTokenFixtures;
 use App\DataFixtures\UserFixtures;
 use App\Entity\Structure;
+use App\Entity\User;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
 use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
@@ -103,6 +104,28 @@ class SecurityControllerTest extends WebTestCase
 
         $flash = $crawler->filter('html:contains(" Un email vous a été envoyé si un compte lui est associé")');
         $this->assertCount(1, $flash);
+
+        $user = $this->getOneUserBy(['username' => 'superadmin']);
+        $forgetToken = $this->getOneForgetTokenBy(['user' => $user]);
+        $this->assertNotEmpty($forgetToken);;
+
+    }
+
+
+    public function testForgetPasswordAlreadyForgetToken()
+    {
+        $this->client->request(Request::METHOD_POST, '/forget', ['username' => 'admin@libriciel']);
+        $this->assertResponseRedirects('/login');
+        $crawler = $this->client->followRedirect();
+        $this->assertResponseStatusCodeSame(200);
+
+        $flash = $crawler->filter('html:contains(" Un email vous a été envoyé si un compte lui est associé")');
+        $this->assertCount(1, $flash);
+
+        $user = $this->getOneUserBy(['username' => 'admin@libriciel']);
+        $forgetToken = $this->getOneForgetTokenBy(['user' => $user]);
+        $this->assertNotEmpty($forgetToken);;
+        $this->assertNotSame("forgetToken", $forgetToken->getToken());
     }
 
     public function testLogout()

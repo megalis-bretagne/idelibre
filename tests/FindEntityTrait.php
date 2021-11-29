@@ -5,6 +5,7 @@ namespace App\Tests;
 use App\Entity\Annex;
 use App\Entity\ApiUser;
 use App\Entity\Convocation;
+use App\Entity\ForgetToken;
 use App\Entity\Group;
 use App\Entity\Party;
 use App\Entity\Project;
@@ -85,5 +86,11 @@ trait FindEntityTrait
     public function getOneThemeBy(array $criteria): ?Theme
     {
         return $this->getOneEntityBy(Theme::class, $criteria);
+    }
+
+
+    public function getOneForgetTokenBy(array $criteria): ?ForgetToken
+    {
+        return $this->getOneEntityBy(ForgetToken::class, $criteria);
     }
 }
