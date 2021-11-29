@@ -21,31 +21,6 @@ use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPasspor
 
 class TokenAuthenticator extends AbstractAuthenticator
 {
-    private UserRepository $userRepository;
-    private RouterInterface $router;
-    private CsrfTokenManagerInterface $csrfTokenManager;
-    private UserPasswordHasherInterface $passwordHasher;
-    private Security $security;
-    private ImpersonateStructure $impersonateStructure;
-    private LegacyPassword $legacyPassword;
-
-    public function __construct(
-        UserRepository $userRepository,
-        RouterInterface $router,
-        CsrfTokenManagerInterface $csrfTokenManager,
-        ImpersonateStructure $impersonateStructure,
-        UserPasswordHasherInterface $passwordHasher,
-        Security $security,
-        LegacyPassword $legacyPassword
-    ) {
-        $this->userRepository = $userRepository;
-        $this->router = $router;
-        $this->csrfTokenManager = $csrfTokenManager;
-        $this->passwordHasher = $passwordHasher;
-        $this->security = $security;
-        $this->impersonateStructure = $impersonateStructure;
-        $this->legacyPassword = $legacyPassword;
-    }
 
     public function supports(Request $request): bool
     {

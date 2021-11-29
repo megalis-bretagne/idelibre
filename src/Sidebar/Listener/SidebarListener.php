@@ -7,7 +7,6 @@ use App\Sidebar\State\SidebarState;
 use ReflectionAttribute;
 use ReflectionClass;
 use ReflectionException;
-use RuntimeException;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 
 class SidebarListener
@@ -44,14 +43,14 @@ class SidebarListener
         try {
             $controller = new ReflectionClass($controller);
         } catch (ReflectionException $e) {
-            throw new RuntimeException('Failed to read class annotation! : ' . $e->getMessage());
+            throw new SideBarAttributeException('Failed to read class annotation! : ' . $e->getMessage());
         }
         $this->setActiveNav($controller->getAttributes(Sidebar::class));
 
         try {
             $method = $controller->getMethod($method);
         } catch (ReflectionException $e) {
-            throw new RuntimeException('Failed to read method annotation!  ' . $e->getMessage());
+            throw new SideBarAttributeException('Failed to read method annotation!  ' . $e->getMessage());
         }
 
         $this->setActiveNav($method->getAttributes(Sidebar::class));

@@ -3,14 +3,13 @@
 namespace App\Normalizer;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Symfony\Component\Serializer\Normalizer\ContextAwareDenormalizerInterface;
 
 /**
  * Get related entity by id
  * add ['normalize_relations' => true ] to context.
  */
-class EntityRelationNormalizer implements ContextAwareDenormalizerInterface
+class EntityRelationDenormalizer implements ContextAwareDenormalizerInterface
 {
     public function __construct(private EntityManagerInterface $entityManager)
     {
@@ -20,7 +19,7 @@ class EntityRelationNormalizer implements ContextAwareDenormalizerInterface
     {
         $entity = $this->getEntityById($type, $data);
         if (!$entity) {
-            throw new Exception("entity $type with id $data not found");
+            throw new EntityDenormalizerException("entity $type with id $data not found");
         }
 
         return $this->getEntityById($type, $data);

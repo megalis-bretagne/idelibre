@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\EmailTemplateRepository;
 use App\Service\Email\EmailData;
+use App\Service\EmailTemplate\EmailTemplateException;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
@@ -180,7 +181,7 @@ class EmailTemplate
     public function setFormat(string $format): self
     {
         if (!in_array($format, [EmailData::FORMAT_HTML, EmailData::FORMAT_TEXT])) {
-            throw new Exception('invalid format');
+            throw new EmailTemplateException('invalid format');
         }
         $this->format = $format;
 
