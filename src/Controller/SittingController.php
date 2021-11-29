@@ -44,7 +44,7 @@ class SittingController extends AbstractController
             ]
         );
         if ($status = $request->query->get('status')) {
-            $sidebarState->addActiveNavs(['sitting-nav', "sitting-${status}-nav"]);
+            $sidebarState->setActiveNavs(['sitting-nav', "sitting-${status}-nav"]);
         }
 
         return $this->render('sitting/index.html.twig', [
@@ -162,7 +162,7 @@ class SittingController extends AbstractController
     #[Breadcrumb(title: 'Détail {sitting.nameWithDate}')]
     public function showInformation(Sitting $sitting, SittingManager $sittingManager, SidebarState $sidebarState): Response
     {
-        $sidebarState->addActiveNavs(['sitting-nav', $this->activeSidebarNav($sitting->getIsArchived())]);
+        $sidebarState->setActiveNavs(['sitting-nav', $this->activeSidebarNav($sitting->getIsArchived())]);
 
         return $this->render('sitting/details_information.html.twig', [
             'isAlreadySent' => $sittingManager->isAlreadySent($sitting),
@@ -176,7 +176,7 @@ class SittingController extends AbstractController
     #[Breadcrumb(title: 'Détail {sitting.nameWithDate}')]
     public function showActors(Sitting $sitting, ConvocationRepository $convocationRepository, SidebarState $sidebarState): Response
     {
-        $sidebarState->addActiveNavs(['sitting-nav', $this->activeSidebarNav($sitting->getIsArchived())]);
+        $sidebarState->setActiveNavs(['sitting-nav', $this->activeSidebarNav($sitting->getIsArchived())]);
 
         return $this->render('sitting/details_actors.html.twig', [
             'sitting' => $sitting,
@@ -188,7 +188,7 @@ class SittingController extends AbstractController
     #[Breadcrumb(title: 'Détail {sitting.nameWithDate}')]
     public function showProjects(Sitting $sitting, ConvocationRepository $convocationRepository, ProjectRepository $projectRepository, SidebarState $sidebarState): Response
     {
-        $sidebarState->addActiveNavs(['sitting-nav', $this->activeSidebarNav($sitting->getIsArchived())]);
+        $sidebarState->setActiveNavs(['sitting-nav', $this->activeSidebarNav($sitting->getIsArchived())]);
 
         return $this->render('sitting/details_projects.html.twig', [
             'sitting' => $sitting,
