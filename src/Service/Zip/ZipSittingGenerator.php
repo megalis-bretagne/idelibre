@@ -3,6 +3,7 @@
 namespace App\Service\Zip;
 
 use App\Entity\Sitting;
+use App\Service\Util\DateUtil;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use ZipArchive;
@@ -11,7 +12,8 @@ class ZipSittingGenerator
 {
     public function __construct(
         private ParameterBagInterface $bag,
-        private Filesystem $filesystem
+        private Filesystem $filesystem,
+        private DateUtil $dateUtil
     ) {
     }
 
@@ -56,5 +58,10 @@ class ZipSittingGenerator
                 $zip->addFile($annex->getFile()->getPath(), $directory . $annex->getFile()->getName());
             }
         }
+    }
+
+    public function createName(Sitting $sitting)
+    {
+        return $sitting->getName() . '_' . $this->dateUtil->getUnderscoredDate($sitting->getDate())  . '.zip';
     }
 }

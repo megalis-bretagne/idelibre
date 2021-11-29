@@ -194,12 +194,20 @@ class SittingControllerTest extends WebTestCase
         $zipDirectory = $bag->get('document_zip_directory') . $sitting->getStructure()->getId() . '/';
 
         $filesystem = new FileSystem();
-        $filesystem->copy(__DIR__ . '/../resources/fichier.pdf', $zipDirectory . $sitting->getId() . '.zip');
+        $filesystem->copy(__DIR__ . '/../resources/fichier.zip', $zipDirectory . $sitting->getId() . '.zip');
 
         $this->loginAsAdminLibriciel();
 
         $this->client->request(Request::METHOD_GET, '/sitting/zip/' . $sitting->getId());
         $this->assertResponseStatusCodeSame(200);
+
+
+        $response = $this->client->getResponse();
+
+        $this->assertSame('attachment; filename="Conseil Libriciel_22_10_2020.zip"', $response->headers->get('content-disposition'));
+        $this->assertSame('application/zip', $response->headers->get('content-type'));
+        $this->assertGreaterThan(100, intval($response->headers->get('content-length')));
+
     }
 
     public function testGetZipSeancesWrongStructure()
@@ -223,10 +231,17 @@ class SittingControllerTest extends WebTestCase
         $filesystem = new FileSystem();
         $filesystem->copy(__DIR__ . '/../resources/fichier.pdf', $zipDirectory . $sitting->getId() . '.pdf');
 
+        $this>self::assertFileExists($zipDirectory . $sitting->getId() . '.pdf');
+
         $this->loginAsAdminLibriciel();
 
         $this->client->request(Request::METHOD_GET, '/sitting/pdf/' . $sitting->getId());
         $this->assertResponseStatusCodeSame(200);
+
+        $response = $this->client->getResponse();
+        $this->assertSame('attachment; filename="Conseil Libriciel_22_10_2020.pdf"', $response->headers->get('content-disposition'));
+        $this->assertSame('application/pdf', $response->headers->get('content-type'));
+        $this->assertGreaterThan(100, intval($response->headers->get('content-length')));
     }
 
     public function testEditInformation()
