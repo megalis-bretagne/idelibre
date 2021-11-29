@@ -217,7 +217,7 @@ class CsvUserManager
             return null;
         }
 
-        if (in_array($code, [GenderConverter::NOT_DEFINED, GenderConverter::FEMALE, GenderConverter::FEMALE])) {
+        if (in_array($code, [GenderConverter::NOT_DEFINED, GenderConverter::FEMALE, GenderConverter::MALE])) {
             return $code;
         }
 
