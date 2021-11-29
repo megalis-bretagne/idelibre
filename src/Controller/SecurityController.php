@@ -58,7 +58,7 @@ class SecurityController extends AbstractController
     #[Route(path: '/logout', name: 'app_logout')]
     public function logout()
     {
-        /** Used to generate route */
+        /* Used to generate route */
     }
 
     #[Route(path: '/security/impersonate/{id}', name: 'security_impersonate')]

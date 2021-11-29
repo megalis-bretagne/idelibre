@@ -159,15 +159,6 @@ class ConvocationManager
         $this->messageBus->dispatch(new ConvocationSent([$convocation->getId()], $convocation->getSitting()->getId()));
     }
 
-    /**
-     * @param iterable<Convocation> $convocations
-     *
-     * @return string[]
-     */
-    private function getConvocationIdList(iterable $convocations): array
-    {
-        return array_map(fn (Convocation $convocation) => $convocation->getId(), $convocations);
-    }
 
     /**
      * @throws ConnectionException

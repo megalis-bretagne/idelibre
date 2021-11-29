@@ -34,7 +34,7 @@ class SidebarListener
 
         $this->handleAnnotation($controllers);
 
-        $this->sidebarState->addActiveNavs($this->activeNavs);
+        $this->sidebarState->setActiveNavs($this->activeNavs);
     }
 
     private function handleAnnotation(iterable $controllers): void
