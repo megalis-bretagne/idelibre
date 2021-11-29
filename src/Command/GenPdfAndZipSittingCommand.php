@@ -33,6 +33,7 @@ class GenPdfAndZipSittingCommand extends Command
 
         $this->genZipAndPdf->genAllZipPdf();
 
+        $io->success('OK');
         return Command::SUCCESS;
     }
 }
