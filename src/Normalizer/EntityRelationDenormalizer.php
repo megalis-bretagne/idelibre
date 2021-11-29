@@ -3,7 +3,6 @@
 namespace App\Normalizer;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Symfony\Component\Serializer\Normalizer\ContextAwareDenormalizerInterface;
 
 /**
