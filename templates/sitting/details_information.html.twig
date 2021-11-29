@@ -5,164 +5,176 @@
 
 
 {% block body %}
-    <div class="col-12">
-        {{ apy_breadcrumb_trail_render(breadcrumb) }}
+<div class="col-12">
+    {{ apy_breadcrumb_trail_render(breadcrumb) }}
+</div>
+
+<div class="d-flex align-items-center col-11 mt-3">
+    <h1 class="flex-grow-1">Détail de la séance</h1>
+    {% if  not sitting.isArchived %}
+        {{ macroNav.toogleView( path('edit_sitting_information', {'id': sitting.id}) , 'show') }}
+    {% endif %}
+</div>
+
+<div class="col-12">
+
+    <div class="mt-4">
+        {{ macro.backButton('sitting_index', {'status' : sitting.isArchived ? 'archived' : 'active'}) }}
     </div>
 
-    <div class="d-flex align-items-center col-11 mt-3">
-        <h1 class="flex-grow-1">Détail de la séance</h1>
-        {% if  not sitting.isArchived %}
-            {{ macroNav.toogleView( path('edit_sitting_information', {'id': sitting.id}) , 'show') }}
-        {% endif %}
-    </div>
 
-    <div class="col-12">
+    <div class="col-10 offset-1 form-white mt-4">
 
-        <div class="mt-4">
-            {{ macro.backButton('sitting_index', {'status' : sitting.isArchived ? 'archived' : 'active'}) }}
+        {{ macroTab.showTabs('information', sitting) }}
+
+
+        <h2 class="mb-5">Informations générales</h2>
+        <div class="row">
+            <div class="col-4 text-right">
+                <b>Type :</b>
+            </div>
+            <div class="col-8">
+                {{ sitting.name }}
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-4 text-right">
+                <b>Date :</b>
+            </div>
+            <div class="col-8">
+                {{ sitting.date | date('d/m/Y : H:i' , timezone) }}
+            </div>
         </div>
 
 
-        <div class="col-10 offset-1 form-white mt-4">
-
-            {{ macroTab.showTabs('information', sitting) }}
-
-
-            <h2 class="mb-5">Informations générales</h2>
-            <div class="row">
-                <div class="col-4 text-right">
-                    <b>Type :</b>
-                </div>
-                <div class="col-8">
-                    {{ sitting.name }}
-                </div>
-            </div>
-
+        {% if sitting.reminder and sitting.reminder.isActive %}
             <div class="row mt-3">
                 <div class="col-4 text-right">
-                    <b>Date :</b>
+                    <b>durée de la séance :</b>
                 </div>
                 <div class="col-8">
-                    {{ sitting.date | date('d/m/Y : H:i' , timezone) }}
+                    {{ sitting.reminder.duration }} minutes
                 </div>
             </div>
 
+        {% endif %}
 
-            <div class="row mt-3">
-                <div class="col-4 text-right">
-                    <b>Lieu :</b>
-                </div>
-                <div class="col-8">
-                    {{ sitting.place | default('') }}
-                </div>
+        <div class="row mt-3">
+            <div class="col-4 text-right">
+                <b>Lieu :</b>
             </div>
+            <div class="col-8">
+                {{ sitting.place | default('') }}
+            </div>
+        </div>
 
+        <div class="row mt-2 align-bottom">
+            <div class="col-4 text-right align-bottom mt-1">
+                <b>Convocation :</b>
+            </div>
+            <div class="col-8">
+                {{ sitting.convocationFile.name }}
+                <a class="btn btn-outline-secondary borderless"
+                   href="{{ path('file_download', {'id': sitting.convocationFile.id}) }}"
+                   title="Télécharger la convocation">
+                    <span class="fas fa-download"></span>
+                </a>
+            </div>
+        </div>
+
+        {% if sitting.invitationFile %}
             <div class="row mt-2 align-bottom">
                 <div class="col-4 text-right align-bottom mt-1">
-                    <b>Convocation :</b>
+                    <b>Invitation :</b>
                 </div>
                 <div class="col-8">
-                    {{ sitting.convocationFile.name }}
+                    {{ sitting.invitationFile.name }}
                     <a class="btn btn-outline-secondary borderless"
-                       href="{{ path('file_download', {'id': sitting.convocationFile.id}) }}"
-                       title="Télécharger la convocation">
+                       href="{{ path('file_download', {'id': sitting.invitationFile.id}) }}"
+                       title="Télécharger l'invitation'">
                         <span class="fas fa-download"></span>
                     </a>
                 </div>
             </div>
+        {% endif %}
 
-            {% if sitting.invitationFile  %}
-                <div class="row mt-2 align-bottom">
-                    <div class="col-4 text-right align-bottom mt-1">
-                        <b>Invitation :</b>
-                    </div>
-                    <div class="col-8">
-                        {{ sitting.invitationFile.name }}
-                        <a class="btn btn-outline-secondary borderless"
-                           href="{{ path('file_download', {'id': sitting.invitationFile.id}) }}"
-                           title="Télécharger l'invitation'">
-                            <span class="fas fa-download"></span>
-                        </a>
-                    </div>
-                </div>
-            {% endif %}
-
-            <div class="row mt-2">
-                <div class="col-4 text-right mt-1">
-                    <b>Zip de la séance :</b>
-                </div>
-                <div class="col-8">
-                    {{ sitting.name }}.zip
-                    <a class="btn btn-outline-secondary borderless"
-                       href="{{ path('sitting_zip', {'id': sitting.id}) }}"
-                       title="Télécharger le zip">
-                        <span class="fas fa-download"></span>
-                    </a>
-                </div>
+        <div class="row mt-2">
+            <div class="col-4 text-right mt-1">
+                <b>Zip de la séance :</b>
             </div>
-
-            <div class="row mt-2">
-                <div class="col-4 text-right mt-1">
-                    <b>Pdf complet de la séance :</b>
-                </div>
-                <div class="col-8">
-                    {{ sitting.name }}.pdf
-                    <a class="btn btn-outline-secondary borderless"
-                       href="{{ path('sitting_full_pdf', {'id': sitting.id}) }}"
-                       title="Télécharger le pdf">
-                        <span class="fas fa-download"></span>
-                    </a>
-                </div>
+            <div class="col-8">
+                {{ sitting.name }}.zip
+                <a class="btn btn-outline-secondary borderless"
+                   href="{{ path('sitting_zip', {'id': sitting.id}) }}"
+                   title="Télécharger le zip">
+                    <span class="fas fa-download"></span>
+                </a>
             </div>
-
-            <div class="row mt-2">
-                <div class="col-4 text-right mt-1">
-                    <b>rapport pdf de la séance :</b>
-                </div>
-                <div class="col-8">
-                    {{ sitting.name }}_rapport.pdf
-                    <a class="btn btn-outline-secondary borderless"
-                       href="{{ path('sitting_report_pdf', {'id': sitting.id}) }}"
-                       title="Télécharger le rapport">
-                        <span class="fas fa-download"></span>
-                    </a>
-                </div>
-            </div>
-
-
-            <div class="row mt-2">
-                <div class="col-4 text-right mt-1">
-                    <b>rapport csv de la séance :</b>
-                </div>
-                <div class="col-8">
-                    {{ sitting.name }}_rapport.csv
-                    <a class="btn btn-outline-secondary borderless"
-                       href="{{ path('sitting_report_csv', {'id': sitting.id}) }}"
-                       title="Télécharger le rapport">
-                        <span class="fas fa-download"></span>
-                    </a>
-                </div>
-            </div>
-
-            {% if isAlreadySent %}
-                <div class="row mt-2">
-                    <div class="col-4 text-right mt-1">
-                        <b>jetons d'horodatage :</b>
-                    </div>
-                    <div class="col-8">
-                        {{ sitting.name }}_jetons.zip
-                        <a class="btn btn-outline-secondary borderless"
-                           href="{{ path('sitting_report_token', {'id': sitting.id}) }}"
-                           title="Télécharger les jetons">
-                            <span class="fas fa-download"></span>
-                        </a>
-                    </div>
-                </div>
-            {% endif %}
-
         </div>
 
+        <div class="row mt-2">
+            <div class="col-4 text-right mt-1">
+                <b>Pdf complet de la séance :</b>
+            </div>
+            <div class="col-8">
+                {{ sitting.name }}.pdf
+                <a class="btn btn-outline-secondary borderless"
+                   href="{{ path('sitting_full_pdf', {'id': sitting.id}) }}"
+                   title="Télécharger le pdf">
+                    <span class="fas fa-download"></span>
+                </a>
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col-4 text-right mt-1">
+                <b>rapport pdf de la séance :</b>
+            </div>
+            <div class="col-8">
+                {{ sitting.name }}_rapport.pdf
+                <a class="btn btn-outline-secondary borderless"
+                   href="{{ path('sitting_report_pdf', {'id': sitting.id}) }}"
+                   title="Télécharger le rapport">
+                    <span class="fas fa-download"></span>
+                </a>
+            </div>
+        </div>
+
+
+        <div class="row mt-2">
+            <div class="col-4 text-right mt-1">
+                <b>rapport csv de la séance :</b>
+            </div>
+            <div class="col-8">
+                {{ sitting.name }}_rapport.csv
+                <a class="btn btn-outline-secondary borderless"
+                   href="{{ path('sitting_report_csv', {'id': sitting.id}) }}"
+                   title="Télécharger le rapport">
+                    <span class="fas fa-download"></span>
+                </a>
+            </div>
+        </div>
+
+        {% if isAlreadySent %}
+            <div class="row mt-2">
+                <div class="col-4 text-right mt-1">
+                    <b>jetons d'horodatage :</b>
+                </div>
+                <div class="col-8">
+                    {{ sitting.name }}_jetons.zip
+                    <a class="btn btn-outline-secondary borderless"
+                       href="{{ path('sitting_report_token', {'id': sitting.id}) }}"
+                       title="Télécharger les jetons">
+                        <span class="fas fa-download"></span>
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+
     </div>
+
+</div>
 
 
 {% endblock %}
