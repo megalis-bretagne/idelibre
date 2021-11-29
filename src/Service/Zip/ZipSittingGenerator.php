@@ -62,6 +62,6 @@ class ZipSittingGenerator
 
     public function createName(Sitting $sitting)
     {
-        return $sitting->getName() . '_' . $this->dateUtil->getUnderscoredDate($sitting->getDate())  . '.zip';
+        return $sitting->getName() . '_' . $this->dateUtil->getUnderscoredDate($sitting->getDate()) . '.zip';
     }
 }

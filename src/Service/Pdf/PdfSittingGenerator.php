@@ -92,9 +92,8 @@ class PdfSittingGenerator
         $this->filesystem->remove($path);
     }
 
-
     public function createName(Sitting $sitting)
     {
-        return $sitting->getName() . '_' . $this->dateUtil->getUnderscoredDate($sitting->getDate())  . '.pdf';
+        return $sitting->getName() . '_' . $this->dateUtil->getUnderscoredDate($sitting->getDate()) . '.pdf';
     }
 }

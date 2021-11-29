@@ -30,9 +30,8 @@ class DateUtil
         return $this->getFormattedDate($dateTime) . ' - ' . $this->getFormattedTime($dateTime, $timezone);
     }
 
-
     public function getUnderscoredDate(DateTimeInterface $dateTime): string
     {
-       return $dateTime->format('d_m_Y');
+        return $dateTime->format('d_m_Y');
     }
 }

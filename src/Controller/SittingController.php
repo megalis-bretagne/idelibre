@@ -11,7 +11,6 @@ use App\Service\Convocation\ConvocationManager;
 use App\Service\Pdf\PdfSittingGenerator;
 use App\Service\Seance\ActorManager;
 use App\Service\Seance\SittingManager;
-use App\Service\Util\DateUtil;
 use App\Service\Zip\ZipSittingGenerator;
 use App\Sidebar\Annotation\Sidebar;
 use App\Sidebar\State\SidebarState;
@@ -201,7 +200,6 @@ class SittingController extends AbstractController
     #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
     public function getZipSitting(Sitting $sitting, ZipSittingGenerator $zipSittingGenerator): Response
     {
-
         $zipPath = $zipSittingGenerator->getAndCreateZipPath($sitting);
         $response = new BinaryFileResponse($zipPath);
         $response->setContentDisposition(
