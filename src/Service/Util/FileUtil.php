@@ -4,19 +4,26 @@ namespace App\Service\Util;
 
 class FileUtil
 {
-    public function deleteFileInDirectory(string $directory)
+    public function deleteFileInDirectory(string $path)
     {
-        $days = 2;
-        $path = $directory;
+        $handle = opendir($path);
+        if (!$handle) {
+            return;
+        }
 
-        if ($handle = opendir($path)) {
-            while (false !== ($file = readdir($handle))) {
-                if (is_file($path . $file)) {
-                    if (filemtime($path . $file) < (time() - ($days * 24 * 60 * 60))) {
-                        unlink($path . $file);
-                    }
-                }
+        while (false !== ($file = readdir($handle))) {
+            if ($this->isFileOlderThan2Days($path, $file)) {
+                unlink($path . $file);
             }
         }
+    }
+
+    private function isFileOlderThan2Days(string $path, false|string $file): bool
+    {
+        if (!is_file($path . $file)) {
+            return false;
+        }
+
+        return filemtime($path . $file) < (time() - (2 * 24 * 60 * 60));
     }
 }

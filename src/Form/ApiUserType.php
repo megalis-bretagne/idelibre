@@ -21,8 +21,6 @@ class ApiUserType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $isNew = !isset($options['data']);
-
         $builder
             ->add('name', TextType::class, [
                 'label' => 'Intitulé',
@@ -53,7 +51,6 @@ class ApiUserType extends AbstractType
 
     private function getTokenValue(array $options)
     {
-        //$isNew ? TokenUtil::genToken() : $options['data']->getToken()
         if (!isset($options['data'])) {
             return TokenUtil::genToken();
         }

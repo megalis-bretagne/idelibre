@@ -172,8 +172,6 @@ class SittingApiController extends AbstractController
     #[Route('/{sittingId}/projects/{id}', name: 'deleteProject', methods: ['DELETE'])]
     #[ParamConverter('sitting', class: Sitting::class, options: ['id' => 'sittingId'])]
     #[IsGranted('API_SAME_STRUCTURE', subject: ['structure', 'sitting'])]
-
-    //todo same structure project / sitting
     public function DeleteProject(
         Structure $structure,
         Sitting $sitting,

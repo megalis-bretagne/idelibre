@@ -17,11 +17,4 @@ class SidebarState
 
         return $this;
     }
-
-    public function addActiveNavs(array $activeNavs): SidebarState
-    {
-        $this->activeNavs = $activeNavs;
-
-        return $this;
-    }
 }

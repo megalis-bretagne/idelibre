@@ -21,7 +21,6 @@ class ApiUserFixtures extends Fixture implements DependentFixtureInterface
          * @var ApiRole   $roleApiStructureAdmin
          */
         $structureLibriciel = $this->getReference(StructureFixtures::REFERENCE . 'libriciel');
-        // $structureMontpellier = $this->getReference(StructureFixtures::REFERENCE . 'montpellier');
         $roleApiStructureAdmin = $this->getReference(ApiRoleFixtures::REFERENCE . 'apiStructureAdmin');
 
         //////  apiStructureAdmin ///////

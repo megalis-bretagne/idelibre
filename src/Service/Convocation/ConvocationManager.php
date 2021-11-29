@@ -160,16 +160,6 @@ class ConvocationManager
     }
 
     /**
-     * @param iterable<Convocation> $convocations
-     *
-     * @return string[]
-     */
-    private function getConvocationIdList(iterable $convocations): array
-    {
-        return array_map(fn (Convocation $convocation) => $convocation->getId(), $convocations);
-    }
-
-    /**
      * @throws ConnectionException
      */
     private function timestampAndActiveConvocations(Sitting $sitting, iterable $convocations): bool
