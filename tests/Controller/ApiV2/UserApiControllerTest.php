@@ -37,6 +37,7 @@ class UserApiControllerTest extends WebTestCase
             ->get('doctrine')
             ->getManager();
 
+
         $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
         $databaseTool->loadFixtures([
             UserFixtures::class,
@@ -133,6 +134,53 @@ class UserApiControllerTest extends WebTestCase
         $this->assertNotEmpty($userBdd->getId());
         $this->assertNotEmpty($userBdd->getParty());
         $this->assertNotEmpty($userBdd->getRole());
+    }
+
+
+    public function testPostWithPassword()
+    {
+        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
+        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
+        $roleActor = $this->getOneRoleBy(['name' => 'Actor']);
+        $party = $this->getOnePartyBy(['name' => 'Majorité', 'structure' => $structure]);
+
+
+        $data = [
+            'username' => 'newUser',
+            'email' => 'newUser@exemple.org',
+            'firstName' => 'newFirstName',
+            'lastName' => 'newLastName',
+            'role' => $roleActor->getId(),
+            'party' => $party->getId(),
+            'title' => 'Madame la vice présidente',
+            'gender' => 1,
+            'isActive' => true,
+            'phone' => '0607080919',
+            'password' => 'password'
+        ];
+
+        $this->client->request(Request::METHOD_POST, "/api/v2/structures/{$structure->getId()}/users",
+            [],
+            [],
+            [
+                "HTTP_X-AUTH-TOKEN" => $apiUser->getToken(),
+                'CONTENT_TYPE' => 'application/json',
+            ],
+            json_encode($data)
+        );
+        $this->assertResponseStatusCodeSame(201);
+
+        $response = $this->client->getResponse();
+        $user = json_decode($response->getContent(), true);
+
+        $userBdd = $this->getOneUserBy(['id' => $user['id']]);
+
+        $this->assertNotEmpty($userBdd->getId());
+        $this->assertNotEmpty($userBdd->getParty());
+        $this->assertNotEmpty($userBdd->getRole());
+
+        $passwordHasher = self::getContainer()->get('security.user_password_hasher');
+        $this->assertTrue($passwordHasher->isPasswordValid($userBdd, $data['password']));
     }
 
 
@@ -324,6 +372,50 @@ class UserApiControllerTest extends WebTestCase
     }
 
 
+    public function testUpdateWithPassword()
+    {
+        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
+        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
+        $actorLs = $this->getOneUserBy(['username' => 'actor1@libriciel']);
+
+        $data = [
+            'username' => 'updatedUserName',
+            'email' => 'updated@exemple.org',
+            'firstName' => 'updatedFirstName',
+            'lastName' => 'updatedLastName',
+            'password' => 'passwordChange',
+            'title' => 'Madame la vice présidente',
+            'gender' => 1,
+            'isActive' => true,
+            'phone' => '0607080919'
+        ];
+
+
+        $this->client->request(Request::METHOD_PUT, "/api/v2/structures/{$structure->getId()}/users/{$actorLs->getId()}",
+            [],
+            [],
+            [
+                "HTTP_X-AUTH-TOKEN" => $apiUser->getToken(),
+                'CONTENT_TYPE' => 'application/json',
+            ],
+            json_encode($data)
+        );
+
+        $this->assertResponseStatusCodeSame(200);
+        $response = $this->client->getResponse();
+        $user = json_decode($response->getContent(), true);
+
+
+        $this->assertSame($user['username'], 'updatedUserName');
+        $this->assertNotEmpty($user['party']);
+        $this->assertNotEmpty($user['role']);
+
+        $this->entityManager->refresh($actorLs);
+        $passwordHasher = self::getContainer()->get('security.user_password_hasher');
+        $this->assertTrue($passwordHasher->isPasswordValid($actorLs, $data['password']));
+    }
+
+
     public function testUpdateParty()
     {
         $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
@@ -412,6 +504,23 @@ class UserApiControllerTest extends WebTestCase
         $this->assertSame('Actor', $user['role']['name']);
     }
 
+
+    public function testDelete()
+    {
+        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
+        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
+        $actorLs = $this->getOneUserBy(['username' => 'actor1@libriciel']);
+
+        $this->client->request(Request::METHOD_DELETE, "/api/v2/structures/{$structure->getId()}/users/{$actorLs->getId()}", [], [],
+            [
+                "HTTP_X-AUTH-TOKEN" => $apiUser->getToken(),
+                'CONTENT-TYPE' => 'application/json'
+            ]
+        );
+
+        $deleted = $this->getOneUserBy(['username' => 'actor1@libriciel']);
+        $this->assertEmpty($deleted);
+    }
 
 }
 

@@ -66,6 +66,9 @@ class ComelusConnector extends Connector
         return $this->fields['url'];
     }
 
+    /**
+     * @throws ComelusConnectorException
+     */
     public function setUrl(?string $url): self
     {
         $this->validateLength($url, self::MAX_URL_LENGTH);
@@ -79,6 +82,9 @@ class ComelusConnector extends Connector
         return $this->fields['api_key'];
     }
 
+    /**
+     * @throws ComelusConnectorException
+     */
     public function setApiKey(?string $apiKey): self
     {
         $this->validateLength($apiKey, self::MAX_API_KEY_LENGTH);
@@ -132,7 +138,7 @@ class ComelusConnector extends Connector
             return;
         }
         if (strlen($string) > $length) {
-            throw new ComelusConnectorException("length should be < $length");
+            throw new ComelusConnectorException("length should be <= $length");
         }
     }
 }

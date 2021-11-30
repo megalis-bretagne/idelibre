@@ -198,6 +198,40 @@ class SittingApiControllerTest extends WebTestCase
     }
 
 
+
+    public function testAddSittingNoConvocationFile()
+    {
+        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
+        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
+        $type = $this->getOneTypeBy(['name' => 'Conseil Communautaire Libriciel']);
+
+        $this->client->request(Request::METHOD_POST,
+            "/api/v2/structures/{$structure->getId()}/sittings",
+            [
+                'date' => '2020-10-22 11:00:00',
+                'type' => $type->getId(),
+                'place' => 'salle du conseil'
+            ],
+            [
+            ],
+            [
+                "HTTP_ACCEPT" => 'application/json',
+                "HTTP_X-AUTH-TOKEN" => $apiUser->getToken(),
+            ],
+        );
+
+
+        $this->assertResponseStatusCodeSame(400);
+
+        $response = $this->client->getResponse();
+        $decodedContent = json_decode($response->getContent());
+        $this->assertSame('File with key convocationFile is required', $decodedContent->message);
+
+
+    }
+
+
+
     public function testUpdateSitting()
     {
         $structure = $this->getOneStructureBy(['name' => 'Libriciel']);

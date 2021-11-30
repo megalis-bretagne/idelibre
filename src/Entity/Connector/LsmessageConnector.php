@@ -2,6 +2,7 @@
 
 namespace App\Entity\Connector;
 
+use App\Entity\Connector\Exception\LsmessageConnectorException;
 use App\Entity\Structure;
 use App\Repository\Connector\LsmessageConnectorRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -67,8 +68,12 @@ class LsmessageConnector extends Connector
         return $this->fields['url'];
     }
 
+    /**
+     * @throws LsmessageConnectorException
+     */
     public function setUrl(?string $url): self
     {
+        $this->validateLength($url, self::MAX_URL_LENGTH);
         $this->fields['url'] = $url;
 
         return $this;
@@ -79,20 +84,28 @@ class LsmessageConnector extends Connector
         return $this->fields['api_key'];
     }
 
+    /**
+     * @throws LsmessageConnectorException
+     */
     public function setApiKey(?string $apiKey): self
     {
+        $this->validateLength($apiKey, self::MAX_API_KEY_LENGTH);
         $this->fields['api_key'] = $apiKey;
 
         return $this;
     }
 
-    public function getcontent(): ?string
+    public function getContent(): ?string
     {
         return $this->fields['content'];
     }
 
+    /**
+     * @throws LsmessageConnectorException
+     */
     public function setContent(?string $content): self
     {
+        $this->validateLength($content, self::MAX_CONTENT_LENGTH);
         $this->fields['content'] = $content;
 
         return $this;
@@ -104,10 +117,11 @@ class LsmessageConnector extends Connector
     }
 
     /**
-     * @return $this
+     * @throws LsmessageConnectorException
      */
     public function setSender(?string $sender): self
     {
+        $this->validateLength($sender, self::MAX_SENDER_LENGTH);
         $this->fields['sender'] = $sender;
 
         return $this;
@@ -123,5 +137,18 @@ class LsmessageConnector extends Connector
         $this->fields['active'] = $active;
 
         return $this;
+    }
+
+    /**
+     * @throws LsmessageConnectorException
+     */
+    private function validateLength(?string $string, int $length)
+    {
+        if (!$string) {
+            return;
+        }
+        if (strlen($string) > $length) {
+            throw new LsmessageConnectorException("length should be <= $length");
+        }
     }
 }
