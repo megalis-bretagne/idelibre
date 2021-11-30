@@ -24,13 +24,13 @@ class ManageAttendanceVoter extends Voter
         $this->convocationRepository = $convocationRepository;
     }
 
-    protected function supports($attribute, $subject)
+    protected function supports($attribute, $subject): bool
     {
         return in_array($attribute, ['MANAGE_ATTENDANCE'])
             && ($subject instanceof Request);
     }
 
-    protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
+    protected function voteOnAttribute($attribute, $subject, TokenInterface $token): bool
     {
         /** @var User $loggedInUser */
         $loggedInUser = $token->getUser();

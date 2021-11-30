@@ -92,12 +92,12 @@ class ApiUser implements UserInterface
         return array_unique($roles);
     }
 
-    public function getPassword()
+    public function getPassword(): ?string
     {
         return null;
     }
 
-    public function getSalt()
+    public function getSalt(): ?string
     {
         return null;
     }
@@ -107,7 +107,7 @@ class ApiUser implements UserInterface
         // Not implemented
     }
 
-    public function getUsername()
+    public function getUsername(): string
     {
         return $this->name;
     }

@@ -23,13 +23,13 @@ class ManageConvocationVoter extends Voter
         $this->convocationRepository = $convocationRepository;
     }
 
-    protected function supports($attribute, $subject)
+    protected function supports($attribute, $subject): bool
     {
         return in_array($attribute, ['MANAGE_CONVOCATIONS'])
             && ($subject instanceof Convocation);
     }
 
-    protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
+    protected function voteOnAttribute($attribute, $subject, TokenInterface $token): bool
     {
         /** @var User $loggedInUser */
         $loggedInUser = $token->getUser();

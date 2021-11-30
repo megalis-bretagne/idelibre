@@ -15,7 +15,7 @@ class EntityRelationDenormalizer implements ContextAwareDenormalizerInterface
     {
     }
 
-    public function denormalize($data, string $type, string $format = null, array $context = [])
+    public function denormalize($data, string $type, string $format = null, array $context = []): mixed
     {
         $entity = $this->getEntityById($type, $data);
         if (!$entity) {
@@ -25,7 +25,7 @@ class EntityRelationDenormalizer implements ContextAwareDenormalizerInterface
         return $this->getEntityById($type, $data);
     }
 
-    public function supportsDenormalization($data, string $type, string $format = null, array $context = [])
+    public function supportsDenormalization($data, string $type, string $format = null, array $context = []): bool
     {
         if (!isset($context['normalize_relations']) || !$context['normalize_relations']) {
             return false;

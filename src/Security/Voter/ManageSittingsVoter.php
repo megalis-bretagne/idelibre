@@ -23,13 +23,13 @@ class ManageSittingsVoter extends Voter
         $this->sittingRepository = $sittingRepository;
     }
 
-    protected function supports($attribute, $subject)
+    protected function supports($attribute, $subject): bool
     {
         return in_array($attribute, ['MANAGE_SITTINGS'])
             && ($subject instanceof Sitting);
     }
 
-    protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
+    protected function voteOnAttribute($attribute, $subject, TokenInterface $token): bool
     {
         /** @var User $loggedInUser */
         $loggedInUser = $token->getUser();

@@ -18,13 +18,13 @@ class ManageTypesVoter extends Voter
         $this->security = $security;
     }
 
-    protected function supports($attribute, $subject)
+    protected function supports($attribute, $subject): bool
     {
         return in_array($attribute, ['MANAGE_TYPES'])
             && ($subject instanceof Type);
     }
 
-    protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
+    protected function voteOnAttribute($attribute, $subject, TokenInterface $token): bool
     {
         /** @var User $loggedInUser */
         $loggedInUser = $token->getUser();
