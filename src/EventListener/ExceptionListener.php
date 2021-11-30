@@ -11,7 +11,7 @@ use Throwable;
 
 class ExceptionListener implements EventSubscriberInterface
 {
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [KernelEvents::EXCEPTION => 'onKernelException'];
     }
@@ -31,7 +31,7 @@ class ExceptionListener implements EventSubscriberInterface
         $event->setResponse($response);
     }
 
-    private function getStatusCode(Throwable $throwable)
+    private function getStatusCode(Throwable $throwable): int
     {
         if ($throwable instanceof HttpException) {
             return $throwable->getStatusCode();
@@ -40,7 +40,7 @@ class ExceptionListener implements EventSubscriberInterface
         return $throwable->getCode() > 100 ? $throwable->getCode() : 500;
     }
 
-    private function isJsonContentTypeOrAccept(ExceptionEvent $event)
+    private function isJsonContentTypeOrAccept(ExceptionEvent $event): bool
     {
         return 'json' === $event->getRequest()->getContentType() || in_array('application/json', $event->getRequest()->getAcceptableContentTypes());
     }

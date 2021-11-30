@@ -15,7 +15,7 @@ class HiddenEntityTransformer implements DataTransformerInterface
     ) {
     }
 
-    public function transform(mixed $value)
+    public function transform(mixed $value): mixed
     {
         if (!$value instanceof $this->entityName) {
             throw new TransformationFailedException('Value must be an instance of ' . $this->entityName);
@@ -24,7 +24,7 @@ class HiddenEntityTransformer implements DataTransformerInterface
         return $value->getId();
     }
 
-    public function reverseTransform($value)
+    public function reverseTransform($value): mixed
     {
         try {
             $repository = $this->managerRegistry->getRepository($this->entityName);

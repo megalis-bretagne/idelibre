@@ -9,7 +9,7 @@ use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 
 class DataArgumentResolver implements ArgumentValueResolverInterface
 {
-    public function supports(Request $request, ArgumentMetadata $argument)
+    public function supports(Request $request, ArgumentMetadata $argument): bool
     {
         if (!$this->isPostOrPut($request) || !$this->isApiPath($request)) {
             return false;
@@ -18,7 +18,7 @@ class DataArgumentResolver implements ArgumentValueResolverInterface
         return 'data' === $argument->getName() && 'array' === $argument->getType();
     }
 
-    public function resolve(Request $request, ArgumentMetadata $argument)
+    public function resolve(Request $request, ArgumentMetadata $argument): \Generator
     {
         $data = json_decode($request->getContent(), true);
 
