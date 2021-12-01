@@ -242,6 +242,8 @@ class SittingApiControllerTest extends WebTestCase
         $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/invitation_updated.pdf');
         $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/convocation_updated.pdf');
 
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', '/tmp/fileProject1');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', '/tmp/fileProject2');
 
         $invitationFile = new UploadedFile(__DIR__ . '/../../resources/invitation_updated.pdf', 'invitation_updated.pdf', 'application/pdf');
         $convocationFile = new UploadedFile(__DIR__ . '/../../resources/convocation_updated.pdf', 'convocation_updated.pdf', 'application/pdf');
@@ -285,6 +287,8 @@ class SittingApiControllerTest extends WebTestCase
         $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/project1.pdf');
         $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/project2.pdf');
         $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/annex1_project2.pdf');
+
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', '/tmp/convocation');
 
 
         $project1File = new UploadedFile(__DIR__ . '/../../resources/project1.pdf', 'project1.pdf', 'application/pdf');
