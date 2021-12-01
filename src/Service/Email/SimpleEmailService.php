@@ -3,16 +3,15 @@
 namespace App\Service\Email;
 
 use App\Service\EmailTemplate\HtmlTag;
-use Exception;
-use Swift_Attachment;
-use Swift_Mailer;
-use Swift_Message;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 
 class SimpleEmailService implements EmailServiceInterface
 {
     public function __construct(
-        private Swift_Mailer $mailer,
+        private MailerInterface $mailer,
         private ParameterBagInterface $bag
     ) {
     }
@@ -25,72 +24,62 @@ class SimpleEmailService implements EmailServiceInterface
     public function sendBatch(array $emailsData): void
     {
         foreach ($emailsData as $emailData) {
-            try {
-                $message = (new Swift_Message($emailData->getSubject()))
-                    ->setFrom($this->bag->get('email_from'))
-                    ->setTo($emailData->getTo())
-                    ->setBody(
-                        $this->getFormattedContent($emailData),
-                        $this->selectEmailFormat($emailData->getFormat())
-                    );
+            $email = (new Email())
+                ->from($this->bag->get('email_from'))
+                ->to($emailData->getTo())
+                ->subject($emailData->getSubject());
 
-                if ($emailData->getReplyTo()) {
-                    $message->setReplyTo($emailData->getReplyTo());
-                }
-
-                $this->setAttachment($message, $emailData);
-                $this->setCal($message, $emailData);
-            } catch (Exception $e) {
-                throw new EmailNotSendException($e->getMessage());
+            if ($emailData->getReplyTo()) {
+                $email->replyTo($emailData->getReplyTo());
             }
 
-            $this->mailer->send($message);
+            $this->setContent($email, $emailData);
+            $this->setAttachment($email, $emailData);
+            $this->setCal($email, $emailData);
+
+            try {
+                $this->mailer->send($email);
+            } catch (TransportExceptionInterface $e) {
+                throw new EmailNotSendException($e->getMessage());
+            }
         }
     }
 
-    private function setAttachment(Swift_Message $message, EmailData $email)
+    private function setAttachment(Email $email, EmailData $emailData)
     {
-        if (!$email->isAttachment() || !file_exists($email->getAttachment()->getPath())) {
+        if (!$emailData->isAttachment() || !file_exists($emailData->getAttachment()->getPath())) {
             return;
         }
 
-        if (filesize($email->getAttachment()->getPath()) > $this->bag->get('max_email_attachment_file_size')) {
+        if (filesize($emailData->getAttachment()->getPath()) > $this->bag->get('max_email_attachment_file_size')) {
             return;
         }
 
-        $message->attach(
-            Swift_Attachment::fromPath($email->getAttachment()->getPath())
-                ->setFilename($email->getAttachment()->getFileName())
-        );
+        $email->attachFromPath($emailData->getAttachment()->getPath(), $emailData->getAttachment()->getFileName());
     }
 
-    private function getFormattedContent(EmailData $email): string
-    {
-        if (EmailData::FORMAT_TEXT === $email->getFormat()) {
-            return $email->getContent();
-        }
-
-        return HtmlTag::START_HTML . $email->getContent() . HtmlTag::END_HTML;
-    }
-
-    private function selectEmailFormat(string $format): string
-    {
-        if (EmailData::FORMAT_TEXT === $format) {
-            return 'text/plain';
-        }
-
-        return 'text/html';
-    }
-
-    private function setCal(Swift_Message $message, EmailData $emailData)
+    private function setCal(Email $email, EmailData $emailData)
     {
         if (!$emailData->getCalPath()) {
             return;
         }
 
-        $message->attach(
-            Swift_Attachment::fromPath($emailData->getCalPath(), CalGenerator::CONTENT_TYPE)
-                ->setFilename('cal.ics')
+        $email->attachFromPath(
+            $emailData->getCalPath(),
+            'cal.ics',
+            CalGenerator::CONTENT_TYPE
         );
+    }
+
+    private function setContent(Email $email, EmailData $emailData)
+    {
+        if (EmailData::FORMAT_TEXT === $emailData->getFormat()) {
+            $email->text($emailData->getContent());
+        }
+
+        if (EmailData::FORMAT_HTML === $emailData->getFormat()) {
+            $contentHtml = HtmlTag::START_HTML . $emailData->getContent() . HtmlTag::END_HTML;
+            $email->text($contentHtml);
+        }
     }
 }
