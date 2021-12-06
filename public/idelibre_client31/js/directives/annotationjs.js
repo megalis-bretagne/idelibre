@@ -98,6 +98,9 @@
                             },
                             users: function () {
                                 return $scope.users;
+                            },
+                            isSharedAnnotation: function() {
+                                return $scope.account.isSharedAnnotation;
                             }
                         }
                     });

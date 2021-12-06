@@ -1,8 +1,9 @@
 (function () {
-    angular.module('idelibreApp').controller('ModalStickyNote', function ($scope, $modalInstance, stickynote, users, $rootScope) {
+    angular.module('idelibreApp').controller('ModalStickyNote', function ($scope, $modalInstance, stickynote, users, isSharedAnnotation, $rootScope) {
 
         $scope.users = users;
         $scope.groupesPolitiques = getgroupesPolitiques();
+        $scope.isSharedAnnotation = isSharedAnnotation;
 
         // Unselect every users;
         $scope.users.forEach(function (user) {

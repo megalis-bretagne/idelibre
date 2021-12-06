@@ -1,4 +1,3 @@
-
 <style>
     /* The switch - the box around the slider */
     .switch {
@@ -9,7 +8,9 @@
     }
 
     /* Hide default HTML checkbox */
-    .switch input {display:none;}
+    .switch input {
+        display: none;
+    }
 
     /* The slider */
     .slider {
@@ -60,22 +61,21 @@
     }
 
 
-    .notSelected{
+    .notSelected {
         background: #F5F5F5;
     }
 
-    .selected{
+    .selected {
         background: #9FA8DA;
     }
 
-    .groupePol{
+    .groupePol {
         background: #BBDEFB;
-        padding-top: 10px ;
-        padding-bottom: 10px; 
+        padding-top: 10px;
+        padding-bottom: 10px;
     }
 
 </style>
-
 
 
 <div class="modal-header">
@@ -83,53 +83,58 @@
 </div>
 <div class="modal-body">
 
-    <label >Auteur :</label> {{stickyNote.authorName}} <br>
-    <label >Date :</label> {{stickyNote.formatedDate}} <br>
+    <label>Auteur :</label> {{stickyNote.authorName}} <br>
+    <label>Date :</label> {{stickyNote.formatedDate}} <br>
 
     <label>Page :</label> {{stickyNote.page}}<br>
 
     <div class="form-group ">
-        <label >Annotation :</label>
-        <textarea ng-hide="stickyNote.isLocked"  class="form-control" ng-model="sticky.text" rows="5"></textarea>
+        <label>Annotation :</label>
+        <textarea ng-hide="stickyNote.isLocked" class="form-control" ng-model="sticky.text" rows="5"></textarea>
         <textarea ng-show="stickyNote.isLocked" readonly class="form-control" ng-model="sticky.text" rows="5"></textarea>
     </div>
 
-    <div ng-hide="stickyNote.isLocked">
-        <div>
-            <label>Partager : </label><br>
+    <div ng-hide="!isSharedAnnotation">
+        <div ng-hide="stickyNote.isLocked">
+            <div>
+                <label>Partager : </label><br>
 
 
-            <label class="switch">
-                <input ng-change="sharedChange()" ng-model="shared.status"   type="checkbox">
-                <span class="slider round"></span>
-            </label>
+                <label class="switch">
+                    <input ng-change="sharedChange()" ng-model="shared.status" type="checkbox">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+
+
+            <div ng-show="shared.status" style="height:230px;overflow-y:scroll; overflow-x:  hidden">
+                <div ng-repeat="groupePol in groupesPolitiques">
+                    <div class="col-xs-12">
+                        <div ng-click="clickOnGP(groupePol)" class="btn groupePol fa fa-lg" ng-class="{'fa-check': groupePol.isSelected}"
+                             style="width:100%; margin-top: 2px"><b>{{groupePol.name}}</b></div>
+                    </div>
+                </div>
+                <div ng-repeat="user in users">
+                    <div class="col-xs-6">
+                        <div ng-click="clickOnUser(user)" class="btn" ng-class="{notSelected : !user.isShared, selected:user.isShared}"
+                             style="width:100%; margin-top: 2px"><b>{{user.firstname}}<br> {{user.lastname}}</b></div>
+
+                    </div>
+
+                </div>
+
+            </div>
         </div>
 
-        
-        <div ng-show="shared.status" style="height:230px;overflow-y:scroll; overflow-x:  hidden">
-            <div ng-repeat="groupePol in groupesPolitiques"> 
-                <div class="col-xs-12">
-                    <div ng-click="clickOnGP(groupePol)" class="btn groupePol fa fa-lg" ng-class="{'fa-check': groupePol.isSelected}" style="width:100%; margin-top: 2px"><b>{{groupePol.name}}</b></div>
-                </div>
-            </div>
+        <div ng-show="stickyNote.isLocked" style="height:200px;overflow-y:scroll; overflow-x:  hidden">
+
             <div ng-repeat="user in users">
-                <div class="col-xs-6">
-                    <div ng-click="clickOnUser(user)" class="btn" ng-class="{notSelected : !user.isShared, selected:user.isShared}" style="width:100%; margin-top: 2px"> <b>{{user.firstname}}<br> {{user.lastname}}</b></div> 
-
+                <div ng-if="user.isShared" class="col-xs-6">
+                    <div class="notSelected" style="width:100%; margin-top: 2px;text-align: center;"><b>{{user.firstname}}<br>
+                        {{user.lastname}}</b></div>
                 </div>
 
             </div>
-
-        </div>
-    </div>
-    
-    <div ng-show="stickyNote.isLocked" style="height:200px;overflow-y:scroll; overflow-x:  hidden">
-
-        <div ng-repeat="user in users">
-            <div ng-if="user.isShared" class="col-xs-6">
-                <div class="notSelected" style="width:100%; margin-top: 2px;text-align: center;"> <b>{{user.firstname}}<br> {{user.lastname}}</b></div> 
-            </div>
-
         </div>
     </div>
 </div>
@@ -137,7 +142,7 @@
 
 <div class="modal-footer">
     <button class="btn btn-warning" ng-click="cancel()">Annuler</button>
-    <button ng-hide="stickyNote.isLocked" class="btn btn-danger pull-left" ng-click="deleteSticky()" >Supprimer</button>
+    <button ng-hide="stickyNote.isLocked" class="btn btn-danger pull-left" ng-click="deleteSticky()">Supprimer</button>
     <button ng-hide="stickyNote.isLocked" class="btn btn-success" ng-click="ok()">Enregistrer</button>
 
 </div>

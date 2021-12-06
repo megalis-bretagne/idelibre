@@ -88,6 +88,7 @@
                 account.token = data.token;
                 account.userId = data.userId;
                 //set account status online en broadcast it
+                account.isSharedAnnotation = data.configuration.isSharedAnnotation;
                 account.status = ONLINE;
                 $rootScope.$broadcast('connectionStatus', {state: true});
 
