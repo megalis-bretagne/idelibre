@@ -45,7 +45,8 @@ services:
     env_file:
       #- docker-resources/.env.test
       - .env.docker.local
-    command: [ "/app/docker-resources/init.sh" ]
+    #command: [ "/app/docker-resources/init.sh" ]
+    command: "sleep 3000"
 
 
   nginx-idelibre:
