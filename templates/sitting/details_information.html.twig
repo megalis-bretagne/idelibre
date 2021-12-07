@@ -51,7 +51,7 @@
         {% if sitting.reminder and sitting.reminder.isActive %}
             <div class="row mt-3">
                 <div class="col-4 text-right">
-                    <b>durée de la séance :</b>
+                    <b>Durée de la séance :</b>
                 </div>
                 <div class="col-8">
                     {{ sitting.reminder.duration % 60 != 0
@@ -132,7 +132,7 @@
 
         <div class="row mt-2">
             <div class="col-4 text-right mt-1">
-                <b>rapport pdf de la séance :</b>
+                <b>Rapport pdf de la séance :</b>
             </div>
             <div class="col-8">
                 {{ sitting.name }}_rapport.pdf
@@ -147,7 +147,7 @@
 
         <div class="row mt-2">
             <div class="col-4 text-right mt-1">
-                <b>rapport csv de la séance :</b>
+                <b>Rapport csv de la séance :</b>
             </div>
             <div class="col-8">
                 {{ sitting.name }}_rapport.csv
@@ -162,7 +162,7 @@
         {% if isAlreadySent %}
             <div class="row mt-2">
                 <div class="col-4 text-right mt-1">
-                    <b>jetons d'horodatage :</b>
+                    <b>Jetons d'horodatage :</b>
                 </div>
                 <div class="col-8">
                     {{ sitting.name }}_jetons.zip
