@@ -54,7 +54,10 @@
                     <b>durée de la séance :</b>
                 </div>
                 <div class="col-8">
-                    {{ sitting.reminder.duration }} minutes
+                    {{ sitting.reminder.duration % 60 != 0
+                    ? sitting.reminder.duration ~ ' minutes '
+                    : sitting.reminder.duration / 60 ~ ' heure(s)'
+                    }}
                 </div>
             </div>
 
