@@ -13,9 +13,7 @@ class ReminderSittingType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-
-
-            $builder
+        $builder
                 ->add('isActive', CheckboxType::class, [
                     'required' => false,
                     'label_attr' => ['class' => 'switch-custom'],
@@ -31,7 +29,6 @@ class ReminderSittingType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Reminder::class,
-            'sittingData' => null
         ]);
     }
 }
