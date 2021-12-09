@@ -63,8 +63,12 @@ class LsmessageConnectorManager
     /**
      * @param Sms[] $sms
      */
-    public function sendSms(Sitting $sitting, array $smsList)
+    public function sendSms(Sitting $sitting, ?array $smsList)
     {
+        if (empty($smsList)) {
+            return;
+        }
+
         $lsmessageConnector = $this->getLsmessageConnector($sitting->getStructure());
         if (!$lsmessageConnector || !$lsmessageConnector->getActive()) {
             return;

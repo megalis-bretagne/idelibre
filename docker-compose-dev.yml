@@ -45,8 +45,7 @@ services:
     env_file:
       #- docker-resources/.env.test
       - .env.docker.local
-    #command: [ "/app/docker-resources/init.sh" ]
-    command: "sleep 3000"
+    command: [ "/app/docker-resources/init.sh" ]
 
 
   nginx-idelibre:
@@ -97,7 +96,7 @@ services:
     image: djfarrelly/maildev
     ports:
       - 1280:80
-    command: bin/maildev --web 80 --smtp 25 --hide-extensions STARTTLS
+    #command: bin/maildev --web 80 --smtp 25 --hide-extensions STARTTLS
 
 
 
