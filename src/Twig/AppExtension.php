@@ -22,7 +22,7 @@ class AppExtension extends AbstractExtension
 
     public function formatMinutesOrHours(string $timeInMinutes): string
     {
-        if($timeInMinutes % 60 != 0) {
+        if (0 != $timeInMinutes % 60) {
             return $timeInMinutes . ' minutes';
         }
 
