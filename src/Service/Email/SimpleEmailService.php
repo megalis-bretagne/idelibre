@@ -79,7 +79,7 @@ class SimpleEmailService implements EmailServiceInterface
 
         if (EmailData::FORMAT_HTML === $emailData->getFormat()) {
             $contentHtml = HtmlTag::START_HTML . $emailData->getContent() . HtmlTag::END_HTML;
-            $email->text($contentHtml);
+            $email->html($contentHtml);
         }
     }
 }
