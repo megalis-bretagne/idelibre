@@ -43,7 +43,7 @@ class CalGenerator
 
         $timezone = $sitting->getStructure()->getTimezone()->getName();
 
-        $endDateTimeWithTz = $this->getEndDatetimeWithTz($sitting->getDate(), 90, $timezone);
+        $endDateTimeWithTz = $this->getEndDatetimeWithTz($sitting->getDate(), $sitting->getReminder()->getDuration(), $timezone);
         $startDateTimeWithTz = $this->getStartDatetimeWithTz($sitting->getDate(), $timezone);
 
         $event = (new Event())
@@ -55,7 +55,11 @@ class CalGenerator
                     new DateTime($endDateTimeWithTz, true)
                 )
             )
-            ->setOrganizer(new Organizer(new EmailAddress($sitting->getStructure()->getReplyTo()), $sitting->getStructure()->getName()));
+            ->setOrganizer(new Organizer(
+                new EmailAddress($sitting->getStructure()->getReplyTo()),
+                $sitting->getStructure()->getName(),
+                null,
+            ));
 
         if ($sitting->getPlace()) {
             $event->setLocation(new Location($sitting->getPlace()));
