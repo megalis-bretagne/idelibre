@@ -59,6 +59,15 @@ WORKDIR /app
 RUN curl -s https://getcomposer.org/installer | php &&  php composer.phar install --no-interaction
 RUN pecl install xdebug && docker-php-ext-enable xdebug
 
+
+RUN apt install gnupg -yy
+
+RUN sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt stretch-pgdg main" > /etc/apt/sources.list.d/pgdg.list' && \
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
+apt-get update -yy
+
+RUN apt-get install postgresql-client-12 -yy
+
 RUN chown -R www-data:www-data /app
 
 RUN mkdir -p /data

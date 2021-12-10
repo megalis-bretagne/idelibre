@@ -90,3 +90,6 @@ services:
   App\ArgumentResolver\DataArgumentResolver:
     tags:
       - { name: controller.argument_value_resolver, priority: 50 }
+
+  App\PostgresqlDatabaseBackup:
+    public: true
