@@ -4,7 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ### Evolution
  - remise en place du minimum de l'api 3.2
- 
+
+### Correction
+ - script d'initialisation des repertoire de token par structure
 
 ## [4.0.7] - 2021-11-25
 ### Evolution
