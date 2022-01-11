@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ### Evolution
  - remise en place du minimum de l'api 3.2
+ - symfony 5.3.13
 
 ### Correction
  - script d'initialisation des repertoire de token par structure
