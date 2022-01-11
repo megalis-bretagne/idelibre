@@ -23,8 +23,7 @@ class CreateTokenDirectory extends Command
         ParameterBagInterface $bag,
         StructureRepository $structureRepository,
         string $name = null
-    )
-    {
+    ) {
         parent::__construct($name);
         $this->fileSystem = $fileSystem;
         $this->structureRepository = $structureRepository;
