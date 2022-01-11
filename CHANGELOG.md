@@ -1,5 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
+## [4.0.8] - WIP
+
+### Evolution
+ - remise en place du minimum de l'api 3.2
+ 
 
 ## [4.0.7] - 2021-11-25
 ### Evolution
