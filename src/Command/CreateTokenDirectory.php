@@ -14,15 +14,16 @@ class CreateTokenDirectory extends Command
 {
     protected static $defaultName = 'createdir:token';
 
-
     private StructureRepository $structureRepository;
     private ParameterBagInterface $bag;
     private Filesystem $fileSystem;
 
-    public function __construct(FileSystem            $fileSystem,
-                                ParameterBagInterface $bag,
-                                StructureRepository   $structureRepository,
-                                string                $name = null)
+    public function __construct(
+        FileSystem $fileSystem,
+        ParameterBagInterface $bag,
+        StructureRepository $structureRepository,
+        string $name = null
+    )
     {
         parent::__construct($name);
         $this->fileSystem = $fileSystem;
@@ -46,13 +47,14 @@ class CreateTokenDirectory extends Command
         $year = (new \DateTimeImmutable())->format('Y');
         foreach ($structures as $structure) {
             $tokenStructureDirectory = "{$this->bag->get('token_directory')}{$structure->getId()}/$year/";
-            if(!$this->fileSystem->exists($tokenStructureDirectory)) {
-                dump($tokenStructureDirectory . " : created");
+            if (!$this->fileSystem->exists($tokenStructureDirectory)) {
+                dump($tokenStructureDirectory . ' : created');
                 $this->fileSystem->mkdir($tokenStructureDirectory);
             }
         }
 
         $io->success('token dir create');
+
         return Command::SUCCESS;
     }
 }
