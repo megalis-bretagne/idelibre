@@ -125,6 +125,21 @@ class SittingRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * @return Sitting[]
+     */
+    public function findSittingsBeforeDate(Structure $structure, DateTimeInterface $before): array
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.structure =:structure')
+            ->setParameter('structure', $structure)
+            ->andWhere('s.date < :beforeDate')
+            ->setParameter('beforeDate', $before)
+            ->orderBy('s.date', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
     public function findWithFullDetail(string $sittingId, Structure $structure): ?Sitting
     {
         return $this->createQueryBuilder('s')
