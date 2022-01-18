@@ -9,9 +9,7 @@ use DateTimeZone;
 use Eluceo\iCal\Domain\Entity\Calendar;
 use Eluceo\iCal\Domain\Entity\Event;
 use Eluceo\iCal\Domain\ValueObject\DateTime;
-use Eluceo\iCal\Domain\ValueObject\EmailAddress;
 use Eluceo\iCal\Domain\ValueObject\Location;
-use Eluceo\iCal\Domain\ValueObject\Organizer;
 use Eluceo\iCal\Domain\ValueObject\TimeSpan;
 use Eluceo\iCal\Presentation\Factory\CalendarFactory;
 use Exception;
@@ -54,12 +52,7 @@ class CalGenerator
                     new DateTime($startDateTimeWithTz, true),
                     new DateTime($endDateTimeWithTz, true)
                 )
-            )
-            ->setOrganizer(new Organizer(
-                new EmailAddress($sitting->getStructure()->getReplyTo()),
-                $sitting->getStructure()->getName(),
-                null,
-            ));
+            );
 
         if ($sitting->getPlace()) {
             $event->setLocation(new Location($sitting->getPlace()));
