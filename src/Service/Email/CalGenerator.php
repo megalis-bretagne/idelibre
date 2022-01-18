@@ -23,11 +23,10 @@ class CalGenerator
     public const DIRECTORY = '/tmp/cal/';
 
     public function __construct(
-        private Filesystem      $filesystem,
-        private FileUtil        $fileUtil,
+        private Filesystem $filesystem,
+        private FileUtil $fileUtil,
         private LoggerInterface $logger
-    )
-    {
+    ) {
     }
 
     public function generate(Sitting $sitting): ?string
