@@ -17,7 +17,7 @@
 
     <div class="form-group mt-4">
         <label for="subject" hidden>Objet</label>
-        <input type="text" class="form-control bg-white" id="subject" value="{{ emailTemplate.subject }}" disabled>
+        <input type="text" class="form-control bg-white" id="subject" value="{{ subject }}" disabled>
     </div>
 
     <iframe class="mt-3 bg-white" src="{{ path('email_template_iframe_preview', {'id': emailTemplate.id }) }}"
