@@ -94,7 +94,7 @@ class EmailTemplateController extends AbstractController
     #[Route(path: '/emailTemplate/preview/{id}', name: 'email_template_preview', methods: ['GET'])]
     #[IsGranted(data: 'MANAGE_EMAIL_TEMPLATES', subject: 'emailTemplate')]
     #[Breadcrumb(title: 'Visualiser {emailTemplate.name}')]
-    public function preview(EmailTemplate $emailTemplate, EmailGenerator $generator,): Response
+    public function preview(EmailTemplate $emailTemplate, EmailGenerator $generator, ): Response
     {
         $emailData = $generator->generateFromTemplate($emailTemplate, [
             '#linkUrl#' => '<a href="#">Accéder aux dossiers</a>',
@@ -110,10 +110,9 @@ class EmailTemplateController extends AbstractController
         ]);
         $subject = $emailData->getSubject();
 
-
         return $this->render('email_template/preview.html.twig', [
             'emailTemplate' => $emailTemplate,
-            'subject' => $subject
+            'subject' => $subject,
         ]);
     }
 
