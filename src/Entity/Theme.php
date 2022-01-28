@@ -18,7 +18,7 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotNull;
 
-#[Gedmo\Tree(type: "nested")]
+#[Gedmo\Tree(type: 'nested')]
 #[Entity(repositoryClass: ThemeRepository::class)]
 #[Index(columns: ['lft'], name: 'lft_ix')]
 #[Index(columns: ['rgt'], name: 'rgt_ix')]
@@ -37,7 +37,6 @@ class Theme
     #[Groups(['theme', 'theme:read', 'theme:write', 'project:read'])]
     private ?string $name;
 
-
     #[Gedmo\TreeLeft]
     #[Column(type: 'integer')]
     private $lft;
@@ -50,7 +49,6 @@ class Theme
     #[Gedmo\TreeRight]
     #[Column(type: 'integer')]
     private $rgt;
-
 
     #[Gedmo\TreeRoot]
     #[ManyToOne(targetEntity: Theme::class)]
