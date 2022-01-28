@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\ThemeRepository;
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
@@ -19,9 +18,7 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotNull;
 
-/**
- * @Gedmo\Tree(type="nested")
- */
+#[Gedmo\Tree(type: "nested")]
 #[Entity(repositoryClass: ThemeRepository::class)]
 #[Index(columns: ['lft'], name: 'lft_ix')]
 #[Index(columns: ['rgt'], name: 'rgt_ix')]
@@ -40,43 +37,32 @@ class Theme
     #[Groups(['theme', 'theme:read', 'theme:write', 'project:read'])]
     private ?string $name;
 
-    /**
-     * @Gedmo\TreeLeft()
-     */
+
+    #[Gedmo\TreeLeft]
     #[Column(type: 'integer')]
     private $lft;
 
-    /**
-     * @Gedmo\TreeLevel()
-     */
+    #[Gedmo\TreeLevel]
     #[Column(type: 'integer')]
     #[Groups(['theme'])]
     private $lvl;
 
-    /**
-     * @Gedmo\TreeRight()
-     */
+    #[Gedmo\TreeRight]
     #[Column(type: 'integer')]
     private $rgt;
 
-    /**
-     * @Gedmo\TreeRoot()
-     */
+
+    #[Gedmo\TreeRoot]
     #[ManyToOne(targetEntity: Theme::class)]
     #[JoinColumn(name: 'tree_root', referencedColumnName: 'id', onDelete: 'CASCADE')]
     private $root;
 
-    /**
-     * @Gedmo\TreeParent()
-     */
+    #[Gedmo\TreeParent]
     #[ManyToOne(targetEntity: Theme::class, inversedBy: 'children')]
     #[JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     #[Groups('theme:write:post')]
     private $parent;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Theme", mappedBy="parent")
-     */
     #[OneToMany(mappedBy: 'parent', targetEntity: Theme::class)]
     #[OrderBy(value: ['name' => 'ASC'])]
     private $children;
