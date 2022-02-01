@@ -4,9 +4,11 @@ namespace App\Entity\Gdpr;
 
 use App\Repository\GdprHostingRepository;
 use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\CustomIdGenerator;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
+use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
 
@@ -14,7 +16,8 @@ use Symfony\Component\Validator\Constraints\Length;
 class GdprHosting
 {
     #[Id]
-    #[GeneratedValue(strategy: 'UUID')]
+    #[GeneratedValue(strategy: 'CUSTOM')]
+    #[CustomIdGenerator(UuidGenerator::class)]
     #[Column(type: 'uuid', unique: true)]
     private $id;
 

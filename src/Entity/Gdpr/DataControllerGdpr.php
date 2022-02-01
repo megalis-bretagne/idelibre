@@ -5,11 +5,13 @@ namespace App\Entity\Gdpr;
 use App\Entity\Structure;
 use App\Repository\DataControllerGdprRepository;
 use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\CustomIdGenerator;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\OneToOne;
+use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
 
@@ -17,7 +19,8 @@ use Symfony\Component\Validator\Constraints\Length;
 class DataControllerGdpr
 {
     #[Id]
-    #[GeneratedValue(strategy: 'UUID')]
+    #[GeneratedValue(strategy: 'CUSTOM')]
+    #[CustomIdGenerator(UuidGenerator::class)]
     #[Column(type: 'uuid', unique: true)]
     private $id;
 
