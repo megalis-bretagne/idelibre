@@ -5,7 +5,6 @@ namespace App\Entity\Connector;
 use App\Entity\Connector\Exception\LsmessageConnectorException;
 use App\Entity\Structure;
 use App\Repository\Connector\LsmessageConnectorRepository;
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\CustomIdGenerator;
 use Doctrine\ORM\Mapping\Entity;
