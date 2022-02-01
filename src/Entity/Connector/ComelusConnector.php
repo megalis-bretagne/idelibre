@@ -5,13 +5,14 @@ namespace App\Entity\Connector;
 use App\Entity\Connector\Exception\ComelusConnectorException;
 use App\Entity\Structure;
 use App\Repository\Connector\ComelusConnectorRepository;
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\CustomIdGenerator;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
+use Ramsey\Uuid\Doctrine\UuidGenerator;
 
 #[Entity(repositoryClass: ComelusConnectorRepository::class)]
 class ComelusConnector extends Connector
@@ -19,12 +20,16 @@ class ComelusConnector extends Connector
     public const NAME = 'comelus';
     public const MAX_URL_LENGTH = 255;
     public const MAX_API_KEY_LENGTH = 255;
+
     #[Id]
-    #[GeneratedValue(strategy: 'UUID')]
-    #[Column(type: 'guid')]
+    #[GeneratedValue(strategy: 'CUSTOM')]
+    #[CustomIdGenerator(UuidGenerator::class)]
+    #[Column(type: 'uuid', unique: true)]
     protected $id;
+
     #[Column(type: 'string', length: 255)]
     protected $name = self::NAME;
+
     #[Column(type: 'json', options: ['jsonb' => true])]
     protected $fields = [
         'url' => null,
@@ -33,10 +38,7 @@ class ComelusConnector extends Connector
         'mailing_list_id' => null,
         'active' => false,
     ];
-    /**
-     * @ORM\ManyToOne(targetEntity=Structure::class)
-     * @ORM\JoinColumn(nullable=false)
-     */
+
     #[ManyToOne(targetEntity: Structure::class)]
     #[JoinColumn(nullable: false, onDelete: 'CASCADE')]
     protected $structure;

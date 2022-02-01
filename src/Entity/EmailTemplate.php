@@ -6,6 +6,7 @@ use App\Repository\EmailTemplateRepository;
 use App\Service\Email\EmailData;
 use App\Service\EmailTemplate\EmailTemplateException;
 use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\CustomIdGenerator;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
@@ -15,6 +16,7 @@ use Doctrine\ORM\Mapping\OneToOne;
 use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\UniqueConstraint;
 use Exception;
+use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -30,8 +32,9 @@ class EmailTemplate
     public const CATEGORY_INVITATION = 'invitation';
 
     #[Id]
-    #[GeneratedValue(strategy: 'UUID')]
-    #[Column(type: 'guid')]
+    #[GeneratedValue(strategy: 'CUSTOM')]
+    #[CustomIdGenerator(UuidGenerator::class)]
+    #[Column(type: 'uuid', unique: true)]
     private $id;
 
     #[Column(type: 'string', length: 255)]

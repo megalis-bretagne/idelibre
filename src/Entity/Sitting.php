@@ -10,6 +10,7 @@ use DateTimeZone;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\CustomIdGenerator;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
@@ -20,6 +21,7 @@ use Doctrine\ORM\Mapping\OneToOne;
 use Doctrine\ORM\Mapping\OrderBy;
 use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\UniqueConstraint;
+use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints\Length;
@@ -35,8 +37,9 @@ class Sitting
     public const ACTIVE = 'active';
 
     #[Id]
-    #[GeneratedValue(strategy: 'UUID')]
-    #[Column(type: 'guid')]
+    #[GeneratedValue(strategy: 'CUSTOM')]
+    #[CustomIdGenerator(UuidGenerator::class)]
+    #[Column(type: 'uuid', unique: true)]
     #[Groups(['sitting', 'sitting:read'])]
     private $id;
 

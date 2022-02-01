@@ -15,7 +15,7 @@ class GdprHosting
 {
     #[Id]
     #[GeneratedValue(strategy: 'UUID')]
-    #[Column(type: 'guid')]
+    #[Column(type: 'uuid', unique: true)]
     private $id;
 
     #[Column(type: 'string', length: 255)]

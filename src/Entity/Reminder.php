@@ -4,11 +4,13 @@ namespace App\Entity;
 
 use App\Repository\ReminderRepository;
 use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\CustomIdGenerator;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\OneToOne;
+use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[Entity(repositoryClass: ReminderRepository::class)]
@@ -24,8 +26,9 @@ class Reminder
         '5 heures' => 300,
     ];
     #[Id]
-    #[GeneratedValue(strategy: 'UUID')]
-    #[Column(type: 'guid')]
+    #[GeneratedValue(strategy: 'CUSTOM')]
+    #[CustomIdGenerator(UuidGenerator::class)]
+    #[Column(type: 'uuid', unique: true)]
     #[Groups(['type:detail', 'type:write', 'sitting:detail'])]
     private $id;
 

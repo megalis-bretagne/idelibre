@@ -4,12 +4,16 @@ namespace App\Entity;
 
 use App\Repository\AnnexRepository;
 use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\CustomIdGenerator;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToOne;
+
+
+use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotNull;
@@ -18,8 +22,9 @@ use Symfony\Component\Validator\Constraints\NotNull;
 class Annex
 {
     #[Id]
-    #[GeneratedValue(strategy: 'UUID')]
-    #[Column(type: 'guid')]
+    #[GeneratedValue(strategy: 'CUSTOM')]
+    #[CustomIdGenerator(UuidGenerator::class)]
+    #[Column(type: 'uuid', unique: true)]
     #[Groups(['project:read'])]
     private $id;
 

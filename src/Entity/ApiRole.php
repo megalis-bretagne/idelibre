@@ -4,16 +4,19 @@ namespace App\Entity;
 
 use App\Repository\ApiRoleRepository;
 use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\CustomIdGenerator;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
+use Ramsey\Uuid\Doctrine\UuidGenerator;
 
 #[Entity(repositoryClass: ApiRoleRepository::class)]
 class ApiRole
 {
     #[Id]
-    #[GeneratedValue(strategy: 'UUID')]
-    #[Column(type: 'guid')]
+    #[GeneratedValue(strategy: 'CUSTOM')]
+    #[CustomIdGenerator(UuidGenerator::class)]
+    #[Column(type: 'uuid', unique: true)]
     private $id;
 
     #[Column(type: 'string', length: 255)]
