@@ -30,7 +30,7 @@ class EmailTemplateFixtures extends Fixture implements DependentFixtureInterface
             ->setName('Conseil Libriciel')
             ->setSubject('idelibre : une nouvelle convocation ...')
             ->setCategory(EmailTemplate::CATEGORY_CONVOCATION)
-            ->setContent('Voici mon template pour les seance de type conseil de la struture libriciel');
+            ->setContent('Voici mon template pour les seance de type conseil de la structure libriciel');
 
         $manager->persist($emailTemplateConseilLs);
         $this->addReference(self::REFERENCE . 'emailTemplateConseilLs', $emailTemplateConseilLs);
