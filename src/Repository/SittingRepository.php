@@ -76,9 +76,9 @@ class SittingRepository extends ServiceEntityRepository
         return $qb;
     }
 
-    public function findActiveFromStructure(Structure $structure): QueryBuilder
+    public function findActiveFromStructure(Structure $structure, ?iterable $authorizedTypes = null): QueryBuilder
     {
-        return $this->createQueryBuilder('s')
+        $sittings = $this->createQueryBuilder('s')
             ->andWhere('s.structure =:structure')
             ->andWhere('s.isArchived = false')
             ->setParameter('structure', $structure)
@@ -91,6 +91,15 @@ class SittingRepository extends ServiceEntityRepository
             ->addSelect('sent_timestamp')
             ->addSelect('received_timestamp')
             ->orderBy('s.date', 'DESC');
+
+        if ($authorizedTypes) {
+            $sittings->join('s.type', 't')
+                ->andWhere('t in (:types)')
+                ->setParameter('types', $authorizedTypes);
+
+        }
+
+        return $sittings;
     }
 
     public function findWithProjectsAndAnnexes(string $sittingId): ?Sitting
