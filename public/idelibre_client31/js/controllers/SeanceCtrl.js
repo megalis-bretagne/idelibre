@@ -84,7 +84,7 @@
 
 
         $scope.account.seances = _.sortBy($scope.account.seances, function (seance) {
-            return seance.date;
+            return - seance.date;
         });
 
     });
