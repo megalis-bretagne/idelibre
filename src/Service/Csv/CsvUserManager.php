@@ -89,7 +89,7 @@ class CsvUserManager
     private function missingFieldViolation($record): ConstraintViolationList
     {
         $violation = new ConstraintViolation(
-            'Chaque ligne doit contenir 6 champs séparés par des virgules.',
+            'Chaque ligne doit contenir 7 champs séparés par des virgules.',
             null,
             $record,
             null,

@@ -190,7 +190,7 @@ class CsvUserControllerTest extends WebTestCase
         $this->assertCount(1, $title);
 
 
-        $errorMsg = $crawler->filter('html:contains("Chaque ligne doit contenir 6 champs séparés par des virgules.")');
+        $errorMsg = $crawler->filter('html:contains("Chaque ligne doit contenir 7 champs séparés par des virgules.")');
         $this->assertCount(1, $errorMsg);
     }
 
