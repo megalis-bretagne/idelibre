@@ -26,7 +26,7 @@ class ApiUserType extends AbstractType
                 'label' => 'Intitulé',
             ])
             ->add('token', TextType::class, [
-                'label' => "Clé d'api",
+                'label' => "Clé d'API",
                 'data' => $this->getTokenValue($options),
             ]);
 

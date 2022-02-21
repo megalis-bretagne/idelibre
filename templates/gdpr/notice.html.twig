@@ -21,8 +21,8 @@
                     <div class="card-header bg-primary text-white">
                         <h3>Politique de confidentialité</h3>
                     </div>
-                    <div class="card-body">
-                        La création de votre compte utilisateur sur idelibRE demande la
+                    <div class="card-body text-justify">
+                        La création de votre compte utilisateur sur idelibre demande la
                         saisie de données personnelles vous concernant. Vous trouverez ci-dessous le
                         détail des informations collectées ainsi que les traitements effectués. Ces
                         données sont collectées uniquement dans le cadre de votre activité
@@ -43,7 +43,7 @@
                     </div>
                     <div class="card-body">
                         <h5 class="card-subtitle mb-2 text-muted">Entité : </h5>
-                        <div class="ml-3">
+                        <div class="ml-3 text-justify">
                             {{ dataController.name ?? 'Non renseignée' }} <br>
                             {{ dataController.address ?? 'Non renseignée' }} <br>
                             Numéro SIRET : {{ dataController.siret ?? 'Non renseignée' }} <br>
@@ -51,14 +51,14 @@
                             Numéro de téléphone : {{ dataController.phone ?? 'Non renseignée' }} <br>
                             E-mail : {{ dataController.email ?? 'Non renseignée' }}
                         </div>
-                        <h5 class="card-subtitle mb-2 text-muted mt-2">Responsable de l'entité \ Responsable des traitements :</h5>
-                        <div class="ml-3">
-                            {{ dataController.representative ?? 'Non renseignée' }}
+                        <h5 class="card-subtitle mb-2 text-muted mt-2">Responsable de l'entité / Responsable des traitements :</h5>
+                        <div class="ml-3 text-justify">
+                            {{ dataController.representative ?? 'Non renseignée' }},
                             {{ dataController.quality ?? 'Non renseignée' }}
                         </div>
-                        <h5 class="card-subtitle mb-2 text-muted  mt-2">Délégué à la protection des données de l'entité (DPD / DPO) :</h5>
+                        <h5 class="card-subtitle mb-2 text-muted  mt-2 text-justify">Délégué à la protection des données de l'entité (DPD / DPO) :</h5>
                         <div class="ml-3">
-                            {{ dataController.dpoName ?? 'Non renseignée' }}
+                            {{ dataController.dpoName ?? 'Non renseignée' }},
                             {{ dataController.dpoEmail ?? 'Non renseignée' }}
                         </div>
                     </div>
@@ -72,10 +72,10 @@
                     <div class="card-body">
                         <h5 class="card-subtitle mb-2 text-muted">1.1 Logiciel (ci-après « le logiciel ») : </h5>
                         <div class="ml-3">
-                            idelibRE
+                            idelibre
                         </div>
                         <h5 class="card-subtitle mb-2 text-muted mt-2">1.2 Éditeur (ci-après « l'éditeur ») :</h5>
-                        <div class="ml-3">
+                        <div class="ml-3 text-justify">
                             LIBRICIEL SCOP<br>
                             836 Rue du Mas de Verchant - 34000 Montpellier<br>
                             numéro SIRET : 491 011 698 00025 <br>
@@ -92,7 +92,7 @@
                     <div class="card-body">
                         <h5 class="card-subtitle mb-2 text-muted">2.1 Hébergeur (ci-après « l'hébergeur ») :</h5>
                         <div class="ml-3">
-                            idelibRE est hébergée par : <br>
+                            idelibre est hébergée par : <br>
                             {{ gdpr.companyName ?? 'Non renseignée' }} <br>
                             {{ gdpr.address ?? 'Non renseignée' }} <br>
 
@@ -134,9 +134,9 @@
                         <h3>Article 4 - Traitements</h3>
                     </div>
                     <div class="card-body">
-                        <div class="ml-3">
-                            Vos informations personnelles sont utilisées pour le bon fonctionnement de idelibRE dans les cas listés
-                            ci-après :
+                        <div class="ml-3 text-justify">
+                            Vos informations personnelles sont utilisées pour le bon fonctionnement de idelibre dans les cas listés
+                            ci-après : <br><br>
 
                             lister les utilisateurs de l'application : <br>
                             votre prénom, votre nom et votre adresse de messagerie apparaissent dans la liste. <br><br>
@@ -158,9 +158,9 @@
                     </div>
                     <div class="card-body">
                         <h5 class="card-subtitle mb-2 text-muted">5.1 Cookies strictement nécessaires :</h5>
-                        <div class="ml-3">
+                        <div class="ml-3 text-justify">
                             Ces cookies sont nécessaires au fonctionnement de l'application et ne peuvent pas être désactivés.
-                            Nous utilisons un cookie de session qui est utilisé pour stocker des informations de votre la session en cours.
+                            Nous utilisons un cookie de session qui est utilisé pour stocker des informations de votre session en cours.
                             Les informations, telles que les données de connexion ou les formulaires en ligne déjà remplis, sont également
                             conservées
                             pendant la session.
@@ -176,8 +176,8 @@
                         <h3>Article 6 - Droit à l'oubli</h3>
                     </div>
                     <div class="card-body">
-                        <div class="ml-3">
-                            Sur votre demande ou à la demande de l’administrateur de idelibRE, votre compte utilisateur peut être
+                        <div class="ml-3 text-justify">
+                            Sur votre demande ou à la demande de l’administrateur de idelibre, votre compte utilisateur peut être
                             supprimé définitivement. <br>
                             La suppression de votre compte laissera les traces de votre activité : <br>
                             dans le journal des évenements pendant une durée de 6 mois après la suppression de l'utilisateur.
@@ -191,7 +191,7 @@
                         <h3>Article 7 - Vos droits sur les données vous concernant</h3>
                     </div>
                     <div class="card-body">
-                        <div class="ml-3">
+                        <div class="ml-3 text-justify">
                             Vous pouvez accéder et obtenir une copie des données vous concernant, vous opposer au traitement de ces
                             données,
                             les faire rectifier ou les faire effacer. Vous disposez également d'un droit à la limitation du
@@ -203,7 +203,7 @@
                             Pour exercer vos droits sur les données personnelles vous concernant, vous
                             pouvez contacter le Délégué à la Protection des Données (DPO), à l’adresse
                             suivante : <br>
-                            {{ dataController.dpoEmail ?? 'Non renseignée'}}
+                            {{ dataController.dpoEmail ?? 'Non renseignée'}} <br><br>
                             Réclamation (plainte) auprès de la CNIL.
                             Si vous estimez, après nous avoir contacté, que vos droits sur vos données ne sont pas respectés,
                             vous pouvez <a href="https://www.cnil.fr/fr/plaintes">adresser une réclamation (plainte) à la CNIL</a>.
