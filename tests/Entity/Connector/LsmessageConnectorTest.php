@@ -48,39 +48,4 @@ class LsmessageConnectorTest extends WebTestCase
     }
 
 
-    public function testSetUrlTooLong()
-    {
-        $this->expectException(LsmessageConnectorException::class);
-        $this->expectExceptionMessage('length should be <= 255');
-        $this->createDummyConnector()
-            ->setUrl('https://' . $this->genString(255). '.fr');
-    }
-
-    public function testApiKeyTooLong()
-    {
-        $this->expectException(LsmessageConnectorException::class);
-        $this->expectExceptionMessage('length should be <= 255');
-        $this->createDummyConnector()
-            ->setApiKey($this->genString(260));
-    }
-
-    public function testContentTooLong()
-    {
-        $this->expectException(LsmessageConnectorException::class);
-        $this->expectExceptionMessage('length should be <= 140');
-        $this->createDummyConnector()
-            ->setContent($this->genString(142));
-    }
-
-    public function testSenderTooLong()
-    {
-        $this->expectException(LsmessageConnectorException::class);
-        $this->expectExceptionMessage('length should be <= 11');
-        $this->createDummyConnector()
-            ->setSender($this->genString(12));
-    }
-
-
-
-
 }
