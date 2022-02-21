@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Structure;
-use App\Repository\SittingRepository;
 use App\Service\Seance\SittingManager;
 use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;

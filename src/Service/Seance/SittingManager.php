@@ -138,8 +138,6 @@ class SittingManager
         return $this->sittingRepository->findByStructure($user->getStructure(), $search, $status);
     }
 
-
-
     public function getActiveSittingDetails(User $user): QueryBuilder
     {
         if ($user->getRole()->getId() === $this->roleManager->getSecretaryRole()->getId()) {
@@ -148,7 +146,6 @@ class SittingManager
 
         return $this->sittingRepository->findByStructure($user->getStructure());
     }
-
 
     public function isAlreadySent(Sitting $sitting): bool
     {

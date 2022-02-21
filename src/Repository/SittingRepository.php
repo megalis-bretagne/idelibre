@@ -96,7 +96,6 @@ class SittingRepository extends ServiceEntityRepository
             $sittings->join('s.type', 't')
                 ->andWhere('t in (:types)')
                 ->setParameter('types', $authorizedTypes);
-
         }
 
         return $sittings;
