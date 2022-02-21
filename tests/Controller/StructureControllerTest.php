@@ -180,7 +180,7 @@ class StructureControllerTest extends WebTestCase
         $crawler = $this->client->request(Request::METHOD_GET, '/structure/preferences');
         $this->assertResponseStatusCodeSame(200);
 
-        $editTitle = $crawler->filter('html:contains("Informations de la struture")');
+        $editTitle = $crawler->filter('html:contains("Informations de la structure")');
         $this->assertCount(1, $editTitle);
         $form = $crawler->selectButton('Enregistrer')->form();
         $form['structure_information[name]'] = 'New structure name';

@@ -33,7 +33,7 @@ class LsmessageConnectorType extends AbstractType
                 'label' => 'Expéditeur',
                 'constraints' => [
                     new Length(['max' => LsmessageConnector::MAX_SENDER_LENGTH]),
-                    new Regex('/^[^0-9][a-zA-Z0-9]+$/', 'L\'expéditeur ne doit ni commencer par un chiffre ni contenir de carractères spéciaux'),
+                    new Regex('/^[^0-9][a-zA-Z0-9]+$/', 'L\'expéditeur ne doit ni commencer par un chiffre ni contenir de caractères spéciaux'),
                 ],
             ])
             ->add('content', TextareaType::class, [
