@@ -1,7 +1,7 @@
 {% extends 'dataview.html.twig' %}
 {% import 'macro/_forms.html.twig' as macros %}
 
-{% block pageTitle "Clés d'api" %}
+{% block pageTitle "Clés d'API" %}
 
 {% block pageActions %}
     <a href="{{ path('apiUser_add') }}" class="btn btn-primary"><span
@@ -21,7 +21,7 @@
         </thead>
         <tbody>
 
-        {{ macros.emptyList(apiUsers, "Aucune clé d'api à afficher") }}
+        {{ macros.emptyList(apiUsers, "Aucune clé d'API à afficher") }}
 
         {% for apiUser in apiUsers %}
             <tr class="d-flex">
