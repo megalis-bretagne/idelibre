@@ -12,7 +12,6 @@ use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
-use Symfony\Component\Validator\Constraints\Length;
 
 #[Entity(repositoryClass: LsmessageConnectorRepository::class)]
 class LsmessageConnector extends Connector
@@ -135,5 +134,4 @@ class LsmessageConnector extends Connector
 
         return $this;
     }
-
 }
