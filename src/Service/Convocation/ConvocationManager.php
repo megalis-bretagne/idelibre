@@ -130,7 +130,7 @@ class ConvocationManager
      */
     public function sendAllConvocations(Sitting $sitting, ?string $userProfile): void
     {
-        $convocations = $this->getConvocationByUserProfile($sitting, $userProfile);
+        $convocations = $this->getConvocationNotSentByUserProfile($sitting, $userProfile);
         while (count($convocations)) {
             $convocationBatch = array_splice($convocations, 0, $this->bag->get('max_batch_email'));
             $this->timestampAndActiveConvocations($sitting, $convocationBatch);
@@ -268,7 +268,7 @@ class ConvocationManager
         return $emails;
     }
 
-    private function getConvocationByUserProfile(Sitting $sitting, ?string $userProfile): array
+    private function getConvocationNotSentByUserProfile(Sitting $sitting, ?string $userProfile): array
     {
         switch ($userProfile) {
             case Role::NAME_ROLE_ACTOR:
@@ -284,7 +284,22 @@ class ConvocationManager
                 $convocations = $sitting->getConvocations()->toArray();
         }
 
-        return $convocations;
+        return $this->keepOnlyNotSent($convocations);
+    }
+
+    /**
+     * @param array<Convocation> $convocations
+     */
+    public function keepOnlyNotSent(array $convocations): array
+    {
+        $notSentConvocations = [];
+        foreach ($convocations as $convocation) {
+            if (!$convocation->getSentTimestamp()) {
+                $notSentConvocations[] = $convocation;
+            }
+        }
+
+        return $notSentConvocations;
     }
 
     public function updateConvocationAttendances(array $convocationAttendances)
