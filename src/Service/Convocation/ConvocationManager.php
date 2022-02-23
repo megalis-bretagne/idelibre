@@ -28,19 +28,18 @@ use Symfony\Component\Messenger\MessageBusInterface;
 class ConvocationManager
 {
     public function __construct(
-        private EntityManagerInterface  $em,
-        private ConvocationRepository   $convocationRepository,
-        private TimestampManager        $timestampManager,
-        private LoggerInterface         $logger,
-        private ParameterBagInterface   $bag,
-        private EmailServiceInterface   $emailService,
-        private EmailGenerator          $emailGenerator,
-        private UserRepository          $userRepository,
+        private EntityManagerInterface $em,
+        private ConvocationRepository $convocationRepository,
+        private TimestampManager $timestampManager,
+        private LoggerInterface $logger,
+        private ParameterBagInterface $bag,
+        private EmailServiceInterface $emailService,
+        private EmailGenerator $emailGenerator,
+        private UserRepository $userRepository,
         private ClientNotifierInterface $clientNotifier,
-        private MessageBusInterface     $messageBus,
-        private CalGenerator            $icalGenerator
-    )
-    {
+        private MessageBusInterface $messageBus,
+        private CalGenerator $icalGenerator
+    ) {
     }
 
     public function createConvocationsActors(Sitting $sitting): void
@@ -140,7 +139,7 @@ class ConvocationManager
             $this->emailService->sendBatch($emails);
             $this->messageBus->dispatch(
                 new ConvocationSent(
-                    array_map(fn(Convocation $c) => $c->getId(), $convocations),
+                    array_map(fn (Convocation $c) => $c->getId(), $convocations),
                     $sitting->getId()
                 )
             );
@@ -202,7 +201,7 @@ class ConvocationManager
 
     private function isAlreadySent(Convocation $convocation): bool
     {
-        return (bool)$convocation->getSentTimestamp();
+        return (bool) $convocation->getSentTimestamp();
     }
 
     /**
@@ -302,7 +301,6 @@ class ConvocationManager
 
         return $notSentConvocations;
     }
-
 
     public function updateConvocationAttendances(array $convocationAttendances)
     {
