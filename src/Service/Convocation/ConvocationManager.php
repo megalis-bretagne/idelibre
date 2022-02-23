@@ -28,18 +28,19 @@ use Symfony\Component\Messenger\MessageBusInterface;
 class ConvocationManager
 {
     public function __construct(
-        private EntityManagerInterface $em,
-        private ConvocationRepository $convocationRepository,
-        private TimestampManager $timestampManager,
-        private LoggerInterface $logger,
-        private ParameterBagInterface $bag,
-        private EmailServiceInterface $emailService,
-        private EmailGenerator $emailGenerator,
-        private UserRepository $userRepository,
+        private EntityManagerInterface  $em,
+        private ConvocationRepository   $convocationRepository,
+        private TimestampManager        $timestampManager,
+        private LoggerInterface         $logger,
+        private ParameterBagInterface   $bag,
+        private EmailServiceInterface   $emailService,
+        private EmailGenerator          $emailGenerator,
+        private UserRepository          $userRepository,
         private ClientNotifierInterface $clientNotifier,
-        private MessageBusInterface $messageBus,
-        private CalGenerator $icalGenerator
-    ) {
+        private MessageBusInterface     $messageBus,
+        private CalGenerator            $icalGenerator
+    )
+    {
     }
 
     public function createConvocationsActors(Sitting $sitting): void
@@ -130,7 +131,7 @@ class ConvocationManager
      */
     public function sendAllConvocations(Sitting $sitting, ?string $userProfile): void
     {
-        $convocations = $this->getConvocationByUserProfile($sitting, $userProfile);
+        $convocations = $this->getConvocationNotSentByUserProfile($sitting, $userProfile);
         while (count($convocations)) {
             $convocationBatch = array_splice($convocations, 0, $this->bag->get('max_batch_email'));
             $this->timestampAndActiveConvocations($sitting, $convocationBatch);
@@ -139,7 +140,7 @@ class ConvocationManager
             $this->emailService->sendBatch($emails);
             $this->messageBus->dispatch(
                 new ConvocationSent(
-                    array_map(fn (Convocation $c) => $c->getId(), $convocations),
+                    array_map(fn(Convocation $c) => $c->getId(), $convocations),
                     $sitting->getId()
                 )
             );
@@ -201,7 +202,7 @@ class ConvocationManager
 
     private function isAlreadySent(Convocation $convocation): bool
     {
-        return (bool) $convocation->getSentTimestamp();
+        return (bool)$convocation->getSentTimestamp();
     }
 
     /**
@@ -268,7 +269,7 @@ class ConvocationManager
         return $emails;
     }
 
-    private function getConvocationByUserProfile(Sitting $sitting, ?string $userProfile): array
+    private function getConvocationNotSentByUserProfile(Sitting $sitting, ?string $userProfile): array
     {
         switch ($userProfile) {
             case Role::NAME_ROLE_ACTOR:
@@ -284,8 +285,24 @@ class ConvocationManager
                 $convocations = $sitting->getConvocations()->toArray();
         }
 
-        return $convocations;
+        return $this->keepOnlyNotSent($convocations);
     }
+
+    /**
+     * @param array<Convocation> $convocations
+     */
+    public function keepOnlyNotSent(array $convocations): array
+    {
+        $notSentConvocations = [];
+        foreach ($convocations as $convocation) {
+            if (!$convocation->getSentTimestamp()) {
+                $notSentConvocations[] = $convocation;
+            }
+        }
+
+        return $notSentConvocations;
+    }
+
 
     public function updateConvocationAttendances(array $convocationAttendances)
     {
