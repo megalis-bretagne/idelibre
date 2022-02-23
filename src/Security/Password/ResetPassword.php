@@ -64,7 +64,7 @@ class ResetPassword
     {
         $subject = 'Réinitialiser votre mot de passe';
         $resetPasswordUrl = $this->router->generate('app_reset', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
-        $content = "Bonjour, \n\nVeuillez cliquer sur le lien suivant pour réinitialiser votre mot de passe \n\n" . $resetPasswordUrl;
+        $content = "Bonjour, \n\nVeuillez cliquer sur le lien suivant pour réinitialiser votre mot de passe : \n\n" . $resetPasswordUrl;
 
         $emailData = new EmailData($subject, $content, EmailData::FORMAT_TEXT);
         $emailData->setTo($user->getEmail())
