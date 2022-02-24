@@ -58,16 +58,11 @@ class ComelusConnectorType extends AbstractType
             ->add('mailingListId', ChoiceType::class, [
                 'required' => true,
                 'placeholder' => 'choississez une liste',
-                'choices' => $this->getAvailableOptions($comelusConnector->getUrl(), $comelusConnector->getApiKey()),
+                'choices' => $this->getAvailableOptions($comelusConnector->getUrl(), $comelusConnector->getApiKey()), // do only in get not post !
                 'label' => 'Liste de diffusion',
             ]);
 
-        $builder->addEventListener(
-            FormEvents::SUBMIT,
-            function (FormEvent $event) {
-                $this->getMailingList($event->getForm());
-            }
-        );
+        $builder->get('mailingListId')->resetViewTransformers();
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -77,17 +72,6 @@ class ComelusConnectorType extends AbstractType
         ]);
     }
 
-    private function getMailingList(FormInterface $form)
-    {
-        $options = $this->getAvailableOptions($form->getData()->getUrl(), $form->getData()->getApiKey());
-
-        $form->add('mailingListId', ChoiceType::class, [
-            'required' => false,
-            'placeholder' => 'choississez une liste',
-            'choices' => $options,
-            'label' => 'Liste de diffusion',
-        ]);
-    }
 
     private function getAvailableOptions(?string $url, ?string $apiKey): ?array
     {
