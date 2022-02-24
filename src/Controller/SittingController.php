@@ -68,7 +68,8 @@ class SittingController extends AbstractController
                 $form->getData(),
                 $form->get('convocationFile')->getData(),
                 $form->get('invitationFile')->getData(),
-                $this->getUser()->getStructure()
+                $this->getUser()->getStructure(),
+                $form->get('reminder')->getData()
             );
 
             return $this->redirectToRoute('edit_sitting_actor', ['id' => $sittingId]);

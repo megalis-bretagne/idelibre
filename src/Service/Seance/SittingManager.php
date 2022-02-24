@@ -2,6 +2,7 @@
 
 namespace App\Service\Seance;
 
+use App\Entity\Reminder;
 use App\Entity\Sitting;
 use App\Entity\Structure;
 use App\Entity\User;
@@ -39,7 +40,8 @@ class SittingManager
         Sitting $sitting,
         UploadedFile $uploadedConvocationFile,
         ?UploadedFile $uploadedInvitationFile,
-        Structure $structure
+        Structure $structure,
+        ?Reminder $reminder = null
     ): string {
         // TODO remove file if transaction failed
         $convocationFile = $this->fileManager->save($uploadedConvocationFile, $structure);
@@ -48,6 +50,11 @@ class SittingManager
             ->setName($sitting->getType()->getName())
             ->setConvocationFile($convocationFile);
         $this->em->persist($sitting);
+
+        if($reminder) {
+            $this->em->persist($reminder);
+            $sitting->setReminder($reminder);
+        }
 
         $this->convocationManager->createConvocationsActors($sitting);
         $this->createInvitationsInvitableEmployeesAndGuests($uploadedInvitationFile, $sitting, $structure);
