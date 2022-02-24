@@ -12,9 +12,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 
@@ -58,34 +55,17 @@ class ComelusConnectorType extends AbstractType
             ->add('mailingListId', ChoiceType::class, [
                 'required' => true,
                 'placeholder' => 'choississez une liste',
-                'choices' => $this->getAvailableOptions($comelusConnector->getUrl(), $comelusConnector->getApiKey()),
+                'choices' => $this->getAvailableOptions($comelusConnector->getUrl(), $comelusConnector->getApiKey()), // do only in get not post !
                 'label' => 'Liste de diffusion',
             ]);
 
-        $builder->addEventListener(
-            FormEvents::SUBMIT,
-            function (FormEvent $event) {
-                $this->getMailingList($event->getForm());
-            }
-        );
+        $builder->get('mailingListId')->resetViewTransformers();
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'data_class' => ComelusConnector::class,
-        ]);
-    }
-
-    private function getMailingList(FormInterface $form)
-    {
-        $options = $this->getAvailableOptions($form->getData()->getUrl(), $form->getData()->getApiKey());
-
-        $form->add('mailingListId', ChoiceType::class, [
-            'required' => false,
-            'placeholder' => 'choississez une liste',
-            'choices' => $options,
-            'label' => 'Liste de diffusion',
         ]);
     }
 
