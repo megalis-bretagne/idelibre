@@ -51,7 +51,7 @@ class SittingManager
             ->setConvocationFile($convocationFile);
         $this->em->persist($sitting);
 
-        if($reminder) {
+        if ($reminder) {
             $this->em->persist($reminder);
             $sitting->setReminder($reminder);
         }
