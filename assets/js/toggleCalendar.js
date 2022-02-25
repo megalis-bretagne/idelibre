@@ -4,6 +4,10 @@ $("document").ready(function () {
     if(!$("#sitting_reminder_isActive").attr('checked')) {
         $('#sitting_reminder_duration').attr('disabled', true);
     }
+
+    if(!$("#type_reminder_isActive").attr('checked')) {
+        $('#type_reminder_duration').attr('disabled', true);
+    }
 })
 
 
