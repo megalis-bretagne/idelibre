@@ -35,7 +35,7 @@ services:
 
   node-idelibre:
     container_name: node-idelibre
-    image: registry.libriciel.fr:443/public/citoyens/idelibre-node/idelibre-node:4.0.1
+    image: registry.libriciel.fr:443/public/citoyens/idelibre-node/idelibre-node:4.1.0
     volumes:
       - /data/files:/data
     environment:
