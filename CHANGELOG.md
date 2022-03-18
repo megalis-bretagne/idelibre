@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
-## [4.0.8] - WIP
+## [4.0.9] - 2022-03-18
+
+### Correction
+ - Probleme d'envoi en masse à lsmessage (#264)
+
+
+## [4.0.8] - 2022-01-12
 
 ### Evolution
  - remise en place du minimum de l'api 3.2
