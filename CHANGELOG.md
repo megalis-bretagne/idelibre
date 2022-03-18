@@ -1,6 +1,17 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.1.1] - 2022-03-18
+
+### Evolution
+- Script de purge
+- script de creation des repertoires de token post migration
+- Récupération de l'api32
+
+
+### Correction
+ - Envoi de sms par lot via lsmessage (#264) 
+
 ## [4.1] - 2022-03-01
 ### Evolution
 - nouveau systeme d'authentification
