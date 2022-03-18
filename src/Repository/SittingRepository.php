@@ -152,5 +152,4 @@ class SittingRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
-
 }

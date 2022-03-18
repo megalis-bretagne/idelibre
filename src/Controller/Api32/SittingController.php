@@ -5,7 +5,6 @@ namespace App\Controller\Api32;
 use App\Entity\Annex;
 use App\Entity\Convocation;
 use App\Entity\Project;
-use App\Entity\Structure;
 use App\Repository\SittingRepository;
 use App\Service\LegacyWs\LegacyWsService;
 use App\Service\Seance\SittingManager;
