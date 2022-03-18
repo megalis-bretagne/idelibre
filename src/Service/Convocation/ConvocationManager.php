@@ -139,7 +139,7 @@ class ConvocationManager
             $this->emailService->sendBatch($emails);
             $this->messageBus->dispatch(
                 new ConvocationSent(
-                    array_map(fn (Convocation $c) => $c->getId(), $convocations),
+                    array_map(fn (Convocation $c) => $c->getId(), $convocationBatch),
                     $sitting->getId()
                 )
             );
