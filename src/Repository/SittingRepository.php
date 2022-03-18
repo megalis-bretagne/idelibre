@@ -132,4 +132,24 @@ class SittingRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findWithFullDetail(string $sittingId, Structure $structure): ?Sitting
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.id =:sittingId')
+            ->setParameter('sittingId', $sittingId)
+            ->andWhere('s.structure =:structure')
+            ->setParameter('structure', $structure)
+            ->leftjoin('s.convocations', 'c')
+            ->leftJoin('c.user', 'u')
+            ->leftJoin('s.projects', 'p')
+            ->leftJoin('p.annexes', 'a')
+            ->addSelect('c')
+            ->addSelect('p')
+            ->addSelect('a')
+            ->addSelect('u')
+            ->orderBy('p.rank', 'ASC')
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }
