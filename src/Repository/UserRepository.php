@@ -263,7 +263,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
         $associatedArrayIds = $qb->getQuery()->getScalarResult();
 
-        return array_map(fn ($el) => $el['id'], $associatedArrayIds);
+        return array_map(fn($el) => $el['id'], $associatedArrayIds);
     }
 
     public function findSecretariesByStructure($structure): QueryBuilder
@@ -359,4 +359,26 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getQuery()
             ->getResult();
     }
+
+
+    public function countByRole(Structure $structure): array
+    {
+        return $this->createQueryBuilder('u')
+            ->select('COUNT(u.id) as count')
+            ->join('u.role', 'r')
+            ->addSelect('r.prettyName')
+            ->addSelect('r.name')
+            ->andWhere('
+            (r.name !=:superAdmin AND r.name !=:groupAdmin )
+            OR 
+            (r.name is null)')
+            ->andWhere('u.structure = :structure')
+            ->setParameter('superAdmin', 'SuperAdmin')
+            ->setParameter('groupAdmin', 'GroupAdmin')
+            ->setParameter('structure', $structure)
+            ->groupBy('r.prettyName')
+            ->orderBy('r.prettyName', 'ASC')
+            ->getQuery()->getArrayResult();
+    }
+
 }
