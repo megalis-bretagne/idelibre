@@ -8,10 +8,10 @@ use League\Csv\Writer;
 
 class RoleByStructureStatisticCsvGenerator
 {
-
     public function __construct(
         private StructureRepository $structureRepository,
-        private UserRepository      $userRepository)
+        private UserRepository $userRepository
+    )
     {
     }
 
@@ -29,13 +29,11 @@ class RoleByStructureStatisticCsvGenerator
         return $csvPath;
     }
 
-
     private function getFormattedRoleData(array $roleCountArray, $structureName): array
     {
-
         $formatted = [$structureName];
 
-        foreach ($roleCountArray as $roleCount ) {
+        foreach ($roleCountArray as $roleCount) {
             $formatted[] = $roleCount['prettyName'];
             $formatted[] = $roleCount['count'];
         }

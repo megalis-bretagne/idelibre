@@ -12,7 +12,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class StatisticController extends AbstractController
 {
-
     #[Route('statistics/user')]
     #[IsGranted('ROLE_SUPERADMIN')]
     public function countUsers(RoleByStructureStatisticCsvGenerator $statisticCsvGenerator): Response
@@ -26,5 +25,4 @@ class StatisticController extends AbstractController
 
         return $response;
     }
-
 }
