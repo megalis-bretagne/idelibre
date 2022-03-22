@@ -11,8 +11,7 @@ class RoleByStructureStatisticCsvGenerator
     public function __construct(
         private StructureRepository $structureRepository,
         private UserRepository $userRepository
-    )
-    {
+    ) {
     }
 
     public function generate(): string
