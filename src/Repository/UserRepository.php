@@ -359,4 +359,23 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getQuery()
             ->getResult();
     }
+
+    public function countByRole(Structure $structure): array
+    {
+        return $this->createQueryBuilder('u')
+            ->select('COUNT(u.id) as count')
+            ->join('u.role', 'r')
+            ->addSelect('r.prettyName')
+            ->andWhere('
+            (r.name !=:superAdmin AND r.name !=:groupAdmin )
+            OR 
+            (r.name is null)')
+            ->andWhere('u.structure = :structure')
+            ->setParameter('superAdmin', 'SuperAdmin')
+            ->setParameter('groupAdmin', 'GroupAdmin')
+            ->setParameter('structure', $structure)
+            ->groupBy('r.prettyName')
+            ->orderBy('r.prettyName', 'ASC')
+            ->getQuery()->getArrayResult();
+    }
 }

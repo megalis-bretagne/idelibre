@@ -112,4 +112,11 @@ class UserRepositoryTest extends WebTestCase
         $actorQB = $this->userRepository->findActorsByStructure($structure);
         $this->assertCount(5, $actorQB->getQuery()->getResult());
     }
+
+    public function testCountByRole()
+    {
+        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
+        $countByRole = $this->userRepository->countByRole($structure);
+        $this->assertCount(5, $countByRole);
+    }
 }

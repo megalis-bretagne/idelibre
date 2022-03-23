@@ -59,7 +59,7 @@ WORKDIR /app
 RUN curl -s https://getcomposer.org/installer | php &&  php composer.phar install --no-interaction
 RUN pecl install xdebug && docker-php-ext-enable xdebug
 
-RUN chown -R www-data:www-data /app
+#RUN chown -R www-data:www-data /app
 
 RUN mkdir -p /data
 RUN chown -R www-data:www-data /data
