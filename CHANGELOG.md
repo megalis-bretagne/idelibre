@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.1.2] - 2022-03-23
+
+### Evolution
+- symfony 5.4.6
+- Fonctionnalité de stats iso 3.x
+
+
 ## [4.1.1] - 2022-03-18
 
 ### Evolution
