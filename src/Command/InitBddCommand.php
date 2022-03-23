@@ -67,7 +67,7 @@ class InitBddCommand extends Command
         return 0;
     }
 
-    private function isAlreadyInit()
+    private function isAlreadyInit(): bool
     {
         $pdo = $this->entityManager->getConnection()->getWrappedConnection();
         $statement = $pdo->prepare('select * from "user"');

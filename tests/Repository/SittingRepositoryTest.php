@@ -9,6 +9,7 @@ use App\DataFixtures\StructureFixtures;
 use App\DataFixtures\TypeFixtures;
 use App\DataFixtures\UserFixtures;
 use App\Entity\Sitting;
+use App\Entity\Structure;
 use App\Repository\SittingRepository;
 use App\Tests\FindEntityTrait;
 use Doctrine\Persistence\ObjectManager;
@@ -79,5 +80,19 @@ class SittingRepositoryTest extends WebTestCase
     {
         $structureLs = $this->getOneStructureBy(['name' => 'Libriciel']);
         $this->assertCount(1, $this->sittingRepository->findActiveFromStructure($structureLs)->getQuery()->getResult());
+    }
+
+    public function testFindSittingsAfter50Months()
+    {
+        $structureLs = $this->getOneStructureBy(['name' => 'Libriciel']);
+        $sittings = $this->sittingRepository->findSittingsAfter(new \DateTime("-50 months"), $structureLs);
+        $this->assertCount(3, $sittings);
+    }
+
+    public function testFindSittingsAfter3Months()
+    {
+        $structureLs = $this->getOneStructureBy(['name' => 'Libriciel']);
+        $sittings = $this->sittingRepository->findSittingsAfter(new \DateTime("-3 months"), $structureLs);
+        $this->assertCount(0, $sittings);
     }
 }

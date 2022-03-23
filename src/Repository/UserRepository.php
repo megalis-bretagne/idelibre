@@ -366,7 +366,6 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->select('COUNT(u.id) as count')
             ->join('u.role', 'r')
             ->addSelect('r.prettyName')
-            ->addSelect('r.name')
             ->andWhere('
             (r.name !=:superAdmin AND r.name !=:groupAdmin )
             OR 
