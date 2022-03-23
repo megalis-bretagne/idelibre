@@ -11,9 +11,8 @@ class SittingByStructureStatisticCsvGenerator
 {
     public function __construct(
         private StructureRepository $structureRepository,
-        private SittingRepository   $sittingRepository
-    )
-    {
+        private SittingRepository $sittingRepository
+    ) {
     }
 
     public function generate(int $month): string
@@ -31,10 +30,9 @@ class SittingByStructureStatisticCsvGenerator
         return $csvPath;
     }
 
-
     private function getHeaders(): array
     {
-        return ['Structure', 'nb seances','nb convocations', 'nb lues', 'nb non lues'];
+        return ['Structure', 'nb seances', 'nb convocations', 'nb lues', 'nb non lues'];
     }
 
     /**
@@ -45,8 +43,7 @@ class SittingByStructureStatisticCsvGenerator
         $countSitings = count($sittings);
         [$countSent, $countRead] = $this->countConvocationsByStatus($sittings);
 
-        return [$structureName, $countSitings ,$countSent, $countRead, $countSent - $countRead ];
-
+        return [$structureName, $countSitings, $countSent, $countRead, $countSent - $countRead];
     }
 
     /**
@@ -62,9 +59,9 @@ class SittingByStructureStatisticCsvGenerator
                 if (!$convocation->getSentTimestamp()) {
                     continue;
                 }
-                $countSent++;
+                ++$countSent;
                 if ($convocation->getIsRead()) {
-                    $countRead++;
+                    ++$countRead;
                 }
             }
         }

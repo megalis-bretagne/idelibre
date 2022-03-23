@@ -153,7 +153,8 @@ class SittingRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    public function findSittingsAfter(DateTimeInterface $after, Structure $structure) {
+    public function findSittingsAfter(DateTimeInterface $after, Structure $structure)
+    {
         return $this->createQueryBuilder('s')
             ->leftJoin('s.convocations', 'conv')
             ->addSelect('conv')
@@ -162,7 +163,5 @@ class SittingRepository extends ServiceEntityRepository
             ->setParameter('structure', $structure)
             ->setParameter('after', $after)
             ->getQuery()->getResult();
-
     }
-
 }
