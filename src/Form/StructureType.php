@@ -57,7 +57,6 @@ class StructureType extends AbstractType
                 'label_attr' => ['class' => 'switch-custom'],
                 'required' => false,
             ]);
-
         }
 
         if ($isNew) {

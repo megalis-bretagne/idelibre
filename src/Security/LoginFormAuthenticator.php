@@ -33,15 +33,14 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
     private LegacyPassword $legacyPassword;
 
     public function __construct(
-        UserRepository              $userRepository,
-        RouterInterface             $router,
-        CsrfTokenManagerInterface   $csrfTokenManager,
-        ImpersonateStructure        $impersonateStructure,
+        UserRepository $userRepository,
+        RouterInterface $router,
+        CsrfTokenManagerInterface $csrfTokenManager,
+        ImpersonateStructure $impersonateStructure,
         UserPasswordHasherInterface $passwordHasher,
-        Security                    $security,
-        LegacyPassword              $legacyPassword
-    )
-    {
+        Security $security,
+        LegacyPassword $legacyPassword
+    ) {
         $this->userRepository = $userRepository;
         $this->router = $router;
         $this->csrfTokenManager = $csrfTokenManager;
@@ -117,8 +116,5 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         }
 
         return false;
-
     }
-
-
 }
