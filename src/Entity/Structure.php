@@ -70,6 +70,9 @@ class Structure
     #[OneToOne(mappedBy: 'structure', targetEntity: Configuration::class, cascade: ['persist', 'remove'])]
     private $configuration;
 
+    #[Column(type: 'boolean', options: ['default' => true])]
+    private $isActive = true;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -203,5 +206,17 @@ class Structure
     public function getConfiguration(): ?Configuration
     {
         return $this->configuration;
+    }
+
+    public function getIsActive(): ?bool
+    {
+        return $this->isActive;
+    }
+
+    public function setIsActive(bool $isActive): self
+    {
+        $this->isActive = $isActive;
+
+        return $this;
     }
 }
