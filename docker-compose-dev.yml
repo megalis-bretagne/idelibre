@@ -4,7 +4,6 @@ services:
   fpm-idelibre:
     container_name: fpm-idelibre
     image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/idelibre/idelibre:4.1
-
     env_file:
       - .env.docker.local
     volumes:
@@ -25,6 +24,7 @@ services:
       - ./composer.json:/app/composer.json
       - ./composer.lock:/app/composer.lock
       - ./rector.php:/app/rector.php
+      - ./docker-resources/minimum.sql:/app/docker-resources/minimum.sql
 
     command: ["/app/docker-resources/initApp.sh"]
 
