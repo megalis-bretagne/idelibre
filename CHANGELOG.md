@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.1.3] - 2022-07-22
+
+### Evolution
+- symfony 5.4.10
+
+### Correction
+- Erreur minimum.sql lors d'une fresh install
+
 ## [4.1.2] - 2022-03-23
 
 ### Evolution
