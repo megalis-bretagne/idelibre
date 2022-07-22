@@ -2,6 +2,7 @@
 
 namespace App\Security;
 
+use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Security\Password\LegacyPassword;
 use App\Service\User\ImpersonateStructure;
@@ -93,7 +94,7 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
     {
         $user = $this->userRepository->findOneBy(['username' => $username, 'isActive' => true]);
 
-        if (!$user) {
+        if (!$user || $this->isInUnActiveStructure($user)) {
             return false;
         }
 
@@ -102,5 +103,18 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         }
 
         return $this->legacyPassword->checkAndUpdateCredentials($user, $plainPassword);
+    }
+
+    private function isInUnActiveStructure(User $user): bool
+    {
+        if (!$user->getStructure()) {
+            return false;
+        }
+
+        if (!$user->getStructure()->getIsActive()) {
+            return $user->getRole()->getIsInStructureRole();
+        }
+
+        return false;
     }
 }
