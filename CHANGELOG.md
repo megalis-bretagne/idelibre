@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+
+###[4.1.4] - wip
+### Evolution
+- symfony 5.4.12
+
+
+
 ## [4.1.3] - 2022-07-22
 
 ### Evolution
