@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file.
 ### Evolution
 - symfony 5.4.12
 
+### Correction
+- Erreur d'adresse et de siret de l'éditeur dans la notice rgpd
 
 
 ## [4.1.3] - 2022-07-22
