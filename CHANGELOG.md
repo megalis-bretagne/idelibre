@@ -1,10 +1,12 @@
 # Changelog
-All notable changes to this project will be documented in this file.
+All notable changes to this project will be documented in this file.   
 
 
-###[4.1.4] - wip
+## [4.1.4] - 2022-08-31
+
 ### Evolution
 - symfony 5.4.12
+- possibilité de cacher la bannière de gauche de l'écran de login
 
 ### Correction
 - Erreur d'adresse et de siret de l'éditeur dans la notice rgpd
