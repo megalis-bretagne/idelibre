@@ -26,6 +26,7 @@ services:
       - SENTRY_DSN=${SENTRY_DSN:-null}
       - SALT=${SALT:-saltsaltsalt}
       - PASSPHRASE=${PASSPHRASE:-passphrase}
+      - DISABLE_LEFT_BANNER_LOGIN=${DISABLE_LEFT_BANNER_LOGIN:-false}
     volumes:
       - data-public:/app/public
       - /data/files:/data

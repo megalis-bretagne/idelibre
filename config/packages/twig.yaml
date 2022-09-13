@@ -7,6 +7,7 @@ twig:
     product_editor: '%product_editor%'
     breadcrumb: 'others/breadCrumb.html.twig'
     nginx: '%nginx_host%'
+    hide_left_banner_login: '%hide_left_banner_login%'
 
 when@test:
   twig:

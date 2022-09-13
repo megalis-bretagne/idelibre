@@ -27,6 +27,10 @@ parameters:
 
   legacy_salt: '%env(SALT)%'
 
+  env(HIDE_LEFT_BANNER_LOGIN): false
+  hide_left_banner_login: '%env(bool:HIDE_LEFT_BANNER_LOGIN)%'
+
+
 
 services:
   # default configuration for services in *this* file
