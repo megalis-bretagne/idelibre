@@ -85,7 +85,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ManyToOne(targetEntity: Party::class, inversedBy: 'actors')]
     #[JoinColumn(onDelete: 'SET NULL')]
-    #[Groups(['user:detail', 'user:write'])]
+    #[Groups(['user', 'user:detail', 'user:write'])]
     private $party;
 
     #[Column(type: 'string', length: 255, nullable: true)]
