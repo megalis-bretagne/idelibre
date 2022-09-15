@@ -61,6 +61,7 @@
                                 label="lastName"
                                 class="bs-form-like"
                                 v-model="addedActors"
+                                :close-on-select="false"
                                 :reduce="item => item.id"
                                 multiple>
                             <template #option="{ firstName, lastName }">
@@ -106,6 +107,7 @@
                                     label="lastName"
                                     class="bs-form-like"
                                     v-model="addedEmployees"
+                                    :close-on-select="false"
                                     :reduce="item => item.id"
                                     multiple>
                                 <template #option="{ firstName, lastName }">
@@ -153,6 +155,7 @@
                                     label="lastName"
                                     class="bs-form-like"
                                     v-model="addedGuests"
+                                    :close-on-select="false"
                                     :reduce="item => item.id"
                                     multiple>
                                 <template #option="{ firstName, lastName }">
