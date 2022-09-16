@@ -14,7 +14,8 @@
     <table class="table table-striped bg-white">
         <thead>
         <tr class="d-flex">
-            <th class="col-10">Intitulé</th>
+            <th class="col-8">Intitulé</th>
+            <th class="col-2">Initiales</th>
             <th class="col-2">Actions</th>
         </tr>
         </thead>
@@ -24,7 +25,8 @@
 
         {% for party in parties %}
             <tr class="d-flex">
-                <td class="col-10">{{ party.name }} </td>
+                <td class="col-8">{{ party.name }} </td>
+                <td class="col-2">{{ party.initials }} </td>
                 <td class="col-2">
                     {{ macros.editButton('party_edit', party.id) }}
 

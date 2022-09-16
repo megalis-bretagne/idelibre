@@ -55,6 +55,8 @@ class ConvocationRepository extends ServiceEntityRepository
             ->setParameter('sitting', $sitting)
             ->leftJoin('c.user', 'user')
             ->addSelect('user')
+            ->leftJoin('user.party', 'party')
+            ->addSelect('party')
             ->innerJoin('user.role', 'r')
             ->andWhere('r.name in (:roleNames)')
             ->setParameter('roleNames', $roleNames)
