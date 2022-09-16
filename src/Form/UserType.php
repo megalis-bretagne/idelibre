@@ -46,6 +46,7 @@ class UserType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+//        dd($builder->getRequestHandler()->handleRequest() );
         $builder
             ->add('gender', ChoiceType::class, [
                 'label' => 'Civilité',
@@ -75,7 +76,7 @@ class UserType extends AbstractType
             ])
             ->add('redirect_url', HiddenType::class, [
                 'mapped' => false,
-                'data' => $_SERVER['HTTP_REFERER']
+                'data' => $options['referer']
             ]);
 
         if ($this->isNew($options)) {
@@ -142,6 +143,7 @@ class UserType extends AbstractType
         $resolver->setDefaults([
             'data_class' => User::class,
             'structure' => null,
+            'referer' => null,
         ]);
     }
 
