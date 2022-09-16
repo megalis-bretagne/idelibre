@@ -24,7 +24,15 @@ $(document).ready(function () {
     };
     flatpickr($('input[type=datetime-local]'), config);
 
-    bsCustomFileInput.init()
+    bsCustomFileInput.init();
+
+
+    $('.active_column').hide();
+    $('.active_column').each(function () {
+        if ($(this).html() == '') {
+            $(this).parents('tr').addClass('inactive');
+        }
+    });
 })
 
 
