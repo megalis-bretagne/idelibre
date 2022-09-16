@@ -378,4 +378,48 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->orderBy('r.prettyName', 'ASC')
             ->getQuery()->getArrayResult();
     }
+
+    public function findCountActorsByIds(Structure $structure, array $actorIds): array
+    {
+        return $this->createQueryBuilder('u')
+            ->select('COUNT(u.id) as count')
+            ->andWhere('u.structure =:structure')
+            ->setParameter('structure', $structure)
+            ->andWhere('u.id in (:actorIds)')
+            ->setParameter('actorIds', $actorIds)
+            ->leftJoin('u.role', 'r')
+            ->andWhere(' r.name =:actor')
+            ->setParameter('actor', 'Actor')
+            ->getQuery()
+            ->getResult();
+    }
+    public function findCountEmployeesByIds(Structure $structure, array $employeeIds): array
+    {
+        return $this->createQueryBuilder('u')
+            ->select('COUNT(u.id) as count')
+            ->andWhere('u.structure =:structure')
+            ->setParameter('structure', $structure)
+            ->andWhere('u.id in (:employeeIds)')
+            ->setParameter('employeeIds', $employeeIds)
+            ->leftJoin('u.role', 'r')
+            ->andWhere(' r.name IN (:employees)')
+            ->setParameter('employees', ['Employee', 'Admin','Secretary'])
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findCountGuestsByIds(Structure $structure, array $guestIds): array
+    {
+        return $this->createQueryBuilder('u')
+            ->select('COUNT(u.id) as count')
+            ->andWhere('u.structure =:structure')
+            ->setParameter('structure', $structure)
+            ->andWhere('u.id in (:guestIds)')
+            ->setParameter('guestIds', $guestIds)
+            ->leftJoin('u.role', 'r')
+            ->andWhere(' r.name =:guest')
+            ->setParameter('guest', 'Guest')
+            ->getQuery()
+            ->getResult();
+    }
 }
