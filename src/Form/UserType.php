@@ -17,6 +17,7 @@ use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -71,6 +72,10 @@ class UserType extends AbstractType
                 'constraints' => [
                     new Regex('/^0(6|7)\d{8}$/', 'Le numéro de téléphone doit être de la forme 06xxxxxxxx ou 07xxxxxxxx'),
                 ],
+            ])
+            ->add('redirect_url', HiddenType::class, [
+                'mapped' => false,
+                'data' => $_SERVER['HTTP_REFERER']
             ]);
 
         if ($this->isNew($options)) {
