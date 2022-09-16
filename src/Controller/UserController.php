@@ -91,7 +91,7 @@ class UserController extends AbstractController
 
             $this->addFlash('success', 'Votre utilisateur a bien été modifié');
 
-            return $this->redirect($form->get('redirect_url')->getData());
+            return $form->get('redirect_url')->getData() ? $this->redirect($form->get('redirect_url')->getData()) : $this->redirectToRoute('user_index');
         }
 
         return $this->render('user/edit.html.twig', [
