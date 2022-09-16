@@ -22,7 +22,36 @@
                 {{ form_widget(form.associatedActors) }}
             </div>
             <div class="col-3">
-                <button type="button" id="selectAll" class="btn btn-primary">Sélectionner tous les élus</button>
+                <button type="button" id="selectAll" class="btn btn-primary">Tout sélectionner</button>
+            </div>
+        </div>
+
+    </div>
+    <div class="form-group">
+        {{ form_label(form.associatedEmployees) }}
+        {{ form_errors(form.associatedEmployees) }}
+
+        <div class="row">
+            <div class="col-9">
+                {{ form_widget(form.associatedEmployees) }}
+            </div>
+            <div class="col-3">
+                <button type="button" id="selectAllEmployees" class="btn btn-primary">Tout sélectionner</button>
+            </div>
+        </div>
+
+    </div>
+    <div class="form-group">
+
+        {{ form_label(form.associatedGuests) }}
+        {{ form_errors(form.associatedGuests) }}
+
+        <div class="row">
+            <div class="col-9">
+                {{ form_widget(form.associatedGuests) }}
+            </div>
+            <div class="col-3">
+                <button type="button" id="selectAllGuests" class="btn btn-primary">Tout sélectionner</button>
             </div>
         </div>
 
