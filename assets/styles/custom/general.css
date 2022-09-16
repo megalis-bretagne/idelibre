@@ -304,8 +304,9 @@ input[type="file"].project-file-btn {
     content: "Parcourir";
 }
 
-.inactive{
+.inactiveLine td:not(.actionButton){
+    text-decoration: line-through;
     font-style: italic;
-    color:#a3a3a3;
     opacity: 0.7;
+    color:#a3a3a3;
 }
