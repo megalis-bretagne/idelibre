@@ -6,6 +6,7 @@ use App\Entity\Type;
 use App\Form\SearchType;
 use App\Form\TypeType;
 use App\Repository\TypeRepository;
+use App\Repository\UserRepository;
 use App\Service\Type\TypeManager;
 use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
@@ -48,7 +49,14 @@ class TypeController extends AbstractController
     #[Breadcrumb(title: 'Ajouter')]
     public function add(Request $request, TypeManager $typeManager): Response
     {
-        $form = $this->createForm(TypeType::class, null, ['structure' => $this->getUser()->getStructure()]);
+        $form = $this->createForm(
+            TypeType::class,
+            null,
+            [
+                'structure' => $this->getUser()->getStructure(),
+                'isNew' => true
+            ]
+        );
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $typeManager->save(
@@ -72,9 +80,19 @@ class TypeController extends AbstractController
     #[Route(path: '/type/edit/{id}', name: 'type_edit')]
     #[IsGranted(data: 'MANAGE_TYPES', subject: 'type')]
     #[Breadcrumb(title: 'Modifier {type.name}')]
-    public function edit(Type $type, Request $request, TypeManager $typeManager): Response
+    public function edit(Type $type, Request $request, TypeManager $typeManager, UserRepository $userRepository): Response
     {
-        $form = $this->createForm(TypeType::class, $type, ['structure' => $this->getUser()->getStructure()]);
+        $form = $this->createForm(
+            TypeType::class,
+            $type,
+            [
+                'structure' => $this->getUser()->getStructure(),
+                'actor' => $userRepository->findCountActorsByIds($this->getUser()->getStructure(), $type->getAssociatedUsers()->getValues()),
+                'employee' => $userRepository->findCountEmployeesByIds($this->getUser()->getStructure(), $type->getAssociatedUsers()->getValues()),
+                'guest' => $userRepository->findCountGuestsByIds($this->getUser()->getStructure(), $type->getAssociatedUsers()->getValues()),
+                'isNew' => false
+            ]
+        );
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $typeManager->save(

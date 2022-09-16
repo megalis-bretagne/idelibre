@@ -25,6 +25,15 @@ class TypeType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $eluAssocie = 'Elus associés';
+        $employeeAssocie = 'Personnels administratifs, Administrateurs, Gestionnaires de séance associés';
+        $guestAssocie = 'Invités associés';
+        if( !$options['isNew'] ) {
+            $eluAssocie = 'Elus associés ('.$options['actor'][0]['count'].')';
+            $employeeAssocie = 'Personnels administratifs, Administrateurs, Gestionnaires de séance associés ('.$options['employee'][0]['count'].')';
+            $guestAssocie = 'Invités associés ('.$options['guest'][0]['count'].')';
+        }
+
         $builder
             ->add('name', TextType::class, [
                 'label' => 'Intitulé',
@@ -32,7 +41,7 @@ class TypeType extends AbstractType
             ->add('associatedActors', EntityType::class, [
                 'placeholder' => 'Sélectionner les élus',
                 'required' => false,
-                'label' => 'Elus associés',
+                'label' => $eluAssocie,
                 'class' => User::class,
                 'query_builder' => $this->userRepository
                     ->findActorsByStructure($options['structure']),
@@ -44,7 +53,7 @@ class TypeType extends AbstractType
             ->add('associatedEmployees', EntityType::class, [
                 'placeholder' => 'Sélectionner les personnels administratifs',
                 'required' => false,
-                'label' => 'Personnels administratifs, Administrateurs, Gestionnaires de séance associés',
+                'label' => $employeeAssocie,
                 'class' => User::class,
                 'query_builder' => $this->userRepository
                     ->findInvitableEmployeesByStructure($options['structure']),
@@ -56,7 +65,7 @@ class TypeType extends AbstractType
             ->add('associatedGuests', EntityType::class, [
                 'placeholder' => 'Sélectionner les Invités',
                 'required' => false,
-                'label' => 'Invités associés',
+                'label' => $guestAssocie,
                 'class' => User::class,
                 'query_builder' => $this->userRepository
                     ->findGuestsByStructure($options['structure']),
@@ -105,7 +114,11 @@ class TypeType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Type::class,
+            'isNew' => false,
             'structure' => null,
+            'actor' => null,
+            'employee' => null,
+            'guest' => null
         ]);
     }
 }
