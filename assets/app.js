@@ -30,7 +30,7 @@ $(document).ready(function () {
     $('.active_column').hide();
     $('.active_column').each(function () {
         if ($(this).html() == '') {
-            $(this).parents('tr').addClass('inactive');
+            $(this).parents('tr').addClass('inactiveLine');
         }
     });
 })

@@ -17,6 +17,7 @@ use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -45,6 +46,7 @@ class UserType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+//        dd($builder->getRequestHandler()->handleRequest() );
         $builder
             ->add('gender', ChoiceType::class, [
                 'label' => 'Civilité',
@@ -71,6 +73,10 @@ class UserType extends AbstractType
                 'constraints' => [
                     new Regex('/^0(6|7)\d{8}$/', 'Le numéro de téléphone doit être de la forme 06xxxxxxxx ou 07xxxxxxxx'),
                 ],
+            ])
+            ->add('redirect_url', HiddenType::class, [
+                'mapped' => false,
+                'data' => $options['referer']
             ]);
 
         if ($this->isNew($options)) {
@@ -137,6 +143,7 @@ class UserType extends AbstractType
         $resolver->setDefaults([
             'data_class' => User::class,
             'structure' => null,
+            'referer' => null,
         ]);
     }
 

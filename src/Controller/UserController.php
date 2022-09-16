@@ -73,7 +73,14 @@ class UserController extends AbstractController
     #[Breadcrumb(title: 'Modifier {user.firstName} {user.lastName}')]
     public function edit(User $user, Request $request, UserManager $manageUser): Response
     {
-        $form = $this->createForm(UserType::class, $user, ['structure' => $this->getUser()->getStructure()]);
+        $form = $this->createForm(
+            UserType::class,
+            $user,
+            [
+                'structure' => $this->getUser()->getStructure(),
+                'referer' => $request->headers->get('referer')
+            ]
+        );
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $manageUser->save(
@@ -84,7 +91,7 @@ class UserController extends AbstractController
 
             $this->addFlash('success', 'Votre utilisateur a bien été modifié');
 
-            return $this->redirectToRoute('user_index');
+            return $form->get('redirect_url')->getData() ? $this->redirect($form->get('redirect_url')->getData()) : $this->redirectToRoute('user_index');
         }
 
         return $this->render('user/edit.html.twig', [
