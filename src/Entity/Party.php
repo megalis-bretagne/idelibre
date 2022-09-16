@@ -50,6 +50,11 @@ class Party
     #[NotNull]
     private $structure;
 
+    #[Column(type: 'string', length: 10, nullable: true)]
+    #[Length(max: '10')]
+    #[Groups(['party:read'])]
+    private ?string $initials = null;
+
     public function __construct()
     {
         $this->actors = new ArrayCollection();
@@ -126,6 +131,18 @@ class Party
     public function setLegacyId(int $legacyId): self
     {
         $this->legacyId = $legacyId;
+
+        return $this;
+    }
+
+    public function getInitials(): ?string
+    {
+        return $this->initials;
+    }
+
+    public function setInitials(?string $initials): self
+    {
+        $this->initials = $initials;
 
         return $this;
     }

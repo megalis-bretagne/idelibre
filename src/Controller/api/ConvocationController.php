@@ -26,7 +26,7 @@ class ConvocationController extends AbstractController
             ],
             200,
             [],
-            ['groups' => ['convocation', 'user']]
+            ['groups' => ['convocation', 'user', 'party:read']]
         );
     }
 
