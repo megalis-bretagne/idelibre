@@ -303,3 +303,9 @@ input[type="file"].project-file-btn {
 .custom-file-input ~ .custom-file-label::after {
     content: "Parcourir";
 }
+
+.inactive{
+    font-style: italic;
+    color:#a3a3a3;
+    opacity: 0.7;
+}
