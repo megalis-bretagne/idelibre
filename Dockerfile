@@ -37,7 +37,7 @@ RUN apt-get update -yqq \
 RUN docker-php-ext-configure intl
 RUN docker-php-ext-install intl mbstring xml zip pdo pdo_pgsql pgsql opcache
 
-
+RUN apt install gnupg -yy
 RUN sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt stretch-pgdg main" > /etc/apt/sources.list.d/pgdg.list' && \
 wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
 apt-get update -yy && apt-get install postgresql-client-12 -yy \
