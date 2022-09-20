@@ -37,10 +37,6 @@ RUN apt-get update -yqq \
 RUN docker-php-ext-configure intl
 RUN docker-php-ext-install intl mbstring xml zip pdo pdo_pgsql pgsql opcache
 
-RUN apt install gnupg -yy
-RUN sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt stretch-pgdg main" > /etc/apt/sources.list.d/pgdg.list' && \
-wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
-apt-get update -yy && apt-get install postgresql-client-12 -yy \
 
 COPY ./docker-resources/wkhtmltox_0.12.6-1.buster_amd64.deb /tmp/wkhtmltox.deb
 RUN  dpkg -i /tmp/wkhtmltox.deb
@@ -48,6 +44,15 @@ RUN  dpkg -i /tmp/wkhtmltox.deb
 
 COPY ./docker-resources/pdftk-java-3.2.2-1-all.deb /tmp/pdftk.deb
 RUN  dpkg -i /tmp/pdftk.deb
+
+
+RUN apt install gnupg -yy
+RUN sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt stretch-pgdg main" > /etc/apt/sources.list.d/pgdg.list' && \
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
+apt-get update -yy
+
+RUN apt-get install postgresql-client-12 -yy
+
 
 RUN curl -sL https://deb.nodesource.com/setup_12.x | sudo bash -
 RUN apt-get install nodejs -yqq
