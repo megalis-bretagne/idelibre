@@ -58,7 +58,7 @@ class Type
 
     #[Column(type: 'boolean', nullable: true)]
     #[Groups(['sitting', 'type:read', 'type:write'])]
-    private $isSms;
+    private $isSmsActors;
 
     #[Column(type: 'boolean', nullable: true)]
     #[Groups(['sitting', 'type:read', 'type:write'])]
@@ -67,6 +67,14 @@ class Type
     #[Groups(['type:detail', 'type:write'])]
     #[OneToOne(targetEntity: Reminder::class, mappedBy: 'type', cascade: ['persist', 'remove'])]
     private $reminder;
+
+    #[Column(type: 'boolean', nullable: true)]
+    #[Groups(['sitting', 'type:read', 'type:write'])]
+    private ?bool $isSmsGuests = null;
+
+    #[Column(type: 'boolean', nullable: true)]
+    #[Groups(['sitting', 'type:read', 'type:write'])]
+    private ?bool $isSmsEmployees = null;
 
     public function __construct()
     {
@@ -168,14 +176,14 @@ class Type
         return $this;
     }
 
-    public function getIsSms(): bool
+    public function getIsSmsActors(): bool
     {
-        return $this->isSms ?? false;
+        return $this->isSmsActors ?? false;
     }
 
-    public function setIsSms(bool $isSms): self
+    public function setIsSmsActors(bool $isSmsActors): self
     {
-        $this->isSms = $isSms;
+        $this->isSmsActors = $isSmsActors;
 
         return $this;
     }
@@ -207,5 +215,29 @@ class Type
         $this->reminder = $reminder;
 
         return $this;
+    }
+
+    public function setIsSmsGuests(?bool $isSmsGuests): self
+    {
+        $this->isSmsGuests = $isSmsGuests;
+
+        return $this;
+    }
+
+    public function getIsSmsGuests(): bool
+    {
+        return $this->isSmsGuests ?? false;
+    }
+
+    public function setIsSmsEmployees(?bool $isSmsEmployees): self
+    {
+        $this->isSmsEmployees = $isSmsEmployees;
+
+        return $this;
+    }
+
+    public function getIsSmsEmployees(): bool
+    {
+        return $this->isSmsEmployees ?? false;
     }
 }

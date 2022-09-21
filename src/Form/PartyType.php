@@ -29,7 +29,7 @@ class PartyType extends AbstractType
                 'label' => 'Intitulé',
             ])
             ->add('initials', TextType::class, [
-                'label' => 'Initiales',
+                'label' => 'Abréviations',
                 'required' => false,
             ])
             ->add('actors', EntityType::class, [
