@@ -33,6 +33,5 @@ final class Version20220921090856 extends AbstractMigration
         $this->addSql('ALTER TABLE type DROP is_sms_actors');
         $this->addSql('ALTER TABLE type DROP is_sms_guests');
         $this->addSql('ALTER TABLE type DROP is_sms_employees');
-        $this->addSql('ALTER TABLE structure ADD is_active BOOLEAN DEFAULT \'true\' NOT NULL');
     }
 }
