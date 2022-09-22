@@ -6,6 +6,7 @@ use App\Entity\Sitting;
 use App\Form\SearchType;
 use App\Form\SittingType;
 use App\Repository\ConvocationRepository;
+use App\Repository\OtherdocRepository;
 use App\Repository\ProjectRepository;
 use App\Service\Convocation\ConvocationManager;
 use App\Service\Pdf\PdfSittingGenerator;
@@ -256,5 +257,32 @@ class SittingController extends AbstractController
         }
 
         return 'sitting-active-nav';
+    }
+
+    #[Route(path: '/sitting/edit/{id}/otherdocs', name: 'edit_sitting_otherdoc')]
+    #[Sidebar(active: ['sitting-active-nav'])]
+    #[Breadcrumb(title: 'Modifier {sitting.nameWithDate}')]
+    public function editOtherdocs(Sitting $sitting): Response
+    {
+        if ($sitting->getIsArchived()) {
+            throw new InvalidArgumentException('Impossible de modifier une séance archivée');
+        }
+
+        return $this->render('sitting/edit_otherdocs.html.twig', [
+            'sitting' => $sitting,
+        ]);
+    }
+
+    #[Route(path: '/sitting/show/{id}/otherdocs', name: 'sitting_show_otherdocs', methods: ['GET'])]
+    #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
+    #[Breadcrumb(title: 'Détail {sitting.nameWithDate}')]
+    public function showOtherdocs(Sitting $sitting, ConvocationRepository $convocationRepository, OtherdocRepository $otherdocRepository, SidebarState $sidebarState): Response
+    {
+        $sidebarState->setActiveNavs(['sitting-nav', $this->activeSidebarNav($sitting->getIsArchived())]);
+
+        return $this->render('sitting/details_otherdocs.html.twig', [
+            'sitting' => $sitting,
+            'otherdocs' => $otherdocRepository->getOtherdocsWithAssociatedEntities($sitting),
+        ]);
     }
 }

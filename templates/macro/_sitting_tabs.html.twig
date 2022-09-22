@@ -10,6 +10,9 @@
             <a class="nav-item nav-link change-tab {{ activeTab == 'projects' ? 'active': '' }}" id="nav-projects"
                href="{{ path('edit_sitting_project', {'id': sitting.id}) }}"
                aria-selected="{{ activeTab == 'projects' ? 'false' : 'true' }}">Projets</a>
+            <a class="nav-item nav-link change-tab {{ activeTab == 'otherdocs' ? 'active': '' }}" id="nav-otherdocs"
+               href="{{ path('edit_sitting_otherdoc', {'id': sitting.id}) }}"
+               aria-selected="{{ activeTab == 'otherdocs' ? 'false' : 'true' }}">Autres documents</a>
         </div>
     </nav>
 {% endmacro %}
@@ -28,6 +31,9 @@
             <a class="nav-item nav-link {{ activeTab == 'projects' ? 'active': '' }}" id="nav-projects"
                href="{{ path('sitting_show_projects', {'id': sitting.id}) }}"
                aria-selected="{{ activeTab == 'projects' ? 'false' : 'true' }}">Projets</a>
+            <a class="nav-item nav-link change-tab {{ activeTab == 'otherdocs' ? 'active': '' }}" id="nav-otherdocs"
+               href="{{ path('sitting_show_otherdocs', {'id': sitting.id}) }}"
+               aria-selected="{{ activeTab == 'otherdocs' ? 'false' : 'true' }}">Autres documents</a>
         </div>
     </nav>
 {% endmacro %}

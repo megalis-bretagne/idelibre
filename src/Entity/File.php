@@ -61,6 +61,12 @@ class File
     #[OneToOne(mappedBy: 'invitationFile', targetEntity: Sitting::class, cascade: ['persist', 'remove'])]
     private $invitationSitting;
 
+    /**
+     * @var Otherdoc|null
+     */
+    #[OneToOne(mappedBy: 'file', targetEntity: Otherdoc::class)]
+    private $otherdoc;
+
     public function __construct()
     {
         $this->createdAt = new DateTimeImmutable();
@@ -123,6 +129,10 @@ class File
 
         if ($this->convocationSitting) {
             return $this->convocationSitting->getStructure();
+        }
+
+        if ($this->otherdoc) {
+            return $this->otherdoc->getSitting()->getStructure();
         }
 
         return $this->invitationSitting->getStructure();
