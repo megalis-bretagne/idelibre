@@ -2,6 +2,7 @@
 
 namespace App\Service\Pdf;
 
+use App\Service\ApiEntity\OtherdocApi;
 use App\Service\ApiEntity\ProjectApi;
 
 class PdfValidator
@@ -29,6 +30,20 @@ class PdfValidator
     {
         foreach ($projects as $project) {
             if (!$this->isPdfFile($project->getFileName())) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @param OtherdocApi[] $otherdocs
+     */
+    public function isOtherdocsPdf(array $otherdocs): bool
+    {
+        foreach ($otherdocs as $otherdoc) {
+            if (!$this->isPdfFile($otherdoc->getFileName())) {
                 return false;
             }
         }
