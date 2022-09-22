@@ -79,10 +79,20 @@ class TypeType extends AbstractType
                 'label_attr' => ['class' => 'switch-custom'],
                 'label' => 'Envoyer le dossier via comelus',
             ])
-            ->add('isSms', CheckboxType::class, [
+            ->add('isSmsActors', CheckboxType::class, [
                 'required' => false,
                 'label_attr' => ['class' => 'switch-custom'],
                 'label' => 'Notifier les élus via sms',
+            ])
+            ->add('isSmsEmployees', CheckboxType::class, [
+                'required' => false,
+                'label_attr' => ['class' => 'switch-custom'],
+                'label' => 'Notifier les personnels administratifs via sms',
+            ])
+            ->add('isSmsGuests', CheckboxType::class, [
+                'required' => false,
+                'label_attr' => ['class' => 'switch-custom'],
+                'label' => 'Notifier les invités via sms',
             ])
             ->add('authorizedSecretaries', EntityType::class, [
                 'placeholder' => 'Sélectionner les gestionnaires de séance autorisés',
