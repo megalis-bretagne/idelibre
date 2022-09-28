@@ -133,7 +133,6 @@ class OtherdocManager
     public function deleteOtherdocs(iterable $otherdocs): void
     {
         foreach ($otherdocs as $otherdoc) {
-dd($otherdoc);
             $this->fileManager->delete($otherdoc->getFile());
             $this->em->remove($otherdoc);
         }

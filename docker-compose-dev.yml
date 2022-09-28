@@ -25,6 +25,8 @@ services:
       - ./composer.lock:/app/composer.lock
       - ./rector.php:/app/rector.php
       - ./docker-resources/minimum.sql:/app/docker-resources/minimum.sql
+      - ./webpack.config.js:/app/webpack.config.js
+      - ./assets:/app/assets
 
     command: ["/app/docker-resources/initApp.sh"]
 
@@ -33,19 +35,31 @@ services:
 
   node-idelibre:
     container_name: node-idelibre
-    #ports:
-    #  - 4000:3000
-    image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/idelibre/idelibre-nodejs:main
+    ports:
+      - 4000:3000
+    image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/idelibre/idelibre-nodejs:4.1.0
     volumes:
-      - ../idelibre4-nodejs:/app:ro
-      #- /home/rdubourget/dataFiles:/data
-      #- /tmp/data/zip:/data/zip:ro
-      #- /tmp/docker:/tmp
       - /data/files:/data
-    env_file:
-      #- docker-resources/.env.test
-      - .env.docker.local
-    command: [ "/app/docker-resources/init.sh" ]
+      - ../idelibre4-nodejs:/app:ro
+    environment:
+      - TYPEORM_CONNECTION=postgres
+      - TYPEORM_HOST=${POSTGRES_HOST:-172.17.0.1}
+      - TYPEORM_USERNAME=${POSTGRES_USER:-idelibre}
+      - TYPEORM_PASSWORD=${POSTGRES_PASSWORD:-idelibre}
+      - TYPEORM_DATABASE=${POSTGRES_DB:-idelibre}
+      - TYPEORM_PORT=${POSTGRES_PORT:-5432}
+      - TYPEORM_SYNCHRONIZE=false
+      - TYPEORM_LOGGING=false
+      - TYPEORM_ENTITIES=src/entity/**/*.ts
+      - SALT=${SALT:-saltsaltsalt}
+      - LOG_LEVEL=${LOG_LEVEL:-error}
+      - LISTEN_PORT=${LISTEN_PORT:-3000}
+      - PASSPHRASE=${PASSPHRASE:-passphrase}
+      - JWT_SECRET=${JWT_SECRET:-jwtsecret}
+      - JWT_TIMEOUT=${JWT_TIMEOUT:-86400}
+
+#    command: [ "/app/docker-resources/init.sh" ]
+    command:  "sleep 3600"
 
 
   nginx-idelibre:
@@ -66,10 +80,10 @@ services:
       - /data/certbot/www:/var/www/certbot
       #- data-public:/app/public:ro
       - ./public:/app/public
+      - ./assets:/app/assets
       #- /tmp/data/pdf:/data/pdf:ro
       #- /tmp/data/zip:/data/zip:ro
       #- /home/rdubourget/dataFiles/workspace:/data/workspace:ro
-
   certbot:
     image: certbot/certbot
     volumes:
