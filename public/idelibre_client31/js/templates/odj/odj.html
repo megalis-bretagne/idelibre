@@ -39,13 +39,13 @@
 </button>
 
 
+<legend><h1>Autres documents</h1></legend>
 <div ng-repeat="otherdoc in seance.otherdocs| orderBy: sortOtherdoc" >
-
-    <projet-btn data = "otherdoc" collectivite ="collectivite" account="accountId" seance="seanceId" state='state' ></projet-btn>
-
+    <otherdoc-btn data = "otherdoc" collectivite ="collectivite" account="accountId" seance="seanceId" state='state' ></otherdoc-btn>
 </div>
 
 
+<legend><h1>Projets</h1></legend>
 <div ng-repeat="projet in seance.projets| orderBy: sortProjet" >
 
     <projet-btn data = "projet" collectivite ="collectivite" account="accountId" seance="seanceId" state='state' ></projet-btn>
