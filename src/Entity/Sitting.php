@@ -103,11 +103,17 @@ class Sitting
     #[OneToMany(mappedBy: 'sitting', targetEntity: Timestamp::class)]
     private $updatedTimestamps;
 
+
+    #[OneToMany(mappedBy: 'sitting', targetEntity: Otherdoc::class)]
+    #[OrderBy(value: ['rank' => 'ASC'])]
+    private $otherdocs;
+
     public function __construct()
     {
         $this->createdAt = new DateTimeImmutable();
         $this->convocations = new ArrayCollection();
         $this->projects = new ArrayCollection();
+        $this->otherdocs = new ArrayCollection();
         $this->updatedTimestamps = new ArrayCollection();
     }
 
@@ -352,6 +358,37 @@ class Sitting
             // set the owning side to null (unless already changed)
             if ($updatedTimestamp->getSitting() === $this) {
                 $updatedTimestamp->setSitting(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Otherdoc[]
+     */
+    public function getOtherdocs(): Collection
+    {
+        return $this->otherdocs;
+    }
+
+    public function addOtherdoc(Otherdoc $otherdoc): self
+    {
+        if (!$this->otherdocs->contains($otherdoc)) {
+            $this->otherdocs[] = $otherdoc;
+            $otherdoc->setSitting($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOtherdoc(Otherdoc $otherdoc): self
+    {
+        if ($this->otherdocs->contains($otherdoc)) {
+            $this->otherdocs->removeElement($otherdoc);
+            // set the owning side to null (unless already changed)
+            if ($otherdoc->getSitting() === $this) {
+                $otherdoc->setSitting(null);
             }
         }
 
