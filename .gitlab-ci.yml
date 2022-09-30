@@ -13,7 +13,7 @@ build:
   stage: build
 
   tags:
-    - docker-build
+    - citoyen-runner
 
   script:
     - docker login -u "gitlab-ci-token" -p "$CI_JOB_TOKEN" $CI_REGISTRY

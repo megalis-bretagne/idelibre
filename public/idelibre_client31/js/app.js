@@ -57,9 +57,13 @@
                 templateUrl: 'js/templates/convocation/convocation.html',
                 controller: 'ConvocationCtrl'
             }).when(
-            '/projet/:documentId/:projetId/:seanceId/:acountId', {
+            '/projet/:documentId/:projetId/:seanceId/:accountId', {
                 templateUrl: 'js/templates/projet/projet.html',
                 controller: 'ProjetCtrl'
+            }).when(
+            '/otherdoc/:documentId/:otherdocId/:seanceId/:accountId', {
+                templateUrl: 'js/templates/otherdoc/otherdoc.html',
+                controller: 'OtherdocCtrl'
             }).when(
             '/navbar/', {
                 templateUrl: 'js/templates/navbartest/navbartest.html',

@@ -20,7 +20,6 @@ final class Version20220922081915 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('DROP SEQUENCE otherdoc_id_seq CASCADE');
         $this->addSql('ALTER TABLE otherdoc DROP CONSTRAINT FK_798DA02D8014E66');
         $this->addSql('ALTER TABLE otherdoc ADD CONSTRAINT FK_798DA02D8014E66 FOREIGN KEY (sitting_id) REFERENCES sitting (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
     }

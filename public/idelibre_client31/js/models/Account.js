@@ -207,9 +207,9 @@ Account.prototype.formatDataOtherdoc = function (data) {
     var otherdoc = {
         id: data.otherdoc_id,
         name: data.otherdoc_name,
-        rank: data.projet_rank,
+        rank: data.otherdoc_rank,
         document_text: {
-            id: data.otherdoc_document_id,
+            id: data.otherdoc_documentId,
             name: data.otherdoc_name,
             isLoaded: NOTLOADED,
         }
@@ -284,7 +284,8 @@ Account.prototype.formatDataSeance = function (data) {
         //     }
         // },
         //  users: data.Users,
-        projets: _.map(data.projets, this.formatDataProjet)
+        projets: _.map(data.projets, this.formatDataProjet),
+        otherdocs: _.map(data.otherdocs, this.formatDataOtherdoc)
 
     };
 

@@ -39,6 +39,10 @@ var Seance = function (id, name, rev, dateSeance) {
     this.projets = [];
 
 
+    /**
+     * @type array of Otherdoc
+     */
+    this.otherdocs = [];
 };
 
 
@@ -109,6 +113,40 @@ Seance.prototype.stringProjetIds = function () {
 
 
 /**
+ * retourne le tableau des seances si il existe un tableau vide si non
+ * @returns {array of Seance}
+ */
+Seance.prototype.getOtherdocs = function () {
+    this.otherdocs = this.otherdocs || [];
+    return this.otherdocs;
+};
+
+
+/**
+ * retourne le tableau d'id des autres doucments si il existe un tableau vide si non
+ * @returns {array of Seance}
+ */
+Seance.prototype.listOtherdocIds = function () {
+    var otherdocIds = []
+    this.otherdocs = this.otherdocs || [];
+    _.each(this.otherdocs, function (otherdoc) {
+        otherdocIds.push(otherdoc.id);
+    });
+
+    return otherdocIds;
+};
+
+Seance.prototype.stringOtherdocsIds = function () {
+    var otherdocIds = "";
+    this.otherdocs = this.otherdocs || [];
+    _.each(this.otherdocs, function (otherdoc) {
+        otherdocIds += "'" + otherdoc.id + "' , "
+    });
+
+    //on retourne le text moins la derniere virgule
+    return otherdocIds.substring(0, otherdocIds.length - 2);
+};
+/**
  *
  * @param {user} user
  * @returns {}
@@ -126,6 +164,15 @@ Seance.prototype.addProjet = function (projet) {
     this.projets.push(projet);
 };
 
+
+/**
+ *
+ * @param {Otherdoc} otherdoc
+ * @returns {}
+ */
+Seance.prototype.addOtherdoc = function (otherdoc) {
+    this.otherdocs.push(otherdoc);
+};
 
 
 /**
@@ -166,6 +213,15 @@ Seance.prototype.countProjets = function () {
 
 
 /**
+ * nombre total de otherdoc de la seance
+ * @returns {number}
+ */
+Seance.prototype.countOtherdocs = function () {
+    return this.getOtherdocs().length;
+};
+
+
+/**
  * nombre de projets chargés
  * @returns {Number}
  */
@@ -177,6 +233,21 @@ Seance.prototype.countLoadedProjets = function () {
         }
     }
     return loadedProjets;
+
+};
+
+/**
+ * nombre de otherdocs chargés
+ * @returns {Number}
+ */
+Seance.prototype.countLoadedOtherdocs = function () {
+    var loadedOtherdocs = 0;
+    for (var i = 0, ln = this.otherdocs.length; i < ln; i++) {
+        if (this.otherdocs[i].isLoaded()) {
+            loadedOtherdocs++;
+        }
+    }
+    return loadedOtherdocs;
 
 };
 Seance.prototype.isLoadedConvocationDocument = function () {
@@ -214,6 +285,19 @@ Seance.prototype.getProjetDocumentsId = function () {
 };
 
 
+/**
+ * renvoie la liste des document_text.id de tous les autres doc de la seance
+ * @returns {array of documentId}
+ */
+Seance.prototype.getOtherdocDocumentsId = function () {
+    // array de'id des documents
+    var documentsId = [];
+    _.each(this.getOtherdocs(), function (otherdoc) {
+        documentsId.push(otherdoc.document_text.id);
+    });
+    return (documentsId);
+};
+
 
 
 /**
@@ -238,6 +322,20 @@ Seance.prototype.findProjet = function (projetId) {
         return projet.id === projetId;
     });
     return projet;
+};
+
+
+/**
+ * cherche le projet correspondante à l'id et la renvoie
+ * @param {String} seanceId
+ * @returns {Seance}
+ */
+Seance.prototype.findOtherdoc = function (otherdocId) {
+
+    var otherdoc = _.find(this.getOtherdocs(), function (otherdoc) {
+        return otherdoc.id === otherdocId;
+    });
+    return otherdoc;
 };
 
 

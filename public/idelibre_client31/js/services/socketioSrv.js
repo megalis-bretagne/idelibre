@@ -88,6 +88,8 @@
                 account.token = data.token;
                 account.userId = data.userId;
                 //set account status online en broadcast it
+
+
                 account.isSharedAnnotation = data.configuration.isSharedAnnotation;
                 account.status = ONLINE;
                 $rootScope.$broadcast('connectionStatus', {state: true});
@@ -169,6 +171,7 @@
                     localDbSrv.getAllConvocationByAccount(account);
                     //localDbSrv.checkAllProjetsDocument();
                     localDbSrv.checkAllProjetsDocumentByAccount(account);
+                    localDbSrv.checkAllOtherdocsDocumentByAccount(account);
                 }
 
                 // Save locally
@@ -208,6 +211,7 @@
                 if (!_.isEmpty(json.toModify) || !_.isEmpty(json.toAdd)) {
                     localDbSrv.getAllInvitationsByAccount(account);
                     localDbSrv.checkAllProjetsDocumentByAccount(account);
+                    localDbSrv.checkAllOtherdocsDocumentByAccount(account);
                 }
 
                 // Save locally
@@ -251,6 +255,7 @@
                 if (!_.isEmpty(json.toModify) || !_.isEmpty(json.toAdd)) {
                     localDbSrv.getAllInvitationsByAccount(account);
                     localDbSrv.checkAllProjetsDocumentByAccount(account);
+                    localDbSrv.checkAllOtherdocsDocumentByAccount(account);
                 }
 
                 localDbSrv.getAllInvitationsByAccount(account);
@@ -490,13 +495,31 @@
                     return;
                 }
                 var projetDao = new ProjetDAO();
-                var archivedProjets = [];
+                var archivedvs = [];
                 for (var i = 0, ln = jsonProjets.length; i < ln; i++) {
                     archivedProjets.push(projetDao.unserialize(jsonProjets[i]));
                 }
                 $rootScope.$broadcast('archivedProjetsList', {archivedProjets: archivedProjets});
             });
 
+
+            socket.on("archivedOtherdocsListFeedBack", function (data) {
+                var jsonOtherdocs;
+
+                try {
+                    jsonOtherdocs = JSON.parse(data);
+                    console.log(jsonOtherdocs);
+                } catch (e) {
+                    console.log(e);
+                    return;
+                }
+                var otherdocDao = new OtherdocDAO();
+                var archivedOtherdocs = [];
+                for (var i = 0, ln = jsonOtherdocs.length; i < ln; i++) {
+                    archivedOtherdocs.push(otherdocDao.unserialize(jsonOtherdocs[i]));
+                }
+                $rootScope.$broadcast('archivedOtherdocsList', {archivedOtherdocs: archivedOtherdocs});
+            });
         };
 
 
@@ -657,6 +680,13 @@
             var socket = accountIdSocketMap[account.id];
             if (socket) {
                 socket.emit("sendPresence", {token: account.token, seanceId: seanceId, presentStatus: status, procuration_name:mandataire});
+            }
+        }
+
+        socketio.archivedOtherdocs = function (account, seanceId) {
+            var socket = accountIdSocketMap[account.id];
+            if (socket) {
+                socket.emit("archivedOtherdocsList", {token: account.token, seanceId: seanceId});
             }
         }
 
