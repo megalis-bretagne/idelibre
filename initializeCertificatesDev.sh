@@ -24,17 +24,6 @@ if [ ! -f "$FILE" ] || [ $force = true ]; then
 fi
 
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-if ! [ -x "$(command -v docker-compose)" ]; then
-  echo 'Error: docker-compose is not installed.' >&2
-  exit 1
-fi
-
->>>>>>> 73a4d5b (Ajout des autres douments en lien avec la partie node)
-=======
->>>>>>> origin/300-nouveau-champ-pour-y-mettre-un-fichier-ordre-du-jour
 domains=($URL)
 rsa_key_size=4096
 data_path="/data/certbot"
@@ -45,18 +34,8 @@ if [ -d "$data_path" ]; then
  # read -p "Existing data found for $domains. Continue and replace existing certificate? (y/N) " decision
   if [ $force != true ] ; then
     echo "### Certificate already exists. use -f to replace"
-<<<<<<< HEAD
-<<<<<<< HEAD
     docker compose -f docker-compose-dev.yml down
     docker compose -f docker-compose-dev.yml up -d
-=======
-    docker-compose -f docker-compose-dev.yml down
-    docker-compose -f docker-compose-dev.yml up -d
->>>>>>> 73a4d5b (Ajout des autres douments en lien avec la partie node)
-=======
-    docker compose -f docker-compose-dev.yml down
-    docker compose -f docker-compose-dev.yml up -d
->>>>>>> origin/300-nouveau-champ-pour-y-mettre-un-fichier-ordre-du-jour
     exit
   fi
 fi
@@ -74,15 +53,7 @@ fi
 echo "### Creating dummy certificate for $domains ..."
 path="/etc/letsencrypt/live/$domains"
 mkdir -p "$data_path/conf/live/$domains"
-<<<<<<< HEAD
-<<<<<<< HEAD
 docker compose -f docker-compose-dev.yml run --rm --entrypoint "\
-=======
-docker-compose -f docker-compose-dev.yml run --rm --entrypoint "\
->>>>>>> 73a4d5b (Ajout des autres douments en lien avec la partie node)
-=======
-docker compose -f docker-compose-dev.yml run --rm --entrypoint "\
->>>>>>> origin/300-nouveau-champ-pour-y-mettre-un-fichier-ordre-du-jour
     openssl req -x509 -nodes -newkey rsa:1024 -days 365\
     -keyout '$path/privkey.pem' \
     -out '$path/fullchain.pem' \
@@ -92,18 +63,8 @@ echo
 
 if [ $SELF_SIGNED = 1 ]; then
   echo "### WORKING WITH SELF SIGNED CERTIFICATE"
-<<<<<<< HEAD
-<<<<<<< HEAD
   docker compose -f docker-compose-dev.yml down
   docker compose -f docker-compose-dev.yml up -d
-=======
-  docker-compose -f docker-compose-dev.yml down
-  docker-compose -f docker-compose-dev.yml up -d
->>>>>>> 73a4d5b (Ajout des autres douments en lien avec la partie node)
-=======
-  docker compose -f docker-compose-dev.yml down
-  docker compose -f docker-compose-dev.yml up -d
->>>>>>> origin/300-nouveau-champ-pour-y-mettre-un-fichier-ordre-du-jour
 
 exit 0
 fi
@@ -113,28 +74,12 @@ echo "### From here generate letsencrypt certificate (if stagging=1 we only try)
 
 
 echo "### Starting nginx ..."
-<<<<<<< HEAD
-<<<<<<< HEAD
 docker compose -f docker-compose-dev.yml up --force-recreate -d nginx-idelibre
-=======
-docker-compose -f docker-compose-dev.yml up --force-recreate -d nginx-idelibre
->>>>>>> 73a4d5b (Ajout des autres douments en lien avec la partie node)
-=======
-docker compose -f docker-compose-dev.yml up --force-recreate -d nginx-idelibre
->>>>>>> origin/300-nouveau-champ-pour-y-mettre-un-fichier-ordre-du-jour
 echo
 
 
 echo "### Deleting dummy certificate for $domains ..."
-<<<<<<< HEAD
-<<<<<<< HEAD
 docker compose -f docker-compose-dev.yml run --rm --entrypoint "\
-=======
-docker-compose -f docker-compose-dev.yml run --rm --entrypoint "\
->>>>>>> 73a4d5b (Ajout des autres douments en lien avec la partie node)
-=======
-docker compose -f docker-compose-dev.yml run --rm --entrypoint "\
->>>>>>> origin/300-nouveau-champ-pour-y-mettre-un-fichier-ordre-du-jour
   rm -Rf /etc/letsencrypt/live/$domains && \
   rm -Rf /etc/letsencrypt/archive/$domains && \
   rm -Rf /etc/letsencrypt/renewal/$domains.conf" certbot
@@ -157,15 +102,7 @@ esac
 # Enable staging mode if needed
 if [ $staging != "0" ]; then staging_arg="--staging"; fi
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 docker compose -f docker-compose-dev.yml run --rm --entrypoint "\
-=======
-docker-compose -f docker-compose-dev.yml run --rm --entrypoint "\
->>>>>>> 73a4d5b (Ajout des autres douments en lien avec la partie node)
-=======
-docker compose -f docker-compose-dev.yml run --rm --entrypoint "\
->>>>>>> origin/300-nouveau-champ-pour-y-mettre-un-fichier-ordre-du-jour
   certbot certonly --webroot -w /var/www/certbot \
     $staging_arg \
     $email_arg \
@@ -176,12 +113,4 @@ docker compose -f docker-compose-dev.yml run --rm --entrypoint "\
 echo
 
 echo "### Reloading nginx ..."
-<<<<<<< HEAD
-<<<<<<< HEAD
 docker compose -f docker-compose-dev.yml exec nginx-idelibre nginx -s reload
-=======
-docker-compose -f docker-compose-dev.yml exec nginx-idelibre nginx -s reload
->>>>>>> 73a4d5b (Ajout des autres douments en lien avec la partie node)
-=======
-docker compose -f docker-compose-dev.yml exec nginx-idelibre nginx -s reload
->>>>>>> origin/300-nouveau-champ-pour-y-mettre-un-fichier-ordre-du-jour
