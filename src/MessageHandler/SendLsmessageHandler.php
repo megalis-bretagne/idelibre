@@ -33,7 +33,7 @@ class SendLsmessageHandler implements MessageHandlerInterface
 
         $sitting = $this->sittingRepository->find($convocationSent->getSittingId());
 
-        if( $sitting->getType()->getIsSmsActors() || $sitting->getType()->getIsSmsEmployees() || $sitting->getType()->getIsSmsGuests() ) {
+        if( $sitting->getType()->getIsSms() || $sitting->getType()->getIsSmsEmployees() || $sitting->getType()->getIsSmsGuests() ) {
             $lsmessageConnector = $this->lsmessageConnectorManager->getLsmessageConnector($sitting->getStructure());
             if (!$lsmessageConnector || !$lsmessageConnector->getActive()) {
                 return;
@@ -54,7 +54,7 @@ class SendLsmessageHandler implements MessageHandlerInterface
         $smsList = [];
         foreach ($convocations as $convocation) {
             // Envoi pour les élus
-            if ($convocation->getSitting()->getType()->getIsSmsActors() && $this->isConvocation($convocation) && $this->hasPhone($convocation->getUser())) {
+            if ($convocation->getSitting()->getType()->getIsSms() && $this->isConvocation($convocation) && $this->hasPhone($convocation->getUser())) {
                 $smsList[] = new Sms('idelibre', $convocation->getUser()->getPhone(), $connector->getContent(), $connector->getSender());
             }
             // Envoi pour les administratifs

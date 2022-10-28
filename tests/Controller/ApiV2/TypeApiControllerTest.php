@@ -94,7 +94,7 @@ class TypeApiControllerTest extends WebTestCase
 
         $data = [
             'name' => 'my new type',
-            'isSmsActors' => true,
+            'isSms' => true,
             'isSmsEmployees' => true,
             'isSmsGuests' => true,
             'isComelus' => true,
@@ -117,7 +117,7 @@ class TypeApiControllerTest extends WebTestCase
         $type = json_decode($response->getContent(), true);
 
         $this->assertNotEmpty($type['id']);
-        $this->assertTrue($type['isSmsActors']);
+        $this->assertTrue($type['isSms']);
         $this->assertTrue($type['isSmsEmployees']);
         $this->assertTrue($type['isSmsGuests']);
         $this->assertTrue($type['isComelus']);
@@ -134,7 +134,7 @@ class TypeApiControllerTest extends WebTestCase
 
         $data = [
             'name' => 'my new type',
-            'isSmsActors' => true,
+            'isSms' => true,
             'isSmsEmployees' => true,
             'isSmsGuests' => true,
             'isComelus' => true,
@@ -172,7 +172,7 @@ class TypeApiControllerTest extends WebTestCase
 
         $data = [
             'name' => 'updated name',
-            'isSmsActors' => true,
+            'isSms' => true,
             'isSmsEmployees' => true,
             'isSmsGuests' => true,
             'isComelus' => true,
@@ -196,7 +196,7 @@ class TypeApiControllerTest extends WebTestCase
 
         $this->assertNotEmpty($type['id']);
         $this->assertSame($type['name'], 'updated name');
-        $this->assertTrue($type['isSmsActors']);
+        $this->assertTrue($type['isSms']);
         $this->assertTrue($type['isSmsEmployees']);
         $this->assertTrue($type['isSmsGuests']);
         $this->assertTrue($type['isComelus']);

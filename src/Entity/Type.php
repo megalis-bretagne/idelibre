@@ -58,7 +58,7 @@ class Type
 
     #[Column(type: 'boolean', nullable: true)]
     #[Groups(['sitting', 'type:read', 'type:write'])]
-    private $isSmsActors;
+    private $isSms;
 
     #[Column(type: 'boolean', nullable: true)]
     #[Groups(['sitting', 'type:read', 'type:write'])]
@@ -176,14 +176,14 @@ class Type
         return $this;
     }
 
-    public function getIsSmsActors(): bool
+    public function getIsSms(): bool
     {
-        return $this->isSmsActors ?? false;
+        return $this->isSms ?? false;
     }
 
-    public function setIsSmsActors(bool $isSmsActors): self
+    public function setIsSms(bool $isSms): self
     {
-        $this->isSmsActors = $isSmsActors;
+        $this->isSms = $isSms;
 
         return $this;
     }

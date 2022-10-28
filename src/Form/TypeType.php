@@ -79,7 +79,7 @@ class TypeType extends AbstractType
                 'label_attr' => ['class' => 'switch-custom'],
                 'label' => 'Envoyer le dossier via comelus',
             ])
-            ->add('isSmsActors', CheckboxType::class, [
+            ->add('isSms', CheckboxType::class, [
                 'required' => false,
                 'label_attr' => ['class' => 'switch-custom'],
                 'label' => 'Notifier les élus via sms',

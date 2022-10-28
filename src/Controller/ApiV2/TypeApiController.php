@@ -17,7 +17,9 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 /**
  * body {
  * "name": string,
- * "isSmsActors":bool,
+ * "isSms":bool,
+ * "isSmsEmployees":bool,
+ * "isSmsGuests":bool,
  * "isComelus":bool,
  * "reminder":{"duration":<60, 90, 120, 180, 240, 300>,"isActive":bool},
  * 'associatedUsers':[{userIds}]
