@@ -13,9 +13,9 @@
 
 
         var seance = account.findSeance($scope.seanceId);
+console.log( seance);
 
         $scope.isInvite = account.type == INVITES;
-
 
         if(seance.convocation) {
             $scope.annotations = seance.convocation.countAnnotations();
@@ -37,6 +37,7 @@
 
         //tri des projet par ...
         $scope.sortProjet = 'rank';
+        $scope.sortOtherdoc = 'rank';
 
 
         $scope.$on("sortSeanceBy", function (event, data) {
@@ -51,6 +52,13 @@
             }
         };
 
+        $scope.sortBy = function (arg) {
+            if ($scope.sortOtherdoc == arg) {
+                $scope.sortOtherdoc = '-' + $scope.sortOtherdoc;
+            } else {
+                $scope.sortOtherdoc = arg;
+            }
+        };
 
         $scope.collectivite = account.name;
         $scope.seance = seance;
@@ -99,10 +107,19 @@
             var sortedProjet = _.sortBy(seance.projets, function(projet){
                 return projet.rank;
             });
-
             _.each(sortedProjet, function (projet) {
                 if (projet.document_text.isLoaded !== 2) {
                     localDbSrv.getProjet(projet.document_text, $scope.collectivite, $scope.seance, $scope.accountId);
+                }
+            });
+
+            var sortedOtherdoc = _.sortBy(seance.otherdocs, function(otherdoc){
+                return otherdoc.rank;
+            });
+
+            _.each(sortedOtherdoc, function (otherdoc) {
+                if (otherdoc.document_text.isLoaded !== 2) {
+                    localDbSrv.getOtherdoc(otherdoc.document_text, $scope.collectivite, $scope.seance, $scope.accountId);
                 }
             });
 

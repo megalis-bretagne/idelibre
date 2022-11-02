@@ -1,14 +1,16 @@
 /**
- * 
+ *
  * @param {string} id
  * @param {string} name
  * @param {Document_text} document_text
  * @param {string} theme
  * @param {int} rank
+ * @param {string} rapporteur
+ * @param {int} rapporteurId
  * @param {bool} vote
  * @returns {Projet}
  */
-var Projet = function (id, name, document_text, theme, rank, vote, rapporteur) {
+var Projet = function (id, name, document_text, theme, rank, vote, rapporteur, rapporteurId) {
     this.id = id;
     this.name = name;
     this.theme = theme;
@@ -49,7 +51,7 @@ Projet.prototype.isLoaded = function () {
     if (this.document_text) {
         return this.document_text.isLoaded;
     }
-    //on retourne true si pas de doc associé au projet    
+    //on retourne true si pas de doc associé au projet
     else {
         return true;
     }
@@ -85,7 +87,7 @@ Projet.prototype.findAnnexe = function (annexeId) {
 
 
 Projet.prototype.findAnnotationIndex = function (annotationId) {
-       var pos = _.findIndex(this.getAnnotations(), function (annotation) {
+    var pos = _.findIndex(this.getAnnotations(), function (annotation) {
         return annotation.id === annotationId;
     });
     return pos;
@@ -142,7 +144,7 @@ Projet.prototype.addAnnotation = function (annotation) {
     });
 
     if (index === -1) {
-        //it's a new annotation : 
+        //it's a new annotation :
         this.annotations.push(annotation)
     } else {
         //it's an updated annotation
@@ -178,12 +180,10 @@ Projet.prototype.getAnnotations = function () {
 
 Projet.prototype.getType = function(){
     return DocType.PROJET;
-}
-
-
+};
 
 
 Projet.prototype.deleteAllAnnotations = function(){
     this.annotations =[];
-}
+};
 

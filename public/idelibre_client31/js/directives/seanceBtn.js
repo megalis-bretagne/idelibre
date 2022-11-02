@@ -26,10 +26,6 @@
                 $scope.accountId = $scope.account.id;
 
 
-
-
-
-
                 //ecouteur pour la mise à jour du nombre de convocation chargée
                 $scope.$on('update loaded convocation', function (event, data) {
 
@@ -72,14 +68,26 @@
                 });
 
 
+                //ecouteur pour la mise à jour du nombre de projet chargée
+                $scope.$on('update loaded other document', function (event, data) {
+                    if (data.seanceId === $scope.data.id) {
+                        $scope.loadedOtherdocsDocument = $scope.data.countLoadedOtherdocs();
+                        if (!$rootScope.$$phase) {
+                            $scope.$apply();
+                        }
+                    }
+                });
+
                 //écouteur qui force le rafraichissment
                 $scope.$on('refresh seances', function (event, data) {
                     // rafraichissement des données des seances
                     $scope.loadedConvocationDocument = $scope.data.isLoadedConvocationDocument();
                     $scope.loadedProjetsDocument = $scope.data.countLoadedProjets();
+                    $scope.loadedOtherdocsDocument = $scope.data.countLoadedOtherdocs();
                     $scope.isRead = $scope.data.convocation.isRead;
                     $scope.isModified = $scope.data.isModified;
                     $scope.countProjets = $scope.data.countProjets();
+                    $scope.countOtherdocs = $scope.data.countOtherdocs();
                 });
 
 
@@ -147,6 +155,7 @@
 
                 //nombre de projet
                 $scope.countProjets = $scope.data.countProjets();
+                $scope.countOtherdocs = $scope.data.countOtherdocs();
 
 
 
@@ -167,6 +176,7 @@ console.log(date.getHours());
                     $scope.loadedConvocationDocument = $scope.data.isLoadedConvocationDocument();
                     // nombre de projet chargé
                     $scope.loadedProjetsDocument = $scope.data.countLoadedProjets();
+                    $scope.loadedOtherdocsDocument = $scope.data.countLoadedOtherdocs();
                     // convocation déja lu
                     $scope.isRead = $scope.data.convocation.isRead;
                 }else{
@@ -174,6 +184,7 @@ console.log(date.getHours());
 
                     $scope.isRead = $scope.data.invitation.isRead;
                     $scope.loadedProjetsDocument = $scope.data.countLoadedProjets();
+                    $scope.loadedOtherdocsDocument = $scope.data.countLoadedOtherdocs();
 
                 }
 

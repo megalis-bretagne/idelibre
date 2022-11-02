@@ -14,6 +14,7 @@ var LOAD_ERROR =3;
 
 var CONVOCATION = 1;
 var PROJET = 2;
+var OTHERDOC = 3;
 
 var ACTEURS = 'b2f7a7e4-4ab1-4d93-ac13-d7ca540b4c16';
 var ADMINISTRATIFS = 'db68a3c7-0119-40f1-b444-e96f568b3d67';
@@ -23,7 +24,8 @@ var INVITES = 'aa130693-e6d0-4893-ba31-98892b98581f';
 var DocType = {
     PROJET : "Projet",
     CONVOCATION : "Convocation",
-    ANNEXE  :"Annexe"
+    ANNEXE  :"Annexe",
+    OTHERDOC  :"Autre document"
 };
  
 

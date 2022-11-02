@@ -57,6 +57,7 @@
         $scope.accounts = accountSrv.getList();
         localDbSrv.getAllConvocation();
         localDbSrv.checkAllProjetsDocument();
+        localDbSrv.checkAllOtherdocsDocument();
         socketioSrv.initSockets();
 
 

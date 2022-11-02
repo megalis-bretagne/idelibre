@@ -50,6 +50,10 @@ var Account = function () {
     this.numberLoadedConvocations = 0;
 
 
+    /**
+     * @property {Number} nombre d'autres documents chargés (utiliser getNumberLoadedOtherdocs pour le lire)
+     */
+    this.numberLoadedOtherdocs = 0;
 };
 
 
@@ -70,6 +74,16 @@ Account.prototype.getSeances = function () {
 Account.prototype.getNumberLoadedProjets = function () {
     this.numberLoadedProjets = this.numberLoadedProjets || 0;
     return this.numberLoadedProjets;
+};
+
+
+/**
+ * retourne le nombre d'autres documents chargés
+ * @returns {Number}
+ */
+Account.prototype.getNumberLoadedOtherdocs = function () {
+    this.numberLoadedOtherdocs = this.numberLoadedOtherdocs || 0;
+    return this.numberLoadedOtherdocs;
 };
 
 
@@ -106,6 +120,19 @@ Account.prototype.countProjets = function () {
 
 };
 
+
+/**
+ * Nombre d'uatres documents par account
+ * @returns {Number}
+ */
+Account.prototype.countOtherdocs = function () {
+    var nbOtherdoc = 0;
+    for (var i = 0, ln = this.getSeances().length; i < ln; i++) {
+        nbOtherdoc += this.seances[i].countOtherdocs();
+    }
+    return nbOtherdoc;
+
+};
 
 /**
  *
@@ -166,6 +193,29 @@ Account.prototype.formatDataProjet = function (data) {
     });
 
     return projet;
+
+};
+
+
+/**
+ * a faire aussi coté serveur comme le formatDataSeance
+ * @param {Json} data
+ * @returns {OtherdocJson}
+ */
+Account.prototype.formatDataOtherdoc = function (data) {
+
+    var otherdoc = {
+        id: data.otherdoc_id,
+        name: data.otherdoc_name,
+        rank: data.otherdoc_rank,
+        document_text: {
+            id: data.otherdoc_documentId,
+            name: data.otherdoc_name,
+            isLoaded: NOTLOADED,
+        }
+    };
+
+    return otherdoc;
 
 };
 
@@ -234,7 +284,8 @@ Account.prototype.formatDataSeance = function (data) {
         //     }
         // },
         //  users: data.Users,
-        projets: _.map(data.projets, this.formatDataProjet)
+        projets: _.map(data.projets, this.formatDataProjet),
+        otherdocs: _.map(data.otherdocs, this.formatDataOtherdoc)
 
     };
 
@@ -474,6 +525,20 @@ Account.prototype.listProjetId = function () {
 
 };
 
+/**
+ * Retourne un tableau de string des ids des autres documents
+ * @returns {array of string}
+ */
+Account.prototype.listOtherdocId = function () {
+    var otherdocList = []
+    _.each(this.getSeances(), function (seance) {
+        otherdocList.push(seance.stringOtherdocIds());
+    });
+
+    return _.flatten(otherdocList);
+
+};
+
 
 /**
  * retrouve un objet projet en fonction de son id
@@ -492,6 +557,23 @@ Account.prototype.findProjet = function (projetId) {
 
 };
 
+
+/**
+ * retrouve un objet autre document en fonction de son id
+ * @param {type} otherdocId
+ * @returns {Otherdoc}
+ */
+Account.prototype.findOtherdoc = function (otherdocId) {
+
+    for (var i = 0, l = this.getSeances().length; i < l; i++) {
+
+        var res = this.getSeances()[i].findOtherdoc(otherdocId);
+        if (res) {
+            return res;
+        }
+    }
+
+};
 
 Account.prototype.deleteAllAnnotations = function () {
     for (var i = 0, ln = this.getSeances().length; i < ln; i++) {

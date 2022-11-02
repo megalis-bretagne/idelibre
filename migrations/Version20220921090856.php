@@ -32,3 +32,4 @@ final class Version20220921090856 extends AbstractMigration
         $this->addSql('ALTER TABLE type DROP is_sms_employees');
     }
 }
+
