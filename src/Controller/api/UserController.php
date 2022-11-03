@@ -3,6 +3,7 @@
 namespace App\Controller\api;
 
 use App\Entity\Sitting;
+use App\Entity\User;
 use App\Repository\ConvocationRepository;
 use App\Repository\UserRepository;
 use App\Service\Convocation\ConvocationManager;
@@ -80,5 +81,20 @@ class UserController extends AbstractController
             'employees' => $userRepository->findInvitableEmployeesIdsConvocationSent($sitting),
             'guests' => $userRepository->findGuestsIdsConvocationSent($sitting),
         ]);
+    }
+
+
+    #[Route(path: '/api/users/{id}', name: 'api_user', methods: ['GET'])]
+    #[IsGranted(data: 'MANAGE_USERS', subject: 'user')]
+    public function getUsersDataInSitting(User $user, UserRepository $userRepository): JsonResponse
+    {
+        return $this->json(
+            [
+                'user' => $userRepository->findOneBy(['id' => $user])
+            ],
+            200,
+            [],
+            ['groups' => ['user']]
+        );
     }
 }

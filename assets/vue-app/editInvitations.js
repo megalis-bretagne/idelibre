@@ -37,6 +37,27 @@ let app = new Vue({
             removeInSittingUser(this.inSittingGuests, userId);
             removeInSittingUser(this.inSittingEmployees, userId);
             this.removedUsers.push(userId);
+            this.updateSelectDataAfterRemove(userId);
+        },
+
+        updateSelectDataAfterRemove(userId) {
+            Promise.all([
+                axios.get(`/api/users/${userId}`),
+            ]).then((response) => {
+                this.notInSittingActors.push(response[0].data['user']);
+                axios.put(`/api/users/sittings/${getSittingId()}`, {
+                    removedUsers: this.removedUsers,
+                    addedActors: this.addedActors,
+                    addedEmployees: this.addedEmployees,
+                    addedGuests: this.addedGuests
+                }).then((response) => {
+                    this.removedUsers = [];
+                    this.addedActors = [];
+                    this.addedEmployees = [];
+                    this.addedGuests = [];
+                    this.getUsers();
+                })
+            });
         },
 
         save() {
