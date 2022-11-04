@@ -73,9 +73,6 @@
                 //nombre de projet chargé
                 $scope.countLoadedProjets = $scope.data.countLoadedProjets();
 
-                //nombre d'autre document chargé
-                $scope.countLoadedOtherdocs = $scope.data.countLoadedOtherdocs();
-
                 //nombre de seance
                 $scope.countSeances = $scope.data.countSeances();
 

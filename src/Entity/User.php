@@ -100,7 +100,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $authorizedTypes;
 
     #[Column(type: 'boolean')]
-    #[Groups(['user:read', 'user:write'])]
+    #[Groups(['user', 'user:read', 'user:write'])]
     private $isActive = true;
 
     #[Column(type: 'string', length: 30, nullable: true)]
