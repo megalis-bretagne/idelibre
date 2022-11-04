@@ -86,3 +86,11 @@ a#cRetour.cVisible{
     bottom:50px;
     opacity:1;
 }
+
+td.inactiveLine  ~ td {
+    text-decoration: line-through;
+    font-style: italic;
+    opacity: 0.7;
+    color:#a3a3a3;
+    pointer-events: none;
+}

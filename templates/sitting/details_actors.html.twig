@@ -106,33 +106,43 @@
                         </td>
                     </tr>
 
-                    <tr class="d-flex " v-for="convocation in filteredActorConvocations">
+                    {% set classToChange = '' %}
+                    <tr class="d-flex {{ classToChange }}" v-for="convocation in filteredActorConvocations">
 
-                        <td class="col-3">
+                        <td v-if="convocation.user.isActive" class={{ classToChange }}>
+                            {% set classToChange = 'inactiveLine' %}
+                        </td>
+                        <td v-else-if="!convocation.user.isActive" class={{ classToChange }}>
+                            {% set classToChange = '' %}
+                        </td>
+
+                        <td class="col-3 {{ classToChange }} ">
                             ${convocation.user.firstName} ${convocation.user.lastName}
                         </td>
-                        <td class="col-1">
+
+                        <td class="col-1 {{ classToChange }} ">
                             ${ convocation.user.party?.initials  ? convocation.user.party.initials : null}
                         </td>
-                        <td v-if="convocation.sentTimestamp" class="col-2"><span class="fas fa-check text-success"> </span>
+
+                        <td v-if="convocation.sentTimestamp" class="col-2"><span class="fas fa-check text-success {{ classToChange }}"> </span>
                             ${convocation.sentTimestamp.createdAt | formatDateString }
                         </td>
-                        <td v-else-if="!isArchived" class="col-2">
+                        <td v-else-if="!isArchived" class="col-2 {{ classToChange }}">
                             <button v-on:click="sendConvocation(convocation.id)" class="btn btn-outline-primary borderless mt-n2"
                                     title="Envoyer"><span class="fa fa-paper-plane"></span></button>
                         </td>
-                        <td v-else class="col-2">
+                        <td v-else class="col-2 {{ classToChange }}">
                             <span class="fas fa-times text-danger"> </span>
                         </td>
 
-                        <td v-if="convocation.receivedTimestamp" class="col-2">
+                        <td v-if="convocation.receivedTimestamp" class="col-2 {{ classToChange }}">
                             <span class="fas fa-check text-success"> </span> ${convocation.receivedTimestamp.createdAt | formatDateString }
                         </td>
-                        <td v-else class="col-2">
+                        <td v-else class="col-2 {{ classToChange }}">
                             <span class="fas fa-times text-danger"> </span>
                         </td>
 
-                        <td class="col-1">
+                        <td class="col-1 {{ classToChange }}">
                             <span v-if="!convocation.attendance" class="text-warning"
                                   title="Sans réponse">
                                 <i class="fas fa-question"></i>
@@ -145,18 +155,18 @@
                             <span v-else class="text-danger" title="Absent">
                                 <i class="fas fa-times"></i>
                             </span>
-
                         </td>
-                        <td class="col-3">
+
+                        <td class="col-3 {{ classToChange }}">
                             <span v-if="convocation.deputy"> ${convocation.deputy}</span>
                         </td>
 
                     </tr>
 
-                    </tbody>
+                </tbody>
 
-                </table>
-            </div>
+            </table>
+        </div>
 
 
             {% if sitting.invitationFile %}

@@ -257,12 +257,14 @@ class ConvocationManager
     {
         $emails = [];
         foreach ($convocations as $convocation) {
-            $email = $this->emailGenerator->generateFromTemplateAndConvocation($sitting->getType()->getEmailTemplate(), $convocation);
-            $email->setTo($convocation->getUser()->getEmail());
-            $email->setReplyTo($sitting->getStructure()->getReplyTo());
-            $email->setAttachment($this->getConvocationAttachment($convocation, $sitting));
-            $email->setCalPath($this->icalGenerator->generate($sitting));
-            $emails[] = $email;
+            if( $convocation->getUser()->getIsActive() ) {
+                $email = $this->emailGenerator->generateFromTemplateAndConvocation($sitting->getType()->getEmailTemplate(), $convocation);
+                $email->setTo($convocation->getUser()->getEmail());
+                $email->setReplyTo($sitting->getStructure()->getReplyTo());
+                $email->setAttachment($this->getConvocationAttachment($convocation, $sitting));
+                $email->setCalPath($this->icalGenerator->generate($sitting));
+                $emails[] = $email;
+            }
         }
 
         return $emails;
