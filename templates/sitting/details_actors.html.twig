@@ -109,10 +109,10 @@
                     {% set classToChange = '' %}
                     <tr class="d-flex {{ classToChange }}" v-for="convocation in filteredActorConvocations">
 
-                        <td v-if="convocation.user.isActive" class={{ classToChange }}>
+                        <td v-if="convocation.user.isActive" class="activeNotToDisplay {{ classToChange }}">
                             {% set classToChange = 'inactiveLine' %}
                         </td>
-                        <td v-else-if="!convocation.user.isActive" class={{ classToChange }}>
+                        <td v-else-if="!convocation.user.isActive" class="{{ classToChange }}">
                             {% set classToChange = '' %}
                         </td>
 

@@ -94,3 +94,7 @@ td.inactiveLine  ~ td {
     color:#a3a3a3;
     pointer-events: none;
 }
+
+td.inactiveLine, td.activeNotToDisplay {
+    display:none;
+}
