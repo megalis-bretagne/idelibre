@@ -23,8 +23,8 @@ class CheckController extends AbstractController
 {
     #[Route(path: '/check', name: 'check_index')]
     #[IsGranted(data: 'ROLE_SUPERADMIN')]
-    #[Breadcrumb(title: 'Vérification de la plateforme')]
-    public function index(ClientNotifier $clientNotifier, LshorodatageInterface $lshorodatage, LoggerInterface $logger, ServiceInfo $serviceInfo): Response
+//    #[Breadcrumb(title: 'Vérification de la plateforme')]
+    public function index(ClientNotifier $clientNotifier, LshorodatageInterface $lshorodatage, LoggerInterface $logger, ServiceInfo $serviceInfo, ParameterBagInterface $bag): Response
     {
         $isNodejs = $clientNotifier->checkConnection();
         $isLshorodatage = true;
@@ -39,6 +39,7 @@ class CheckController extends AbstractController
             'isNodejs' => $isNodejs,
             'isLshorodatage' => $isLshorodatage,
             'phpConfig' => $serviceInfo->getPhpConfiguration(),
+            'entropyForUser' => $bag->get('minimumEntropyForUserWithRoleHigh')
         ]);
     }
 

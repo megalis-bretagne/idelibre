@@ -18,30 +18,16 @@ use Symfony\Component\Routing\RouterInterface;
 
 class ResetPassword
 {
-    private $em;
-    private $userRepository;
-    private $tokenRepository;
-    private $router;
-    private UserPasswordHasherInterface $passwordHasher;
-    private $email;
-    private ParameterBagInterface $bag;
 
     public function __construct(
-        EmailServiceInterface $email,
-        EntityManagerInterface $em,
-        RouterInterface $router,
-        UserRepository $userRepository,
-        ForgetTokenRepository $tokenRepository,
-        UserPasswordHasherInterface $passwordHasher,
-        ParameterBagInterface $bag
+        private readonly EntityManagerInterface $em,
+        private readonly RouterInterface $router,
+        private readonly ForgetTokenRepository $tokenRepository,
+        private readonly UserPasswordHasherInterface $passwordHasher,
+        private readonly EmailServiceInterface $email,
+        private readonly ParameterBagInterface $bag,
+        private readonly PasswordStrengthMeter $passwordStrengthMeter,
     ) {
-        $this->em = $em;
-        $this->userRepository = $userRepository;
-        $this->tokenRepository = $tokenRepository;
-        $this->router = $router;
-        $this->passwordHasher = $passwordHasher;
-        $this->email = $email;
-        $this->bag = $bag;
     }
 
     /**
@@ -82,7 +68,7 @@ class ResetPassword
      * @throws EntityNotFoundException
      * @throws TimeoutException
      */
-    public function getUserFromToken(string $token)
+    public function getUserFromToken(string $token): User
     {
         $token = $this->tokenRepository->findOneBy(['token' => $token]);
 

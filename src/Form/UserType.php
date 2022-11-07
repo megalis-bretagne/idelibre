@@ -118,12 +118,21 @@ class UserType extends AbstractType
 
         $builder->add('plainPassword', RepeatedType::class, [
             'mapped' => false,
+            'required' => false,
             'type' => PasswordType::class,
             'invalid_message' => 'Les mots de passe ne sont pas identiques',
-            'options' => ['attr' => ['class' => 'password-field']],
-            'required' => $this->isNew($options),
-            'first_options' => ['label' => 'Mot de passe'],
-            'second_options' => ['label' => 'Confirmer'],
+            'options' => [
+                'attr' => [
+                    'class' => 'password-field showValidationPasswordEntropy',
+                    'data-minimum-entropy' => $options['entropyForUser'],
+                ],
+            ],
+            'first_options' => [
+                'label' => 'Mot de passe',
+            ],
+            'second_options' => [
+                'label' => 'Confirmer',
+            ],
         ]);
 
         $builder->add('isActive', CheckboxType::class, [
@@ -143,6 +152,7 @@ class UserType extends AbstractType
         $resolver->setDefaults([
             'data_class' => User::class,
             'structure' => null,
+            'entropyForUser' => null,
             'referer' => null,
         ]);
     }

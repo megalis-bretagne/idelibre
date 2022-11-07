@@ -2,66 +2,94 @@
 
 namespace App\Command;
 
+use App\Entity\User;
+use App\Security\Password\PasswordStrengthMeter;
+use App\Service\role\RoleManager;
+use App\Service\User\UserManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class CreateSuperAdminCommand extends Command
 {
     protected static $defaultName = 'admin:create:superadmin';
 
+    public function __construct(
+        private ParameterBagInterface $bag,
+        private EntityManagerInterface $em,
+        private UserManager $userManager,
+        private PasswordStrengthMeter $passwordStrengthMeter,
+        private UserPasswordHasherInterface $passwordHasher,
+        private RoleManager $roleManager,
+        string $name = null,
+    ) {
+        parent::__construct($name);
+    }
+
     protected function configure(): void
     {
         $this
-            // bin/console list
-            ->setDescription('Create a superAdmin')
-            // bin/console command --help
-            ->setHelp('Create a superadmin')
-
-            // bin/console command parm1 param2
-            ->addArgument('arg1', InputArgument::OPTIONAL, 'Argument description')
-            // --repeat=2
-            ->addOption('no-password', 'np', InputOption::VALUE_NONE, 'Option description')
+            ->setDescription('Create first user "superadmin"')
+            ->setHelp('Create superadmin')
+            ->addArgument('argPassword', InputArgument::OPTIONAL, 'Password')
         ;
+
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $arg1 = $input->getArgument('arg1');
+        if ($this->isAlreadyCreate()) {
+            $io->text('already existe in bdd');
 
-        if ($arg1) {
-            $io->note(sprintf('You passed an argument: %s', $arg1));
+            return 0;
         }
+        $argPassword = $input->getArgument('argPassword');
+        $minimumEntropy = $this->bag->get('minimumEntropyForUserWithRoleHigh');
 
-        $output->writeln([
-            'User Creator',
-            '============',
-            '',
-        ]);
+        if ($argPassword) {
+            $io->note(sprintf('Vous avez passé un mot de passe pour l\'utilisateur "superadmin" : %s', $argPassword));
 
-        $io->title('Voici la nouvelle commande symfony');
-        $io->text('Text simple');
-        $io->text(['superadmin', 'admin', 'user']);
+            $successPassword = $this->passwordStrengthMeter->checkEntropy($argPassword, $minimumEntropy);
 
-        $res = $io->choice('choississez un groupe :', ['superadmin', 'admin', 'user']);
+            if (false === $successPassword) {
+                $io->error(sprintf('Le mot de passe pour l\'utilisateur ne correspond pas à l\'entropie définie de : %s', $minimumEntropy));
 
-        $io->text($res);
+                return 0;
+            }
+            $password = $argPassword;
+        } else {
+            $password = $this->passwordStrengthMeter->generatePassword();
+        }
+        $roleSuperAdmin = $this->roleManager->getStructureAdminRole();
+        $user = new User();
+        $user->setUsername('superadmin')
+            ->setFirstName('Admin')
+            ->setLastName('SUPER')
+            ->setEmail('superadmin@example.fr')
+            ->setRole($roleSuperAdmin)
+            ->setPassword($this->passwordHasher->hashPassword($user, $password))
+        ;
+        $this->userManager->save($user);
 
-        $io->horizontalTable(['name', 'size', 'number'], [['toto', 'tata', 'tutu'], ['toto', 'tata', 'tutu']]);
-        $io->table(['name', 'size', 'number'], [['toto', 'tata', 'tutu'], ['toto', 'tata', 'tutu']]);
-
-        $io->listing(['name', 'size', 'number']);
-
-        $io->block('TOTO');
-
-        $io->caution('Be careful');
-
-        $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
+        $io->success(sprintf('L\'utilisateur "superadmin" a bien été enregistré avec le mot de passe : %s', $password));
 
         return Command::SUCCESS;
     }
+    private function isAlreadyCreate(): bool
+    {
+        $pdo = $this->em->getConnection()->getWrappedConnection();
+
+        $statement = $pdo->prepare('select * from "user"');
+        $statement->execute();
+        $count = $statement->rowCount();
+
+        return $count > 0;
+    }
+
 }

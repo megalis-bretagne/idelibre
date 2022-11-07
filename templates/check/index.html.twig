@@ -52,6 +52,16 @@
             </tr>
         {% endfor %}
 
+        <tr class="d-flex">
+            <td class="col-8">Entropie du mot de passe pour les profils: <br /> Superadmin, Administrateur de groupe et Administrateur</td>
+            <td class="col-4">
+                {% if entropyForUser|default(null) %}
+                    {{ entropyForUser }}
+                {% else %}
+                    <span style="color: red;">A définir par l'administrateur de la plateforme</span>
+                {% endif %}
+            </td>
+        </tr>
 
         </tbody>
     </table>

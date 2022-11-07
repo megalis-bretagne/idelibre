@@ -41,12 +41,21 @@ class SuperUserType extends AbstractType
                 'label' => 'Email', ])
             ->add('plainPassword', RepeatedType::class, [
                 'mapped' => false,
+                'required' => false,
                 'type' => PasswordType::class,
                 'invalid_message' => 'Les mots de passe ne sont pas identiques',
-                'options' => ['attr' => ['class' => 'password-field']],
-                'required' => !$options['isEditMode'],
-                'first_options' => ['label' => 'Mot de passe'],
-                'second_options' => ['label' => 'Confirmer'],
+                'options' => [
+                    'attr' => [
+                        'class' => 'password-field showValidationPasswordEntropy',
+                        'data-minimum-entropy' => $options['entropyForUser'],
+                    ],
+                ],
+                'first_options' => [
+                    'label' => 'Mot de passe',
+                ],
+                'second_options' => [
+                    'label' => 'Confirmer',
+                ],
             ])
             ->add('role', HiddenEntityType::class, [
                 'data' => $this->roleManager->getSuperAdminRole(),
@@ -68,6 +77,7 @@ class SuperUserType extends AbstractType
             'data_class' => User::class,
             'isEditMode' => false,
             'isGroupChoice' => false,
+            'entropyForUser' => null,
         ]);
     }
 }

@@ -6,6 +6,7 @@ use App\Entity\Group;
 use App\Entity\Role;
 use App\Entity\Structure;
 use App\Entity\User;
+use App\Security\Password\PasswordStrengthMeter;
 use App\Service\role\RoleManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -19,6 +20,7 @@ class UserManager
         private UserPasswordHasherInterface $passwordHasher,
         private ValidatorInterface $validator,
         private RoleManager $roleManager,
+        private PasswordStrengthMeter $passwordStrengthMeter,
     ) {
     }
 
@@ -75,4 +77,21 @@ class UserManager
         $this->em->remove($user);
         $this->em->flush();
     }
+
+    public function preference(User $user, string $plainPassword, Structure $structure): ?bool
+    {
+        if ($plainPassword) {
+            $success = $this->passwordStrengthMeter->checkPasswordEntropy($user, $plainPassword);
+
+            if (false === $success) {
+                return false;
+            }
+            $plainPassword = $this->passwordHasher->hashPassword($user, $plainPassword);
+        }
+
+        $this->save($user, $plainPassword, $structure);
+
+        return true;
+    }
+
 }

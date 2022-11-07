@@ -6,7 +6,9 @@
     </div>
 
     <div class="col-12 offset-0 mt-3">
-        {% block pageTop %}{% endblock %}
+        {% block pageTop %}
+            {{ include('include/flash.html.twig') }}
+        {% endblock %}
 
 
         <h1>{% block pageTitle %}{% endblock %}</h1>

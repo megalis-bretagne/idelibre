@@ -7,6 +7,7 @@ use App\Entity\Structure;
 use App\Form\UserPasswordType;
 use App\Security\Password\ResetPassword;
 use App\Security\Password\TimeoutException;
+use App\Security\UserLoginEntropy;
 use App\Service\User\ImpersonateStructure;
 use Doctrine\ORM\EntityNotFoundException;
 use Exception;
@@ -125,7 +126,7 @@ class SecurityController extends AbstractController
      * @throws Exception
      */
     #[Route(path: '/reset/{token}', name: 'app_reset')]
-    public function resetPassword(string $token, ResetPassword $resetPassword, Request $request): Response
+    public function resetPassword(string $token, ResetPassword $resetPassword, Request $request, UserLoginEntropy $userLoginEntropy): Response
     {
         try {
             $user = $resetPassword->getUserFromToken($token);

@@ -33,6 +33,7 @@ Encore
     .addEntry('toggle-calendar', './assets/js/toggleCalendar.js')
     .addEntry('toggle-calendar-new-sitting', './assets/js/toggleCalendarNewSitting.js')
     .addEntry('vue-manage-other-docs', './assets/vue-app/manageOtherdocs.js')
+    .addEntry('showPasswordEntropy', './assets/js/password/showPasswordEntropy.js')
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')
@@ -81,7 +82,7 @@ Encore
     //.enableIntegrityHashes(Encore.isProduction())
 
     // uncomment if you're having problems with a jQuery plugin
-    //.autoProvidejQuery()
+    .autoProvidejQuery()
 ;
 
 module.exports = Encore.getWebpackConfig();
