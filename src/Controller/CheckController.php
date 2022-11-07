@@ -23,7 +23,7 @@ class CheckController extends AbstractController
 {
     #[Route(path: '/check', name: 'check_index')]
     #[IsGranted(data: 'ROLE_SUPERADMIN')]
-//    #[Breadcrumb(title: 'Vérification de la plateforme')]
+    #[Breadcrumb(title: 'Vérification de la plateforme')]
     public function index(ClientNotifier $clientNotifier, LshorodatageInterface $lshorodatage, LoggerInterface $logger, ServiceInfo $serviceInfo, ParameterBagInterface $bag): Response
     {
         $isNodejs = $clientNotifier->checkConnection();
