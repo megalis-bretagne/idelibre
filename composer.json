@@ -28,7 +28,7 @@
     "libriciel/comelus-api-wrapper": "^1.0",
     "libriciel/ls-message-wrapper": "^1.0",
     "libriciel/lshorodatage-api-wrapper": "^1.0.2",
-    "libriciel/php-password": "^1.1",
+    "libriciel/php-password": "^3.0",
     "mailjet/mailjet-apiv3-php": "^1.5",
     "neitanod/forceutf8": "^2.0",
     "nyholm/psr7": "^1.4",

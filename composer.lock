@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bfe9de0eef1783acdb325ae6581d105e",
+    "content-hash": "a69aa06c0d4090d2bea8677b0cd676b4",
     "packages": [
         {
             "name": "apy/breadcrumbtrail-bundle",
@@ -2993,40 +2993,33 @@
         },
         {
             "name": "libriciel/php-password",
-            "version": "1.1.0",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://gitlab.adullact.net/Libriciel/php-password.git",
-                "reference": "28a046a007d1d7a71df5922a414f37ecb166cdb0"
+                "reference": "18f2692cda0a013631bbf4318a08f87ad37907e1"
             },
             "require": {
-                "paragonie/random_compat": "^2.0"
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "php": "^8.1"
             },
             "require-dev": {
-                "mayflower/php-codebrowser": "^1.1",
-                "pdepend/pdepend": "^2.5",
-                "phpdocumentor/phpdocumentor": "2.*",
-                "phploc/phploc": "^4.0",
-                "phpmd/phpmd": "^2.6",
-                "phpunit/php-code-coverage": "^5.3",
-                "phpunit/phpunit": "^6.5",
-                "sebastian/phpcpd": "^3.0",
-                "squizlabs/php_codesniffer": "^3.2",
-                "wimg/php-compatibility": "^8.1"
+                "phpmd/phpmd": "^2.11",
+                "phpunit/phpunit": "^9.5",
+                "sebastian/phpcpd": "^6.0",
+                "squizlabs/php_codesniffer": "^3.6"
             },
             "type": "library",
             "autoload": {
-                "files": [
-                    "src/basics.php"
-                ],
                 "psr-4": {
-                    "Libriciel\\Utility\\Password\\": "src/",
-                    "LibricielTest\\Utility\\Password\\": "tests/"
+                    "Libriciel\\Password\\": "src/",
+                    "LibricielTest\\Password\\": "tests/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "CeCiLL V2"
+                "MIT"
             ],
             "authors": [
                 {
@@ -3035,8 +3028,8 @@
                     "homepage": "https://www.libriciel.fr"
                 }
             ],
-            "description": "Librairie PHP permettant de calculer la force et l'entropie d'un mot de passe et de générer des mots de passes aléatoires.",
-            "time": "2018-10-26T08:21:30+00:00"
+            "description": "Bibliothèque PHP permettant de calculer la force et l'entropie d'un mot de passe et de générer des mots de passes aléatoires.",
+            "time": "2022-02-22T07:57:18+00:00"
         },
         {
             "name": "mailjet/mailjet-apiv3-php",
