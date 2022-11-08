@@ -8,10 +8,9 @@ use App\Repository\Connector\ComelusConnectorRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\GeneratedValue;
-use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
+use Ramsey\Uuid\Doctrine\UuidGenerator;
 
 #[Entity(repositoryClass: ComelusConnectorRepository::class)]
 class ComelusConnector extends Connector
@@ -19,9 +18,10 @@ class ComelusConnector extends Connector
     public const NAME = 'comelus';
     public const MAX_URL_LENGTH = 255;
     public const MAX_API_KEY_LENGTH = 255;
-    #[Id]
-    #[GeneratedValue(strategy: 'UUID')]
-    #[Column(type: 'guid')]
+    #[ORM\Id]
+    #[ORM\Column(type: 'uuid', unique: true)]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
     protected $id;
     #[Column(type: 'string', length: 255)]
     protected $name = self::NAME;

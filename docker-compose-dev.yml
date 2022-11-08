@@ -3,7 +3,8 @@ version: '3.4'
 services:
   fpm-idelibre:
     container_name: fpm-idelibre
-    image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/idelibre/idelibre:4.1
+#    image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/idelibre/idelibre:4.1
+    image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/idelibre/idelibre:latest
     env_file:
       - .env.docker.local
     volumes:
@@ -35,9 +36,10 @@ services:
 
   node-idelibre:
     container_name: node-idelibre
-    ports:
-      - 4001:3000
+#    ports:
+#      - 4000:3001
     image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/idelibre/idelibre-nodejs:4.1.0
+#    image: registry.libriciel.fr:443/public/citoyens/idelibre-node/idelibre-node:4.1.0
     volumes:
       - /data/files:/data
       - ../idelibre4-nodejs:/app:ro
@@ -104,14 +106,20 @@ services:
       - SITE_HOSTNAME=${URL:-lshorodatage.libriciel.fr}
     command: ["/app/docker-resources/init.sh"]
 
-  maildev-idelibre:
-    container_name: maildev-idelibre
-    image: djfarrelly/maildev
-    ports:
-      - 1280:80
+#  maildev-idelibre:
+#    container_name: maildev-idelibre
+#    image: djfarrelly/maildev
+#    ports:
+#      - 1280:80
     #command: bin/maildev --web 80 --smtp 25 --hide-extensions STARTTLS
 
-
+  maildev-idelibre:
+    container_name: idelibre_mailcatcher_dev
+    image: tophfr/mailcatcher:0.7.1
+    restart: always
+    ports:
+      - "2092:80"
+      - "2029:25"
 
 
 volumes:

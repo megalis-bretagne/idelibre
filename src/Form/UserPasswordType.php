@@ -16,19 +16,30 @@ class UserPasswordType extends AbstractType
         $builder
             ->add('plainPassword', RepeatedType::class, [
                 'mapped' => false,
+                'required' => false,
                 'type' => PasswordType::class,
                 'invalid_message' => 'Les mots de passe ne sont pas identiques',
-                'options' => ['attr' => ['class' => 'password-field']],
-                'required' => true,
-                'first_options' => ['label' => 'Mot de passe'],
-                'second_options' => ['label' => 'Confirmer'],
-            ]);
+                'options' => [
+                    'attr' => [
+                        'class' => 'password-field showValidationPasswordEntropy',
+                        'data-minimum-entropy' => $options['entropyForUser'],
+                    ],
+                ],
+                'first_options' => [
+                    'label' => 'Mot de passe',
+                ],
+                'second_options' => [
+                    'label' => 'Confirmer',
+                ],
+            ])
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+            'entropyForUser' => null,
         ]);
     }
 }

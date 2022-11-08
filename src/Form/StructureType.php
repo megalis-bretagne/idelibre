@@ -7,6 +7,7 @@ use App\Entity\Timezone;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -63,7 +64,14 @@ class StructureType extends AbstractType
             $builder->add('user', SuperUserType::class, [
                 'mapped' => false,
                 'label' => false,
+                'entropyForUser' => $options['entropyForUser']
             ]);
+        } else {
+            $builder
+                ->add('minimumEntropy', IntegerType::class, [
+                    'label' => 'Force du mot de passe minimum pour les utilisateurs de la structure (hors administrateur)',
+                ])
+            ;
         }
     }
 
@@ -71,6 +79,7 @@ class StructureType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Structure::class,
+            'entropyForUser' => null
         ]);
     }
 }

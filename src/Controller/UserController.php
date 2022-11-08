@@ -7,6 +7,7 @@ use App\Form\SearchType;
 use App\Form\UserPreferenceType;
 use App\Form\UserType;
 use App\Repository\UserRepository;
+use App\Security\UserLoginEntropy;
 use App\Service\User\UserManager;
 use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
@@ -48,7 +49,12 @@ class UserController extends AbstractController
     #[Breadcrumb(title: 'Ajouter')]
     public function add(Request $request, UserManager $manageUser): Response
     {
-        $form = $this->createForm(UserType::class, new User(), ['structure' => $this->getUser()->getStructure()]);
+        $form = $this->createForm(UserType::class, new User(), [
+            'structure' => $this->getUser()->getStructure(),
+            'entropyForUser' => $this->getUser()->getStructure()->getMinimumEntropy()
+        ]);
+
+
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $manageUser->save(
@@ -78,6 +84,7 @@ class UserController extends AbstractController
             $user,
             [
                 'structure' => $this->getUser()->getStructure(),
+                'entropyForUser' => $this->getUser()->getStructure()->getMinimumEntropy(),
                 'referer' => $request->headers->get('referer')
             ]
         );
@@ -119,7 +126,7 @@ class UserController extends AbstractController
 
     #[Route(path: '/user/deleteBatch', name: 'user_delete_batch')]
     #[IsGranted(data: 'ROLE_MANAGE_USERS')]
-    #[Breadcrumb(title: 'Suppression par lot')]
+//    #[Breadcrumb(title: 'Suppression par lot')]
     public function deleteBatch(UserRepository $userRepository, Request $request): Response
     {
         if ($request->isMethod('POST')) {
@@ -138,26 +145,34 @@ class UserController extends AbstractController
     #[Route(path: '/user/preferences', name: 'user_preferences')]
     #[IsGranted(data: 'ROLE_MANAGE_PREFERENCES')]
     #[Breadcrumb(null)]
-    #[Breadcrumb(title: 'Préférences utilisateur')]
-    public function preferences(Request $request, UserManager $userManager): Response
+//    #[Breadcrumb(title: 'Préférences utilisateur')]
+    public function preferences(Request $request, UserManager $userManager, UserLoginEntropy $userLoginEntropy): Response
     {
-        $form = $this->createForm(UserPreferenceType::class, $this->getUser());
+        $user = $this->getUser();
+
+        $form = $this->createForm(UserPreferenceType::class, $user, [
+            'entropyForUser' => $userLoginEntropy->getEntropy($user),
+        ]);
+
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $userManager->save(
+            $success = $userManager->preference(
                 $form->getData(),
-                $form->get('plainPassword')->getData(),
-                $this->getUser()->getStructure()
+                $user->getStructure(),
+                $form->get('plainPassword')->getData()
             );
 
-            $this->addFlash('success', 'Vos préférences utilisateur ont bien été modifiées');
+            if (true === $success) {
+                $this->addFlash('success', 'Vos préférences utilisateur ont bien été modifiées');
 
-            return $this->redirectToRoute('app_entrypoint');
+                return $this->redirectToRoute('app_entrypoint');
+            }
+            $this->addFlash('error', 'Votre mot de passe n\'est pas assez fort.');
         }
 
         return $this->render('user/preferences.html.twig', [
             'form' => $form->createView(),
-            'suffix' => $this->isGranted('ROLE_MANAGE_STRUCTURES') ? null : $this->getUser()->getStructure()->getSuffix(),
+            'suffix' => $this->isGranted('ROLE_MANAGE_STRUCTURES') ? null : $user->getStructure()->getSuffix(),
         ]);
     }
 }

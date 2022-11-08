@@ -46,14 +46,17 @@ final class Version20211115210427 extends AbstractMigration implements Container
 
     public function postUp(Schema $schema): void
     {
-        $structures = $this->structureRepository->findAll();
-        foreach ($structures as $structure) {
-            $configuration = new Configuration();
-            $configuration->setStructure($structure)
-                ->setIsSharedAnnotation(true);
-            $this->em->persist($configuration);
+       /* $pdo = $this->em->getConnection()->getWrappedConnection();
+        $statement = $pdo->prepare('INSERT INTO configuration (id, structure_id, is_shared_annotation) VALUES (UUID_GENERATE_V4(), ?, true)');
+
+        $structureStatement = $pdo->query('SELECT id FROM structure');
+        $structureStatement->execute();
+
+        $structures = $structureStatement->fetchAll();
+        foreach ($structures as $s => $structure) {
+            $statement->execute([$structure['id']]);
         }
-        $this->em->flush();
+       */
     }
 
 

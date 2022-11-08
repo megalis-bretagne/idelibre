@@ -7,12 +7,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\GeneratedValue;
-use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\OneToOne;
+use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
@@ -24,9 +24,10 @@ use Symfony\Component\Validator\Constraints\NotNull;
 #[UniqueEntity('suffix')]
 class Structure
 {
-    #[Id]
-    #[GeneratedValue(strategy: 'UUID')]
-    #[Column(type: 'guid')]
+    #[ORM\Id]
+    #[ORM\Column(type: 'uuid', unique: true)]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
     private $id;
 
     #[Column(type: 'string', length: 255, unique: true)]
@@ -72,6 +73,9 @@ class Structure
 
     #[Column(type: 'boolean', options: ['default' => true])]
     private $isActive = true;
+
+    #[Column(type: 'integer', unique: false, nullable: false)]
+    private $minimumEntropy = 80;
 
     public function __construct()
     {
@@ -216,6 +220,18 @@ class Structure
     public function setIsActive(bool $isActive): self
     {
         $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    public function getMinimumEntropy(): ?int
+    {
+        return $this->minimumEntropy;
+    }
+
+    public function setMinimumEntropy(int $minimumEntropy): self
+    {
+        $this->minimumEntropy = $minimumEntropy;
 
         return $this;
     }

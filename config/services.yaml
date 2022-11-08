@@ -30,6 +30,7 @@ parameters:
   env(HIDE_LEFT_BANNER_LOGIN): false
   hide_left_banner_login: '%env(bool:HIDE_LEFT_BANNER_LOGIN)%'
 
+  minimumEntropyForUserWithRoleHigh: '%env(ENTROPY_ADMIN)%'
 
 
 services:

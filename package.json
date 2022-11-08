@@ -11,7 +11,7 @@
         "core-js": "^3.0.0",
         "dayjs": "^1.10.3",
         "flatpickr": "^4.6.9",
-        "jquery": "^3.5.1",
+        "jquery": "^3.6.0",
         "popper.js": "^1.16.1",
         "regenerator-runtime": "^0.13.2",
         "select2": "^4.0.13",
@@ -30,5 +30,7 @@
         "watch": "encore dev --watch",
         "build": "encore production --progress"
     },
-    "dependencies": {}
+    "dependencies": {
+        "@libriciel/ls-jquery-password": "^1.2.3"
+    }
 }

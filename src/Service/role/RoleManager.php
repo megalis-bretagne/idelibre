@@ -54,4 +54,14 @@ class RoleManager
     {
         return $this->apiRoleRepository->findOneBy(['name' => 'ApiStructureAdmin']);
     }
+
+    public function getAllRolesAdmin(): array
+    {
+        return $this->roleRepository->findBy([
+            'name' => [
+                'GroupAdmin',
+                'Admin',
+            ],
+        ]);
+    }
 }

@@ -43,13 +43,23 @@ class UserPreferenceType extends AbstractType
             ])
             ->add('plainPassword', RepeatedType::class, [
                 'mapped' => false,
+                'required' => false,
                 'type' => PasswordType::class,
                 'invalid_message' => 'Les mots de passe ne sont pas identiques',
-                'options' => ['attr' => ['class' => 'password-field']],
-                'required' => false,
-                'first_options' => ['label' => 'Mot de passe'],
-                'second_options' => ['label' => 'Confirmer'],
-            ]);
+                'options' => [
+                    'attr' => [
+                        'class' => 'password-field showValidationPasswordEntropy',
+                        'data-minimum-entropy' => $options['entropyForUser'],
+                    ],
+                ],
+                'first_options' => [
+                    'label' => 'Mot de passe',
+                ],
+                'second_options' => [
+                    'label' => 'Confirmer',
+                ],
+            ])
+        ;
 
         $builder->get('username')->addModelTransformer(new CallbackTransformer(
             fn ($username) => preg_replace('/@.*/', '', $username),
@@ -61,6 +71,7 @@ class UserPreferenceType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+            'entropyForUser' => null,
         ]);
     }
 
