@@ -78,7 +78,7 @@ class UserManager
         $this->em->flush();
     }
 
-    public function preference(User $user, string $plainPassword, Structure $structure): ?bool
+    public function preference(User $user, Structure $structure, string $plainPassword = null): ?bool
     {
         if ($plainPassword) {
             $success = $this->passwordStrengthMeter->checkPasswordEntropy($user, $plainPassword);

@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Sidebar(active: ['user-nav'])]
-//#[Breadcrumb(title: 'Utilisateurs', routeName: 'user_index')]
+#[Breadcrumb(title: 'Utilisateurs', routeName: 'user_index')]
 class UserController extends AbstractController
 {
     #[Route(path: '/user', name: 'user_index')]
@@ -46,7 +46,7 @@ class UserController extends AbstractController
 
     #[Route(path: '/user/add', name: 'user_add')]
     #[IsGranted(data: 'ROLE_MANAGE_USERS')]
-//    #[Breadcrumb(title: 'Ajouter')]
+    #[Breadcrumb(title: 'Ajouter')]
     public function add(Request $request, UserManager $manageUser): Response
     {
         $form = $this->createForm(UserType::class, new User(), [
@@ -76,7 +76,7 @@ class UserController extends AbstractController
 
     #[Route(path: '/user/edit/{id}', name: 'user_edit')]
     #[IsGranted(data: 'MANAGE_USERS', subject: 'user')]
-//    #[Breadcrumb(title: 'Modifier {user.firstName} {user.lastName}')]
+    #[Breadcrumb(title: 'Modifier {user.firstName} {user.lastName}')]
     public function edit(User $user, Request $request, UserManager $manageUser): Response
     {
         $form = $this->createForm(
@@ -158,8 +158,8 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $success = $userManager->preference(
                 $form->getData(),
-                $form->get('plainPassword')->getData(),
-                $user->getStructure()
+                $user->getStructure(),
+                $form->get('plainPassword')->getData()
             );
 
             if (true === $success) {
