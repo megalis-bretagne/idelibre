@@ -312,7 +312,7 @@ class Sitting
 
     public function getNameWithDate(): string
     {
-        $dateTime = new DateTime(null, new DateTimeZone($this->getStructure()->getTimezone()->getName()));
+        $dateTime = new DateTime('', new DateTimeZone($this->getStructure()->getTimezone()->getName()));
         $dateTime->setTimestamp($this->getDate()->getTimestamp());
 
         return $this->name . ' ' . $dateTime->format('d/m/y');
