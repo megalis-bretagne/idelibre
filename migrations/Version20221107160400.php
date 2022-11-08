@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20220921141808 extends AbstractMigration
+final class Version20221107160400 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -25,7 +25,12 @@ final class Version20220921141808 extends AbstractMigration
         $this->addSql('CREATE INDEX IDX_798DA02D8014E66 ON otherdoc (sitting_id)');
         $this->addSql('COMMENT ON COLUMN otherdoc.created_at IS \'(DC2Type:datetime_immutable)\'');
         $this->addSql('ALTER TABLE otherdoc ADD CONSTRAINT FK_798DA02D93CB796C FOREIGN KEY (file_id) REFERENCES file (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
-        $this->addSql('ALTER TABLE otherdoc ADD CONSTRAINT FK_798DA02D8014E66 FOREIGN KEY (sitting_id) REFERENCES sitting (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE otherdoc ADD CONSTRAINT FK_798DA02D8014E66 FOREIGN KEY (sitting_id) REFERENCES sitting (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE party ADD initials VARCHAR(10) DEFAULT NULL');
+        $this->addSql('ALTER TABLE structure ADD is_active BOOLEAN DEFAULT \'true\' NOT NULL');
+        $this->addSql('ALTER TABLE structure ADD minimum_entropy INT NOT NULL');
+        $this->addSql('ALTER TABLE type ADD is_sms_guests BOOLEAN DEFAULT NULL');
+        $this->addSql('ALTER TABLE type ADD is_sms_employees BOOLEAN DEFAULT NULL');
     }
 
     public function down(Schema $schema): void
@@ -33,5 +38,10 @@ final class Version20220921141808 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE SCHEMA public');
         $this->addSql('DROP TABLE otherdoc');
+        $this->addSql('ALTER TABLE party DROP initials');
+        $this->addSql('ALTER TABLE type DROP is_sms_guests');
+        $this->addSql('ALTER TABLE type DROP is_sms_employees');
+        $this->addSql('ALTER TABLE structure DROP is_active');
+        $this->addSql('ALTER TABLE structure DROP minimum_entropy');
     }
 }

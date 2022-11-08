@@ -26,6 +26,7 @@ class ResetPassword
         private readonly UserPasswordHasherInterface $passwordHasher,
         private readonly EmailServiceInterface $email,
         private readonly ParameterBagInterface $bag,
+        private readonly UserRepository $userRepository,
         private readonly PasswordStrengthMeter $passwordStrengthMeter,
     ) {
     }

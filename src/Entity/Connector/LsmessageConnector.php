@@ -8,10 +8,9 @@ use App\Repository\Connector\LsmessageConnectorRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\GeneratedValue;
-use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
+use Ramsey\Uuid\Doctrine\UuidGenerator;
 
 #[Entity(repositoryClass: LsmessageConnectorRepository::class)]
 class LsmessageConnector extends Connector
@@ -21,9 +20,10 @@ class LsmessageConnector extends Connector
     public const MAX_API_KEY_LENGTH = 255;
     public const MAX_CONTENT_LENGTH = 140;
     public const MAX_SENDER_LENGTH = 11;
-    #[Id]
-    #[GeneratedValue(strategy: 'UUID')]
-    #[Column(type: 'guid')]
+    #[ORM\Id]
+    #[ORM\Column(type: 'uuid', unique: true)]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
     protected $id;
     #[Column(type: 'string', length: 255)]
     protected $name = self::NAME;
