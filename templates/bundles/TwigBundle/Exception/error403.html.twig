@@ -1,0 +1,19 @@
+{# templates/bundles/TwigBundle/Exception/error403.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="form-side">
+        <div class="form-content">
+            <section>
+                <h1><i class="fa fa-ban"></i> Erreur 403<br /> Accès interdit </h1>
+                <p>
+                    <br />Vous n'avez pas la permission d'accéder à cette ressource. <br /><br />
+                </p>
+            </section>
+            <a href="{{ path('app_login') }}" class="btn btn-primary float-right mt-3">
+                <span class="fa fa-arrow-left"></span>
+                Retour à la page d'accueil
+            </a>
+        </div>
+    </div>
+{% endblock %}

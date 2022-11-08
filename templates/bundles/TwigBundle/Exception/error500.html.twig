@@ -1,0 +1,19 @@
+{# templates/bundles/TwigBundle/Exception/error500.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="form-side">
+        <div class="form-content">
+            <section>
+                <h1><i class="fa fa-skull-crossbones"></i> Erreur 500<br /> Erreur interne du serveur </h1>
+                <p>
+                    <br />Une erreur inattendue est survenue. <br />
+                </p>
+            </section>
+            <a href="{{ path('app_login') }}" class="btn btn-primary float-right mt-3">
+                <span class="fa fa-arrow-left"></span>
+                Retour à la page d'accueil
+            </a>
+        </div>
+    </div>
+{% endblock %}
