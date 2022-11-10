@@ -2,16 +2,15 @@
 
 namespace App\Tests\Story;
 
-use App\Service\Statistic\RoleByStructureStatisticCsvGenerator;
 use App\Service\Util\GenderConverter;
 use App\Tests\Factory\UserFactory;
 use Zenstruck\Foundry\Story;
+use App\Security\Password\LegacyPassword;
 
 final class UserStory extends Story
 {
     // argon2i password
     public const PASSWORD = '$argon2id$v=19$m=65536,t=4,p=1$jCNjXFnpctIdKy2XKJ3d9w$B2THO9hICaf20D73R6PB0FDiR1+2RpJCZlpG6RExTlg';
-    private $legacyPassword;
 
     public function build(): void
     {
@@ -73,17 +72,17 @@ final class UserStory extends Story
             'lastName' => 'montpellier',
             'structure' => StructureStory::montpellier()
         ]));
-
-        $passwordLegacy = $this->legacyPassword->encode('passwordLegacy');
-        $this->addState('userLegacy', UserFactory::new([
-            'username' => 'userLegacy@montpellier',
-            'email' => 'userLegacy@example.org',
-            'password' => $passwordLegacy,
-            'firstName' => 'userLegacy',
-            'lastName' => 'montpellier',
-            'structure' => StructureStory::montpellier(),
-            'role' => RoleStory::admin()
-        ]));
+//
+//        $passwordLegacy = $this->legacyPassword->encode('passwordLegacy');
+//        $this->addState('userLegacy', UserFactory::new([
+//            'username' => 'userLegacy@montpellier',
+//            'email' => 'userLegacy@example.org',
+//            'password' => $passwordLegacy,
+//            'firstName' => 'userLegacy',
+//            'lastName' => 'montpellier',
+//            'structure' => StructureStory::montpellier(),
+//            'role' => RoleStory::admin()
+//        ]));
 
         // Admin de groupe
         $this->addState('userGroupRecia', UserFactory::new([
