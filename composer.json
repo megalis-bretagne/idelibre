@@ -14,7 +14,6 @@
     "apy/breadcrumbtrail-bundle": "^1.9.0",
     "composer/package-versions-deprecated": "^1.11",
     "doctrine/annotations": "^1.0",
-    "doctrine/dbal": "2.*",
     "doctrine/doctrine-bundle": "^2",
     "doctrine/doctrine-migrations-bundle": "^3",
     "doctrine/orm": "^2.9",
