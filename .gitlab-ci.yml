@@ -62,15 +62,11 @@ phpTestWithoutCovering:
     - tags
     - master
   image: $CONTAINER_IMAGE
-  services:
-    - name: postgres:12-alpine
-      alias: postgresqlil
-      command: ["postgres", "-N", "1000"]
 
   variables:
     XDEBUG_MODE: coverage
     APP_ENV: test
-    DATABASE_URL: postgresql://%kernel.project_dir%/var/data.db
+    DATABASE_URL: sqlite:///%kernel.project_dir%/var/data.db
     GIT_STRATEGY: none
     COMPOSER_PROCESS_TIMEOUT: 1200
 
