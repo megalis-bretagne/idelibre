@@ -64,7 +64,7 @@ phpTestWithoutCovering:
   image: $CONTAINER_IMAGE
   services:
     - name: postgres:12-alpine
-      alias: postgresil
+      alias: postgresqlil
       command: ["postgres", "-N", "1000"]
 
   variables:
