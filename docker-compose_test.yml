@@ -8,8 +8,6 @@ services:
       dockerfile: DockerfileTest
     env_file:
       - .env.test.docker
-    depends_on:
-      - database_idelibre_test
     volumes:
       - /tmp/var:/app/var
       - ./docker-resources/zz-php.ini:/usr/local/etc/php/conf.d/zz-php.ini
