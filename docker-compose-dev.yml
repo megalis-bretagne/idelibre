@@ -28,6 +28,7 @@ services:
       - ./docker-resources/minimum.sql:/app/docker-resources/minimum.sql
       - ./webpack.config.js:/app/webpack.config.js
       - ./assets:/app/assets
+      - ./tests:/app/tests
 
     command: ["/app/docker-resources/initApp.sh"]
 

@@ -2,65 +2,50 @@
 
 namespace App\Tests\Controller;
 
-use App\DataFixtures\GroupFixtures;
-use App\DataFixtures\UserFixtures;
 use App\Entity\Group;
 use App\Entity\User;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
+use App\Tests\Story\GroupStory;
+use App\Tests\Story\RoleStory;
+use App\Tests\Story\UserStory;
 use Doctrine\ORM\EntityManagerInterface;
-use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class AdminControllerTest extends WebTestCase
 {
-
+    use ResetDatabase, Factories;
     use FindEntityTrait;
     use LoginTrait;
 
-    /**
-     * @var KernelBrowser
-     */
-    private $client;
 
-    /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
-
+    private KernelBrowser $client;
+    private EntityManagerInterface $entityManager;
 
 
     protected function setUp(): void
     {
-        $this->client = static::createClient();
-
         $kernel = self::bootKernel();
-
-        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
-
         $this->entityManager = $kernel->getContainer()
             ->get('doctrine')
-            ->getManager();
+            ->getManager()
+        ;
 
-        $databaseTool->loadFixtures ([
-            UserFixtures::class,
-            GroupFixtures::class,
-        ]);
-    }
+        self::ensureKernelShutdown();
+        $this->client = static::createClient();
 
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-        $this->client = null;
-        $this->entityManager->getConnection()->close();
+        UserStory::load();
+        GroupStory::load();
+        RoleStory::load();
     }
 
     public function testDelete()
     {
         $this->loginAsSuperAdmin();
-        /** @var User $user */
         $user = $this->getOneEntityBy(User::class, ['username' => 'otherSuperadmin']);
         $this->client->request(Request::METHOD_DELETE, '/admin/delete/' . $user->getId());
         $this->assertTrue($this->client->getResponse()->isRedirect());

@@ -15,16 +15,15 @@ use App\Entity\Structure;
 use App\Entity\Theme;
 use App\Entity\Type;
 use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
 
 trait FindEntityTrait
 {
     public function getOneEntityBy($entityClass, array $criteria)
     {
-        if (!$this->entityManager) {
-            throw new \Exception('entityManager is not defined');
-        }
-        $repository = $this->entityManager->getRepository($entityClass);
+        $entityManager = self::getcontainer()->get(EntityManagerInterface::class);
 
+        $repository = $entityManager->getRepository($entityClass);
         return $repository->findOneBy($criteria);
     }
 

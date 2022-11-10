@@ -2,30 +2,16 @@
 
 namespace App\Tests;
 
-use App\Entity\User;
-use Symfony\Component\BrowserKit\Cookie;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use App\Repository\UserRepository;
 
 trait LoginTrait
 {
     public function login(string $username)
     {
-        $session = self::getContainer()->get('session');
+        $userRepository = static::getContainer()->get(UserRepository::class);
 
-        $firewallName = 'main';
-        $firewallContext = 'main';
-
-        $userRepository = $this->entityManager->getRepository(User::class);
-        /** @var User $user */
-        $user = $userRepository->findOneBy(['username' => $username]);
-
-        $token = new UsernamePasswordToken($user, null, $firewallName, $user->getRoles());
-        $session->set('_security_' . $firewallContext, serialize($token));
-
-        $session->save();
-
-        $cookie = new Cookie($session->getName(), $session->getId());
-        $this->client->getCookieJar()->set($cookie);
+        $user = $userRepository->findOneByUsername($username);
+        $this->client->loginUser($user);
     }
 
     public function loginAsAdminLibriciel()

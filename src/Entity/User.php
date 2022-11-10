@@ -49,9 +49,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['user', 'party:detail', 'user:read', 'type:detail', 'user:write'])]
     private $email;
 
-    /**
-     * @var string The hashed password
-     */
+
     #[Column(type: 'string')]
     private $password;
 
@@ -136,9 +134,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @see UserInterface
      */
-    public function getUsername(): string
+    public function getUsername(): ?string
     {
-        return (string) $this->username;
+        return $this->username;
     }
 
     public function setUsername(string $username): self
@@ -148,9 +146,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @see UserInterface
-     */
     public function getRoles(): array
     {
         $roles = $this->getRole() ? $this->getRole()->getComposites() : [];
@@ -160,12 +155,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return array_unique($roles);
     }
 
-    /**
-     * @see UserInterface
-     */
-    public function getPassword(): string
+
+    public function getPassword(): ?string
     {
-        return (string) $this->password;
+        return $this->password;
     }
 
     public function setPassword(string $password): self
@@ -175,17 +168,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @see UserInterface
-     */
+
     public function getSalt(): ?string
     {
         return null;
     }
 
-    /**
-     * @see UserInterface
-     */
+
     public function eraseCredentials()
     {
         // If you store any temporary, sensitive data on the user, clear it here
