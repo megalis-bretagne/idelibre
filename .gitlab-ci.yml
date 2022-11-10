@@ -70,7 +70,7 @@ phpTestWithoutCovering:
   variables:
     XDEBUG_MODE: coverage
     APP_ENV: test
-    DATABASE_URL: postgresql:///%kernel.project_dir%/var/data.db
+    DATABASE_URL: postgresql://%kernel.project_dir%/var/data.db
     GIT_STRATEGY: none
     COMPOSER_PROCESS_TIMEOUT: 1200
 
