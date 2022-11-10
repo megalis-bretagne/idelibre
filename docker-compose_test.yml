@@ -23,4 +23,3 @@ services:
       - ./phpunit.xml.dist:/app/phpunit.xml.dist
 #    command: ["/app/docker-resources/initApp.sh"]
     command: sleep 3000
-

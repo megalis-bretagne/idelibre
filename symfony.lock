@@ -184,9 +184,6 @@
     "libriciel/lshorodatage-api-wrapper": {
         "version": "1.0.0"
     },
-    "liip/test-fixtures-bundle": {
-        "version": "1.9.1"
-    },
     "mailjet/mailjet-apiv3-php": {
         "version": "v1.5.0"
     },
@@ -351,9 +348,6 @@
     "swiftmailer/swiftmailer": {
         "version": "v6.2.3"
     },
-    "symfony/amqp-messenger": {
-        "version": "v5.1.8"
-    },
     "symfony/asset": {
         "version": "v5.1.9"
     },
@@ -404,9 +398,6 @@
     },
     "symfony/doctrine-bridge": {
         "version": "v5.1.9"
-    },
-    "symfony/doctrine-messenger": {
-        "version": "v5.1.8"
     },
     "symfony/dom-crawler": {
         "version": "v5.1.5"
@@ -565,9 +556,6 @@
     "symfony/polyfill-mbstring": {
         "version": "v1.20.0"
     },
-    "symfony/polyfill-php73": {
-        "version": "v1.20.0"
-    },
     "symfony/polyfill-php80": {
         "version": "v1.20.0"
     },
@@ -585,9 +573,6 @@
     },
     "symfony/psr-http-message-bridge": {
         "version": "v2.1.1"
-    },
-    "symfony/redis-messenger": {
-        "version": "v5.1.8"
     },
     "symfony/routing": {
         "version": "5.3",
@@ -621,9 +606,6 @@
         "version": "v5.1.9"
     },
     "symfony/security-csrf": {
-        "version": "v5.1.9"
-    },
-    "symfony/security-guard": {
         "version": "v5.1.9"
     },
     "symfony/security-http": {
@@ -759,5 +741,17 @@
     },
     "webmozart/assert": {
         "version": "1.9.1"
+    },
+    "zenstruck/foundry": {
+        "version": "1.22",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "1.10",
+            "ref": "37c2f894cc098ab4c08874b80cccc8e2f8de7976"
+        },
+        "files": [
+            "config/packages/zenstruck_foundry.yaml"
+        ]
     }
 }
