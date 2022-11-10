@@ -1,20 +1,6 @@
 version: '3.4'
 
 services:
-  database_idelibre_test:
-    image: postgres:${POSTGRES_VERSION:-12}-alpine
-    container_name: idelibre_symfony_db_test
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB:-idelibre_test}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-idelibretest}
-      POSTGRES_USER: ${POSTGRES_USER:-idelibretest}
-      POSTGRES_PORT: ${POSTGRES_PORT:-5432}
-    env_file:
-      - .env.test
-    networks:
-      - test
-
-
   fpm-idelibre_test:
     container_name: fpm-idelibre_test
     build:
@@ -37,11 +23,5 @@ services:
       - ./tests:/app/tests
       - ./docker-resources/zz-idelibre.conf:/usr/local/etc/php-fpm.d/zz-idelibre.conf
       - ./phpunit.xml.dist:/app/phpunit.xml.dist
-    networks:
-      - test
 #    command: ["/app/docker-resources/initApp.sh"]
     command: sleep 3000
-
-
-networks:
-  test:
