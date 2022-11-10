@@ -70,7 +70,13 @@ phpTestWithoutCovering:
   variables:
     XDEBUG_MODE: coverage
     APP_ENV: test
-    DATABASE_URL: postgresql://idelibre:idelibre@postgresqlil:5432/idelibre_test?serverVersion=12&charset=utf8
+    POSTGRES_HOST: postgresgfc
+    POSTGRES_VERSION: 12
+    POSTGRES_DB: idelibre_test
+    POSTGRES_USER: idelibretest
+    POSTGRES_PASSWORD: idelibretest
+    POSTGRES_PORT: 5432
+    DATABASE_URL: postgresql://idelibretest:idelibretest@postgresgfc:5432/idelibre?serverVersion=13&charset=utf8
     #    DATABASE_URL: sqlite:///%kernel.project_dir%/var/data.db
     GIT_STRATEGY: none
     COMPOSER_PROCESS_TIMEOUT: 1200
