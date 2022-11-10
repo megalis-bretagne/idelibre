@@ -62,16 +62,15 @@ phpTestWithoutCovering:
     - tags
     - master
   image: $CONTAINER_IMAGE
+  services:
+    - name: postgres:12-alpine
+      alias: postgresil
+      command: ["postgres", "-N", "1000"]
 
   variables:
     XDEBUG_MODE: coverage
     APP_ENV: test
-    POSTGRES_HOST: 172.17.0.1
-    POSTGRES_DB: idelibre_test
-    POSTGRES_USER: idelibre
-    POSTGRES_PASSWORD: idelibre
-    POSTGRES_PORT: 5432
-    DATABASE_URL: postgresql://idelibre:idelibre@172.17.0.1:5432/idelibre_test
+    DATABASE_URL: postgresql://idelibre:idelibre@postgresqlil:5432/idelibre_test?serverVersion=12&charset=utf8
     #    DATABASE_URL: sqlite:///%kernel.project_dir%/var/data.db
     GIT_STRATEGY: none
     COMPOSER_PROCESS_TIMEOUT: 1200
