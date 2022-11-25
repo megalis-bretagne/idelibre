@@ -28,7 +28,7 @@ final class Version20221107160400 extends AbstractMigration
         $this->addSql('ALTER TABLE otherdoc ADD CONSTRAINT FK_798DA02D8014E66 FOREIGN KEY (sitting_id) REFERENCES sitting (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE party ADD initials VARCHAR(10) DEFAULT NULL');
         $this->addSql('ALTER TABLE structure ADD is_active BOOLEAN DEFAULT \'true\' NOT NULL');
-        $this->addSql('ALTER TABLE structure ADD minimum_entropy INT NOT NULL');
+        $this->addSql('ALTER TABLE structure ADD minimum_entropy INT NOT NULL default 80');
         $this->addSql('ALTER TABLE type ADD is_sms_guests BOOLEAN DEFAULT NULL');
         $this->addSql('ALTER TABLE type ADD is_sms_employees BOOLEAN DEFAULT NULL');
     }
