@@ -2,58 +2,52 @@
 
 namespace App\Tests\Controller\ApiV2;
 
-use App\DataFixtures\ApiUserFixtures;
-use App\DataFixtures\StructureFixtures;
-use App\DataFixtures\TypeFixtures;
-use App\DataFixtures\UserFixtures;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
+use App\Tests\Story\ApiUserStory;
+use App\Tests\Story\StructureStory;
+use App\Tests\Story\TypeStory;
+use App\Tests\Story\UserStory;
 use Doctrine\Persistence\ObjectManager;
-use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class TypeApiControllerTest extends WebTestCase
 {
+    use ResetDatabase;
+    use Factories;
     use FindEntityTrait;
     use LoginTrait;
 
-
     private ?KernelBrowser $client;
-    /**
-     * @var ObjectManager
-     */
-    private $entityManager;
-
+    private ObjectManager $entityManager;
 
     protected function setUp(): void
     {
-        $this->client = static::createClient();
-
         $kernel = self::bootKernel();
-
-        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
-
         $this->entityManager = $kernel->getContainer()
             ->get('doctrine')
             ->getManager();
 
-        $databaseTool->loadFixtures([
-            UserFixtures::class,
-            TypeFixtures::class,
-            ApiUserFixtures::class,
-            StructureFixtures::class
-        ]);
+        self::ensureKernelShutdown();
+        $this->client = static::createClient();
+
+        UserStory::actorLibriciel1();
+        TypeStory::typeConseilLibriciel();
+        StructureStory::libriciel();
+        ApiUserStory::apiAdminLibriciel();
     }
 
     public function testGetAll()
     {
-        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
+        $structure = StructureStory::libriciel();
+        $apiUser = ApiUserStory::apiAdminLibriciel();
 
         $this->client->request(Request::METHOD_GET, "/api/v2/structures/{$structure->getId()}/types", [], [], [
-            "HTTP_X-AUTH-TOKEN" => $apiUser->getToken(),
+            'HTTP_X-AUTH-TOKEN' => $apiUser->getToken(),
             'CONTENT_TYPE' => 'application/json',
         ]);
 
@@ -65,15 +59,14 @@ class TypeApiControllerTest extends WebTestCase
         $this->assertCount(3, $types);
     }
 
-
     public function testGetById()
     {
-        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $type = $this->getOneTypeBy(['name' => 'Conseil Communautaire Libriciel']);
-        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
+        $structure = StructureStory::libriciel();
+        $apiUser = ApiUserStory::apiAdminLibriciel();
+        $type = TypeStory::typeConseilLibriciel();
 
         $this->client->request(Request::METHOD_GET, "/api/v2/structures/{$structure->getId()}/types/{$type->getId()}", [], [], [
-            "HTTP_X-AUTH-TOKEN" => $apiUser->getToken(),
+            'HTTP_X-AUTH-TOKEN' => $apiUser->getToken(),
             'CONTENT_TYPE' => 'application/json',
         ]);
         $this->assertResponseStatusCodeSame(200);
@@ -85,12 +78,11 @@ class TypeApiControllerTest extends WebTestCase
         $this->assertCount(2, $type['associatedUsers']);
     }
 
-
     public function testPost()
     {
-        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
-        $actorLs = $this->getOneUserBy(['username' => 'actor1@libriciel']);
+        $structure = StructureStory::libriciel();
+        $apiUser = ApiUserStory::apiAdminLibriciel();
+        $actorLs = UserStory::actorLibriciel1();
 
         $data = [
             'name' => 'my new type',
@@ -99,14 +91,16 @@ class TypeApiControllerTest extends WebTestCase
             'isSmsGuests' => true,
             'isComelus' => true,
             'reminder' => ['duration' => 180, 'isActive' => true],
-            'associatedUsers' => [$actorLs->getId()]
+            'associatedUsers' => [$actorLs->getId()],
         ];
 
-        $this->client->request(Request::METHOD_POST, "/api/v2/structures/{$structure->getId()}/types",
+        $this->client->request(
+            Request::METHOD_POST,
+            "/api/v2/structures/{$structure->getId()}/types",
             [],
             [],
             [
-                "HTTP_X-AUTH-TOKEN" => $apiUser->getToken(),
+                'HTTP_X-AUTH-TOKEN' => $apiUser->getToken(),
                 'CONTENT_TYPE' => 'application/json',
             ],
             json_encode($data)
@@ -125,11 +119,10 @@ class TypeApiControllerTest extends WebTestCase
         $this->assertCount(1, $type['associatedUsers']);
     }
 
-
     public function testPostAssociateNotSameStructureUsers()
     {
-        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
+        $structure = StructureStory::libriciel();
+        $apiUser = ApiUserStory::apiAdminLibriciel();
         $userMtp = $this->getOneUserBy(['username' => 'user@montpellier']);
 
         $data = [
@@ -139,15 +132,16 @@ class TypeApiControllerTest extends WebTestCase
             'isSmsGuests' => true,
             'isComelus' => true,
             'reminder' => ['duration' => 180, 'isActive' => true],
-            'associatedUsers' => [$userMtp->getId()]
+            'associatedUsers' => [$userMtp->getId()],
         ];
 
-
-        $this->client->request(Request::METHOD_POST, "/api/v2/structures/{$structure->getId()}/types",
+        $this->client->request(
+            Request::METHOD_POST,
+            "/api/v2/structures/{$structure->getId()}/types",
             [],
             [],
             [
-                "HTTP_X-AUTH-TOKEN" => $apiUser->getToken(),
+                'HTTP_X-AUTH-TOKEN' => $apiUser->getToken(),
                 'CONTENT_TYPE' => 'application/json',
             ],
             json_encode($data)
@@ -157,19 +151,17 @@ class TypeApiControllerTest extends WebTestCase
         $response = $this->client->getResponse();
         $error = json_decode($response->getContent(), true);
 
-        $this->assertSame("some users does not belong to your structure : {$userMtp->getId()}", $error["message"]);
-
+        $this->assertSame("some users does not belong to your structure : {$userMtp->getId()}", $error['message']);
     }
-
 
     public function testUpdate()
     {
-        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
-        $actorLs = $this->getOneUserBy(['username' => 'actor1@libriciel']);
-        $type = $this->getOneTypeBy(['name' => 'Conseil Communautaire Libriciel']);
+        $structure = StructureStory::libriciel();
+        $apiUser = ApiUserStory::apiAdminLibriciel();
+        $actorLs = UserStory::actorLibriciel1();
+        $type = TypeStory::typeConseilLibriciel()
 
-
+;
         $data = [
             'name' => 'updated name',
             'isSms' => true,
@@ -177,14 +169,16 @@ class TypeApiControllerTest extends WebTestCase
             'isSmsGuests' => true,
             'isComelus' => true,
             'reminder' => ['duration' => 180, 'isActive' => true],
-            'associatedUsers' => [$actorLs->getId()]
+            'associatedUsers' => [$actorLs->getId()],
         ];
 
-        $this->client->request(Request::METHOD_PUT, "/api/v2/structures/{$structure->getId()}/types/{$type->getId()}",
+        $this->client->request(
+            Request::METHOD_PUT,
+            "/api/v2/structures/{$structure->getId()}/types/{$type->getId()}",
             [],
             [],
             [
-                "HTTP_X-AUTH-TOKEN" => $apiUser->getToken(),
+                'HTTP_X-AUTH-TOKEN' => $apiUser->getToken(),
                 'CONTENT_TYPE' => 'application/json',
             ],
             json_encode($data)
@@ -206,24 +200,18 @@ class TypeApiControllerTest extends WebTestCase
 
     public function testDelete()
     {
-        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
-        $type = $this->getOneTypeBy(['name' => 'Conseil Communautaire Libriciel']);
+        $structure = StructureStory::libriciel();
+        $apiUser = ApiUserStory::apiAdminLibriciel();
+        $type = TypeStory::typeConseilLibriciel();
 
-        $this->client->request(Request::METHOD_DELETE, "/api/v2/structures/{$structure->getId()}/types/{$type->getId()}",
+        $this->client->request(
+            Request::METHOD_DELETE,
+            "/api/v2/structures/{$structure->getId()}/types/{$type->getId()}",
             [],
             [],
-            ["HTTP_X-AUTH-TOKEN" => $apiUser->getToken()]);
+            ['HTTP_X-AUTH-TOKEN' => $apiUser->getToken()]
+        );
         $this->assertResponseStatusCodeSame(204);
         $this->assertEmpty($this->getOneTypeBy(['name' => 'Conseil Communautaire Libriciel']));
     }
-
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-        $this->client = null;
-        $this->entityManager->close();
-    }
-
 }

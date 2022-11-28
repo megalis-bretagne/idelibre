@@ -26,6 +26,10 @@ let app = new Vue({
         isAlreadySentEmployees: false,
         isArchived: true,
         showModalComelus: false,
+        previewUrl: "",
+        previewData: "",
+        previewSubject: "",
+        showModalMailExample: false,
         filter: {
             actor: "",
             guest: "",
@@ -193,7 +197,13 @@ let app = new Vue({
         setInfoMessage(msg) {
             this.infoMessage = msg
             setTimeout(() => this.infoMessage = null, 3000);
-        }
+        },
+
+        openShowModalMailExample(convocationId) {
+            this.convocationId = convocationId;
+            this.previewUrl = `/api/convocations/previewForSecretary/${convocationId}`;
+            this.showModalMailExample = true;
+        },
 
 
     },

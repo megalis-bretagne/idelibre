@@ -1,6 +1,7 @@
-version: '3.4'
+version: '3.8'
 
 services:
+
   fpm-idelibre_test:
     container_name: fpm-idelibre_test
     build:
@@ -21,5 +22,11 @@ services:
       - ./tests:/app/tests
       - ./docker-resources/zz-idelibre.conf:/usr/local/etc/php-fpm.d/zz-idelibre.conf
       - ./phpunit.xml.dist:/app/phpunit.xml.dist
-#    command: ["/app/docker-resources/initApp.sh"]
+    #command: ["/app/docker-resources/initApp.sh"]
     command: sleep 3000
+    networks:
+      - network_idelibre_test
+
+networks:
+  network_idelibre_test:
+

@@ -13,4 +13,5 @@ class TemplateTag
     public const ACTOR_USERNAME = '#username#';
     public const ACTOR_TITLE = '#titre#';
     public const ACTOR_GENDER = '#civilite#';
+    public const SITTING_URL = '#urlseance#';
 }

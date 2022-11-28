@@ -1,12 +1,28 @@
+include:
+  #  - remote: 'https://jobs.r2devops.io/0.1.0/php_security_checker.yml'
+  #  - remote: 'https://jobs.r2devops.io/0.3.0/sls_scan.yml'
+  #  - remote: 'https://jobs.r2devops.io/0.2.0/trivy_dependency.yml'
+  #  - remote: 'https://jobs.r2devops.io/0.1.0/twig_lint.yml'
+  - project: "libriciel/integration-continue/templates"
+    ref: master
+    file: '/publish-container-to-registry.yml'
+  - project: "libriciel/integration-continue/templates"
+    ref: master
+    file: '/security-check.yml'
+
 stages:
   - build
+  - deploy
+  - staging
   - testWithoutCovering
   - test
   - quality
   - release
-  - deploy
+
 variables:
   CONTAINER_IMAGE: "${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME}"
+  REGISTRY_CONTAINER_PATH: /public/citoyens/idelibre
+  CANARY_BRANCH_NAME: 313-modification-tests-unitaires-avec-foundry
 
 
 build:
@@ -29,21 +45,29 @@ phpTest:
   only:
     - master
   image: $CONTAINER_IMAGE
-
+  services:
+    - name: postgres:13-alpine
+      alias: postgresidelibre
+      command: [ "postgres", "-N", "1000" ]
   variables:
-    XDEBUG_MODE: coverage
-    APP_ENV: test
-    DATABASE_URL: sqlite:///%kernel.project_dir%/var/data.db
     GIT_STRATEGY: none
     COMPOSER_PROCESS_TIMEOUT: 1200
-
+    DONT_RETRIEVE_VALIDCA: "true"
+    APP_ENV: test
+    POSTGRES_HOST: postgresidelibre
+    POSTGRES_VERSION: 13
+    POSTGRES_DB: idelibre_test
+    POSTGRES_USER: idelibretest
+    POSTGRES_PASSWORD: idelibretest
+    POSTGRES_PORT: 5432
+    DATABASE_URL: postgresql://idelibretest:idelibretest@postgresidelibre:5432/idelibre?serverVersion=13&charset=utf8
+    XDEBUG_MODE: coverage
   before_script:
     - cd /app
     - pecl install xdebug && docker-php-ext-enable xdebug
     - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
     - php composer-setup.php --install-dir=/usr/local/bin
     - mv /usr/local/bin/composer.phar /usr/local/bin/composer
-
   script:
     - composer install
     - docker-resources/initAppTest.sh
@@ -62,20 +86,27 @@ phpTestWithoutCovering:
     - tags
     - master
   image: $CONTAINER_IMAGE
-
+  services:
+    - name: postgres:13-alpine
+      alias: postgresidelibre
+      command: [ "postgres", "-N", "1000" ]
   variables:
     XDEBUG_MODE: coverage
     APP_ENV: test
-    DATABASE_URL: sqlite:///%kernel.project_dir%/var/data.db
+    POSTGRES_HOST: postgresidelibre
+    POSTGRES_VERSION: 13
+    POSTGRES_DB: idelibre_test
+    POSTGRES_USER: idelibretest
+    POSTGRES_PASSWORD: idelibretest
+    POSTGRES_PORT: 5432
+    DATABASE_URL: postgresql://idelibretest:idelibretest@postgresidelibre:5432/idelibre?serverVersion=13&charset=utf8
     GIT_STRATEGY: none
     COMPOSER_PROCESS_TIMEOUT: 1200
-
   before_script:
     - cd /app
     - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
     - php composer-setup.php --install-dir=/usr/local/bin
     - mv /usr/local/bin/composer.phar /usr/local/bin/composer
-
   script:
     - composer install
     - SYMFONY_DEPRECATIONS_HELPER=disabled bin/phpunit --colors=never
@@ -131,3 +162,31 @@ publish:
     - docker login -u "$REGISTRY_CONTAINER_USER" -p "$REGISTRY_CONTAINER_PASSWORD" "$REGISTRY_CONTAINER_HOST"
     - docker build --pull -t ${REGISTRY_CONTAINER_HOST}/public/citoyens/idelibre/idelibre:${IMAGE_VERSION} .
     - docker push ${REGISTRY_CONTAINER_HOST}/public/citoyens/idelibre/idelibre:${IMAGE_VERSION}
+
+deploy_master:
+  stage: staging
+  environment:
+    name: idelibre-4-2.dev.libriciel.net
+    url: https://idelibre-4-2.dev.libriciel.net
+  tags:
+    - citoyen-shell
+#  only:
+#    - master
+  variables:
+    PAYLOAD: "payload={\"text\": \"[idelibre-4-2.dev.libriciel.net](https://idelibre-4-2.dev.libriciel.net) a été mis à jour - [build $CI_PIPELINE_ID]($CI_PROJECT_URL/pipelines/$CI_PIPELINE_ID)\"}"
+  script:
+    - eval $(ssh-agent -s)
+    - ssh-add <(echo "$IDELIBRECI_SSH_KEY")
+    - mkdir -p ~/.ssh
+    - 'echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+    - scp ./docker-compose-deploy.yml idelibreci@idelibre-4-2.dev.libriciel.net:/data/docker-files/docker-compose.yml
+    - scp ./initializeCertificatesDeploy.sh idelibreci@idelibre-4-2.dev.libriciel.net:/data/docker-files/initializeCertificatesDeploy.sh
+    - scp ./docker-resources/nginx_template.vhost idelibreci@idelibre-4-2.dev.libriciel.net:/data/docker-files/docker-resources/nginx_template.vhost
+    - scp ./docker-resources/nginx.conf idelibreci@idelibre-4-2.dev.libriciel.net:/data/docker-files/docker-resources/nginx.conf
+    - scp ./docker-resources/options-ssl-nginx.conf idelibreci@idelibre-4-2.dev.libriciel.net:/data/docker-files/docker-resources/options-ssl-nginx.conf
+    - scp ./docker-resources/ssl-dhparams.pem idelibreci@idelibre-4-2.dev.libriciel.net:/data/docker-files/docker-resources/ssl-dhparams.pem
+    - scp ./docker-resources/zz-idelibre.conf idelibreci@idelibre-4-2.dev.libriciel.net:/data/docker-files/docker-resources/zz-idelibre.conf
+    - echo "$MASTER_ENV_FILE_CONTENT" > /tmp/.env.dist
+    - scp /tmp/.env.dist idelibreci@idelibre-4-2.dev.libriciel.net:/data/docker-files/.env.docker.local
+    - ssh -tt idelibreci@idelibre-4-2.dev.libriciel.net "cd /data/docker-files/  && docker compose pull && ./initializeCertificatesDeploy.sh -f"
+    - curl -i -X POST -d "$PAYLOAD" $MATTERMOST_WEBHOOK

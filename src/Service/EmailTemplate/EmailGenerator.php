@@ -7,13 +7,15 @@ use App\Entity\EmailTemplate;
 use App\Service\Email\EmailData;
 use App\Service\Util\DateUtil;
 use App\Service\Util\GenderConverter;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class EmailGenerator
 {
     public function __construct(
         private DateUtil $dateUtil,
         private GenderConverter $genderConverter,
-        private EmailTemplateManager $emailTemplateManager
+        private EmailTemplateManager $emailTemplateManager,
+        private ParameterBagInterface $params,
     ) {
     }
 
@@ -82,6 +84,7 @@ class EmailGenerator
             TemplateTag::ACTOR_USERNAME => $user->getUsername(),
             TemplateTag::ACTOR_TITLE => $user->getTitle() ?? '',
             TemplateTag::ACTOR_GENDER => $this->genderConverter->format($user->getGender()),
+            TemplateTag::SITTING_URL => $this->params->get('url_client'),
         ];
     }
 }

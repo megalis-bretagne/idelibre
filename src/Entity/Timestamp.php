@@ -5,9 +5,9 @@ namespace App\Entity;
 use App\Repository\TimestampRepository;
 use DateTimeImmutable;
 use DateTimeInterface;
+use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
@@ -18,8 +18,6 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 #[Entity(repositoryClass: TimestampRepository::class)]
 class Timestamp
 {
-
-
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]

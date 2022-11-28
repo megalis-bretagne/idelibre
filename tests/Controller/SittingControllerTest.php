@@ -2,51 +2,43 @@
 
 namespace App\Tests\Controller;
 
-use App\DataFixtures\FileFixtures;
-use App\DataFixtures\SittingFixtures;
 use App\Entity\Sitting;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
+use App\Tests\Story\EmailTemplateStory;
+use App\Tests\Story\SittingStory;
+use App\Tests\Story\TypeStory;
 use Doctrine\Persistence\ObjectManager;
-use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class SittingControllerTest extends WebTestCase
 {
+    use ResetDatabase;
+    use Factories;
     use FindEntityTrait;
     use LoginTrait;
 
     private ?KernelBrowser $client;
-    /**
-     * @var ObjectManager
-     */
-    private $entityManager;
+    private ObjectManager $entityManager;
 
     protected function setUp(): void
     {
-        $this->client = static::createClient();
-
         $kernel = self::bootKernel();
         $this->entityManager = $kernel->getContainer()
             ->get('doctrine')
             ->getManager();
 
-        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
-        $databaseTool->loadFixtures([
-            SittingFixtures::class,
-            FileFixtures::class
-        ]);
-    }
+        self::ensureKernelShutdown();
+        $this->client = static::createClient();
 
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-        $this->client = null;
-        $this->entityManager->close();
+        SittingStory::load();
+        EmailTemplateStory::load();
     }
 
     public function testIndex()
@@ -71,7 +63,7 @@ class SittingControllerTest extends WebTestCase
 
     public function testAdd()
     {
-        $type = $this->getOneTypeBy(['name' => 'unUsedType']);
+        $type = TypeStory::testTypeLS();
 
         $this->loginAsAdminLibriciel();
         $crawler = $this->client->request(Request::METHOD_GET, '/sitting/add');
@@ -82,7 +74,7 @@ class SittingControllerTest extends WebTestCase
         $filesystem = new FileSystem();
         $filesystem->copy(__DIR__ . '/../resources/fichier.pdf', __DIR__ . '/../resources/convocation.pdf');
 
-        $fileConvocation = new UploadedFile(__DIR__ . '/../resources/convocation.pdf', 'fichier.pdf', 'application/pdf');
+        $fileConvocation = new UploadedFile(__DIR__ . '/../resources/convocation.pdf', 'convocation.pdf', 'application/pdf');
 
         $form = $crawler->selectButton('Enregistrer')->form();
 
@@ -106,9 +98,10 @@ class SittingControllerTest extends WebTestCase
 
     public function testEditUsers()
     {
-        $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
+        $sitting = SittingStory::sittingConseilLibriciel();
         $this->loginAsAdminLibriciel();
         $crawler = $this->client->request(Request::METHOD_GET, '/sitting/edit/' . $sitting->getId() . '/actors');
+
         $this->assertResponseStatusCodeSame(200);
 
         $item = $crawler->filter('html:contains("Modifier la séance")');
@@ -117,7 +110,7 @@ class SittingControllerTest extends WebTestCase
 
     public function testEditProjects()
     {
-        $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
+        $sitting = SittingStory::sittingConseilLibriciel();
         $this->loginAsAdminLibriciel();
         $crawler = $this->client->request(Request::METHOD_GET, '/sitting/edit/' . $sitting->getId() . '/projects');
         $this->assertResponseStatusCodeSame(200);
@@ -129,7 +122,7 @@ class SittingControllerTest extends WebTestCase
     public function testDelete()
     {
         $this->loginAsAdminLibriciel();
-        $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
+        $sitting = SittingStory::sittingConseilLibriciel();
 
         $this->client->request(Request::METHOD_DELETE, '/sitting/delete/' . $sitting->getId());
         $this->assertTrue($this->client->getResponse()->isRedirect());
@@ -145,7 +138,7 @@ class SittingControllerTest extends WebTestCase
     public function testDeleteSecretaryNotAuthorizedType()
     {
         $this->loginAsSecretaryLibriciel();
-        $sitting = $this->getOneSittingBy(['name' => 'Bureau Libriciel']);
+        $sitting = SittingStory::sittingBureauLibriciel();
 
         $this->client->request(Request::METHOD_DELETE, '/sitting/delete/' . $sitting->getId());
         $this->assertResponseStatusCodeSame(403);
@@ -153,7 +146,7 @@ class SittingControllerTest extends WebTestCase
 
     public function testShowInformation()
     {
-        $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
+        $sitting = SittingStory::sittingConseilLibriciel();
         $this->loginAsAdminLibriciel();
         $crawler = $this->client->request(Request::METHOD_GET, '/sitting/show/' . $sitting->getId() . '/information');
         $this->assertResponseStatusCodeSame(200);
@@ -164,8 +157,9 @@ class SittingControllerTest extends WebTestCase
 
     public function testShowActors()
     {
-        $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
+        $sitting = SittingStory::sittingConseilLibriciel();
         $this->loginAsAdminLibriciel();
+
         $crawler = $this->client->request(Request::METHOD_GET, '/sitting/show/' . $sitting->getId() . '/actors');
         $this->assertResponseStatusCodeSame(200);
 
@@ -175,7 +169,7 @@ class SittingControllerTest extends WebTestCase
 
     public function testShowProjects()
     {
-        $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
+        $sitting = SittingStory::sittingConseilLibriciel();
         $this->loginAsAdminLibriciel();
         $crawler = $this->client->request(Request::METHOD_GET, '/sitting/show/' . $sitting->getId() . '/projects');
         $this->assertResponseStatusCodeSame(200);
@@ -201,18 +195,16 @@ class SittingControllerTest extends WebTestCase
         $this->client->request(Request::METHOD_GET, '/sitting/zip/' . $sitting->getId());
         $this->assertResponseStatusCodeSame(200);
 
-
         $response = $this->client->getResponse();
 
         $this->assertSame('attachment; filename="Conseil Libriciel_22_10_2020.zip"', $response->headers->get('content-disposition'));
         $this->assertSame('application/zip', $response->headers->get('content-type'));
         $this->assertGreaterThan(100, intval($response->headers->get('content-length')));
-
     }
 
     public function testGetZipSeancesWrongStructure()
     {
-        $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
+        $sitting = SittingStory::sittingConseilLibriciel();
 
         $this->loginAsUserMontpellier();
         $this->client->request(Request::METHOD_GET, '/sitting/zip/' . $sitting->getId());
@@ -224,14 +216,14 @@ class SittingControllerTest extends WebTestCase
         $container = self::getContainer();
         $bag = $container->get('parameter_bag');
 
-        $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
+        $sitting = SittingStory::sittingConseilLibriciel();
 
         $zipDirectory = $bag->get('document_full_pdf_directory') . $sitting->getStructure()->getId() . '/';
 
         $filesystem = new FileSystem();
         $filesystem->copy(__DIR__ . '/../resources/fichier.pdf', $zipDirectory . $sitting->getId() . '.pdf');
 
-        $this>self::assertFileExists($zipDirectory . $sitting->getId() . '.pdf');
+        $this > self::assertFileExists($zipDirectory . $sitting->getId() . '.pdf');
 
         $this->loginAsAdminLibriciel();
 
@@ -248,7 +240,7 @@ class SittingControllerTest extends WebTestCase
     {
         $filesystem = new Filesystem();
         $filesystem->copy(__DIR__ . '/../resources/fichier.pdf', '/tmp/convocation');
-        $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
+        $sitting = SittingStory::sittingConseilLibriciel();
 
         $this->loginAsAdminLibriciel();
         $crawler = $this->client->request(Request::METHOD_GET, '/sitting/edit/' . $sitting->getId());
@@ -263,7 +255,6 @@ class SittingControllerTest extends WebTestCase
 
         $crawler = $this->client->submit($form);
 
-
         $this->assertTrue($this->client->getResponse()->isRedirect());
 
         $crawler = $this->client->followRedirect();
@@ -277,7 +268,7 @@ class SittingControllerTest extends WebTestCase
 
     public function testArchiveSeance()
     {
-        $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
+        $sitting = SittingStory::sittingConseilLibriciel();
         $this->loginAsAdminLibriciel();
         $this->client->request(Request::METHOD_POST, '/sitting/archive/' . $sitting->getId());
         $this->assertTrue($this->client->getResponse()->isRedirect());

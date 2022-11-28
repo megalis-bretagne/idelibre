@@ -6,9 +6,9 @@ use App\Repository\UserRepository;
 use App\Validator\OneAtMax;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToMany;
 use Doctrine\ORM\Mapping\ManyToOne;
@@ -48,7 +48,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Email]
     #[Groups(['user', 'party:detail', 'user:read', 'type:detail', 'user:write'])]
     private $email;
-
 
     #[Column(type: 'string')]
     private $password;
@@ -155,7 +154,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return array_unique($roles);
     }
 
-
     public function getPassword(): ?string
     {
         return $this->password;
@@ -168,12 +166,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-
     public function getSalt(): ?string
     {
         return null;
     }
-
 
     public function eraseCredentials()
     {

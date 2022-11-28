@@ -394,6 +394,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getQuery()
             ->getResult();
     }
+
     public function findCountEmployeesByIds(Structure $structure, array $employeeIds): array
     {
         return $this->createQueryBuilder('u')
@@ -404,7 +405,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->setParameter('employeeIds', $employeeIds)
             ->leftJoin('u.role', 'r')
             ->andWhere(' r.name IN (:employees)')
-            ->setParameter('employees', ['Employee', 'Admin','Secretary'])
+            ->setParameter('employees', ['Employee', 'Admin', 'Secretary'])
             ->getQuery()
             ->getResult();
     }

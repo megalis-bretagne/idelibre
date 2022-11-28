@@ -2,26 +2,30 @@
 
 namespace App\Tests\Entity;
 
-use App\DataFixtures\SittingFixtures;
 use App\Entity\File;
 use App\Entity\Sitting;
 use App\Entity\Structure;
 use App\Tests\FindEntityTrait;
 use App\Tests\HasValidationError;
+use App\Tests\Story\SittingStory;
 use App\Tests\StringTrait;
 use DateTime;
-use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
+use Doctrine\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class SittingTest extends WebTestCase
 {
+    use ResetDatabase;
+    use Factories;
     use FindEntityTrait;
     use HasValidationError;
     use StringTrait;
 
     private ValidatorInterface $validator;
-    private $entityManager;
+    private ObjectManager $entityManager;
 
     protected function setUp(): void
     {
@@ -29,10 +33,7 @@ class SittingTest extends WebTestCase
         $this->validator = self::getContainer()->get('validator');
         $this->entityManager = self::getContainer()->get('doctrine')->getManager();
 
-        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
-        $databaseTool->loadFixtures([
-            SittingFixtures::class,
-        ]);
+        SittingStory::load();
     }
 
     public function testValid()

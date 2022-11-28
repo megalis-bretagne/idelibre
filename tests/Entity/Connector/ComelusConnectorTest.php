@@ -9,14 +9,17 @@ use App\Tests\HasValidationError;
 use App\Tests\StringTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class ComelusConnectorTest extends WebTestCase
 {
+    use ResetDatabase;
+    use Factories;
     use HasValidationError;
     use StringTrait;
 
     private ValidatorInterface $validator;
-
 
     protected function setUp(): void
     {
@@ -31,8 +34,8 @@ class ComelusConnectorTest extends WebTestCase
     {
         return (new ComelusConnector(new Structure()))
             ->setActive(true)
-            ->setApiKey("1234")
-            ->setDescription("Ceci est une description")
+            ->setApiKey('1234')
+            ->setDescription('Ceci est une description')
             ->setMailingListId('azerty')
             ->setUrl('https://test.url.fr');
     }
@@ -42,16 +45,15 @@ class ComelusConnectorTest extends WebTestCase
         $connector = $this->createDummyConnector()
             ->setUrl('https://test.url.fr');
 
-        $this->assertHasValidationErrors($connector, 0 );
+        $this->assertHasValidationErrors($connector, 0);
     }
-
 
     public function testSetUrlTooLong()
     {
         $this->expectException(ComelusConnectorException::class);
         $this->expectExceptionMessage('length should be <= 255');
         $this->createDummyConnector()
-            ->setUrl('https://' . $this->genString(255). '.fr');
+            ->setUrl('https://' . $this->genString(255) . '.fr');
     }
 
     public function testApiKeyTooLong()
@@ -61,8 +63,4 @@ class ComelusConnectorTest extends WebTestCase
         $this->createDummyConnector()
             ->setApiKey($this->genString(260));
     }
-
-
-
-
 }

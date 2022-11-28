@@ -2,38 +2,33 @@
 
 namespace App\Tests\Service\File;
 
-use App\DataFixtures\AnnexFixtures;
-use App\DataFixtures\ConvocationFixtures;
-use App\DataFixtures\FileFixtures;
-use App\DataFixtures\ProjectFixtures;
-use App\DataFixtures\SittingFixtures;
 use App\Service\File\FileManager;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
+use App\Tests\Story\AnnexStory;
+use App\Tests\Story\ConvocationStory;
+use App\Tests\Story\FileStory;
+use App\Tests\Story\ProjectStory;
+use App\Tests\Story\SittingStory;
 use Doctrine\Persistence\ObjectManager;
-use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class FileManagerTest extends WebTestCase
 {
+    use ResetDatabase;
+    use Factories;
     use FindEntityTrait;
     use LoginTrait;
 
     private ?KernelBrowser $client;
-    /**
-     * @var ObjectManager
-     */
-    private $entityManager;
-    /**
-     * @var FileManager|object|null
-     */
+    private ObjectManager $entityManager;
     private FileManager $fileManager;
 
     protected function setUp(): void
     {
-        $this->client = static::createClient();
-
         $kernel = self::bootKernel();
         $this->entityManager = $kernel->getContainer()
             ->get('doctrine')
@@ -42,28 +37,20 @@ class FileManagerTest extends WebTestCase
         $container = self::getContainer();
         $this->fileManager = $container->get('App\Service\File\FileManager');
 
-        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
+        self::ensureKernelShutdown();
+        $this->client = static::createClient();
 
-        $databaseTool->loadFixtures([
-            FileFixtures::class,
-            ProjectFixtures::class,
-            ConvocationFixtures::class,
-            AnnexFixtures::class,
-            SittingFixtures::class,
-        ]);
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-        $this->client = null;
-        $this->entityManager->close();
+        FileStory::load();
+        ProjectStory::load();
+        ConvocationStory::load();
+        AnnexStory::load();
+        SittingStory::load();
     }
 
     public function testListFilesFromSitting()
     {
-        $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
-        $files = $this->fileManager->listFilesFromSitting($sitting);
-        $this->assertCount(5, $files);
+        $sitting = SittingStory::sittingConseilLibriciel();
+        $files = $this->fileManager->listFilesFromSitting($sitting->object());
+        $this->assertCount(6, $files);
     }
 }

@@ -76,7 +76,7 @@ class UserType extends AbstractType
             ])
             ->add('redirect_url', HiddenType::class, [
                 'mapped' => false,
-                'data' => $options['referer']
+                'data' => $options['referer'],
             ]);
 
         if ($this->isNew($options)) {

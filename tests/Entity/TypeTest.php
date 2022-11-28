@@ -2,24 +2,28 @@
 
 namespace App\Tests\Entity;
 
-use App\DataFixtures\TypeFixtures;
 use App\Entity\Structure;
 use App\Entity\Type;
 use App\Tests\FindEntityTrait;
 use App\Tests\HasValidationError;
+use App\Tests\Story\TypeStory;
 use App\Tests\StringTrait;
-use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
+use Doctrine\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class TypeTest extends WebTestCase
 {
+    use ResetDatabase;
+    use Factories;
     use FindEntityTrait;
     use HasValidationError;
     use StringTrait;
 
     private ValidatorInterface $validator;
-    private $entityManager;
+    private ObjectManager $entityManager;
 
     protected function setUp(): void
     {
@@ -27,10 +31,7 @@ class TypeTest extends WebTestCase
         $this->validator = self::getContainer()->get('validator');
         $this->entityManager = self::getContainer()->get('doctrine')->getManager();
 
-        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
-        $databaseTool->loadFixtures([
-            TypeFixtures::class,
-        ]);
+        TypeStory::load();
     }
 
     public function testValid()

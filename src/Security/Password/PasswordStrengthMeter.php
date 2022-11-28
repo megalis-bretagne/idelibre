@@ -12,6 +12,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 class PasswordStrengthMeter
 {
     use RoleTrait;
+
     public function __construct(
         private ParameterBagInterface $bag,
         private RoleManager $roleManager,

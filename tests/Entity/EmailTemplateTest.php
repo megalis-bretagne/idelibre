@@ -2,24 +2,28 @@
 
 namespace App\Tests\Entity;
 
-use App\DataFixtures\EmailTemplateFixtures;
 use App\Entity\EmailTemplate;
 use App\Entity\Structure;
 use App\Tests\FindEntityTrait;
 use App\Tests\HasValidationError;
+use App\Tests\Story\EmailTemplateStory;
 use App\Tests\StringTrait;
-use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
+use Doctrine\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class EmailTemplateTest extends WebTestCase
 {
+    use ResetDatabase;
+    use Factories;
     use FindEntityTrait;
     use HasValidationError;
     use StringTrait;
 
-    private $validator;
-    private $entityManager;
+    private ValidatorInterface $validator;
+    private ObjectManager $entityManager;
 
     protected function setUp(): void
     {
@@ -28,11 +32,7 @@ class EmailTemplateTest extends WebTestCase
         $this->validator = self::getContainer()->get('validator');
         $this->entityManager = self::getContainer()->get('doctrine')->getManager();
 
-        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
-
-        $databaseTool->loadFixtures([
-            EmailTemplateFixtures::class,
-        ]);
+        EmailTemplateStory::load();
     }
 
     public function testValid()

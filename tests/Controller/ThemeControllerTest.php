@@ -2,45 +2,43 @@
 
 namespace App\Tests\Controller;
 
-use App\DataFixtures\StructureFixtures;
-use App\DataFixtures\ThemeFixtures;
-use App\DataFixtures\UserFixtures;
 use App\Entity\Theme;
+use App\Tests\Factory\ThemeFactory;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
+use App\Tests\Story\StructureStory;
+use App\Tests\Story\ThemeStory;
+use App\Tests\Story\UserStory;
 use Doctrine\Persistence\ObjectManager;
-use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class ThemeControllerTest extends WebTestCase
 {
+    use ResetDatabase;
+    use Factories;
     use FindEntityTrait;
     use LoginTrait;
 
     private ?KernelBrowser $client;
-    /**
-     * @var ObjectManager
-     */
-    private $entityManager;
+    private ObjectManager $entityManager;
 
     protected function setUp(): void
     {
-        $this->client = static::createClient();
-
         $kernel = self::bootKernel();
         $this->entityManager = $kernel->getContainer()
             ->get('doctrine')
             ->getManager();
 
-        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
+        self::ensureKernelShutdown();
+        $this->client = static::createClient();
 
-        $databaseTool->loadFixtures([
-            UserFixtures::class,
-            StructureFixtures::class,
-            ThemeFixtures::class,
-        ]);
+        UserStory::load();
+        StructureStory::load();
+        ThemeStory::load();
     }
 
     protected function tearDown(): void
@@ -113,17 +111,16 @@ class ThemeControllerTest extends WebTestCase
     public function testDelete()
     {
         $this->loginAsAdminLibriciel();
-        /** @var $themeFinance Theme */
-        $themeFinance = $this->getOneEntityBy(Theme::class, ['name' => 'Finance']);
-        $this->client->request(Request::METHOD_DELETE, '/theme/delete/' . $themeFinance->getId());
-        $this->assertTrue($this->client->getResponse()->isRedirect());
+        $theme = ThemeFactory::createOne(['name' => 'financeToDelete', 'structure' => StructureStory::libriciel()])->object();
 
+        $this->client->request(Request::METHOD_DELETE, '/theme/delete/' . $theme->getId());
+        $this->assertTrue($this->client->getResponse()->isRedirect());
         $crawler = $this->client->followRedirect();
+
         $this->assertResponseStatusCodeSame(200);
         $successMsg = $crawler->filter('html:contains("Le thème a bien été supprimé")');
         $this->assertCount(1, $successMsg);
-
-        $this->assertEmpty($this->getOneEntityBy(Theme::class, ['id' => $themeFinance->getId()]));
+        $this->assertEmpty($theme->getId());
     }
 
     public function testDeleteNotMyTheme()

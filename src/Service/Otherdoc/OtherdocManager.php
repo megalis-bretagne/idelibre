@@ -24,7 +24,7 @@ class OtherdocManager
     }
 
     /**
-     * @param OtherdocApi[]   $clientOtherdocs
+     * @param OtherdocApi[]  $clientOtherdocs
      * @param UploadedFile[] $uploadedFiles
      */
     public function update(array $clientOtherdocs, array $uploadedFiles, Sitting $sitting): void
@@ -88,7 +88,6 @@ class OtherdocManager
 
         return $otherdoc;
     }
-
 
     /**
      * @return Otherdoc[]

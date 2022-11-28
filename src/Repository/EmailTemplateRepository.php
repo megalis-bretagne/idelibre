@@ -45,4 +45,20 @@ class EmailTemplateRepository extends ServiceEntityRepository
 
         return null;
     }
+
+    public function findOneByStructureAndCategory(Structure $structure, string $category): ?EmailTemplate
+    {
+        $qb = $this->createQueryBuilder('et')
+            ->andWhere('et.structure =:structure')
+            ->setParameter('structure', $structure)
+            ->andWhere('et.category = :category')
+            ->setParameter('category', $category);
+
+        $templates = $qb->getQuery()->getResult();
+        if (!empty($templates)) {
+            return $templates[0];
+        }
+
+        return null;
+    }
 }

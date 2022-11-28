@@ -2,53 +2,42 @@
 
 namespace App\Tests\Controller;
 
-use App\DataFixtures\UserFixtures;
 use App\Entity\Structure;
 use App\Entity\Timezone;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
-use Doctrine\ORM\EntityManagerInterface;
-use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
+use App\Tests\Story\StructureStory;
+use App\Tests\Story\UserStory;
+use Doctrine\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 // TODO improve TESTS STRUCTURE CREATION (ie connectors, templates ...)
 
 class StructureControllerTest extends WebTestCase
 {
+    use ResetDatabase;
+    use Factories;
     use FindEntityTrait;
     use LoginTrait;
 
-    /**
-     * @var KernelBrowser
-     */
-    private $client;
-
-    /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
+    private ?KernelBrowser $client;
+    private ObjectManager $entityManager;
 
     protected function setUp(): void
     {
-        $this->client = static::createClient();
-
         $kernel = self::bootKernel();
         $this->entityManager = $kernel->getContainer()
             ->get('doctrine')
             ->getManager();
-        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
-        $databaseTool->loadFixtures([
-            UserFixtures::class,
-        ]);
-    }
 
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-        $this->client = null;
-        $this->entityManager->close();
+        self::ensureKernelShutdown();
+        $this->client = static::createClient();
+
+        UserStory::load();
     }
 
     public function testIndex()
@@ -104,16 +93,12 @@ class StructureControllerTest extends WebTestCase
 
         $this->assertNotEmpty($newStructure);
 
-
-
         $this->assertNotEmpty($newStructure->getConfiguration());
         $this->assertSame(true, $newStructure->getConfiguration()->getIsSharedAnnotation());
     }
 
-
     public function testAddGroupAdmin()
     {
-
         $this->login('userGroupRecia');
         $crawler = $this->client->request(Request::METHOD_GET, '/structure/add');
         $this->assertResponseStatusCodeSame(200);
@@ -121,19 +106,16 @@ class StructureControllerTest extends WebTestCase
         $this->assertCount(1, $item);
     }
 
-
     public function testAddGroupAdminNotStructureCreator()
     {
-
         $this->login('adminNotStructureCreator');
         $crawler = $this->client->request(Request::METHOD_GET, '/structure/add');
         $this->assertResponseStatusCodeSame(403);
     }
 
-
     public function testEdit()
     {
-        $structure = $this->getOneEntityBy(Structure::class, ['name' => 'Libriciel']);
+        $structure = StructureStory::libriciel();
         $this->loginAsSuperAdmin();
         $crawler = $this->client->request(Request::METHOD_GET, '/structure/edit/' . $structure->getId());
         $this->assertResponseStatusCodeSame(200);

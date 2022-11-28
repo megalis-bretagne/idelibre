@@ -2,62 +2,55 @@
 
 namespace App\Tests\Controller\api;
 
-use App\DataFixtures\ConvocationFixtures;
-use App\DataFixtures\EmailTemplateFixtures;
-use App\DataFixtures\TypeFixtures;
 use App\Tests\FileTrait;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
+use App\Tests\Story\ApiUserStory;
+use App\Tests\Story\ConvocationStory;
+use App\Tests\Story\EmailTemplateStory;
+use App\Tests\Story\SittingStory;
+use App\Tests\Story\TypeStory;
+use App\Tests\Story\UserStory;
 use Doctrine\Persistence\ObjectManager;
-use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class ConvocationControllerTest extends WebTestCase
 {
+    use ResetDatabase;
+    use Factories;
     use FindEntityTrait;
     use LoginTrait;
     use FileTrait;
 
     private ?KernelBrowser $client;
-    /**
-     * @var ObjectManager
-     */
-    private $entityManager;
+    private ObjectManager $entityManager;
 
     protected function setUp(): void
     {
-        $this->client = static::createClient();
-
         $kernel = self::bootKernel();
         $this->entityManager = $kernel->getContainer()
             ->get('doctrine')
             ->getManager();
 
-        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
-        $databaseTool->loadFixtures([
-            ConvocationFixtures::class,
-            TypeFixtures::class,
-            EmailTemplateFixtures::class,
-        ]);
-    }
+        self::ensureKernelShutdown();
+        $this->client = static::createClient();
 
-    protected function tearDown(): void
-    {
-
-        $bag = static::getContainer()->get('parameter_bag');
-        $tokenPath = $bag->get('token_directory');
-        $this->deleteFileInDirectory($tokenPath);
-        parent::tearDown();
-
-        $this->client = null;
-        $this->entityManager->close();
+        UserStory::load();
+        ConvocationStory::load();
+        TypeStory::load();
+        EmailTemplateStory::load();
+        SittingStory::load();
+        ApiUserStory::load();
     }
 
     public function testGetConvocations()
     {
-        $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
+        $sitting = SittingStory::sittingConseilLibriciel();
+
         $this->loginAsAdminLibriciel();
         $this->client->request(Request::METHOD_GET, '/api/convocations/' . $sitting->getId());
         $this->assertResponseStatusCodeSame(200);
@@ -71,21 +64,20 @@ class ConvocationControllerTest extends WebTestCase
 
     public function testSendConvocation()
     {
-        $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
-        $actor = $this->getOneUserBy(['username' => 'actor1@libriciel']);
-        $convocation = $this->getOneConvocationBy(['sitting' => $sitting, 'user' => $actor]);
+        $sitting = SittingStory::sittingConseilLibriciel();
+        $actor = UserStory::actorLibriciel1();
+        $emailTemplate = EmailTemplateStory::emailTemplateConseilLs()->object();
+        $convocation = ConvocationStory::convocationActor1();
 
         $this->loginAsAdminLibriciel();
+
         $this->client->request(Request::METHOD_POST, '/api/convocations/' . $convocation->getId() . '/send');
         $this->assertResponseStatusCodeSame(200);
-
-        $this->entityManager->refresh($convocation);
-
         $this->assertNotEmpty($convocation->getSentTimestamp());
 
-        $bag = static::getContainer()->get('parameter_bag');
-
+        $bag = static::getContainer()->getParameterBag();
         $year = $sitting->getDate()->format('Y');
+
         $tokenPath = "{$bag->get('token_directory')}{$sitting->getStructure()->getId()}/$year/{$sitting->getId()}";
         $this->assertEquals(2, $this->countFileInDirectory($tokenPath));
     }
@@ -106,9 +98,7 @@ class ConvocationControllerTest extends WebTestCase
 
     public function testSetAttendance()
     {
-        $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
-        $actor = $this->getOneUserBy(['username' => 'actor1@libriciel']);
-        $convocation = $this->getOneConvocationBy(['sitting' => $sitting, 'user' => $actor]);
+        $convocation = ConvocationStory::convocationActor1();
 
         $data = [['convocationId' => $convocation->getId(), 'attendance' => 'absent', 'deputy' => 'John Doe']];
 
@@ -123,7 +113,6 @@ class ConvocationControllerTest extends WebTestCase
             json_encode($data)
         );
         $this->assertResponseStatusCodeSame(200);
-        $this->entityManager->refresh($convocation);
         $this->assertEquals('absent', $convocation->getAttendance());
         $this->assertEquals('John Doe', $convocation->getDeputy());
     }

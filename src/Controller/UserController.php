@@ -51,9 +51,8 @@ class UserController extends AbstractController
     {
         $form = $this->createForm(UserType::class, new User(), [
             'structure' => $this->getUser()->getStructure(),
-            'entropyForUser' => $this->getUser()->getStructure()->getMinimumEntropy()
+            'entropyForUser' => $this->getUser()->getStructure()->getMinimumEntropy(),
         ]);
-
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -85,7 +84,7 @@ class UserController extends AbstractController
             [
                 'structure' => $this->getUser()->getStructure(),
                 'entropyForUser' => $this->getUser()->getStructure()->getMinimumEntropy(),
-                'referer' => $request->headers->get('referer')
+                'referer' => $request->headers->get('referer'),
             ]
         );
         $form->handleRequest($request);
@@ -126,6 +125,7 @@ class UserController extends AbstractController
 
     #[Route(path: '/user/deleteBatch', name: 'user_delete_batch')]
     #[IsGranted(data: 'ROLE_MANAGE_USERS')]
+
 //    #[Breadcrumb(title: 'Suppression par lot')]
     public function deleteBatch(UserRepository $userRepository, Request $request): Response
     {
@@ -145,6 +145,7 @@ class UserController extends AbstractController
     #[Route(path: '/user/preferences', name: 'user_preferences')]
     #[IsGranted(data: 'ROLE_MANAGE_PREFERENCES')]
     #[Breadcrumb(null)]
+
 //    #[Breadcrumb(title: 'Préférences utilisateur')]
     public function preferences(Request $request, UserManager $userManager, UserLoginEntropy $userLoginEntropy): Response
     {

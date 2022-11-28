@@ -2,56 +2,43 @@
 
 namespace App\Tests\Controller;
 
-use App\DataFixtures\RoleFixtures;
-use App\DataFixtures\TypeFixtures;
-use App\DataFixtures\UserFixtures;
 use App\Entity\Role;
 use App\Entity\User;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
-use Doctrine\ORM\EntityManagerInterface;
-use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
+use App\Tests\Story\RoleStory;
+use App\Tests\Story\TypeStory;
+use App\Tests\Story\UserStory;
+use Doctrine\Persistence\ObjectManager;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class UserControllerTest extends WebTestCase
 {
+    use ResetDatabase;
+    use Factories;
     use FindEntityTrait;
     use LoginTrait;
 
-    /**
-     * @var \Symfony\Bundle\FrameworkBundle\KernelBrowser
-     */
-    private $client;
-
-    /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
+    private ?KernelBrowser $client;
+    private ObjectManager $entityManager;
 
     protected function setUp(): void
     {
-        $this->client = static::createClient();
-
         $kernel = self::bootKernel();
         $this->entityManager = $kernel->getContainer()
             ->get('doctrine')
             ->getManager();
 
-        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
+        self::ensureKernelShutdown();
+        $this->client = static::createClient();
 
-        $databaseTool->loadFixtures([
-            UserFixtures::class,
-            RoleFixtures::class,
-            TypeFixtures::class,
-        ]);
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-        $this->client = null;
-        $this->entityManager->close();
+        UserStory::load();
+        RoleStory::load();
+        TypeStory::load();
     }
 
     public function testDelete()
@@ -82,12 +69,9 @@ class UserControllerTest extends WebTestCase
         $actor1 = $this->getOneUserBy(['username' => 'actor1@libriciel']);
         $actor2 = $this->getOneUserBy(['username' => 'actor1@libriciel']);
 
-
         $this->client->request(Request::METHOD_POST, '/user/deleteBatch', [
             'users' => [$actor1->getId(), $actor2->getId()],
         ]);
-
-
 
         $this->assertTrue($this->client->getResponse()->isRedirect());
         $crawler = $this->client->followRedirect();
@@ -155,6 +139,7 @@ class UserControllerTest extends WebTestCase
         $this->assertNotEmpty($this->getOneEntityBy(User::class, ['username' => 'newuser@libriciel']));
     }
 
+    //# A verifier ##
     public function testEdit()
     {
         $this->loginAsAdminLibriciel();
@@ -180,8 +165,7 @@ class UserControllerTest extends WebTestCase
     public function testEditSecretary()
     {
         $this->loginAsAdminLibriciel();
-
-        $user = $this->getOneUserBy(['username' => 'secretary1@libriciel']);
+        $user = UserStory::secretaryLibriciel1();
         $type = $this->getOneTypeBy(['name' => 'Bureau Communautaire Libriciel']);
 
         $crawler = $this->client->request(Request::METHOD_GET, '/user/edit/' . $user->getId());
@@ -201,15 +185,14 @@ class UserControllerTest extends WebTestCase
         $successMsg = $crawler->filter('html:contains("Votre utilisateur a bien été modifié")');
         $this->assertCount(1, $successMsg);
 
-        $this->entityManager->refresh($user);
+        $user->refresh();
         $this->assertSame($user->getAuthorizedTypes()->first()->getId(), $type->getId());
     }
 
     public function testEditSecretaryRemoveAllAuthorized()
     {
         $this->loginAsAdminLibriciel();
-
-        $user = $this->getOneUserBy(['username' => 'secretary1@libriciel']);
+        $user = UserStory::secretaryLibriciel1();
 
         $crawler = $this->client->request(Request::METHOD_GET, '/user/edit/' . $user->getId());
         $this->assertResponseStatusCodeSame(200);
@@ -228,7 +211,7 @@ class UserControllerTest extends WebTestCase
         $successMsg = $crawler->filter('html:contains("Votre utilisateur a bien été modifié")');
         $this->assertCount(1, $successMsg);
 
-        $this->entityManager->refresh($user);
+        $user->refresh();
         $this->assertCount(0, $user->getAuthorizedTypes());
     }
 

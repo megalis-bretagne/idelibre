@@ -2,32 +2,24 @@
 
 namespace App\Tests\Repository;
 
-use App\DataFixtures\ConvocationFixtures;
-use App\DataFixtures\RoleFixtures;
-use App\DataFixtures\SittingFixtures;
-use App\DataFixtures\StructureFixtures;
-use App\DataFixtures\TypeFixtures;
-use App\DataFixtures\UserFixtures;
-use App\Entity\Sitting;
-use App\Entity\Structure;
 use App\Repository\SittingRepository;
 use App\Tests\FindEntityTrait;
+use App\Tests\Story\ConvocationStory;
+use App\Tests\Story\StructureStory;
+use App\Tests\Story\TypeStory;
 use Doctrine\Persistence\ObjectManager;
-use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class SittingRepositoryTest extends WebTestCase
 {
+    use ResetDatabase;
+    use Factories;
     use FindEntityTrait;
 
-    /**
-     * @var ObjectManager
-     */
-    private $entityManager;
-    /**
-     * @var SittingRepository
-     */
-    private $sittingRepository;
+    private ObjectManager $entityManager;
+    private SittingRepository $sittingRepository;
 
     protected function setUp(): void
     {
@@ -36,63 +28,51 @@ class SittingRepositoryTest extends WebTestCase
             ->get('doctrine')
             ->getManager();
 
-        $this->sittingRepository = $this->entityManager->getRepository(Sitting::class);
+        $this->sittingRepository = self::getContainer()->get(SittingRepository::class);
 
-        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
+        self::ensureKernelShutdown();
 
-        $databaseTool->loadFixtures([
-            StructureFixtures::class,
-            UserFixtures::class,
-            TypeFixtures::class,
-            SittingFixtures::class,
-            RoleFixtures::class,
-            ConvocationFixtures::class,
-        ]);
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-        $this->entityManager->close();
+        StructureStory::libriciel();
+        TypeStory::load();
+        ConvocationStory::load();
     }
 
     public function testFindWithTypesByStructure()
     {
-        $structureLs = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $typeConseil = $this->getOneTypeBy(['name' => 'Conseil Communautaire Libriciel']);
-        $typeBureau = $this->getOneTypeBy(['name' => 'Bureau Communautaire Libriciel']);
-        $typeNotUsed = $this->getOneTypeBy(['name' => 'unUsedType']);
+        $structureLs = StructureStory::libriciel();
+        $typeConseil = TypeStory::typeConseilLibriciel();
+        $typeBureau = TypeStory::typeBureauLibriciel();
+        $typeNotUsed = TypeStory::testTypeLS();
 
-        $this->assertCount(0, $this->sittingRepository->findWithTypesByStructure($structureLs, [])->getQuery()->getResult());
-        $this->assertCount(0, $this->sittingRepository->findWithTypesByStructure($structureLs, [$typeNotUsed])->getQuery()->getResult());
-        $this->assertCount(1, $this->sittingRepository->findWithTypesByStructure($structureLs, [$typeConseil])->getQuery()->getResult());
-        $this->assertCount(3, $this->sittingRepository->findWithTypesByStructure($structureLs, [$typeConseil, $typeBureau])->getQuery()->getResult());
+        $this->assertCount(0, $this->sittingRepository->findWithTypesByStructure($structureLs->object(), [])->getQuery()->getResult());
+        $this->assertCount(0, $this->sittingRepository->findWithTypesByStructure($structureLs->object(), [$typeNotUsed->getId()])->getQuery()->getResult());
+        $this->assertCount(1, $this->sittingRepository->findWithTypesByStructure($structureLs->object(), [$typeConseil->getId()])->getQuery()->getResult());
+        $this->assertCount(3, $this->sittingRepository->findWithTypesByStructure($structureLs->object(), [$typeConseil->getId(), $typeBureau->getId()])->getQuery()->getResult());
     }
 
     public function testFindByStructure()
     {
-        $structureLs = $this->getOneStructureBy(['name' => 'Libriciel']);
-
-        $this->assertCount(3, $this->sittingRepository->findByStructure($structureLs)->getQuery()->getResult());
+        $structureLs = StructureStory::libriciel();
+        $this->assertCount(3, $this->sittingRepository->findByStructure($structureLs->object())->getQuery()->getResult());
     }
 
     public function testFindActiveFromStructure()
     {
-        $structureLs = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $this->assertCount(1, $this->sittingRepository->findActiveFromStructure($structureLs)->getQuery()->getResult());
+        $structureLs = StructureStory::libriciel();
+        $this->assertCount(1, $this->sittingRepository->findActiveFromStructure($structureLs->object())->getQuery()->getResult());
     }
 
     public function testFindSittingsAfter50Months()
     {
-        $structureLs = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $sittings = $this->sittingRepository->findSittingsAfter(new \DateTime("-50 months"), $structureLs);
+        $structureLs = StructureStory::libriciel();
+        $sittings = $this->sittingRepository->findSittingsAfter(new \DateTime('-50 months'), $structureLs->object());
         $this->assertCount(3, $sittings);
     }
 
     public function testFindSittingsAfter3Months()
     {
-        $structureLs = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $sittings = $this->sittingRepository->findSittingsAfter(new \DateTime("-3 months"), $structureLs);
+        $structureLs = StructureStory::libriciel();
+        $sittings = $this->sittingRepository->findSittingsAfter(new \DateTime('-3 months'), $structureLs->object());
         $this->assertCount(0, $sittings);
     }
 }

@@ -2,53 +2,39 @@
 
 namespace App\Tests\Controller;
 
-use App\DataFixtures\ApiUserFixtures;
-use App\DataFixtures\UserFixtures;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
+use App\Tests\Story\ApiUserStory;
+use App\Tests\Story\UserStory;
 use Doctrine\ORM\EntityManagerInterface;
-use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class ApiUserControllerTest extends WebTestCase
 {
+    use ResetDatabase;
+    use Factories;
     use FindEntityTrait;
     use LoginTrait;
 
-    /**
-     * @var KernelBrowser
-     */
-    private $client;
-
-    /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
+    private KernelBrowser $client;
+    private EntityManagerInterface $entityManager;
 
     protected function setUp(): void
     {
-        $this->client = static::createClient();
-
         $kernel = self::bootKernel();
         $this->entityManager = $kernel->getContainer()
             ->get('doctrine')
             ->getManager();
 
-        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
+        self::ensureKernelShutdown();
+        $this->client = static::createClient();
 
-        $databaseTool->loadFixtures([
-            UserFixtures::class,
-            ApiUserFixtures::class,
-        ]);
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-        $this->client = null;
-        $this->entityManager->getConnection()->close();
+        ApiUserStory::apiAdminLibriciel();
+        UserStory::load();
     }
 
     public function testIndex()
@@ -102,11 +88,10 @@ class ApiUserControllerTest extends WebTestCase
         $this->assertNotEmpty($this->getOneApiUserBy(['name' => 'New api key']));
     }
 
-
     public function testEdit()
     {
         $this->loginAsAdminLibriciel();
-        $userApi = $this->getOneApiUserBy(['name' => 'connecteur api']);
+        $userApi = ApiUserStory::apiAdminLibriciel();
         $crawler = $this->client->request(Request::METHOD_GET, '/apikey/edit/' . $userApi->getId());
         $this->assertResponseStatusCodeSame(200);
         $item = $crawler->filter('html:contains("Modifier une clé d\'api")');
@@ -127,13 +112,11 @@ class ApiUserControllerTest extends WebTestCase
         $successMsg = $crawler->filter('html:contains("La clé d\'api a été modifiée")');
         $this->assertCount(1, $successMsg);
 
-        $this->entityManager->refresh($userApi);
+        $userApi->refresh();
 
         $this->assertSame('updated name', $userApi->getName());
         $this->assertSame('updated token', $userApi->getToken());
     }
-
-
 
     public function testRefreshApiKey()
     {

@@ -13,6 +13,7 @@ use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -49,9 +50,11 @@ class AdminController extends AbstractController
     #[Route(path: '/admin/add', name: 'admin_add')]
     #[IsGranted(data: 'ROLE_SUPERADMIN')]
     #[Breadcrumb(title: 'Ajouter')]
-    public function add(Request $request, UserManager $userManager, RoleManager $roleManager): Response
+    public function add(Request $request, UserManager $userManager, RoleManager $roleManager, ParameterBagInterface $bag): Response
     {
-        $form = $this->createForm(SuperUserType::class);
+        $form = $this->createForm(SuperUserType::class, null, [
+            'entropyForUser' => $bag->get('minimumEntropyForUserWithRoleHigh'),
+        ]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $userManager->saveAdmin(
@@ -73,10 +76,13 @@ class AdminController extends AbstractController
     #[Route(path: '/admin/group/add', name: 'admin_goup_add')]
     #[IsGranted(data: 'ROLE_MANAGE_STRUCTURES')]
     #[Breadcrumb(title: 'Ajouter un administrateur de groupe')]
-    public function addGroupAdmin(Request $request, UserManager $userManager, RoleManager $roleManager): Response
+    public function addGroupAdmin(Request $request, UserManager $userManager, RoleManager $roleManager, ParameterBagInterface $bag): Response
     {
         $isGroupChoice = in_array('ROLE_SUPERADMIN', $this->getUser()->getRoles());
-        $form = $this->createForm(SuperUserType::class, null, ['isGroupChoice' => $isGroupChoice]);
+        $form = $this->createForm(SuperUserType::class, null, [
+            'isGroupChoice' => $isGroupChoice,
+            'entropyForUser' => $bag->get('minimumEntropyForUserWithRoleHigh'),
+        ]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             if (!$isGroupChoice) {
@@ -102,9 +108,12 @@ class AdminController extends AbstractController
     #[Route(path: '/admin/edit/{id}', name: 'admin_edit')]
     #[IsGranted(data: 'MY_GROUP', subject: 'user')]
     #[Breadcrumb(title: 'Modifier {user.firstName} {user.lastName}')]
-    public function edit(User $user, Request $request, UserManager $userManager): Response
+    public function edit(User $user, Request $request, UserManager $userManager, ParameterBagInterface $bag): Response
     {
-        $form = $this->createForm(SuperUserType::class, $user, ['isEditMode' => true]);
+        $form = $this->createForm(SuperUserType::class, $user, [
+            'isEditMode' => true,
+            'entropyForUser' => $bag->get('minimumEntropyForUserWithRoleHigh'),
+        ]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $userManager->saveAdmin(

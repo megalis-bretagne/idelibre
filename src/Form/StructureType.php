@@ -64,7 +64,7 @@ class StructureType extends AbstractType
             $builder->add('user', SuperUserType::class, [
                 'mapped' => false,
                 'label' => false,
-                'entropyForUser' => $options['entropyForUser']
+                'entropyForUser' => $options['entropyForUser'],
             ]);
         } else {
             $builder
@@ -79,7 +79,7 @@ class StructureType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Structure::class,
-            'entropyForUser' => null
+            'entropyForUser' => null,
         ]);
     }
 }

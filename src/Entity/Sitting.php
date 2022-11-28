@@ -9,9 +9,9 @@ use DateTimeInterface;
 use DateTimeZone;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
@@ -103,7 +103,6 @@ class Sitting
 
     #[OneToMany(mappedBy: 'sitting', targetEntity: Timestamp::class)]
     private $updatedTimestamps;
-
 
     #[OneToMany(mappedBy: 'sitting', targetEntity: Otherdoc::class)]
     #[OrderBy(value: ['rank' => 'ASC'])]

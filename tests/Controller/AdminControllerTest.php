@@ -2,12 +2,10 @@
 
 namespace App\Tests\Controller;
 
-use App\Entity\Group;
 use App\Entity\User;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
 use App\Tests\Story\GroupStory;
-use App\Tests\Story\RoleStory;
 use App\Tests\Story\UserStory;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -18,40 +16,40 @@ use Zenstruck\Foundry\Test\ResetDatabase;
 
 class AdminControllerTest extends WebTestCase
 {
-    use ResetDatabase, Factories;
+    use ResetDatabase;
+    use Factories;
     use FindEntityTrait;
     use LoginTrait;
 
-
     private KernelBrowser $client;
     private EntityManagerInterface $entityManager;
-
 
     protected function setUp(): void
     {
         $kernel = self::bootKernel();
         $this->entityManager = $kernel->getContainer()
             ->get('doctrine')
-            ->getManager()
-        ;
+            ->getManager();
 
         self::ensureKernelShutdown();
+
         $this->client = static::createClient();
 
         UserStory::load();
-        GroupStory::load();
-        RoleStory::load();
+        GroupStory::recia();
     }
 
     public function testDelete()
     {
         $this->loginAsSuperAdmin();
         $user = $this->getOneEntityBy(User::class, ['username' => 'otherSuperadmin']);
+
         $this->client->request(Request::METHOD_DELETE, '/admin/delete/' . $user->getId());
         $this->assertTrue($this->client->getResponse()->isRedirect());
 
         $crawler = $this->client->followRedirect();
         $this->assertResponseStatusCodeSame(200);
+
         $successMsg = $crawler->filter('html:contains("L\'utilisateur a bien été supprimé")');
         $this->assertCount(1, $successMsg);
 
@@ -103,7 +101,7 @@ class AdminControllerTest extends WebTestCase
     public function testEdit()
     {
         $this->loginAsSuperAdmin();
-        $admin = $this->getOneEntityBy(User::class, ['username' => 'superadmin']);
+        $admin = UserStory::superadmin();
         $crawler = $this->client->request(Request::METHOD_GET, '/admin/edit/' . $admin->getId());
         $this->assertResponseStatusCodeSame(200);
         $item = $crawler->filter('html:contains("Modifier un administrateur")');
@@ -123,7 +121,7 @@ class AdminControllerTest extends WebTestCase
 
     public function testAddGroupAdmin()
     {
-        $group = $this->getOneEntityBy(Group::class, ['name' => 'Recia']);
+        $group = GroupStory::recia();
         $this->loginAsSuperAdmin();
         $crawler = $this->client->request(Request::METHOD_GET, '/admin/group/add');
         $this->assertResponseStatusCodeSame(200);

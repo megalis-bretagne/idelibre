@@ -2,67 +2,61 @@
 
 namespace App\Tests\Controller\ApiV2;
 
-use App\DataFixtures\ApiUserFixtures;
-use App\DataFixtures\PartyFixtures;
-use App\DataFixtures\RoleFixtures;
-use App\DataFixtures\StructureFixtures;
-use App\DataFixtures\UserFixtures;
+use App\Security\Password\LegacyPassword;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
+use App\Tests\Story\ApiUserStory;
+use App\Tests\Story\PartyStory;
+use App\Tests\Story\RoleStory;
+use App\Tests\Story\StructureStory;
+use App\Tests\Story\UserStory;
 use Doctrine\Persistence\ObjectManager;
-use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class UserApiControllerTest extends WebTestCase
 {
+    use ResetDatabase;
+    use Factories;
     use FindEntityTrait;
     use LoginTrait;
 
+    public const REFERENCE = 'User_';
 
     private ?KernelBrowser $client;
-    /**
-     * @var ObjectManager
-     */
-    private $entityManager;
-
+    private ObjectManager $entityManager;
+    private UserPasswordHasherInterface $passwordHasher;
+    private LegacyPassword $legacyPassword;
 
     protected function setUp(): void
     {
-        $this->client = static::createClient();
-
         $kernel = self::bootKernel();
         $this->entityManager = $kernel->getContainer()
             ->get('doctrine')
             ->getManager();
 
+        self::ensureKernelShutdown();
+        $this->client = static::createClient();
 
-        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
-        $databaseTool->loadFixtures([
-            UserFixtures::class,
-            PartyFixtures::class,
-            RoleFixtures::class,
-            ApiUserFixtures::class,
-            StructureFixtures::class
-        ]);
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-        $this->client = null;
-        $this->entityManager->close();
+        UserStory::load();
+        PartyStory::load();
+        RoleStory::load();
+        ApiUserStory::load();
+        StructureStory::load();
     }
 
     public function testGetAll()
     {
-        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
+        $structure = StructureStory::libriciel();
+        $apiUser = ApiUserStory::apiAdminLibriciel();
 
         $this->client->request(Request::METHOD_GET, "/api/v2/structures/{$structure->getId()}/users", [], [], [
-            "HTTP_X-AUTH-TOKEN" => $apiUser->getToken(),
-            'CONTENT-TYPE' => 'application/json'
+            'HTTP_X-AUTH-TOKEN' => $apiUser->getToken(),
+            'CONTENT-TYPE' => 'application/json',
         ]);
 
         $this->assertResponseStatusCodeSame(200);
@@ -75,13 +69,13 @@ class UserApiControllerTest extends WebTestCase
 
     public function testGetById()
     {
-        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $actorLs = $this->getOneUserBy(['username' => 'actor1@libriciel']);
-        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
+        $structure = StructureStory::libriciel();
+        $apiUser = ApiUserStory::apiAdminLibriciel();
+        $actorLs = UserStory::actorLibriciel1();
 
         $this->client->request(Request::METHOD_GET, "/api/v2/structures/{$structure->getId()}/users/{$actorLs->getId()}", [], [], [
-            "HTTP_X-AUTH-TOKEN" => $apiUser->getToken(),
-            'CONTENT-TYPE' => 'application/json'
+            'HTTP_X-AUTH-TOKEN' => $apiUser->getToken(),
+            'CONTENT-TYPE' => 'application/json',
         ]);
         $this->assertResponseStatusCodeSame(200);
 
@@ -93,14 +87,12 @@ class UserApiControllerTest extends WebTestCase
         $this->assertNotEmpty($user['party']);
     }
 
-
     public function testPost()
     {
-        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
-        $roleActor = $this->getOneRoleBy(['name' => 'Actor']);
-        $party = $this->getOnePartyBy(['name' => 'Majorité', 'structure' => $structure]);
-
+        $structure = StructureStory::libriciel();
+        $apiUser = ApiUserStory::apiAdminLibriciel();
+        $roleActor = RoleStory::actor();
+        $party = PartyStory::majorite();
 
         $data = [
             'username' => 'newUser',
@@ -112,14 +104,16 @@ class UserApiControllerTest extends WebTestCase
             'title' => 'Madame la vice présidente',
             'gender' => 1,
             'isActive' => true,
-            'phone' => '0607080919'
+            'phone' => '0607080919',
         ];
 
-        $this->client->request(Request::METHOD_POST, "/api/v2/structures/{$structure->getId()}/users",
+        $this->client->request(
+            Request::METHOD_POST,
+            "/api/v2/structures/{$structure->getId()}/users",
             [],
             [],
             [
-                "HTTP_X-AUTH-TOKEN" => $apiUser->getToken(),
+                'HTTP_X-AUTH-TOKEN' => $apiUser->getToken(),
                 'CONTENT_TYPE' => 'application/json',
             ],
             json_encode($data)
@@ -136,14 +130,12 @@ class UserApiControllerTest extends WebTestCase
         $this->assertNotEmpty($userBdd->getRole());
     }
 
-
     public function testPostWithPassword()
     {
-        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
-        $roleActor = $this->getOneRoleBy(['name' => 'Actor']);
-        $party = $this->getOnePartyBy(['name' => 'Majorité', 'structure' => $structure]);
-
+        $structure = StructureStory::libriciel();
+        $apiUser = ApiUserStory::apiAdminLibriciel();
+        $roleActor = RoleStory::actor();
+        $party = PartyStory::majorite();
 
         $data = [
             'username' => 'newUser',
@@ -156,14 +148,16 @@ class UserApiControllerTest extends WebTestCase
             'gender' => 1,
             'isActive' => true,
             'phone' => '0607080919',
-            'password' => 'password'
+            'password' => 'password',
         ];
 
-        $this->client->request(Request::METHOD_POST, "/api/v2/structures/{$structure->getId()}/users",
+        $this->client->request(
+            Request::METHOD_POST,
+            "/api/v2/structures/{$structure->getId()}/users",
             [],
             [],
             [
-                "HTTP_X-AUTH-TOKEN" => $apiUser->getToken(),
+                'HTTP_X-AUTH-TOKEN' => $apiUser->getToken(),
                 'CONTENT_TYPE' => 'application/json',
             ],
             json_encode($data)
@@ -183,14 +177,12 @@ class UserApiControllerTest extends WebTestCase
         $this->assertTrue($passwordHasher->isPasswordValid($userBdd, $data['password']));
     }
 
-
     public function testAddNoUsernameAndEmail()
     {
-        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
-        $roleActor = $this->getOneRoleBy(['name' => 'Actor']);
-        $party = $this->getOnePartyBy(['name' => 'Majorité', 'structure' => $structure]);
-
+        $structure = StructureStory::libriciel();
+        $apiUser = ApiUserStory::apiAdminLibriciel();
+        $roleActor = RoleStory::actor();
+        $party = PartyStory::majorite();
 
         $data = [
             'firstName' => 'newFirstName',
@@ -200,14 +192,16 @@ class UserApiControllerTest extends WebTestCase
             'title' => 'Madame la vice présidente',
             'gender' => 1,
             'isActive' => true,
-            'phone' => '0607080919'
+            'phone' => '0607080919',
         ];
 
-        $this->client->request(Request::METHOD_POST, "/api/v2/structures/{$structure->getId()}/users",
+        $this->client->request(
+            Request::METHOD_POST,
+            "/api/v2/structures/{$structure->getId()}/users",
             [],
             [],
             [
-                "HTTP_X-AUTH-TOKEN" => $apiUser->getToken(),
+                'HTTP_X-AUTH-TOKEN' => $apiUser->getToken(),
                 'CONTENT_TYPE' => 'application/json',
             ],
             json_encode($data)
@@ -218,15 +212,15 @@ class UserApiControllerTest extends WebTestCase
         $error = json_decode($response->getContent(), true);
 
         $this->assertSame(
-            "Cette valeur ne doit pas être vide. ( username : \"\"), Cette valeur ne doit pas être vide. ( email : \"\")",
-            $error["message"]
+            'Cette valeur ne doit pas être vide. ( username : ""), Cette valeur ne doit pas être vide. ( email : "")',
+            $error['message']
         );
     }
 
     public function testAddNoRole()
     {
-        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
+        $structure = StructureStory::libriciel();
+        $apiUser = ApiUserStory::apiAdminLibriciel();
 
         $data = [
             'username' => 'newUser',
@@ -236,14 +230,16 @@ class UserApiControllerTest extends WebTestCase
             'title' => 'Madame la vice présidente',
             'gender' => 1,
             'isActive' => true,
-            'phone' => '0607080919'
+            'phone' => '0607080919',
         ];
 
-        $this->client->request(Request::METHOD_POST, "/api/v2/structures/{$structure->getId()}/users",
+        $this->client->request(
+            Request::METHOD_POST,
+            "/api/v2/structures/{$structure->getId()}/users",
             [],
             [],
             [
-                "HTTP_X-AUTH-TOKEN" => $apiUser->getToken(),
+                'HTTP_X-AUTH-TOKEN' => $apiUser->getToken(),
                 'CONTENT_TYPE' => 'application/json',
             ],
             json_encode($data)
@@ -253,13 +249,12 @@ class UserApiControllerTest extends WebTestCase
         $response = $this->client->getResponse();
         $error = json_decode($response->getContent(), true);
         $this->assertSame('Cette valeur ne doit pas être nulle. ( role : "")', $error['message']);
-
     }
 
     public function testAddForbiddenRole()
     {
-        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
+        $structure = StructureStory::libriciel();
+        $apiUser = ApiUserStory::apiAdminLibriciel();
         $roleSuperAdmin = $this->getOneRoleBy(['name' => 'SuperAdmin']);
 
         $data = [
@@ -271,14 +266,16 @@ class UserApiControllerTest extends WebTestCase
             'title' => 'Madame la vice présidente',
             'gender' => 1,
             'isActive' => true,
-            'phone' => '0607080919'
+            'phone' => '0607080919',
         ];
 
-        $this->client->request(Request::METHOD_POST, "/api/v2/structures/{$structure->getId()}/users",
+        $this->client->request(
+            Request::METHOD_POST,
+            "/api/v2/structures/{$structure->getId()}/users",
             [],
             [],
             [
-                "HTTP_X-AUTH-TOKEN" => $apiUser->getToken(),
+                'HTTP_X-AUTH-TOKEN' => $apiUser->getToken(),
                 'CONTENT_TYPE' => 'application/json',
             ],
             json_encode($data)
@@ -288,17 +285,14 @@ class UserApiControllerTest extends WebTestCase
         $response = $this->client->getResponse();
         $error = json_decode($response->getContent(), true);
         $this->assertSame("You can't give role : {$roleSuperAdmin->getId()}", $error['message']);
-
     }
-
 
     public function testAddBadPartyId()
     {
-        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
-        $roleActor = $this->getOneRoleBy(['name' => 'Actor']);
+        $structure = StructureStory::libriciel();
+        $apiUser = ApiUserStory::apiAdminLibriciel();
+        $roleActor = RoleStory::actor();
         $fakePartyId = '216ddd2a-2ee8-4dd3-840d-efdd6f710ca0';
-
 
         $data = [
             'username' => 'newUser',
@@ -310,14 +304,16 @@ class UserApiControllerTest extends WebTestCase
             'title' => 'Madame la vice présidente',
             'gender' => 1,
             'isActive' => true,
-            'phone' => '0607080919'
+            'phone' => '0607080919',
         ];
 
-        $this->client->request(Request::METHOD_POST, "/api/v2/structures/{$structure->getId()}/users",
+        $this->client->request(
+            Request::METHOD_POST,
+            "/api/v2/structures/{$structure->getId()}/users",
             [],
             [],
             [
-                "HTTP_X-AUTH-TOKEN" => $apiUser->getToken(),
+                'HTTP_X-AUTH-TOKEN' => $apiUser->getToken(),
                 'CONTENT_TYPE' => 'application/json',
             ],
             json_encode($data)
@@ -328,15 +324,13 @@ class UserApiControllerTest extends WebTestCase
         $error = json_decode($response->getContent(), true);
 
         $this->assertSame("You can't use party : 216ddd2a-2ee8-4dd3-840d-efdd6f710ca0", $error['message']);
-
     }
-
 
     public function testUpdate()
     {
-        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
-        $actorLs = $this->getOneUserBy(['username' => 'actor1@libriciel']);
+        $structure = StructureStory::libriciel();
+        $apiUser = ApiUserStory::apiAdminLibriciel();
+        $actorLs = UserStory::actorLibriciel1();
 
         $data = [
             'username' => 'updatedUserName',
@@ -347,15 +341,16 @@ class UserApiControllerTest extends WebTestCase
             'title' => 'Madame la vice présidente',
             'gender' => 1,
             'isActive' => true,
-            'phone' => '0607080919'
+            'phone' => '0607080919',
         ];
 
-
-        $this->client->request(Request::METHOD_PUT, "/api/v2/structures/{$structure->getId()}/users/{$actorLs->getId()}",
+        $this->client->request(
+            Request::METHOD_PUT,
+            "/api/v2/structures/{$structure->getId()}/users/{$actorLs->getId()}",
             [],
             [],
             [
-                "HTTP_X-AUTH-TOKEN" => $apiUser->getToken(),
+                'HTTP_X-AUTH-TOKEN' => $apiUser->getToken(),
                 'CONTENT_TYPE' => 'application/json',
             ],
             json_encode($data)
@@ -365,17 +360,15 @@ class UserApiControllerTest extends WebTestCase
         $response = $this->client->getResponse();
         $user = json_decode($response->getContent(), true);
 
-
         $this->assertSame($user['username'], 'updatedUserName');
         $this->assertNotEmpty($user['party']);
         $this->assertNotEmpty($user['role']);
     }
 
-
     public function testUpdateWithPassword()
     {
-        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
+        $structure = StructureStory::libriciel();
+        $apiUser = ApiUserStory::apiAdminLibriciel();
         $actorLs = $this->getOneUserBy(['username' => 'actor1@libriciel']);
 
         $data = [
@@ -387,15 +380,16 @@ class UserApiControllerTest extends WebTestCase
             'title' => 'Madame la vice présidente',
             'gender' => 1,
             'isActive' => true,
-            'phone' => '0607080919'
+            'phone' => '0607080919',
         ];
 
-
-        $this->client->request(Request::METHOD_PUT, "/api/v2/structures/{$structure->getId()}/users/{$actorLs->getId()}",
+        $gg = $this->client->request(
+            Request::METHOD_PUT,
+            "/api/v2/structures/{$structure->getId()}/users/{$actorLs->getId()}",
             [],
             [],
             [
-                "HTTP_X-AUTH-TOKEN" => $apiUser->getToken(),
+                'HTTP_X-AUTH-TOKEN' => $apiUser->getToken(),
                 'CONTENT_TYPE' => 'application/json',
             ],
             json_encode($data)
@@ -405,33 +399,32 @@ class UserApiControllerTest extends WebTestCase
         $response = $this->client->getResponse();
         $user = json_decode($response->getContent(), true);
 
-
         $this->assertSame($user['username'], 'updatedUserName');
         $this->assertNotEmpty($user['party']);
         $this->assertNotEmpty($user['role']);
 
-        $this->entityManager->refresh($actorLs);
         $passwordHasher = self::getContainer()->get('security.user_password_hasher');
         $this->assertTrue($passwordHasher->isPasswordValid($actorLs, $data['password']));
     }
 
-
     public function testUpdateParty()
     {
-        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
-        $actorLs = $this->getOneUserBy(['username' => 'actor1@libriciel']);
-        $partyOpposition = $this->getOnePartyBy(['name' => 'Opposition', 'structure' => $structure]);
+        $structure = StructureStory::libriciel();
+        $apiUser = ApiUserStory::apiAdminLibriciel();
+        $actorLs = UserStory::actorLibriciel1();
+        $partyOpposition = PartyStory::opposition();
 
         $data = [
             'party' => $partyOpposition->getId(),
         ];
 
-        $this->client->request(Request::METHOD_PUT, "/api/v2/structures/{$structure->getId()}/users/{$actorLs->getId()}",
+        $this->client->request(
+            Request::METHOD_PUT,
+            "/api/v2/structures/{$structure->getId()}/users/{$actorLs->getId()}",
             [],
             [],
             [
-                "HTTP_X-AUTH-TOKEN" => $apiUser->getToken(),
+                'HTTP_X-AUTH-TOKEN' => $apiUser->getToken(),
                 'CONTENT_TYPE' => 'application/json',
             ],
             json_encode($data)
@@ -442,25 +435,25 @@ class UserApiControllerTest extends WebTestCase
         $user = json_decode($response->getContent(), true);
 
         $this->assertSame($user['party']['name'], 'Opposition');
-
     }
-
 
     public function testRemoveParty()
     {
-        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
-        $actorLs = $this->getOneUserBy(['username' => 'actor1@libriciel']);
+        $structure = StructureStory::libriciel();
+        $apiUser = ApiUserStory::apiAdminLibriciel();
+        $actorLs = UserStory::actorLibriciel1();
 
         $data = [
             'party' => null,
         ];
 
-        $this->client->request(Request::METHOD_PUT, "/api/v2/structures/{$structure->getId()}/users/{$actorLs->getId()}",
+        $this->client->request(
+            Request::METHOD_PUT,
+            "/api/v2/structures/{$structure->getId()}/users/{$actorLs->getId()}",
             [],
             [],
             [
-                "HTTP_X-AUTH-TOKEN" => $apiUser->getToken(),
+                'HTTP_X-AUTH-TOKEN' => $apiUser->getToken(),
                 'CONTENT_TYPE' => 'application/json',
             ],
             json_encode($data)
@@ -471,27 +464,26 @@ class UserApiControllerTest extends WebTestCase
         $user = json_decode($response->getContent(), true);
 
         $this->assertEmpty($user['party']);
-
     }
-
 
     public function testUpdateRoleDoesNothing()
     {
-        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
-        $actorLs = $this->getOneUserBy(['username' => 'actor1@libriciel']);
-        $roleSecretary = $this->getOneRoleBy(['name' => 'Secretary']);
-
+        $structure = StructureStory::libriciel();
+        $apiUser = ApiUserStory::apiAdminLibriciel();
+        $actorLs = UserStory::actorLibriciel1();
+        $roleSecretary = RoleStory::secretary();
 
         $data = [
-            'role' => $roleSecretary->getId()
+            'role' => $roleSecretary->getId(),
         ];
 
-        $this->client->request(Request::METHOD_PUT, "/api/v2/structures/{$structure->getId()}/users/{$actorLs->getId()}",
+        $this->client->request(
+            Request::METHOD_PUT,
+            "/api/v2/structures/{$structure->getId()}/users/{$actorLs->getId()}",
             [],
             [],
             [
-                "HTTP_X-AUTH-TOKEN" => $apiUser->getToken(),
+                'HTTP_X-AUTH-TOKEN' => $apiUser->getToken(),
                 'CONTENT_TYPE' => 'application/json',
             ],
             json_encode($data)
@@ -504,25 +496,24 @@ class UserApiControllerTest extends WebTestCase
         $this->assertSame('Actor', $user['role']['name']);
     }
 
-
     public function testDelete()
     {
-        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
-        $actorLs = $this->getOneUserBy(['username' => 'actor1@libriciel']);
+        $structure = StructureStory::libriciel();
+        $apiUser = ApiUserStory::apiAdminLibriciel();
+        $actorLs = UserStory::actorLibriciel1();
 
-        $this->client->request(Request::METHOD_DELETE, "/api/v2/structures/{$structure->getId()}/users/{$actorLs->getId()}", [], [],
+        $this->client->request(
+            Request::METHOD_DELETE,
+            "/api/v2/structures/{$structure->getId()}/users/{$actorLs->getId()}",
+            [],
+            [],
             [
-                "HTTP_X-AUTH-TOKEN" => $apiUser->getToken(),
-                'CONTENT-TYPE' => 'application/json'
+                'HTTP_X-AUTH-TOKEN' => $apiUser->getToken(),
+                'CONTENT-TYPE' => 'application/json',
             ]
         );
 
         $deleted = $this->getOneUserBy(['username' => 'actor1@libriciel']);
         $this->assertEmpty($deleted);
     }
-
 }
-
-
-

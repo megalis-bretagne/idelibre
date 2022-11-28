@@ -1,5 +1,3 @@
-version: '3.4'
-
 services:
   fpm-idelibre:
     container_name: fpm-idelibre
@@ -96,6 +94,15 @@ services:
     volumes:
       - /data/certificates:/certificates
     command: [ "/app/docker-resources/init.sh" ]
+
+
+  idelibre_mailcatcher:
+    container_name: idelibre_mailcatcher
+    image: tophfr/mailcatcher:0.7.1
+    restart: always
+    ports:
+      - "2092:80"
+      - "2029:25"
 
 volumes:
   data-public:

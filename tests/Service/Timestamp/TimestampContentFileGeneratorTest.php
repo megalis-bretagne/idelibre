@@ -2,39 +2,34 @@
 
 namespace App\Tests\Service\Timestamp;
 
-use App\DataFixtures\AnnexFixtures;
-use App\DataFixtures\ConvocationFixtures;
-use App\DataFixtures\FileFixtures;
-use App\DataFixtures\ProjectFixtures;
-use App\DataFixtures\SittingFixtures;
 use App\Service\Timestamp\TimestampContentFileGenerator;
 use App\Tests\FileTrait;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
+use App\Tests\Story\AnnexStory;
+use App\Tests\Story\ConvocationStory;
+use App\Tests\Story\FileStory;
+use App\Tests\Story\ProjectStory;
+use App\Tests\Story\SittingStory;
 use Doctrine\Persistence\ObjectManager;
-use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
-use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\DependencyInjection\ParameterBag\ContainerBag;
+use Symfony\Component\Filesystem\Filesystem;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class TimestampContentFileGeneratorTest extends WebTestCase
 {
+    use ResetDatabase;
+    use Factories;
     use FindEntityTrait;
     use LoginTrait;
     use FileTrait;
 
-    /**
-     * @var ObjectManager
-     */
-    private $entityManager;
+    private ObjectManager $entityManager;
     private $environment;
-    /**
-     * @var object|\Symfony\Component\DependencyInjection\ParameterBag\ContainerBag|null
-     */
-    private $bag;
-    /**
-     * @var object|\Symfony\Component\Filesystem\Filesystem|null
-     */
-    private $fileSystem;
+    private ContainerBag $bag;
+    private Filesystem $fileSystem;
 
     protected function setUp(): void
     {
@@ -46,27 +41,19 @@ class TimestampContentFileGeneratorTest extends WebTestCase
         $this->bag = $container->get('parameter_bag');
         $this->fileSystem = $container->get('filesystem');
 
-        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
-        $databaseTool->loadFixtures([
-            SittingFixtures::class,
-            ConvocationFixtures::class,
-            ProjectFixtures::class,
-            AnnexFixtures::class,
-            FileFixtures::class,
-        ]);
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-        $this->entityManager->close();
+        SittingStory::load();
+        ConvocationStory::load();
+        ProjectStory::load();
+        AnnexStory::load();
+        FileStory::load();
     }
 
     public function testGenerateFile()
     {
-        $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
+        $sitting = SittingStory::sittingConseilLibriciel()->object();
         $timestampGenerator = new TimestampContentFileGenerator($this->environment, $this->bag, $this->fileSystem);
         $path = $timestampGenerator->generateConvocationFile($sitting, $sitting->getConvocations());
-        $this->assertSame(51, $this->countFileLines($path));
+
+        $this->assertSame(58, $this->countFileLines($path));
     }
 }

@@ -2,8 +2,6 @@
 
 namespace App\Tests\Entity\Connector;
 
-use App\Entity\Connector\ComelusConnector;
-use App\Entity\Connector\Exception\ComelusConnectorException;
 use App\Entity\Connector\Exception\LsmessageConnectorException;
 use App\Entity\Connector\LsmessageConnector;
 use App\Entity\Structure;
@@ -19,7 +17,6 @@ class LsmessageConnectorTest extends WebTestCase
 
     private ValidatorInterface $validator;
 
-
     protected function setUp(): void
     {
         self::bootKernel();
@@ -33,7 +30,7 @@ class LsmessageConnectorTest extends WebTestCase
     {
         return (new LsmessageConnector(new Structure()))
             ->setActive(true)
-            ->setApiKey("1234")
+            ->setApiKey('1234')
             ->setContent('content')
             ->setSender('sender')
             ->setUrl('https://test.url.fr');
@@ -44,8 +41,6 @@ class LsmessageConnectorTest extends WebTestCase
         $connector = $this->createDummyConnector()
             ->setUrl('https://test.url.fr');
 
-        $this->assertHasValidationErrors($connector, 0 );
+        $this->assertHasValidationErrors($connector, 0);
     }
-
-
 }

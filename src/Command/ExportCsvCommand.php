@@ -10,7 +10,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
 
-
 class ExportCsvCommand extends Command
 {
     protected static $defaultName = 'export:user';
@@ -19,7 +18,6 @@ class ExportCsvCommand extends Command
     ) {
         parent::__construct();
     }
-
 
     protected function configure(): void
     {
@@ -32,15 +30,14 @@ class ExportCsvCommand extends Command
 
     private function runQuery(string $query)
     {
-        $psqlCmd = "psql --dbname=" . getenv('DATABASE_URL') . " -c " . "\"" . $query . "\"";
+        $psqlCmd = 'psql --dbname=' . getenv('DATABASE_URL') . ' -c ' . '"' . $query . '"';
         exec($psqlCmd, $out, $resultCode);
 
-        if ($resultCode != 0) {
-            throw new Exception("erreur dans le sql : " . $query);
+        if (0 != $resultCode) {
+            throw new Exception('erreur dans le sql : ' . $query);
         }
         dump($out);
     }
-
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -56,6 +53,7 @@ class ExportCsvCommand extends Command
 
         if (!$structureId) {
             $io->note('structureId is required');
+
             return Command::FAILURE;
         }
 
@@ -67,7 +65,7 @@ class ExportCsvCommand extends Command
     protected function exportUsers(string $structureId, string $pathDir): void
     {
         $path = $pathDir . '/user.csv';
-        $query = "copy(select * from " .'\"user\"' . " where structure_id ='$structureId') to '$path' delimiter ',' csv HEADER ENCODING 'UTF8';";
+        $query = 'copy(select * from ' . '\"user\"' . " where structure_id ='$structureId') to '$path' delimiter ',' csv HEADER ENCODING 'UTF8';";
 
         $this->runQuery($query);
     }

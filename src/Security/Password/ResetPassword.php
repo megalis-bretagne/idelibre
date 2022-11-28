@@ -18,7 +18,6 @@ use Symfony\Component\Routing\RouterInterface;
 
 class ResetPassword
 {
-
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly RouterInterface $router,
@@ -64,8 +63,6 @@ class ResetPassword
     }
 
     /**
-     * @return User
-     *
      * @throws EntityNotFoundException
      * @throws TimeoutException
      */
