@@ -2,7 +2,6 @@
 
 namespace App\Tests\Story;
 
-use App\Entity\Structure;
 use App\Tests\Factory\PartyFactory;
 use Zenstruck\Foundry\Story;
 
@@ -12,17 +11,17 @@ final class PartyStory extends Story
     {
         $this->addState('majorite', PartyFactory::new([
             'name' => 'Majorité',
-            'structure' => StructureStory::libriciel()
+            'structure' => StructureStory::libriciel(),
         ]));
 
         $this->addState('opposition', PartyFactory::new([
             'name' => 'Opposition',
-            'structure' => StructureStory::libriciel()
+            'structure' => StructureStory::libriciel(),
         ]));
 
         $this->addState('montpellier', PartyFactory::new([
             'name' => 'Montpellier',
-            'structure' => StructureStory::montpellier()
+            'structure' => StructureStory::montpellier(),
         ]));
     }
 }

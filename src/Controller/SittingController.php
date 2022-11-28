@@ -6,6 +6,7 @@ use App\Entity\Sitting;
 use App\Form\SearchType;
 use App\Form\SittingType;
 use App\Repository\ConvocationRepository;
+use App\Repository\EmailTemplateRepository;
 use App\Repository\OtherdocRepository;
 use App\Repository\ProjectRepository;
 use App\Service\Convocation\ConvocationManager;
@@ -64,6 +65,7 @@ class SittingController extends AbstractController
     {
         $form = $this->createForm(SittingType::class, null, ['structure' => $this->getUser()->getStructure(), 'user' => $this->getUser()]);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $sittingId = $sittingManager->save(
                 $form->getData(),
@@ -176,12 +178,15 @@ class SittingController extends AbstractController
     #[Route(path: '/sitting/show/{id}/actors', name: 'sitting_show_actors', methods: ['GET'])]
     #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
     #[Breadcrumb(title: 'Détail {sitting.nameWithDate}')]
-    public function showActors(Sitting $sitting, ConvocationRepository $convocationRepository, SidebarState $sidebarState): Response
+    public function showActors(Sitting $sitting, EmailTemplateRepository $emailTemplateRepository, SidebarState $sidebarState): Response
     {
         $sidebarState->setActiveNavs(['sitting-nav', $this->activeSidebarNav($sitting->getIsArchived())]);
 
+        $emailTemplate = $emailTemplateRepository->findOneByStructureAndCategory($sitting->getStructure(), 'convocation');
+
         return $this->render('sitting/details_actors.html.twig', [
             'sitting' => $sitting,
+            'emailTemplate' => $emailTemplate,
         ]);
     }
 

@@ -3,9 +3,9 @@
 namespace App\Entity;
 
 use App\Repository\ConfigurationRepository;
+use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\OneToOne;
 use Ramsey\Uuid\Doctrine\UuidGenerator;

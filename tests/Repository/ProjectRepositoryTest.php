@@ -2,74 +2,56 @@
 
 namespace App\Tests\Repository;
 
-use App\DataFixtures\AnnexFixtures;
-use App\DataFixtures\FileFixtures;
-use App\DataFixtures\ProjectFixtures;
-use App\DataFixtures\ThemeFixtures;
-use App\Entity\Project;
 use App\Repository\ProjectRepository;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
+use App\Tests\Story\ProjectStory;
+use App\Tests\Story\SittingStory;
 use Doctrine\Persistence\ObjectManager;
-use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class ProjectRepositoryTest extends WebTestCase
 {
+    use ResetDatabase;
+    use Factories;
     use FindEntityTrait;
     use LoginTrait;
 
     private ?KernelBrowser $client;
-    /**
-     * @var ObjectManager
-     */
-    private $entityManager;
-    /**
-     * @var ProjectRepository
-     */
-    private $projectRepository;
+    private ObjectManager $entityManager;
+    private ProjectRepository $projectRepository;
 
     protected function setUp(): void
     {
-        $this->client = static::createClient();
-
         $kernel = self::bootKernel();
         $this->entityManager = $kernel->getContainer()
             ->get('doctrine')
             ->getManager();
 
-        $this->projectRepository = $this->entityManager->getRepository(Project::class);
+        $this->projectRepository = self::getContainer()->get(ProjectRepository::class);
 
-        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
-        $databaseTool->loadFixtures([
-            ProjectFixtures::class,
-            AnnexFixtures::class,
-            ThemeFixtures::class,
-            FileFixtures::class,
-        ]);
-    }
+        self::ensureKernelShutdown();
+        $this->client = static::createClient();
 
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-        $this->client = null;
-        $this->entityManager->close();
+        SittingStory::sittingConseilLibriciel();
+        ProjectStory::project2();
     }
 
     public function testGetProjectsWithAssociatedEntities()
     {
-        $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
-
-        $projects = $this->projectRepository->getProjectsWithAssociatedEntities($sitting);
-        $this->assertCount(2, $projects);
+        $sitting = SittingStory::sittingConseilLibriciel();
+        $projects = $this->projectRepository->getProjectsWithAssociatedEntities($sitting->object());
+        $this->assertCount(3, $projects);
     }
 
     public function testFindNotInListProjects()
     {
-        $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
-        $projectId = $this->getOneProjectBy(['name' => 'Project 2'])->getId();
-        $projects = $this->projectRepository->findNotInListProjects([$projectId], $sitting);
-        $this->assertCount(1, $projects);
+        $sitting = SittingStory::sittingConseilLibriciel();
+        $project = ProjectStory::project2();
+        $projects = $this->projectRepository->findNotInListProjects([$project->getId()], $sitting->object());
+        $this->assertCount(2, $projects);
     }
 }

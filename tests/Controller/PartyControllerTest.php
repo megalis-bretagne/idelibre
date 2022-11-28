@@ -2,28 +2,28 @@
 
 namespace App\Tests\Controller;
 
-use App\DataFixtures\PartyFixtures;
-use App\DataFixtures\UserFixtures;
 use App\Entity\Party;
 use App\Entity\User;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
+use App\Tests\Story\PartyStory;
+use App\Tests\Story\UserStory;
 use Doctrine\Persistence\ObjectManager;
-use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class PartyControllerTest extends WebTestCase
 {
+    use ResetDatabase;
+    use Factories;
     use FindEntityTrait;
     use LoginTrait;
 
     private ?KernelBrowser $client;
-    /**
-     * @var ObjectManager
-     */
-    private $entityManager;
+    private ObjectManager $entityManager;
 
     protected function setUp(): void
     {
@@ -34,19 +34,11 @@ class PartyControllerTest extends WebTestCase
             ->get('doctrine')
             ->getManager();
 
-        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
+        self::ensureKernelShutdown();
+        $this->client = static::createClient();
 
-        $databaseTool->loadFixtures([
-            PartyFixtures::class,
-            UserFixtures::class,
-        ]);
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-        $this->client = null;
-        $this->entityManager->close();
+        UserStory::load();
+        PartyStory::load();
     }
 
     public function testIndex()
@@ -61,9 +53,7 @@ class PartyControllerTest extends WebTestCase
 
     public function testAdd()
     {
-        /** @var User $actor2 */
-        $actor2 = $this->getOneEntityBy(User::class, ['username' => 'actor2@libriciel']);
-
+        $actor2 = UserStory::actorLibriciel2();
         $this->loginAsAdminLibriciel();
         $crawler = $this->client->request(Request::METHOD_GET, '/party/add');
         $this->assertResponseStatusCodeSame(200);
@@ -95,14 +85,11 @@ class PartyControllerTest extends WebTestCase
 
     public function testEdit()
     {
-        /** @var User $actor2 */
-        $actor2 = $this->getOneEntityBy(User::class, ['username' => 'actor2@libriciel']);
-
-        /** @var User $actor3 */
-        $actor3 = $this->getOneEntityBy(User::class, ['username' => 'actor3@libriciel']);
+        $actor2 = UserStory::actorLibriciel2();
+        $actor3 = UserStory::actorLibriciel3();
 
         $this->loginAsAdminLibriciel();
-        /** @var $party Party */
+
         $party = $this->getOneEntityBy(Party::class, ['name' => 'Majorité']);
         $currentUserId = $party->getActors()->first()->getId();
 
@@ -126,7 +113,7 @@ class PartyControllerTest extends WebTestCase
         $this->assertCount(1, $successMsg);
 
         $updated = $this->getOneEntityBy(Party::class, ['name' => 'New party name']);
-        $this->entityManager->refresh($updated);
+
         $this->assertNotEmpty($updated);
 
         $this->assertCount(2, $updated->getActors());
@@ -137,7 +124,7 @@ class PartyControllerTest extends WebTestCase
     public function testDeleteNotMyParty()
     {
         $this->loginAsAdminLibriciel();
-        $partyMtp = $this->getOneEntityBy(Party::class, ['name' => 'Montpellier']);
+        $partyMtp = PartyStory::montpellier();
         $this->client->request(Request::METHOD_DELETE, '/party/delete/' . $partyMtp->getId());
         $this->assertResponseStatusCodeSame(403);
     }

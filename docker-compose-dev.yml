@@ -1,10 +1,16 @@
-version: '3.4'
+
 
 services:
   fpm-idelibre:
     container_name: fpm-idelibre
+    image: registry.libriciel.fr:443/public/citoyens/idelibre:canary
 #    image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/idelibre/idelibre:4.1
-    image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/idelibre/idelibre:latest
+#    image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/idelibre/idelibre:latest
+#    build:
+#      context: .
+    restart: always
+    depends_on:
+      - maildev-idelibre
     env_file:
       - .env.docker.local
     volumes:
@@ -24,26 +30,26 @@ services:
       - ./migrations:/app/migrations
       - ./composer.json:/app/composer.json
       - ./composer.lock:/app/composer.lock
-      - ./rector.php:/app/rector.php
+#      - ./rector.php:/app/rector.php
       - ./docker-resources/minimum.sql:/app/docker-resources/minimum.sql
       - ./webpack.config.js:/app/webpack.config.js
       - ./assets:/app/assets
       - ./tests:/app/tests
-
     command: ["/app/docker-resources/initApp.sh"]
+    networks:
+      - network_idelibre_dev
 
 
   ## il faut partager le /data/workspace entre le node et le fpm sinon on ne peut pas recuperer les fichiers
 
   node-idelibre:
     container_name: node-idelibre
-#    ports:
-#      - 4000:3001
-    image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/idelibre/idelibre-nodejs:4.1.0
-#    image: registry.libriciel.fr:443/public/citoyens/idelibre-node/idelibre-node:4.1.0
+    ports:
+      - 4000:3001
+#    image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/idelibre/idelibre-nodejs:4.1.0
+    image: registry.libriciel.fr:443/public/citoyens/idelibre-node/idelibre-node:4.1.0
     volumes:
       - /data/files:/data
-      - ../idelibre4-nodejs:/app:ro
     environment:
       - TYPEORM_CONNECTION=postgres
       - TYPEORM_HOST=${POSTGRES_HOST:-172.17.0.1}
@@ -62,6 +68,8 @@ services:
       - JWT_TIMEOUT=${JWT_TIMEOUT:-86400}
 
     command: [ "/app/docker-resources/init.sh" ]
+    networks:
+      - network_idelibre_dev
 
 
   nginx-idelibre:
@@ -85,16 +93,20 @@ services:
       #- /tmp/data/pdf:/data/pdf:ro
       #- /tmp/data/zip:/data/zip:ro
       #- /home/rdubourget/dataFiles/workspace:/data/workspace:ro
+    networks:
+      - network_idelibre_dev
 
   certbot:
     image: certbot/certbot
     volumes:
       - /data/certbot/conf:/etc/letsencrypt
       - /data/certbot/www:/var/www/certbot
+    networks:
+      - network_idelibre_dev
 
   lshorodatage:
     container_name: lshorodatage
-    image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/lshorodatage/lshorodatage:1.0.0-rc1
+    image: registry.libriciel.fr:443/public/citoyens/lshorodatage/lshorodatage:1.0.0
     ports:
       - 5000:3000
     environment:
@@ -106,6 +118,8 @@ services:
       - POSTGRES_PORT=${POSTGRES_PORT:-5432}
       - SITE_HOSTNAME=${URL:-lshorodatage.libriciel.fr}
     command: ["/app/docker-resources/init.sh"]
+    networks:
+      - network_idelibre_dev
 
 #  maildev-idelibre:
 #    container_name: maildev-idelibre
@@ -121,7 +135,11 @@ services:
     ports:
       - "2092:80"
       - "2029:25"
+    networks:
+      - network_idelibre_dev
 
+networks:
+  network_idelibre_dev:
 
 volumes:
   data-public:

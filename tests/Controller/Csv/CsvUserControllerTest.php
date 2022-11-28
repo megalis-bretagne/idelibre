@@ -2,54 +2,44 @@
 
 namespace App\Tests\Controller\Csv;
 
-use App\DataFixtures\RoleFixtures;
-use App\DataFixtures\TypeFixtures;
-use App\DataFixtures\UserFixtures;
 use App\Entity\Type;
 use App\Entity\User;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
+use App\Tests\Story\RoleStory;
+use App\Tests\Story\TypeStory;
+use App\Tests\Story\UserStory;
 use Doctrine\Persistence\ObjectManager;
-use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class CsvUserControllerTest extends WebTestCase
 {
+    use ResetDatabase;
+    use Factories;
     use FindEntityTrait;
     use LoginTrait;
 
     private ?KernelBrowser $client;
-    /**
-     * @var ObjectManager
-     */
-    private $entityManager;
+    private ObjectManager $entityManager;
 
     protected function setUp(): void
     {
-        $this->client = static::createClient();
-
         $kernel = self::bootKernel();
         $this->entityManager = $kernel->getContainer()
             ->get('doctrine')
             ->getManager();
 
-        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
+        self::ensureKernelShutdown();
+        $this->client = static::createClient();
 
-        $databaseTool->loadFixtures([
-            UserFixtures::class,
-            RoleFixtures::class,
-            TypeFixtures::class,
-        ]);
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-        $this->client = null;
-        $this->entityManager->close();
+        UserStory::load();
+        RoleStory::load();
+        TypeStory::load();
     }
 
     public function testImportUsers()
@@ -77,25 +67,20 @@ class CsvUserControllerTest extends WebTestCase
         $successMsg = $crawler->filter('html:contains("Fichier csv importé avec succès")');
         $this->assertCount(1, $successMsg);
 
-
         $user = $this->getOneUserBy(['username' => 't.martin@libriciel']);
         $this->assertNotEmpty($user);
         $this->assertSame(1, $user->getGender());
         $this->assertCount(4, $user->getAssociatedTypes()->toArray());
         $this->assertNotEmpty($this->getOneEntityBy(Type::class, ['name' => 'New type']));
 
-
         $user2 = $this->getOneUserBy(['username' => 'e.dupont@libriciel']);
         $this->assertNotEmpty($user2);
         $this->assertCount(1, $user2->getAssociatedTypes()->toArray());
 
-
         $employee = $this->getOneUserBy(['username' => 'a.poulain@libriciel']);
         $this->assertNotEmpty($employee);
         $this->assertSame(2, $employee->getGender());
-
     }
-
 
     public function testImportUsersBlankPassword()
     {
@@ -127,10 +112,7 @@ class CsvUserControllerTest extends WebTestCase
         $this->assertNotEmpty($user);
 
         $this->assertSame('NotInitialized', $user->getPassword());
-
     }
-
-
 
     public function testImportUsersMissingEmail()
     {
@@ -163,7 +145,6 @@ class CsvUserControllerTest extends WebTestCase
         $this->assertNotEmpty($this->getOneEntityBy(User::class, ['username' => 'e.dupont@libriciel']));
     }
 
-
     public function testImportUserCsvMissingField()
     {
         $csvFile = new UploadedFile(__DIR__ . '/../../resources/user_missing_fields.csv', 'user.csv');
@@ -189,11 +170,9 @@ class CsvUserControllerTest extends WebTestCase
         $title = $crawler->filter('html:contains("Erreurs lors de l\'import")');
         $this->assertCount(1, $title);
 
-
         $errorMsg = $crawler->filter('html:contains("Chaque ligne doit contenir 7 champs séparés par des virgules.")');
         $this->assertCount(1, $errorMsg);
     }
-
 
     public function testImportUserCsvNoRole()
     {
@@ -224,13 +203,7 @@ class CsvUserControllerTest extends WebTestCase
         $this->assertCount(1, $errorMsg);
         $errorMsg = $crawler->filter('html:contains("Champ en erreur : role")');
         $this->assertCount(1, $errorMsg);
-
-
     }
-
-
-
-
 
     public function testCsvErrorWithNoError()
     {

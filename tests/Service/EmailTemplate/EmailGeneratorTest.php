@@ -2,27 +2,28 @@
 
 namespace App\Tests\Service\EmailTemplate;
 
-use App\DataFixtures\ConvocationFixtures;
-use App\DataFixtures\SittingFixtures;
-use App\DataFixtures\UserFixtures;
 use App\Entity\EmailTemplate;
 use App\Service\EmailTemplate\EmailGenerator;
+use App\Service\EmailTemplate\EmailTemplateManager;
 use App\Service\Util\DateUtil;
 use App\Service\Util\GenderConverter;
 use App\Tests\FindEntityTrait;
+use App\Tests\Story\ConvocationStory;
+use App\Tests\Story\StructureStory;
+use App\Tests\Story\UserStory;
 use Doctrine\ORM\EntityManagerInterface;
-use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class EmailGeneratorTest extends WebTestCase
 {
+    use ResetDatabase;
+    use Factories;
     use FindEntityTrait;
 
     private EntityManagerInterface $entityManager;
-    /**
-     * @var \App\Service\EmailTemplate\EmailTemplateManager|object|null
-     */
-    private $emailTemplateManager;
+    private EmailTemplateManager $emailTemplateManager;
 
     protected function setUp(): void
     {
@@ -31,15 +32,15 @@ class EmailGeneratorTest extends WebTestCase
             ->get('doctrine')
             ->getManager();
 
-        $container = self::getContainer();
-        $this->emailTemplateManager = $container->get('App\Service\EmailTemplate\EmailTemplateManager');
+        $this->emailTemplateManager = self::getContainer()->get(EmailTemplateManager::class);
 
-        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
-        $databaseTool->loadFixtures([
-            UserFixtures::class,
-            SittingFixtures::class,
-            ConvocationFixtures::class,
-        ]);
+        $this->params = self::getContainer()->getParameterBag();
+
+        self::ensureKernelShutdown();
+
+        UserStory::load();
+        StructureStory::load();
+        ConvocationStory::load();
     }
 
     public function testGenerateNotification()
@@ -47,7 +48,7 @@ class EmailGeneratorTest extends WebTestCase
         $emailTemplate = new EmailTemplate();
         $emailTemplate->setContent('test de génération de message : #variable#');
         $emailTemplate->setSubject('test de génération de titre : #variable#');
-        $generator = new EmailGenerator(new DateUtil(), new GenderConverter(), $this->emailTemplateManager);
+        $generator = new EmailGenerator(new DateUtil(), new GenderConverter(), $this->emailTemplateManager, $this->params);
         $emailData = $generator->generateFromTemplate($emailTemplate, ['#variable#' => 'test']);
         $this->assertEquals(
             'test de génération de message : test',
@@ -61,10 +62,9 @@ class EmailGeneratorTest extends WebTestCase
 
     public function testGenerateParams()
     {
-        $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
-        $actor = $this->getOneUserBy(['username' => 'actor1@libriciel']);
-        $convocation = $this->getOneConvocationBy(['sitting' => $sitting, 'user' => $actor]);
-        $generator = new EmailGenerator(new DateUtil(), new GenderConverter(), $this->emailTemplateManager);
+        $convocation = ConvocationStory::convocationActor1();
+
+        $generator = new EmailGenerator(new DateUtil(), new GenderConverter(), $this->emailTemplateManager, $this->params);
 
         $expected = [
             '#typeseance#' => 'Conseil Libriciel',
@@ -75,8 +75,10 @@ class EmailGeneratorTest extends WebTestCase
             '#nom#' => 'libriciel',
             '#username#' => 'actor1@libriciel',
             '#titre#' => 'Madame le maire',
-            '#civilite#' => 'Monsieur', ];
+            '#civilite#' => 'Monsieur',
+            '#urlseance#' => 'idelibre-test.libriciel.fr/idelibre_client',
+            ];
 
-        $this->assertEquals($expected, $generator->generateParams($convocation));
+        $this->assertEquals($expected, $generator->generateParams($convocation->object()));
     }
 }

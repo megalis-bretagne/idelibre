@@ -2,23 +2,27 @@
 
 namespace App\Tests\Entity;
 
-use App\DataFixtures\TimezoneFixtures;
 use App\Entity\Timezone;
 use App\Tests\FindEntityTrait;
 use App\Tests\HasValidationError;
+use App\Tests\Story\TimezoneStory;
 use App\Tests\StringTrait;
-use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
+use Doctrine\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class TimezoneTest extends WebTestCase
 {
+    use ResetDatabase;
+    use Factories;
     use FindEntityTrait;
     use HasValidationError;
     use StringTrait;
 
     private ValidatorInterface $validator;
-    private $entityManager;
+    private ObjectManager $entityManager;
 
     protected function setUp(): void
     {
@@ -26,11 +30,7 @@ class TimezoneTest extends WebTestCase
         $this->validator = self::getContainer()->get('validator');
         $this->entityManager = self::getContainer()->get('doctrine')->getManager();
 
-        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
-
-        $databaseTool->loadFixtures([
-            TimezoneFixtures::class,
-        ]);
+        TimezoneStory::load();
     }
 
     public function testValid()

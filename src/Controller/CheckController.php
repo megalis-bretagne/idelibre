@@ -39,7 +39,7 @@ class CheckController extends AbstractController
             'isNodejs' => $isNodejs,
             'isLshorodatage' => $isLshorodatage,
             'phpConfig' => $serviceInfo->getPhpConfiguration(),
-            'entropyForUser' => $bag->get('minimumEntropyForUserWithRoleHigh')
+            'entropyForUser' => $bag->get('minimumEntropyForUserWithRoleHigh'),
         ]);
     }
 

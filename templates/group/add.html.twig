@@ -10,3 +10,8 @@
 {% block pageSaveReturn %}
     {{ macro.save('group_index') }}
 {% endblock %}
+
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('showPasswordEntropy') }}
+{% endblock %}

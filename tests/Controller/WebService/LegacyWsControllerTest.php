@@ -2,61 +2,51 @@
 
 namespace App\Tests\Controller\WebService;
 
-use App\DataFixtures\ReminderFixtures;
-use App\DataFixtures\RoleFixtures;
-use App\DataFixtures\StructureFixtures;
-use App\DataFixtures\ThemeFixtures;
-use App\DataFixtures\TypeFixtures;
-use App\DataFixtures\UserFixtures;
 use App\Entity\Theme;
 use App\Entity\Type;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
+use App\Tests\Story\ReminderStory;
+use App\Tests\Story\RoleStory;
+use App\Tests\Story\StructureStory;
+use App\Tests\Story\ThemeStory;
+use App\Tests\Story\TypeStory;
+use App\Tests\Story\UserStory;
 use Doctrine\Persistence\ObjectManager;
-use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class LegacyWsControllerTest extends WebTestCase
 {
+    use ResetDatabase;
+    use Factories;
     use FindEntityTrait;
     use LoginTrait;
 
     private ?KernelBrowser $client;
-    /**
-     * @var ObjectManager
-     */
-    private $entityManager;
+    private ObjectManager $entityManager;
 
     protected function setUp(): void
     {
-        $this->client = static::createClient();
-
         $kernel = self::bootKernel();
         $this->entityManager = $kernel->getContainer()
             ->get('doctrine')
             ->getManager();
 
-        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
+        self::ensureKernelShutdown();
+        $this->client = static::createClient();
 
-        $databaseTool->loadFixtures([
-            StructureFixtures::class,
-            UserFixtures::class,
-            RoleFixtures::class,
-            ThemeFixtures::class,
-            TypeFixtures::class,
-            ReminderFixtures::class
-        ]);
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-        $this->client = null;
-        $this->entityManager->close();
+        StructureStory::load();
+        UserStory::load();
+        RoleStory::load();
+        ThemeStory::load();
+        TypeStory::load();
+        ReminderStory::load();
     }
 
     public function testAddSitting()
@@ -152,20 +142,16 @@ class LegacyWsControllerTest extends WebTestCase
 
         $themeRepository = $this->entityManager->getRepository(Theme::class);
 
-        $this->assertCount(1, $themeRepository->findBy(['name' => 'T1' ]));
-
+        $this->assertCount(1, $themeRepository->findBy(['name' => 'T1']));
 
         $typeRepository = $this->entityManager->getRepository(Type::class);
 
         /** @var Type $type */
-        $type = $typeRepository->findOneBy(['name' => "Commission webservice"]);
+        $type = $typeRepository->findOneBy(['name' => 'Commission webservice']);
         $this->assertNotEmpty($type);
 
         $this->assertCount(5, $type->getAssociatedUsers());
     }
-
-
-
 
     public function testAddSittingExistingType()
     {
@@ -261,23 +247,18 @@ class LegacyWsControllerTest extends WebTestCase
 
         $themeRepository = $this->entityManager->getRepository(Theme::class);
 
-        $this->assertCount(1, $themeRepository->findBy(['name' => 'T1' ]));
-
+        $this->assertCount(1, $themeRepository->findBy(['name' => 'T1']));
 
         $typeRepository = $this->entityManager->getRepository(Type::class);
 
         /** @var Type $type */
-        $type = $typeRepository->findOneBy(['name' => "Conseil Communautaire Libriciel"]);
+        $type = $typeRepository->findOneBy(['name' => 'Conseil Communautaire Libriciel']);
         $this->assertNotEmpty($type);
-
 
         $this->assertCount(8, $type->getAssociatedUsers());
 
         $this->assertNotEmpty($sitting->getReminder());
     }
-
-
-
 
     public function testAddSittingActeurs_convoquesNotJson()
     {
@@ -306,42 +287,41 @@ class LegacyWsControllerTest extends WebTestCase
             'date_seance' => '2021-05-12 09:30',
             'acteurs_convoques' => [
                 [
-                    "Acteur" => [
-                        "nom" => "MARTIN",
-                        "prenom" => "Philippe",
-                        "email" => "philippe.marton@example.org"
-                    ]
+                    'Acteur' => [
+                        'nom' => 'MARTIN',
+                        'prenom' => 'Philippe',
+                        'email' => 'philippe.marton@example.org',
+                    ],
                 ],
                 [
-                    "Acteur" => [
-                        "nom" => "POMMIER",
-                        "prenom" => "Sarah",
-                        "email" => "sarah.pommier@example.org"
-                    ]
+                    'Acteur' => [
+                        'nom' => 'POMMIER',
+                        'prenom' => 'Sarah',
+                        'email' => 'sarah.pommier@example.org',
+                    ],
                 ],
                 [
-                    "Acteur" => [
-                        "nom" => "MARTINEZ",
-                        "prenom" => "Franck",
-                        "email" => "frank.martinez@gmail.com"
-                    ]
+                    'Acteur' => [
+                        'nom' => 'MARTINEZ',
+                        'prenom' => 'Franck',
+                        'email' => 'frank.martinez@gmail.com',
+                    ],
                 ],
                 [
-                    "Acteur" => [
-                        "nom" => "DURAND",
-                        "prenom" => "Thomas",
-                        "email" => "thomas.durand@example.org"
-                    ]
+                    'Acteur' => [
+                        'nom' => 'DURAND',
+                        'prenom' => 'Thomas',
+                        'email' => 'thomas.durand@example.org',
+                    ],
                 ],
 
                 [
-                    "Acteur" => [
-                        "nom" => "DUPONT",
-                        "prenom" => "Emilie",
-                        "email" => "emilie.dupont@example.org"
-                    ]
+                    'Acteur' => [
+                        'nom' => 'DUPONT',
+                        'prenom' => 'Emilie',
+                        'email' => 'emilie.dupont@example.org',
+                    ],
                 ],
-
             ],
             'projets' => [
                 [
@@ -404,9 +384,8 @@ class LegacyWsControllerTest extends WebTestCase
 
         $themeRepository = $this->entityManager->getRepository(Theme::class);
 
-        $this->assertCount(1, $themeRepository->findBy(['name' => 'T1' ]));
+        $this->assertCount(1, $themeRepository->findBy(['name' => 'T1']));
     }
-
 
     public function testAddSittingNoProjects()
     {

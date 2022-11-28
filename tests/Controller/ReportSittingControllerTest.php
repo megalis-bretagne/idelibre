@@ -2,71 +2,60 @@
 
 namespace App\Tests\Controller;
 
-use App\DataFixtures\ConvocationFixtures;
-use App\DataFixtures\SittingFixtures;
-use App\DataFixtures\TimestampFixtures;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
+use App\Tests\Story\ConvocationStory;
+use App\Tests\Story\SittingStory;
 use Doctrine\Persistence\ObjectManager;
-use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class ReportSittingControllerTest extends WebTestCase
 {
+    use ResetDatabase;
+    use Factories;
     use FindEntityTrait;
     use LoginTrait;
 
     private ?KernelBrowser $client;
-    /**
-     * @var ObjectManager
-     */
-    private $entityManager;
+    private ObjectManager $entityManager;
 
     protected function setUp(): void
     {
-        $this->client = static::createClient();
-
         $kernel = self::bootKernel();
         $this->entityManager = $kernel->getContainer()
             ->get('doctrine')
             ->getManager();
 
-        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
-        $databaseTool->loadFixtures([
-            SittingFixtures::class,
-            ConvocationFixtures::class,
-            TimestampFixtures::class,
-        ]);
-    }
+        self::ensureKernelShutdown();
+        $this->client = static::createClient();
 
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-        $this->client = null;
-        $this->entityManager->close();
+        SittingStory::load();
+        ConvocationStory::load();
     }
 
     /**
      * Problem absolute_url with webpack. Can't access to localhost/build/app.xxx.css
      * works well in real life.
      */
-  /*
-    public function testPdfReport()
-    {
-        $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
-        $this->loginAsAdminLibriciel();
-        $this->client->request(Request::METHOD_GET, '/reportSitting/pdf/' . $sitting->getId());
-        $this->assertResponseStatusCodeSame(200);
+    /*
+      public function testPdfReport()
+      {
+          $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
+          $this->loginAsAdminLibriciel();
+          $this->client->request(Request::METHOD_GET, '/reportSitting/pdf/' . $sitting->getId());
+          $this->assertResponseStatusCodeSame(200);
 
-        $response = $this->client->getResponse();
-        $this->assertTrue($response->headers->has('content-disposition'));
-        $this->assertSame('attachment; filename="Conseil Libriciel_rapport.pdf"', $response->headers->get('content-disposition'));
-        $this->assertSame('application/pdf', $response->headers->get('content-type'));
-        $this->assertGreaterThan(5000, intval($response->headers->get('content-length')));
-    }
+          $response = $this->client->getResponse();
+          $this->assertTrue($response->headers->has('content-disposition'));
+          $this->assertSame('attachment; filename="Conseil Libriciel_rapport.pdf"', $response->headers->get('content-disposition'));
+          $this->assertSame('application/pdf', $response->headers->get('content-type'));
+          $this->assertGreaterThan(5000, intval($response->headers->get('content-length')));
+      }
 */
     public function testCsvReport()
     {

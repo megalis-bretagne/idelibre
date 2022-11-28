@@ -33,7 +33,7 @@ class SendLsmessageHandler implements MessageHandlerInterface
 
         $sitting = $this->sittingRepository->find($convocationSent->getSittingId());
 
-        if( $sitting->getType()->getIsSms() || $sitting->getType()->getIsSmsEmployees() || $sitting->getType()->getIsSmsGuests() ) {
+        if ($sitting->getType()->getIsSms() || $sitting->getType()->getIsSmsEmployees() || $sitting->getType()->getIsSmsGuests()) {
             $lsmessageConnector = $this->lsmessageConnectorManager->getLsmessageConnector($sitting->getStructure());
             if (!$lsmessageConnector || !$lsmessageConnector->getActive()) {
                 return;
@@ -53,16 +53,7 @@ class SendLsmessageHandler implements MessageHandlerInterface
     {
         $smsList = [];
         foreach ($convocations as $convocation) {
-            // Envoi pour les élus
-            if ($convocation->getSitting()->getType()->getIsSms() && $this->isConvocation($convocation) && $this->hasPhone($convocation->getUser())) {
-                $smsList[] = new Sms('idelibre', $convocation->getUser()->getPhone(), $connector->getContent(), $connector->getSender());
-            }
-            // Envoi pour les administratifs
-            if ( $convocation->getSitting()->getType()->getIsSmsEmployees() && $this->isInvitation($convocation) && $this->hasPhone($convocation->getUser()) && in_array($convocation->getUser()->getRole()->getName(), ['Secretary', 'Admin', 'Employee']) ) {
-                $smsList[] = new Sms('idelibre', $convocation->getUser()->getPhone(), $connector->getContent(), $connector->getSender());
-            }
-            // Envoi pour les invités
-            if ( $convocation->getSitting()->getType()->getIsSmsGuests() && $this->isInvitation($convocation) && $this->hasPhone($convocation->getUser()) && in_array($convocation->getUser()->getRole()->getName(), ['Guest']) ) {
+            if ($this->isActorConvocableWithPhone($convocation) || $this->isEmployeeConvocableWithPhone($convocation) || $this->isGuestConvocableWithPhone($convocation)) {
                 $smsList[] = new Sms('idelibre', $convocation->getUser()->getPhone(), $connector->getContent(), $connector->getSender());
             }
         }
@@ -83,5 +74,34 @@ class SendLsmessageHandler implements MessageHandlerInterface
     private function hasPhone(User $user): bool
     {
         return null !== $user->getPhone();
+    }
+
+    private function isActorConvocableWithPhone(Convocation $convocation)
+    {
+        $sittingWithSms = $convocation->getSitting()->getType()->getIsSms();
+        $isConvocated = $this->isConvocation($convocation);
+        $hasPhoneNumber = $this->hasPhone($convocation->getUser());
+
+        return $sittingWithSms && $isConvocated && $hasPhoneNumber;
+    }
+
+    private function isEmployeeConvocableWithPhone(Convocation $convocation)
+    {
+        $isSittingWithSms = $convocation->getSitting()->getType()->getIsSmsEmployees();
+        $isInvitated = $this->isInvitation($convocation);
+        $hasPhoneNumber = $this->hasPhone($convocation->getUser());
+        $isAReelEmployee = in_array($convocation->getUser()->getRole()->getName(), ['Secretary', 'Admin', 'Employee']);
+
+        return $isSittingWithSms && $isInvitated && $hasPhoneNumber && $isAReelEmployee;
+    }
+
+    private function isGuestConvocableWithPhone(Convocation $convocation)
+    {
+        $isSittingWithSms = $convocation->getSitting()->getType()->getIsSmsGuests();
+        $isInvitated = $this->isInvitation($convocation);
+        $hasPhoneNumber = $this->hasPhone($convocation->getUser());
+        $isAReelGuest = in_array($convocation->getUser()->getRole()->getName(), ['Guest']);
+
+        return $isSittingWithSms && $isInvitated && $hasPhoneNumber && $isAReelGuest;
     }
 }

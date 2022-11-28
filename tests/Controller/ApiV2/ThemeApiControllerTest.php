@@ -2,62 +2,50 @@
 
 namespace App\Tests\Controller\ApiV2;
 
-use App\DataFixtures\ApiUserFixtures;
-use App\DataFixtures\StructureFixtures;
-use App\DataFixtures\ThemeFixtures;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
+use App\Tests\Story\ApiUserStory;
+use App\Tests\Story\StructureStory;
+use App\Tests\Story\ThemeStory;
 use Doctrine\Persistence\ObjectManager;
-use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
-
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class ThemeApiControllerTest extends WebTestCase
 {
+    use ResetDatabase;
+    use Factories;
     use FindEntityTrait;
     use LoginTrait;
 
-
     private ?KernelBrowser $client;
-    /**
-     * @var ObjectManager
-     */
-    private $entityManager;
-
+    private ObjectManager $entityManager;
 
     protected function setUp(): void
     {
-        $this->client = static::createClient();
-
         $kernel = self::bootKernel();
         $this->entityManager = $kernel->getContainer()
             ->get('doctrine')
             ->getManager();
 
-        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
-        $databaseTool->loadFixtures([
-            ThemeFixtures::class,
-            ApiUserFixtures::class,
-            StructureFixtures::class
-        ]);
-    }
+        self::ensureKernelShutdown();
+        $this->client = static::createClient();
 
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-        $this->client = null;
-        $this->entityManager->close();
+        ThemeStory::budgetTheme();
+        StructureStory::libriciel();
+        ApiUserStory::apiAdminLibriciel();
     }
 
     public function testGetAll()
     {
-        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
+        $structure = StructureStory::libriciel();
+        $apiUser = ApiUserStory::apiAdminLibriciel();
 
         $this->client->request(Request::METHOD_GET, "/api/v2/structures/{$structure->getId()}/themes", [], [], [
-            "HTTP_X-AUTH-TOKEN" => $apiUser->getToken(),
+            'HTTP_X-AUTH-TOKEN' => $apiUser->getToken(),
             'CONTENT_TYPE' => 'application/json',
         ]);
 
@@ -71,12 +59,12 @@ class ThemeApiControllerTest extends WebTestCase
 
     public function testGetById()
     {
-        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
-        $theme = $this->getOneThemeBy(['fullName' => "Finance, budget"]);
+        $structure = StructureStory::libriciel();
+        $apiUser = ApiUserStory::apiAdminLibriciel();
+        $theme = ThemeStory::budgetTheme();
 
         $this->client->request(Request::METHOD_GET, "/api/v2/structures/{$structure->getId()}/themes/{$theme->getId()}", [], [], [
-            "HTTP_X-AUTH-TOKEN" => $apiUser->getToken(),
+            'HTTP_X-AUTH-TOKEN' => $apiUser->getToken(),
             'CONTENT_TYPE' => 'application/json',
         ]);
 
@@ -88,22 +76,26 @@ class ThemeApiControllerTest extends WebTestCase
         $this->assertNotEmpty($theme['id']);
     }
 
-
     public function testAddMainTheme()
     {
-        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
+        $structure = StructureStory::libriciel();
+        $apiUser = ApiUserStory::apiAdminLibriciel();
 
         $data = [
-            'name' => 'new theme'
+            'name' => 'new theme',
         ];
 
-        $this->client->request(Request::METHOD_POST, "/api/v2/structures/{$structure->getId()}/themes", [], [],
+        $this->client->request(
+            Request::METHOD_POST,
+            "/api/v2/structures/{$structure->getId()}/themes",
+            [],
+            [],
             [
-                "HTTP_X-AUTH-TOKEN" => $apiUser->getToken(),
+                'HTTP_X-AUTH-TOKEN' => $apiUser->getToken(),
                 'CONTENT_TYPE' => 'application/json',
             ],
-            json_encode($data));
+            json_encode($data)
+        );
 
         $this->assertResponseStatusCodeSame(201);
 
@@ -116,24 +108,28 @@ class ThemeApiControllerTest extends WebTestCase
         $this->assertNotEmpty($inDbTheme);
     }
 
-
     public function testAddSubTheme()
     {
-        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
-        $theme = $this->getOneThemeBy(['fullName' => "Finance, budget"]);
+        $structure = StructureStory::libriciel();
+        $apiUser = ApiUserStory::apiAdminLibriciel();
+        $theme = ThemeStory::budgetTheme();
 
         $data = [
             'name' => 'new theme with parent',
-            'parent' => $theme->getId()
+            'parent' => $theme->getId(),
         ];
 
-        $this->client->request(Request::METHOD_POST, "/api/v2/structures/{$structure->getId()}/themes", [], [],
+        $this->client->request(
+            Request::METHOD_POST,
+            "/api/v2/structures/{$structure->getId()}/themes",
+            [],
+            [],
             [
-                "HTTP_X-AUTH-TOKEN" => $apiUser->getToken(),
+                'HTTP_X-AUTH-TOKEN' => $apiUser->getToken(),
                 'CONTENT_TYPE' => 'application/json',
             ],
-            json_encode($data));
+            json_encode($data)
+        );
 
         $this->assertResponseStatusCodeSame(201);
 
@@ -148,82 +144,91 @@ class ThemeApiControllerTest extends WebTestCase
         $this->assertSame('Finance, budget, new theme with parent', $inDbTheme->getFullName());
     }
 
-
     public function testAddForbiddenSubTheme()
     {
-        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
+        $structure = StructureStory::libriciel();
+        $apiUser = ApiUserStory::apiAdminLibriciel();
         $themeId = '1199fb00-b1bf-4243-98d6-50fcce089ee1';
 
         $data = [
             'name' => 'new theme with parent',
-            'parent' => $themeId
+            'parent' => $themeId,
         ];
 
-        $this->client->request(Request::METHOD_POST, "/api/v2/structures/{$structure->getId()}/themes", [], [],
+        $this->client->request(
+            Request::METHOD_POST,
+            "/api/v2/structures/{$structure->getId()}/themes",
+            [],
+            [],
             [
-                "HTTP_X-AUTH-TOKEN" => $apiUser->getToken(),
+                'HTTP_X-AUTH-TOKEN' => $apiUser->getToken(),
                 'CONTENT_TYPE' => 'application/json',
             ],
-            json_encode($data));
+            json_encode($data)
+        );
 
         $this->assertResponseStatusCodeSame(403);
-
 
         $response = $this->client->getResponse();
         $error = json_decode($response->getContent(), true);
 
-        $this->assertSame("You cannot use this parent : 1199fb00-b1bf-4243-98d6-50fcce089ee1", $error['message']);
+        $this->assertSame('You cannot use this parent : 1199fb00-b1bf-4243-98d6-50fcce089ee1', $error['message']);
     }
 
-
+    //# A VERIFIER ##
     public function testUpdateTheme()
     {
-        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
-        $theme = $this->getOneThemeBy(['fullName' => "Finance, budget"]);
-
+        $structure = StructureStory::libriciel();
+        $apiUser = ApiUserStory::apiAdminLibriciel();
+        $theme = ThemeStory::budgetTheme();
 
         $data = [
             'name' => 'new name',
         ];
 
-        $this->client->request(Request::METHOD_PUT, "/api/v2/structures/{$structure->getId()}/themes/{$theme->getId()}", [], [],
+        $this->client->request(
+            Request::METHOD_PUT,
+            "/api/v2/structures/{$structure->getId()}/themes/{$theme->getId()}",
+            [],
+            [],
             [
-                "HTTP_X-AUTH-TOKEN" => $apiUser->getToken(),
+                'HTTP_X-AUTH-TOKEN' => $apiUser->getToken(),
                 'CONTENT_TYPE' => 'application/json',
             ],
-            json_encode($data));
+            json_encode($data)
+        );
 
         $this->assertResponseStatusCodeSame(200);
 
         $response = $this->client->getResponse();
         $theme = json_decode($response->getContent(), true);
 
-
         $this->assertNotEmpty($theme['id']);
 
         $inDbTheme = $this->getOneThemeBy(['id' => $theme['id']]);
-        $this->entityManager->refresh($inDbTheme);
 
         $this->assertNotEmpty($inDbTheme);
         $this->assertSame('new name', $inDbTheme->getName());
         $this->assertSame('Finance, new name', $inDbTheme->getFullName());
     }
 
-
     public function testDeleteTheme()
     {
         $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
         $apiUser = $this->getOneApiUserBy(['token' => '1234']);
-        $theme = $this->getOneThemeBy(['fullName' => "Finance, budget"]);
+        $theme = ThemeStory::budgetTheme();
         $themeId = $theme->getId();
 
-        $this->client->request(Request::METHOD_DELETE, "/api/v2/structures/{$structure->getId()}/themes/{$theme->getId()}", [], [],
+        $this->client->request(
+            Request::METHOD_DELETE,
+            "/api/v2/structures/{$structure->getId()}/themes/{$theme->getId()}",
+            [],
+            [],
             [
-                "HTTP_X-AUTH-TOKEN" => $apiUser->getToken(),
+                'HTTP_X-AUTH-TOKEN' => $apiUser->getToken(),
                 'CONTENT_TYPE' => 'application/json',
-            ]);
+            ]
+        );
 
         $this->assertResponseStatusCodeSame(204);
 
@@ -231,6 +236,4 @@ class ThemeApiControllerTest extends WebTestCase
 
         $this->assertEmpty($inDbTheme);
     }
-
-
 }

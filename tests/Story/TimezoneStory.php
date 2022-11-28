@@ -10,7 +10,8 @@ final class TimezoneStory extends Story
     public function build(): void
     {
         $this->addState('paris', TimezoneFactory::new([
-            'name' => 'Europe/Paris'
+            'name' => 'Europe/Paris',
+            'info' => 'Paris',
         ]));
     }
 }

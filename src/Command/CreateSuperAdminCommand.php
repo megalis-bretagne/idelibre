@@ -38,7 +38,6 @@ class CreateSuperAdminCommand extends Command
             ->setHelp('Create superadmin')
             ->addArgument('argPassword', InputArgument::OPTIONAL, 'Password')
         ;
-
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -81,9 +80,10 @@ class CreateSuperAdminCommand extends Command
 
         return Command::SUCCESS;
     }
+
     private function isAlreadyCreate(): bool
     {
-        $pdo = $this->em->getConnection()->getWrappedConnection();
+        $pdo = $this->em->getConnection()->getNativeConnection();
 
         $statement = $pdo->prepare('select * from "user"');
         $statement->execute();
@@ -91,5 +91,4 @@ class CreateSuperAdminCommand extends Command
 
         return $count > 0;
     }
-
 }

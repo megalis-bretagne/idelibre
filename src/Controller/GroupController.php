@@ -13,6 +13,7 @@ use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -42,9 +43,12 @@ class GroupController extends AbstractController
     #[Route(path: '/group/add', name: 'group_add')]
     #[IsGranted(data: 'ROLE_SUPERADMIN')]
     #[Breadcrumb(title: 'Ajouter')]
-    public function add(Request $request, GroupManager $groupManager): Response
+    public function add(Request $request, GroupManager $groupManager, ParameterBagInterface $bag): Response
     {
-        $form = $this->createForm(GroupType::class, null, ['isNew' => true]);
+        $form = $this->createForm(GroupType::class, null, [
+            'isNew' => true,
+            'entropyForUser' => $bag->get('minimumEntropyForUserWithRoleHigh'),
+        ]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $errors = $groupManager->create(

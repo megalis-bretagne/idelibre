@@ -14,7 +14,7 @@ final class StructureStory extends Story
             'suffix' => 'libriciel',
             'legacyConnectionName' => 'libriciel',
             'replyTo' => 'libriciel@exemple.org',
-            'timeZone' => TimezoneStory::paris()
+            'timezone' => TimezoneStory::paris(),
         ]));
 
         $this->addState('montpellier', StructureFactory::new([
@@ -22,8 +22,8 @@ final class StructureStory extends Story
             'suffix' => 'montpellier',
             'legacyConnectionName' => 'montpellier',
             'replyTo' => 'montpellier@exemple.org',
-            'timeZone' => TimezoneStory::paris(),
-            'group' => GroupStory::recia()
+            'timezone' => TimezoneStory::paris(),
+            'group' => GroupStory::recia(),
         ]));
     }
 }

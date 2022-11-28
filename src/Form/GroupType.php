@@ -28,6 +28,7 @@ class GroupType extends AbstractType
             $builder->add('user', SuperUserType::class, [
                 'mapped' => false,
                 'label' => false,
+                'entropyForUser' => $options['entropyForUser'],
             ]);
         }
     }
@@ -37,6 +38,7 @@ class GroupType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Group::class,
             'isNew' => false,
+            'entropyForUser' => null,
         ]);
     }
 }

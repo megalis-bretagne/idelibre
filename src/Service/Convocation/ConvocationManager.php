@@ -257,7 +257,7 @@ class ConvocationManager
     {
         $emails = [];
         foreach ($convocations as $convocation) {
-            if( $convocation->getUser()->getIsActive() ) {
+            if ($convocation->getUser()->getIsActive()) {
                 $email = $this->emailGenerator->generateFromTemplateAndConvocation($sitting->getType()->getEmailTemplate(), $convocation);
                 $email->setTo($convocation->getUser()->getEmail());
                 $email->setReplyTo($sitting->getStructure()->getReplyTo());

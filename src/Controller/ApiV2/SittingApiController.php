@@ -155,6 +155,7 @@ class SittingApiController extends AbstractController
         }
 
         $rawProjects = $request->get('projects');
+
         $projects = $this->serializer->deserialize($rawProjects, ProjectApi::class . '[]', 'json');
         if (!$this->pdfValidator->isProjectsPdf($projects)) {
             return $this->json(['success' => false, 'message' => 'Au moins un projet n\'est pas un pdf'], 400);

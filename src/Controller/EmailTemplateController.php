@@ -98,6 +98,7 @@ class EmailTemplateController extends AbstractController
     {
         $emailData = $generator->generateFromTemplate($emailTemplate, [
             '#linkUrl#' => '<a href="#">Accéder aux dossiers</a>',
+            '#urlseance#' => '<a href="#">idelibre.example.fr/idelibre_client</a>',
             '#reinitLink#' => '<a href="#">Réinitialiser le mot de passe</a>',
             '#typeseance#' => 'Conseil municipal',
             '#dateseance#' => '05/12/2020',
@@ -122,6 +123,7 @@ class EmailTemplateController extends AbstractController
     {
         $emailData = $generator->generateFromTemplate($emailTemplate, [
             '#linkUrl#' => '<a href="#">Accéder aux dossiers</a>',
+            '#urlseance#' => '<a href="#">idelibre.example.fr/idelibre_client</a>',
             '#reinitLink#' => '<a href="#">Réinitialiser le mot de passe</a>',
             '#typeseance#' => 'Conseil municipal',
             '#dateseance#' => '05/12/2020',

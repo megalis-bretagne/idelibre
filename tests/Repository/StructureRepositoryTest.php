@@ -2,24 +2,22 @@
 
 namespace App\Tests\Repository;
 
-use App\DataFixtures\GroupFixtures;
-use App\DataFixtures\StructureFixtures;
-use App\Entity\Structure;
 use App\Repository\StructureRepository;
 use App\Tests\FindEntityTrait;
+use App\Tests\Story\GroupStory;
+use App\Tests\Story\StructureStory;
 use Doctrine\Persistence\ObjectManager;
-use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class StructureRepositoryTest extends WebTestCase
 {
+    use ResetDatabase;
+    use Factories;
     use FindEntityTrait;
 
-    /**
-     * @var ObjectManager
-     */
-    private $entityManager;
-
+    private ObjectManager $entityManager;
     private StructureRepository $structureRepository;
 
     protected function setUp(): void
@@ -29,39 +27,32 @@ class StructureRepositoryTest extends WebTestCase
             ->get('doctrine')
             ->getManager();
 
-        $this->structureRepository = $this->entityManager->getRepository(Structure::class);
+        $this->structureRepository = self::getContainer()->get(StructureRepository::class);
 
-        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
-        $databaseTool->loadFixtures([
-            StructureFixtures::class,
-            GroupFixtures::class,
-        ]);
-    }
+        self::ensureKernelShutdown();
 
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-        $this->entityManager->close();
+        StructureStory::load();
+        GroupStory::recia();
     }
 
     public function testFindByGroupQueryBuilder()
     {
-        $groupRecia = $this->getOneGroupBy(['name' => 'Recia']);
-        $qbStructure = $this->structureRepository->findByGroupQueryBuilder($groupRecia);
+        $groupRecia = GroupStory::recia();
+        $qbStructure = $this->structureRepository->findByGroupQueryBuilder($groupRecia->object());
         $this->assertCount(1, $qbStructure->getQuery()->getResult());
     }
 
     public function testFindByGroupQueryBuilderSearchExists()
     {
-        $groupRecia = $this->getOneGroupBy(['name' => 'Recia']);
-        $qbStructure = $this->structureRepository->findByGroupQueryBuilder($groupRecia, 'Mon');
+        $groupRecia = GroupStory::recia();
+        $qbStructure = $this->structureRepository->findByGroupQueryBuilder($groupRecia->object(), 'Mon');
         $this->assertCount(1, $qbStructure->getQuery()->getResult());
     }
 
     public function testFindByGroupQueryBuilderSearchNotExists()
     {
-        $groupRecia = $this->getOneGroupBy(['name' => 'Recia']);
-        $qbStructure = $this->structureRepository->findByGroupQueryBuilder($groupRecia, 'notexists');
+        $groupRecia = GroupStory::recia();
+        $qbStructure = $this->structureRepository->findByGroupQueryBuilder($groupRecia->object(), 'notexists');
         $this->assertCount(0, $qbStructure->getQuery()->getResult());
     }
 }

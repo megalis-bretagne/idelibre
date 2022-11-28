@@ -2,10 +2,10 @@
 
 namespace App\Tests\Story;
 
+use App\Security\Password\LegacyPassword;
 use App\Service\Util\GenderConverter;
 use App\Tests\Factory\UserFactory;
 use Zenstruck\Foundry\Story;
-use App\Security\Password\LegacyPassword;
 
 final class UserStory extends Story
 {
@@ -22,7 +22,7 @@ final class UserStory extends Story
             'firstName' => 'super',
             'lastName' => 'admin',
             'isActive' => true,
-            'role' => RoleStory::superadmin()
+            'role' => RoleStory::superadmin(),
         ]));
 
         $this->addState('otherSuperadmin', UserFactory::new([
@@ -32,8 +32,8 @@ final class UserStory extends Story
             'firstName' => 'otherSuper',
             'lastName' => 'admin',
             'isActive' => true,
+            'role' => RoleStory::superadmin(),
         ]));
-
 
         $this->addState('superadminInactive', UserFactory::new([
             'username' => 'superadminInactive',
@@ -42,6 +42,7 @@ final class UserStory extends Story
             'firstName' => 'super',
             'lastName' => 'admin inactive',
             'isActive' => false,
+            'role' => RoleStory::superadmin(),
         ]));
 
         $this->addState('adminLibriciel', UserFactory::new([
@@ -51,7 +52,7 @@ final class UserStory extends Story
             'firstName' => 'admin',
             'lastName' => 'libriciel',
             'structure' => StructureStory::libriciel(),
-            'role' => RoleStory::admin()
+            'role' => RoleStory::admin(),
         ]));
 
         $this->addState('otherUserLibriciel', UserFactory::new([
@@ -61,7 +62,7 @@ final class UserStory extends Story
             'firstName' => 'otherUser',
             'lastName' => 'libriciel',
             'structure' => StructureStory::libriciel(),
-            'role' => RoleStory::actor()
+            'role' => RoleStory::actor(),
         ]));
 
         $this->addState('userMontpellier', UserFactory::new([
@@ -70,7 +71,7 @@ final class UserStory extends Story
             'password' => self::PASSWORD,
             'firstName' => 'user',
             'lastName' => 'montpellier',
-            'structure' => StructureStory::montpellier()
+            'structure' => StructureStory::montpellier(),
         ]));
 //
 //        $passwordLegacy = $this->legacyPassword->encode('passwordLegacy');
@@ -92,7 +93,7 @@ final class UserStory extends Story
             'firstName' => 'userGroupRecia',
             'lastName' => 'Recia',
             'group' => GroupStory::recia(),
-            'role' => RoleStory::groupadmin()
+            'role' => RoleStory::groupadmin(),
         ]));
 
         $this->addState('adminNotStructureCreator', UserFactory::new([
@@ -102,7 +103,7 @@ final class UserStory extends Story
             'firstName' => 'adminGroup',
             'lastName' => 'NotStructureCreator',
             'group' => GroupStory::notStructureCreator(),
-            'role' => RoleStory::groupadmin()
+            'role' => RoleStory::groupadmin(),
         ]));
 
         // Actors
@@ -116,7 +117,7 @@ final class UserStory extends Story
             'title' => 'Madame le maire',
             'structure' => StructureStory::libriciel(),
             'role' => RoleStory::actor(),
-            'party' => PartyStory::majorite()
+            'party' => PartyStory::majorite(),
         ]));
         $this->addState('actorLibriciel2', UserFactory::new([
             'username' => 'actor2@libriciel',
@@ -125,17 +126,18 @@ final class UserStory extends Story
             'firstName' => 'actor_2',
             'lastName' => 'libriciel',
             'structure' => StructureStory::libriciel(),
-            'role' => RoleStory::actor()
+            'role' => RoleStory::actor(),
         ]));
         $this->addState('actorLibriciel3', UserFactory::new([
+            'role' => RoleStory::actor(),
             'username' => 'actor3@libriciel',
-            'email' => 'actor3@example.org',
-            'password' => self::PASSWORD,
             'firstName' => 'actor_3',
             'lastName' => 'libriciel',
+            'email' => 'actor3@example.org',
+            'password' => self::PASSWORD,
             'structure' => StructureStory::libriciel(),
-            'role' => RoleStory::actor()
         ]));
+
         $this->addState('mgille', UserFactory::new([
             'username' => 'm.gille@libriciel',
             'email' => 'm.gille@example.org',
@@ -143,9 +145,8 @@ final class UserStory extends Story
             'firstName' => 'Maurice',
             'lastName' => 'Gille',
             'structure' => StructureStory::libriciel(),
-            'role' => RoleStory::actor()
+            'role' => RoleStory::actor(),
         ]));
-
 
         // Secrétaires
         $this->addState('secretaryLibriciel1', UserFactory::new([
@@ -155,7 +156,7 @@ final class UserStory extends Story
             'firstName' => 'secretary_1',
             'lastName' => 'libriciel',
             'structure' => StructureStory::libriciel(),
-            'role' => RoleStory::secretary()
+            'role' => RoleStory::secretary(),
         ]));
         $this->addState('secretaryLibriciel2', UserFactory::new([
             'username' => 'secretary2@libriciel',
@@ -164,7 +165,7 @@ final class UserStory extends Story
             'firstName' => 'secretary_2',
             'lastName' => 'libriciel',
             'structure' => StructureStory::libriciel(),
-            'role' => RoleStory::secretary()
+            'role' => RoleStory::secretary(),
         ]));
 
         // Guests
@@ -175,7 +176,7 @@ final class UserStory extends Story
             'firstName' => 'guest1',
             'lastName' => 'libriciel',
             'structure' => StructureStory::libriciel(),
-            'role' => RoleStory::guest()
+            'role' => RoleStory::guest(),
         ]));
         $this->addState('guestLibriciel2', UserFactory::new([
             'username' => 'guest2@libriciel',
@@ -184,7 +185,7 @@ final class UserStory extends Story
             'firstName' => 'guest2',
             'lastName' => 'libriciel',
             'structure' => StructureStory::libriciel(),
-            'role' => RoleStory::secretary()
+            'role' => RoleStory::guest(),
         ]));
 
         // Employee
@@ -195,7 +196,7 @@ final class UserStory extends Story
             'firstName' => 'employee1',
             'lastName' => 'libriciel',
             'structure' => StructureStory::libriciel(),
-            'role' => RoleStory::employee()
+            'role' => RoleStory::employee(),
         ]));
         $this->addState('employeeLibriciel2', UserFactory::new([
             'username' => 'employee2@libriciel',
@@ -204,7 +205,7 @@ final class UserStory extends Story
             'firstName' => 'employee2',
             'lastName' => 'libriciel',
             'structure' => StructureStory::libriciel(),
-            'role' => RoleStory::secretary()
+            'role' => RoleStory::employee(),
         ]));
     }
 }

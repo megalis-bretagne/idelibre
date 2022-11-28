@@ -2,58 +2,56 @@
 
 namespace App\Tests\Controller;
 
-use App\DataFixtures\FileFixtures;
-use App\DataFixtures\ProjectFixtures;
-use App\Entity\File;
+use App\Tests\Factory\FileFactory;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
+use App\Tests\Story\FileStory;
+use App\Tests\Story\ProjectStory;
 use Doctrine\Persistence\ObjectManager;
-use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class FileControllerTest extends WebTestCase
 {
+    use ResetDatabase;
+    use Factories;
     use FindEntityTrait;
     use LoginTrait;
 
     private ?KernelBrowser $client;
-    /**
-     * @var ObjectManager
-     */
-    private $entityManager;
+    private ObjectManager $entityManager;
 
     protected function setUp(): void
     {
-        $this->client = static::createClient();
-
         $kernel = self::bootKernel();
         $this->entityManager = $kernel->getContainer()
             ->get('doctrine')
             ->getManager();
 
-        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
+        self::ensureKernelShutdown();
+        $this->client = static::createClient();
 
-        $databaseTool->loadFixtures([
-            FileFixtures::class,
-            ProjectFixtures::class,
-        ]);
+        FileStory::load();
+        ProjectStory::load();
     }
 
     private function prepareFile(): string
     {
-        $file = new File();
-        $file->setName('projet')
-            ->setSize(100)
-            ->setPath(__DIR__ . '/../resources/fichier.pdf');
+        $file = FileFactory::new([
+            'name' => 'projet',
+            'size' => 100,
+            'path' => __DIR__ . '/../resources/fichier.pdf',
+        ])->create();
 
-        $project = $this->getOneProjectBy(['name' => 'Project 1']);
-        $project->setFile($file);
+        //$project = $this->getOneProjectBy(['name' => 'Project 1']);
+        $project = ProjectStory::project1();
+        $project->setFile($file->object());
 
-        $this->entityManager->persist($file);
-        $this->entityManager->persist($project);
-        $this->entityManager->flush();
+        $file->save();
+        $project->save();
 
         return $file->getId();
     }
@@ -61,6 +59,7 @@ class FileControllerTest extends WebTestCase
     public function testDownload()
     {
         $fileId = $this->prepareFile();
+
         $this->loginAsAdminLibriciel();
         $this->client->request(Request::METHOD_GET, '/file/download/' . $fileId);
         $this->assertResponseStatusCodeSame(200);

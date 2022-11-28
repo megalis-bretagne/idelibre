@@ -28,10 +28,10 @@ class TypeType extends AbstractType
         $eluAssocie = 'Elus associés';
         $employeeAssocie = 'Personnels administratifs, Administrateurs, Gestionnaires de séance associés';
         $guestAssocie = 'Invités associés';
-        if( !$options['isNew'] ) {
-            $eluAssocie = 'Elus associés ('.$options['actor'][0]['count'].')';
-            $employeeAssocie = 'Personnels administratifs, Administrateurs, Gestionnaires de séance associés ('.$options['employee'][0]['count'].')';
-            $guestAssocie = 'Invités associés ('.$options['guest'][0]['count'].')';
+        if (!$options['isNew']) {
+            $eluAssocie = 'Elus associés (' . $options['actor'][0]['count'] . ')';
+            $employeeAssocie = 'Personnels administratifs, Administrateurs, Gestionnaires de séance associés (' . $options['employee'][0]['count'] . ')';
+            $guestAssocie = 'Invités associés (' . $options['guest'][0]['count'] . ')';
         }
 
         $builder
@@ -128,7 +128,7 @@ class TypeType extends AbstractType
             'structure' => null,
             'actor' => null,
             'employee' => null,
-            'guest' => null
+            'guest' => null,
         ]);
     }
 }

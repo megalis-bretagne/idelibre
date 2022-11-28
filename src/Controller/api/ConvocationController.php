@@ -6,10 +6,13 @@ use App\Entity\Convocation;
 use App\Entity\Sitting;
 use App\Repository\ConvocationRepository;
 use App\Service\Convocation\ConvocationManager;
+use App\Service\Email\EmailData;
+use App\Service\EmailTemplate\EmailGenerator;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ConvocationController extends AbstractController
@@ -46,5 +49,19 @@ class ConvocationController extends AbstractController
         $convocationManager->updateConvocationAttendances($request->toArray());
 
         return $this->json(['success' => 'true']);
+    }
+
+    #[Route(path: '/api/convocations/previewForSecretary/{id}', name: 'api_convocation_preview_for_secretary', methods: ['GET'])]
+    #[IsGranted(data: 'MANAGE_CONVOCATIONS', subject: 'convocation')]
+    public function iframePreviewForSecretary(Convocation $convocation, EmailGenerator $generator): Response
+    {
+        $emailData = $generator->generateFromTemplateAndConvocation($convocation->getSitting()->getType()->getEmailTemplate(), $convocation);
+        $content = $emailData->getContent();
+        if (EmailData::FORMAT_TEXT === $emailData->getFormat()) {
+            $content = htmlspecialchars($content);
+            $content = nl2br($content);
+        }
+
+        return new Response($content);
     }
 }

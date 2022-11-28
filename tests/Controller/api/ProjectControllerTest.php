@@ -2,70 +2,59 @@
 
 namespace App\Tests\Controller\api;
 
-use App\DataFixtures\AnnexFixtures;
-use App\DataFixtures\FileFixtures;
-use App\DataFixtures\ProjectFixtures;
-use App\DataFixtures\SittingFixtures;
-use App\DataFixtures\ThemeFixtures;
-use App\DataFixtures\UserFixtures;
 use App\Entity\Project;
 use App\Repository\ProjectRepository;
 use App\Service\ApiEntity\AnnexApi;
 use App\Service\ApiEntity\ProjectApi;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
+use App\Tests\Story\AnnexStory;
+use App\Tests\Story\FileStory;
+use App\Tests\Story\ProjectStory;
+use App\Tests\Story\SittingStory;
+use App\Tests\Story\ThemeStory;
+use App\Tests\Story\UserStory;
 use Doctrine\Persistence\ObjectManager;
-use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Serializer;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class ProjectControllerTest extends WebTestCase
 {
+    use ResetDatabase;
+    use Factories;
     use FindEntityTrait;
     use LoginTrait;
 
     private ?KernelBrowser $client;
-    /**
-     * @var ObjectManager
-     */
-    private $entityManager;
-    /**
-     * @var object|Serializer|null
-     */
-    private $serializer;
+    private ObjectManager $entityManager;
+    private Serializer $serializer;
+    private ProjectRepository $projectRepository;
 
     protected function setUp(): void
     {
-        $this->client = static::createClient();
-
         $kernel = self::bootKernel();
+
         $this->entityManager = $kernel->getContainer()
             ->get('doctrine')
             ->getManager();
 
-        $this->serializer = $kernel->getContainer()
-            ->get('serializer');
+        self::ensureKernelShutdown();
+        $this->client = static::createClient();
+        $this->projectRepository = self::getContainer()->get(ProjectRepository::class);
+        $this->serializer = self::getContainer()->get('serializer');
 
-        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
-        $databaseTool->loadFixtures([
-            ProjectFixtures::class,
-            UserFixtures::class,
-            AnnexFixtures::class,
-            FileFixtures::class,
-            ThemeFixtures::class,
-            SittingFixtures::class,
-        ]);
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-        $this->client = null;
-        $this->entityManager->close();
+        UserStory::load();
+        AnnexStory::load();
+        FileStory::load();
+        ThemeStory::load();
+        SittingStory::load();
+        ProjectStory::load();
     }
 
     public function testEditAddProjects()
@@ -75,7 +64,6 @@ class ProjectControllerTest extends WebTestCase
 
         $filesystem = new Filesystem();
         $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', '/tmp/convocation');
-
         $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/project1.pdf');
         $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/project2.pdf');
         $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/annex1.pdf');
@@ -123,13 +111,13 @@ class ProjectControllerTest extends WebTestCase
         $this->assertNotEmpty($project->getAnnexes());
     }
 
-
     public function testEditAddProjectsNoPdf()
     {
         $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
         $this->loginAsAdminLibriciel();
 
         $filesystem = new Filesystem();
+
         $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/project1.txt');
         $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/project2.pdf');
         $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/annex1.pdf');
@@ -173,18 +161,14 @@ class ProjectControllerTest extends WebTestCase
         $this->assertSame('Au moins un projet n\'est pas un pdf', $response->message);
     }
 
-
-
     public function testEditDeleteProjects()
     {
         $filesystem = new Filesystem();
         $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', '/tmp/convocation');
         $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', '/tmp/fileProject2');
 
-        $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
-        $projectId = $this->getOneProjectBy(['name' => 'Project 2'])->getId();
-
-        $this->loginAsAdminLibriciel();
+        $sitting = SittingStory::sittingConseilLibriciel();
+        $projectId = ProjectStory::project2()->getId();
 
         $project2 = new ProjectApi();
         $project2->setName('Project 2')
@@ -192,6 +176,7 @@ class ProjectControllerTest extends WebTestCase
             ->setRank(0)
             ->setId($projectId);
 
+        $this->loginAsAdminLibriciel();
         $serializedProjects = $this->serializer->serialize([$project2], 'json');
 
         $this->client->request(
@@ -200,7 +185,6 @@ class ProjectControllerTest extends WebTestCase
             ['projects' => $serializedProjects]
         );
 
-        /** @var ProjectRepository $projectRepository */
         $projectRepository = $this->entityManager->getRepository(Project::class);
         $this->assertNotEmpty($projectRepository->findOneBy(['name' => 'Project 2']));
         $this->assertEmpty($projectRepository->findOneBy(['name' => 'Project 1']));
@@ -208,7 +192,6 @@ class ProjectControllerTest extends WebTestCase
 
     public function testEditDeleteAnnex()
     {
-
         $filesystem = new Filesystem();
         $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', '/tmp/convocation');
         $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', '/tmp/fileProject1');
@@ -264,7 +247,7 @@ class ProjectControllerTest extends WebTestCase
 
         $projectsArray = json_decode($this->client->getResponse()->getContent(), true);
 
-        $this->assertCount(2, $projectsArray);
+        $this->assertCount(3, $projectsArray);
         $this->assertEquals('Project 1', $projectsArray[0]['name']);
         $this->assertNotEmpty($projectsArray[0]['themeId']);
         $this->assertNotEmpty($projectsArray[0]['reporterId']);

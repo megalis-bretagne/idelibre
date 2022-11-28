@@ -2,54 +2,40 @@
 
 namespace App\Tests\Controller;
 
-use App\DataFixtures\TypeFixtures;
-use App\DataFixtures\UserFixtures;
 use App\Entity\Type;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
-use Doctrine\ORM\EntityManagerInterface;
-use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
+use App\Tests\Story\TypeStory;
+use App\Tests\Story\UserStory;
+use Doctrine\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class TypeControllerTest extends WebTestCase
 {
+    use ResetDatabase;
+    use Factories;
     use FindEntityTrait;
     use LoginTrait;
 
-    /**
-     * @var KernelBrowser
-     */
-    private $client;
-
-    /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
+    private ?KernelBrowser $client;
+    private ObjectManager $entityManager;
 
     protected function setUp(): void
     {
-        $this->client = static::createClient();
-
         $kernel = self::bootKernel();
         $this->entityManager = $kernel->getContainer()
             ->get('doctrine')
             ->getManager();
 
-        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
+        self::ensureKernelShutdown();
+        $this->client = static::createClient();
 
-        $databaseTool->loadFixtures([
-            UserFixtures::class,
-            TypeFixtures::class,
-        ]);
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-        $this->client = null;
-        $this->entityManager->getConnection()->close();
+        UserStory::load();
+        TypeStory::load();
     }
 
     public function testIndex()
@@ -112,9 +98,10 @@ class TypeControllerTest extends WebTestCase
 
     public function testAddWithAssociatedUsers()
     {
-        $actorLs = $this->getOneUserBy(['username' => 'actor1@libriciel']);
-        $guestLs = $this->getOneUserBy(['username' => 'guest2@libriciel']);
-        $employeeLs = $this->getOneUserBy(['username' => 'employee2@libriciel']);
+        $actorLs = UserStory::actorLibriciel1();
+        $guestLs = UserStory::guestLibriciel2();
+        $employeeLs = UserStory::employeeLibriciel2();
+
         $this->loginAsAdminLibriciel();
         $crawler = $this->client->request(Request::METHOD_GET, '/type/add');
         $this->assertResponseStatusCodeSame(200);
@@ -147,8 +134,9 @@ class TypeControllerTest extends WebTestCase
     public function testEdit()
     {
         $this->loginAsAdminLibriciel();
-        $type = $this->getOneTypeBy(['name' => 'Conseil Communautaire Libriciel']);
-        $notAssociatedActor = $this->getOneUserBy(['username' => 'actor3@libriciel']);
+        $type = TypeStory::typeConseilLibriciel();
+        $notAssociatedActor = UserStory::actorLibriciel3();
+
         $crawler = $this->client->request(Request::METHOD_GET, '/type/edit/' . $type->getId());
         $this->assertResponseStatusCodeSame(200);
         $item = $crawler->filter('html:contains("Modifier un type de séance")');
@@ -169,9 +157,11 @@ class TypeControllerTest extends WebTestCase
         $successMsg = $crawler->filter('html:contains("Votre type a bien été modifié")');
         $this->assertCount(1, $successMsg);
 
+        $notAssociatedActor->refresh();
+
         $modifiedType = $this->getOneTypeBy(['name' => 'new name']);
         $this->assertNotEmpty($modifiedType);
         $this->assertCount(1, $modifiedType->getAssociatedUsers());
-        $this->assertSame($notAssociatedActor, $modifiedType->getAssociatedUsers()->first());
+        $this->assertSame($notAssociatedActor->object(), $modifiedType->getAssociatedUsers()->first());
     }
 }

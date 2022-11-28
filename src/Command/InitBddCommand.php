@@ -69,7 +69,7 @@ class InitBddCommand extends Command
 
     private function isAlreadyInit(): bool
     {
-        $pdo = $this->entityManager->getConnection()->getWrappedConnection();
+        $pdo = $this->entityManager->getConnection()->getNativeConnection();
         $statement = $pdo->prepare('select * from "user"');
         $statement->execute();
         $count = $statement->rowCount();

@@ -4,9 +4,9 @@ namespace App\Entity;
 
 use DateTimeImmutable;
 use DateTimeInterface;
+use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\OneToOne;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -44,7 +44,7 @@ class File
     /**
      * @var Project|null
      */
-    #[OneToOne(mappedBy: 'file', targetEntity: Project::class)]
+    #[OneToOne(mappedBy: 'file', targetEntity: Project::class, cascade: ['persist'])]
     private $project;
 
     /**

@@ -2,24 +2,28 @@
 
 namespace App\Tests\Entity;
 
-use App\DataFixtures\StructureFixtures;
 use App\Entity\Structure;
 use App\Entity\Timezone;
 use App\Tests\FindEntityTrait;
 use App\Tests\HasValidationError;
+use App\Tests\Story\StructureStory;
 use App\Tests\StringTrait;
-use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
+use Doctrine\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class StructureTest extends WebTestCase
 {
+    use ResetDatabase;
+    use Factories;
     use FindEntityTrait;
     use HasValidationError;
     use StringTrait;
 
     private ValidatorInterface $validator;
-    private $entityManager;
+    private ObjectManager $entityManager;
 
     protected function setUp(): void
     {
@@ -27,10 +31,7 @@ class StructureTest extends WebTestCase
         $this->validator = self::getContainer()->get('validator');
         $this->entityManager = self::getContainer()->get('doctrine')->getManager();
 
-        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
-        $databaseTool->loadFixtures([
-            StructureFixtures::class,
-        ]);
+        StructureStory::load();
     }
 
     public function testValid()
@@ -65,7 +66,6 @@ class StructureTest extends WebTestCase
 
         $this->assertHasValidationErrors($structure, 1);
     }
-
 
     public function testInvalidNameTooLong()
     {

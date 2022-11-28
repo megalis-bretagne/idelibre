@@ -2,54 +2,40 @@
 
 namespace App\Tests\Controller;
 
-use App\DataFixtures\GroupFixtures;
-use App\DataFixtures\UserFixtures;
 use App\Entity\Group;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
+use App\Tests\Story\GroupStory;
+use App\Tests\Story\UserStory;
 use Doctrine\ORM\EntityManagerInterface;
-use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class GroupControllerTest extends WebTestCase
 {
+    use ResetDatabase;
+    use Factories;
     use FindEntityTrait;
     use LoginTrait;
 
-    /**
-     * @var KernelBrowser
-     */
-    private $client;
-
-    /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
+    private ?KernelBrowser $client;
+    private EntityManagerInterface $entityManager;
 
     protected function setUp(): void
     {
-        $this->client = static::createClient();
-
         $kernel = self::bootKernel();
         $this->entityManager = $kernel->getContainer()
             ->get('doctrine')
             ->getManager();
 
-        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
+        self::ensureKernelShutdown();
+        $this->client = static::createClient();
 
-        $databaseTool->loadFixtures([
-            UserFixtures::class,
-            GroupFixtures::class,
-        ]);
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-        $this->client = null;
-        $this->entityManager->close();
+        UserStory::load();
+        GroupStory::recia();
     }
 
     public function testIndex()
@@ -95,7 +81,7 @@ class GroupControllerTest extends WebTestCase
     public function testEdit()
     {
         $this->loginAsSuperAdmin();
-        $group = $this->getOneEntityBy(Group::class, ['name' => 'Recia']);
+        $group = GroupStory::recia();
         $crawler = $this->client->request(Request::METHOD_GET, '/group/edit/' . $group->getId());
         $this->assertResponseStatusCodeSame(200);
         $item = $crawler->filter('html:contains("Modifier un groupe")');
@@ -118,7 +104,7 @@ class GroupControllerTest extends WebTestCase
     public function testManage()
     {
         $this->loginAsSuperAdmin();
-        $group = $this->getOneEntityBy(Group::class, ['name' => 'Recia']);
+        $group = GroupStory::recia();
         $crawler = $this->client->request(Request::METHOD_GET, '/group/manage/' . $group->getId());
         $this->assertResponseStatusCodeSame(200);
         $item = $crawler->filter('html:contains("Associer des structures")');

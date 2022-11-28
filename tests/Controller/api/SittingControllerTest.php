@@ -2,62 +2,47 @@
 
 namespace App\Tests\Controller\api;
 
-use App\DataFixtures\ConvocationFixtures;
-use App\DataFixtures\EmailTemplateFixtures;
-use App\DataFixtures\SittingFixtures;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
+use App\Tests\Story\SittingStory;
 use Doctrine\Persistence\ObjectManager;
-use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class SittingControllerTest extends WebTestCase
 {
+    use ResetDatabase;
+    use Factories;
     use FindEntityTrait;
     use LoginTrait;
 
     private ?KernelBrowser $client;
-    /**
-     * @var ObjectManager
-     */
-    private $entityManager;
+    private ObjectManager $entityManager;
 
     protected function setUp(): void
     {
-        $this->client = static::createClient();
-
         $kernel = self::bootKernel();
         $this->entityManager = $kernel->getContainer()
             ->get('doctrine')
             ->getManager();
 
-        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
-        $databaseTool->loadFixtures([
-            SittingFixtures::class,
-            ConvocationFixtures::class,
-            EmailTemplateFixtures::class,
-        ]);
-    }
+        self::ensureKernelShutdown();
+        $this->client = static::createClient();
 
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-        $this->client = null;
-        $this->entityManager->close();
+        SittingStory::sittingConseilLibriciel();
     }
 
     public function testSendConvocations()
     {
-        $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
+        $sitting = SittingStory::sittingConseilLibriciel();
         $this->loginAsAdminLibriciel();
 
         $this->client->request(Request::METHOD_POST, '/api/sittings/' . $sitting->getId() . '/sendConvocations');
 
         $this->assertResponseStatusCodeSame(200);
-
-        $this->entityManager->refresh($sitting);
 
         foreach ($sitting->getConvocations() as $convocation) {
             $this->assertNotEmpty($convocation->getSentTimestamp());
@@ -68,7 +53,7 @@ class SittingControllerTest extends WebTestCase
 
     public function testNotifyAgain()
     {
-        $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
+        $sitting = SittingStory::sittingConseilLibriciel();
         $this->loginAsAdminLibriciel();
         $this->client->request(Request::METHOD_POST, '/api/sittings/' . $sitting->getId() . '/notifyAgain', [], [], [], json_encode(['object' => 'test', 'content' => 'test']));
         $this->assertResponseStatusCodeSame(200);

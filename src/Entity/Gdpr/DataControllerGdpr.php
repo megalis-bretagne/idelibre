@@ -4,9 +4,9 @@ namespace App\Entity\Gdpr;
 
 use App\Entity\Structure;
 use App\Repository\DataControllerGdprRepository;
+use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\OneToOne;
 use Ramsey\Uuid\Doctrine\UuidGenerator;

@@ -1,0 +1,113 @@
+version: '3.4'
+
+services:
+  fpm-idelibre:
+    container_name: fpm-idelibre
+    image: registry.libriciel.fr:443/public/citoyens/idelibre:canary
+    environment:
+      - APP_ENV=${APP_ENV:-prod}
+      - APP_SECRET=${APP_SECRET:-b64dca717248e387bc88b36d9c485244}
+      - DATABASE_URL=${DATABASE_URL:-postgresql://idelibre:idelibre@172.17.0.1:5432/idelibre}
+      - VERSION=${VERSION:-TAG}
+      - MAILER_URL=${MAILER_URL:-null://localhost}
+      - WKHTMLTOPDF_PATH=${WKHTMLTOPDF_PATH:-/usr/local/bin/wkhtmltopdf}
+      - WKHTMLTOIMAGE_PATH=${WKHTMLTOIMAGE_PATH:-/usr/local/bin/wkhtmltoimage}
+      - MAILJET_KEY=${MAILJET_KEY:-null}
+      - MAILJET_SECRET=${MAILJET_SECRET:-null}
+      - EMAIL_FROM=${EMAIL_FROM:-email@service.fr}
+      - EMAIL_ALIAS=${EMAIL_ALIAS:-idelibre}
+      - MAILER_TYPE=${MAILER_TYPE:-simple}
+      - DOCUMENT_MAX_SIZE=${DOCUMENT_MAX_SIZE:-150Mi}
+      - DOCUMENT_MAX_COUNT=${DOCUMENT_MAX_COUNT:-300}
+      - PHP_OPCACHE_VALIDATE_TIMESTAMPS=${PHP_OPCACHE_VALIDATE_TIMESTAMPS:-0}
+      - PHP_OPCACHE_MAX_ACCELERATED_FILES=${PHP_OPCACHE_MAX_ACCELERATED_FILES:-20000}
+      - PHP_OPCACHE_MEMORY_CONSUMPTION=${PHP_OPCACHE_MEMORY_CONSUMPTION:-192}
+      - PHP_OPCACHE_MAX_WASTED_PERCENTAGE=${PHP_OPCACHE_MAX_WASTED_PERCENTAGE:-10}
+      - SENTRY_DSN=${SENTRY_DSN:-null}
+      - SALT=${SALT:-saltsaltsalt}
+      - PASSPHRASE=${PASSPHRASE:-passphrase}
+      - DISABLE_LEFT_BANNER_LOGIN=${DISABLE_LEFT_BANNER_LOGIN:-false}
+      - MAILER_DSN=${MAILER_DSN:-smtp://idelibre_mailcatcher:25}
+    volumes:
+      - data-public:/app/public
+      - /data/files:/data
+      - ./docker-resources/zz-idelibre.conf:/usr/local/etc/php-fpm.d/zz-idelibre.conf
+    command: [ "/app/docker-resources/initApp.sh" ]
+
+  node-idelibre:
+    container_name: node-idelibre
+    ports:
+      - 4000:3001
+    image: registry.libriciel.fr:443/public/citoyens/idelibre-node/idelibre-node:4.1.0
+    volumes:
+      - /data/files:/data
+    environment:
+      - TYPEORM_CONNECTION=postgres
+      - TYPEORM_HOST=${POSTGRES_HOST:-172.17.0.1}
+      - TYPEORM_USERNAME=${POSTGRES_USER:-idelibre}
+      - TYPEORM_PASSWORD=${POSTGRES_PASSWORD:-idelibre}
+      - TYPEORM_DATABASE=${POSTGRES_DB:-idelibre}
+      - TYPEORM_PORT=${POSTGRES_PORT:-5432}
+      - TYPEORM_SYNCHRONIZE=false
+      - TYPEORM_LOGGING=false
+      - TYPEORM_ENTITIES=src/entity/**/*.ts
+      - SALT=${SALT:-saltsaltsalt}
+      - LOG_LEVEL=${LOG_LEVEL:-error}
+      - LISTEN_PORT=${LISTEN_PORT:-3000}
+      - PASSPHRASE=${PASSPHRASE:-passphrase}
+      - JWT_SECRET=${JWT_SECRET:-jwtsecret}
+      - JWT_TIMEOUT=${JWT_TIMEOUT:-86400}
+
+    command: [ "/app/docker-resources/init.sh" ]
+
+  nginx-idelibre:
+    container_name: nginx-idelibre
+    image: nginx:1.17
+    depends_on:
+      - fpm-idelibre
+      - node-idelibre
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./docker-resources/nginx.vhost:/etc/nginx/conf.d/default.conf
+      - ./docker-resources/nginx.conf:/etc/nginx/nginx.conf
+      - ./docker-resources/options-ssl-nginx.conf:/etc/letsencrypt/options-ssl-nginx.conf
+      - /data/certbot/conf:/etc/letsencrypt
+      - /data/certbot/www:/var/www/certbot
+      - data-public:/app/public:ro
+      - /data/files:/data:ro
+
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - /data/certbot/conf:/etc/letsencrypt
+      - /data/certbot/www:/var/www/certbot
+
+  lshorodatage:
+    container_name: lshorodatage
+    image: registry.libriciel.fr:443/public/citoyens/lshorodatage/lshorodatage:1.0.0
+    environment:
+      - NODE_ENV=production
+      - POSTGRES_HOST=${POSTGRES_HOST:-172.17.0.1}
+      - POSTGRES_DB=lshorodatage
+      - POSTGRES_USER=lshorodatage
+      - POSTGRES_PASSWORD=lshorodatage
+      - POSTGRES_PORT=${POSTGRES_PORT:-5432}
+      - SITE_HOSTNAME=${URL:-lshorodatage.libriciel.fr}
+    volumes:
+      - /data/certificates:/certificates
+    command: [ "/app/docker-resources/init.sh" ]
+
+
+  idelibre_mailcatcher:
+    container_name: il-4-2-dev-mailcatcher
+    image: tophfr/mailcatcher:0.7.1
+    restart: always
+    ports:
+      - "2192:80"
+      - "2129:25"
+
+volumes:
+  data-public:
+  data-file:

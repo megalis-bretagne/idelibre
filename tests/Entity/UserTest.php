@@ -2,24 +2,28 @@
 
 namespace App\Tests\Entity;
 
-use App\DataFixtures\RoleFixtures;
-use App\DataFixtures\UserFixtures;
 use App\Entity\User;
 use App\Tests\FindEntityTrait;
 use App\Tests\HasValidationError;
+use App\Tests\Story\RoleStory;
+use App\Tests\Story\UserStory;
 use App\Tests\StringTrait;
-use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
+use Doctrine\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class UserTest extends WebTestCase
 {
+    use ResetDatabase;
+    use Factories;
     use FindEntityTrait;
     use HasValidationError;
     use StringTrait;
 
     private ValidatorInterface $validator;
-    private $entityManager;
+    private ObjectManager $entityManager;
 
     protected function setUp(): void
     {
@@ -27,11 +31,8 @@ class UserTest extends WebTestCase
         $this->validator = self::getContainer()->get('validator');
         $this->entityManager = self::getContainer()->get('doctrine')->getManager();
 
-        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
-        $databaseTool->loadFixtures([
-            UserFixtures::class,
-            RoleFixtures::class
-        ]);
+        UserStory::load();
+        RoleStory::load();
     }
 
     public function testValidNoAtUsername()

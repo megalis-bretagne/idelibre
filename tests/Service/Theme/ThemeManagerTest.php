@@ -2,34 +2,31 @@
 
 namespace App\Tests\Service\Theme;
 
-use App\DataFixtures\StructureFixtures;
-use App\DataFixtures\ThemeFixtures;
 use App\Entity\Theme;
 use App\Repository\ThemeRepository;
 use App\Service\Theme\ThemeManager;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
 use App\Tests\privateMethodTrait;
-use Doctrine\ORM\EntityManagerInterface;
-use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
+use App\Tests\Story\StructureStory;
+use App\Tests\Story\ThemeStory;
+use Doctrine\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class ThemeManagerTest extends WebTestCase
 {
+    use ResetDatabase;
+    use Factories;
     use FindEntityTrait;
     use LoginTrait;
     use privateMethodTrait;
 
     private ?KernelBrowser $client;
-    /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
-    /**
-     * @var ThemeRepository
-     */
-    private $themeRepository;
+    private ObjectManager $entityManager;
+    private ThemeRepository $themeRepository;
 
     protected function setUp(): void
     {
@@ -40,26 +37,15 @@ class ThemeManagerTest extends WebTestCase
             ->get('doctrine')
             ->getManager();
 
-        $this->themeRepository = $this->entityManager->getRepository(Theme::class);
+        $this->themeRepository = self::getContainer()->get(ThemeRepository::class);
 
-        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
-        $databaseTool->loadFixtures([
-            ThemeFixtures::class,
-            StructureFixtures::class
-        ]);
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-        $this->client = null;
-        $this->entityManager->close();
+        ThemeStory::load();
+        StructureStory::load();
     }
 
     public function testGenerateFullName()
     {
-        /** @var Theme $theme */
-        $themeBudget = $this->getOneEntityBy(Theme::class, ['name' => 'budget']);
+        $themeBudget = ThemeStory::budgetTheme()->object();
         $themeManager = new ThemeManager($this->themeRepository, $this->entityManager);
         $generateFullNameFct = $this->getPrivateMethod(ThemeManager::class, 'generateFullName');
         $actual = $generateFullNameFct->invokeArgs($themeManager, [$themeBudget]);
@@ -68,53 +54,50 @@ class ThemeManagerTest extends WebTestCase
 
     public function testCreateThemesFromString()
     {
-        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
+        $structure = StructureStory::libriciel();
 
         /** @var ThemeManager $themeManager */
         $themeManager = self::getContainer()->get(ThemeManager::class);
-        $themeManager->createThemesFromString("addedTheme", $structure);
+        $themeManager->createThemesFromString('addedTheme', $structure->object());
 
         $themeRepository = $this->entityManager->getRepository(Theme::class);
 
-        $addedThemes = $themeRepository->findBy(['name' => 'addedTheme' ]);
+        $addedThemes = $themeRepository->findBy(['name' => 'addedTheme']);
         $this->assertCount(1, $addedThemes);
-
     }
 
     public function testCreateThemesFromStringAlreadyExists()
     {
-        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
+        $structure = StructureStory::libriciel();
 
         /** @var ThemeManager $themeManager */
         $themeManager = self::getContainer()->get(ThemeManager::class);
-        $themeManager->createThemesFromString("Finance", $structure);
+        $themeManager->createThemesFromString('Finance', $structure->object());
         $themeRepository = $this->entityManager->getRepository(Theme::class);
 
-        $addedThemes = $themeRepository->findBy(['name' => 'Finance' ]);
+        $addedThemes = $themeRepository->findBy(['name' => 'Finance']);
         $this->assertCount(1, $addedThemes);
     }
 
-
     public function testCreateThemesFromStringTwice()
     {
-        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
+        $structure = StructureStory::libriciel()->object();
 
         /** @var ThemeManager $themeManager */
         $themeManager = self::getContainer()->get(ThemeManager::class);
-        $themeManager->createThemesFromString("addedTheme", $structure);
-        $themeManager->createThemesFromString("addedTheme", $structure);
+        $themeManager->createThemesFromString('addedTheme', $structure);
+        $themeManager->createThemesFromString('addedTheme', $structure);
 
         $themeRepository = $this->entityManager->getRepository(Theme::class);
 
-        $addedThemes = $themeRepository->findBy(['name' => 'addedTheme' ]);
+        $addedThemes = $themeRepository->findBy(['name' => 'addedTheme']);
         $this->assertCount(1, $addedThemes);
-
     }
 
     public function testUpdate()
     {
-        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $theme = $this->getOneThemeBy(['name' => 'Finance', 'structure' => $structure ]);
+        $structure = StructureStory::libriciel()->object();
+        $theme = $this->getOneThemeBy(['name' => 'Finance', 'structure' => $structure]);
 
         /** @var ThemeManager $themeManager */
         $themeManager = self::getContainer()->get(ThemeManager::class);
@@ -125,9 +108,8 @@ class ThemeManagerTest extends WebTestCase
         $this->entityManager->refresh($theme);
         $this->assertSame('updated name', $theme->getFullName());
 
-        $subThemeBudget= $this->getOneThemeBy(['name' => 'budget', 'structure' => $structure ]);
+        $subThemeBudget = $this->getOneThemeBy(['name' => 'budget', 'structure' => $structure]);
 
         $this->assertSame('updated name, budget', $subThemeBudget->getFullName());
     }
-
 }

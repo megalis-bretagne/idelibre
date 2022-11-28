@@ -2,50 +2,47 @@
 
 namespace App\Tests\Controller;
 
-use App\DataFixtures\ForgetTokenFixtures;
-use App\DataFixtures\UserFixtures;
 use App\Entity\Structure;
-use App\Entity\User;
+use App\Security\Password\LegacyPassword;
+use App\Tests\Factory\UserFactory;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
-use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
+use App\Tests\Story\ForgetTokenStory;
+use App\Tests\Story\RoleStory;
+use App\Tests\Story\StructureStory;
+use App\Tests\Story\UserStory;
+use Doctrine\Persistence\ObjectManager;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class SecurityControllerTest extends WebTestCase
 {
+    use ResetDatabase;
+    use Factories;
     use FindEntityTrait;
     use LoginTrait;
 
-    /**
-     * @var \Symfony\Bundle\FrameworkBundle\KernelBrowser
-     */
-    private $client;
-    /**
-     * @var \Doctrine\Persistence\ObjectManager
-     */
-    private $entityManager;
+    private ?KernelBrowser $client;
+    private ObjectManager $entityManager;
+    private LegacyPassword $legacyPassword;
 
     protected function setUp(): void
     {
-        $this->client = static::createClient();
-
         $kernel = self::bootKernel();
         $this->entityManager = $kernel->getContainer()
             ->get('doctrine')
             ->getManager();
 
-        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
-        $databaseTool->loadFixtures([
-            UserFixtures::class,
-            ForgetTokenFixtures::class,
-        ]);
-    }
+        self::ensureKernelShutdown();
+        $this->client = static::createClient();
 
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-        $this->client = null;
+        $this->legacyPassword = self::getContainer()->get(LegacyPassword::class);
+
+        UserStory::load();
+        ForgetTokenStory::load();
     }
 
     public function testImpersonateAS()
@@ -107,10 +104,8 @@ class SecurityControllerTest extends WebTestCase
 
         $user = $this->getOneUserBy(['username' => 'superadmin']);
         $forgetToken = $this->getOneForgetTokenBy(['user' => $user]);
-        $this->assertNotEmpty($forgetToken);;
-
+        $this->assertNotEmpty($forgetToken);
     }
-
 
     public function testForgetPasswordAlreadyForgetToken()
     {
@@ -124,8 +119,8 @@ class SecurityControllerTest extends WebTestCase
 
         $user = $this->getOneUserBy(['username' => 'admin@libriciel']);
         $forgetToken = $this->getOneForgetTokenBy(['user' => $user]);
-        $this->assertNotEmpty($forgetToken);;
-        $this->assertNotSame("forgetToken", $forgetToken->getToken());
+        $this->assertNotEmpty($forgetToken);
+        $this->assertNotSame('forgetToken', $forgetToken->getToken());
     }
 
     public function testLogout()
@@ -179,30 +174,40 @@ class SecurityControllerTest extends WebTestCase
 
     public function testLoginLegacy()
     {
+        $userLegacy = UserFactory::createOne([
+            'email' => 'userLegacy@example.org',
+            'username' => 'userLegacy@montpellier',
+            'firstname' => 'userLegacy',
+            'lastname' => 'montpellier',
+            'role' => RoleStory::admin(),
+            'structure' => StructureStory::montpellier(),
+            'password' => $this->legacyPassword->encode('passwordLegacy'),
+            'isActive' => true,
+        ]);
+
         $crawler = $this->client->request(Request::METHOD_GET, '/login');
         $this->assertResponseStatusCodeSame(200);
+
         $title = $crawler->filter('html:contains("Veuillez saisir vos identifiants de connexion")');
 
         $this->assertCount(1, $title);
 
         $form = $crawler->selectButton('Se connecter')->form();
-
         $form['username'] = 'userLegacy@montpellier';
         $form['password'] = 'passwordLegacy';
-
         $this->client->submit($form);
 
         $this->assertTrue($this->client->getResponse()->isRedirect());
+
         $this->client->followRedirect();
         $crawler = $this->client->followRedirect();
+
         $this->assertResponseStatusCodeSame(200);
 
         $successMsg = $crawler->filter('html:contains("Séances")');
-
         $this->assertCount(1, $successMsg);
 
-        $updatedPasswordUser = $this->getOneUserBy(['username' => 'userLegacy@montpellier']);
-        $this->assertSame('$', $updatedPasswordUser->getPassword()[0]);
+        $this->assertSame('$', $userLegacy->getPassword()[0]);
     }
 
     public function testLoginFalse()

@@ -2,51 +2,41 @@
 
 namespace App\Tests\Controller\api;
 
-use App\DataFixtures\ConvocationFixtures;
-use App\DataFixtures\SittingFixtures;
-use App\DataFixtures\UserFixtures;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
+use App\Tests\Story\ConvocationStory;
+use App\Tests\Story\SittingStory;
+use App\Tests\Story\UserStory;
 use Doctrine\Persistence\ObjectManager;
-use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class UserControllerTest extends WebTestCase
 {
+    use ResetDatabase;
+    use Factories;
     use FindEntityTrait;
     use LoginTrait;
 
     private ?KernelBrowser $client;
-    /**
-     * @var ObjectManager
-     */
-    private $entityManager;
+    private ObjectManager $entityManager;
 
     protected function setUp(): void
     {
-        $this->client = static::createClient();
-
         $kernel = self::bootKernel();
         $this->entityManager = $kernel->getContainer()
             ->get('doctrine')
             ->getManager();
 
-        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
+        self::ensureKernelShutdown();
+        $this->client = static::createClient();
 
-        $databaseTool->loadFixtures([
-            UserFixtures::class,
-            SittingFixtures::class,
-            ConvocationFixtures::class,
-        ]);
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-        $this->client = null;
-        $this->entityManager->close();
+        UserStory::actorLibriciel3();
+        SittingStory::sittingConseilLibriciel();
+        ConvocationStory::load();
     }
 
     public function testGetActors()
@@ -62,7 +52,7 @@ class UserControllerTest extends WebTestCase
 
     public function testGetUsersInSitting()
     {
-        $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
+        $sitting = SittingStory::sittingConseilLibriciel();
         $this->loginAsAdminLibriciel();
         $this->client->request(Request::METHOD_GET, '/api/users/sittings/' . $sitting->getId());
         $this->assertResponseStatusCodeSame(200);
@@ -76,13 +66,12 @@ class UserControllerTest extends WebTestCase
 
     public function testGetUsersNotInSitting()
     {
-        $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
+        $sitting = SittingStory::sittingConseilLibriciel();
         $this->loginAsAdminLibriciel();
         $this->client->request(Request::METHOD_GET, '/api/users/sittings/' . $sitting->getId() . '/not');
         $this->assertResponseStatusCodeSame(200);
 
         $usersNotInSitting = json_decode($this->client->getResponse()->getContent(), true);
-
         $this->assertCount(3, $usersNotInSitting['actors']);
         $this->assertCount(5, $usersNotInSitting['employees']);
         $this->assertCount(2, $usersNotInSitting['guests']);
@@ -90,8 +79,8 @@ class UserControllerTest extends WebTestCase
 
     public function testUpdateUsersInSittingAddActor()
     {
-        $actor3 = $this->getOneUserBy(['username' => 'actor3@libriciel']);
-        $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
+        $actor3 = UserStory::actorLibriciel3();
+        $sitting = SittingStory::sittingConseilLibriciel();
         $this->loginAsAdminLibriciel();
         $data = json_encode(['addedActors' => [$actor3->getId()], 'addedEmployees' => [], 'addedGuests' => [],  'removedUsers' => []]);
 
@@ -105,7 +94,7 @@ class UserControllerTest extends WebTestCase
         );
 
         $this->assertResponseStatusCodeSame(200);
-        $this->entityManager->refresh($sitting);
+        UserStory::actorLibriciel3()->refresh($sitting);
 
         $this->assertCount(3, $sitting->getConvocations());
     }
@@ -127,7 +116,7 @@ class UserControllerTest extends WebTestCase
         );
 
         $this->assertResponseStatusCodeSame(200);
-        $this->entityManager->refresh($sitting);
+        UserStory::actorLibriciel1()->refresh($sitting);
 
         $this->assertCount(1, $sitting->getConvocations());
     }

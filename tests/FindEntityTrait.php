@@ -24,6 +24,7 @@ trait FindEntityTrait
         $entityManager = self::getcontainer()->get(EntityManagerInterface::class);
 
         $repository = $entityManager->getRepository($entityClass);
+
         return $repository->findOneBy($criteria);
     }
 
@@ -86,7 +87,6 @@ trait FindEntityTrait
     {
         return $this->getOneEntityBy(Theme::class, $criteria);
     }
-
 
     public function getOneForgetTokenBy(array $criteria): ?ForgetToken
     {

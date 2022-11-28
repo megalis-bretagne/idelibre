@@ -2,68 +2,50 @@
 
 namespace App\Tests\Repository;
 
-use App\DataFixtures\AnnexFixtures;
-use App\DataFixtures\FileFixtures;
-use App\DataFixtures\ProjectFixtures;
-use App\DataFixtures\SittingFixtures;
-use App\Entity\Annex;
 use App\Repository\AnnexRepository;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
+use App\Tests\Story\AnnexStory;
+use App\Tests\Story\SittingStory;
 use Doctrine\Persistence\ObjectManager;
-use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class AnnexRepositoryTest extends WebTestCase
 {
+    use ResetDatabase;
+    use Factories;
     use FindEntityTrait;
     use LoginTrait;
 
     private ?KernelBrowser $client;
-    /**
-     * @var ObjectManager
-     */
-    private $entityManager;
-    /**
-     * @var AnnexRepository
-     */
-    private $annexRepository;
+    private ObjectManager $entityManager;
+    private AnnexRepository $annexRepository;
 
     protected function setUp(): void
     {
-        $this->client = static::createClient();
-
         $kernel = self::bootKernel();
         $this->entityManager = $kernel->getContainer()
             ->get('doctrine')
             ->getManager();
 
-        $this->annexRepository = $this->entityManager->getRepository(Annex::class);
+        $this->annexRepository = self::getContainer()->get(AnnexRepository::class);
 
-        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
+        self::ensureKernelShutdown();
+        $this->client = static::createClient();
 
-        $databaseTool->loadFixtures([
-            ProjectFixtures::class,
-            AnnexFixtures::class,
-            FileFixtures::class,
-            SittingFixtures::class,
-        ]);
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-        $this->client = null;
-        $this->entityManager->close();
+        SittingStory::sittingConseilLibriciel();
+        AnnexStory::annex1();
     }
 
     public function testFindNotInListProjects()
     {
-        $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
-        $project1 = $this->getOneProjectBy(['name' => 'Project 1']);
-        $annexId = $this->getOneAnnexBy(['project' => $project1, 'rank' => 0])->getId();
-        $annexes = $this->annexRepository->findNotInListAnnexes([$annexId], $sitting);
+        $sitting = SittingStory::sittingConseilLibriciel();
+        $annex = AnnexStory::annex1();
+
+        $annexes = $this->annexRepository->findNotInListAnnexes([$annex->getId()], $sitting->object());
         $this->assertCount(1, $annexes);
         $this->assertSame('Fichier annexe 2', $annexes[0]->getFile()->getName());
     }

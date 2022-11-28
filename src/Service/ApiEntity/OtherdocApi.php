@@ -17,7 +17,6 @@ class OtherdocApi
     #[NotBlank]
     private ?int $rank = null;
 
-
     public function getName(): ?string
     {
         return $this->name;
@@ -30,7 +29,6 @@ class OtherdocApi
         return $this;
     }
 
-
     public function getLinkedFileKey(): ?string
     {
         return $this->linkedFileKey;
@@ -42,7 +40,6 @@ class OtherdocApi
 
         return $this;
     }
-
 
     public function getRank(): ?int
     {

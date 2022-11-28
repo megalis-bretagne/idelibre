@@ -54,7 +54,7 @@ class TypeController extends AbstractController
             null,
             [
                 'structure' => $this->getUser()->getStructure(),
-                'isNew' => true
+                'isNew' => true,
             ]
         );
         $form->handleRequest($request);
@@ -90,7 +90,7 @@ class TypeController extends AbstractController
                 'actor' => $userRepository->findCountActorsByIds($this->getUser()->getStructure(), $type->getAssociatedUsers()->getValues()),
                 'employee' => $userRepository->findCountEmployeesByIds($this->getUser()->getStructure(), $type->getAssociatedUsers()->getValues()),
                 'guest' => $userRepository->findCountGuestsByIds($this->getUser()->getStructure(), $type->getAssociatedUsers()->getValues()),
-                'isNew' => false
+                'isNew' => false,
             ]
         );
         $form->handleRequest($request);

@@ -83,14 +83,13 @@ class UserController extends AbstractController
         ]);
     }
 
-
     #[Route(path: '/api/users/{id}', name: 'api_user', methods: ['GET'])]
     #[IsGranted(data: 'MANAGE_USERS', subject: 'user')]
     public function getUsersDataInSitting(User $user, UserRepository $userRepository): JsonResponse
     {
         return $this->json(
             [
-                'user' => $userRepository->findOneBy(['id' => $user])
+                'user' => $userRepository->findOneBy(['id' => $user]),
             ],
             200,
             [],

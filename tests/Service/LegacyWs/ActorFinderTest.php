@@ -2,27 +2,26 @@
 
 namespace App\Tests\Service\LegacyWs;
 
-use App\DataFixtures\StructureFixtures;
-use App\DataFixtures\UserFixtures;
 use App\Entity\Structure;
 use App\Entity\User;
 use App\Repository\UserRepository;
-use App\Service\LegacyWs\WsActorManager;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
+use App\Tests\Story\StructureStory;
+use App\Tests\Story\UserStory;
 use Doctrine\Persistence\ObjectManager;
-use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class ActorFinderTest extends WebTestCase
 {
+    use ResetDatabase;
+    use Factories;
     use FindEntityTrait;
     use LoginTrait;
 
-    /**
-     * @var ObjectManager
-     */
-    private $entityManager;
+    private ObjectManager $entityManager;
     private UserRepository $userRepository;
 
     protected function setUp(): void
@@ -31,23 +30,13 @@ class ActorFinderTest extends WebTestCase
         $container = static::getContainer();
 
         $this->entityManager = $container->get('doctrine')->getManager();
-        $this->userRepository = $this->entityManager->getRepository(User::class);
+        $this->userRepository = self::getcontainer()->get(UserRepository::class);
 
-        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
-        $databaseTool->loadFixtures([
-            StructureFixtures::class,
-            UserFixtures::class
-        ]);
+        StructureStory::load();
+        UserStory::load();
     }
 
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-        $this->entityManager->close();
-    }
-
-
-    private function createUser(string $firstname, string $lastName, Structure $structure, string $username = "usernameLibriciel"): User
+    private function createUser(string $firstname, string $lastName, Structure $structure, string $username = 'usernameLibriciel'): User
     {
         $user = new User();
         $user->setPassword('fake')
@@ -57,8 +46,6 @@ class ActorFinderTest extends WebTestCase
             ->setEmail('email@exemple.org')
             ->setStructure($structure);
 
-
-
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
@@ -67,75 +54,66 @@ class ActorFinderTest extends WebTestCase
 
     public function testFindByStructureIdenticalNames()
     {
-        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $this->createUser("firstWS", "lastWS", $structure);
-        $actor = $this->userRepository->findByFirstNameLastNameAndStructureOrUsername("firstWS", "lastWS", $structure, 'f.last@libriciel');
+        $structure = StructureStory::libriciel();
+        $this->createUser('firstWS', 'lastWS', $structure->object());
+        $actor = $this->userRepository->findByFirstNameLastNameAndStructureOrUsername('firstWS', 'lastWS', $structure->object(), 'f.last@libriciel');
         $this->assertNotEmpty($actor);
     }
 
-
     public function testFindByStructureTrailingSpacesBDD()
     {
-        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $this->createUser(" firstWS ", " lastWS  ", $structure);
-        $actor = $this->userRepository->findByFirstNameLastNameAndStructureOrUsername("firstWS", "lastWS", $structure,'f.last@libriciel');
+        $structure = StructureStory::libriciel();
+        $this->createUser(' firstWS ', ' lastWS  ', $structure->object());
+        $actor = $this->userRepository->findByFirstNameLastNameAndStructureOrUsername('firstWS', 'lastWS', $structure->object(), 'f.last@libriciel');
         $this->assertNotEmpty($actor);
     }
 
     public function testFindByStructureTrailingSpacesWSActor()
     {
-        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $this->createUser("firstWS", "lastWS", $structure);
-        $actor = $this->userRepository->findByFirstNameLastNameAndStructureOrUsername("  firstWS ", " lastWS ", $structure,'f.last@libriciel');
+        $structure = StructureStory::libriciel();
+        $this->createUser('firstWS', 'lastWS', $structure->object());
+        $actor = $this->userRepository->findByFirstNameLastNameAndStructureOrUsername('  firstWS ', ' lastWS ', $structure->object(), 'f.last@libriciel');
         $this->assertNotEmpty($actor);
     }
-
 
     public function testFindByStructureSpaceBetween()
     {
-        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $this->createUser("first WS", "last WS", $structure);
-        $actor = $this->userRepository->findByFirstNameLastNameAndStructureOrUsername("firstWS", "lastWS", $structure,'f.last@libriciel');
+        $structure = StructureStory::libriciel();
+        $this->createUser('first WS', 'last WS', $structure->object());
+        $actor = $this->userRepository->findByFirstNameLastNameAndStructureOrUsername('firstWS', 'lastWS', $structure->object(), 'f.last@libriciel');
         $this->assertEmpty($actor);
     }
-
 
     public function testFindByStructureCaseInsensitive()
     {
-        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $this->createUser("firstws", "LASTWS", $structure);
-        $actor = $this->userRepository->findByFirstNameLastNameAndStructureOrUsername("firstWS", "lastWS", $structure, 'f.last@libriciel');
+        $structure = StructureStory::libriciel();
+        $this->createUser('firstws', 'LASTWS', $structure->object());
+        $actor = $this->userRepository->findByFirstNameLastNameAndStructureOrUsername('firstWS', 'lastWS', $structure->object(), 'f.last@libriciel');
         $this->assertNotEmpty($actor);
     }
-
 
     public function testFindByStructureDifferentNameSameUsername()
     {
-        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $this->createUser("firstws", "lastws", $structure, 'sameUsername');
-        $actor = $this->userRepository->findByFirstNameLastNameAndStructureOrUsername("other", "name same username", $structure, 'sameUsername');
+        $structure = StructureStory::libriciel();
+        $this->createUser('firstws', 'lastws', $structure->object(), 'sameUsername');
+        $actor = $this->userRepository->findByFirstNameLastNameAndStructureOrUsername('other', 'name same username', $structure->object(), 'sameUsername');
         $this->assertNotEmpty($actor);
     }
 
-
-
     public function testFindByStructureNewUser()
     {
-        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $this->createUser("firstws", "lastws", $structure);
-        $actor = $this->userRepository->findByFirstNameLastNameAndStructureOrUsername("news", "user", $structure, 'n.user@libriciel');
+        $structure = StructureStory::libriciel();
+        $this->createUser('firstws', 'lastws', $structure->object());
+        $actor = $this->userRepository->findByFirstNameLastNameAndStructureOrUsername('news', 'user', $structure->object(), 'n.user@libriciel');
         $this->assertEmpty($actor);
     }
-
 
     public function testFindByStructureNotSameStructure()
     {
-        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $this->createUser("firstWS", "firstWS", $structure);
-        $structureMtp = $this->getOneStructureBy(['name' => 'Montpellier']);
-        $actor = $this->userRepository->findByFirstNameLastNameAndStructureOrUsername("firstWS", "firstWS", $structureMtp, 'f.last@libriciel');
+        $structure = StructureStory::libriciel();
+        $this->createUser('firstWS', 'firstWS', $structure->object());
+        $structureMtp = StructureStory::montpellier();
+        $actor = $this->userRepository->findByFirstNameLastNameAndStructureOrUsername('firstWS', 'firstWS', $structureMtp->object(), 'f.last@libriciel');
         $this->assertEmpty($actor);
     }
-
-
 }

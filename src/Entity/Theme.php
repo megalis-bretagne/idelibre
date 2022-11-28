@@ -3,9 +3,9 @@
 namespace App\Entity;
 
 use App\Repository\ThemeRepository;
+use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
@@ -75,7 +75,7 @@ class Theme
     #[Groups(['theme', 'theme:read', 'project:read'])]
     private $fullName;
 
-    public function getId(): string
+    public function getId(): ?string
     {
         return $this->id;
     }

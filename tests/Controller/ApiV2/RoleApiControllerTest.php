@@ -2,64 +2,50 @@
 
 namespace App\Tests\Controller\ApiV2;
 
-use App\DataFixtures\ApiUserFixtures;
-use App\DataFixtures\PartyFixtures;
-use App\DataFixtures\StructureFixtures;
-use App\DataFixtures\UserFixtures;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
+use App\Tests\Story\ApiUserStory;
+use App\Tests\Story\StructureStory;
+use App\Tests\Story\UserStory;
 use Doctrine\Persistence\ObjectManager;
-use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
-
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class RoleApiControllerTest extends WebTestCase
 {
+    use ResetDatabase;
+    use Factories;
     use FindEntityTrait;
     use LoginTrait;
 
-
     private ?KernelBrowser $client;
-    /**
-     * @var ObjectManager
-     */
-    private $entityManager;
-
+    private ObjectManager $entityManager;
 
     protected function setUp(): void
     {
-        $this->client = static::createClient();
-
         $kernel = self::bootKernel();
         $this->entityManager = $kernel->getContainer()
             ->get('doctrine')
             ->getManager();
 
-        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
-        $databaseTool->loadFixtures([
-            UserFixtures::class,
-            ApiUserFixtures::class,
-            StructureFixtures::class
-        ]);
-    }
+        self::ensureKernelShutdown();
+        $this->client = static::createClient();
 
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-        $this->client = null;
-        $this->entityManager->close();
+        UserStory::load();
+        StructureStory::libriciel();
+        ApiUserStory::apiAdminLibriciel();
     }
-
 
     public function testGetAll()
     {
-        $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
-        $apiUser = $this->getOneApiUserBy(['token' => '1234']);
+        $structure = StructureStory::libriciel();
+        $apiUser = ApiUserStory::apiAdminLibriciel();
 
         $this->client->request(Request::METHOD_GET, "/api/v2/structures/{$structure->getId()}/roles", [], [], [
-            "HTTP_X-AUTH-TOKEN" => $apiUser->getToken()
+            'HTTP_X-AUTH-TOKEN' => $apiUser->getToken(),
         ]);
 
         $this->assertResponseStatusCodeSame(200);
@@ -69,7 +55,4 @@ class RoleApiControllerTest extends WebTestCase
 
         $this->assertCount(5, $roles);
     }
-
-
-
 }

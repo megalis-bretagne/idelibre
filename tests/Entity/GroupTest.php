@@ -2,32 +2,33 @@
 
 namespace App\Tests\Entity;
 
-use App\DataFixtures\GroupFixtures;
 use App\Entity\Group;
 use App\Tests\HasValidationError;
+use App\Tests\Story\GroupStory;
 use App\Tests\StringTrait;
-use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
+use Doctrine\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class GroupTest extends WebTestCase
 {
+    use ResetDatabase;
+    use Factories;
     use HasValidationError;
     use StringTrait;
 
     private ValidatorInterface $validator;
-    private $entityManager;
+    private ObjectManager $entityManager;
 
     protected function setUp(): void
     {
         self::bootKernel();
         $this->validator = self::getContainer()->get('validator');
         $this->entityManager = self::getContainer()->get('doctrine')->getManager();
-        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
 
-        $databaseTool->loadFixtures([
-            GroupFixtures::class,
-        ]);
+        GroupStory::load();
     }
 
     public function testValid()

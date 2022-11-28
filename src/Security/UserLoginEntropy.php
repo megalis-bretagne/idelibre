@@ -20,11 +20,11 @@ class UserLoginEntropy
             return true;
         }
 
-        if (in_array("ROLE_GROUP_ADMIN", $user->getRoles())) {
+        if (in_array('ROLE_GROUP_ADMIN', $user->getRoles())) {
             return true;
         }
 
-        if (in_array("ROLE_STRUCTURE_ADMIN", $user->getRoles())) {
+        if (in_array('ROLE_STRUCTURE_ADMIN', $user->getRoles())) {
             return true;
         }
 

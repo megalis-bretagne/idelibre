@@ -2,52 +2,40 @@
 
 namespace App\Tests\Controller\Csv;
 
-use App\DataFixtures\ThemeFixtures;
-use App\DataFixtures\UserFixtures;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
+use App\Tests\Story\ThemeStory;
+use App\Tests\Story\UserStory;
 use Doctrine\Persistence\ObjectManager;
-use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class CsvThemeControllerTest extends WebTestCase
 {
+    use ResetDatabase;
+    use Factories;
     use FindEntityTrait;
     use LoginTrait;
 
-
     private ?KernelBrowser $client;
-    /**
-     * @var ObjectManager
-     */
-    private $entityManager;
-
+    private ObjectManager $entityManager;
 
     protected function setUp(): void
     {
-        $this->client = static::createClient();
-
         $kernel = self::bootKernel();
         $this->entityManager = $kernel->getContainer()
             ->get('doctrine')
             ->getManager();
 
-        $databaseTool = self::getContainer()->get(DatabaseToolCollection::class)->get();
+        self::ensureKernelShutdown();
+        $this->client = static::createClient();
 
-        $databaseTool->loadFixtures([
-            UserFixtures::class,
-            ThemeFixtures::class,
-        ]);
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-        $this->client = null;
-        $this->entityManager->close();
+        UserStory::load();
+        ThemeStory::load();
     }
 
     public function testImportTheme()
@@ -75,12 +63,9 @@ class CsvThemeControllerTest extends WebTestCase
         $successMsg = $crawler->filter('html:contains("Fichier csv importé avec succès")');
         $this->assertCount(1, $successMsg);
 
-
         $addedTheme1 = $this->getOneThemeBy(['name' => 'AddedTheme1']);
         $this->assertNotEmpty($addedTheme1);
-
     }
-
 
     public function testImportCsvError()
     {
@@ -107,10 +92,7 @@ class CsvThemeControllerTest extends WebTestCase
         $successMsg = $crawler->filter('html:contains("Certains thèmes n\'ont pas pu être importés")');
         $this->assertCount(1, $successMsg);
 
-
         $addedTheme1 = $this->getOneThemeBy(['name' => 'AddedTheme1']);
         $this->assertNotEmpty($addedTheme1);
-
     }
-
 }
