@@ -6,23 +6,17 @@ services:
     image: registry.libriciel.fr:443/public/citoyens/idelibre:canary
 #    image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/idelibre/idelibre:4.1
 #    image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/idelibre/idelibre:latest
-#    build:
-#      context: .
+    build:
+      context: .
     restart: always
     depends_on:
       - maildev-idelibre
     env_file:
       - .env.docker.local
     volumes:
-      #- data-public:/app/public
       - ./public:/app/public
-      #- /tmp/data/token:/data/token
-      #- /tmp/data/zip:/data/zip
-      #- /tmp/data/pdf:/data/pdf
-      #- /home/rdubourget/dataFiles/workspace:/data/workspace
       - /data/files:/data
-      - ./docker-resources/zz-idelibre.conf:/usr/local/etc/php-fpm.d/zz-idelibre.conf
-      - ./docker-resources/initApp.sh:/app/docker-resources/initApp.sh
+      #- ./docker-resources/initApp.sh:/app/docker-resources/initApp.sh
       - ./src:/app/src
       - ./templates:/app/templates
       - ./config:/app/config
@@ -30,7 +24,6 @@ services:
       - ./migrations:/app/migrations
       - ./composer.json:/app/composer.json
       - ./composer.lock:/app/composer.lock
-#      - ./rector.php:/app/rector.php
       - ./docker-resources/minimum.sql:/app/docker-resources/minimum.sql
       - ./webpack.config.js:/app/webpack.config.js
       - ./assets:/app/assets
@@ -38,6 +31,8 @@ services:
     command: ["/app/docker-resources/initApp.sh"]
     networks:
       - network_idelibre_dev
+    ports:
+      - 1234:9000
 
 
   ## il faut partager le /data/workspace entre le node et le fpm sinon on ne peut pas recuperer les fichiers

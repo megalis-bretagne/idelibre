@@ -32,6 +32,9 @@ parameters:
   env(HIDE_LEFT_BANNER_LOGIN): false
   hide_left_banner_login: '%env(bool:HIDE_LEFT_BANNER_LOGIN)%'
 
+  env(WKHTMLTOPDF_PATH): /usr/bin/wkhtmltopdf
+  env(WKHTMLTOIMAGE_PATH): /usr/bin/wkhtmltoimage
+
   minimumEntropyForUserWithRoleHigh: '%env(ENTROPY_ADMIN)%'
 
 
