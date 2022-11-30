@@ -21,12 +21,6 @@ final class FileStory extends Story
             'path' => '/tmp/fileProject2',
         ]));
 
-        $this->addState('fileProject', FileFactory::new([
-            'name' => 'FileProject',
-            'size' => 100,
-            'path' => __DIR__ . '/../file/download/FileProject.pdf',
-        ]));
-
         $this->addState('fileAnnex1', FileFactory::new([
             'name' => 'Fichier annexe 1',
             'size' => 100,
@@ -46,15 +40,15 @@ final class FileStory extends Story
         ]));
 
         $this->addState('fileConvocation2', FileFactory::new([
-            'name' => 'Fichier de convocation 2',
+            'name' => 'Fichier de convocation',
             'size' => 100,
-            'path' => '/tmp/convocation2',
+            'path' => '/tmp/convocation',
         ]));
 
         $this->addState('fileConvocation3', FileFactory::new([
-            'name' => 'Fichier de convocation 3',
+            'name' => 'Fichier de convocation',
             'size' => 100,
-            'path' => '/tmp/convocation3',
+            'path' => '/tmp/convocation',
         ]));
     }
 }

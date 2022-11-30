@@ -25,11 +25,5 @@ final class ProjectStory extends Story
             'sitting' => SittingStory::sittingConseilLibriciel(),
         ]));
 
-        $this->addState('projectFile', ProjectFactory::new([
-            'rank' => 3,
-            'name' => 'ProjectFile',
-            'file' => FileStory::fileProject(),
-            'sitting' => SittingStory::sittingConseilLibriciel(),
-        ]));
     }
 }

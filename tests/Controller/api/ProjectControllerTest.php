@@ -247,7 +247,7 @@ class ProjectControllerTest extends WebTestCase
 
         $projectsArray = json_decode($this->client->getResponse()->getContent(), true);
 
-        $this->assertCount(3, $projectsArray);
+        $this->assertCount(2, $projectsArray);
         $this->assertEquals('Project 1', $projectsArray[0]['name']);
         $this->assertNotEmpty($projectsArray[0]['themeId']);
         $this->assertNotEmpty($projectsArray[0]['reporterId']);

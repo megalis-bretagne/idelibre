@@ -54,6 +54,6 @@ class TimestampContentFileGeneratorTest extends WebTestCase
         $timestampGenerator = new TimestampContentFileGenerator($this->environment, $this->bag, $this->fileSystem);
         $path = $timestampGenerator->generateConvocationFile($sitting, $sitting->getConvocations());
 
-        $this->assertSame(58, $this->countFileLines($path));
+        $this->assertSame(51, $this->countFileLines($path));
     }
 }
