@@ -14,19 +14,28 @@ use Symfony\Component\Filesystem\Filesystem;
 class PdfSittingGenerator
 {
     public function __construct(
-        private ParameterBagInterface $bag,
-        private Filesystem $filesystem,
-        private LoggerInterface $logger,
-        private DateUtil $dateUtil
+        private readonly ParameterBagInterface $bag,
+        private readonly Filesystem $filesystem,
+        private readonly LoggerInterface $logger,
+        private readonly DateUtil $dateUtil,
+        private readonly PdfChecker $checker
     ) {
     }
 
     public function generateFullSittingPdf(Sitting $sitting): void
     {
-        $cmd = 'pdftk ';
-        $cmd = $this->addConvocation($cmd, $sitting);
-        $cmd = $this->addProjectsAndAnnexes($cmd, $sitting->getProjects());
-        $cmd .= ' cat output ' . $this->getPdfPath($sitting);
+        $pdfDocPaths = [];
+        $pdfDocPaths[] = $this->getConvocationPath($sitting);
+        $pdfDocPaths = [...$pdfDocPaths, ...$this->getProjectsAndAnnexesPath($sitting->getProjects())];
+
+        $cmd = 'pdfunite ' . implode(' ', $pdfDocPaths) . ' ' . $this->getPdfPath($sitting);
+
+        if (!$this->checker->isValid($pdfDocPaths)) {
+            $this->logger->error('MergePdf : Un des PDF n\'est pas valide');
+
+            return;
+        }
+
         try {
             shell_exec($cmd);
         } catch (Exception $exception) {
@@ -34,36 +43,40 @@ class PdfSittingGenerator
         }
     }
 
-    private function addConvocation(string $cmd, Sitting $sitting): string
+    private function getConvocationPath(Sitting $sitting): string
     {
-        return $cmd . $sitting->getConvocationFile()->getPath() . ' ';
+        return $sitting->getConvocationFile()->getPath();
     }
 
     /**
      * @param Project[] $projects
      */
-    private function addProjectsAndAnnexes(string $cmd, iterable $projects): string
+    private function getProjectsAndAnnexesPath(iterable $projects): array
     {
+        $projectsAndAnnexesArray = [];
+
         foreach ($projects as $project) {
-            $cmd .= $project->getFile()->getPath() . ' ';
-            $cmd = $this->addAnnexes($cmd, $project->getAnnexes());
+            $projectsAndAnnexesArray[] = $project->getFile()->getPath();
+            $projectsAndAnnexesArray = [...$projectsAndAnnexesArray, ...$this->getAnnexePath($project->getAnnexes())];
         }
 
-        return $cmd;
+        return $projectsAndAnnexesArray;
     }
 
     /**
      * @param Annex[] $annexes
      */
-    private function addAnnexes(string $cmd, iterable $annexes): string
+    private function getAnnexePath(iterable $annexes): array
     {
+        $annexesPathArray = [];
         foreach ($annexes as $annex) {
             if ($this->isPdfFile($annex->getFile()->getName())) {
-                $cmd .= $annex->getFile()->getPath() . ' ';
+                $annexPath = $annex->getFile()->getPath();
+                $annexesPathArray[] = $annexPath;
             }
         }
 
-        return $cmd;
+        return $annexesPathArray;
     }
 
     private function isPdfFile(string $fileName): bool
@@ -92,7 +105,7 @@ class PdfSittingGenerator
         $this->filesystem->remove($path);
     }
 
-    public function createName(Sitting $sitting)
+    public function createPrettyName(Sitting $sitting): string
     {
         return $sitting->getName() . '_' . $this->dateUtil->getUnderscoredDate($sitting->getDate()) . '.pdf';
     }

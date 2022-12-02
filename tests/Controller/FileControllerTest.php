@@ -72,5 +72,4 @@ class FileControllerTest extends WebTestCase
         $this->client->request(Request::METHOD_GET, '/file/download/' . $fileId);
         $this->assertResponseStatusCodeSame(403);
     }
-
 }

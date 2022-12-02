@@ -24,6 +24,5 @@ final class ProjectStory extends Story
             'file' => FileStory::fileProject2(),
             'sitting' => SittingStory::sittingConseilLibriciel(),
         ]));
-
     }
 }

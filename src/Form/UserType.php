@@ -141,9 +141,8 @@ class UserType extends AbstractType
             'label' => 'Actif',
         ]);
 
-
         $builder->get('username')->addModelTransformer(new CallbackTransformer(
-            fn ($username) => preg_replace('/@.*/', '', $username ),
+            fn ($username) => preg_replace('/@.*/', '', $username),
             fn ($username) => $username . '@' . $this->getStructureSuffix($options['structure'])
         ));
     }

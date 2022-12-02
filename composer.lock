@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "efbfa215f976b006afe6ff71a04e065a",
+    "content-hash": "2da85b62dd99506ccc648af66f3e888c",
     "packages": [
         {
             "name": "apy/breadcrumbtrail-bundle",
@@ -2337,6 +2337,44 @@
             "time": "2022-10-26T14:07:24+00:00"
         },
         {
+            "name": "howtomakeaturn/pdfinfo",
+            "version": "1.1.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/howtomakeaturn/pdfinfo.git",
+                "reference": "292e11fe1f0fa17c3b57dd52f29376e49c14c15e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/howtomakeaturn/pdfinfo/zipball/292e11fe1f0fa17c3b57dd52f29376e49c14c15e",
+                "reference": "292e11fe1f0fa17c3b57dd52f29376e49c14c15e",
+                "shasum": ""
+            },
+            "require-dev": {
+                "filp/whoops": "1.1.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Howtomakeaturn\\PDFInfo": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "simple php wrapper for pdfinfo",
+            "keywords": [
+                "pdf",
+                "pdfinfo"
+            ],
+            "support": {
+                "issues": "https://github.com/howtomakeaturn/pdfinfo/issues",
+                "source": "https://github.com/howtomakeaturn/pdfinfo/tree/master"
+            },
+            "time": "2019-01-10T02:45:07+00:00"
+        },
+        {
             "name": "http-interop/http-factory-guzzle",
             "version": "1.2.0",
             "source": {
@@ -2749,6 +2787,49 @@
                 "source": "https://github.com/KnpLabs/KnpSnappyBundle/tree/v1.9.0"
             },
             "time": "2022-01-05T15:50:51+00:00"
+        },
+        {
+            "name": "koerel/pdfunite",
+            "version": "0.1.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/koerel/pdfunite.git",
+                "reference": "3dca6f1a0b37e6b3e7c6b6793239fd4fb5af3ce1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/koerel/pdfunite/zipball/3dca6f1a0b37e6b3e7c6b6793239fd4fb5af3ce1",
+                "reference": "3dca6f1a0b37e6b3e7c6b6793239fd4fb5af3ce1",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~6.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Koerel\\PdfUnite\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Karel Eeckelaert",
+                    "email": "mail@kareleeckelaert.be"
+                }
+            ],
+            "description": "A php wrapper for pdfunite",
+            "support": {
+                "issues": "https://github.com/koerel/pdfunite/issues",
+                "source": "https://github.com/koerel/pdfunite/tree/master"
+            },
+            "time": "2017-11-12T12:14:10+00:00"
         },
         {
             "name": "laminas/laminas-code",
