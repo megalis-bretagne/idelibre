@@ -6,9 +6,9 @@ include:
   - project: "libriciel/integration-continue/templates"
     ref: master
     file: '/publish-container-to-registry.yml'
-  - project: "libriciel/integration-continue/templates"
-    ref: master
-    file: '/security-check.yml'
+#  - project: "libriciel/integration-continue/templates"
+#    ref: master
+#    file: '/security-check.yml'
 
 stages:
   - build
