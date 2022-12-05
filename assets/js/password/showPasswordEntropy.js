@@ -2,7 +2,7 @@ import $ from "jquery";
 import '@libriciel/ls-jquery-password/dist/js/ls-jquery-password.min';
 
 $(document).ready(function () {
-    let fieldPassword = $('.showValidationPasswordEntropy')[0],
+    let fieldPassword = $('.showValidationPasswordEntropy'),
         minEntropy = $(fieldPassword).attr('data-minimum-entropy');
 
     $(fieldPassword)
@@ -17,4 +17,7 @@ $(document).ready(function () {
             ]
         })
         .lsPasswordToggler($.fn.lsPasswordToggler.configure('5.0'));
+
+    let fieldPassword2 = $('.showValidationPasswordEntropy')[1];
+    $(fieldPassword2).parent().parent().children('div.progress').hide();
 });
