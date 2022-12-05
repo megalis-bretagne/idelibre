@@ -4,9 +4,9 @@ import 'select2'
 
 $('document').ready(function () {
     $('select').select2({
-        'closeOnSelect': true,
+        'closeOnSelect': false,
         'allowClear': true,
-         width: '100%',
+        width: '100%',
         placeholder :'Sélectionner ...',
         "language": {
             "noResults": function () {
