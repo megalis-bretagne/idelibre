@@ -43,6 +43,7 @@ build:
 phpTest:
   stage: test
   only:
+    - tags
     - master
   image: $CONTAINER_IMAGE
   services:
