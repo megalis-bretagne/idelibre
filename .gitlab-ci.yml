@@ -171,8 +171,8 @@ deploy_master:
     url: https://idelibre-4-2.dev.libriciel.net
   tags:
     - citoyen-shell
-#  only:
-#    - master
+  only:
+    - master
   variables:
     PAYLOAD: "payload={\"text\": \"[idelibre-4-2.dev.libriciel.net](https://idelibre-4-2.dev.libriciel.net) a été mis à jour - [build $CI_PIPELINE_ID]($CI_PROJECT_URL/pipelines/$CI_PIPELINE_ID)\"}"
   script:
