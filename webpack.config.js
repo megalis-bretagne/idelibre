@@ -27,7 +27,6 @@ Encore
     .addEntry('vue-edit-informations', './assets/vue-app/editInformations.js')
     .addEntry('enable-popover', './assets/js/enablePopover.js')
     .addEntry('enable-select2', './assets/js/enableSelect2.js')
-    .addEntry('enable-select2-without-closing', './assets/js/enableSelect2WithoutClosing.js')
     .addEntry('create-user', './assets/js/createUser.js')
     .addEntry('delete-user-batch', './assets/js/deleteBatch.js')
     .addEntry('select-all-users', './assets/js/selectAllUsers.js')

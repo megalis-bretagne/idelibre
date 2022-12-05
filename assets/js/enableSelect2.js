@@ -3,8 +3,13 @@ import 'select2'
 
 
 $('document').ready(function () {
+    let condition = true;
+    if( $('select').attr('multiple') == 'multiple' ) {
+        condition = false;
+    }
+
     $('select').select2({
-        'closeOnSelect': true,
+        'closeOnSelect': condition,
         'allowClear': true,
          width: '100%',
         placeholder :'Sélectionner ...',
