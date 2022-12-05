@@ -22,7 +22,7 @@ stages:
 variables:
   CONTAINER_IMAGE: "${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME}"
   REGISTRY_CONTAINER_PATH: /public/citoyens/idelibre
-  CANARY_BRANCH_NAME: 313-modification-tests-unitaires-avec-foundry
+#  CANARY_BRANCH_NAME: 313-modification-tests-unitaires-avec-foundry
 
 
 build:
