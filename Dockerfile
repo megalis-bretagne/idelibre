@@ -23,7 +23,6 @@ RUN apt-get update -yqq \
         xfonts-75dpi \
         fontconfig \
         xfonts-base \
-        pdftk \
         poppler-utils \
         qpdf \
         -yqq
@@ -32,14 +31,14 @@ RUN apt install php-fpm php-intl php-mbstring php-xml php-zip php-pgsql  -y
 
 RUN apt install wkhtmltopdf -y
 
-#RUN apt install gnupg -yy
-#RUN sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt bullseye-pgdg main" > /etc/apt/sources.list.d/pgdg.list' && \
-#wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
-#apt-get update -yy
-#
+RUN apt install gnupg -yy
+RUN sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt bullseye-pgdg main" > /etc/apt/sources.list.d/pgdg.list' && \
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
+apt-get update -yy
 
-#RUN apt-get install postgresql-client-12 -yy
-#
+
+RUN apt-get install postgresql-client-12 -yy
+
 
 RUN curl -sL https://deb.nodesource.com/setup_16.x | sudo bash -
 RUN apt-get install nodejs -yqq
