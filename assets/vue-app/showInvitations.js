@@ -44,7 +44,8 @@ let app = new Vue({
         notification: {
             object: "",
             content: "",
-        }
+        },
+        convocationIdCurrent: "",
     },
 
     computed: {
@@ -102,6 +103,8 @@ let app = new Vue({
                 this.isAlreadySentActors = isAlreadySentSitting(this.actorConvocations);
                 this.isAlreadySentGuests = isAlreadySentSitting(this.guestConvocations);
                 this.isAlreadySentEmployees = isAlreadySentSitting(this.employeeConvocations);
+                this.convocationIdCurrent = getConvocationCurrentId(convocations);
+console.log(this.convocationIdCurrent);
             })
         },
 
@@ -238,6 +241,10 @@ function getSittingId() {
     return window.location.pathname.split('/')[3];
 }
 
+function getConvocationCurrentId(convocations) {
+    let convocationCurrentId = formatAttendanceStatus(convocations.data['actors'])[0].convocationId;
+    return convocationCurrentId;
+}
 function updateConvocations(convocations, convocation) {
     for (let i = 0; i < convocations.length; i++) {
         if (convocations[i].id === convocation.id) {
