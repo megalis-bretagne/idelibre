@@ -51,6 +51,6 @@ class FileManagerTest extends WebTestCase
     {
         $sitting = SittingStory::sittingConseilLibriciel();
         $files = $this->fileManager->listFilesFromSitting($sitting->object());
-        $this->assertCount(6, $files);
+        $this->assertCount(5, $files);
     }
 }

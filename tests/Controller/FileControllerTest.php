@@ -46,7 +46,6 @@ class FileControllerTest extends WebTestCase
             'path' => __DIR__ . '/../resources/fichier.pdf',
         ])->create();
 
-        //$project = $this->getOneProjectBy(['name' => 'Project 1']);
         $project = ProjectStory::project1();
         $project->setFile($file->object());
 
@@ -72,12 +71,5 @@ class FileControllerTest extends WebTestCase
         $this->loginAsUserMontpellier();
         $this->client->request(Request::METHOD_GET, '/file/download/' . $fileId);
         $this->assertResponseStatusCodeSame(403);
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-        $this->client = null;
-        $this->entityManager->close();
     }
 }

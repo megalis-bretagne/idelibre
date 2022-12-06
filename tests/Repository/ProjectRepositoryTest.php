@@ -44,7 +44,7 @@ class ProjectRepositoryTest extends WebTestCase
     {
         $sitting = SittingStory::sittingConseilLibriciel();
         $projects = $this->projectRepository->getProjectsWithAssociatedEntities($sitting->object());
-        $this->assertCount(3, $projects);
+        $this->assertCount(2, $projects);
     }
 
     public function testFindNotInListProjects()
@@ -52,6 +52,6 @@ class ProjectRepositoryTest extends WebTestCase
         $sitting = SittingStory::sittingConseilLibriciel();
         $project = ProjectStory::project2();
         $projects = $this->projectRepository->findNotInListProjects([$project->getId()], $sitting->object());
-        $this->assertCount(2, $projects);
+        $this->assertCount(1, $projects);
     }
 }

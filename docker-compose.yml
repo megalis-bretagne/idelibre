@@ -8,8 +8,6 @@ services:
       - DATABASE_URL=${DATABASE_URL:-postgresql://idelibre:idelibre@172.17.0.1:5432/idelibre}
       - VERSION=${VERSION:-TAG}
       - MAILER_URL=${MAILER_URL:-null://localhost}
-      - WKHTMLTOPDF_PATH=${WKHTMLTOPDF_PATH:-/usr/local/bin/wkhtmltopdf}
-      - WKHTMLTOIMAGE_PATH=${WKHTMLTOIMAGE_PATH:-/usr/local/bin/wkhtmltoimage}
       - MAILJET_KEY=${MAILJET_KEY:-null}
       - MAILJET_SECRET=${MAILJET_SECRET:-null}
       - EMAIL_FROM=${EMAIL_FROM:-email@service.fr}

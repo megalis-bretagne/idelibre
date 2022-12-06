@@ -1,3 +1,4 @@
+#!/bin/bash
 
 echo "init databases with symfony"
 ./bin/console migrate:from40
@@ -10,4 +11,5 @@ if [ "$USER" != "www-data" ]; then
   chown -R www-data: /data
 fi
 
-php-fpm
+php-fpm8.1 --nodaemonize
+

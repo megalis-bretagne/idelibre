@@ -136,7 +136,7 @@ class SittingApiControllerTest extends WebTestCase
         $response = $this->client->getResponse();
         $projects = json_decode($response->getContent(), true);
 
-        $this->assertCount(3, $projects);
+        $this->assertCount(2, $projects);
     }
 
     public function testAddSitting()

@@ -226,7 +226,7 @@ class SittingController extends AbstractController
         $response = new BinaryFileResponse($pdfPath);
         $response->setContentDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            $pdfSittingGenerator->createName($sitting)
+            $pdfSittingGenerator->createPrettyName($sitting)
         );
         $response->headers->set('X-Accel-Redirect', $pdfPath);
 
