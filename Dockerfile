@@ -20,11 +20,12 @@ RUN apt-get update -yqq \
         locales \
         netcat \
         openssl \
-        pdftk \
         xfonts-75dpi \
         fontconfig \
         xfonts-base \
+        pdftk \
         poppler-utils \
+        qpdf \
         -yqq
 
 RUN apt install php-fpm php-intl php-mbstring php-xml php-zip php-pgsql  -y
