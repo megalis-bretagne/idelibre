@@ -6,9 +6,9 @@ include:
   - project: "libriciel/integration-continue/templates"
     ref: master
     file: '/publish-container-to-registry.yml'
-  - project: "libriciel/integration-continue/templates"
-    ref: master
-    file: '/security-check.yml'
+#  - project: "libriciel/integration-continue/templates"
+#    ref: master
+#    file: '/security-check.yml'
 
 stages:
   - build
@@ -22,15 +22,13 @@ stages:
 variables:
   CONTAINER_IMAGE: "${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME}"
   REGISTRY_CONTAINER_PATH: /public/citoyens/idelibre
-  CANARY_BRANCH_NAME: 313-modification-tests-unitaires-avec-foundry
+#  CANARY_BRANCH_NAME: 321-test-v4-2-les-elus-n-ont-pas-la-seance-a-disposition-dans-leur-espace-idelibre
 
 
 build:
   stage: build
-
   tags:
     - citoyen-shell
-
   script:
     - docker login -u "gitlab-ci-token" -p "$CI_JOB_TOKEN" $CI_REGISTRY
     - docker pull $CI_REGISTRY_IMAGE:latest || true
@@ -43,6 +41,7 @@ build:
 phpTest:
   stage: test
   only:
+    - tags
     - master
   image: $CONTAINER_IMAGE
   services:
@@ -171,8 +170,8 @@ deploy_master:
     url: https://idelibre-4-2.dev.libriciel.net
   tags:
     - citoyen-shell
-#  only:
-#    - master
+  only:
+    - master
   variables:
     PAYLOAD: "payload={\"text\": \"[idelibre-4-2.dev.libriciel.net](https://idelibre-4-2.dev.libriciel.net) a été mis à jour - [build $CI_PIPELINE_ID]($CI_PROJECT_URL/pipelines/$CI_PIPELINE_ID)\"}"
   script:
