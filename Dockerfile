@@ -79,6 +79,7 @@ RUN chown -R www-data:www-data /data
 #
 
 RUN sed -i "s|/run/php/php8.1-fpm.sock|9000|g" /etc/php/8.1/fpm/pool.d/www.conf
+RUN sed -i "s|;clear_env = no|clear_env = no|g" /etc/php/8.1/fpm/pool.d/www.conf
 
 COPY docker-resources/opcache.ini /etc/php/8.1/fpm/conf.d/opcache.ini
 COPY docker-resources/zz-php.ini /etc/php/8.1/fpm/conf.d/zz-php.ini
