@@ -1,5 +1,13 @@
 # Changelog
-All notable changes to this project will be documented in this file.   
+All notable changes to this project will be documented in this file.
+
+## [4.2.0] - wip
+### Evolution
+- Docker passage  en Ubuntu 22:04
+- Node 12 -> 16
+- php 8 -> php8.1
+- Concatenation -> pdftk to pdfunite
+- Gestion des fichiers 'encrypted' avec qpdf
 
 
 ## [4.1.4] - 2022-08-31

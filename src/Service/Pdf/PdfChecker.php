@@ -16,17 +16,15 @@ class PdfChecker
      */
     public function isValid(array $pdfDocPaths): bool
     {
-        $encryptedFiles = $this->checkEncrypted($pdfDocPaths);
+        $this->sanitizeEncrypted($pdfDocPaths);
 
-        return empty($encryptedFiles);
+        return true;
     }
 
     /**
      * @param array<string> $pdfDocPaths
-     *
-     * @return array<string>
      */
-    private function checkEncrypted(array $pdfDocPaths): array
+    private function sanitizeEncrypted(array $pdfDocPaths): void
     {
         $encryptedFiles = [];
         foreach ($pdfDocPaths as $path) {
@@ -38,8 +36,19 @@ class PdfChecker
 
         if (!empty($encryptedFiles)) {
             $this->logger->error("les fichiers suivants sont 'encrypted' : " . implode(',', $encryptedFiles));
-        }
 
-        return $encryptedFiles;
+            $this->removeEncryption($encryptedFiles);
+        }
+    }
+
+    /**
+     * @param array<string> $encryptedFiles *
+     */
+    private function removeEncryption(array $encryptedFiles): void
+    {
+        foreach ($encryptedFiles as $ef) {
+            $cmd = 'qpdf --decrypt' . ' ' . $ef . ' ' . '--replace-input';
+            shell_exec($cmd);
+        }
     }
 }
