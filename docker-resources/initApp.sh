@@ -1,3 +1,4 @@
+#!/bin/bash
 
 echo "init databases with symfony"
 ./bin/console migrate:from40
