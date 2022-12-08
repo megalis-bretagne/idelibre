@@ -16,6 +16,7 @@ SeanceDAO.prototype.unserialize = function (seance) {
 
     var projetDAO = new ProjetDAO();
     var userDAO = new UserDAO();
+    var otherdocDAO = new OtherdocDAO();
     var convocationDAO = new ConvocationDAO();
     var invitationDAO = new InvitationDAO();
 
@@ -53,6 +54,13 @@ SeanceDAO.prototype.unserialize = function (seance) {
         console.log(seance.invitation);
     }
 
+    // deserialisation des otherdocs
+    if (seance.otherdocs) {
+        for (var i = 0; i < seance.otherdocs.length; i++) {
+            //console.log('projet');
+            seance.otherdocs[i] = otherdocDAO.unserialize(seance.otherdocs[i]);
+        }
+    }
 
     return seance;
 };
