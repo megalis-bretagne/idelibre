@@ -86,6 +86,8 @@ services:
   lshorodatage:
     container_name: lshorodatage
     image: registry.libriciel.fr:443/public/citoyens/lshorodatage/lshorodatage:1.0.0
+    ports:
+      - 5000:3000
     environment:
       - NODE_ENV=production
       - POSTGRES_HOST=${POSTGRES_HOST:-172.17.0.1}
