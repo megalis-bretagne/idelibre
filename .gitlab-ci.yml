@@ -13,7 +13,6 @@ include:
 stages:
   - build
   - deploy
-  - staging
   - testWithoutCovering
   - test
   - quality
@@ -164,7 +163,7 @@ publish:
     - docker push ${REGISTRY_CONTAINER_HOST}/public/citoyens/idelibre/idelibre:${IMAGE_VERSION}
 
 deploy_master:
-  stage: staging
+  stage: deploy
   environment:
     name: idelibre-4-2.dev.libriciel.net
     url: https://idelibre-4-2.dev.libriciel.net
