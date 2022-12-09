@@ -37,7 +37,7 @@ services:
     container_name: node-idelibre
     ports:
       - 4000:3001
-    image: registry.libriciel.fr:443/public/citoyens/idelibre-node/idelibre-node:4.1.1
+    image: registry.libriciel.fr:443/public/citoyens/idelibre-node/idelibre-node:4.1.0
     volumes:
       - /data/files:/data
     environment:
