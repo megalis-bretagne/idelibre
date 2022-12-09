@@ -7,7 +7,7 @@
 
         fakeUrlSrv.removeUrls();
        
-        $scope.accountId = $routeParams.acountId;
+        $scope.accountId = $routeParams.accountId;
         $scope.seanceId = $routeParams.seanceId;
         $scope.documentId = $routeParams.documentId;
         $scope.projetId = $routeParams.projetId;
