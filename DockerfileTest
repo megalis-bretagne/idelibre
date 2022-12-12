@@ -1,4 +1,4 @@
-FROM ubuntu22.04_idelibrefpm
+FROM idelibre-fpm-idelibre
 
 RUN apt -y install php-xdebug
 RUN bin/phpunit --version
