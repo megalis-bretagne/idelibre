@@ -77,32 +77,6 @@
         </tbody>
     </table>
 
-
-    {# Modal invalidation password #}
-    <div class="modal fade" id="invalidatePassword" tabindex="-1" aria-labelledby="invalidatePasswordLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    Êtes-vous sûr de vouloir invalider les mots de passe de tous vos utilisateurs ?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Retour</button>
-                    <a href="{{ path('invalidate_users_password') }}" class="btn btn-outline-primary">
-                        <span class="fa fa-arrows-rotate"></span>
-                        Oui
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    {# Fin modal invalidation password #}
 {% endblock %}
 
 
