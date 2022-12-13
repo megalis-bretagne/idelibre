@@ -17,6 +17,16 @@
         <a href="{{ path('user_delete_batch') }}" class="btn btn-outline-primary"><span
                     class="fa fa-trash-alt"></span>
             Supprimer par lot</a>
+
+
+        {{ macros.button_top_open_modal_post(
+            'invalidation des mots de passe',
+            'invalider tous les mots de passe',
+            'invalidate_users_password',
+            'fas fa-sync-alt',
+            "invalidation mot de passe",
+            '<span class="fas fa-exclamation-circle"></span> Invalider' )
+        }}
     </div>
 
     <div class="col-5">
@@ -66,7 +76,9 @@
         {% endfor %}
         </tbody>
     </table>
+
 {% endblock %}
+
 
 {% block pagePagination knp_pagination_render(users) %}
 

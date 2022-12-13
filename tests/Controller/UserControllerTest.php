@@ -4,9 +4,12 @@ namespace App\Tests\Controller;
 
 use App\Entity\Role;
 use App\Entity\User;
+use App\Repository\UserRepository;
+use App\Service\User\PasswordInvalidator;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
 use App\Tests\Story\RoleStory;
+use App\Tests\Story\StructureStory;
 use App\Tests\Story\TypeStory;
 use App\Tests\Story\UserStory;
 use Doctrine\Persistence\ObjectManager;
@@ -250,5 +253,33 @@ class UserControllerTest extends WebTestCase
         $this->assertCount(1, $successMsg);
 
         $this->assertNotEmpty($user = $this->getOneEntityBy(User::class, ['email' => 'NewEmail@exameple.org']));
+    }
+
+    public function testInvalidateUsersPassword()
+    {
+        $libriciel = StructureStory::libriciel();
+        $this->loginAsAdminLibriciel();
+
+        $crawler = $this->client->request(Request::METHOD_GET, '/user');
+        $this->assertResponseStatusCodeSame(200);
+        $page = $crawler->filter('html:contains("Utilisateurs")');
+        $this->assertCount(1, $page);
+
+        $crawler->selectButton('Invalider')->form();
+
+        $this->client->request(Request::METHOD_POST, '/user/invalidatePassword');
+
+        $this->assertTrue($this->client->getResponse()->isRedirect());
+        $crawler = $this->client->followRedirect();
+
+        $this->assertResponseStatusCodeSame(200);
+
+        $successMsg = $crawler->filter('html:contains("Tous les mots de passe ont été invalidés")');
+        $this->assertCount(1, $successMsg);
+
+        $userRepository = self::getContainer()->get(UserRepository::class);
+        $users = $userRepository->findBy(['structure' => $libriciel->object()]);
+
+        $this->assertSame($users[0]->getPassword(), PasswordInvalidator::INVALID_PASSWORD);
     }
 }
