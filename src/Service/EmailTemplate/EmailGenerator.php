@@ -85,6 +85,8 @@ class EmailGenerator
             TemplateTag::ACTOR_TITLE => $user->getTitle() ?? '',
             TemplateTag::ACTOR_GENDER => $this->genderConverter->format($user->getGender()),
             TemplateTag::SITTING_URL => $this->params->get('url_client'),
+            TemplateTag::ACTOR_ATTENDANCE => $convocation->getAttendance(),
+            TemplateTag::ACTOR_DEPUTY => $convocation->getDeputy(),
         ];
     }
 }

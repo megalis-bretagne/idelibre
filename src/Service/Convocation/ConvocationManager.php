@@ -332,4 +332,19 @@ class ConvocationManager
 
         return $sitting->getInvitationFile();
     }
+
+    public function generateEmailForProcuration(Sitting $sitting, array $convocations): array
+    {
+        $emails = [];
+        foreach ($convocations as $convocation) {
+            if ($convocation->getUser()->getIsActive()) {
+                $email = $this->emailGenerator->generateFromTemplateAndConvocation($sitting->getType()->getEmailTemplate(), $convocation);
+                $email->setTo($convocation->getUser()->getEmail());
+                $email->setReplyTo($sitting->getStructure()->getReplyTo());
+                $emails[] = $email;
+            }
+        }
+
+        return $emails;
+    }
 }

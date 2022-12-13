@@ -1,8 +1,3 @@
-date de la séance : #dateseance# <br>
-heure de la séance : #heureseance# <br>
-lieu de la seance : #lieuseance# <br>
-type de la séance : #typeseance# <br>
-lien vers la séance : #urlseance# <br>
 
 {% if email_template is not defined or email_template.category == 'convocation' %}
     civilité de l'élu : #civilite# <br>
@@ -14,7 +9,18 @@ lien vers la séance : #urlseance# <br>
     nom de l'utilisateur : #nom# <br>
 {% endif %}
 
-{% if email_template is not defined or email_template.category == 'convocation' %}
-    titre de l'élu : #titre# <br>
+{% if email_template.category != 'procuration' %}
+    date de la séance : #dateseance# <br>
+    heure de la séance : #heureseance# <br>
+    lieu de la seance : #lieuseance# <br>
+    type de la séance : #typeseance# <br>
+    lien vers la séance : #urlseance# <br>
+
+    {% if email_template is not defined or email_template.category == 'convocation' %}
+        titre de l'élu : #titre# <br>
+    {% endif %}
+
+{% else %}
+    contenu complet du message : #procuration# <br>
 {% endif %}
 
