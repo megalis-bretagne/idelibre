@@ -9,7 +9,7 @@
     nom de l'utilisateur : #nom# <br>
 {% endif %}
 
-{% if email_template.category != 'procuration' %}
+{% if email_template is not defined or email_template.category != 'procuration' %}
     date de la séance : #dateseance# <br>
     heure de la séance : #heureseance# <br>
     lieu de la seance : #lieuseance# <br>
