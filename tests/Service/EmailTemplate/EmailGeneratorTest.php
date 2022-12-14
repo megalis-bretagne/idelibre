@@ -79,7 +79,6 @@ class EmailGeneratorTest extends WebTestCase
             '#urlseance#' => 'idelibre-test.libriciel.fr/idelibre_client',
             '#mandataire#' => null,
             '#presence#' => null,
-            '#procuration#' => null,
             ];
 
         $this->assertEquals($expected, $generator->generateParams($convocation->object()));
