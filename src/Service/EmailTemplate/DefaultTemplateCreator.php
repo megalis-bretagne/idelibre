@@ -16,7 +16,7 @@ class DefaultTemplateCreator
     {
         $this->initDefaultConvocationTemplates($structure);
         $this->initDefaultInvitationTemplates($structure);
-        $this->initDefaultProcurationTemplates($structure);
+        $this->initDefaultRecapitulatifTemplates($structure);
     }
 
     private function initDefaultConvocationTemplates(Structure $structure): void
@@ -43,15 +43,15 @@ class DefaultTemplateCreator
         $this->em->persist($invitationTemplate);
     }
 
-    private function initDefaultProcurationTemplates(Structure $structure): void
+    private function initDefaultRecapitulatifTemplates(Structure $structure): void
     {
-        $procurationTemplate = new EmailTemplate();
-        $procurationTemplate->setName('Procuration par défaut')
+        $recapitulatifTemplate = new EmailTemplate();
+        $recapitulatifTemplate->setName('Récapitulatif par défaut')
             ->setStructure($structure)
             ->setSubject('Récapitulatif des absences/présences aux séances')
-            ->setContent(DefaultTemplate::PROCURATION)
+            ->setContent(DefaultTemplate::RECAPITULATIF)
             ->setIsDefault(true)
-            ->setCategory(EmailTemplate::CATEGORY_PROCURATION);
-        $this->em->persist($procurationTemplate);
+            ->setCategory(EmailTemplate::CATEGORY_RECAPITULATIF);
+        $this->em->persist($recapitulatifTemplate);
     }
 }

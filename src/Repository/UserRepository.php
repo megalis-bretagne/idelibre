@@ -424,4 +424,20 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getQuery()
             ->getResult();
     }
+
+
+    public function findSecretariesWithActiveSittingsAndAuthorizedType($structure): QueryBuilder
+    {
+        return $this->createQueryBuilder('u')
+            ->leftJoin('u.role', 'r')
+            ->andWhere(' r.name =:secretary')
+            ->setParameter('secretary', 'Secretary')
+            ->andWhere('u.structure = :structure')
+            ->setParameter('structure', $structure)
+            ->leftJoin('u.structure', 'structure')
+            ->leftJoin('structure.sittings', 'sitting')
+            ->leftJoin( 'u.authorizedTypes', 'type')
+            ->andWhere('sitting.type IN (type)')
+            ->orderBy('u.lastName', 'ASC');
+    }
 }

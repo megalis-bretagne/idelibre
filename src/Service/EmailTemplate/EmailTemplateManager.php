@@ -71,7 +71,7 @@ Un dossier a été mis à votre disposition. veuillez cliquez sur le lien pour l
     public function getDefaultProcurationTemplate(Structure $structure): EmailTemplate
     {
         return $this->templateRepository->findOneBy([
-            'category' => EmailTemplate::CATEGORY_PROCURATION,
+            'category' => EmailTemplate::CATEGORY_RECAPITULATIF,
             'structure' => $structure,
             'isDefault' => true,
         ]);

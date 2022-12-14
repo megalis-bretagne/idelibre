@@ -2,6 +2,7 @@
 
 namespace App\Command\ServiceCmd;
 
+use App\Entity\EmailTemplate;
 use App\Entity\Sitting;
 use App\Entity\Structure;
 use App\Entity\User;
@@ -15,11 +16,14 @@ use App\Service\EmailTemplate\EmailGenerator;
 use App\Service\EmailTemplate\TemplateTag;
 use App\Service\Util\GenderConverter;
 use DateTime;
+use Eluceo\iCal\Domain\ValueObject\Category;
+use Twig\Environment;
 
 class AttendanceNotification
 {
 
     public function __construct(
+        private Environment $twig,
         private StructureRepository $structureRepository,
         private SittingRepository $sittingRepository,
         private ConvocationRepository $convocationRepository,
@@ -44,7 +48,7 @@ class AttendanceNotification
      */
     private function listActiveSittingsByStructure(Structure $structure): array
     {
-        return $this->sittingRepository->findActiveSittingsAfterDate($structure, new DateTime('- 4month'));
+        return $this->sittingRepository->findActiveSittingsAfterDate($structure, new DateTime('0 days'));
     }
 
     public function genAllAttendanceNotification(): void
@@ -56,58 +60,50 @@ class AttendanceNotification
 
     public function getAttendanceNotification(Structure $structure): void
     {
+
         $users = $this->userRepository->findSecretariesByStructure($structure)->getQuery()->getResult();
-        $attendanceDatas = $this->prepareDatas($structure);
-        if( !empty($attendanceDatas) ){
-            $this->prepareAndSendMail($structure, $attendanceDatas, $users);
-        }
-    }
-
-    public function prepareDatas(Structure $structure ): array
-    {
-        $attendanceDatas = [];
         $sittings = $this->listActiveSittingsByStructure($structure);
-        foreach($sittings as $sitting) {
-            $seanceName = 'Séance ' . $sitting->getName(). ' du '.$sitting->getDate()->format('d/m/Y à H:i');
-            $statut =  'Non renseigné';
-            $convocations = $this->convocationRepository->getConvocationsWithUserBySitting($sitting);
-            foreach( $convocations as $convocation ) {
-                if (!empty($convocation->getAttendance())) {
-                    $statut = ucfirst($convocation->getAttendance() );
-                    if (!empty($convocation->getDeputy())) {
-                        $statut = ucfirst($convocation->getAttendance()) . ' - Mandataire: ' . $convocation->getDeputy();
-                    }
+        foreach( $users as $user) {
+            $attendanceDatas = [];
+            foreach( $sittings as $sitting ) {
+                if( $user->getAuthorizedTypes()->contains($sitting->getType()) ) {
+                    $attendanceDatas[] = $this->prepareDatas($sitting);
                 }
-                $attendanceDatas[$seanceName][]  = $convocation->getUser()->getFirstName() . ' ' . $convocation->getUser()->getLastName() . ' - Statut : ' .$statut;
             }
+            $this->prepareAndSendMail($structure, $attendanceDatas, $user);
         }
-        return $attendanceDatas;
     }
 
-    private function prepareAndSendMail(Structure $structure, array $content, array $users): void
+    public function prepareDatas(Sitting $sitting): string
     {
-        $emailsData = [];
-        $emailTemplate = $this->emailTemplateRepository->findOneByStructureAndCategory($structure, 'procuration');
-        if (!empty($emailTemplate)) {
-            foreach( $users as $user ) {
-                $emailDest = $user->getEmail();
-                $emailData = $this->emailGenerator->generateFromTemplate($emailTemplate, $this->generateParams($content, $user));
-                $emailData->setTo($emailDest)->setReplyTo($structure->getReplyTo());
-                $emailsData[] = $emailData;
-            }
+        $convocations = $this->convocationRepository->getConvocationsWithUserBySitting($sitting);
+        return $this->twig->render('generate/mailing_recap_template.html.twig', [
+            'convocations' => $convocations,
+            'sitting' => $sitting,
+            'timezone' => $sitting->getStructure()->getTimezone()->getName(),
+        ]);
+    }
+
+    /**
+     * @param array<string> $content
+     */
+    private function prepareAndSendMail(Structure $structure, array $content, User $user): void
+    {
+        if( empty($content ) ){
+            return;
         }
-        $this->emailService->sendBatch($emailsData);
+        $emailTemplate = $this->emailTemplateRepository->findOneByStructureAndCategory($structure, EmailTemplate::CATEGORY_RECAPITULATIF);
+        if (!empty($emailTemplate)) {
+            $emailDest = $user->getEmail();
+            $emailData = $this->emailGenerator->generateFromTemplate($emailTemplate, $this->generateParams($content, $user));
+            $emailData->setTo($emailDest)->setReplyTo($structure->getReplyTo());
+            $this->emailService->sendBatch([$emailData]);
+        }
     }
 
     public function generateParams(array $content, User $user): array
     {
-        $allDatas = [];
-        foreach( $content  as $seanceName => $contentData ) {
-            $datas = $seanceName."\n".'- ';
-            $datas .= implode("\n".'- ', $contentData);
-            $allDatas[] = $datas."\n";
-        }
-        $contentToDisplay = nl2br(implode("\n", $allDatas));
+        $contentToDisplay = implode("\n", $content);
         return [
             TemplateTag::SITTING_PROCURATION => $contentToDisplay,
             TemplateTag::ACTOR_FIRST_NAME => $user->getFirstName(),

@@ -90,6 +90,8 @@ class ConvocationRepository extends ServiceEntityRepository
             ->setParameter('convocationIds', $convocationIds)
             ->join('c.user', 'user')
             ->addSelect('user')
+            ->orderBy('user.lastName')
+            ->addOrderBy('user.firstName')
             ->getQuery()
             ->getResult();
     }
@@ -105,6 +107,8 @@ class ConvocationRepository extends ServiceEntityRepository
             ->addSelect('sent')
             ->leftJoin('c.receivedTimestamp', 'received')
             ->addSelect('received')
+            ->orderBy('user.lastName')
+            ->addOrderBy('user.firstName')
             ->getQuery()
             ->getResult();
     }

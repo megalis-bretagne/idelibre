@@ -20,11 +20,11 @@ Pour vous connecter à la séance, veuillez vous rendre à l'adresse suivante : 
 </br>
 Cordialement,";
 
-    public const PROCURATION = "Bonjour #civilite# #nom# #prenom#, </br>
+    public const RECAPITULATIF = "Bonjour #civilite# #nom# #prenom#, </br>
 </br>
 Ce mail est un récapitulatif des présents/absents pour les différentes séances en cours.</br>
 </br>
-#procuration#
+#recapitulatif#
 </br>
 </br>                   
 Cordialement,";
