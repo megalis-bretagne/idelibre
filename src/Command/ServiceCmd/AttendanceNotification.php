@@ -5,6 +5,7 @@ namespace App\Command\ServiceCmd;
 use App\Entity\EmailTemplate;
 use App\Entity\Sitting;
 use App\Entity\Structure;
+use App\Entity\Type;
 use App\Entity\User;
 use App\Repository\ConvocationRepository;
 use App\Repository\EmailTemplateRepository;
@@ -61,13 +62,13 @@ class AttendanceNotification
     public function getAttendanceNotification(Structure $structure): void
     {
 
-        $users = $this->userRepository->findSecretariesByStructure($structure)->getQuery()->getResult();
+        $users = $this->userRepository->findSecretariesAndAdminByStructure($structure)->getQuery()->getResult();
         $sittings = $this->listActiveSittingsByStructure($structure);
         foreach( $users as $user) {
             if( $user->getAcceptMailRecap() ) {
                 $attendanceDatas = [];
                 foreach( $sittings as $sitting ) {
-                    if( $user->getAuthorizedTypes()->contains($sitting->getType()) ) {
+                    if( $this->isAuthorizedSittingType($sitting->getType(), $user) ) {
                         $attendanceDatas[] = $this->prepareDatas($sitting);
                     }
                 }
@@ -114,5 +115,13 @@ class AttendanceNotification
             TemplateTag::ACTOR_TITLE => $user->getTitle() ?? '',
             TemplateTag::ACTOR_GENDER => $this->genderConverter->format($user->getGender()),
         ];
+    }
+
+    private function isAuthorizedSittingType(Type $type, User $user): bool
+    {
+        if( $user->getRole()->getName() == 'Admin') {
+            return true;
+        }
+        return $user->getAuthorizedTypes()->contains($type);
     }
 }
