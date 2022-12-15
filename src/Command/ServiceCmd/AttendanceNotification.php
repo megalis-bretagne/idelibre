@@ -64,13 +64,15 @@ class AttendanceNotification
         $users = $this->userRepository->findSecretariesByStructure($structure)->getQuery()->getResult();
         $sittings = $this->listActiveSittingsByStructure($structure);
         foreach( $users as $user) {
-            $attendanceDatas = [];
-            foreach( $sittings as $sitting ) {
-                if( $user->getAuthorizedTypes()->contains($sitting->getType()) ) {
-                    $attendanceDatas[] = $this->prepareDatas($sitting);
+            if( $user->getAcceptMailRecap() ) {
+                $attendanceDatas = [];
+                foreach( $sittings as $sitting ) {
+                    if( $user->getAuthorizedTypes()->contains($sitting->getType()) ) {
+                        $attendanceDatas[] = $this->prepareDatas($sitting);
+                    }
                 }
+                $this->prepareAndSendMail($structure, $attendanceDatas, $user);
             }
-            $this->prepareAndSendMail($structure, $attendanceDatas, $user);
         }
     }
 
@@ -105,7 +107,7 @@ class AttendanceNotification
     {
         $contentToDisplay = implode("\n", $content);
         return [
-            TemplateTag::SITTING_PROCURATION => $contentToDisplay,
+            TemplateTag::SITTING_RECAPITULATIF => $contentToDisplay,
             TemplateTag::ACTOR_FIRST_NAME => $user->getFirstName(),
             TemplateTag::ACTOR_LAST_NAME => $user->getLastName(),
             TemplateTag::ACTOR_USERNAME => $user->getUsername(),

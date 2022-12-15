@@ -105,6 +105,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['user:read', 'user:write'])]
     private $phone;
 
+    #[Column(type: 'boolean')]
+    #[Groups(['user', 'user:read', 'user:write'])]
+    private $acceptMailRecap = true;
+
     public function __construct()
     {
         $this->associatedTypes = new ArrayCollection();
@@ -352,6 +356,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPhone(?string $phone): self
     {
         $this->phone = $phone;
+
+        return $this;
+    }
+
+    public function getAcceptMailRecap(): bool
+    {
+        return $this->acceptMailRecap;
+    }
+
+    public function setAcceptMailRecap(bool $acceptMailRecap): self
+    {
+        $this->acceptMailRecap = $acceptMailRecap;
 
         return $this;
     }

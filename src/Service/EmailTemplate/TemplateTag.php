@@ -16,5 +16,5 @@ class TemplateTag
     public const SITTING_URL = '#urlseance#';
     public const ACTOR_ATTENDANCE = '#presence#';
     public const ACTOR_DEPUTY = '#mandataire#';
-    public const SITTING_PROCURATION = '#procuration#';
+    public const SITTING_RECAPITULATIF = '#recapitulatif#';
 }
