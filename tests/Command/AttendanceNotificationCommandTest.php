@@ -48,16 +48,14 @@ class AttendanceNotificationCommandTest extends WebTestCase
         SittingStory::load();
         ConvocationStory::load();
     }
+
     public function testGetAttendanceNotification()
     {
         $consulePwd = (new Application(self::$kernel))->find('attendance:notification');
-
         $commandTester = new CommandTester($consulePwd);
         $commandTester->execute([]);
-
         $commandTester->assertCommandIsSuccessful();
         $display = $commandTester->getDisplay();
         $this->assertEquals("[OK] OK", str_replace("\n", "", trim($display)));
-
     }
 }
