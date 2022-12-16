@@ -8,6 +8,7 @@ use App\Form\UserPreferenceType;
 use App\Form\UserType;
 use App\Repository\UserRepository;
 use App\Security\UserLoginEntropy;
+use App\Service\User\PasswordInvalidator;
 use App\Service\User\UserManager;
 use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
@@ -175,5 +176,15 @@ class UserController extends AbstractController
             'form' => $form->createView(),
             'suffix' => $this->isGranted('ROLE_MANAGE_STRUCTURES') ? null : $user->getStructure()->getSuffix(),
         ]);
+    }
+
+    #[Route(path: '/user/invalidatePassword', name: 'invalidate_users_password', methods: ['POST'])]
+    #[IsGranted(data: 'ROLE_MANAGE_USERS')]
+    public function invalidateUsersPassword(PasswordInvalidator $passwordInvalidator): Response
+    {
+        $passwordInvalidator->invalidatePassword($this->getUser()->getStructure());
+        $this->addFlash('success', 'Tous les mots de passe ont été invalidés');
+
+        return $this->redirectToRoute('user_index');
     }
 }
