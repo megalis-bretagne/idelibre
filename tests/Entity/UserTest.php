@@ -42,7 +42,8 @@ class UserTest extends WebTestCase
             ->setFirstName('new firstName')
             ->setLastName('new lastName')
             ->setUsername('new username')
-            ->setEmail('email@example.org');
+            ->setEmail('email@example.org')
+            ->setAcceptMailRecap(false);
 
         $this->assertHasValidationErrors($user, 0);
     }
@@ -54,7 +55,8 @@ class UserTest extends WebTestCase
             ->setFirstName('new firstName')
             ->setLastName('new lastName')
             ->setUsername('new username@toto')
-            ->setEmail('email@example.org');
+            ->setEmail('email@example.org')
+            ->setAcceptMailRecap(false);
 
         $this->assertHasValidationErrors($user, 0);
     }
@@ -66,7 +68,8 @@ class UserTest extends WebTestCase
             ->setFirstName('new firstName')
             ->setLastName('new lastName')
             ->setUsername('new username@toto@extrasuffix')
-            ->setEmail('email@example.org');
+            ->setEmail('email@example.org')
+            ->setAcceptMailRecap(false);
 
         $this->assertHasValidationErrors($user, 1);
     }
@@ -78,7 +81,8 @@ class UserTest extends WebTestCase
             ->setFirstName('new firstName')
             ->setLastName('new lastName')
             ->setUsername('admin@libriciel')
-            ->setEmail('email@example.org');
+            ->setEmail('email@example.org')
+            ->setAcceptMailRecap(false);
 
         $this->assertHasValidationErrors($user, 1);
     }
@@ -90,7 +94,8 @@ class UserTest extends WebTestCase
             ->setFirstName('new firstName')
             ->setLastName('new lastName')
             ->setUsername('')
-            ->setEmail('email@example.org');
+            ->setEmail('email@example.org')
+            ->setAcceptMailRecap(false);
 
         $this->assertHasValidationErrors($user, 1);
     }
@@ -101,7 +106,8 @@ class UserTest extends WebTestCase
             ->setRole($this->getOneRoleBy(['name' => 'Secretary']))
             ->setFirstName('new firstName')
             ->setLastName('new lastName')
-            ->setEmail('email@example.org');
+            ->setEmail('email@example.org')
+            ->setAcceptMailRecap(false);
 
         $this->assertHasValidationErrors($user, 1);
     }
@@ -113,7 +119,8 @@ class UserTest extends WebTestCase
             ->setFirstName('new firstName')
             ->setLastName('new lastName')
             ->setUsername($this->genString(256))
-            ->setEmail('email@example.org');
+            ->setEmail('email@example.org')
+            ->setAcceptMailRecap(false);
 
         $this->assertHasValidationErrors($user, 1);
     }
@@ -125,7 +132,8 @@ class UserTest extends WebTestCase
             ->setFirstName('')
             ->setLastName('new lastName')
             ->setUsername('new username')
-            ->setEmail('email@example.org');
+            ->setEmail('email@example.org')
+            ->setAcceptMailRecap(false);
 
         $this->assertHasValidationErrors($user, 1);
     }
@@ -136,7 +144,8 @@ class UserTest extends WebTestCase
             ->setRole($this->getOneRoleBy(['name' => 'Secretary']))
             ->setLastName('new lastName')
             ->setUsername('new username')
-            ->setEmail('email@example.org');
+            ->setEmail('email@example.org')
+            ->setAcceptMailRecap(false);
 
         $this->assertHasValidationErrors($user, 1);
     }
@@ -148,7 +157,8 @@ class UserTest extends WebTestCase
             ->setFirstName($this->genString(256))
             ->setLastName('new lastName')
             ->setUsername('new username')
-            ->setEmail('email@example.org');
+            ->setEmail('email@example.org')
+            ->setAcceptMailRecap(false);
 
         $this->assertHasValidationErrors($user, 1);
     }
@@ -160,7 +170,8 @@ class UserTest extends WebTestCase
             ->setFirstName('new firstName')
             ->setLastName('')
             ->setUsername('new username')
-            ->setEmail('email@example.org');
+            ->setEmail('email@example.org')
+            ->setAcceptMailRecap(false);
 
         $this->assertHasValidationErrors($user, 1);
     }
@@ -172,7 +183,8 @@ class UserTest extends WebTestCase
             ->setFirstName('new firstName')
             ->setLastName($this->genString(256))
             ->setUsername('new username')
-            ->setEmail('email@example.org');
+            ->setEmail('email@example.org')
+            ->setAcceptMailRecap(false);
 
         $this->assertHasValidationErrors($user, 1);
     }
@@ -183,7 +195,8 @@ class UserTest extends WebTestCase
             ->setRole($this->getOneRoleBy(['name' => 'Secretary']))
             ->setFirstName('new firstName')
             ->setUsername('new username')
-            ->setEmail('email@example.org');
+            ->setEmail('email@example.org')
+            ->setAcceptMailRecap(false);
 
         $this->assertHasValidationErrors($user, 1);
     }
@@ -195,7 +208,8 @@ class UserTest extends WebTestCase
             ->setFirstName('new firstName')
             ->setLastName('new lastName')
             ->setUsername('new username')
-            ->setEmail('email.example.org');
+            ->setEmail('email.example.org')
+            ->setAcceptMailRecap(false);
 
         $this->assertHasValidationErrors($user, 1);
     }

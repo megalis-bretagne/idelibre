@@ -17,7 +17,6 @@ use App\Service\EmailTemplate\EmailGenerator;
 use App\Service\EmailTemplate\TemplateTag;
 use App\Service\Util\GenderConverter;
 use DateTime;
-use Eluceo\iCal\Domain\ValueObject\Category;
 use Twig\Environment;
 
 class AttendanceNotification

@@ -107,7 +107,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[Column(type: 'boolean')]
     #[Groups(['user', 'user:read', 'user:write'])]
-    private $acceptMailRecap = true;
+    private $acceptMailRecap = false;
 
     public function __construct()
     {
