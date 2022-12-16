@@ -20,7 +20,7 @@ final class Version20221215092117 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE "user" ADD accept_mail_recap BOOLEAN NOT NULL');
+        $this->addSql('ALTER TABLE "user" ADD accept_mail_recap BOOLEAN NOT NULL DEFAULT false');
     }
 
     public function down(Schema $schema): void
