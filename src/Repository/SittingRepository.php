@@ -164,4 +164,16 @@ class SittingRepository extends ServiceEntityRepository
             ->setParameter('after', $after)
             ->getQuery()->getResult();
     }
+
+    public function findSittingsBefore(DateTimeInterface $before, Structure $structure)
+    {
+        return $this->createQueryBuilder('s')
+            ->leftJoin('s.convocations', 'conv')
+            ->addSelect('conv')
+            ->andWhere('s.structure = :structure')
+            ->andWhere('s.date < :before')
+            ->setParameter('structure', $structure)
+            ->setParameter('before', $before)
+            ->getQuery()->getResult();
+    }
 }

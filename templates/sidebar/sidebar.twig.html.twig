@@ -148,6 +148,14 @@
 
 
                     {% if is_granted('ROLE_MANAGE_SITTINGS') %}
+                        <li class="{{ 'subscription-nav' in activeNavs ? 'active' : '' }}">
+                            <a href="{{ path('subscription_index') }}">
+                                <i class="fas fa-bell"></i>
+                                <span>Abonnement notifications</span>
+                            </a>
+                            <ul class="sub-menu">
+                            </ul>
+                        </li>
                         <li class="{{ 'board-nav' in activeNavs ? 'active' : '' }}">
                             <a href="{{ path('board_index') }}">
                                 <i class="fas fa-tachometer-alt"></i>

@@ -67,4 +67,13 @@ Un dossier a été mis à votre disposition. veuillez cliquez sur le lien pour l
             'isDefault' => true,
         ]);
     }
+
+    public function getDefaultRecapitulatifTemplate(Structure $structure): EmailTemplate
+    {
+        return $this->templateRepository->findOneBy([
+            'category' => EmailTemplate::CATEGORY_RECAPITULATIF,
+            'structure' => $structure,
+            'isDefault' => true,
+        ]);
+    }
 }

@@ -1,0 +1,52 @@
+
+<style>
+    table {
+        border:1px solid black
+    }
+
+    thead, tr, td, th {
+        border-bottom: 1px solid black;
+        border-left: 1px solid black;
+    }
+
+    td, tr {
+        padding:12px
+    }
+
+    td {
+        border-left: 1px solid black;
+    }
+
+    td:first-child {
+        border-left:none
+    }
+
+    tbody > tr:last-child > td {
+        border-bottom: none;
+    }
+    
+    
+</style>
+
+<legend>Séance {{ sitting.name }} du {{ sitting.date ? sitting.date | date('d/m/Y à H:i', timezone) : '' }}</legend>
+
+<table>
+    <thead>
+        <tr>
+            <th>Utilisateur</th>
+            <th>Statut</th>
+            <th>Mandataire</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for convocation in convocations %}
+        <tr>
+            <td>{{ convocation.user.firstName }} {{ convocation.user.lastName }}</td>
+            <td>{{ convocation.attendance ? (convocation.attendance |capitalize) : 'Non renseigné'}} </td>
+            <td>{{ convocation.deputy ? convocation.deputy  : '' }} </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<br />
+<br />

@@ -28,6 +28,7 @@ class EmailTemplate
 {
     public const CATEGORY_CONVOCATION = 'convocation';
     public const CATEGORY_INVITATION = 'invitation';
+    public const CATEGORY_RECAPITULATIF = 'recapitulatif';
 
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]

@@ -19,4 +19,13 @@ Vous êtes invité(e) au #typeseance# en date du #dateseance# à #heureseance# q
 Pour vous connecter à la séance, veuillez vous rendre à l'adresse suivante : <a href='https://#urlseance#'>https://#urlseance#</a></br>
 </br>
 Cordialement,";
+
+    public const RECAPITULATIF = "Bonjour #civilite# #nom# #prenom#, </br>
+</br>
+Ce mail est un récapitulatif des présents/absents pour les différentes séances en cours.</br>
+</br>
+#recapitulatif#
+</br>
+</br>                   
+Cordialement,";
 }

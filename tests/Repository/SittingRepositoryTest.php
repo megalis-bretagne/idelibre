@@ -75,4 +75,18 @@ class SittingRepositoryTest extends WebTestCase
         $sittings = $this->sittingRepository->findSittingsAfter(new \DateTime('-3 months'), $structureLs->object());
         $this->assertCount(0, $sittings);
     }
+
+    public function testFindSittingsBefore3Months()
+    {
+        $structureLs = StructureStory::libriciel();
+        $sittings = $this->sittingRepository->findSittingsBefore(new \DateTime('-3 months'), $structureLs->object());
+        $this->assertCount(3, $sittings);
+    }
+
+    public function testFindSittingsBefore50Months()
+    {
+        $structureLs = StructureStory::libriciel();
+        $sittings = $this->sittingRepository->findSittingsBefore(new \DateTime('-50 months'), $structureLs->object());
+        $this->assertCount(0, $sittings);
+    }
 }
