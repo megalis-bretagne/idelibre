@@ -495,7 +495,7 @@
                     return;
                 }
                 var projetDao = new ProjetDAO();
-                var archivedvs = [];
+                var archivedProjets = [];
                 for (var i = 0, ln = jsonProjets.length; i < ln; i++) {
                     archivedProjets.push(projetDao.unserialize(jsonProjets[i]));
                 }
