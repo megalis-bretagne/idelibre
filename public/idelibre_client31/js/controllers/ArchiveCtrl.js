@@ -32,6 +32,7 @@ $rootScope.$broadcast('buttonDrawersVisibility',{visibility: false});
         socketioSrv.archivedSeancesList(account);
 
         $scope.sortSeance = 'seance_date';
+        $scope.sortReverse = 'desc';
         /**
          * fonction de tri des Séances
          * @param {type} arg

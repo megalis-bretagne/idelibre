@@ -3,7 +3,7 @@
 
 
 <div class="perso-margin-vertical-lg">
-    <div ng-repeat="seance in archivedSeances| orderBy:  sortSeance">
+    <div ng-repeat="seance in archivedSeances| orderBy:  sortSeance:sortReverse">
         <archiveseance_btn seance="seance" accountid="accountId" state='state'></archiveseance_btn>
     </div>
 </div>
