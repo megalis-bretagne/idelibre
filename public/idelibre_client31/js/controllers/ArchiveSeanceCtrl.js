@@ -2,7 +2,7 @@
 (function () {
     'use strict';
 
-    angular.module('idelibreApp').controller('ArchiveSeanceCtrl', function ($routeParams, $scope, $location, accountSrv, socketioSrv, usSpinnerService, $timeout, $log, $rootScope) {
+    angular.module('idelibreApp').controller('ArchiveSeanceCtrl', function ($routeParams, $scope, $location, dlOriginalSrv, accountSrv, socketioSrv, usSpinnerService, $timeout, $log, $rootScope) {
 
 
 $rootScope.$broadcast('buttonDrawersVisibility',{visibility: false});
@@ -57,6 +57,34 @@ $rootScope.$broadcast('buttonDrawersVisibility',{visibility: false});
             }
         });
 
+        var callbackSuccess = function () {
+            $scope.dlStatus = false;
+            $scope.stateClass = "fa fa-download fa-lg perso-color-yellow";
+            $rootScope.$broadcast('modalOpen', {title: 'Téléchargement terminé', content: 'Votre document a bien été téléchargé'});
+        }
+
+
+        var callbackError = function () {
+            $scope.dlStatus = false;
+            $scope.stateClass = "fa fa-download fa-lg perso-color-yellow";
+            $rootScope.$broadcast('modalOpen', {title: 'Téléchargement erreur', content: 'Votre document n\'a pas été téléchargé'});
+        };
+
+
+        $scope.downloadZipSeance = function(){
+            var url = account.url + '/nodejs/' + config.API_LEVEL + '/zips/dlZip/' +  $scope.seanceId;
+            var filename = 'seance.zip';
+            $rootScope.$broadcast('notify', {class: 'info', content: "<b>" + account.name + "</b>" + Messages.DONWLOAD_ZIP});
+            dlOriginalSrv.dlPDF(account, url, filename, 'application/zip', "idelibre/", callbackSuccess, callbackError);
+        };
+
+
+        $scope.downloadPdfSeance = function(){
+            var url = account.url + '/nodejs/' + config.API_LEVEL + '/pdf/dlPdf/' +  $scope.seanceId;
+            var filename = 'seance.pdf';
+            $rootScope.$broadcast('notify', {class: 'info', content: "<b>" + account.name + "</b>" + Messages.DONWLOAD_PDF});
+            dlOriginalSrv.dlPDF(account, url, filename, 'application/pdf', "idelibre/", callbackSuccess, callbackError);
+        };
 
     });
 })();
