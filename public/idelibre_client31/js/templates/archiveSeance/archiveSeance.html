@@ -2,6 +2,10 @@
 
 <button ng-click="goToArchive()"  type="button" class="btn btn-primary perso-top-left" ><i class="fa fa-reply fa-2x"></i></button>
 
+<div class="perso-top-right">
+    <div ng-if="!isInvite" style="margin-top: 5px"><button ng-click="downloadZipSeance()"  type="button" title="ZIP" class="btn btn-warning" style="width: 55px"> ZIP </button> </div>
+    <div ng-if="!isInvite" style="margin-top: 5px"><button ng-click="downloadPdfSeance()"  type="button" title="PDF" class="btn btn-warning" style="width: 55px"> PDF </button> </div>
+</div>
 
 <div class="perso-margin-vertical-lg">
     <div ng-repeat="projet in archivedProjets| orderBy:'projet_rank' ">
