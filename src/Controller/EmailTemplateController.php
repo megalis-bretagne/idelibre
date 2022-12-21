@@ -121,6 +121,8 @@ class EmailTemplateController extends AbstractController
     #[IsGranted(data: 'MANAGE_EMAIL_TEMPLATES', subject: 'emailTemplate')]
     public function iframePreview(EmailTemplate $emailTemplate, EmailGenerator $generator): Response
     {
+        $recapitulatif = $this->tableExample();
+
         $emailData = $generator->generateFromTemplate($emailTemplate, [
             '#linkUrl#' => '<a href="#">Accéder aux dossiers</a>',
             '#urlseance#' => '<a href="#">idelibre.example.fr/idelibre_client</a>',
@@ -133,6 +135,7 @@ class EmailTemplateController extends AbstractController
             '#nom#' => 'Dupont',
             '#titre#' => 'Monsieur le Maire',
             '#civilite#' => 'Monsieur',
+            '#recapitulatif#' => $recapitulatif,
         ]);
         $content = $emailData->getContent();
         if (EmailData::FORMAT_TEXT === $emailData->getFormat()) {
@@ -141,5 +144,84 @@ class EmailTemplateController extends AbstractController
         }
 
         return new Response($content);
+    }
+
+    public function tableExample() {
+        return "<style>
+                table {
+                    border:1px solid black
+                }
+                thead, tr, td, th {
+                    border-bottom: 1px solid black;
+                    border-left: 1px solid black;
+                }
+                td, tr {
+                    padding:12px
+                }
+                td {
+                    border-left: 1px solid black;
+                }
+                td:first-child {
+                    border-left:none
+                }
+                tbody > tr:last-child > td {
+                    border-bottom: none;
+                }
+            </style>
+            <legend>Séance Conseil Municipal du 23/12/2022 à 12:00</legend>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Utilisateur</th>
+                        <th>Statut</th>
+                        <th>Mandataire</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Michel DURANT</td>
+                        <td>Présent</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Emilie DIL</td>
+                        <td>Non renseigné</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Jean-Paul LABA</td>
+                        <td>Absent</td>
+                        <td>Eric POLO</td>
+                    </tr>
+                </tbody>
+            </table>
+            <br />
+            <legend>Séance Assemblée Générale du 05/01/2023 à 14:00</legend>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Utilisateur</th>
+                        <th>Statut</th>
+                        <th>Mandataire</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Michel DURANT</td>
+                        <td>Non renseigné</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Emilie DIL</td>
+                        <td>Présent</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Jean-Paul LABA</td>
+                        <td>Présent</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>";
     }
 }
