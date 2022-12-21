@@ -84,6 +84,49 @@ class FileManager
         return $file;
     }
 
+//    public function save(UploadedFile $uploadedFile, Structure $structure): ?File
+//    {
+//        $pathS3 = $this->sendS3($structure, $uploadedFile);
+//
+//        if (!empty($pathS3)) {
+//            $file = new File();
+//            $file
+//                ->setName($uploadedFile->getClientOriginalName())
+//                ->setPath($pathS3)
+//                ->setSize($uploadedFile->getSize())
+//            ;
+//
+//            $this->em->persist($file);
+//
+//            return $file;
+//        }
+//
+//        return null;
+//    }
+
+//    private function sendS3(Structure $structure, UploadedFile $uploadedFile)
+//    {
+//        if (false === $this->checkVirusFile($uploadedFile)) {
+//            return false;
+//        }
+//
+//        $fileName = $this->sanitizeAndUniqueFileName($uploadedFile);
+//
+//        $key = $this->bag->get('document_files_directory') . $structure->getId() . date('/Y/m/') . $fileName;
+//
+//        try {
+//            $this->s3Manager->addObject(
+//                $uploadedFile->getRealPath(),
+//                $key
+//            );
+//        } catch (ObjectStorageException $e) {
+//            $this->logger->error($e);
+//            return false;
+//        }
+//
+//        return $key;
+//    }
+
     public function transfertToS3(string $path)
     {
         if (false === $this->fileExist($path)) {

@@ -208,6 +208,12 @@ class S3Manager
     /**
      * @param string $bucketName
      *                           ttl example : '+10 minutes'
+    /**
+     * @param string $fileKey
+     * @param string $fileName
+     * @param string $ttl
+     * @param string $bucketName
+     * ttl example : '+10 minutes'
      */
     public function generatePresignedLink(string $fileKey, string $fileName, string $ttl, ?string $bucketName = null): string
     {
