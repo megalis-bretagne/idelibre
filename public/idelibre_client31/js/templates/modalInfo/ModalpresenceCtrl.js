@@ -1,7 +1,8 @@
 (function () {
     angular.module('idelibreApp').controller('ModalpresenceCtrl', function ($scope, account, seance, $rootScope, $modalInstance, socketioSrv, accountSrv) {
 
-        $scope.presenceStatus = seance.getPresentStatus();
+        // $scope.presenceStatus = seance.getPresentStatus();
+        $scope.presenceStatus = 'undefined';
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
         };
@@ -9,7 +10,7 @@
         $scope.present = function () {
             seance.setPresentStatus(Seance.PRESENT);
             accountSrv.save();
-            socketioSrv.sendConfirmPresence(account, seance.id, Seance.PRESENT);
+            socketioSrv.sendConfirmPresence(account, seance.id, Seance.PRESENT, null);
             $modalInstance.dismiss('cancel');
         };
 
