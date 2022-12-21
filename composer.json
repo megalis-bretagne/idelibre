@@ -12,6 +12,7 @@
     "ext-mbstring": "*",
     "ext-zip": "*",
     "apy/breadcrumbtrail-bundle": "^1.9.0",
+    "aws/aws-sdk-php": "^3.254",
     "composer/package-versions-deprecated": "^1.11",
     "doctrine/annotations": "^1.0",
     "doctrine/doctrine-bundle": "^2",
