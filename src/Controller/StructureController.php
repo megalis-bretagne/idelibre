@@ -8,6 +8,7 @@ use App\Form\StructureInformationType;
 use App\Form\StructureType;
 use App\Repository\StructureRepository;
 use App\Service\RoleTrait;
+use App\Service\S3\S3Manager;
 use App\Service\Structure\StructureCreator;
 use App\Service\Structure\StructureManager;
 use App\Service\ValidationTrait;
@@ -25,6 +26,30 @@ class StructureController extends AbstractController
 {
     use ValidationTrait;
     use RoleTrait;
+
+    #[Route(path: '/structure/checks3', name: 'cs3')]
+    public function checkS3(S3Manager $s3Manager): Response
+    {
+//        $objects = $s3Manager->listObjects();
+//
+//        foreach ($objects as $key => $object) {
+//            if ('Contents' === $key) {
+//                foreach ($object as $obj) {
+//                    $s3Manager->deleteObjects([
+//                        $obj['Key'],
+//                    ]);
+//                }
+//            }
+//        }
+//
+//        dd($s3Manager->listObjects());
+
+        dd($s3Manager->listObjects());
+        //        dd($s3Manager->deleteObjects([
+        //            '1b9bf70e-6e5a-4950-a31e-60a644f2dd28/2022/06/cv_theo_guillon_62b1cee347602.pdf',
+        //        ]));
+        //        dd($s3Manager->getObjects($bag->get('s3.bucket')));
+    }
 
     #[Route(path: '/structure', name: 'structure_index')]
     #[IsGranted(data: 'ROLE_MANAGE_STRUCTURES')]

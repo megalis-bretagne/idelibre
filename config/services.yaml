@@ -46,6 +46,13 @@ parameters:
     'text/plain'
   ]
 
+  #  S3
+  s3.key: '%env(S3_KEY)%'
+  s3.secret: '%env(S3_SECRET)%'
+  s3.bucket: '%env(S3_BUCKET)%'
+  s3.region: '%env(S3_REGION)%'
+  s3.endpoint: '%env(S3_ENDPOINT)%'
+
 services:
   # default configuration for services in *this* file
   _defaults:
@@ -103,3 +110,14 @@ services:
   App\ArgumentResolver\DataArgumentResolver:
     tags:
       - { name: controller.argument_value_resolver, priority: 50 }
+
+  App\Service\VirusScan\VirusScanInterface: '@App\Service\VirusScan\VirusScanFake'
+
+  Aws\S3\S3Client:
+    arguments:
+      - version: 'latest'
+        region: '%s3.region%'
+        endpoint: '%s3.endpoint%'
+        credentials:
+          key: '%s3.key%'
+          secret: '%s3.secret%'

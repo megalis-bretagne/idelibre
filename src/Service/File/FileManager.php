@@ -7,7 +7,11 @@ use App\Entity\File;
 use App\Entity\Project;
 use App\Entity\Sitting;
 use App\Entity\Structure;
+use App\Service\S3\ObjectStorageException;
+use App\Service\S3\S3Manager;
+use App\Service\VirusScan\VirusScanInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -15,9 +19,12 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class FileManager
 {
     public function __construct(
-        private Filesystem $filesystem,
-        private EntityManagerInterface $em,
-        private ParameterBagInterface $bag,
+        private readonly Filesystem $filesystem,
+        private readonly EntityManagerInterface $em,
+        private readonly S3Manager $s3Manager,
+        private readonly LoggerInterface $logger,
+        private readonly ParameterBagInterface $bag,
+        private readonly VirusScanInterface $scan,
     ) {
     }
 
@@ -35,6 +42,49 @@ class FileManager
 
         return $file;
     }
+
+//    public function save(UploadedFile $uploadedFile, Structure $structure): ?File
+//    {
+//        $pathS3 = $this->sendS3($structure, $uploadedFile);
+//
+//        if (!empty($pathS3)) {
+//            $file = new File();
+//            $file
+//                ->setName($uploadedFile->getClientOriginalName())
+//                ->setPath($pathS3)
+//                ->setSize($uploadedFile->getSize())
+//            ;
+//
+//            $this->em->persist($file);
+//
+//            return $file;
+//        }
+//
+//        return null;
+//    }
+
+//    private function sendS3(Structure $structure, UploadedFile $uploadedFile)
+//    {
+//        if (false === $this->checkVirusFile($uploadedFile)) {
+//            return false;
+//        }
+//
+//        $fileName = $this->sanitizeAndUniqueFileName($uploadedFile);
+//
+//        $key = $this->bag->get('document_files_directory') . $structure->getId() . date('/Y/m/') . $fileName;
+//
+//        try {
+//            $this->s3Manager->addObject(
+//                $uploadedFile->getRealPath(),
+//                $key
+//            );
+//        } catch (ObjectStorageException $e) {
+//            $this->logger->error($e);
+//            return false;
+//        }
+//
+//        return $key;
+//    }
 
     private function sanitizeAndUniqueFileName(UploadedFile $file): string
     {
@@ -123,5 +173,16 @@ class FileManager
         }
 
         return $files;
+    }
+
+    private function checkVirusFile(UploadedFile $file): bool
+    {
+        if (!$this->scan->isFileSafe($file->getRealPath())) {
+            $this->logger->error('error while scanning file');
+
+            return false;
+        }
+
+        return true;
     }
 }

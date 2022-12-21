@@ -46,9 +46,11 @@ class SittingManager
         // TODO remove file if transaction failed
         $convocationFile = $this->fileManager->save($uploadedConvocationFile, $structure);
 
-        $sitting->setStructure($structure)
+        $sitting
+            ->setStructure($structure)
             ->setName($sitting->getType()->getName())
-            ->setConvocationFile($convocationFile);
+            ->setConvocationFile($convocationFile)
+        ;
         $this->em->persist($sitting);
 
         if ($reminder) {

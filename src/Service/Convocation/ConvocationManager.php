@@ -67,9 +67,11 @@ class ConvocationManager
     {
         foreach ($associatedUsers as $user) {
             $convocation = new Convocation();
-            $convocation->setSitting($sitting)
+            $convocation
+                ->setSitting($sitting)
                 ->setUser($user)
-                ->setCategory($this->getConvocationCategory($user));
+                ->setCategory($this->getConvocationCategory($user))
+            ;
             $this->em->persist($convocation);
         }
     }
