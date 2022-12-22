@@ -18,13 +18,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
     #[Route(path: '/', name: 'app_entrypoint')]
-    public function entryPoint(Security $security): Response
+    public function entryPoint(): Response
     {
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
@@ -41,11 +40,14 @@ class SecurityController extends AbstractController
         return $this->redirectToRoute('sitting_index', ['status' => 'active']);
     }
 
-    #[Route(path: '/login', name: 'app_login')]
+    #[Route(path: '/login', name: 'app_login', methods: ['GET', 'POST'])]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
+        if ($error) {
+            $this->addFlash('error', 'Erreur d\'identification');
+        }
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
@@ -55,7 +57,7 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/logout', name: 'app_logout')]
+    #[Route(path: '/logout', name: 'app_logout', methods: ['GET'])]
     public function logout()
     {
     }

@@ -51,6 +51,8 @@ security:
       custom_authenticators:
         - App\Security\LoginFormAuthenticator
 
+      user_checker: App\Security\UserChecker
+
       login_throttling:
         max_attempts: 3
 

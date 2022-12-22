@@ -27,26 +27,16 @@ use Symfony\Component\Validator\Constraints\Regex;
 
 class UserType extends AbstractType
 {
-    private RoleRepository $roleRepository;
-    private PartyRepository $partyRepository;
-    private RoleManager $roleManager;
-    private TypeRepository $typeRepository;
-
     public function __construct(
-        RoleRepository $roleRepository,
-        PartyRepository $partyRepository,
-        RoleManager $roleManager,
-        TypeRepository $typeRepository
+        private readonly RoleRepository $roleRepository,
+        private readonly PartyRepository $partyRepository,
+        private readonly RoleManager $roleManager,
+        private readonly TypeRepository $typeRepository
     ) {
-        $this->roleRepository = $roleRepository;
-        $this->partyRepository = $partyRepository;
-        $this->roleManager = $roleManager;
-        $this->typeRepository = $typeRepository;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-//        dd($builder->getRequestHandler()->handleRequest() );
         $builder
             ->add('gender', ChoiceType::class, [
                 'label' => 'Civilité',
@@ -66,7 +56,8 @@ class UserType extends AbstractType
                 'label' => 'Nom d\'utilisateur',
             ])
             ->add('email', EmailType::class, [
-                'label' => 'Email', ])
+                'label' => 'Email',
+            ])
             ->add('phone', TextType::class, [
                 'label' => 'Téléphone mobile (06XXXXXXXX ou 07XXXXXXXX) ',
                 'required' => false,
