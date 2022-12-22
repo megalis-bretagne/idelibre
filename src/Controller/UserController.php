@@ -89,6 +89,7 @@ class UserController extends AbstractController
             ]
         );
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $manageUser->save(
                 $form->getData(),
@@ -159,6 +160,7 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $success = $userManager->preference(
                 $form->getData(),
+                $user->getStructure(),
                 $form->get('plainPassword')->getData()
             );
 

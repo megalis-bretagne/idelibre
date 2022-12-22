@@ -16,11 +16,11 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class UserManager
 {
     public function __construct(
-        private EntityManagerInterface $em,
-        private UserPasswordHasherInterface $passwordHasher,
-        private ValidatorInterface $validator,
-        private RoleManager $roleManager,
-        private PasswordStrengthMeter $passwordStrengthMeter,
+        private readonly EntityManagerInterface $em,
+        private readonly UserPasswordHasherInterface $passwordHasher,
+        private readonly ValidatorInterface $validator,
+        private readonly RoleManager $roleManager,
+        private readonly PasswordStrengthMeter $passwordStrengthMeter,
     ) {
     }
 
@@ -86,8 +86,7 @@ class UserManager
             if (false === $success) {
                 return false;
             }
-
-            $user->setPassword($this->passwordHasher->hashPassword($user, $plainPassword));
+            $plainPassword = $this->passwordHasher->hashPassword($user, $plainPassword);
         }
 
         $this->save($user, $plainPassword, $structure);
