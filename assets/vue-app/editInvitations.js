@@ -154,7 +154,7 @@ function isDirty() {
 // OH que ce n'est pas beau du jquery dans une app vue
 // TODO Tout faire en vue
 
-$('.change-tab').click(function (event) {
+$('.change-tab, a#retourOngletInfo').click(function (event) {
 
     if ($(this).hasClass('active')) {
         event.preventDefault();
