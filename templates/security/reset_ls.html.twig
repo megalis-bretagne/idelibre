@@ -1,7 +1,6 @@
 {% extends 'base_login.html.twig' %}
 
 {% block body %}
-
     <div class="form-side">
         <div class="form-content">
             <div class="soft-logo">
@@ -11,18 +10,26 @@
             </div>
 
             <section>
-                <h1 class="page-title">Renseigner votre nouveau mot de passe</h1>
+                <h1 class="page-title">
+                    Renseigner votre nouveau mot de passe
+                </h1>
+
+                {% for message in app.flashes('error') %}
+                    <div class="alert alert-danger">
+                        <i class="fa fa-exclamation-triangle"></i>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+
                 {{ form_start(form) }}
                 {{ form_widget(form) }}
-
-
                 <button type="submit" class="btn btn-outline-primary float-right">Enregistrer</button>
                 {{ form_end(form) }}
             </section>
         </div>
     </div>
-
 {% endblock %}
+
 {% block javascripts %}
     {{ encore_entry_script_tags('showPasswordEntropy') }}
 {% endblock %}

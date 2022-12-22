@@ -13,7 +13,7 @@
         $scope.simpleConfirm = function(){
             seance.setPresentStatus(Seance.ABSENT);
             accountSrv.save();
-            socketioSrv.sendConfirmPresence(account, seance.id, Seance.ABSENT, null);
+            socketioSrv.sendConfirmPresence(account, seance.id, Seance.ABSENT);
             $modalInstance.dismiss('cancel');
         }
 

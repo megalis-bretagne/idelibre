@@ -6,12 +6,14 @@ use App\Entity\ForgetToken;
 use App\Entity\User;
 use App\Repository\ForgetTokenRepository;
 use App\Repository\UserRepository;
+use App\Security\UserLoginEntropy;
 use App\Service\Email\EmailData;
 use App\Service\Email\EmailServiceInterface;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -27,6 +29,7 @@ class ResetPassword
         private readonly ParameterBagInterface $bag,
         private readonly UserRepository $userRepository,
         private readonly PasswordStrengthMeter $passwordStrengthMeter,
+        private readonly UserLoginEntropy $userLoginEntropy
     ) {
     }
 
@@ -69,13 +72,12 @@ class ResetPassword
     public function getUserFromToken(string $token): User
     {
         $token = $this->tokenRepository->findOneBy(['token' => $token]);
-
         if (empty($token)) {
-            throw new EntityNotFoundException('this token does not exist', 400);
+            throw new EntityNotFoundException("this token does not exist", Response::HTTP_BAD_REQUEST);
         }
 
         if (new DateTime() > $token->getExpireAt()) {
-            throw new TimeoutException('this token has expired', 400);
+            throw new TimeoutException('this token has expired', 498);
         }
 
         return $token->getUser();
@@ -104,12 +106,31 @@ class ResetPassword
         $this->em->flush();
     }
 
-    public function setNewPassword(User $user, string $plainPassword)
+    public function setNewPassword(User $user, string $plainPassword): bool
     {
+        $success = $this->checkPasswordEntropy($user, $plainPassword);
+
+        if (false === $success) {
+            return false;
+        }
+
         $user->setPassword($this->passwordHasher->hashPassword($user, $plainPassword));
         $this->em->persist($user);
         $this->em->flush();
 
         $this->removeTokenIfExists($user);
+
+        return true;
+    }
+
+    public function checkPasswordEntropy(User $user, string $plainPassword)
+    {
+        $passwordEntropy = $this->passwordStrengthMeter->getPasswordEntropy($plainPassword);
+
+        if ($passwordEntropy <= $this->userLoginEntropy->getEntropy($user)) {
+            return false;
+        }
+
+        return true;
     }
 }

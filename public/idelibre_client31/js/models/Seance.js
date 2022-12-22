@@ -444,9 +444,5 @@ Seance.prototype.deleteAllAnnotations = function(){
     }
 }
 
-Seance.prototype.getDate = function () {
-    return this.date;
-};
-
 
 

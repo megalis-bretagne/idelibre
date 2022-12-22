@@ -78,7 +78,7 @@ class UserManager
         $this->em->flush();
     }
 
-    public function preference(User $user, Structure $structure, string $plainPassword = null): ?bool
+    public function preference(User $user, Structure $structure, ?string $plainPassword = null): ?bool
     {
         if ($plainPassword) {
             $success = $this->passwordStrengthMeter->checkPasswordEntropy($user, $plainPassword);
@@ -86,7 +86,8 @@ class UserManager
             if (false === $success) {
                 return false;
             }
-            $plainPassword = $this->passwordHasher->hashPassword($user, $plainPassword);
+
+            $user->setPassword($this->passwordHasher->hashPassword($user, $plainPassword));
         }
 
         $this->save($user, $plainPassword, $structure);
