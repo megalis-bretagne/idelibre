@@ -58,7 +58,6 @@ class StructureController extends AbstractController
 
     #[Route(path: '/structure/add', name: 'structure_add')]
     #[IsGranted(data: 'CREATE_STRUCTURE')]
-
 //    #[Breadcrumb(title: 'Ajouter')]
     public function add(Request $request, StructureCreator $structureCreator, ParameterBagInterface $bag): Response
     {
@@ -66,11 +65,11 @@ class StructureController extends AbstractController
             'entropyForUser' => $bag->get('minimumEntropyForUserWithRoleHigh'),
         ]);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $errors = $structureCreator->create(
                 $form->getData(),
                 $form->get('user')->getData(),
-                $form->get('user')->get('plainPassword')->getData(),
                 $this->getUser()->getGroup()
             );
 
@@ -93,12 +92,12 @@ class StructureController extends AbstractController
 
     #[Route(path: '/structure/edit/{id}', name: 'structure_edit')]
     #[IsGranted(data: 'MY_GROUP', subject: 'structure')]
-
 //    #[Breadcrumb(title: 'Modifier {structure.name}')]
     public function edit(Structure $structure, Request $request, StructureManager $structureManager): Response
     {
         $form = $this->createForm(StructureType::class, $structure);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $structureManager->save($form->getData());
             $this->addFlash('success', 'La structure a été modifiée');
@@ -126,7 +125,6 @@ class StructureController extends AbstractController
     #[Route(path: '/structure/preferences', name: 'structure_preferences')]
     #[IsGranted(data: 'ROLE_STRUCTURE_ADMIN')]
     #[Sidebar(reset: true, active: ['structure-preference-nav'])]
-
 //    #[Breadcrumb(title: 'Préférences')]
     public function preferences(Request $request, StructureManager $structureManager): Response
     {

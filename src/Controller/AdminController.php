@@ -60,7 +60,6 @@ class AdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $userManager->saveAdmin(
                 $form->getData(),
-                $form->get('plainPassword')->getData(),
                 $roleManager->getSuperAdminRole()
             );
 
@@ -80,18 +79,19 @@ class AdminController extends AbstractController
     public function addGroupAdmin(Request $request, UserManager $userManager, RoleManager $roleManager, ParameterBagInterface $bag): Response
     {
         $isGroupChoice = in_array('ROLE_SUPERADMIN', $this->getUser()->getRoles());
+
         $form = $this->createForm(SuperUserType::class, null, [
             'isGroupChoice' => $isGroupChoice,
             'entropyForUser' => $bag->get('minimumEntropyForUserWithRoleHigh'),
         ]);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             if (!$isGroupChoice) {
                 $group = $this->getUser()->getGroup();
             }
             $userManager->saveAdmin(
                 $form->getData(),
-                $form->get('plainPassword')->getData(),
                 $roleManager->getGroupAdminRole(),
                 $group ?? null
             );
@@ -116,10 +116,10 @@ class AdminController extends AbstractController
             'entropyForUser' => $bag->get('minimumEntropyForUserWithRoleHigh'),
         ]);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $userManager->saveAdmin(
                 $form->getData(),
-                $form->get('plainPassword')->getData()
             );
 
             $this->addFlash('success', 'Votre administrateur a bien été modifié');

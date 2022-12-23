@@ -11,6 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
 
@@ -48,7 +49,7 @@ class AdminControllerTest extends WebTestCase
         $this->assertTrue($this->client->getResponse()->isRedirect());
 
         $crawler = $this->client->followRedirect();
-        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
         $successMsg = $crawler->filter('html:contains("L\'utilisateur a bien été supprimé")');
         $this->assertCount(1, $successMsg);
@@ -58,13 +59,18 @@ class AdminControllerTest extends WebTestCase
 
     public function testDeleteYourself()
     {
+        $user = $this->getOneEntityBy(User::class, [
+            'username' => 'superadmin'
+        ]);
+
         $this->loginAsSuperAdmin();
-        $user = $this->getOneEntityBy(User::class, ['username' => 'superadmin']);
+
         $this->client->request(Request::METHOD_DELETE, '/admin/delete/' . $user->getId());
         $this->assertTrue($this->client->getResponse()->isRedirect());
 
         $crawler = $this->client->followRedirect();
-        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
         $successMsg = $crawler->filter('html:contains("Impossible de supprimer son propre utilisateur")');
         $this->assertCount(1, $successMsg);
     }
@@ -72,10 +78,11 @@ class AdminControllerTest extends WebTestCase
     public function testAdd()
     {
         $this->loginAsSuperAdmin();
+
         $crawler = $this->client->request(Request::METHOD_GET, '/admin/add');
-        $this->assertResponseStatusCodeSame(200);
-        $item = $crawler->filter('html:contains("Ajouter un administrateur")');
-        $this->assertCount(1, $item);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
+        $this->assertSelectorTextSame('h1', 'Ajouter un administrateur');
 
         $form = $crawler->selectButton('Enregistrer')->form();
 
@@ -83,38 +90,44 @@ class AdminControllerTest extends WebTestCase
         $form['super_user[lastName]'] = 'admin';
         $form['super_user[email]'] = 'newadmin@example.org';
         $form['super_user[username]'] = 'newadmin';
-        $form['super_user[plainPassword][first]'] = 'password';
-        $form['super_user[plainPassword][second]'] = 'password';
 
         $this->client->submit($form);
 
         $this->assertTrue($this->client->getResponse()->isRedirect());
 
         $crawler = $this->client->followRedirect();
-        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
         $successMsg = $crawler->filter('html:contains("Votre administrateur a bien été ajouté")');
         $this->assertCount(1, $successMsg);
-        $this->assertNotEmpty($this->getOneEntityBy(User::class, ['username' => 'newadmin']));
+
+        $this->assertNotEmpty($this->getOneEntityBy(User::class, [
+            'username' => 'newadmin'
+        ]));
     }
 
     public function testEdit()
     {
-        $this->loginAsSuperAdmin();
         $admin = UserStory::superadmin();
+
+        $this->loginAsSuperAdmin();
+
         $crawler = $this->client->request(Request::METHOD_GET, '/admin/edit/' . $admin->getId());
-        $this->assertResponseStatusCodeSame(200);
-        $item = $crawler->filter('html:contains("Modifier un administrateur")');
-        $this->assertCount(1, $item);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
+        $this->assertSelectorTextSame('h1', 'Modifier un administrateur');
 
         $form = $crawler->selectButton('Enregistrer')->form();
+
         $form['super_user[firstName]'] = 'new';
+
         $this->client->submit($form);
 
         $this->assertTrue($this->client->getResponse()->isRedirect());
 
         $crawler = $this->client->followRedirect();
-        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
         $successMsg = $crawler->filter('html:contains("Votre administrateur a bien été modifié")');
         $this->assertCount(1, $successMsg);
     }
@@ -122,11 +135,13 @@ class AdminControllerTest extends WebTestCase
     public function testAddGroupAdmin()
     {
         $group = GroupStory::recia();
+
         $this->loginAsSuperAdmin();
+
         $crawler = $this->client->request(Request::METHOD_GET, '/admin/group/add');
-        $this->assertResponseStatusCodeSame(200);
-        $item = $crawler->filter('html:contains("Ajouter un administrateur")');
-        $this->assertCount(1, $item);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
+        $this->assertSelectorTextSame('h1', 'Ajouter un administrateur');
 
         $form = $crawler->selectButton('Enregistrer')->form();
 
@@ -134,8 +149,6 @@ class AdminControllerTest extends WebTestCase
         $form['super_user[lastName]'] = 'admin';
         $form['super_user[email]'] = 'newadmin@example.org';
         $form['super_user[username]'] = 'newAdmin';
-        $form['super_user[plainPassword][first]'] = 'password';
-        $form['super_user[plainPassword][second]'] = 'password';
         $form['super_user[group]'] = $group->getId();
 
         $this->client->submit($form);
@@ -143,7 +156,7 @@ class AdminControllerTest extends WebTestCase
         $this->assertTrue($this->client->getResponse()->isRedirect());
 
         $crawler = $this->client->followRedirect();
-        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
         $successMsg = $crawler->filter('html:contains("Votre administrateur a bien été ajouté")');
         $this->assertCount(1, $successMsg);
@@ -152,17 +165,18 @@ class AdminControllerTest extends WebTestCase
     public function testIndex()
     {
         $this->loginAsSuperAdmin();
-        $crawler = $this->client->request(Request::METHOD_GET, '/admin');
-        $this->assertResponseStatusCodeSame(200);
 
-        $item = $crawler->filter('html:contains("Administrateurs de la plateforme")');
-        $this->assertCount(1, $item);
+        $this->client->request(Request::METHOD_GET, '/admin');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
+        $this->assertSelectorTextSame('h1', 'Administrateurs de la plateforme');
     }
 
     public function testIndexNotSuperadmin()
     {
         $this->loginAsAdminLibriciel();
+
         $this->client->request(Request::METHOD_GET, '/admin');
-        $this->assertResponseStatusCodeSame(403);
+        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 }

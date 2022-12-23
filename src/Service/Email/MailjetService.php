@@ -2,6 +2,7 @@
 
 namespace App\Service\Email;
 
+use App\Entity\User;
 use App\Service\EmailTemplate\HtmlTag;
 use Mailjet\Client;
 use Mailjet\Resources;
@@ -11,9 +12,10 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 class MailjetService implements EmailServiceInterface
 {
     public function __construct(
-        private Client $mailjetClient,
-        private ParameterBagInterface $bag,
-        private LoggerInterface $logger
+        private readonly Client $mailjetClient,
+        private readonly ParameterBagInterface $bag,
+        private readonly LoggerInterface $logger,
+        private readonly EmailContentGenerator $emailContentGenerator,
     ) {
     }
 
@@ -94,5 +96,51 @@ class MailjetService implements EmailServiceInterface
                 'Base64Content' => base64_encode(file_get_contents($email->getAttachment()->getPath())),
             ],
         ];
+    }
+
+    public function sendInitPassword(User $user, string $token)
+    {
+        $contentSubject = '[#NOM_PRODUIT#] Initialisation de votre mot de passe';
+        $subject = $this->emailContentGenerator->generateSubject($user, $contentSubject);
+
+        $contents = $this->emailContentGenerator->generateInitPassword(
+            $user,
+            $token
+        );
+
+        $this->send($user->getEmail(), $subject, $contents['html'], $contents['text']);
+    }
+
+    /**
+     * @throws EmailNotSendException
+     */
+    private function send(string $userEmail, string $subject, string $contentHtml, string $contentText): void
+    {
+        $message = [
+            [
+                'From' => [
+                    'Email' => $this->bag->get('email_from'),
+                    'Name' => $this->bag->get('email_alias')
+                ],
+                'To' => [
+                    [
+                        'Email' => $userEmail,
+                    ]
+                ],
+                'Subject' => $subject,
+                'HTMLPart' => $contentHtml,
+                'TextPart' => $contentText,
+            ]
+        ];
+
+        $result = $this->mailjetClient->post(Resources::$Email, [
+            'body' => [
+                'Messages' => $message
+            ]
+        ]);
+
+        if (false === $result->success()) {
+            throw new EmailNotSendException($result->getBody()['ErrorMessage'], $result->getStatus());
+        }
     }
 }

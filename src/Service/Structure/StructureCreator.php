@@ -7,6 +7,7 @@ use App\Entity\Connector\Exception\LsmessageConnectorException;
 use App\Entity\Group;
 use App\Entity\Structure;
 use App\Entity\User;
+use App\Security\Password\ResetPassword;
 use App\Service\Configuration\ConfigurationManager;
 use App\Service\Connector\ComelusConnectorManager;
 use App\Service\Connector\LsmessageConnectorManager;
@@ -20,13 +21,14 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
 class StructureCreator
 {
     public function __construct(
-        private UserManager $userManager,
-        private EntityManagerInterface $em,
-        private ThemeManager $themeManager,
-        private ComelusConnectorManager $comelusConnectorManager,
-        private LsmessageConnectorManager $lsmessageConnectorManager,
-        private DefaultTemplateCreator $defaultTemplateCreator,
-        private ConfigurationManager $configurationManager
+        private readonly UserManager $userManager,
+        private readonly EntityManagerInterface $em,
+        private readonly ThemeManager $themeManager,
+        private readonly ComelusConnectorManager $comelusConnectorManager,
+        private readonly LsmessageConnectorManager $lsmessageConnectorManager,
+        private readonly DefaultTemplateCreator $defaultTemplateCreator,
+        private readonly ConfigurationManager $configurationManager,
+        private readonly ResetPassword $resetPassword,
     ) {
     }
 
@@ -35,7 +37,7 @@ class StructureCreator
      * @throws LsmessageConnectorException
      * @throws ConnectionException
      */
-    public function create(Structure $structure, User $user, string $plainPassword, Group $group = null): ?ConstraintViolationListInterface
+    public function create(Structure $structure, User $user, Group $group = null): ?ConstraintViolationListInterface
     {
         $this->em->getConnection()->beginTransaction();
         $structure->setLegacyConnectionName($this->createLegacyConnexionName($structure->getSuffix()));
@@ -44,7 +46,7 @@ class StructureCreator
         $this->em->persist($structure);
 
         $this->addSuffixToUsername($user, $structure->getSuffix());
-        $errors = $this->userManager->saveStructureAdmin($user, $plainPassword, $structure);
+        $errors = $this->userManager->saveStructureAdmin($user, $structure);
 
         if (!empty($errors)) {
             $this->em->getConnection()->rollBack();
@@ -55,6 +57,8 @@ class StructureCreator
         $this->initConfig($structure);
         $this->em->flush();
         $this->em->getConnection()->commit();
+
+        $this->resetPassword->sendEmailDefinePassword($user);
 
         return null;
     }

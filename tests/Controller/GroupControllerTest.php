@@ -11,6 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
 
@@ -41,19 +42,21 @@ class GroupControllerTest extends WebTestCase
     public function testIndex()
     {
         $this->loginAsSuperAdmin();
-        $crawler = $this->client->request(Request::METHOD_GET, '/group');
-        $this->assertResponseStatusCodeSame(200);
-        $item = $crawler->filter('html:contains("Groupes")');
-        $this->assertCount(1, $item);
+
+        $this->client->request(Request::METHOD_GET, '/group');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
+        $this->assertSelectorTextSame('h1', 'Groupes');
     }
 
     public function testAdd()
     {
         $this->loginAsSuperAdmin();
+
         $crawler = $this->client->request(Request::METHOD_GET, '/group/add');
-        $this->assertResponseStatusCodeSame(200);
-        $item = $crawler->filter('html:contains("Ajouter un groupe")');
-        $this->assertCount(1, $item);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
+        $this->assertSelectorTextSame('h1', 'Ajouter un groupe');
 
         $form = $crawler->selectButton('Enregistrer')->form();
 
@@ -62,30 +65,32 @@ class GroupControllerTest extends WebTestCase
         $form['group[user][lastName]'] = 'new lastname';
         $form['group[user][email]'] = 'new@email.com';
         $form['group[user][username]'] = 'newUser';
-        $form['group[user][plainPassword][first]'] = 'password';
-        $form['group[user][plainPassword][second]'] = 'password';
 
         $this->client->submit($form);
 
         $this->assertTrue($this->client->getResponse()->isRedirect());
 
         $crawler = $this->client->followRedirect();
-        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
         $successMsg = $crawler->filter('html:contains("Le groupe a bien été créé")');
         $this->assertCount(1, $successMsg);
 
-        $this->assertNotEmpty($this->getOneEntityBy(Group::class, ['name' => 'new group']));
+        $this->assertNotEmpty($this->getOneEntityBy(Group::class, [
+            'name' => 'new group'
+        ]));
     }
 
     public function testEdit()
     {
-        $this->loginAsSuperAdmin();
         $group = GroupStory::recia();
+
+        $this->loginAsSuperAdmin();
+
         $crawler = $this->client->request(Request::METHOD_GET, '/group/edit/' . $group->getId());
-        $this->assertResponseStatusCodeSame(200);
-        $item = $crawler->filter('html:contains("Modifier un groupe")');
-        $this->assertCount(1, $item);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
+        $this->assertSelectorTextSame('h1', 'Modifier un groupe');
 
         $form = $crawler->selectButton('Enregistrer')->form();
 
@@ -95,7 +100,7 @@ class GroupControllerTest extends WebTestCase
         $this->assertTrue($this->client->getResponse()->isRedirect());
 
         $crawler = $this->client->followRedirect();
-        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
         $successMsg = $crawler->filter('html:contains("Le groupe a bien été modifié")');
         $this->assertCount(1, $successMsg);
@@ -103,26 +108,35 @@ class GroupControllerTest extends WebTestCase
 
     public function testManage()
     {
-        $this->loginAsSuperAdmin();
         $group = GroupStory::recia();
-        $crawler = $this->client->request(Request::METHOD_GET, '/group/manage/' . $group->getId());
-        $this->assertResponseStatusCodeSame(200);
-        $item = $crawler->filter('html:contains("Associer des structures")');
-        $this->assertCount(1, $item);
+
+        $this->loginAsSuperAdmin();
+
+        $this->client->request(Request::METHOD_GET, '/group/manage/' . $group->getId());
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
+        $this->assertSelectorTextSame('h1', 'Associer des structures');
     }
 
     public function testDelete()
     {
+        $group = $this->getOneEntityBy(Group::class, [
+            'name' => 'Recia'
+        ]);
+
         $this->loginAsSuperAdmin();
-        $group = $this->getOneEntityBy(Group::class, ['name' => 'Recia']);
+
         $this->client->request(Request::METHOD_DELETE, '/group/delete/' . $group->getId());
         $this->assertTrue($this->client->getResponse()->isRedirect());
 
         $crawler = $this->client->followRedirect();
-        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
         $successMsg = $crawler->filter('html:contains("Le groupe a bien été supprimé")');
         $this->assertCount(1, $successMsg);
 
-        $this->assertEmpty($this->getOneEntityBy(Group::class, ['id' => $group->getId()]));
+        $this->assertEmpty($this->getOneEntityBy(Group::class, [
+            'id' => $group->getId()
+        ]));
     }
 }

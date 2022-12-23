@@ -36,6 +36,15 @@ class ResetPassword
     /**
      * @throws EntityNotFoundException
      */
+    public function sendEmailDefinePassword(User $user)
+    {
+        $token = $this->createToken($user);
+        $this->email->sendInitPassword($user, $token);
+    }
+
+    /**
+     * @throws EntityNotFoundException
+     */
     public function reset(string $username)
     {
         $user = $this->userRepository->findOneBy(['username' => $username]);

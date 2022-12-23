@@ -50,11 +50,11 @@ class GroupController extends AbstractController
             'entropyForUser' => $bag->get('minimumEntropyForUserWithRoleHigh'),
         ]);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $errors = $groupManager->create(
                 $form->getData(),
                 $form->get('user')->getData(),
-                $form->get('user')->get('plainPassword')->getData()
             );
 
             if (!empty($errors)) {

@@ -2,17 +2,23 @@
 
 namespace App\Service\Email;
 
+use App\Entity\EmailTemplate;
+use App\Entity\User;
 use App\Service\EmailTemplate\HtmlTag;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 class SimpleEmailService implements EmailServiceInterface
 {
     public function __construct(
-        private MailerInterface $mailer,
-        private ParameterBagInterface $bag
+        private readonly MailerInterface $mailer,
+        private readonly ParameterBagInterface $bag,
+        private readonly RouterInterface $router,
+        private readonly EmailContentGenerator $emailContentGenerator,
     ) {
     }
 
@@ -81,5 +87,32 @@ class SimpleEmailService implements EmailServiceInterface
             $contentHtml = HtmlTag::START_HTML . $emailData->getContent() . HtmlTag::END_HTML;
             $email->html($contentHtml);
         }
+    }
+
+    public function sendInitPassword(User $user, string $token)
+    {
+        $contentSubject = '[#NOM_PRODUIT#] Initialisation de votre mot de passe';
+        $subject = $this->emailContentGenerator->generateSubject($user, $contentSubject);
+
+        $contents = $this->emailContentGenerator->generateInitPassword(
+            $user,
+            $token
+        );
+
+        $this->send($user->getEmail(), $subject, $contents['html'], $contents['text']);
+    }
+
+    private function send(string $to, string $subject, string $contentHtml, string $contentText): void
+    {
+        $email = (new Email())
+            ->from($this->bag->get('email_from'))
+            ->to($to)
+            ->subject($subject)
+        ;
+
+        $email->html($contentHtml);
+        $email->text($contentText);
+
+        $this->mailer->send($email);
     }
 }

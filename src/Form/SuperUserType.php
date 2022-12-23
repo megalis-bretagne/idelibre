@@ -29,7 +29,15 @@ class SuperUserType extends AbstractType
     {
         /** @var User|null $user */
         $user = $builder->getData();
+        $isNew = (!$user || $user->getId() === null);
         $isMySelf = ($this->security->getUser() === $user);
+
+        $disable = false;
+        if (false === $isNew) {
+            if (false === $isMySelf) {
+                $disable = true;
+            }
+        }
 
         $builder
             ->add('firstName', TextType::class, [
@@ -46,24 +54,7 @@ class SuperUserType extends AbstractType
             ])
             ->add('email', EmailType::class, [
                 'label' => 'Email',
-            ])
-            ->add('plainPassword', RepeatedType::class, [
-                'mapped' => false,
-                'required' => false,
-                'type' => PasswordType::class,
-                'invalid_message' => 'Les mots de passe ne sont pas identiques',
-                'options' => [
-                    'attr' => [
-                        'class' => 'password-field showValidationPasswordEntropy',
-                        'data-minimum-entropy' => $options['entropyForUser'],
-                    ],
-                ],
-                'first_options' => [
-                    'label' => 'Mot de passe',
-                ],
-                'second_options' => [
-                    'label' => 'Confirmer',
-                ],
+                'disabled' => $disable,
             ])
             ->add('role', HiddenEntityType::class, [
                 'data' => $this->roleManager->getSuperAdminRole(),

@@ -1,15 +1,17 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [4.2.0] - wip
+## [4.2.0] - 2023-xx-xx
+
 ### Evolution
-- Docker passage  en Ubuntu 22:04
+- Docker passage  en Ubuntu 22:04Ajout
 - Node 12 -> 16
 - php 8 -> php8.1
 - Concatenation -> pdftk to pdfunite
 - Gestion des fichiers 'encrypted' avec qpdf
 - Mise en place d'un système permettant de bloquer le brut force
 - Mise en place du calcul d'entropie sur les mot de passes
+- Un mail d'initialisation du mot de passe est envoyé lors de la création d'un compte superadmin et admin de groupe.
 
 
 ## [4.1.4] - 2022-08-31
