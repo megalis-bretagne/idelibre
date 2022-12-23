@@ -156,7 +156,6 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $success = $userManager->preference(
                 $form->getData(),
-                $user->getStructure(),
                 $form->get('plainPassword')->getData()
             );
 
