@@ -23,3 +23,28 @@ $('#selectAllGuests').click(function () {
     }
     $options.parent().trigger("change");
 });
+
+$(document).ready(function () {
+    let $labelActors = $('#type_associatedActorsLabel');
+    let $labelEmployees = $('#type_associatedEmployeesLabel');
+    let $labelGuests = $('#type_associatedGuestsLabel');
+    let nbSelectedActors = $('#type_associatedActors option:selected').length;
+    let nbSelectedEmployees = $('#type_associatedEmployees option:selected').length;
+    let nbSelectedGuests = $('#type_associatedGuests option:selected').length;
+
+    $labelActors.html(nbSelectedActors);
+    $labelEmployees.html(nbSelectedEmployees);
+    $labelGuests.html(nbSelectedGuests);
+    $('#type_associatedActors').change(function (){
+        nbSelectedActors = $('#type_associatedActors option:selected').length;
+        $labelActors.html(nbSelectedActors);
+    });
+    $('#type_associatedEmployees').change(function (){
+        nbSelectedEmployees = $('#type_associatedEmployees option:selected').length;
+        $labelEmployees.html(nbSelectedEmployees);
+    });
+    $('#type_associatedGuests').change(function (){
+        nbSelectedGuests = $('#type_associatedGuests option:selected').length;
+        $labelGuests.html(nbSelectedGuests);
+    });
+});
