@@ -14,7 +14,8 @@
     {{ form_row(form.name) }}
 
     <div class="form-group">
-        {{ form_label(form.associatedActors) }}
+        Elus associés (<label id="type_associatedActorsLabel" class="" for="type_associatedActors"> </label>)
+
         {{ form_errors(form.associatedActors) }}
 
         <div class="row">
@@ -28,7 +29,8 @@
 
     </div>
     <div class="form-group">
-        {{ form_label(form.associatedEmployees) }}
+        Personnels administratifs, Administrateurs, Gestionnaires de séance associés (<label id="type_associatedEmployeesLabel" class="" for="type_associatedEmployees"> </label>)
+
         {{ form_errors(form.associatedEmployees) }}
 
         <div class="row">
@@ -42,8 +44,8 @@
 
     </div>
     <div class="form-group">
+        Invités associés (<label id="type_associatedGuestsLabel" class="" for="type_associatedGuests"> </label>)
 
-        {{ form_label(form.associatedGuests) }}
         {{ form_errors(form.associatedGuests) }}
 
         <div class="row">
