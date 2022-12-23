@@ -82,7 +82,7 @@ class SecurityController extends AbstractController
         return $this->redirectToRoute('structure_index');
     }
 
-    #[Route(path: '/forget', name: 'app_forget')]
+    #[Route(path: '/forget', name: 'app_forget', methods: ['GET', 'POST'])]
     public function forgetPassword(Request $request, ResetPassword $resetPassword, LoggerInterface $logger): Response
     {
         if ($request->isMethod('post')) {

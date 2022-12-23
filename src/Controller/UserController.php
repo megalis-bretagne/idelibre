@@ -79,15 +79,11 @@ class UserController extends AbstractController
     #[Breadcrumb(title: 'Modifier {user.firstName} {user.lastName}')]
     public function edit(User $user, Request $request, UserManager $manageUser): Response
     {
-        $form = $this->createForm(
-            UserType::class,
-            $user,
-            [
-                'structure' => $this->getUser()->getStructure(),
-                'entropyForUser' => $this->getUser()->getStructure()->getMinimumEntropy(),
-                'referer' => $request->headers->get('referer'),
-            ]
-        );
+        $form = $this->createForm(UserType::class, $user, [
+            'structure' => $this->getUser()->getStructure(),
+            'entropyForUser' => $this->getUser()->getStructure()->getMinimumEntropy(),
+            'referer' => $request->headers->get('referer'),
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

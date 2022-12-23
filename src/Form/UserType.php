@@ -23,6 +23,7 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Validator\Constraints\Regex;
 
 class UserType extends AbstractType
@@ -31,12 +32,17 @@ class UserType extends AbstractType
         private readonly RoleRepository $roleRepository,
         private readonly PartyRepository $partyRepository,
         private readonly RoleManager $roleManager,
-        private readonly TypeRepository $typeRepository
+        private readonly TypeRepository $typeRepository,
+        private readonly Security $security
     ) {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        /** @var User|null $user */
+        $user = $builder->getData();
+        $isMySelf = ($this->security->getUser() === $user);
+
         $builder
             ->add('gender', ChoiceType::class, [
                 'label' => 'Civilité',
@@ -126,11 +132,13 @@ class UserType extends AbstractType
             ],
         ]);
 
-        $builder->add('isActive', CheckboxType::class, [
-            'required' => false,
-            'label_attr' => ['class' => 'switch-custom'],
-            'label' => 'Actif',
-        ]);
+        if (false === $isMySelf) {
+            $builder->add('isActive', CheckboxType::class, [
+                'required' => false,
+                'label_attr' => ['class' => 'switch-custom'],
+                'label' => 'Actif',
+            ]);
+        }
 
         $builder->get('username')->addModelTransformer(new CallbackTransformer(
             fn ($username) => preg_replace('/@.*/', '', $username),

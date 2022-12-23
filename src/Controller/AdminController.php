@@ -56,6 +56,7 @@ class AdminController extends AbstractController
             'entropyForUser' => $bag->get('minimumEntropyForUserWithRoleHigh'),
         ]);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $userManager->saveAdmin(
                 $form->getData(),
