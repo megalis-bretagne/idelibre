@@ -2,23 +2,20 @@
 
 namespace App\Service\Email;
 
-use App\Entity\EmailTemplate;
 use App\Entity\User;
+use App\Service\EmailTemplate\EmailGenerator;
 use App\Service\EmailTemplate\HtmlTag;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Routing\RouterInterface;
 
 class SimpleEmailService implements EmailServiceInterface
 {
     public function __construct(
         private readonly MailerInterface $mailer,
         private readonly ParameterBagInterface $bag,
-        private readonly RouterInterface $router,
-        private readonly EmailContentGenerator $emailContentGenerator,
+        private readonly EmailGenerator $emailGenerator,
     ) {
     }
 
@@ -92,9 +89,9 @@ class SimpleEmailService implements EmailServiceInterface
     public function sendInitPassword(User $user, string $token)
     {
         $contentSubject = '[#NOM_PRODUIT#] Initialisation de votre mot de passe';
-        $subject = $this->emailContentGenerator->generateSubject($user, $contentSubject);
+        $subject = $this->emailGenerator->generateSubject($user, $contentSubject);
 
-        $contents = $this->emailContentGenerator->generateInitPassword(
+        $contents = $this->emailGenerator->generateInitPassword(
             $user,
             $token
         );

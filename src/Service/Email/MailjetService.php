@@ -3,6 +3,7 @@
 namespace App\Service\Email;
 
 use App\Entity\User;
+use App\Service\EmailTemplate\EmailGenerator;
 use App\Service\EmailTemplate\HtmlTag;
 use Mailjet\Client;
 use Mailjet\Resources;
@@ -15,7 +16,7 @@ class MailjetService implements EmailServiceInterface
         private readonly Client $mailjetClient,
         private readonly ParameterBagInterface $bag,
         private readonly LoggerInterface $logger,
-        private readonly EmailContentGenerator $emailContentGenerator,
+        private readonly EmailGenerator $emailGenerator,
     ) {
     }
 
@@ -101,9 +102,9 @@ class MailjetService implements EmailServiceInterface
     public function sendInitPassword(User $user, string $token)
     {
         $contentSubject = '[#NOM_PRODUIT#] Initialisation de votre mot de passe';
-        $subject = $this->emailContentGenerator->generateSubject($user, $contentSubject);
+        $subject = $this->emailGenerator->generateSubject($user, $contentSubject);
 
-        $contents = $this->emailContentGenerator->generateInitPassword(
+        $contents = $this->emailGenerator->generateInitPassword(
             $user,
             $token
         );

@@ -4,18 +4,23 @@ namespace App\Service\EmailTemplate;
 
 use App\Entity\Convocation;
 use App\Entity\EmailTemplate;
+use App\Entity\User;
 use App\Service\Email\EmailData;
 use App\Service\Util\DateUtil;
 use App\Service\Util\GenderConverter;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 class EmailGenerator
 {
     public function __construct(
-        private DateUtil $dateUtil,
-        private GenderConverter $genderConverter,
-        private EmailTemplateManager $emailTemplateManager,
-        private ParameterBagInterface $params,
+        private readonly DateUtil $dateUtil,
+        private readonly GenderConverter $genderConverter,
+        private readonly EmailTemplateManager $emailTemplateManager,
+        private readonly ParameterBagInterface $params,
+        private readonly ParameterBagInterface $bag,
+        private readonly RouterInterface $router
     ) {
     }
 
@@ -48,11 +53,15 @@ class EmailGenerator
         $isInvitation = $this->isInvitation($convocation);
 
         if ($isInvitation) {
-            $emailTemplate = $this->emailTemplateManager->getDefaultInvitationTemplate($convocation->getSitting()->getStructure());
+            $emailTemplate = $this->emailTemplateManager->getDefaultInvitationTemplate(
+                $convocation->getSitting()->getStructure()
+            );
         }
 
         if (null === $emailTemplate && !$isInvitation) {
-            $emailTemplate = $this->emailTemplateManager->getDefaultConvocationTemplate($convocation->getSitting()->getStructure());
+            $emailTemplate = $this->emailTemplateManager->getDefaultConvocationTemplate(
+                $convocation->getSitting()->getStructure()
+            );
         }
 
         return $this->generateFromTemplate($emailTemplate, $this->generateParams($convocation));
@@ -88,5 +97,65 @@ class EmailGenerator
             TemplateTag::ACTOR_ATTENDANCE => $convocation->getAttendance(),
             TemplateTag::ACTOR_DEPUTY => $convocation->getDeputy(),
         ];
+    }
+
+    private function getGeneralParameter(User $user): array
+    {
+        return [
+            TemplateTag::FIRST_NAME_RECIPIENT => $user->getFirstName(),
+            TemplateTag::LAST_NAME_RECIPIENT => $user->getLastName(),
+            TemplateTag::PRODUCT_NAME => $this->bag->get('product_name'),
+        ];
+    }
+
+    public function generateSubject(User $user, string $subject): string
+    {
+        return $this->generate($subject, $this->getGeneralParameter($user));
+    }
+
+    private function generateContentHtml(string $content, array $parameterForHtml): string
+    {
+        return HtmlTag::START_HTML . $this->generate($content, $parameterForHtml) . HtmlTag::END_HTML;
+    }
+
+    private function generateContentText(string $content, array $parameterForText): string
+    {
+        return strip_tags(html_entity_decode($this->generate($content, $parameterForText)));
+    }
+
+    public function generateInitPassword(User $user, string $token): array
+    {
+        $content = <<<HTML
+            <p>Bonjour #PRENOM_DESTINATAIRE# #NOM_DESTINATAIRE#,</p>\r
+            <p>Un administrateur de la plateforme #NOM_PRODUIT# vient de vous créer un compte sur la plateforme.</p>\r
+            <p>Veuillez cliquer sur le lien pour initialiser votre mot de passe : #LIEN_MDP_INITIALISATION#</p>\r
+            <p>Merci</p>
+        HTML;
+
+        $resetPasswordUrl = $this->generateResetPasswordUrl($token);
+
+        $generalParameter = $this->getGeneralParameter($user);
+
+        $parameterForHtml = $generalParameter + [
+                TemplateTag::INITIALIZATION_PASSWORD_LINK => "<a href='$resetPasswordUrl'>Initialiser votre mot de passe</a>",
+            ];
+
+        $parameterForText = $generalParameter + [
+                TemplateTag::INITIALIZATION_PASSWORD_LINK => $resetPasswordUrl,
+            ];
+
+        return [
+            'html' => $this->generateContentHtml($content, $parameterForHtml),
+            'text' => $this->generateContentText($content, $parameterForText),
+        ];
+    }
+
+    private function generateResetPasswordUrl($token): string
+    {
+        return $this->router->generate(
+            'app_reset',
+            ['token' => $token],
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
     }
 }
