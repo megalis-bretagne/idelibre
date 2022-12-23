@@ -137,12 +137,12 @@ class EmailGenerator
         $generalParameter = $this->getGeneralParameter($user);
 
         $parameterForHtml = $generalParameter + [
-                TemplateTag::INITIALIZATION_PASSWORD_LINK => "<a href='$resetPasswordUrl'>Initialiser votre mot de passe</a>",
-            ];
+            TemplateTag::INITIALIZATION_PASSWORD_LINK => "<a href='$resetPasswordUrl'>Initialiser votre mot de passe</a>",
+        ];
 
         $parameterForText = $generalParameter + [
-                TemplateTag::INITIALIZATION_PASSWORD_LINK => $resetPasswordUrl,
-            ];
+            TemplateTag::INITIALIZATION_PASSWORD_LINK => $resetPasswordUrl,
+        ];
 
         return [
             'html' => $this->generateContentHtml($content, $parameterForHtml),
