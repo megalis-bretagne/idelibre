@@ -16,11 +16,11 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class UserManager
 {
     public function __construct(
-        private EntityManagerInterface $em,
-        private UserPasswordHasherInterface $passwordHasher,
-        private ValidatorInterface $validator,
-        private RoleManager $roleManager,
-        private PasswordStrengthMeter $passwordStrengthMeter,
+        private readonly EntityManagerInterface $em,
+        private readonly UserPasswordHasherInterface $passwordHasher,
+        private readonly ValidatorInterface $validator,
+        private readonly RoleManager $roleManager,
+        private readonly PasswordStrengthMeter $passwordStrengthMeter,
     ) {
     }
 
@@ -78,7 +78,7 @@ class UserManager
         $this->em->flush();
     }
 
-    public function preference(User $user, Structure $structure, string $plainPassword = null): ?bool
+    public function preference(User $user, Structure $structure, ?string $plainPassword = null): ?bool
     {
         if ($plainPassword) {
             $success = $this->passwordStrengthMeter->checkPasswordEntropy($user, $plainPassword);

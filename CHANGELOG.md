@@ -8,6 +8,8 @@ All notable changes to this project will be documented in this file.
 - php 8 -> php8.1
 - Concatenation -> pdftk to pdfunite
 - Gestion des fichiers 'encrypted' avec qpdf
+- Mise en place d'un système permettant de bloquer le brut force
+- Mise en place du calcul d'entropie sur les mot de passes
 
 
 ## [4.1.4] - 2022-08-31

@@ -23,30 +23,26 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Validator\Constraints\Regex;
 
 class UserType extends AbstractType
 {
-    private RoleRepository $roleRepository;
-    private PartyRepository $partyRepository;
-    private RoleManager $roleManager;
-    private TypeRepository $typeRepository;
-
     public function __construct(
-        RoleRepository $roleRepository,
-        PartyRepository $partyRepository,
-        RoleManager $roleManager,
-        TypeRepository $typeRepository
+        private readonly RoleRepository $roleRepository,
+        private readonly PartyRepository $partyRepository,
+        private readonly RoleManager $roleManager,
+        private readonly TypeRepository $typeRepository,
+        private readonly Security $security
     ) {
-        $this->roleRepository = $roleRepository;
-        $this->partyRepository = $partyRepository;
-        $this->roleManager = $roleManager;
-        $this->typeRepository = $typeRepository;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-//        dd($builder->getRequestHandler()->handleRequest() );
+        /** @var User|null $user */
+        $user = $builder->getData();
+        $isMySelf = ($this->security->getUser() === $user);
+
         $builder
             ->add('gender', ChoiceType::class, [
                 'label' => 'Civilité',
@@ -66,7 +62,8 @@ class UserType extends AbstractType
                 'label' => 'Nom d\'utilisateur',
             ])
             ->add('email', EmailType::class, [
-                'label' => 'Email', ])
+                'label' => 'Email',
+            ])
             ->add('phone', TextType::class, [
                 'label' => 'Téléphone mobile (06XXXXXXXX ou 07XXXXXXXX) ',
                 'required' => false,
@@ -135,11 +132,13 @@ class UserType extends AbstractType
             ],
         ]);
 
-        $builder->add('isActive', CheckboxType::class, [
-            'required' => false,
-            'label_attr' => ['class' => 'switch-custom'],
-            'label' => 'Actif',
-        ]);
+        if (false === $isMySelf) {
+            $builder->add('isActive', CheckboxType::class, [
+                'required' => false,
+                'label_attr' => ['class' => 'switch-custom'],
+                'label' => 'Actif',
+            ]);
+        }
 
         $builder->get('username')->addModelTransformer(new CallbackTransformer(
             fn ($username) => preg_replace('/@.*/', '', $username),

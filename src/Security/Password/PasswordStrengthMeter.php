@@ -14,9 +14,16 @@ class PasswordStrengthMeter
     use RoleTrait;
 
     public function __construct(
-        private ParameterBagInterface $bag,
-        private RoleManager $roleManager,
+        private readonly ParameterBagInterface $bag,
+        private readonly RoleManager $roleManager,
     ) {
+    }
+
+    public function getPasswordEntropy($plainPassword): string
+    {
+        $pwdStrengthAnssi = new PasswordStrengthMeterAnssi();
+
+        return $pwdStrengthAnssi->entropy($plainPassword);
     }
 
     public function checkPasswordEntropy(User $user, string $plainPassword)

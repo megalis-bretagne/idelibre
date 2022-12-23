@@ -9,28 +9,35 @@ use App\Form\Type\HiddenEntityType;
 use App\Service\role\RoleManager;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Validator\Constraints\Regex;
 
 class SuperUserType extends AbstractType
 {
-    public function __construct(private RoleManager $roleManager)
+    public function __construct(private readonly RoleManager $roleManager, private readonly Security $security)
     {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        /** @var User|null $user */
+        $user = $builder->getData();
+        $isMySelf = ($this->security->getUser() === $user);
+
         $builder
             ->add('firstName', TextType::class, [
                 'label' => 'Prénom de l\'administrateur',
             ])
             ->add('lastName', TextType::class, [
-                'label' => 'Nom de l\'administrateur', ])
+                'label' => 'Nom de l\'administrateur',
+            ])
             ->add('username', TextType::class, [
                 'label' => 'Nom d\'utilisateur (sans @suffixe)',
                 'constraints' => [
@@ -38,7 +45,8 @@ class SuperUserType extends AbstractType
                 ],
             ])
             ->add('email', EmailType::class, [
-                'label' => 'Email', ])
+                'label' => 'Email',
+            ])
             ->add('plainPassword', RepeatedType::class, [
                 'mapped' => false,
                 'required' => false,
@@ -60,13 +68,22 @@ class SuperUserType extends AbstractType
             ->add('role', HiddenEntityType::class, [
                 'data' => $this->roleManager->getSuperAdminRole(),
                 'class_name' => Role::class,
-            ]);
+            ])
+        ;
 
         if ($options['isGroupChoice']) {
             $builder->add('group', EntityType::class, [
                 'label' => 'Groupe',
                 'class' => Group::class,
                 'choice_label' => 'name',
+            ]);
+        }
+
+        if (false === $isMySelf) {
+            $builder->add('isActive', CheckboxType::class, [
+                'required' => false,
+                'label_attr' => ['class' => 'switch-custom'],
+                'label' => 'Actif',
             ]);
         }
     }

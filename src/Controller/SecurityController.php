@@ -18,20 +18,21 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
     #[Route(path: '/', name: 'app_entrypoint')]
-    public function entryPoint(Security $security): Response
+    public function entryPoint(): Response
     {
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
+
         if (in_array($this->getUser()->getRole()->getName(), [Role::NAME_ROLE_ACTOR, Role::NAME_ROLE_EMPLOYEE, Role::NAME_ROLE_GUEST])) {
             return $this->render('security/noActors.html.twig');
         }
+
         if ($this->isGranted('ROLE_MANAGE_STRUCTURES')) {
             return $this->redirectToRoute('structure_index');
         }
@@ -39,13 +40,13 @@ class SecurityController extends AbstractController
         return $this->redirectToRoute('sitting_index', ['status' => 'active']);
     }
 
-    #[Route(path: '/login', name: 'app_login')]
+    #[Route(path: '/login', name: 'app_login', methods: ['GET', 'POST'])]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
         if ($error) {
-            $this->addFlash('error', 'erreur d\'identification');
+            $this->addFlash('error', 'Erreur d\'identification');
         }
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
@@ -56,10 +57,9 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/logout', name: 'app_logout')]
+    #[Route(path: '/logout', name: 'app_logout', methods: ['GET'])]
     public function logout()
     {
-        /* Used to generate route */
     }
 
     #[Route(path: '/security/impersonate/{id}', name: 'security_impersonate')]
@@ -82,10 +82,7 @@ class SecurityController extends AbstractController
         return $this->redirectToRoute('structure_index');
     }
 
-    /**
-     * @throws EntityNotFoundException
-     */
-    #[Route(path: '/forget', name: 'app_forget')]
+    #[Route(path: '/forget', name: 'app_forget', methods: ['GET', 'POST'])]
     public function forgetPassword(Request $request, ResetPassword $resetPassword, LoggerInterface $logger): Response
     {
         if ($request->isMethod('post')) {
@@ -125,23 +122,32 @@ class SecurityController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route(path: '/reset/{token}', name: 'app_reset')]
+    #[Route(path: '/reset/{token}', name: 'app_reset', methods: ['GET', 'POST'])]
     public function resetPassword(string $token, ResetPassword $resetPassword, Request $request, UserLoginEntropy $userLoginEntropy): Response
     {
         try {
             $user = $resetPassword->getUserFromToken($token);
         } catch (TimeoutException $e) {
-            throw new TimeoutException('expired TOKEN', 400);
+            throw new TimeoutException('expired TOKEN', 498);
         } catch (EntityNotFoundException $e) {
             throw new NotFoundHttpException('this token does not exist');
         }
-        $form = $this->createForm(UserPasswordType::class, $user);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $resetPassword->setNewPassword($user, $form->get('plainPassword')->getData());
-            $this->addFlash('success', 'Modifié avec succès');
 
-            return $this->redirectToRoute('app_login');
+        $form = $this->createForm(UserPasswordType::class, $user, [
+            'entropyForUser' => $userLoginEntropy->getEntropy($user),
+        ]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $success = $resetPassword->setNewPassword($user, $form->get('plainPassword')->getData());
+
+            if (true === $success) {
+                $this->addFlash('success', 'Modifiée avec succès');
+
+                return $this->redirectToRoute('app_login');
+            }
+
+            $this->addFlash('error', 'Votre mot de passe n\'est pas assez fort.');
         }
 
         return $this->render('security/reset_ls.html.twig', [

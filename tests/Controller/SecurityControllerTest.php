@@ -189,7 +189,6 @@ class SecurityControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(200);
 
         $title = $crawler->filter('html:contains("Veuillez saisir vos identifiants de connexion")');
-
         $this->assertCount(1, $title);
 
         $form = $crawler->selectButton('Se connecter')->form();

@@ -79,16 +79,13 @@ class UserController extends AbstractController
     #[Breadcrumb(title: 'Modifier {user.firstName} {user.lastName}')]
     public function edit(User $user, Request $request, UserManager $manageUser): Response
     {
-        $form = $this->createForm(
-            UserType::class,
-            $user,
-            [
-                'structure' => $this->getUser()->getStructure(),
-                'entropyForUser' => $this->getUser()->getStructure()->getMinimumEntropy(),
-                'referer' => $request->headers->get('referer'),
-            ]
-        );
+        $form = $this->createForm(UserType::class, $user, [
+            'structure' => $this->getUser()->getStructure(),
+            'entropyForUser' => $this->getUser()->getStructure()->getMinimumEntropy(),
+            'referer' => $request->headers->get('referer'),
+        ]);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $manageUser->save(
                 $form->getData(),
@@ -143,10 +140,9 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/user/preferences', name: 'user_preferences')]
+    #[Route(path: '/user/preferences', name: 'user_preferences', methods: ['GET', 'POST'])]
     #[IsGranted(data: 'ROLE_MANAGE_PREFERENCES')]
     #[Breadcrumb(null)]
-
 //    #[Breadcrumb(title: 'Préférences utilisateur')]
     public function preferences(Request $request, UserManager $userManager, UserLoginEntropy $userLoginEntropy): Response
     {
@@ -155,8 +151,8 @@ class UserController extends AbstractController
         $form = $this->createForm(UserPreferenceType::class, $user, [
             'entropyForUser' => $userLoginEntropy->getEntropy($user),
         ]);
-
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $success = $userManager->preference(
                 $form->getData(),
