@@ -77,7 +77,7 @@ class GroupControllerTest extends WebTestCase
         $this->assertCount(1, $successMsg);
 
         $this->assertNotEmpty($this->getOneEntityBy(Group::class, [
-            'name' => 'new group'
+            'name' => 'new group',
         ]));
     }
 
@@ -121,7 +121,7 @@ class GroupControllerTest extends WebTestCase
     public function testDelete()
     {
         $group = $this->getOneEntityBy(Group::class, [
-            'name' => 'Recia'
+            'name' => 'Recia',
         ]);
 
         $this->loginAsSuperAdmin();
@@ -136,7 +136,7 @@ class GroupControllerTest extends WebTestCase
         $this->assertCount(1, $successMsg);
 
         $this->assertEmpty($this->getOneEntityBy(Group::class, [
-            'id' => $group->getId()
+            'id' => $group->getId(),
         ]));
     }
 }

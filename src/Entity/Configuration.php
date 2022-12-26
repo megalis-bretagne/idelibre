@@ -8,7 +8,6 @@ use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\OneToOne;
-use phpDocumentor\Reflection\Types\String_;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Symfony\Component\Validator\Constraints as Constraint;
 
@@ -31,8 +30,6 @@ class Configuration
     #[ORM\Column(length: 255, nullable: false, options: ['default' => '10000 years'])]
     #[Constraint\NotBlank]
     private ?string $sittingSuppressionDelay = null;
-
-
 
     public function getId(): ?string
     {
@@ -74,8 +71,4 @@ class Configuration
 
         return $this;
     }
-
-
 }
-
-

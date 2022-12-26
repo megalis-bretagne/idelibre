@@ -7,7 +7,6 @@ use App\Entity\Structure;
 use App\Form\Type\HiddenEntityType;
 use App\Service\Util\SuppressionDelayFormatter;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\ChoiceList\ChoiceList;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -29,12 +28,11 @@ class ConfigurationType extends AbstractType
             ])
             ->add('sittingSuppressionDelay', ChoiceType::class, [
                 'required' => false,
-                'label' => "Temps après lequel une séance est supprimée",
+                'label' => 'Temps après lequel une séance est supprimée',
                 'label_attr' => ['class' => 'form-select'],
 
-                'choices'=> SuppressionDelayFormatter::DELAYS,
-                'placeholder' => '-- Choisir une durée --'
-
+                'choices' => SuppressionDelayFormatter::DELAYS,
+                'placeholder' => '-- Choisir une durée --',
             ])
         ;
     }

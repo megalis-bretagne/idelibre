@@ -27,7 +27,7 @@ class ConfigurationController extends AbstractController
 
         return $this->render('configuration/index.html.twig', [
             'configuration' => $structure->getConfiguration(),
-            'formattedSuppressionDelay' => $suppressionDelayFormatter->formatDelay($structure->getConfiguration()->getSittingSuppressionDelay())
+            'formattedSuppressionDelay' => $suppressionDelayFormatter->formatDelay($structure->getConfiguration()->getSittingSuppressionDelay()),
         ]);
     }
 

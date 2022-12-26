@@ -6,13 +6,9 @@ use App\Repository\SittingRepository;
 use App\Repository\StructureRepository;
 use App\Service\Seance\SittingManager;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use function Symfony\Component\String\s;
 
 class PurgeDataCommand extends Command
 {
@@ -23,12 +19,11 @@ class PurgeDataCommand extends Command
     private SittingManager $sittingManager;
 
     public function __construct(
-        SittingRepository   $sittingRepository,
+        SittingRepository $sittingRepository,
         StructureRepository $structureRepository,
-        SittingManager      $sittingManager,
-        string              $name = null
-    )
-    {
+        SittingManager $sittingManager,
+        string $name = null
+    ) {
         parent::__construct($name);
         $this->sittingRepository = $sittingRepository;
         $this->structureRepository = $structureRepository;

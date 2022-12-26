@@ -56,6 +56,6 @@ class AttendanceNotificationCommandTest extends WebTestCase
         $commandTester->execute([]);
         $commandTester->assertCommandIsSuccessful();
         $display = $commandTester->getDisplay();
-        $this->assertEquals("[OK] OK", str_replace("\n", "", trim($display)));
+        $this->assertEquals('[OK] OK', str_replace("\n", '', trim($display)));
     }
 }

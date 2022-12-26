@@ -21,7 +21,6 @@ class ConfigurationTest extends KernelTestCase
 
     public function testValid()
     {
-
         $configuration = (new Configuration())
             ->setIsSharedAnnotation(true)
             ->setSittingSuppressionDelay('6 months');
@@ -37,4 +36,3 @@ class ConfigurationTest extends KernelTestCase
         $this->assertHasValidationErrors($configuration, 1);
     }
 }
-

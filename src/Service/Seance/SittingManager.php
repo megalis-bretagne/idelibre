@@ -98,7 +98,6 @@ class SittingManager
 
         $this->em->remove($sitting);
         $this->em->flush();
-
     }
 
     public function update(Sitting $sitting, ?UploadedFile $uploadedConvocationFile, ?UploadedFile $uploadedInvitationFile): void
