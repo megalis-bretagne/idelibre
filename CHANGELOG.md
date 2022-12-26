@@ -2,9 +2,10 @@
 All notable changes to this project will be documented in this file.   
 
 
-## [4.1.6] - 2022-12-14
+## [4.1.6] - 2022-12-26
 ### Correction
 - L'envoi de SMS se fait uniquement si la séance autorise les envois de SMS
+- Le classement des séances archivées est désormais par ordre chronologique descendant 
 
 ## [4.1.5] - 2022-12-07
 ### Evolution
