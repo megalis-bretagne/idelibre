@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Structure;
 use App\Form\ConfigurationType;
 use App\Service\Configuration\ConfigurationManager;
+use App\Service\Util\SuppressionDelayFormatter;
 use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -19,13 +20,14 @@ class ConfigurationController extends AbstractController
 {
     #[Route('/configuration', name: 'configuration_index')]
     #[IsGranted('ROLE_MANAGE_CONFIGURATION')]
-    public function index(ConfigurationManager $configurationManager): Response
+    public function index(ConfigurationManager $configurationManager, SuppressionDelayFormatter $suppressionDelayFormatter): Response
     {
         /** @var Structure $structure */
         $structure = $this->getUser()->getStructure();
 
         return $this->render('configuration/index.html.twig', [
             'configuration' => $structure->getConfiguration(),
+            'formattedSuppressionDelay' => $suppressionDelayFormatter->formatDelay($structure->getConfiguration()->getSittingSuppressionDelay())
         ]);
     }
 
