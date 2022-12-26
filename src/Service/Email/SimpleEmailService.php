@@ -9,6 +9,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class SimpleEmailService implements EmailServiceInterface
 {
@@ -86,12 +87,25 @@ class SimpleEmailService implements EmailServiceInterface
         }
     }
 
-    public function sendInitPassword(User $user, string $token)
+    public function sendInitPassword(User $user, string $token): void
     {
         $contentSubject = '[#NOM_PRODUIT#] Initialisation de votre mot de passe';
         $subject = $this->emailGenerator->generateSubject($user, $contentSubject);
 
         $contents = $this->emailGenerator->generateInitPassword(
+            $user,
+            $token
+        );
+
+        $this->send($user->getEmail(), $subject, $contents['html'], $contents['text']);
+    }
+
+    public function sendResetPassword(User $user, string $token): void
+    {
+        $contentSubject = '[#NOM_PRODUIT#] Réinitialiser votre mot de passe';
+        $subject = $this->emailGenerator->generateSubject($user, $contentSubject);
+
+        $contents = $this->emailGenerator->generateForgetPassword(
             $user,
             $token
         );

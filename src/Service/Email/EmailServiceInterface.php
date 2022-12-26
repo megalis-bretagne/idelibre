@@ -13,5 +13,6 @@ interface EmailServiceInterface
      */
     public function sendBatch(array $emailsData): void;
 
-    public function sendInitPassword(User $user, string $token);
+    public function sendInitPassword(User $user, string $token): void;
+    public function sendResetPassword(User $user, string $token): void;
 }

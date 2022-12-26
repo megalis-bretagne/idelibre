@@ -112,6 +112,19 @@ class MailjetService implements EmailServiceInterface
         $this->send($user->getEmail(), $subject, $contents['html'], $contents['text']);
     }
 
+    public function sendResetPassword(User $user, string $token)
+    {
+        $contentSubject = '[#NOM_PRODUIT#] Réinitialiser votre mot de passe';
+        $subject = $this->emailGenerator->generateSubject($user, $contentSubject);
+
+        $contents = $this->emailGenerator->generateForgetPassword(
+            $user,
+            $token
+        );
+
+        $this->send($user->getEmail(), $subject, $contents['html'], $contents['text']);
+    }
+
     /**
      * @throws EmailNotSendException
      */

@@ -16,4 +16,8 @@ class EmailServiceInterfaceFake implements EmailServiceInterface
     public function sendInitPassword(User $user, string $token)
     {
     }
+
+    public function sendResetPassword(User $user, string $token)
+    {
+    }
 }

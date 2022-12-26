@@ -19,7 +19,6 @@ class EmailGenerator
         private readonly GenderConverter $genderConverter,
         private readonly EmailTemplateManager $emailTemplateManager,
         private readonly ParameterBagInterface $params,
-        private readonly ParameterBagInterface $bag,
         private readonly RouterInterface $router
     ) {
     }
@@ -104,7 +103,7 @@ class EmailGenerator
         return [
             TemplateTag::FIRST_NAME_RECIPIENT => $user->getFirstName(),
             TemplateTag::LAST_NAME_RECIPIENT => $user->getLastName(),
-            TemplateTag::PRODUCT_NAME => $this->bag->get('product_name'),
+            TemplateTag::PRODUCT_NAME => $this->params->get('product_name'),
         ];
     }
 
@@ -142,6 +141,34 @@ class EmailGenerator
 
         $parameterForText = $generalParameter + [
             TemplateTag::INITIALIZATION_PASSWORD_LINK => $resetPasswordUrl,
+        ];
+
+        return [
+            'html' => $this->generateContentHtml($content, $parameterForHtml),
+            'text' => $this->generateContentText($content, $parameterForText),
+        ];
+    }
+
+    public function generateForgetPassword(User $user, string $token): array
+    {
+        $content = <<<HTML
+            <p>Bonjour #PRENOM_DESTINATAIRE# #NOM_DESTINATAIRE#,</p>\r
+            <p>Vous avez effectué une demande remise &agrave; z&eacute;ro de mot de passe.</p>\r
+            <p>Veuillez cliquer sur le lien pour le r&eacute;initialiser : #LIEN_MDP_OUBLIE#</p>\r
+            <p>Si vous n'&ecirc;tes pas &agrave; l'origine de cette demande, veuillez contacter votre administrateur.</p>\r
+            <p>Merci</p>
+        HTML;
+
+        $resetPasswordUrl = $this->generateResetPasswordUrl($token);
+
+        $generalParameter = $this->getGeneralParameter($user);
+
+        $parameterForHtml = $generalParameter + [
+            TemplateTag::FORGET_PASSWORD_LINK => "<a href='$resetPasswordUrl'>Réinitialiser votre mot de passe oublié</a>",
+        ];
+
+        $parameterForText = $generalParameter + [
+            TemplateTag::FORGET_PASSWORD_LINK => $resetPasswordUrl,
         ];
 
         return [
