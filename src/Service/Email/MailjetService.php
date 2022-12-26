@@ -99,7 +99,10 @@ class MailjetService implements EmailServiceInterface
         ];
     }
 
-    public function sendInitPassword(User $user, string $token)
+    /**
+     * @throws EmailNotSendException
+     */
+    public function sendInitPassword(User $user, string $token): void
     {
         $contentSubject = '[#NOM_PRODUIT#] Initialisation de votre mot de passe';
         $subject = $this->emailGenerator->generateSubject($user, $contentSubject);
@@ -112,7 +115,10 @@ class MailjetService implements EmailServiceInterface
         $this->send($user->getEmail(), $subject, $contents['html'], $contents['text']);
     }
 
-    public function sendResetPassword(User $user, string $token)
+    /**
+     * @throws EmailNotSendException
+     */
+    public function sendResetPassword(User $user, string $token): void
     {
         $contentSubject = '[#NOM_PRODUIT#] Réinitialiser votre mot de passe';
         $subject = $this->emailGenerator->generateSubject($user, $contentSubject);
