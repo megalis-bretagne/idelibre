@@ -7,6 +7,7 @@ use App\Security\Password\PasswordStrengthMeter;
 use App\Service\role\RoleManager;
 use App\Service\User\UserManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -15,17 +16,16 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
+#[AsCommand(name: 'admin:create:superadmin')]
 class CreateSuperAdminCommand extends Command
 {
-    protected static $defaultName = 'admin:create:superadmin';
-
     public function __construct(
-        private ParameterBagInterface $bag,
-        private EntityManagerInterface $em,
-        private UserManager $userManager,
-        private PasswordStrengthMeter $passwordStrengthMeter,
-        private UserPasswordHasherInterface $passwordHasher,
-        private RoleManager $roleManager,
+        private readonly ParameterBagInterface $bag,
+        private readonly EntityManagerInterface $em,
+        private readonly UserManager $userManager,
+        private readonly PasswordStrengthMeter $passwordStrengthMeter,
+        private readonly UserPasswordHasherInterface $passwordHasher,
+        private readonly RoleManager $roleManager,
         string $name = null,
     ) {
         parent::__construct($name);

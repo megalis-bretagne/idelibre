@@ -3,20 +3,18 @@
 namespace App\Command;
 
 use App\Command\ServiceCmd\GenZipAndPdf;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+#[AsCommand(name: 'gen:zip_pdf')]
 class GenPdfAndZipSittingCommand extends Command
 {
-    protected static $defaultName = 'gen:zip_pdf';
-    private GenZipAndPdf $genZipAndPdf;
-
-    public function __construct(GenZipAndPdf $genZipAndPdf, string $name = null)
+    public function __construct(private readonly GenZipAndPdf $genZipAndPdf, string $name = null)
     {
         parent::__construct($name);
-        $this->genZipAndPdf = $genZipAndPdf;
     }
 
     protected function configure(): void

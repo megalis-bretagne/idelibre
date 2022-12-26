@@ -13,21 +13,12 @@ use Doctrine\ORM\EntityNotFoundException;
 
 class GenZipAndPdf
 {
-    private StructureRepository $structureRepository;
-    private SittingRepository $sittingRepository;
-    private PdfSittingGenerator $pdfSittingGenerator;
-    private ZipSittingGenerator $zipSittingGenerator;
-
     public function __construct(
-        StructureRepository $structureRepository,
-        SittingRepository $sittingRepository,
-        PdfSittingGenerator $pdfSittingGenerator,
-        ZipSittingGenerator $zipSittingGenerator
+        private readonly StructureRepository $structureRepository,
+        private readonly SittingRepository $sittingRepository,
+        private readonly PdfSittingGenerator $pdfSittingGenerator,
+        private readonly ZipSittingGenerator $zipSittingGenerator
     ) {
-        $this->structureRepository = $structureRepository;
-        $this->sittingRepository = $sittingRepository;
-        $this->pdfSittingGenerator = $pdfSittingGenerator;
-        $this->zipSittingGenerator = $zipSittingGenerator;
     }
 
     /**
