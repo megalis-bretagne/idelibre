@@ -5,7 +5,9 @@ namespace App\Service\Group;
 use App\Entity\Group;
 use App\Entity\User;
 use App\Repository\StructureRepository;
+use App\Security\Password\ResetPassword;
 use App\Service\role\RoleManager;
+use App\Service\User\UserManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
@@ -14,11 +16,12 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class GroupManager
 {
     public function __construct(
-        private EntityManagerInterface $em,
-        private UserPasswordHasherInterface $passwordHasher,
-        private ValidatorInterface $validator,
-        private StructureRepository $structureRepository,
-        private RoleManager $roleManager
+        private readonly EntityManagerInterface $em,
+        private readonly ValidatorInterface $validator,
+        private readonly StructureRepository $structureRepository,
+        private readonly RoleManager $roleManager,
+        private readonly UserManager $userManager,
+        private readonly ResetPassword $resetPassword,
     ) {
     }
 
@@ -44,9 +47,9 @@ class GroupManager
         $this->em->flush();
     }
 
-    public function create(Group $group, User $user, string $plainPassword): ?ConstraintViolationListInterface
+    public function create(Group $group, User $user): ?ConstraintViolationListInterface
     {
-        $user->setPassword($this->passwordHasher->hashPassword($user, $plainPassword));
+        $user = $this->userManager->setFirstPassword($user);
         $errors = $this->validator->validate($user);
 
         if (count($errors)) {
@@ -59,6 +62,8 @@ class GroupManager
 
         $this->em->persist($group);
         $this->em->flush();
+
+        $this->resetPassword->sendEmailDefinePassword($user);
 
         return null;
     }

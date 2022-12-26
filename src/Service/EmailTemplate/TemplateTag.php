@@ -17,4 +17,10 @@ class TemplateTag
     public const ACTOR_ATTENDANCE = '#presence#';
     public const ACTOR_DEPUTY = '#mandataire#';
     public const SITTING_RECAPITULATIF = '#recapitulatif#';
+    public const FIRST_NAME_RECIPIENT = '#PRENOM_DESTINATAIRE#';
+    public const LAST_NAME_RECIPIENT = '#NOM_DESTINATAIRE#';
+
+    public const PRODUCT_NAME = '#NOM_PRODUIT#';
+    public const INITIALIZATION_PASSWORD_LINK = '#LIEN_MDP_INITIALISATION#';
+    public const FORGET_PASSWORD_LINK = '#LIEN_MDP_OUBLIE#';
 }

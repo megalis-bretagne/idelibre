@@ -7,6 +7,7 @@ use App\Entity\Role;
 use App\Entity\Structure;
 use App\Entity\User;
 use App\Security\Password\PasswordStrengthMeter;
+use App\Security\Password\ResetPassword;
 use App\Service\role\RoleManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -21,6 +22,7 @@ class UserManager
         private readonly ValidatorInterface $validator,
         private readonly RoleManager $roleManager,
         private readonly PasswordStrengthMeter $passwordStrengthMeter,
+        private readonly ResetPassword $resetPassword,
     ) {
     }
 
@@ -36,11 +38,10 @@ class UserManager
         $this->em->flush();
     }
 
-    public function saveStructureAdmin(User $user, ?string $plainPassword, Structure $structure): ?ConstraintViolationListInterface
+    public function saveStructureAdmin(User $user, Structure $structure): ?ConstraintViolationListInterface
     {
-        if ($plainPassword) {
-            $user->setPassword($this->passwordHasher->hashPassword($user, $plainPassword));
-        }
+        $user = $this->setFirstPassword($user);
+
         $user->setRole($this->roleManager->getStructureAdminRole());
         $user->setStructure($structure);
         $this->em->persist($user);
@@ -55,20 +56,30 @@ class UserManager
         return null;
     }
 
-    public function saveAdmin(User $user, ?string $plainPassword, Role $role = null, ?Group $group = null): void
+    public function saveAdmin(User $user, Role $role = null, ?Group $group = null): void
     {
-        if ($plainPassword) {
-            $user->setPassword($this->passwordHasher->hashPassword($user, $plainPassword));
-        }
+        $user = $this->setFirstPassword($user);
+
         if ($role) {
             $user->setRole($role);
         }
+
         if ($group) {
             $user->setGroup($group);
         }
 
         $this->em->persist($user);
         $this->em->flush();
+
+        $this->resetPassword->sendEmailDefinePassword($user);
+    }
+
+    public function setFirstPassword(User $user): User
+    {
+        $password = $this->passwordStrengthMeter->generatePassword();
+        $user->setPassword($this->passwordHasher->hashPassword($user, $password));
+
+        return $user;
     }
 
     public function delete(User $user): void

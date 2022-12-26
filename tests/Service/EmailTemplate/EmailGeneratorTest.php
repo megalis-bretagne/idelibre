@@ -13,6 +13,7 @@ use App\Tests\Story\StructureStory;
 use App\Tests\Story\UserStory;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\Routing\RouterInterface;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
 
@@ -35,6 +36,7 @@ class EmailGeneratorTest extends WebTestCase
         $this->emailTemplateManager = self::getContainer()->get(EmailTemplateManager::class);
 
         $this->params = self::getContainer()->getParameterBag();
+        $this->router = self::getContainer()->get(RouterInterface::class);
 
         self::ensureKernelShutdown();
 
@@ -48,12 +50,22 @@ class EmailGeneratorTest extends WebTestCase
         $emailTemplate = new EmailTemplate();
         $emailTemplate->setContent('test de génération de message : #variable#');
         $emailTemplate->setSubject('test de génération de titre : #variable#');
-        $generator = new EmailGenerator(new DateUtil(), new GenderConverter(), $this->emailTemplateManager, $this->params);
+
+        $generator = new EmailGenerator(
+            new DateUtil(),
+            new GenderConverter(),
+            $this->emailTemplateManager,
+            $this->params,
+            $this->router
+        );
+
         $emailData = $generator->generateFromTemplate($emailTemplate, ['#variable#' => 'test']);
+
         $this->assertEquals(
             'test de génération de message : test',
             $emailData->getContent()
         );
+
         $this->assertEquals(
             'test de génération de titre : test',
             $emailData->getSubject()
@@ -64,7 +76,13 @@ class EmailGeneratorTest extends WebTestCase
     {
         $convocation = ConvocationStory::convocationActor1();
 
-        $generator = new EmailGenerator(new DateUtil(), new GenderConverter(), $this->emailTemplateManager, $this->params);
+        $generator = new EmailGenerator(
+            new DateUtil(),
+            new GenderConverter(),
+            $this->emailTemplateManager,
+            $this->params,
+            $this->router
+        );
 
         $expected = [
             '#typeseance#' => 'Conseil Libriciel',
@@ -79,7 +97,7 @@ class EmailGeneratorTest extends WebTestCase
             '#urlseance#' => 'idelibre-test.libriciel.fr/idelibre_client',
             '#mandataire#' => null,
             '#presence#' => null,
-            ];
+        ];
 
         $this->assertEquals($expected, $generator->generateParams($convocation->object()));
     }

@@ -48,13 +48,15 @@
                     <td class="active_column">{{ user.isActive }}</td>
                     <td class="col-2 actionButton">
                         {{ macros.editButton('admin_edit', user.id) }}
-                        {{ macros.button_open_modal_delete(
-                            user.id,
-                            'Suppression d\'administrateur',
-                            'admin_delete',
-                            'Voulez-vous vraiment supprimer cet administrateur ?',
-                            users.currentPageNumber
-                        ) }}
+                        {% if (app.user != user) %}
+                            {{ macros.button_open_modal_delete(
+                                user.id,
+                                'Suppression d\'administrateur',
+                                'admin_delete',
+                                'Voulez-vous vraiment supprimer cet administrateur ?',
+                                users.currentPageNumber
+                            ) }}
+                        {% endif %}
                     </td>
                 </tr>
             {% endfor %}
