@@ -177,6 +177,33 @@ class EmailGenerator
         ];
     }
 
+    public function generateReloadPassword(User $user, string $token): array
+    {
+        $content = <<<HTML
+            <p>Bonjour #PRENOM_DESTINATAIRE# #NOM_DESTINATAIRE#,</p>\r
+            <p>Une demande de réinitialisation de votre mot de passe a &eacute;t&eacute; faite par un administrateur de l'application #NOM_PRODUIT#</p>\r
+            <p>Veuillez cliquer sur le lien pour le r&eacute;initialiser : #LIEN_MDP_REACTUALISATION#</p>\r
+            <p>Merci</p>
+        HTML;
+
+        $resetPasswordUrl = $this->generateResetPasswordUrl($token);
+
+        $generalParameter = $this->getGeneralParameter($user);
+
+        $parameterForHtml = $generalParameter + [
+            TemplateTag::UPDATE_PASSWORD_LINK => "<a href='$resetPasswordUrl'>Réinitialiser votre mot de passe</a>",
+        ];
+
+        $parameterForText = $generalParameter + [
+            TemplateTag::UPDATE_PASSWORD_LINK => $resetPasswordUrl,
+        ];
+
+        return [
+            'html' => $this->generateContentHtml($content, $parameterForHtml),
+            'text' => $this->generateContentText($content, $parameterForText),
+        ];
+    }
+
     private function generateResetPasswordUrl($token): string
     {
         return $this->router->generate(

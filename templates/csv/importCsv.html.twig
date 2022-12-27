@@ -8,7 +8,6 @@
 {% endblock %}
 
 {% block pageDetails %}
-
     <div class="alert alert-info">
         Information : Votre csv doit être construit de la manière suivante : <br>
         Ne pas mettre les noms des colonnes mais directement les utilisateurs <br>
@@ -38,27 +37,23 @@
         2,d.martin,Damien,Martin,d.martin@exemple.org,azety,2<br>
         1,e.durant,Emilie,Durant,e.durant@exemple.org,wxcvb,3 <br>
         <b>Attention :</b> Si un acteur existe déja alors il ne sera pas modifié.
-
     </div>
 {% endblock %}
 
-
-
 {% block pageForm %}
-
     {{ form_start(form) }}
     {{ form_widget(form) }}
-    <div class="alert alert-warning">Attention : L'import des utilisateurs peut durer plusieurs dizaines de secondes</div>
+
+    <div class="alert alert-warning">
+        Attention : L'import des utilisateurs peut durer plusieurs dizaines de secondes
+    </div>
 
     <div class="float-right">
         {% block pageSaveReturn %}{{ macro.save('user_index') }}{% endblock %}
     </div>
 
     {{ form_end(form) }}
-
 {% endblock %}
-
-
 
 {% block javascripts %}
     <script>
@@ -78,4 +73,3 @@
         }, true);
     </script>
 {% endblock %}
-

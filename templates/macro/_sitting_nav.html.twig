@@ -1,10 +1,12 @@
 {% macro toogleView(path, currentViewType ) %}
     {% if currentViewType == 'show' %}
         <div class="btn-group  ">
-            <a href="#" class="btn btn-primary disabled" title="Visualiser"><span
-                        class="fa fa-eye"></span></a>
-            <a href="{{ path }}" class="btn btn-primary" title="Modifier"><span
-                        class="fas fa-pen"></span></a>
+            <a href="#" class="btn btn-primary disabled" title="Visualiser">
+                <span class="fa fa-eye"></span>
+            </a>
+            <a href="{{ path }}" class="btn btn-primary" title="Modifier">
+                <span class="fas fa-pen"></span>
+            </a>
         </div>
     {% endif %}
     {% if currentViewType == 'edit' %}

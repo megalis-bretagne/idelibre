@@ -10,7 +10,6 @@
             {{ include('include/flash.html.twig') }}
         {% endblock %}
 
-
         <h1>{% block pageTitle %}{% endblock %}</h1>
 
         <div class="mt-4">
@@ -31,7 +30,6 @@
                         {% block pageSaveReturn %}{% endblock %}
                     </div>
                     {{ form_end(form) }}
-
                 {% endblock %}
             </div>
         </div>
@@ -40,10 +38,5 @@
         <div class="col-8 offset-2">
             {% block bottomPage %}{% endblock %}
         </div>
-
-
     </div>
-
 {% endblock %}
-
-

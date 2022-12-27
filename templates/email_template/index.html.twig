@@ -4,57 +4,69 @@
 {% block pageTitle 'Modèles d\'email' %}
 
 {% block pageActions %}
-    <a href="{{ path('email_template_add') }}" class="btn btn-primary">
-        <span class="fa fa-plus-circle"></span> Ajouter un modèle de convocation
-    </a>
+    {{ macros.addButton(
+        'email_template_add',
+        'Ajouter un modèle de convocation',
+        'Ajouter un modèle de convocation',
+    ) }}
 {% endblock %}
 
 {% block pageTable %}
     <table class="table table-striped mt-3 bg-white">
         <thead>
-        <tr class="d-flex">
-            <th class="col-4">{{ knp_pagination_sortable(templates, 'Intitulé', 'et.name') }}</th>
-            <th class="col-4">{{ knp_pagination_sortable(templates, 'Type de séance', 't.name') }}</th>
-            <th class="col-2">{{ knp_pagination_sortable(templates, 'Catégorie', 'et.category') }}</th>
-            <th class="col-2">Actions</th>
-        </tr>
+            <tr class="d-flex">
+                <th class="col-4">{{ knp_pagination_sortable(templates, 'Intitulé', 'et.name') }}</th>
+                <th class="col-4">{{ knp_pagination_sortable(templates, 'Type de séance', 't.name') }}</th>
+                <th class="col-2">{{ knp_pagination_sortable(templates, 'Catégorie', 'et.category') }}</th>
+                <th class="col-2">Actions</th>
+            </tr>
         </thead>
         <tbody>
+            {{ macros.emptyList(templates, "Aucun modèle à afficher") }}
 
-        {{ macros.emptyList(templates, "Aucun modèle à afficher") }}
+            {% for template in templates %}
+                <tr class="d-flex">
+                    <td class="col-4">
+                        {{ template.name }}
+                    </td>
+                    <td class="col-4">
+                        {{ template.type ? template.type.name : '' }}
+                    </td>
+                    <td class="col-2">
+                        {% if template.category == 'convocation' %}
+                            Convocation
+                        {% endif %}
 
-        {% for template in templates %}
-            <tr class="d-flex">
-                <td class="col-4">{{ template.name }} </td>
-                <td class="col-4">{{ template.type ? template.type.name : '' }} </td>
-                <td class="col-2">
-                    {% if template.category == 'convocation' %} Convocation {% endif %}
-                    {% if template.category == 'invitation'%} Invitation {% endif %}
-                    {% if template.category == 'recapitulatif'%} Récapitulatif {% endif %}
-                    {% if template.category == 'reset_password' %} Mot de passe oublié{% endif %}
+                        {% if template.category == 'invitation'%}
+                            Invitation
+                        {% endif %}
 
-                </td>
-                <td class="col-2">
-                    {{ macros.editButton('email_template_edit', template.id) }}
-                    {{ macros.showButton('email_template_preview', template.id) }}
+                        {% if template.category == 'recapitulatif'%}
+                            Récapitulatif
+                        {% endif %}
 
-                    {% if not template.isDefault %}
-                        {{ macros.button_open_modal_delete(
-                            template.id,
-                            "Suppression du modèle",
-                            "email_template_delete",
-                            "Voulez-vous vraiment supprimer ce modèle ? ",
-                            templates.currentPageNumber
-                        ) }}
-                    {% endif %}
+                        {% if template.category == 'reset_password' %}
+                            Mot de passe oublié
+                        {% endif %}
+                    </td>
+                    <td class="col-2">
+                        {{ macros.editButton('email_template_edit', template.id) }}
+                        {{ macros.showButton('email_template_preview', template.id) }}
 
-                </td>
-            </tr>
-        {% endfor %}
+                        {% if not template.isDefault %}
+                            {{ macros.button_open_modal_delete(
+                                template.id,
+                                "Suppression du modèle",
+                                "email_template_delete",
+                                "Voulez-vous vraiment supprimer ce modèle ? ",
+                                templates.currentPageNumber
+                            ) }}
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
 {% endblock %}
 
 {% block pagePagination  knp_pagination_render(templates) %}
-
-

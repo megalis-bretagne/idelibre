@@ -7,10 +7,7 @@
     {{ macro.backButton('configuration_index') }}
 {% endblock %}
 
-
-
 {% block pageForm %}
-
     {{ form_start(form) }}
     <div class="alert alert-info">
         <b>Attention</b> : la configuration s'appliquera à toutes les séances en cours.
@@ -22,6 +19,4 @@
         {% block pageSaveReturn %}{{ macro.save('configuration_index') }}{% endblock %}
     </div>
     {{ form_end(form) }}
-
 {% endblock %}
-

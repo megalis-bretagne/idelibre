@@ -5,6 +5,7 @@ namespace App\Command;
 use App\Repository\SittingRepository;
 use App\Repository\StructureRepository;
 use App\Service\Seance\SittingManager;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -13,24 +14,16 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+#[AsCommand(name: 'purge:sitting')]
 class PurgeSittingsCommand extends Command
 {
-    protected static $defaultName = 'purge:sitting';
-
-    private SittingRepository $sittingRepository;
-    private StructureRepository $structureRepository;
-    private SittingManager $sittingManager;
-
     public function __construct(
-        SittingRepository $sittingRepository,
-        StructureRepository $structureRepository,
-        SittingManager $sittingManager,
+        private readonly SittingRepository $sittingRepository,
+        private readonly StructureRepository $structureRepository,
+        private readonly SittingManager $sittingManager,
         string $name = null
     ) {
         parent::__construct($name);
-        $this->sittingRepository = $sittingRepository;
-        $this->structureRepository = $structureRepository;
-        $this->sittingManager = $sittingManager;
     }
 
     protected function configure(): void

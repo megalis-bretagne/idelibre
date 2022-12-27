@@ -1,81 +1,71 @@
 {% extends 'dataview.html.twig' %}
 {% import 'macro/_forms.html.twig' as macros %}
 
-
 {% block pageTitle 'Séances' %}
 
 {% block pageActions %}
-
     <div class="row">
         <div class="col-6 pull-left">
-            <a href="{{ path('sitting_add') }}" class="btn btn-primary"><span
-                        class="fa fa-plus-circle"></span>
-                Ajouter</a>
+            {{ macros.addButton('sitting_add') }}
         </div>
 
         <div class="col-6 -pull-right">
             {{ macros.searchForm(formSearch, searchTerm, 'sitting_index') }}
         </div>
-
-
     </div>
 {% endblock %}
 
 {% block pageTable %}
     <table class="table table-striped mt-3 bg-white">
         <thead>
-        <tr class="d-flex">
-            <th class="col-7">{{ knp_pagination_sortable(sittings, 'Intitulé', 's.name') }}</th>
-            <th class="col-3">{{ knp_pagination_sortable(sittings, 'Date', 's.date') }}</th>
-            <th class="col-2">Actions</th>
-        </tr>
+            <tr class="d-flex">
+                <th class="col-7">{{ knp_pagination_sortable(sittings, 'Intitulé', 's.name') }}</th>
+                <th class="col-3">{{ knp_pagination_sortable(sittings, 'Date', 's.date') }}</th>
+                <th class="col-2">Actions</th>
+            </tr>
         </thead>
         <tbody>
+            {{ macros.emptyList(sittings, "Aucune séance à afficher") }}
 
-        {{ macros.emptyList(sittings, "Aucune séance à afficher") }}
+            {% for sitting in sittings %}
+                <tr class="d-flex">
+                    <td class="col-7">{{ sitting.name }}</td>
+                    <td class="col-3">{{ sitting.date | date('d/m/Y : H:i' , timezone) }}</td>
+                    <td class="col-2">
+                        {{ macros.showButton('sitting_show_information', sitting.id) }}
 
-        {% for sitting in sittings %}
-            <tr class="d-flex">
-                <td class="col-7">{{ sitting.name }} </td>
-                <td class="col-3">{{ sitting.date | date('d/m/Y : H:i' , timezone) }} </td>
+                        {% if sitting.isArchived == false %}
+                            {{ macros.button_open_modal_post(
+                                sitting.id,
+                                'Classement de la séance',
+                                'Voulez-vous classer cette séance ?',
+                                'sitting_archive',
+                                'fas fa-book',
+                                'Classer'
+                            ) }}
+                        {% endif %}
 
-                <td class="col-2">
-                    {{ macros.showButton('sitting_show_information', sitting.id) }}
-
-                    {% if sitting.isArchived == false %}
-                        {{ macros.button_open_modal_post(
+                        {{ macros.button_open_modal_delete(
                             sitting.id,
-                            'Classement de la séance',
-                            'Voulez-vous classer cette séance ?',
-                            'sitting_archive',
-                            'fas fa-book',
-                            'Classer'
+                            'Suppression de la séance',
+                            'sitting_delete',
+                            'Voulez-vous vraiment supprimer cette séance ?',
+                            sittings.currentPageNumber
                         ) }}
-                    {% endif %}
 
-                    {{ macros.button_open_modal_delete(
-                        sitting.id,
-                        'Suppression de la séance',
-                        'sitting_delete',
-                        'Voulez-vous vraiment supprimer cette séance ?',
-                        sittings.currentPageNumber
-                    ) }}
-
-
-                    {% if sitting.isArchived and is_granted('ROLE_SUPERADMIN') %}
-                        {{ macros.button_open_modal_post(
-                            sitting.id,
-                            'Déclassement de la séance',
-                            'Voulez-vous déclasser cette séance ?',
-                            'sitting_unarchive',
-                            'fas fa-chart-line',
-                            'Déclasser'
-                        ) }}
-                    {% endif %}
-
-                </td>
-            </tr>
-        {% endfor %}
+                        {% if sitting.isArchived and is_granted('ROLE_SUPERADMIN') %}
+                            {{ macros.button_open_modal_post(
+                                sitting.id,
+                                'Déclassement de la séance',
+                                'Voulez-vous déclasser cette séance ?',
+                                'sitting_unarchive',
+                                'fas fa-chart-line',
+                                'Déclasser'
+                            ) }}
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
 {% endblock %}

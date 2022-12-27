@@ -1,6 +1,8 @@
 {% macro save(cancelPath, param = {} ,saveName = 'Enregistrer') %}
-    <a href="{{ path( cancelPath, param ) }}" class="btn btn-outline-dark">
-        <span class="fa fa-times"></span> Annuler</a>
+    <a href="{{ path( cancelPath, param ) }}" class="btn btn-outline-primary">
+        <span class="fa fa-times"></span>
+        Annuler
+    </a>
 
     <button class="btn btn-primary" type="submit">
         <span class="fa fa-save"></span>
@@ -8,37 +10,34 @@
     </button>
 {% endmacro %}
 
-
 {% macro emptyList(elements, text) %}
     {% if elements |length == 0 %}
         <tr class="d-flex">
-            <td class="col-12 text-center">{{ text }}</td>
+            <td class="col-12 text-center">
+                {{ text }}
+            </td>
         </tr>
     {% endif %}
 {% endmacro %}
 
-
 {% macro editButton(editPath, id = null) %}
-
     {% if id ==null %}
-        <a href="{{ path(editPath) }}" class="btn btn-outline-primary borderless"
-           title="Modifier"><span class="fas fa-pen"></span></a>
+        <a href="{{ path(editPath) }}" class="btn btn-outline-primary borderless" title="Modifier">
+            <span class="fas fa-pen"></span>
+        </a>
     {% else %}
-        <a href="{{ path(editPath, {'id': id}) }}" class="btn btn-outline-primary borderless"
-           title="Modifier"><span class="fas fa-pen"></span></a>
+        <a href="{{ path(editPath, {'id': id}) }}" class="btn btn-outline-primary borderless" title="Modifier">
+            <span class="fas fa-pen"></span>
+        </a>
     {% endif %}
 {% endmacro %}
 
-
 {% macro backButton(backPath, params = {}) %}
     <a href="{{ path(backPath, params) }}" class="btn btn-outline-primary">
-        <span class="fa fa-arrow-left"></span> Retour
+        <span class="fa fa-arrow-left"></span>
+        Retour
     </a>
 {% endmacro %}
-
-
-
-
 
 {% macro searchForm(formSearch, searchTerm, resetPath) %}
     {{ form_start(formSearch, {'method': 'GET'}) }}
@@ -46,23 +45,35 @@
     <div class="input-group col-8 float-right pr-0">
         {{ form_widget(formSearch.search, {'value': searchTerm}) }}
         <div class="input-group-append">
-            <a href="{{ path(resetPath) }}" class="btn btn-warning" title="Effacer"> <span class="fas fa-times"></span></a>
+            <a href="{{ path(resetPath) }}" class="btn btn-warning" title="Effacer">
+                <span class="fas fa-times"></span>
+            </a>
             <button class="btn btn-primary" title="Filtrer">
                 <span class="fas fa-search"></span>
             </button>
-
-
         </div>
     </div>
     {{ form_end(formSearch) }}
-
 {% endmacro %}
 
-
 {% macro showButton(showPath, id) %}
+    <a href="{{ path(showPath, {'id': id}) }}" class="btn btn-outline-primary borderless" title="Visualiser">
+        <span class="fa fa-eye"></span>
+    </a>
+{% endmacro %}
 
-    <a href="{{ path(showPath, {'id': id}) }}" class="btn btn-outline-primary borderless"
-       title="Visualiser"><span class="fa fa-eye"></span></a>
+{% macro addButton(addPath, label="Ajouter", title="Ajouter", class="btn-primary") %}
+    <a href="{{ path(addPath) }}" class="btn {{ class }}" title="{{ title }}">
+        <span class="fa fa-plus-circle"></span>
+        {{ label }}
+    </a>
+{% endmacro %}
+
+{% macro batchDeleteButton(addPath, label="Supprimer", title="Supprimer", class="btn-primary") %}
+    <a href="{{ path(addPath) }}" class="btn {{ class }}" title="{{ title }}">
+        <span class="fa fa-trash-alt"></span>
+        {{ label }}
+    </a>
 {% endmacro %}
 
 {% macro button_open_modal_delete(id, title, pathAction, content, page = 1) %}
@@ -75,31 +86,29 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">{{ title }}</h4>
+                    <h4 class="modal-title">
+                        {{ title }}
+                    </h4>
                     <button class="close" data-dismiss="modal" type="button">&times;</button>
                 </div>
                 <div class="modal-body">
                     {{ content | nl2br | raw }}
                 </div>
-
                 <div class="modal-footer">
+                    {{ _self.cancelBtnModal() }}
 
-                    <button class="btn btn-secondary" data-dismiss="modal" type="button">
-                        <span class="fa fa-times"></span> Annuler
-                    </button>
-                    <form method="post" action="{{ path(pathAction, {id: id, page: page}) }}"
-                          style="display: inline-block">
+                    <form method="post" action="{{ path(pathAction, {id: id, page: page}) }}" style="display: inline-block">
                         <input type="hidden" name="_method" value="DELETE">
                         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ id) }}">
-                        <button type="submit" class="btn btn-danger"><span class="fa fa-trash-alt"></span> Supprimer
+                        <button type="submit" class="btn btn-danger">
+                            <span class="fa fa-trash-alt"></span>
+                            Supprimer
                         </button>
                     </form>
-
                 </div>
             </div>
         </div>
     </div>
-
 {%- endmacro -%}
 
 {% macro button_open_modal_post(id, title, content, pathAction, icon = "fa fa-paper-plane", btn_title = "Envoyer",
@@ -113,66 +122,153 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">{{ title }}</h4>
+                    <h4 class="modal-title">
+                        {{ title }}
+                    </h4>
                     <button class="close" data-dismiss="modal" type="button">&times;</button>
                 </div>
                 <div class="modal-body">
                     {{ content }}
                 </div>
-
                 <div class="modal-footer">
+                    {{ _self.cancelBtnModal() }}
 
-                    <button class="btn btn-secondary" data-dismiss="modal" type="button">
-                        <span class="fa fa-times"></span> Annuler
-                    </button>
-                    <form method="post" action="{{ path(pathAction, {id: id}) }}"
-                          style="display: inline-block">
+                    <form method="post" action="{{ path(pathAction, {id: id}) }}" style="display: inline-block">
                         <input type="hidden" name="_token" value="{{ csrf_token('postForm' ~ id) }}">
-                        <button type="submit" class="btn btn-danger submit_post">{{ confirmMessage | raw }}</button>
+                        <button type="submit" class="btn btn-danger submit_post">
+                            {{ confirmMessage | raw }}
+                        </button>
                     </form>
-
                 </div>
             </div>
         </div>
     </div>
-
 {%- endmacro -%}
 
-{% macro button_top_open_modal_post(title, content, pathAction, icon ,btn_description = "Envoyer",
+{% macro button_top_open_modal_post(title, content, pathAction, icon, btn_description = "Envoyer",
     confirmMessage = '<span class="fas fa-exclamation-circle"></span> Confirmer' ) %}
 
     {% set htmlId = random() %}
 
     <button type="button" class="btn btn-outline-primary" title="{{ btn_description }}"
             data-target="#post{{ htmlId }}" data-toggle="modal">
-        <span class="{{ icon }}"></span> {{ btn_description }}
+        <span class="{{ icon }}"></span>
+        {{ btn_description }}
     </button>
 
     <div id="post{{ htmlId }}" class="modal fade" role="dialog" data-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">{{ title }}</h4>
+                    <h4 class="modal-title">
+                        {{ title }}
+                    </h4>
                     <button class="close" data-dismiss="modal" type="button">&times;</button>
+                </div>
+                <div class="modal-body">
+                    {{ content }}
+                </div>
+                <div class="modal-footer">
+                    {{ _self.cancelBtnModal() }}
+
+                    <form method="post" action="{{ path(pathAction) }}"
+                          style="display: inline-block">
+                        <input type="hidden" name="_token" value="{{ csrf_token('postForm') }}">
+                        <button type="submit" class="btn btn-danger submit_post">
+                            {{ confirmMessage | raw }}
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{%- endmacro -%}
+
+{% macro btnInvalidePasswordWithModal(title, content, pathAction, btn_description = "Invalidation des mots de passe") %}
+    {% set htmlId = random() %}
+
+    <button type="button" class="btn btn-outline-primary" title="{{ btn_description }}"
+            data-target="#post{{ htmlId }}" data-toggle="modal">
+        <span class="fa-passwd-reset fa-stack small">
+            <i class="fa fa-sync-alt fa-stack-2x"></i>
+            <i class="fa fa-lock fa-stack-1x small font-weight-bold"></i>
+        </span>
+        {{ btn_description }}
+    </button>
+
+    <div id="post{{ htmlId }}" class="modal fade" role="dialog" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        {{ title }}
+                    </h4>
+                    <button class="close" data-dismiss="modal" type="button">&times;</button>
+                </div>
+                <div class="modal-body">
+                    {{ content }}
+                </div>
+                <div class="modal-footer">
+                    {{ _self.cancelBtnModal() }}
+
+                    <form method="post" action="{{ path(pathAction) }}" style="display: inline-block">
+                        <input type="hidden" name="_token" value="{{ csrf_token('postForm') }}">
+                        <button type="submit" class="btn btn-danger submit_post">
+                            <span class="fas fa-exclamation-circle"></span>
+                            Invalider
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro btnReloadPasswordWithModal(id, title, pathAction, content, page = 1) %}
+    <button type="button" class="btn btn-outline-primary borderless stacked" title="Réinitialisation du mot de passe utilisateur"
+            data-target="#modalReload{{ id }}" data-toggle="modal">
+        <span class="fa-passwd-reset fa-stack small">
+            <i class="fa fa-sync-alt fa-stack-2x"></i>
+            <i class="fa fa-lock fa-stack-1x small font-weight-bold"></i>
+        </span>
+    </button>
+
+    <div id="modalReload{{ id }}" tabindex="-1" class="modal fade" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">{{ title }}</h4>
+                    <button class="close" data-bs-dismiss="modal" type="button">&times;</button>
                 </div>
                 <div class="modal-body">
                     {{ content }}
                 </div>
 
                 <div class="modal-footer">
+                    {{ _self.cancelBtnModal() }}
 
-                    <button class="btn btn-secondary" data-dismiss="modal" type="button">
-                        <span class="fa fa-times"></span> Annuler
-                    </button>
-                    <form method="post" action="{{ path(pathAction) }}"
+                    <form method="post" action="{{ path(pathAction, {id: id, page: page}) }}"
                           style="display: inline-block">
-                        <input type="hidden" name="_token" value="{{ csrf_token('postForm') }}">
-                        <button type="submit" class="btn btn-danger submit_post">{{ confirmMessage | raw }}</button>
+                        <input type="hidden" name="_method" value="POST">
+                        <button type="submit" class="btn btn-primary">
+                            <span class="fas fa-sync-alt"></span>
+                            Réinitialisation
+                        </button>
                     </form>
-
                 </div>
             </div>
         </div>
     </div>
+{% endmacro %}
 
-{%- endmacro -%}
+{% macro cancelBtnModal(cancelName = 'Annuler') %}
+{#    <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">#}
+{#        <span class="fa fa-times"></span>#}
+{#        {{ cancelName }}#}
+{#    </button>#}
+
+    <button type="button" class="btn btn-outline-primary" data-dismiss="modal">
+        <span class="fa fa-times"></span>
+        Annuler
+    </button>
+{% endmacro %}

@@ -21,17 +21,16 @@ use Twig\Environment;
 
 class AttendanceNotification
 {
-
     public function __construct(
-        private Environment $twig,
-        private StructureRepository $structureRepository,
-        private SittingRepository $sittingRepository,
-        private ConvocationRepository $convocationRepository,
-        private EmailTemplateRepository $emailTemplateRepository,
-        private UserRepository $userRepository,
-        private EmailServiceInterface $emailService,
-        private EmailGenerator $emailGenerator,
-        private GenderConverter $genderConverter,
+        private readonly Environment $twig,
+        private readonly StructureRepository $structureRepository,
+        private readonly SittingRepository $sittingRepository,
+        private readonly ConvocationRepository $convocationRepository,
+        private readonly EmailTemplateRepository $emailTemplateRepository,
+        private readonly UserRepository $userRepository,
+        private readonly EmailServiceInterface $emailService,
+        private readonly EmailGenerator $emailGenerator,
+        private readonly GenderConverter $genderConverter,
     ) {
     }
 

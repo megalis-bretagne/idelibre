@@ -7,15 +7,15 @@
     <div class="row">
         <div class="col-6 pull-left">
             {% if is_granted('ROLE_SUPERADMIN') %}
-                <a href="{{ path('admin_add') }}" class="btn btn-primary">
-                    <span class="fa fa-plus-circle"></span>
-                    Ajouter
-                </a>
+                {{ macros.addButton('admin_add') }}
             {% endif %}
-            <a href="{{ path('admin_goup_add') }}" class="btn btn-outline-primary">
-                <span class="fa fa-plus-circle"></span>
-                Ajouter un admin de groupe
-            </a>
+
+            {{ macros.addButton(
+                'admin_goup_add',
+                'Ajouter un admin de groupe',
+                'Ajouter un admin de groupe',
+                'btn-outline-primary'
+            ) }}
         </div>
 
         <div class="col-6">
@@ -25,7 +25,7 @@
 {% endblock %}
 
 {% block pageTable %}
-    <table class="table table-striped  bg-white">
+    <table class="table table-striped bg-white">
         <thead>
             <tr class="d-flex">
                 <th class="col-2">{{ knp_pagination_sortable(users, 'Nom', 'u.lastName') }}</th>
@@ -41,13 +41,22 @@
 
             {% for user in users %}
                 <tr class="d-flex">
-                    <td class="col-2">{{ user.lastName }}</td>
-                    <td class="col-3">{{ user.username }}</td>
-                    <td class="col-2">{{ ('ROLE_SUPERADMIN' in user.roles) ? 'Superadmin' : 'Admin de groupe' }}</td>
-                    <td class="col-3"> {{ user.group ? user.group.name : '' }}</td>
+                    <td class="col-2">
+                        {{ user.lastName }}
+                    </td>
+                    <td class="col-3">
+                        {{ user.username }}
+                    </td>
+                    <td class="col-2">
+                        {{ ('ROLE_SUPERADMIN' in user.roles) ? 'Superadmin' : 'Admin de groupe' }}
+                    </td>
+                    <td class="col-3">
+                        {{ user.group ? user.group.name : '' }}
+                    </td>
                     <td class="active_column">{{ user.isActive }}</td>
                     <td class="col-2 actionButton">
                         {{ macros.editButton('admin_edit', user.id) }}
+
                         {% if (app.user != user) %}
                             {{ macros.button_open_modal_delete(
                                 user.id,

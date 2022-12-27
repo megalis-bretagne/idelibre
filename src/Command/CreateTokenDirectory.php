@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\Repository\StructureRepository;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -10,24 +11,16 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
+#[AsCommand(name: 'createdir:token')]
 class CreateTokenDirectory extends Command
 {
-    protected static $defaultName = 'createdir:token';
-
-    private StructureRepository $structureRepository;
-    private ParameterBagInterface $bag;
-    private Filesystem $fileSystem;
-
     public function __construct(
-        FileSystem $fileSystem,
-        ParameterBagInterface $bag,
-        StructureRepository $structureRepository,
+        private readonly FileSystem $fileSystem,
+        private readonly ParameterBagInterface $bag,
+        private readonly StructureRepository $structureRepository,
         string $name = null
     ) {
         parent::__construct($name);
-        $this->fileSystem = $fileSystem;
-        $this->structureRepository = $structureRepository;
-        $this->bag = $bag;
     }
 
     protected function configure(): void

@@ -3,38 +3,51 @@
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
             <a class="nav-item nav-link change-tab {{ activeTab == 'information' ? 'active': '' }}" id="nav-information"
                href="{{ path('edit_sitting_information', {'id': sitting.id}) }}"
-               aria-selected="{{ activeTab == 'information' ? 'false' : 'true' }}">Informations</a>
+               aria-selected="{{ activeTab == 'information' ? 'false' : 'true' }}">
+                Informations
+            </a>
             <a class="nav-item nav-link change-tab {{ activeTab == 'actors' ? 'active': '' }}" id="nav-actors"
                href="{{ path('edit_sitting_actor', {'id': sitting.id}) }}"
-               aria-selected="{{ activeTab == 'actors' ? 'false' : 'true' }}">Destinataires</a>
+               aria-selected="{{ activeTab == 'actors' ? 'false' : 'true' }}">
+                Destinataires
+            </a>
             <a class="nav-item nav-link change-tab {{ activeTab == 'projects' ? 'active': '' }}" id="nav-projects"
                href="{{ path('edit_sitting_project', {'id': sitting.id}) }}"
-               aria-selected="{{ activeTab == 'projects' ? 'false' : 'true' }}">Projets</a>
+               aria-selected="{{ activeTab == 'projects' ? 'false' : 'true' }}">
+                Projets
+            </a>
             <a class="nav-item nav-link change-tab {{ activeTab == 'otherdocs' ? 'active': '' }}" id="nav-otherdocs"
                href="{{ path('edit_sitting_otherdoc', {'id': sitting.id}) }}"
-               aria-selected="{{ activeTab == 'otherdocs' ? 'false' : 'true' }}">Autres documents</a>
+               aria-selected="{{ activeTab == 'otherdocs' ? 'false' : 'true' }}">
+                Autres documents
+            </a>
         </div>
     </nav>
 {% endmacro %}
-
-
 
 {% macro showTabs(activeTab, sitting) %}
     <nav class="mb-3">
         <div class="nav nav-tabs justify-content-start" id="nav-tab" role="tablist">
             <a class="nav-item nav-link {{ activeTab == 'information' ? 'active': '' }}" id="nav-information"
                href="{{ path('sitting_show_information', {'id': sitting.id}) }}"
-               aria-selected="{{ activeTab == 'information' ? 'false' : 'true' }}">Informations</a>
+               aria-selected="{{ activeTab == 'information' ? 'false' : 'true' }}">
+                Informations
+            </a>
             <a class="nav-item nav-link {{ activeTab == 'actors' ? 'active': '' }}" id="nav-actors"
                href="{{ path('sitting_show_actors', {'id': sitting.id}) }}"
-               aria-selected="{{ activeTab == 'actors' ? 'false' : 'true' }}">Destinataires</a>
+               aria-selected="{{ activeTab == 'actors' ? 'false' : 'true' }}">
+                Destinataires
+            </a>
             <a class="nav-item nav-link {{ activeTab == 'projects' ? 'active': '' }}" id="nav-projects"
                href="{{ path('sitting_show_projects', {'id': sitting.id}) }}"
-               aria-selected="{{ activeTab == 'projects' ? 'false' : 'true' }}">Projets</a>
+               aria-selected="{{ activeTab == 'projects' ? 'false' : 'true' }}">
+                Projets
+            </a>
             <a class="nav-item nav-link change-tab {{ activeTab == 'otherdocs' ? 'active': '' }}" id="nav-otherdocs"
                href="{{ path('sitting_show_otherdocs', {'id': sitting.id}) }}"
-               aria-selected="{{ activeTab == 'otherdocs' ? 'false' : 'true' }}">Autres documents</a>
+               aria-selected="{{ activeTab == 'otherdocs' ? 'false' : 'true' }}">
+                Autres documents
+            </a>
         </div>
     </nav>
 {% endmacro %}
-

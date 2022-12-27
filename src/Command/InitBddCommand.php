@@ -4,6 +4,7 @@ namespace App\Command;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -12,19 +13,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use function file_get_contents;
 
+#[AsCommand(name: 'initBdd')]
 class InitBddCommand extends Command
 {
     // bin/console initBdd /home/rdubourget/workspace/uploadFile/docker-ressources/minimum.sql
-    protected static $defaultName = 'initBdd';
-    /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
-
-    public function __construct(EntityManagerInterface $entityManager, string $name = null)
+    public function __construct(private readonly EntityManagerInterface $entityManager, string $name = null)
     {
         parent::__construct($name);
-        $this->entityManager = $entityManager;
     }
 
     protected function configure(): void

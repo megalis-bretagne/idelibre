@@ -12,7 +12,15 @@ All notable changes to this project will be documented in this file.
 - Mise en place d'un système permettant de bloquer le brut force
 - Mise en place du calcul d'entropie sur les mot de passes
 - Un mail d'initialisation du mot de passe est envoyé lors de la création d'un compte superadmin et admin de groupe.
+- Lors de la création d'un utilisateur dans une structure, il existe deux possiblité concernant le mot de passe :
+  - soit un mail d'initialisation du mot de passe est envoyé
+  - soit il est possible de définir le mot de passe
+- Mise en place d'envoie d'un mail de réinitialisation du mot de passe.
+- Mise en place de l'invalidation des mots de passe de tous les utilisateurs de la structure.
 
+### Suppression
+- Lors de la création / modification d'un admin de group ou d'un superadmind, il n'est plus possible de définir le mot de passe du nouveau utilisateur.
+- Lors de la modification d'un admin de group ou d'un superadmind, il n'est plus possible de changer l'adresse e-mail de l'utilisateur.
 
 ## [4.1.4] - 2022-08-31
 

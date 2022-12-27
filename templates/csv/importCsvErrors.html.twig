@@ -3,7 +3,6 @@
 
 {% block pageTitle 'Erreurs lors de l\'import' %}
 
-
 {% block pageActions %}
     {{ macro.backButton('user_index') }}
 {% endblock %}
@@ -23,28 +22,18 @@
                     Message : {{ violation.message }} <br>
                     Champ en erreur : {{ violation.propertyPath }} <br>
                     Valeur du champ : {{ violation.invalidValue }} <br>
-
                 {% else%}
-
                     Entrée : {{ violation.parameters | join(',') }} <br>
                     Message: {{ violation.message }} <br>
-
-
                 {% endif %}
 
                 {% if not loop.last %}
                     <hr>
                 {% endif %}
-
             {% endfor %}
-
-
-
         </div>
     {% endfor %}
 {% endblock %}
 
 {% block pageForm %}
 {% endblock %}
-
-

@@ -33,7 +33,7 @@ class AdminController extends AbstractController
                 $request->query->get('search')
             ),
             $request->query->getInt('page', 1),
-            20,
+            $this->getParameter('limit_line_table'),
             [
                 'defaultSortFieldName' => ['u.lastName'],
                 'defaultSortDirection' => 'asc',

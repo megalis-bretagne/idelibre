@@ -8,7 +8,6 @@
 {% endblock %}
 
 {% block pageDetails %}
-
     <div class="alert alert-info">
         Information : Votre csv doit être construit de la manière suivante : <br>
 
@@ -19,15 +18,10 @@
         Administration générale<br>
         "Finances,Budget"<br>
         "Finances,Comptabilité"<br>
-
-
     </div>
 {% endblock %}
 
-
-
 {% block pageForm %}
-
     {{ form_start(form) }}
     {{ form_widget(form) }}
     <div class="alert alert-warning">Attention : L'import des themes peut durer plusieurs dizaines de secondes</div>
@@ -37,10 +31,7 @@
     </div>
 
     {{ form_end(form) }}
-
 {% endblock %}
-
-
 
 {% block javascripts %}
     <script>
@@ -60,4 +51,3 @@
         }, true);
     </script>
 {% endblock %}
-

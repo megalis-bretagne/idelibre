@@ -5,54 +5,51 @@
 
 {% block pageActions %}
     <div class=" pull-left">
-        <a href="{{ path('theme_add') }}" class="btn btn-primary"><span
-                    class="fa fa-plus-circle"></span>
-            Ajouter</a>
-        <a href="{{ path('csv_add_themes') }}" class="btn btn-outline-primary"><span
-                    class="fa fa-plus-circle"></span>
-            Ajouter via csv</a>
+        {{ macros.addButton('theme_add') }}
 
+        {{ macros.addButton(
+            'csv_add_themes',
+            'Ajouter via csv',
+            'Ajouter via csv',
+            'btn-outline-primary'
+        ) }}
     </div>
-
-
 {% endblock %}
 
 {% block pageTable %}
     <table class="table table-striped mt-3 bg-white">
         <thead>
-        <tr class="d-flex">
-            <th class="col-10">Intitulé</th>
-            <th class="col-2">Actions</th>
-        </tr>
+            <tr class="d-flex">
+                <th class="col-10">Intitulé</th>
+                <th class="col-2">Actions</th>
+            </tr>
         </thead>
         <tbody>
+            {{ macros.emptyList(themes, "Aucun thème à afficher") }}
 
-        {{ macros.emptyList(themes, "Aucun thème à afficher") }}
+            {% for theme in themes %}
+                <tr class="d-flex">
+                    <td class="col-10">
+                        {% if(theme.lvl) > 1 %}
+                            {% for i in range (1, theme.lvl - 1) %}
+                                - - -
+                            {% endfor %}
+                        {% endif %}
+                        {{ theme.name }}
 
-        {% for theme in themes %}
-            <tr class="d-flex">
-                <td class="col-10">
-                    {% if(theme.lvl) > 1 %}
-                        {% for i in range (1, theme.lvl - 1) %}
-                            - - -
-                        {% endfor %}
-                    {% endif %}
-                    {{ theme.name }}
-
-                </td>
-                <td class="col-2">
-                    {{ macros.editButton('theme_edit', theme.id) }}
-                    {{ macros.button_open_modal_delete(
-                        theme.id,
-                        'Suppression de thème',
-                        'theme_delete',
-                        'Voulez-vous vraiment supprimer ce thème ? ' ~
-                        'Attention s\'il possède des sous-thèmes ils seront eux aussi supprimés'
-                    ) }}
-                </td>
-            </tr>
-        {% endfor %}
+                    </td>
+                    <td class="col-2">
+                        {{ macros.editButton('theme_edit', theme.id) }}
+                        {{ macros.button_open_modal_delete(
+                            theme.id,
+                            'Suppression de thème',
+                            'theme_delete',
+                            'Voulez-vous vraiment supprimer ce thème ? ' ~
+                            'Attention s\'il possède des sous-thèmes ils seront eux aussi supprimés'
+                        ) }}
+                    </td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
 {% endblock %}
-

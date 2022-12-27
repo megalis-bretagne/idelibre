@@ -83,6 +83,7 @@ class UserType extends AbstractType
                 'class' => Role::class,
                 'choice_label' => 'prettyName',
                 'query_builder' => $this->roleRepository->findInStructureQueryBuilder(),
+                'placeholder' => 'Sélectionnez une valeur',
             ]);
         }
 
@@ -98,7 +99,8 @@ class UserType extends AbstractType
                     'class' => Party::class,
                     'query_builder' => $this->partyRepository->findByStructure($options['structure']),
                     'choice_label' => 'name',
-                ]);
+                ])
+            ;
         }
 
         if ($this->IsSecretary($options)) {
@@ -113,25 +115,6 @@ class UserType extends AbstractType
             ]);
         }
 
-        $builder->add('plainPassword', RepeatedType::class, [
-            'mapped' => false,
-            'required' => false,
-            'type' => PasswordType::class,
-            'invalid_message' => 'Les mots de passe ne sont pas identiques',
-            'options' => [
-                'attr' => [
-                    'class' => 'password-field showValidationPasswordEntropy',
-                    'data-minimum-entropy' => $options['entropyForUser'],
-                ],
-            ],
-            'first_options' => [
-                'label' => 'Mot de passe',
-            ],
-            'second_options' => [
-                'label' => 'Confirmer',
-            ],
-        ]);
-
         if (false === $isMySelf) {
             $builder->add('isActive', CheckboxType::class, [
                 'required' => false,
@@ -139,6 +122,38 @@ class UserType extends AbstractType
                 'label' => 'Actif',
             ]);
         }
+
+        $builder
+            ->add('initPassword', ChoiceType::class, [
+                'mapped' => false,
+                'label' => 'Voulez vous définir le mot de passe de l\'utilisateur ?',
+                'choices' => [
+                    'Non' => false,
+                    'Oui' => true,
+                ],
+                'data' => false,
+                'required' => true,
+            ])
+            ->add('plainPassword', RepeatedType::class, [
+                'mapped' => false,
+                'required' => false,
+                'type' => PasswordType::class,
+                'invalid_message' => 'Les mots de passe ne sont pas identiques',
+                'options' => [
+                    'attr' => [
+                        'class' => 'password-field showValidationPasswordEntropy',
+                        'data-minimum-entropy' => $options['entropyForUser'],
+                        'autocomplete' => 'new-password',
+                    ],
+                ],
+                'first_options' => [
+                    'label' => 'Mot de passe',
+                ],
+                'second_options' => [
+                    'label' => 'Confirmer',
+                ],
+            ])
+        ;
 
         $builder->get('username')->addModelTransformer(new CallbackTransformer(
             fn ($username) => preg_replace('/@.*/', '', $username),

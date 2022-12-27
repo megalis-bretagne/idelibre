@@ -28,7 +28,7 @@ class EmailTemplateController extends AbstractController
         $emailTemplates = $paginator->paginate(
             $repository->findAllByStructure($this->getUser()->getStructure()),
             $request->query->getInt('page', 1),
-            20,
+            $this->getParameter('limit_line_table'),
             [
                 'defaultSortFieldName' => ['et.name'],
                 'defaultSortDirection' => 'asc',

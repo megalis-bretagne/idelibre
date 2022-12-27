@@ -4,42 +4,38 @@
 {% block pageTitle 'Groupes politiques' %}
 
 {% block pageActions %}
-    <a href="{{ path('party_add') }}" class="btn btn-primary"><span
-                class="fa fa-plus-circle"></span>
-        Ajouter</a>
+    {{ macros.addButton('party_add') }}
 {% endblock %}
 
 {% block pageTable %}
-
     <table class="table table-striped bg-white">
         <thead>
-        <tr class="d-flex">
-            <th class="col-8">Intitulé</th>
-            <th class="col-2">Abréviations</th>
-            <th class="col-2">Actions</th>
-        </tr>
+            <tr class="d-flex">
+                <th class="col-8">Intitulé</th>
+                <th class="col-2">Abréviations</th>
+                <th class="col-2">Actions</th>
+            </tr>
         </thead>
         <tbody>
+            {{ macros.emptyList(parties, "Aucun groupe politique à afficher") }}
 
-        {{ macros.emptyList(parties, "Aucun groupe politique à afficher") }}
+            {% for party in parties %}
+                <tr class="d-flex">
+                    <td class="col-8">{{ party.name }}</td>
+                    <td class="col-2">{{ party.initials }}</td>
+                    <td class="col-2">
+                        {{ macros.editButton('party_edit', party.id) }}
 
-        {% for party in parties %}
-            <tr class="d-flex">
-                <td class="col-8">{{ party.name }} </td>
-                <td class="col-2">{{ party.initials }} </td>
-                <td class="col-2">
-                    {{ macros.editButton('party_edit', party.id) }}
-
-                    {{ macros.button_open_modal_delete(
-                        party.id,
-                        'Suppression du groupe politique',
-                        'party_delete',
-                        'Voulez-vous vraiment supprimer ce groupe politique ?',
-                        parties.currentPageNumber
-                    ) }}
-                </td>
-            </tr>
-        {% endfor %}
+                        {{ macros.button_open_modal_delete(
+                            party.id,
+                            'Suppression du groupe politique',
+                            'party_delete',
+                            'Voulez-vous vraiment supprimer ce groupe politique ?',
+                            parties.currentPageNumber
+                        ) }}
+                    </td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
 {% endblock %}
