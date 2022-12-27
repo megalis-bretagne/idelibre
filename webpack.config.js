@@ -34,6 +34,7 @@ Encore
     .addEntry('toggle-calendar-new-sitting', './assets/js/toggleCalendarNewSitting.js')
     .addEntry('vue-manage-other-docs', './assets/vue-app/manageOtherdocs.js')
     .addEntry('showPasswordEntropy', './assets/js/password/showPasswordEntropy.js')
+    .addEntry('setPasswordUser', './assets/js/password/setPasswordUser.js')
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')

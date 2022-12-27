@@ -32,7 +32,7 @@ class GroupController extends AbstractController
         $groups = $paginator->paginate(
             $groupQueryAll,
             $request->query->getInt('page', 1),
-            20
+            $this->getParameter('limit_line_table')
         );
 
         return $this->render('group/index.html.twig', [

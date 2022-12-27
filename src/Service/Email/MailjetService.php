@@ -131,6 +131,19 @@ class MailjetService implements EmailServiceInterface
         $this->send($user->getEmail(), $subject, $contents['html'], $contents['text']);
     }
 
+    public function sendReloadPassword(User $user, string $token): void
+    {
+        $contentSubject = '[#NOM_PRODUIT#] Demande de réinitilisation par un administrateur';
+        $subject = $this->emailGenerator->generateSubject($user, $contentSubject);
+
+        $contents = $this->emailGenerator->generateReloadPassword(
+            $user,
+            $token
+        );
+
+        $this->send($user->getEmail(), $subject, $contents['html'], $contents['text']);
+    }
+
     /**
      * @throws EmailNotSendException
      */

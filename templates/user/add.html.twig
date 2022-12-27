@@ -8,12 +8,11 @@
 {% endblock %}
 
 {% block pageForm %}
-
     {{ form_start(form) }}
 
+    {{ form_row(form.gender) }}
     {{ form_row(form.firstName) }}
     {{ form_row(form.lastName) }}
-
 
     {{ form_label(form.username) }}
 
@@ -25,6 +24,7 @@
             <b class="text-ls-dark">@{{ suffix }}</b>
         </div>
     </div>
+
     {{ form_help(form.username) }}
 
     {{ form_row(form.email) }}
@@ -37,16 +37,15 @@
 
     {{ form_widget(form) }}
     <div class="float-right">
-        {% block pageSaveReturn %}{{ macro.save('user_index') }}{% endblock %}
+        {% block pageSaveReturn %}
+            {{ macro.save('user_index') }}
+        {% endblock %}
     </div>
     {{ form_end(form) }}
-
 {% endblock %}
 
 {% block javascripts %}
     {{ encore_entry_script_tags('create-user') }}
-    {{ encore_entry_script_tags('enable-select2') }}
     {{ encore_entry_script_tags('showPasswordEntropy') }}
+    {{ encore_entry_script_tags('setPasswordUser') }}
 {% endblock %}
-
-

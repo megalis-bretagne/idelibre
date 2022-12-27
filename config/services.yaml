@@ -36,7 +36,13 @@ parameters:
   env(WKHTMLTOIMAGE_PATH): /usr/bin/wkhtmltoimage
 
   minimumEntropyForUserWithRoleHigh: '%env(ENTROPY_ADMIN)%'
+  limit_line_table: '20'
 
+  csv_max_size: "5M"
+  csv_mime_types_authorized: [
+    'text/csv',  # .csv
+    'text/plain'
+  ]
 
 services:
   # default configuration for services in *this* file

@@ -7,9 +7,7 @@
     <div class="row">
         <div class="col-6 pull-left">
             {% if isStructureCreator %}
-                <a href="{{ path('structure_add') }}" class="btn btn-primary"><span
-                            class="fa fa-plus-circle"></span>
-                    Ajouter</a>
+                {{ macros.addButton('structure_add') }}
             {% endif %}
         </div>
 
@@ -20,57 +18,61 @@
 {% endblock %}
 
 {% block pageTable %}
-    <table class="table table-striped mt-3 bg-white">
+    <table class="table table-striped bg-white">
         <thead>
-        <tr class="d-flex">
-            <th class="col-4">{{ knp_pagination_sortable(structures, 'Nom', 's.name') }}</th>
-            <th class="col-3">{{ knp_pagination_sortable(structures, 'Suffixe', 's.suffix') }}</th>
-            <th class="col-3">{{ knp_pagination_sortable(structures, 'Groupe', 'g.name') }}</th>
-            <th class="active_column">{{ knp_pagination_sortable(structures, '', 's.isActive') }}</th>
-            <th class="col-2">Actions</th>
-        </tr>
+            <tr class="d-flex">
+                <th class="col-1"></th>
+                <th class="col-3">{{ knp_pagination_sortable(structures, 'Nom', 's.name') }}</th>
+                <th class="col-3">{{ knp_pagination_sortable(structures, 'Suffixe', 's.suffix') }}</th>
+                <th class="col-3">{{ knp_pagination_sortable(structures, 'Groupe', 'g.name') }}</th>
+                <th class="active_column">{{ knp_pagination_sortable(structures, '', 's.isActive') }}</th>
+                <th class="col-2">Actions</th>
+            </tr>
         </thead>
         <tbody>
+            {{ macros.emptyList(structures, "Aucune structure à afficher") }}
 
-        {{ macros.emptyList(structures, "Aucune structure à afficher") }}
+            {% for structure in structures %}
+                <tr class="d-flex">
+                    <td class="col-1">
+                        {% set disableAction = "pointer-events: none" %}
+                        {% if (structure.isActive) %}
+                            {%  set disableAction = "" %}
+                        {% endif %}
 
-        {% for structure in structures %}
-            <tr class="d-flex">
-                <td class="col-4">{{ structure.name }} </td>
-                <td class="col-3">{{ structure.suffix | slice(0,25) }} </td>
-                <td class="col-3">{{ (structure.group ? structure.group.name : "") | slice(0,25) }} </td>
-                <td class="active_column">{{ structure.isActive }}</td>
-                <td class="col-2">
+                        <a href="{{ path('security_impersonate', {'id': structure.id}) }}"
+                           class="btn btn-outline-primary borderless" title="Se connecter dans la structure" style="{{ disableAction }}">
+                            <span class="fas fa-sign-in-alt"></span>
+                        </a>
+                    </td>
+                    <td class="col-3">
+                        {{ structure.name }}
+                    </td>
+                    <td class="col-3">
+                        {{ structure.suffix | slice(0,25) }}
+                    </td>
+                    <td class="col-3">
+                        {{ (structure.group ? structure.group.name : "") | slice(0,25) }}
+                    </td>
+                    <td class="active_column">{{ structure.isActive }}</td>
+                    <td class="col-2 actionButton">
+                        {{ macros.editButton('structure_edit', structure.id) }}
 
-                    {%  set disableAction = "pointer-events: none" %}
-                    {% if( structure.isActive ) %}
-                        {%  set disableAction = "" %}
-                    {% endif %}
-                    <a href="{{ path('security_impersonate', {'id': structure.id}) }}"
-                       class="btn btn-outline-primary borderless" title="Se connecter dans la structure" style="{{ disableAction }}">
-                        <span class="fas fa-sign-in-alt "></span>
-                    </a>
-
-                    {{ macros.editButton('structure_edit', structure.id) }}
-
-                    {% if is_granted('ROLE_SUPERADMIN') %}
-                        {{ macros.button_open_modal_delete(
-                            structure.id,
-                            "Confirmer suppression de la structure.",
-                            "structure_delete",
-                            "Confirmer la suppression de " ~ structure.name ~
-                            ". Cela supprimera la structure et l'ensemble de ce qui lui est lié.",
-                            structures.currentPageNumber
-                        ) }}
-                    {% endif %}
-
-                </td>
-            </tr>
-        {% endfor %}
+                        {% if is_granted('ROLE_SUPERADMIN') %}
+                            {{ macros.button_open_modal_delete(
+                                structure.id,
+                                "Confirmer suppression de la structure.",
+                                "structure_delete",
+                                "Confirmer la suppression de " ~ structure.name ~
+                                ". Cela supprimera la structure et l'ensemble de ce qui lui est lié.",
+                                structures.currentPageNumber
+                            ) }}
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
 {% endblock %}
 
-{% block pagePagination  knp_pagination_render(structures) %}
-
-
+{% block pagePagination knp_pagination_render(structures) %}

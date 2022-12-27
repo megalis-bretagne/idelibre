@@ -23,4 +23,5 @@ class TemplateTag
     public const PRODUCT_NAME = '#NOM_PRODUIT#';
     public const INITIALIZATION_PASSWORD_LINK = '#LIEN_MDP_INITIALISATION#';
     public const FORGET_PASSWORD_LINK = '#LIEN_MDP_OUBLIE#';
+    public const UPDATE_PASSWORD_LINK = '#LIEN_MDP_REACTUALISATION#';
 }

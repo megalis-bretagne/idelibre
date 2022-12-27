@@ -6,66 +6,70 @@
 {% block pageTable %}
     <table class="table table-striped bg-white mt-5 col-8 offset-2">
         <tbody>
-        <tr class="d-flex">
-            <td class="col-11">Nodejs</td>
-            <td class="col-1">
-                {% if isNodejs %}
-                    <span class="fas fa-check text-success"></span>
-                {% else %}
-                    <span class="fa fa-times text-success"></span>
-                {% endif %}
-
-            </td>
-        </tr>
-        <tr class="d-flex">
-            <td class="col-11">Lshorodatage</td>
-            <td class="col-1">
-                {% if isLshorodatage %}
-                    <span class="fas fa-check text-success"></span>
-                {% else %}
-                    <span class="fa fa-times text-success"></span>
-                {% endif %}
-
-            </td>
-        </tr>
-
-        <tr class="d-flex">
-            <form action="{{ path('check_email') }}" method="post">
-                <td class="col-3"><label for="email">Envoi email</label></td>
-                <td class="col-7">
-                    <input type="email" name="email" id="email" class="form-control" placeholder="email@exemple.org" required>
-                </td>
-                <td class="col-2">
-                    <button class="btn btn-primary" title="Envoyer"><span class="fa fa-paper-plane"></span> Envoyer</button>
-                </td>
-            </form>
-        </tr>
-
-        <tr class="d-flex">
-            <td class="col-12 text-center"> <b>Configuration PHP</b></td>
-        </tr>
-
-        {% for configKey, configValue in phpConfig %}
             <tr class="d-flex">
-                <td class="col-8">{{ configKey }}</td>
-                <td class="col-4">{{ configValue }}</td>
+                <td class="col-11">Nodejs</td>
+                <td class="col-1">
+                    {% if isNodejs %}
+                        <span class="fas fa-check text-success"></span>
+                    {% else %}
+                        <span class="fa fa-times text-success"></span>
+                    {% endif %}
+                </td>
             </tr>
-        {% endfor %}
 
-        <tr class="d-flex">
-            <td class="col-8">Entropie du mot de passe pour les profils: <br /> Superadmin, Administrateur de groupe et Administrateur</td>
-            <td class="col-4">
-                {% if entropyForUser|default(null) %}
-                    {{ entropyForUser }}
-                {% else %}
-                    <span style="color: red;">A définir par l'administrateur de la plateforme</span>
-                {% endif %}
-            </td>
-        </tr>
+            <tr class="d-flex">
+                <td class="col-11">Lshorodatage</td>
+                <td class="col-1">
+                    {% if isLshorodatage %}
+                        <span class="fas fa-check text-success"></span>
+                    {% else %}
+                        <span class="fa fa-times text-success"></span>
+                    {% endif %}
+                </td>
+            </tr>
 
+            <tr class="d-flex">
+                <form action="{{ path('check_email') }}" method="post">
+                    <td class="col-3">
+                        <label for="email">Envoi email</label>
+                    </td>
+                    <td class="col-7">
+                        <input type="email" name="email" id="email" class="form-control" placeholder="email@exemple.org" required>
+                    </td>
+                    <td class="col-2">
+                        <button class="btn btn-primary" title="Envoyer">
+                            <span class="fa fa-paper-plane"></span>
+                            Envoyer
+                        </button>
+                    </td>
+                </form>
+            </tr>
+
+            <tr class="d-flex">
+                <td class="col-12 text-center"> <b>Configuration PHP</b></td>
+            </tr>
+
+            {% for configKey, configValue in phpConfig %}
+                <tr class="d-flex">
+                    <td class="col-8">{{ configKey }}</td>
+                    <td class="col-4">{{ configValue }}</td>
+                </tr>
+            {% endfor %}
+
+            <tr class="d-flex">
+                <td class="col-8">
+                    Entropie du mot de passe pour les profils: <br /> Superadmin, Administrateur de groupe et Administrateur
+                </td>
+                <td class="col-4">
+                    {% if entropyForUser|default(null) %}
+                        {{ entropyForUser }}
+                    {% else %}
+                        <span style="color: red;">A définir par l'administrateur de la plateforme</span>
+                    {% endif %}
+                </td>
+            </tr>
         </tbody>
     </table>
-
 {% endblock %}
 
 

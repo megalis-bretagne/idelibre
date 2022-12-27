@@ -11,22 +11,18 @@
 
     <div class="d-flex align-items-center col-11 mt-3">
         <h1 class="flex-grow-1">Détail de la séance</h1>
-        {% if  not sitting.isArchived %}
+        {% if not sitting.isArchived %}
             {{ macroNav.toogleView( path('edit_sitting_information', {'id': sitting.id}) , 'show') }}
         {% endif %}
     </div>
 
     <div class="col-12">
-
         <div class="mt-4">
             {{ macro.backButton('sitting_index', {'status' : sitting.isArchived ? 'archived' : 'active'}) }}
         </div>
 
-
         <div class="col-10 offset-1 form-white mt-4">
-
             {{ macroTab.showTabs('information', sitting) }}
-
 
             <h2 class="mb-5">Informations générales</h2>
             <div class="row">
@@ -47,7 +43,6 @@
                 </div>
             </div>
 
-
             {% if sitting.reminder and sitting.reminder.isActive %}
                 <div class="row mt-3">
                     <div class="col-4 text-right">
@@ -57,7 +52,6 @@
                         {{ sitting.reminder.duration | minutesOrHours }}
                     </div>
                 </div>
-
             {% endif %}
 
             <div class="row mt-3">

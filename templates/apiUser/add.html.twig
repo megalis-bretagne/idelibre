@@ -24,12 +24,10 @@
     </div>
     {{ form_help(form.token) }}
 
-
     <div class="float-right">
         {% block pageSaveReturn %}
             {{ macro.save('apiUser_index') }}
         {% endblock %}
     </div>
     {{ form_end(form) }}
-
 {% endblock %}

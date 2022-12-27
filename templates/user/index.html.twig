@@ -4,38 +4,35 @@
 {% block pageTitle 'Utilisateurs' %}
 
 {% block pageActions %}
+    <div class="row">
+        <div class="col-7 pull-left">
+            {{ macros.addButton('user_add') }}
 
-<div class="row">
-    <div class="col-7 pull-left">
-        <a href="{{ path('user_add') }}" class="btn btn-primary">
-            <span class="fa fa-plus-circle"></span>
-            Ajouter
-        </a>
+            {{ macros.addButton(
+                'csv_add_users',
+                'Ajouter via csv',
+                'Ajouter via csv',
+                'btn-outline-primary'
+            ) }}
 
-        <a href="{{ path('csv_add_users') }}" class="btn btn-outline-primary">
-            <span class="fa fa-plus-circle"></span>
-            Ajouter via csv
-        </a>
+            {{ macros.batchDeleteButton(
+                'user_delete_batch',
+                'Supprimer par lot',
+                'Supprimer par lot',
+                'btn-outline-primary'
+            ) }}
 
-        <a href="{{ path('user_delete_batch') }}" class="btn btn-outline-primary">
-            <span class="fa fa-trash-alt"></span>
-            Supprimer par lot
-        </a>
+            {{ macros.btnInvalidePasswordWithModal(
+                'Invalidation des mots de passe',
+                'Invalider tous les mots de passe',
+                'invalidate_users_password',
+            ) }}
+        </div>
 
-        {{ macros.button_top_open_modal_post(
-            'invalidation des mots de passe',
-            'invalider tous les mots de passe',
-            'invalidate_users_password',
-            'fas fa-sync-alt',
-            "invalidation mot de passe",
-            '<span class="fas fa-exclamation-circle"></span> Invalider'
-        ) }}
+        <div class="col-5">
+            {{ macros.searchForm(formSearch, searchTerm, 'user_index') }}
+        </div>
     </div>
-
-    <div class="col-5">
-        {{ macros.searchForm(formSearch, searchTerm, 'user_index') }}
-    </div>
-</div>
 {% endblock %}
 
 {% block pageTable %}
@@ -71,11 +68,20 @@
                     <td class="col-2">
                         {{ user.party ?  ( user.party.name|length > 10 ? user.party.name|slice(0,20) ~ '...' : user.party.name)  : ''  }}
                     </td>
-                    <td class="active_column">
-                        {{ user.isActive }}
-                    </td>
+                    <td class="active_column">{{ user.isActive }}</td>
                     <td class="col-2 actionButton">
+                        {% if (app.user != user) %}
+                            {{ macros.btnReloadPasswordWithModal(
+                                user.id,
+                                'Réinitialisation du mot de passe de l\'utilisateur',
+                                'user_reload_password',
+                                'Voulez-vous vraiment activer la procédure de réinitialisation du mot de passe de l\'utilisateur ?',
+                                users.currentPageNumber
+                            ) }}
+                        {% endif %}
+
                         {{ macros.editButton('user_edit', user.id) }}
+
                         {{ macros.button_open_modal_delete(
                             user.id,
                             'Suppression d\'utilisateur',

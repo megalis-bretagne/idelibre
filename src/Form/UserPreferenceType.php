@@ -50,6 +50,7 @@ class UserPreferenceType extends AbstractType
                     'attr' => [
                         'class' => 'password-field showValidationPasswordEntropy',
                         'data-minimum-entropy' => $options['entropyForUser'],
+                        'autocomplete' => 'new-password',
                     ],
                 ],
                 'first_options' => [

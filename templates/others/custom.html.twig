@@ -18,11 +18,15 @@
         {% for page in pagesInRange %}
             {% if page != current %}
                 <li class="page-item">
-                    <a href="{{ path(route, query|merge({(pageParameterName): page})) }}" class="page-link">{{ page }}</a>
+                    <a href="{{ path(route, query|merge({(pageParameterName): page})) }}" class="page-link">
+                        {{ page }}
+                    </a>
                 </li>
             {% else %}
                 <li class="active page-item">
-                    <span class="page-link">{{ page }}</span>
+                    <span class="page-link">
+                        {{ page }}
+                    </span>
                 </li>
             {% endif %}
 
@@ -36,12 +40,16 @@
                     </li>
                 {% else %}
                     <li class="page-item">
-                        <a href="{{ path(route, query|merge({(pageParameterName): (pageCount - 1)})) }}" class="page-link">{{ pageCount -1 }}</a>
+                        <a href="{{ path(route, query|merge({(pageParameterName): (pageCount - 1)})) }}" class="page-link">
+                            {{ pageCount -1 }}
+                        </a>
                     </li>
                 {% endif %}
             {% endif %}
             <li>
-                <a href="{{ path(route, query|merge({(pageParameterName): pageCount})) }}" class="page-link">{{ pageCount }}</a>
+                <a href="{{ path(route, query|merge({(pageParameterName): pageCount})) }}" class="page-link">
+                    {{ pageCount }}
+                </a>
             </li>
         {% endif %}
     </ul>

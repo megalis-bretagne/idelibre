@@ -28,7 +28,7 @@ class ApiUserController extends AbstractController
         $apiUsers = $paginator->paginate(
             $apiUserRepository->findByStructure($this->getUser()->getStructure()),
             $request->query->getInt('page', 1),
-            20,
+            $this->getParameter('limit_line_table'),
             [
                 'defaultSortFieldName' => ['au.name'],
                 'defaultSortDirection' => 'asc',

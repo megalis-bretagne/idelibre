@@ -30,7 +30,7 @@ class TypeController extends AbstractController
         $types = $paginator->paginate(
             $typeRepository->findByStructure($this->getUser()->getStructure(), $request->query->get('search')),
             $request->query->getInt('page', 1),
-            20,
+            $this->getParameter('limit_line_table'),
             [
                 'defaultSortFieldName' => ['t.name'],
                 'defaultSortDirection' => 'asc',

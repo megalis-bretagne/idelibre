@@ -26,7 +26,7 @@ class PartyController extends AbstractController
         $parties = $paginator->paginate(
             $partyRepository->findByStructure($this->getUser()->getStructure()),
             $request->query->getInt('page', 1),
-            20,
+            $this->getParameter('limit_line_table'),
             [
                 'defaultSortFieldName' => ['p.name'],
                 'defaultSortDirection' => 'asc',

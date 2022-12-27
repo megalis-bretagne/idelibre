@@ -24,6 +24,7 @@ class CsvUserController extends AbstractController
     {
         $form = $this->createForm(CsvType::class);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $errors = $csvUserManager->importUsers($form->get('csv')->getData(), $this->getUser()->getStructure());
             if (empty($errors)) {

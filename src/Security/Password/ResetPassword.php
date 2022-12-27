@@ -36,6 +36,12 @@ class ResetPassword
         $this->email->sendInitPassword($user, $token);
     }
 
+    public function reloadPassword(User $user)
+    {
+        $token = $this->createToken($user);
+        $this->email->sendReloadPassword($user, $token);
+    }
+
     /**
      * @throws EntityNotFoundException
      */

@@ -7,46 +7,38 @@
     {{ macro.backButton('connector_index') }}
 {% endblock %}
 
- {% block pageForm %}
+{% block pageForm %}
+    {{ form_start(form) }}
 
-     {{ form_start(form) }}
+    {{ form_row(form.url) }}
+    {{ form_row(form.apiKey) }}
 
-     {{ form_row(form.url) }}
-     {{ form_row(form.apiKey) }}
+    <div id="statusComelus" class="alert alert-info" data-url-check="{{ path("comelus_connector_check") }}">
+     Vérification de la configuration du connecteur
+    </div>
 
-     <div id="statusComelus" class="alert alert-info" data-url-check="{{ path("comelus_connector_check") }}">
-         Vérification de la configuration du connecteur
-     </div>
+    {{ form_row(form.mailingListId, {attr : {'data-url-list':path("comelus_connector_mailing_lists")}}) }}
 
-     {{ form_row(form.mailingListId, {attr : {'data-url-list':path("comelus_connector_mailing_lists")}}) }}
+    {{ form_label(form.description) }}
+    <button type="button"
+         class="btn btn-outline-info borderless float-right"
+         data-toggle="popover"
+         title="Liste des variables"
+         data-html="true"
+         data-content="{{ include('connector/_comelus.popover.html.twig') }}">Variables
+    </button>
+    {{ form_errors(form.description) }}
+    {{ form_widget(form.description) }}
+    {{ form_help(form.description) }}
 
+    {{ form_widget(form) }}
 
-     {{ form_label(form.description) }}
-     <button type="button"
-             class="btn btn-outline-info borderless float-right"
-             data-toggle="popover"
-             title="Liste des variables"
-             data-html="true"
-             data-content="{{ include('connector/_comelus.popover.html.twig') }}">Variables
-     </button>
-     {{ form_errors(form.description) }}
-     {{ form_widget(form.description) }}
-     {{ form_help(form.description) }}
-
-
-     {{ form_widget(form) }}
-
-
-     <div class="float-right">
-         {% block pageSaveReturn %}{{ macro.save('connector_index') }}{% endblock %}
-     </div>
-     {{ form_end(form) }}
-
- {% endblock %}
-
-
+    <div class="float-right">
+     {% block pageSaveReturn %}{{ macro.save('connector_index') }}{% endblock %}
+    </div>
+    {{ form_end(form) }}
+{% endblock %}
 
 {% block javascripts %}
     {{ encore_entry_script_tags('enable-popover') }}
 {% endblock %}
-

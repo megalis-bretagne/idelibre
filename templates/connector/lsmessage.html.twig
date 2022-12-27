@@ -7,9 +7,7 @@
     {{ macro.backButton('connector_index') }}
 {% endblock %}
 
-
 {% block pageForm %}
-
     {{ form_start(form) }}
 
     {{ form_row(form.url) }}
@@ -24,7 +22,4 @@
         {% block pageSaveReturn %}{{ macro.save('connector_index') }}{% endblock %}
     </div>
     {{ form_end(form) }}
-
 {% endblock %}
-
-

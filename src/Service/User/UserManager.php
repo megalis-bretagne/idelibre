@@ -26,16 +26,48 @@ class UserManager
     ) {
     }
 
-    public function save(User $user, ?string $plainPassword, ?Structure $structure): void
+    public function save(User $user, ?string $plainPassword, ?Structure $structure): bool
     {
-        if ($plainPassword) {
-            $user->setPassword($this->passwordHasher->hashPassword($user, $plainPassword));
-        }
-
         $user->setStructure($structure);
+
+        if ($plainPassword) {
+            $success = $this->passwordStrengthMeter->checkPasswordEntropy($user, $plainPassword);
+
+            if (false === $success) {
+                return false;
+            }
+
+            $user->setPassword($this->passwordHasher->hashPassword($user, $plainPassword));
+        } else {
+            $user = $this->setFirstPassword($user);
+        }
 
         $this->em->persist($user);
         $this->em->flush();
+
+        if (empty($plainPassword)) {
+            $this->resetPassword->sendEmailDefinePassword($user);
+        }
+
+        return true;
+    }
+
+    public function editUser(User $user, string $plainPassword = null): bool
+    {
+        if ($plainPassword) {
+            $success = $this->passwordStrengthMeter->checkPasswordEntropy($user, $plainPassword);
+
+            if (false === $success) {
+                return false;
+            }
+
+            $user->setPassword($this->passwordHasher->hashPassword($user, $plainPassword));
+        }
+
+        $this->em->persist($user);
+        $this->em->flush();
+
+        return true;
     }
 
     public function saveStructureAdmin(User $user, Structure $structure): ?ConstraintViolationListInterface
@@ -76,8 +108,9 @@ class UserManager
 
     public function setFirstPassword(User $user): User
     {
-        $password = $this->passwordStrengthMeter->generatePassword();
-        $user->setPassword($this->passwordHasher->hashPassword($user, $password));
+//        $password = $this->passwordStrengthMeter->generatePassword();
+//        $user->setPassword($this->passwordHasher->hashPassword($user, $password));
+        $user->setPassword('CHANGEZ-MOI');
 
         return $user;
     }

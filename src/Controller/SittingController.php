@@ -39,7 +39,7 @@ class SittingController extends AbstractController
         $sittings = $paginator->paginate(
             $sittingManager->getListSittingByStructureQuery($this->getUser(), $request->query->get('search'), $request->query->get('status')),
             $request->query->getInt('page', 1),
-            20,
+            $this->getParameter('limit_line_table'),
             [
                 'defaultSortFieldName' => ['s.date'],
                 'defaultSortDirection' => 'desc',

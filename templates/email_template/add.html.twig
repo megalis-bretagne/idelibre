@@ -7,9 +7,7 @@
     {{ macro.backButton('email_template_index') }}
 {% endblock %}
 
-
 {% block pageForm %}
-
     {{ form_start(form) }}
 
     {{ form_row(form.category) }}
@@ -17,7 +15,6 @@
     {{ form_row(form.type) }}
     {{ form_row(form.format) }}
     {{ form_row(form.subject) }}
-
 
     {{ form_label(form.content) }}
     <button type="button"
@@ -38,11 +35,8 @@
         {% block pageSaveReturn %}{{ macro.save('email_template_index') }}{% endblock %}
     </div>
     {{ form_end(form) }}
-
 {% endblock %}
-
 
 {% block javascripts %}
     {{ encore_entry_script_tags('enable-popover') }}
 {% endblock %}
-

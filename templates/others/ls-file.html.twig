@@ -15,8 +15,6 @@
         <div class="div-info mb-4" {{ file_name is not defined ? 'hidden="true"' : '' }}>
             {%- if not disabled %}<span class="{{ remove_icon }} btn btn-outline-danger borderless delete-file"> </span> {% endif %}
             <span class="file-title">{{ file_name | default("") }}</span>
-
         </div>
     </div>
-
 {% endblock %}

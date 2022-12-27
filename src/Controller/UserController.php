@@ -7,6 +7,7 @@ use App\Form\SearchType;
 use App\Form\UserPreferenceType;
 use App\Form\UserType;
 use App\Repository\UserRepository;
+use App\Security\Password\ResetPassword;
 use App\Security\UserLoginEntropy;
 use App\Service\User\PasswordInvalidator;
 use App\Service\User\UserManager;
@@ -31,7 +32,7 @@ class UserController extends AbstractController
         $users = $paginator->paginate(
             $userRepository->findByStructure($this->getUser()->getStructure(), $request->query->get('search')),
             $request->query->getInt('page', 1),
-            20,
+            $this->getParameter('limit_line_table'),
             [
                 'defaultSortFieldName' => ['u.lastName'],
                 'defaultSortDirection' => 'asc',
@@ -54,18 +55,32 @@ class UserController extends AbstractController
             'structure' => $this->getUser()->getStructure(),
             'entropyForUser' => $this->getUser()->getStructure()->getMinimumEntropy(),
         ]);
-
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
-            $manageUser->save(
-                $form->getData(),
-                $form->get('plainPassword')->getData(),
-                $this->getUser()->getStructure()
-            );
+            $initPassword = $form->get('initPassword')->getData();
 
-            $this->addFlash('success', 'Votre utilisateur a bien été ajouté');
+            if (false === $initPassword) {
+                $success = $manageUser->save(
+                    $form->getData(),
+                    null,
+                    $this->getUser()->getStructure()
+                );
+            } else {
+                $success = $manageUser->save(
+                    $form->getData(),
+                    $form->get('plainPassword')->getData(),
+                    $this->getUser()->getStructure()
+                );
+            }
 
-            return $this->redirectToRoute('user_index');
+            if (true === $success) {
+                $this->addFlash('success', 'Votre utilisateur a bien été ajouté');
+
+                return $this->redirectToRoute('user_index');
+            }
+
+            $this->addFlash('error', 'Votre mot de passe n\'est pas assez fort.');
         }
 
         return $this->render('user/add.html.twig', [
@@ -87,15 +102,27 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $manageUser->save(
-                $form->getData(),
-                $form->get('plainPassword')->getData(),
-                $this->getUser()->getStructure()
-            );
+            $initPassword = $form->get('initPassword')->getData();
 
-            $this->addFlash('success', 'Votre utilisateur a bien été modifié');
+            if (false === $initPassword) {
+                $success = $manageUser->editUser(
+                    $form->getData(),
+                    null,
+                );
+            } else {
+                $success = $manageUser->editUser(
+                    $form->getData(),
+                    $form->get('plainPassword')->getData(),
+                );
+            }
 
-            return $form->get('redirect_url')->getData() ? $this->redirect($form->get('redirect_url')->getData()) : $this->redirectToRoute('user_index');
+            if (true === $success) {
+                $this->addFlash('success', 'Votre utilisateur a bien été modifié');
+
+                return $form->get('redirect_url')->getData() ? $this->redirect($form->get('redirect_url')->getData()) : $this->redirectToRoute('user_index');
+            }
+
+            $this->addFlash('error', 'Votre mot de passe n\'est pas assez fort.');
         }
 
         return $this->render('user/edit.html.twig', [
@@ -181,5 +208,27 @@ class UserController extends AbstractController
         $this->addFlash('success', 'Tous les mots de passe ont été invalidés');
 
         return $this->redirectToRoute('user_index');
+    }
+
+    #[Route(path: '/reload_password/{id}', name: 'user_reload_password', methods: ['POST'])]
+    #[IsGranted(data: 'ROLE_MANAGE_USERS')]
+    public function reloadPassword(User $user, Request $request, ResetPassword $resetPassword): Response
+    {
+        if ($this->getUser()->getId() === $user->getId()) {
+            $this->addFlash('error', 'Impossible de modifier son propre utilisateur');
+
+            return $this->redirectToRoute('user_index');
+        }
+
+        $resetPassword->reloadPassword($user);
+
+        $this->addFlash(
+            'success',
+            'Un e-mail de réinitialisation du mot de passe a été envoyé'
+        );
+
+        return $this->redirectToRoute('user_index', [
+            'page' => $request->get('page'),
+        ]);
     }
 }

@@ -1,17 +1,13 @@
 {% extends 'form.html.twig' %}
 {% import 'macro/_forms.html.twig' as macro %}
 
-
 {% block pageTitle 'Ajouter une séance' %}
 
 {% block pageActions %}
     {{ macro.backButton('sitting_index', {'status' : 'active'}) }}
 {% endblock %}
 
-
-
 {% block pageForm %}
-
     {{ form_start(form, {attr:{'novalidate': true}}) }}
 
     {{ form_widget(form) }}
@@ -21,11 +17,7 @@
     </div>
 
     {{ form_end(form) }}
-
 {% endblock %}
-
-
-
 
 {% block javascripts %}
     {{ encore_entry_script_tags('toggle-calendar-new-sitting') }}

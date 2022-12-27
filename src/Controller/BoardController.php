@@ -26,7 +26,7 @@ class BoardController extends AbstractController
         $sittings = $paginator->paginate(
             $sittingManager->getActiveSittingDetails($this->getUser()),
             $request->query->getInt('page', 1),
-            20,
+            $this->getParameter('limit_line_table'),
             [
                 'defaultSortFieldName' => ['s.date'],
                 'defaultSortDirection' => 'desc',

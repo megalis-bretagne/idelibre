@@ -3,40 +3,27 @@
 
 {% block pageTitle 'Connecteurs' %}
 
-{% block pageActions %}
-    <div class="row">
-
-    </div>
-{% endblock %}
-
 {% block pageTable %}
     <table class="table table-striped mt-3 bg-white">
         <thead>
-        <tr class="d-flex">
-            <th class="col-7">Type</th>
-            <th class="col-3">Actif</th>
-            <th class="col-2">Actions</th>
-        </tr>
+            <tr class="d-flex">
+                <th class="col-7">Type</th>
+                <th class="col-3">Actif</th>
+                <th class="col-2">Actions</th>
+            </tr>
         </thead>
         <tbody>
+            <tr class="d-flex">
+                <td class="col-7">Connecteur Comélus</td>
+                <td class="col-3">{{ comelus.active ? 'Oui': 'Non' }}</td>
+                <td class="col-2">{{ macros.editButton('comelus_connector') }}</td>
+            </tr>
 
-        <tr class="d-flex">
-            <td class="col-7">Connecteur Comélus </td>
-            <td class="col-3">{{ comelus.active ? 'Oui': 'Non' }} </td>
-            <td class="col-2">{{ macros.editButton('comelus_connector') }}</td>
-        </tr>
-
-        <tr class="d-flex">
-            <td class="col-7">Connecteur Lsmessage </td>
-            <td class="col-3">{{ lsmessage.active ? 'Oui': 'Non' }} </td>
-            <td class="col-2">{{ macros.editButton('lsmessage_connector') }}</td>
-        </tr>
-
+            <tr class="d-flex">
+                <td class="col-7">Connecteur Lsmessage</td>
+                <td class="col-3">{{ lsmessage.active ? 'Oui': 'Non' }}</td>
+                <td class="col-2">{{ macros.editButton('lsmessage_connector') }}</td>
+            </tr>
         </tbody>
     </table>
 {% endblock %}
-
-
-
-
-
