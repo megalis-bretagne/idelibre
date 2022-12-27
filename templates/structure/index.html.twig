@@ -40,10 +40,18 @@
                             {%  set disableAction = "" %}
                         {% endif %}
 
-                        <a href="{{ path('security_impersonate', {'id': structure.id}) }}"
-                           class="btn btn-outline-primary borderless" title="Se connecter dans la structure" style="{{ disableAction }}">
-                            <span class="fas fa-sign-in-alt"></span>
-                        </a>
+                        {% if app.user.structure == structure %}
+                            <a href="{{ path('security_impersonate_exit') }}" class="btn btn-outline-danger borderless"
+                               title="Se déconnecter dans la structure" style="{{ disableAction }}">
+                                <span class="fas fa-sign-out-alt"></span>
+                            </a>
+                        {% else %}
+                            <a href="{{ path('security_impersonate', {'id': structure.id}) }}"
+                               class="btn btn-outline-primary borderless" title="Se connecter dans la structure"
+                               style="{{ disableAction }}">
+                                <span class="fas fa-sign-in-alt"></span>
+                            </a>
+                        {% endif %}
                     </td>
                     <td class="col-3">
                         {{ structure.name }}
