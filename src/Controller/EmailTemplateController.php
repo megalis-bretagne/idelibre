@@ -146,8 +146,9 @@ class EmailTemplateController extends AbstractController
         return new Response($content);
     }
 
-    public function tableExample() {
-        return "<style>
+    public function tableExample()
+    {
+        return '<style>
                 table {
                     border:1px solid black
                 }
@@ -222,6 +223,6 @@ class EmailTemplateController extends AbstractController
                         <td></td>
                     </tr>
                 </tbody>
-            </table>";
+            </table>';
     }
 }

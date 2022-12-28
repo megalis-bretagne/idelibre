@@ -47,7 +47,7 @@ class PurgeSittingsCommand extends Command
         $beforeString = $input->getArgument('before');
         $before = new \DateTimeImmutable($beforeString);
 
-        $sittings = $this->sittingRepository->findSittingsBefore($before,  $structure);
+        $sittings = $this->sittingRepository->findSittingsBefore($before, $structure);
         $numberSittings = count($sittings);
 
         $helper = $this->getHelper('question');

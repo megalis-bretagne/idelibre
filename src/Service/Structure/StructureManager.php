@@ -3,19 +3,15 @@
 namespace App\Service\Structure;
 
 use App\Entity\Structure;
-use App\Repository\StructureRepository;
+use App\Service\Seance\SittingManager;
 use App\Service\User\ImpersonateStructure;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class StructureManager
 {
     public function __construct(
-        private StructureRepository $structureRepository,
         private EntityManagerInterface $em,
-        private UserPasswordHasherInterface $passwordHasher,
-        private ValidatorInterface $validator,
+        private SittingManager $sittingManager,
         private ImpersonateStructure $impersonateStructure
     ) {
     }
@@ -29,6 +25,7 @@ class StructureManager
     public function delete(Structure $structure): void
     {
         $this->impersonateStructure->logoutEverySuperAdmin($structure);
+        $this->sittingManager->deleteByStructure($structure);
         $this->em->remove($structure);
         $this->em->flush();
     }

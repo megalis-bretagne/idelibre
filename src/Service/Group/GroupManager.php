@@ -9,7 +9,6 @@ use App\Security\Password\ResetPassword;
 use App\Service\role\RoleManager;
 use App\Service\User\UserManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 

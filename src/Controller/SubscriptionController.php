@@ -21,6 +21,7 @@ class SubscriptionController extends AbstractController
     public function index(): Response
     {
         $user = $this->getUser();
+
         return $this->render('subscription/index.html.twig', [
             'user' => $user,
         ]);
