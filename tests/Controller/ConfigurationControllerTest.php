@@ -46,6 +46,7 @@ class ConfigurationControllerTest extends WebTestCase
         $form = $crawler->selectButton('Enregistrer')->form();
 
         $form['configuration[isSharedAnnotation]'] = false;
+        $form['configuration[sittingSuppressionDelay]'] = '6 months';
 
         $this->client->submit($form);
 

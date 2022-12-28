@@ -33,6 +33,6 @@ class ConfigurationTest extends KernelTestCase
         $configuration = (new Configuration())
             ->setIsSharedAnnotation(true);
 
-        $this->assertHasValidationErrors($configuration, 1);
+        $this->assertHasValidationErrors($configuration, 0);
     }
 }

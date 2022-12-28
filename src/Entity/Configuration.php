@@ -29,7 +29,7 @@ class Configuration
 
     #[ORM\Column(length: 255, nullable: false, options: ['default' => '10000 years'])]
     #[Constraint\NotBlank]
-    private ?string $sittingSuppressionDelay = null;
+    private ?string $sittingSuppressionDelay = 'Jamais';
 
     public function getId(): ?string
     {
