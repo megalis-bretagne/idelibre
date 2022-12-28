@@ -15,6 +15,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Translation\Exception\NotFoundResourceException;
 
@@ -35,7 +36,7 @@ class FileManager
         return $this->filesystem->exists($path);
     }
 
-    public function downloadToS3(string $path): bool
+    public function downloadToS3(string $path)
     {
         $dirname = dirname($path);
         if (false === is_dir($dirname)) {
@@ -44,19 +45,15 @@ class FileManager
 
         $file = $this->s3Manager->getObject($path);
 
-        if (!$fp = fopen($path, 'w+')) {
-//            dd( "Impossible d'ouvrir le fichier ($path)");
-            return false;
+        if (!$fp = fopen($path,'w+')){
+            dd( "Impossible d'ouvrir le fichier ($path)");
         }
 
-        if (false === fwrite($fp, $file['Body'])) {
-//            dd("Impossible d'écrire dans le fichier ($path)");
-            return false;
+        if (false === fwrite($fp, $file['Body'])){
+            dd("Impossible d'écrire dans le fichier ($path)");
         }
 
         fclose($fp);
-
-        return true;
     }
 
     public function save(UploadedFile $uploadedFile, Structure $structure): ?File
@@ -65,8 +62,7 @@ class FileManager
             throw new BadRequestException('VIRUS');
         }
 
-        $file = new File();
-        $file
+        $file = (new File())
             ->setName($uploadedFile->getClientOriginalName())
             ->setSize($uploadedFile->getSize())
         ;
@@ -84,24 +80,19 @@ class FileManager
         return $file;
     }
 
-//    public function save(UploadedFile $uploadedFile, Structure $structure): ?File
+//    public function saveToS3(File $file, string $pathFile): bool
 //    {
-//        $pathS3 = $this->sendS3($structure, $uploadedFile);
-//
-//        if (!empty($pathS3)) {
-//            $file = new File();
-//            $file
-//                ->setName($uploadedFile->getClientOriginalName())
-//                ->setPath($pathS3)
-//                ->setSize($uploadedFile->getSize())
-//            ;
-//
-//            $this->em->persist($file);
-//
-//            return $file;
+//        try {
+//            $this->s3Manager->addObject(
+//                $file->getPath(),
+//                $pathFile
+//            );
+//        } catch (ObjectStorageException $e) {
+//            $this->logger->error($e);
+//            return false;
 //        }
 //
-//        return null;
+//        return true;
 //    }
 
 //    private function sendS3(Structure $structure, UploadedFile $uploadedFile)

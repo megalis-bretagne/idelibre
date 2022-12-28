@@ -80,8 +80,9 @@ class SittingType extends AbstractType
                         new File([
                             'mimeTypes' => ['application/pdf'],
                             'mimeTypesMessage' => 'Le fichier doit être un pdf',
-                        ]),
-                    ],
+                        ])
+                    ]
+                ,
             ])
             ->add('invitationFile', LsFileType::class, [
                 'label' => ($isNew || $isAlreadySentInvitation) ? 'Fichier d\'invitation' : 'Remplacer le fichier d\'invitation',

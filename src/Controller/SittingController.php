@@ -67,7 +67,7 @@ class SittingController extends AbstractController
     {
         $form = $this->createForm(SittingType::class, null, [
             'structure' => $this->getUser()->getStructure(),
-            'user' => $this->getUser(),
+            'user' => $this->getUser()
         ]);
         $form->handleRequest($request);
 

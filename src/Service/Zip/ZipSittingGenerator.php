@@ -3,6 +3,7 @@
 namespace App\Service\Zip;
 
 use App\Entity\Sitting;
+use App\Service\File\FileManager;
 use App\Service\Pdf\PdfSittingGenerator;
 use App\Service\File\FileManager;
 use App\Service\Util\DateUtil;

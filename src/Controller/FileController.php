@@ -16,7 +16,7 @@ class FileController extends AbstractController
 {
     #[Route(path: '/file/download/{id}', name: 'file_download', methods: ['GET'])]
     #[IsGranted(data: 'DOWNLOAD_FILES', subject: 'file')]
-    public function download(File $file, FileManager $fileManager, ): Response
+    public function download(File $file, FileManager $fileManager): Response
     {
         $filePath = $file->getPath();
 
