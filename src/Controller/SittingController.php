@@ -10,7 +10,9 @@ use App\Repository\EmailTemplateRepository;
 use App\Repository\OtherdocRepository;
 use App\Repository\ProjectRepository;
 use App\Service\Convocation\ConvocationManager;
+use App\Service\File\FileManager;
 use App\Service\Pdf\PdfSittingGenerator;
+use App\Service\S3\S3Manager;
 use App\Service\Seance\ActorManager;
 use App\Service\Seance\SittingManager;
 use App\Service\Zip\ZipSittingGenerator;
@@ -20,6 +22,7 @@ use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpClient\Exception\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -63,7 +66,10 @@ class SittingController extends AbstractController
     #[Breadcrumb(title: 'Ajouter')]
     public function createSitting(Request $request, SittingManager $sittingManager): Response
     {
-        $form = $this->createForm(SittingType::class, null, ['structure' => $this->getUser()->getStructure(), 'user' => $this->getUser()]);
+        $form = $this->createForm(SittingType::class, null, [
+            'structure' => $this->getUser()->getStructure(),
+            'user' => $this->getUser()
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -206,9 +212,18 @@ class SittingController extends AbstractController
 
     #[Route(path: '/sitting/zip/{id}', name: 'sitting_zip', methods: ['GET'])]
     #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
-    public function getZipSitting(Sitting $sitting, ZipSittingGenerator $zipSittingGenerator): Response
+    public function getZipSitting(
+        Sitting $sitting,
+        ZipSittingGenerator $zipSittingGenerator,
+        FileManager $fileManager,
+    ): Response
     {
         $zipPath = $zipSittingGenerator->getAndCreateZipPath($sitting);
+
+        if (false === $fileManager->fileExist($zipPath)) {
+            $fileManager->downloadToS3($zipPath);
+        }
+
         $response = new BinaryFileResponse($zipPath);
         $response->setContentDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
@@ -221,9 +236,18 @@ class SittingController extends AbstractController
 
     #[Route(path: '/sitting/pdf/{id}', name: 'sitting_full_pdf', methods: ['GET'])]
     #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
-    public function getFullPdfSitting(Sitting $sitting, PdfSittingGenerator $pdfSittingGenerator): Response
+    public function getFullPdfSitting(
+        Sitting $sitting,
+        PdfSittingGenerator $pdfSittingGenerator,
+        FileManager $fileManager
+    ): Response
     {
         $pdfPath = $pdfSittingGenerator->getPdfPath($sitting);
+
+        if (false === $fileManager->fileExist($pdfPath)) {
+            $fileManager->downloadToS3($pdfPath);
+        }
+
         $response = new BinaryFileResponse($pdfPath);
         $response->setContentDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,

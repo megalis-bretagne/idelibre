@@ -4,6 +4,7 @@ namespace App\Service\Zip;
 
 use App\Entity\Sitting;
 use App\Service\Pdf\PdfSittingGenerator;
+use App\Service\File\FileManager;
 use App\Service\Util\DateUtil;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -13,12 +14,13 @@ use ZipArchive;
 class ZipSittingGenerator
 {
     public function __construct(
-        private ParameterBagInterface $bag,
-        private Filesystem $filesystem,
-        private DateUtil $dateUtil,
-        private ZipChecker $checker,
-        private PdfSittingGenerator $generator,
-        private LoggerInterface $logger
+        private readonly ParameterBagInterface $bag,
+        private readonly Filesystem $filesystem,
+        private readonly DateUtil $dateUtil,
+        private readonly ZipChecker $checker,
+        private readonly PdfSittingGenerator $generator,
+        private readonly LoggerInterface $logger,
+        private readonly FileManager $fileManager,
     ) {
     }
 
@@ -40,6 +42,8 @@ class ZipSittingGenerator
         $zip->addFile($sitting->getConvocationFile()->getPath(), $sitting->getConvocationFile()->getName());
         $this->addProjectAndAnnexesFiles($zip, $sitting);
         $zip->close();
+
+        $this->fileManager->transfertToS3($zipPath);
 
         return $zipPath;
     }

@@ -7,13 +7,10 @@
     {{ encore_entry_link_tags('vue-manage-other-docs') }}
 {% endblock %}
 
-
 {% block body %}
-
     <div class="col-12">
         {{ apy_breadcrumb_trail_render(breadcrumb) }}
     </div>
-
 
     <div v-cloak id="app">
         <div class="alert alert-success mt-2 col-11" v-if="messageInfo"> ${messageInfo}</div>
@@ -28,13 +25,10 @@
             <div class="mt-4">
                 {{ macro.backButton('sitting_index', {'status' : 'active'}) }}
             </div>
-
         </div>
-
 
         <div class="col-10 offset-1 mt-4 form-white">
             {{ macroTab.editTabs('otherdocs', sitting) }}
-
 
             <label class="project-file-btn btn btn-primary" title="Ajouter des documents">
                 <input class="project-file-btn" type="file" accept=".pdf,.PDF" multiple @change="addOtherdoc($event)" onclick="this.value=null">
@@ -49,7 +43,6 @@
 
 
             <draggable v-model="otherdocs" class="bg-white" v-on:change="otherdocChange()" handle=".handle">
-
                 <div v-for="(otherdoc, index) in otherdocs">
                     <div class="il-project">
                         <div class="project-left cursor-grab handle">
@@ -58,14 +51,13 @@
                                 <div class="dropdown-content">
                                     <div v-for="rank in otherdocs.length" class="newRank" v-on:click="move(index, rank -1)"> ${rank}</div>
                                 </div>
-
                             </div>
                         </div>
 
                         <div class="project-right">
                             <div class="project-line">
                                 <div class="project-item">
-                                    <textarea v-model="otherdoc.name" class="form-control" v-on:change="otherdocChange()"> </textarea>
+                                    <textarea v-model="otherdoc.name" class="form-control" v-on:change="otherdocChange()"></textarea>
                                 </div>
                                 <div class="project-item">
                                     ${otherdoc.fileName}
@@ -77,10 +69,7 @@
                                         <span class="fa fa-trash-alt" title="Supprimer"></span>
                                     </button>
                                 </div>
-
                             </div>
-
-
                         </div>
                     </div>
                 </div>
@@ -88,7 +77,8 @@
 
             <div class="float-right mt-5">
                 <button class="btn btn-outline-dark" @click="cancel()">
-                    <span class="fa fa-times"></span> Annuler Les modifications
+                    <span class="fa fa-times"></span>
+                    Annuler les modifications
                 </button>
 
                 <button class="btn btn-primary" @click="save()">
@@ -96,7 +86,6 @@
                     Enregistrer les modifications
                 </button>
             </div>
-
 
             <div v-if="showModal">
                 <transition name="modal">
@@ -117,20 +106,15 @@
                     </div>
                 </transition>
             </div>
-
-
         </div>
-
     </div>
-
 
     {{ include('include/_modal_confirm_not_save.html.twig') }}
 
-
-    <div><a id="cRetour" title="Retour en haut de page" class="cInvisible" href="#haut"></a></div>
-
+    <div>
+        <a id="cRetour" title="Retour en haut de page" class="cInvisible" href="#haut"></a>
+    </div>
 {% endblock %}
-
 
 {% block javascripts %}
     {{ encore_entry_script_tags('vue-manage-other-docs') }}

@@ -187,6 +187,23 @@ class S3Manager
         return true;
     }
 
+    public function getObject(string $filePath, ?string $bucketName = null)
+    {
+        $bucketName = $this->getBucketName($bucketName);
+
+        try {
+            $file = $this->s3Client->getObject([
+                'Bucket' => $bucketName,
+                'Key' => $filePath,
+            ]);
+        } catch (S3Exception $e) {
+            $this->logger->error($e->getMessage());
+            throw new ObjectStorageException($e->getMessage());
+        }
+
+        return $file;
+    }
+
     /**
      * @param string $fileKey
      * @param string $fileName
