@@ -51,7 +51,7 @@ class SubscriptionControllerTest extends WebTestCase
     {
         $user = UserStory::adminLibriciel();
         $this->loginAsAdminLibriciel();
-        $crawler = $this->client->request(Request::METHOD_GET, '/subscription/edit/'. $user->getId());
+        $crawler = $this->client->request(Request::METHOD_GET, '/subscription/edit/' . $user->getId());
         $this->assertResponseStatusCodeSame(200);
         $item = $crawler->filter('html:contains("Modifier l\'abonnement")');
         $this->assertCount(1, $item);

@@ -53,7 +53,7 @@ final class UserStory extends Story
             'lastName' => 'libriciel',
             'structure' => StructureStory::libriciel(),
             'role' => RoleStory::admin(),
-            'accept_mail_recap' => false
+            'accept_mail_recap' => false,
         ]));
 
         $this->addState('otherUserLibriciel', UserFactory::new([

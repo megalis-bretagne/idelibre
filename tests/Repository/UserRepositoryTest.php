@@ -94,13 +94,13 @@ class UserRepositoryTest extends WebTestCase
         $this->assertCount(5, $countByRole);
     }
 
-
     public function testFindSecretariesByStructure()
     {
         $structure = StructureStory::libriciel();
         $secreateryQb = $this->userRepository->findSecretariesByStructure($structure->object());
         $this->assertCount(2, $secreateryQb->getQuery()->getResult());
     }
+
     public function testFindSecretariesAndAdminByStructure()
     {
         $structure = StructureStory::libriciel();

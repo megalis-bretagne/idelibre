@@ -12,7 +12,10 @@
     <div class="alert alert-info">
         <b>Attention</b> : la configuration s'appliquera à toutes les séances en cours.
     </div>
+
     {{ form_row(form.isSharedAnnotation) }}
+
+    {{ form_row(form.sittingSuppressionDelay) }}
 
     {{ form_widget(form) }}
     <div class="float-right">

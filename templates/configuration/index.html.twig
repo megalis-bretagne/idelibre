@@ -4,25 +4,33 @@
 {% block pageTitle 'Configuration de la structure' %}
 
 {% block pageActions %}
-    <a href="{{ path('configuration_edit') }}" class="btn btn-primary">
-        <span class="fas fa-pen"></span>
-        Modifier
-    </a>
+    <a href="{{ path('configuration_edit') }}" class="btn btn-primary"><span
+                class="fas fa-pen"></span>
+        Modifier</a>
 {% endblock %}
+
 
 {% block pageTable %}
     <table class="table table-striped bg-white mt-5 col-8 offset-2">
         <tbody>
-            <tr class="d-flex">
-                <td class="col-11">Autoriser le partage d'annotation</td>
-                <td class="col-1">
-                    {% if configuration.isSharedAnnotation %}
-                        <span class="fas fa-check text-success"></span>
-                    {% else %}
-                        <span class="fa fa-times text-danger"></span>
-                    {% endif %}
-                </td>
-            </tr>
-        </tbody>
+        <tr>
+            <td class="col-11">Autoriser le partage d'annotation</td>
+            <td class="col-1">
+                {% if configuration.isSharedAnnotation %}
+                    <span class="fas fa-check text-success"></span>
+                {% else %}
+                    <span class="fa fa-times text-danger"></span>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td class="col-11">Durée de sauvegarde d'une séance</td>
+            <td class="col-1">
+                <small>{{ formattedSuppressionDelay }}</small>
+            </td>
+        </tr>
     </table>
+
 {% endblock %}
+
+

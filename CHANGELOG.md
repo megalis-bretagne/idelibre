@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 - Mise en place d'un système permettant de bloquer le brut force
 - Mise en place du calcul d'entropie sur les mot de passes
 - Un mail d'initialisation du mot de passe est envoyé lors de la création d'un compte superadmin et admin de groupe.
+- Délai de purge de donnée configurable par entité (#256)
 - Lors de la création d'un utilisateur dans une structure, il existe deux possiblité concernant le mot de passe :
   - soit un mail d'initialisation du mot de passe est envoyé
   - soit il est possible de définir le mot de passe

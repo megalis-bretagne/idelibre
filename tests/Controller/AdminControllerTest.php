@@ -60,7 +60,7 @@ class AdminControllerTest extends WebTestCase
     public function testDeleteYourself()
     {
         $user = $this->getOneEntityBy(User::class, [
-            'username' => 'superadmin'
+            'username' => 'superadmin',
         ]);
 
         $this->loginAsSuperAdmin();
@@ -102,7 +102,7 @@ class AdminControllerTest extends WebTestCase
         $this->assertCount(1, $successMsg);
 
         $this->assertNotEmpty($this->getOneEntityBy(User::class, [
-            'username' => 'newadmin'
+            'username' => 'newadmin',
         ]));
     }
 

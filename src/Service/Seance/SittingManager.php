@@ -92,6 +92,7 @@ class SittingManager
         $this->fileManager->delete($sitting->getConvocationFile());
         $this->projectManager->deleteProjects($sitting->getProjects());
         $this->convocationManager->deleteConvocations($sitting->getConvocations());
+
         $this->pdfSittingGenerator->deletePdf($sitting);
         $this->zipSittingGenerator->deleteZip($sitting);
 
