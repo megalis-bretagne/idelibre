@@ -83,6 +83,7 @@ class StructureController extends AbstractController
 
     #[Route(path: '/structure/add', name: 'structure_add')]
     #[IsGranted(data: 'CREATE_STRUCTURE')]
+
 //    #[Breadcrumb(title: 'Ajouter')]
     public function add(Request $request, StructureCreator $structureCreator, ParameterBagInterface $bag): Response
     {
@@ -117,6 +118,7 @@ class StructureController extends AbstractController
 
     #[Route(path: '/structure/edit/{id}', name: 'structure_edit')]
     #[IsGranted(data: 'MY_GROUP', subject: 'structure')]
+
 //    #[Breadcrumb(title: 'Modifier {structure.name}')]
     public function edit(Structure $structure, Request $request, StructureManager $structureManager): Response
     {
@@ -150,6 +152,7 @@ class StructureController extends AbstractController
     #[Route(path: '/structure/preferences', name: 'structure_preferences')]
     #[IsGranted(data: 'ROLE_STRUCTURE_ADMIN')]
     #[Sidebar(reset: true, active: ['structure-preference-nav'])]
+
 //    #[Breadcrumb(title: 'Préférences')]
     public function preferences(Request $request, StructureManager $structureManager): Response
     {

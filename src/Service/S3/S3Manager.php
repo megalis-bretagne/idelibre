@@ -32,13 +32,14 @@ class S3Manager
 
     /**
      * @param $name
+     *
      * @throws ObjectStorageException
      */
     public function createBucket($name): bool
     {
         try {
             $this->s3Client->createBucket([
-                'Bucket' => $name
+                'Bucket' => $name,
             ]);
         } catch (AwsException $e) {
             $this->logger->error($e->getMessage());
@@ -90,7 +91,7 @@ class S3Manager
 
         try {
             return $this->s3Client->listObjects([
-                'Bucket' => $bucketName
+                'Bucket' => $bucketName,
             ]);
         } catch (S3Exception $e) {
             $this->logger->error($e->getMessage());
@@ -99,9 +100,9 @@ class S3Manager
     }
 
     /**
-     * @param string $keyName
      * @param string $bucketName
-     * ! Ne verifie pas si l'objecct n'existe pas. renvoi true quand meme
+     *                           ! Ne verifie pas si l'objecct n'existe pas. renvoi true quand meme
+     *
      * @throws ObjectStorageException
      */
     public function deleteObject(string $keyName, ?string $bucketName = null): bool
@@ -111,7 +112,7 @@ class S3Manager
         try {
             $this->s3Client->deleteObject([
                 'Bucket' => $bucketName,
-                'Key' => $keyName
+                'Key' => $keyName,
             ]);
         } catch (AwsException $e) {
             $this->logger->error($e->getMessage());
@@ -122,9 +123,9 @@ class S3Manager
     }
 
     /**
-     * @param array $keyNames
      * @param string $bucketName
-     *  ! Ne garanti pas que les objets passer en parametre existe renvoi true mem si n'existe pas
+     *                           ! Ne garanti pas que les objets passer en parametre existe renvoi true mem si n'existe pas
+     *
      * @throws ObjectStorageException
      */
     public function deleteObjects(array $keyNames, ?string $bucketName = null): bool
@@ -137,7 +138,7 @@ class S3Manager
                 'Delete' => [
                     'Objects' => array_map(function ($key) {
                         return ['Key' => $key];
-                    }, $keyNames)
+                    }, $keyNames),
                 ],
             ]);
         } catch (AwsException $e) {
@@ -205,11 +206,8 @@ class S3Manager
     }
 
     /**
-     * @param string $fileKey
-     * @param string $fileName
-     * @param string $ttl
      * @param string $bucketName
-     * ttl example : '+10 minutes'
+     *                           ttl example : '+10 minutes'
      */
     public function generatePresignedLink(string $fileKey, string $fileName, string $ttl, ?string $bucketName = null): string
     {
@@ -219,12 +217,12 @@ class S3Manager
         $cmd = $this->s3Client->getCommand('GetObject', [
             'Bucket' => $bucketName,
             'Key' => $fileKey,
-            'ResponseContentDisposition' => "attachment; filename=$normalizeFileName"
+            'ResponseContentDisposition' => "attachment; filename=$normalizeFileName",
         ]);
 
         $request = $this->s3Client->createPresignedRequest($cmd, $ttl);
 
-        return (string)$request->getUri();
+        return (string) $request->getUri();
     }
 
     private function normalizeString($string = '')

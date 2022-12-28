@@ -59,14 +59,13 @@ class AttendanceNotification
 
     public function getAttendanceNotification(Structure $structure): void
     {
-
         $users = $this->userRepository->findSecretariesAndAdminByStructure($structure)->getQuery()->getResult();
         $sittings = $this->listActiveSittingsByStructure($structure);
-        foreach( $users as $user) {
-            if( $user->getAcceptMailRecap() ) {
+        foreach ($users as $user) {
+            if ($user->getAcceptMailRecap()) {
                 $attendanceDatas = [];
-                foreach( $sittings as $sitting ) {
-                    if( $this->isAuthorizedSittingType($sitting->getType(), $user) ) {
+                foreach ($sittings as $sitting) {
+                    if ($this->isAuthorizedSittingType($sitting->getType(), $user)) {
                         $attendanceDatas[] = $this->prepareDatas($sitting);
                     }
                 }
@@ -78,6 +77,7 @@ class AttendanceNotification
     public function prepareDatas(Sitting $sitting): string
     {
         $convocations = $this->convocationRepository->getConvocationsWithUserBySitting($sitting);
+
         return $this->twig->render('generate/mailing_recap_template.html.twig', [
             'convocations' => $convocations,
             'sitting' => $sitting,
@@ -90,7 +90,7 @@ class AttendanceNotification
      */
     private function prepareAndSendMail(Structure $structure, array $content, User $user): void
     {
-        if( empty($content ) ){
+        if (empty($content)) {
             return;
         }
         $emailTemplate = $this->emailTemplateRepository->findOneByStructureAndCategory($structure, EmailTemplate::CATEGORY_RECAPITULATIF);
@@ -105,6 +105,7 @@ class AttendanceNotification
     public function generateParams(array $content, User $user): array
     {
         $contentToDisplay = implode("\n", $content);
+
         return [
             TemplateTag::SITTING_RECAPITULATIF => $contentToDisplay,
             TemplateTag::ACTOR_FIRST_NAME => $user->getFirstName(),
@@ -117,9 +118,10 @@ class AttendanceNotification
 
     private function isAuthorizedSittingType(Type $type, User $user): bool
     {
-        if( $user->getRole()->getName() == 'Admin') {
+        if ('Admin' == $user->getRole()->getName()) {
             return true;
         }
+
         return $user->getAuthorizedTypes()->contains($type);
     }
 }

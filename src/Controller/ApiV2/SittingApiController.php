@@ -31,11 +31,11 @@ use Symfony\Component\Serializer\SerializerInterface;
 class SittingApiController extends AbstractController
 {
     public function __construct(
-        private DenormalizerInterface $denormalizer,
-        private MessageBusInterface $messageBus,
-        private PdfValidator $pdfValidator,
-        private SerializerInterface $serializer,
-        private EntityManagerInterface $em
+        private readonly DenormalizerInterface $denormalizer,
+        private readonly MessageBusInterface $messageBus,
+        private readonly PdfValidator $pdfValidator,
+        private readonly SerializerInterface $serializer,
+        private readonly EntityManagerInterface $em
     ) {
     }
 

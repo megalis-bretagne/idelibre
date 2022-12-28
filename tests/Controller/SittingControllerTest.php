@@ -3,6 +3,7 @@
 namespace App\Tests\Controller;
 
 use App\Entity\Sitting;
+use App\Service\S3\S3Manager;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
 use App\Tests\Story\EmailTemplateStory;
@@ -14,6 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
 
@@ -44,37 +46,55 @@ class SittingControllerTest extends WebTestCase
     public function testIndex()
     {
         $this->loginAsAdminLibriciel();
-        $crawler = $this->client->request(Request::METHOD_GET, '/sitting');
-        $this->assertResponseStatusCodeSame(200);
 
-        $item = $crawler->filter('html:contains("Séances")');
-        $this->assertCount(1, $item);
+        $this->client->request(Request::METHOD_GET, '/sitting');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
+        $this->assertSelectorTextSame('h1', 'Séances');
     }
 
     public function testSecretary()
     {
         $this->loginAsSecretaryLibriciel();
-        $crawler = $this->client->request(Request::METHOD_GET, '/sitting');
-        $this->assertResponseStatusCodeSame(200);
 
-        $item = $crawler->filter('html:contains("Séances")');
-        $this->assertCount(1, $item);
+        $this->client->request(Request::METHOD_GET, '/sitting');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
+        $this->assertSelectorTextSame('h1', 'Séances');
     }
 
     public function testAdd()
     {
+        $this->client->disableReboot();
+        $fakeS3Manager = $this->getMockBuilder(S3Manager::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['addObject'])
+            ->getMock()
+        ;
+        $fakeS3Manager->method('addObject')->willReturn(true);
+        $container = self::getContainer();
+        $container->set(S3Manager::class, $fakeS3Manager);
+
         $type = TypeStory::testTypeLS();
 
         $this->loginAsAdminLibriciel();
+
         $crawler = $this->client->request(Request::METHOD_GET, '/sitting/add');
-        $this->assertResponseStatusCodeSame(200);
-        $item = $crawler->filter('html:contains("Ajouter une séance")');
-        $this->assertCount(1, $item);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
+        $this->assertSelectorTextSame('h1', 'Ajouter une séance');
 
         $filesystem = new FileSystem();
-        $filesystem->copy(__DIR__ . '/../resources/fichier.pdf', __DIR__ . '/../resources/convocation.pdf');
+        $filesystem->copy(
+            __DIR__ . '/../resources/fichier.pdf',
+            __DIR__ . '/../resources/convocation.pdf'
+        );
 
-        $fileConvocation = new UploadedFile(__DIR__ . '/../resources/convocation.pdf', 'convocation.pdf', 'application/pdf');
+        $fileConvocation = new UploadedFile(
+            __DIR__ . '/../resources/convocation.pdf',
+            'convocation.pdf',
+            'application/pdf'
+        );
 
         $form = $crawler->selectButton('Enregistrer')->form();
 
@@ -85,38 +105,42 @@ class SittingControllerTest extends WebTestCase
 
         $this->client->submit($form);
 
+        $this->client->enableReboot();
         $this->assertTrue($this->client->getResponse()->isRedirect());
 
         $crawler = $this->client->followRedirect();
-        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
         $successMsg = $crawler->filter('html:contains("Modifier la séance")');
         $this->assertCount(1, $successMsg);
 
-        $this->assertNotEmpty($this->getOneEntityBy(Sitting::class, ['name' => 'unUsedType']));
+        $this->assertNotEmpty($this->getOneEntityBy(Sitting::class, [
+            'name' => 'unUsedType',
+        ]));
     }
 
     public function testEditUsers()
     {
         $sitting = SittingStory::sittingConseilLibriciel();
+
         $this->loginAsAdminLibriciel();
-        $crawler = $this->client->request(Request::METHOD_GET, '/sitting/edit/' . $sitting->getId() . '/actors');
 
-        $this->assertResponseStatusCodeSame(200);
+        $this->client->request(Request::METHOD_GET, '/sitting/edit/' . $sitting->getId() . '/actors');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
-        $item = $crawler->filter('html:contains("Modifier la séance")');
-        $this->assertCount(1, $item);
+        $this->assertSelectorTextSame('h1', 'Modifier la séance');
     }
 
     public function testEditProjects()
     {
         $sitting = SittingStory::sittingConseilLibriciel();
-        $this->loginAsAdminLibriciel();
-        $crawler = $this->client->request(Request::METHOD_GET, '/sitting/edit/' . $sitting->getId() . '/projects');
-        $this->assertResponseStatusCodeSame(200);
 
-        $item = $crawler->filter('html:contains("Modifier la séance")');
-        $this->assertCount(1, $item);
+        $this->loginAsAdminLibriciel();
+
+        $this->client->request(Request::METHOD_GET, '/sitting/edit/' . $sitting->getId() . '/projects');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
+        $this->assertSelectorTextSame('h1', 'Modifier la séance');
     }
 
     public function testDelete()
@@ -128,11 +152,14 @@ class SittingControllerTest extends WebTestCase
         $this->assertTrue($this->client->getResponse()->isRedirect());
 
         $crawler = $this->client->followRedirect();
-        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
         $successMsg = $crawler->filter('html:contains("Séances")');
         $this->assertCount(1, $successMsg);
 
-        $this->assertEmpty($this->getOneSittingBy(['name' => 'Conseil Libriciel']));
+        $this->assertEmpty($this->getOneSittingBy([
+            'name' => 'Conseil Libriciel',
+        ]));
     }
 
     public function testDeleteSecretaryNotAuthorizedType()
@@ -147,9 +174,11 @@ class SittingControllerTest extends WebTestCase
     public function testShowInformation()
     {
         $sitting = SittingStory::sittingConseilLibriciel();
+
         $this->loginAsAdminLibriciel();
+
         $crawler = $this->client->request(Request::METHOD_GET, '/sitting/show/' . $sitting->getId() . '/information');
-        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
         $item = $crawler->filter('html:contains("Détail de la séance")');
         $this->assertCount(1, $item);
@@ -158,10 +187,11 @@ class SittingControllerTest extends WebTestCase
     public function testShowActors()
     {
         $sitting = SittingStory::sittingConseilLibriciel();
+
         $this->loginAsAdminLibriciel();
 
         $crawler = $this->client->request(Request::METHOD_GET, '/sitting/show/' . $sitting->getId() . '/actors');
-        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
         $item = $crawler->filter('html:contains("Détail de la séance")');
         $this->assertCount(1, $item);
@@ -170,9 +200,11 @@ class SittingControllerTest extends WebTestCase
     public function testShowProjects()
     {
         $sitting = SittingStory::sittingConseilLibriciel();
+
         $this->loginAsAdminLibriciel();
+
         $crawler = $this->client->request(Request::METHOD_GET, '/sitting/show/' . $sitting->getId() . '/projects');
-        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
         $item = $crawler->filter('html:contains("Détail de la séance")');
         $this->assertCount(1, $item);
@@ -188,12 +220,15 @@ class SittingControllerTest extends WebTestCase
         $zipDirectory = $bag->get('document_zip_directory') . $sitting->getStructure()->getId() . '/';
 
         $filesystem = new FileSystem();
-        $filesystem->copy(__DIR__ . '/../resources/fichier.zip', $zipDirectory . $sitting->getId() . '.zip');
+        $filesystem->copy(
+            __DIR__ . '/../resources/fichier.zip',
+            $zipDirectory . $sitting->getId() . '.zip'
+        );
 
         $this->loginAsAdminLibriciel();
 
         $this->client->request(Request::METHOD_GET, '/sitting/zip/' . $sitting->getId());
-        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
         $response = $this->client->getResponse();
 
@@ -228,7 +263,7 @@ class SittingControllerTest extends WebTestCase
         $this->loginAsAdminLibriciel();
 
         $this->client->request(Request::METHOD_GET, '/sitting/pdf/' . $sitting->getId());
-        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
         $response = $this->client->getResponse();
         $this->assertSame('attachment; filename="Conseil Libriciel_22_10_2020.pdf"', $response->headers->get('content-disposition'));
@@ -238,13 +273,23 @@ class SittingControllerTest extends WebTestCase
 
     public function testEditInformation()
     {
+        $this->client->disableReboot();
+        $fakeS3Manager = $this->getMockBuilder(S3Manager::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['addObject'])
+            ->getMock()
+        ;
+        $fakeS3Manager->method('addObject')->willReturn(true);
+        $container = self::getContainer();
+        $container->set(S3Manager::class, $fakeS3Manager);
+
         $filesystem = new Filesystem();
         $filesystem->copy(__DIR__ . '/../resources/fichier.pdf', '/tmp/convocation');
         $sitting = SittingStory::sittingConseilLibriciel();
 
         $this->loginAsAdminLibriciel();
         $crawler = $this->client->request(Request::METHOD_GET, '/sitting/edit/' . $sitting->getId());
-        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
         $item = $crawler->filter('html:contains("Modifier la séance")');
         $this->assertCount(1, $item);
@@ -253,12 +298,13 @@ class SittingControllerTest extends WebTestCase
 
         $form['sitting[place]'] = 'MyUniquePlace';
 
-        $crawler = $this->client->submit($form);
+        $this->client->submit($form);
 
+        $this->client->enableReboot();
         $this->assertTrue($this->client->getResponse()->isRedirect());
 
         $crawler = $this->client->followRedirect();
-        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
         $successMsg = $crawler->filter('html:contains("Modifier la séance")');
         $this->assertCount(1, $successMsg);
@@ -274,7 +320,7 @@ class SittingControllerTest extends WebTestCase
         $this->assertTrue($this->client->getResponse()->isRedirect());
 
         $crawler = $this->client->followRedirect();
-        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
         $successMsg = $crawler->filter('html:contains("La séance a été classée")');
         $this->assertCount(1, $successMsg);

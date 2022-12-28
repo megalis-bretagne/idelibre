@@ -140,7 +140,7 @@ class StructureControllerTest extends WebTestCase
         $this->assertCount(1, $successMsg);
 
         $this->assertNotEmpty($this->getOneEntityBy(Structure::class, [
-            'name' => 'New structure name'
+            'name' => 'New structure name',
         ]));
     }
 
@@ -160,7 +160,7 @@ class StructureControllerTest extends WebTestCase
         $this->assertCount(1, $successMsg);
 
         $this->assertEmpty($this->getOneEntityBy(Structure::class, [
-            'id' => $structure->getId()
+            'id' => $structure->getId(),
         ]));
     }
 
@@ -189,7 +189,7 @@ class StructureControllerTest extends WebTestCase
         $this->assertCount(1, $successMsg);
 
         $this->assertNotEmpty($this->getOneEntityBy(Structure::class, [
-            'name' => 'New structure name'
+            'name' => 'New structure name',
         ]));
     }
 }
