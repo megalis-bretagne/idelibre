@@ -59,12 +59,10 @@ services:
       - PASSPHRASE=${PASSPHRASE:-passphrase}
       - JWT_SECRET=${JWT_SECRET:-jwtsecret}
       - JWT_TIMEOUT=${JWT_TIMEOUT:-86400}
-
     command: [ "/app/docker-resources/init.sh" ]
 #    command: "sleep 3000"
     networks:
       - network_idelibre_dev
-
 
   nginx-idelibre:
     container_name: nginx-idelibre
@@ -73,8 +71,8 @@ services:
       - fpm-idelibre
       - node-idelibre
     ports:
-      - 8011:80
-      - 4431:443
+      - 80:80
+      - 443:443
     volumes:
       - ./docker-resources/nginx.vhost:/etc/nginx/conf.d/default.conf
       - ./docker-resources/nginx.conf:/etc/nginx/nginx.conf
