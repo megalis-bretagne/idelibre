@@ -19,8 +19,14 @@ class ProjectController extends AbstractController
 {
     #[Route(path: '/api/projects/{id}', name: 'api_project_add', methods: ['POST'])]
     #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
-    public function edit(Sitting $sitting, Request $request, SerializerInterface $serializer, ProjectManager $projectManager, MessageBusInterface $messageBus, PdfValidator $pdfValidator): JsonResponse
-    {
+    public function edit(
+        Sitting $sitting,
+        Request $request,
+        SerializerInterface $serializer,
+        ProjectManager $projectManager,
+        MessageBusInterface $messageBus,
+        PdfValidator $pdfValidator
+    ): JsonResponse {
         $rawProjects = $request->request->get('projects');
         $projects = $serializer->deserialize($rawProjects, ProjectApi::class . '[]', 'json');
         if (!$pdfValidator->isProjectsPdf($projects)) {

@@ -4,6 +4,7 @@ namespace App\Tests\Controller\WebService;
 
 use App\Entity\Theme;
 use App\Entity\Type;
+use App\Service\S3\S3Manager;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
 use App\Tests\Story\ReminderStory;
@@ -51,6 +52,15 @@ class LegacyWsControllerTest extends WebTestCase
 
     public function testAddSitting()
     {
+        $fakeS3Manager = $this->getMockBuilder(S3Manager::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['addObject'])
+            ->getMock()
+        ;
+        $fakeS3Manager->method('addObject')->willReturn(true);
+        $container = self::getContainer();
+        $container->set(S3Manager::class, $fakeS3Manager);
+
         $filesystem = new FileSystem();
         $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/convocation.pdf');
         $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/project1.pdf');
@@ -155,6 +165,15 @@ class LegacyWsControllerTest extends WebTestCase
 
     public function testAddSittingExistingType()
     {
+        $fakeS3Manager = $this->getMockBuilder(S3Manager::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['addObject'])
+            ->getMock()
+        ;
+        $fakeS3Manager->method('addObject')->willReturn(true);
+        $container = self::getContainer();
+        $container->set(S3Manager::class, $fakeS3Manager);
+
         $filesystem = new FileSystem();
         $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/convocation.pdf');
         $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/project1.pdf');
@@ -262,6 +281,15 @@ class LegacyWsControllerTest extends WebTestCase
 
     public function testAddSittingActeurs_convoquesNotJson()
     {
+        $fakeS3Manager = $this->getMockBuilder(S3Manager::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['addObject'])
+            ->getMock()
+        ;
+        $fakeS3Manager->method('addObject')->willReturn(true);
+        $container = self::getContainer();
+        $container->set(S3Manager::class, $fakeS3Manager);
+
         $filesystem = new FileSystem();
         $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/convocation.pdf');
         $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/project1.pdf');
@@ -389,6 +417,15 @@ class LegacyWsControllerTest extends WebTestCase
 
     public function testAddSittingNoProjects()
     {
+        $fakeS3Manager = $this->getMockBuilder(S3Manager::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['addObject'])
+            ->getMock()
+        ;
+        $fakeS3Manager->method('addObject')->willReturn(true);
+        $container = self::getContainer();
+        $container->set(S3Manager::class, $fakeS3Manager);
+
         $filesystem = new FileSystem();
         $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/convocation.pdf');
 
