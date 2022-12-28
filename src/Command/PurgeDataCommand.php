@@ -44,18 +44,23 @@ class PurgeDataCommand extends Command
     {
         $structures = $this->structureRepository->findAll();
         foreach ($structures as $structure) {
-            $delay = $structure->getConfiguration()->getSittingSuppressionDelay();  //-6 months
+            $delay = $structure->getConfiguration()->getSittingSuppressionDelay();
             $before = new \DateTimeImmutable('-' . $delay);
             $toRemoveSittings = $this->sittingRepository->findSittingsBefore($before, $structure);
 
-            foreach ($toRemoveSittings as $sitting) {
-                $this->sittingManager->delete($sitting);
-            }
+            $this->removeSittings($toRemoveSittings);
         }
 
         $io = new SymfonyStyle($input, $output);
         $io->success('Séances supprimées');
 
         return Command::SUCCESS;
+    }
+
+    private function removeSittings(iterable $sittings): void
+    {
+        foreach ($sittings as $sitting) {
+            $this->sittingManager->delete($sitting);
+        }
     }
 }

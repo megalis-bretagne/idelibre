@@ -12,7 +12,7 @@ class SuppressionDelayFormatter
         '3 ans' => '3 years',
         '5 ans' => '5 years',
         '10 ans' => '10 years',
-        'Jamais' => '100000 years',
+        'Jamais' => '10000 years',
     ];
 
     public function formatDelay(string $value): string
