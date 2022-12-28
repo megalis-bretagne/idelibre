@@ -1,0 +1,4 @@
+services:
+    App\Service\S3\S3Manager:
+      autowire: true
+      public: true

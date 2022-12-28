@@ -6,6 +6,7 @@ use App\Entity\Project;
 use App\Repository\ProjectRepository;
 use App\Service\ApiEntity\AnnexApi;
 use App\Service\ApiEntity\ProjectApi;
+use App\Service\S3\S3Manager;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
 use App\Tests\Story\AnnexStory;
@@ -59,6 +60,15 @@ class ProjectControllerTest extends WebTestCase
 
     public function testEditAddProjects()
     {
+        $fakeS3Manager = $this->getMockBuilder(S3Manager::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['addObject'])
+            ->getMock()
+        ;
+        $fakeS3Manager->method('addObject')->willReturn(true);
+        $container = self::getContainer();
+        $container->set(S3Manager::class, $fakeS3Manager);
+
         $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
         $this->loginAsAdminLibriciel();
 

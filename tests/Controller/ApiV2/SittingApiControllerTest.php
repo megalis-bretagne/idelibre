@@ -4,6 +4,7 @@ namespace App\Tests\Controller\ApiV2;
 
 use App\Service\ApiEntity\AnnexApi;
 use App\Service\ApiEntity\ProjectApi;
+use App\Service\S3\S3Manager;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
 use App\Tests\Story\ApiUserStory;
@@ -141,13 +142,28 @@ class SittingApiControllerTest extends WebTestCase
 
     public function testAddSitting()
     {
+        $fakeS3Manager = $this->getMockBuilder(S3Manager::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['addObject'])
+            ->getMock()
+        ;
+        $fakeS3Manager->method('addObject')->willReturn(true);
+        $container = self::getContainer();
+        $container->set(S3Manager::class, $fakeS3Manager);
+
         $structure = StructureStory::libriciel();
         $apiUser = ApiUserStory::apiAdminLibriciel();
         $type = TypeStory::typeConseilLibriciel();
 
         $filesystem = new Filesystem();
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/invitation.pdf');
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/convocation.pdf');
+        $filesystem->copy(
+            __DIR__ . '/../../resources/fichier.pdf',
+            __DIR__ . '/../../resources/invitation.pdf'
+        );
+        $filesystem->copy(
+            __DIR__ . '/../../resources/fichier.pdf',
+            __DIR__ . '/../../resources/convocation.pdf'
+        );
 
         //$filesystem->copy('/home/pmonin/www/idelibre/tests/resources/fichier.pdf', '/home/pmonin/www/idelibre/tests/resources/invitation.pdf');
 
@@ -214,6 +230,15 @@ class SittingApiControllerTest extends WebTestCase
 
     public function testUpdateSitting()
     {
+        $fakeS3Manager = $this->getMockBuilder(S3Manager::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['addObject'])
+            ->getMock()
+        ;
+        $fakeS3Manager->method('addObject')->willReturn(true);
+        $container = self::getContainer();
+        $container->set(S3Manager::class, $fakeS3Manager);
+
         $structure = StructureStory::libriciel();
         $apiUser = ApiUserStory::apiAdminLibriciel();
         $sittingConseil = SittingStory::sittingConseilLibriciel();
@@ -257,6 +282,15 @@ class SittingApiControllerTest extends WebTestCase
 
     public function testAddProjectsToSitting()
     {
+        $fakeS3Manager = $this->getMockBuilder(S3Manager::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['addObject'])
+            ->getMock()
+        ;
+        $fakeS3Manager->method('addObject')->willReturn(true);
+        $container = self::getContainer();
+        $container->set(S3Manager::class, $fakeS3Manager);
+
         $structure = StructureStory::libriciel();
         $apiUser = ApiUserStory::apiAdminLibriciel();
         $sittingBureau = SittingStory::sittingBureauLibriciel();
@@ -350,6 +384,15 @@ class SittingApiControllerTest extends WebTestCase
 
     public function testDeleteProject()
     {
+        $fakeS3Manager = $this->getMockBuilder(S3Manager::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['addObject'])
+            ->getMock()
+        ;
+        $fakeS3Manager->method('addObject')->willReturn(true);
+        $container = self::getContainer();
+        $container->set(S3Manager::class, $fakeS3Manager);
+
         $structure = StructureStory::libriciel();
         $apiUser = ApiUserStory::apiAdminLibriciel();
         $sittingConseil = SittingStory::sittingConseilLibriciel();
