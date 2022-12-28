@@ -28,39 +28,86 @@ class FileManager
     ) {
     }
 
-    public function save(UploadedFile $uploadedFile, Structure $structure): File
+    public function fileExist(string $path): bool
     {
+        return $this->filesystem->exists($path);
+    }
+
+    public function downloadToS3(string $path)
+    {
+        $dirname = dirname($path);
+        if (false === is_dir($dirname)) {
+            $this->filesystem->mkdir($dirname);
+        }
+
+        $file = $this->s3Manager->getObject($path);
+
+        if (!$fp = fopen($path,'w+')){
+            dd( "Impossible d'ouvrir le fichier ($path)");
+        }
+
+        if (false === fwrite($fp, $file['Body'])){
+            dd("Impossible d'écrire dans le fichier ($path)");
+        }
+
+        fclose($fp);
+    }
+
+    public function save(UploadedFile $uploadedFile, Structure $structure): ?File
+    {
+        if (false === $this->checkVirusFile($uploadedFile)) {
+            dd('ERREUR VIRUS');
+        }
+
         $file = new File();
-        $file->setName($uploadedFile->getClientOriginalName())
-            ->setSize($uploadedFile->getSize());
+        $file
+            ->setName($uploadedFile->getClientOriginalName())
+            ->setSize($uploadedFile->getSize())
+        ;
 
         $fileName = $this->sanitizeAndUniqueFileName($uploadedFile);
         $savedFile = $uploadedFile->move($this->getAndCreateDestinationDirectory($structure), $fileName);
 
-        $file->setPath($savedFile->getRealPath());
+        $pathFile = ($savedFile->getRealPath());
+
+        $file->setPath($pathFile);
         $this->em->persist($file);
+
+        $this->transfertToS3($pathFile);
 
         return $file;
     }
 
-//    public function save(UploadedFile $uploadedFile, Structure $structure): ?File
+    public function transfertToS3(string $path)
+    {
+        if (false === $this->fileExist($path)) {
+            dd("ERROR");
+        }
+
+        try {
+            $this->s3Manager->addObject(
+                $path,
+                $path
+            );
+        } catch (ObjectStorageException $e) {
+            $this->logger->error($e);
+            return false;
+        }
+    }
+
+//    public function saveToS3(File $file, string $pathFile): bool
 //    {
-//        $pathS3 = $this->sendS3($structure, $uploadedFile);
-//
-//        if (!empty($pathS3)) {
-//            $file = new File();
-//            $file
-//                ->setName($uploadedFile->getClientOriginalName())
-//                ->setPath($pathS3)
-//                ->setSize($uploadedFile->getSize())
-//            ;
-//
-//            $this->em->persist($file);
-//
-//            return $file;
+//        try {
+//            $this->s3Manager->addObject(
+//                $file->getPath(),
+//                $pathFile
+//            );
+//        } catch (ObjectStorageException $e) {
+//            $this->logger->error($e);
+//            return false;
 //        }
 //
-//        return null;
+//        return true;
 //    }
 
 //    private function sendS3(Structure $structure, UploadedFile $uploadedFile)

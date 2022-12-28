@@ -5,6 +5,7 @@ namespace App\Service\Pdf;
 use App\Entity\Annex;
 use App\Entity\Project;
 use App\Entity\Sitting;
+use App\Service\File\FileManager;
 use App\Service\Util\DateUtil;
 use Exception;
 use Psr\Log\LoggerInterface;
@@ -18,7 +19,8 @@ class PdfSittingGenerator
         private readonly Filesystem $filesystem,
         private readonly LoggerInterface $logger,
         private readonly DateUtil $dateUtil,
-        private readonly PdfChecker $checker
+        private readonly PdfChecker $checker,
+        private readonly FileManager $fileManager,
     ) {
     }
 
@@ -41,6 +43,8 @@ class PdfSittingGenerator
         } catch (Exception $exception) {
             $this->logger->error('MergePdf : ' . $exception->getMessage());
         }
+
+        $this->fileManager->transfertToS3($this->getPdfPath($sitting));
     }
 
     private function getConvocationPath(Sitting $sitting): string

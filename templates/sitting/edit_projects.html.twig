@@ -7,13 +7,10 @@
     {{ encore_entry_link_tags('vue-manage-projects') }}
 {% endblock %}
 
-
 {% block body %}
-
     <div class="col-12">
         {{ apy_breadcrumb_trail_render(breadcrumb) }}
     </div>
-
 
     <div v-cloak id="app">
         <div class="alert alert-success mt-2 col-11" v-if="messageInfo"> ${messageInfo}</div>
@@ -28,13 +25,10 @@
             <div class="mt-4">
                 {{ macro.backButton('sitting_index', {'status' : 'active'}) }}
             </div>
-
         </div>
-
 
         <div class="col-10 offset-1 mt-4 form-white">
             {{ macroTab.editTabs('projects', sitting) }}
-
 
             <label class="project-file-btn btn btn-primary" title="Ajouter des projets">
                 <input class="project-file-btn" type="file" accept=".pdf,.PDF" multiple @change="addProject($event)" onclick="this.value=null">
@@ -47,9 +41,7 @@
                 Aucun projet associé
             </div>
 
-
             <draggable v-model="projects" class="bg-white" v-on:change="projectChange()" handle=".handle">
-
                 <div v-for="(project, index) in projects">
                     <div class="il-project">
                         <div class="project-left cursor-grab handle">
@@ -77,7 +69,6 @@
                                         <span class="fa fa-trash-alt" title="Supprimer"></span>
                                     </button>
                                 </div>
-
                             </div>
 
                             <div class="project-line">
@@ -89,7 +80,6 @@
                                               label="lastName"
                                               class="bs-form-like"
                                               :filter-by="reporterFilter"
-
                                     >
                                         <template #option="{ firstName, lastName }">
                                             ${ firstName } ${ lastName }
@@ -126,12 +116,12 @@
 
                             </div>
 
-
                             <div class="project-line">
                                 <div class="project-item">
                                     <label class="project-file-btn btn btn-outline-primary" title="Ajouter des annexes">
                                         <input class="project-file-btn" type="file" multiple @change="addAnnexes($event, project)">
-                                        <span class="fa fa-plus-circle"></span> Ajouter des annexes
+                                        <span class="fa fa-plus-circle"></span>
+                                        Ajouter des annexes
                                     </label>
                                 </div>
                             </div>
@@ -148,13 +138,8 @@
                                             <span class="fa fa-trash-alt" title="Supprimer"></span>
                                         </button>
                                     </div>
-
                                 </div>
-
-
                             </draggable>
-
-
                         </div>
                     </div>
                 </div>
@@ -162,7 +147,8 @@
 
             <div class="float-right mt-5">
                 <button class="btn btn-outline-dark" @click="cancel()">
-                    <span class="fa fa-times"></span> Annuler Les modifications
+                    <span class="fa fa-times"></span>
+                    Annuler les modifications
                 </button>
 
                 <button class="btn btn-primary" @click="save()">
@@ -170,7 +156,6 @@
                     Enregistrer les modifications
                 </button>
             </div>
-
 
             <div v-if="showModal">
                 <transition name="modal">
@@ -191,20 +176,15 @@
                     </div>
                 </transition>
             </div>
-
-
         </div>
-
     </div>
-
 
     {{ include('include/_modal_confirm_not_save.html.twig') }}
 
-
-    <div><a id="cRetour" title="Retour en haut de page" class="cInvisible" href="#haut"></a></div>
-
+    <div>
+        <a id="cRetour" title="Retour en haut de page" class="cInvisible" href="#haut"></a>
+    </div>
 {% endblock %}
-
 
 {% block javascripts %}
     {{ encore_entry_script_tags('vue-manage-projects') }}

@@ -21,15 +21,11 @@ use Symfony\Component\Validator\Constraints\NotNull;
 
 class SittingType extends AbstractType
 {
-    private TypeRepository $typeRepository;
-    private SittingManager $sittingManager;
-    private RoleManager $roleManager;
-
-    public function __construct(TypeRepository $typeRepository, SittingManager $sittingManager, RoleManager $roleManager)
-    {
-        $this->typeRepository = $typeRepository;
-        $this->sittingManager = $sittingManager;
-        $this->roleManager = $roleManager;
+    public function __construct(
+        private readonly TypeRepository $typeRepository,
+        private readonly SittingManager $sittingManager,
+        private readonly RoleManager $roleManager
+    ) {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -78,11 +74,15 @@ class SittingType extends AbstractType
                         new File([
                             'mimeTypes' => ['application/pdf'],
                             'mimeTypesMessage' => 'Le fichier doit être un pdf',
-                        ]), ] :
-                    [new File([
-                        'mimeTypes' => ['application/pdf'],
-                        'mimeTypesMessage' => 'Le fichier doit être un pdf',
-                    ])],
+                        ]),
+                    ] :
+                    [
+                        new File([
+                            'mimeTypes' => ['application/pdf'],
+                            'mimeTypesMessage' => 'Le fichier doit être un pdf',
+                        ])
+                    ]
+                ,
             ])
             ->add('invitationFile', LsFileType::class, [
                 'label' => ($isNew || $isAlreadySentInvitation) ? 'Fichier d\'invitation' : 'Remplacer le fichier d\'invitation',

@@ -3,6 +3,7 @@
 namespace App\Service\Zip;
 
 use App\Entity\Sitting;
+use App\Service\File\FileManager;
 use App\Service\Util\DateUtil;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -11,9 +12,10 @@ use ZipArchive;
 class ZipSittingGenerator
 {
     public function __construct(
-        private ParameterBagInterface $bag,
-        private Filesystem $filesystem,
-        private DateUtil $dateUtil
+        private readonly ParameterBagInterface $bag,
+        private readonly Filesystem $filesystem,
+        private readonly DateUtil $dateUtil,
+        private readonly FileManager $fileManager,
     ) {
     }
 
@@ -26,6 +28,8 @@ class ZipSittingGenerator
         $zip->addFile($sitting->getConvocationFile()->getPath(), $sitting->getConvocationFile()->getName());
         $this->addProjectAndAnnexesFiles($zip, $sitting);
         $zip->close();
+
+        $this->fileManager->transfertToS3($zipPath);
 
         return $zipPath;
     }
