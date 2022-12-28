@@ -81,7 +81,6 @@ class StructureController extends AbstractController
 
     #[Route(path: '/structure/add', name: 'structure_add')]
     #[IsGranted(data: 'CREATE_STRUCTURE')]
-
     public function add(Request $request, StructureCreator $structureCreator, ParameterBagInterface $bag): Response
     {
         $form = $this->createForm(StructureType::class, null, [
@@ -115,7 +114,6 @@ class StructureController extends AbstractController
 
     #[Route(path: '/structure/edit/{id}', name: 'structure_edit')]
     #[IsGranted(data: 'MY_GROUP', subject: 'structure')]
-
     public function edit(Structure $structure, Request $request, StructureManager $structureManager): Response
     {
         $form = $this->createForm(StructureType::class, $structure);
@@ -148,7 +146,6 @@ class StructureController extends AbstractController
     #[Route(path: '/structure/preferences', name: 'structure_preferences')]
     #[IsGranted(data: 'ROLE_STRUCTURE_ADMIN')]
     #[Sidebar(reset: true, active: ['structure-preference-nav'])]
-
     public function preferences(Request $request, StructureManager $structureManager): Response
     {
         $form = $this->createForm(StructureInformationType::class, $this->getUser()->getStructure());

@@ -15,7 +15,6 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
-use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Translation\Exception\NotFoundResourceException;
 
@@ -36,7 +35,7 @@ class FileManager
         return $this->filesystem->exists($path);
     }
 
-    public function downloadToS3(string $path)
+    public function downloadToS3(string $path): bool
     {
         $dirname = dirname($path);
         if (false === is_dir($dirname)) {
@@ -45,15 +44,19 @@ class FileManager
 
         $file = $this->s3Manager->getObject($path);
 
-        if (!$fp = fopen($path,'w+')){
-            dd( "Impossible d'ouvrir le fichier ($path)");
+        if (!$fp = fopen($path, 'w+')) {
+//            dd( "Impossible d'ouvrir le fichier ($path)");
+            return false;
         }
 
-        if (false === fwrite($fp, $file['Body'])){
-            dd("Impossible d'écrire dans le fichier ($path)");
+        if (false === fwrite($fp, $file['Body'])) {
+//            dd("Impossible d'écrire dans le fichier ($path)");
+            return false;
         }
 
         fclose($fp);
+
+        return true;
     }
 
     public function save(UploadedFile $uploadedFile, Structure $structure): ?File
