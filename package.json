@@ -31,6 +31,7 @@
         "build": "encore production --progress"
     },
     "dependencies": {
-        "@libriciel/ls-jquery-password": "^1.2.3"
+        "@libriciel/ls-jquery-password": "^1.2.3",
+        "dotenv": "^16.0.3"
     }
 }

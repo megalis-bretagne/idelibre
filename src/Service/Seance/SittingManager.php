@@ -2,6 +2,7 @@
 
 namespace App\Service\Seance;
 
+use App\Entity\Project;
 use App\Entity\Reminder;
 use App\Entity\Sitting;
 use App\Entity\Structure;
@@ -206,5 +207,25 @@ class SittingManager
         }
 
         $this->em->flush();
+    }
+
+    /**
+     * @param Sitting $sitting
+     * @return int
+     */
+    public function getProjectsAndAnnexesTotalSize(Sitting $sitting): int
+    {
+        $projects = $this->projectRepository->getProjectsBySitting($sitting);
+        $total = 0;
+
+        foreach ($projects as $project) {
+             $size =  $project->getFile()->getSize();
+             $total += $size;
+             foreach ($project->getAnnexes() as $annex ) {
+                 $size = $annex->getFile()->getSize();
+                 $total += $size;
+             }
+        }
+        return $total;
     }
 }

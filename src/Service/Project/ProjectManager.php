@@ -18,8 +18,10 @@ use App\Service\ApiEntity\ProjectApi;
 use App\Service\ClientNotifier\ClientNotifierInterface;
 use App\Service\File\FileManager;
 use Doctrine\ORM\EntityManagerInterface;
+use phpDocumentor\Reflection\Types\Integer;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Routing\Annotation\Route;
 
 class ProjectManager
 {
@@ -152,8 +154,7 @@ class ProjectManager
     }
 
     /**
-     * @param project[] $projects
-     *
+     * @param project[] $projects     *
      * @return ProjectApi[]
      */
     public function getApiProjectsFromProjects(iterable $projects): array
@@ -167,12 +168,15 @@ class ProjectManager
                 ->setReporterId($project->getReporter() ? $project->getReporter()->getId() : null)
                 ->setFileName($project->getFile()->getName())
                 ->setId($project->getId())
-                ->setAnnexes($this->getApiAnnexesFromAnnexes($project->getAnnexes()));
+                ->setAnnexes($this->getApiAnnexesFromAnnexes($project->getAnnexes()))
+                ->setSize($project->getFile()->getSize())
+            ;
             $apiProjects[] = $apiProject;
         }
 
         return $apiProjects;
     }
+
 
     /**
      * @param annex[] $annexes
@@ -186,10 +190,10 @@ class ProjectManager
             $annexApi = new AnnexApi();
             $annexApi->setRank($annex->getRank())
                 ->setId($annex->getId())
-                ->setFileName($annex->getFile()->getName());
+                ->setFileName($annex->getFile()->getName())
+                ->setSize($annex->getFile()->getSize());
             $apiAnnexes[] = $annexApi;
         }
-
         return $apiAnnexes;
     }
 
@@ -265,7 +269,6 @@ class ProjectManager
                 $ids[] = $clientProject->getId();
             }
         }
-
         return $ids;
     }
 }
