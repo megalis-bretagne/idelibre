@@ -11,6 +11,7 @@ import draggable from 'vuedraggable';
 Vue.component('v-select', VueSelect);
 Vue.component('draggable', draggable);
 
+
 let app = new Vue({
         delimiters: ['${', '}'],
         el: "#app",
@@ -22,10 +23,16 @@ let app = new Vue({
             showModal: false,
             uploadPercent: 0,
             messageError: null,
-
+            fileTooBig: false,
+            maxSize: 0,
+            totalFileSize: 0,
         },
 
         methods: {
+
+            formatSize(value) {
+                return formatBytes(value);
+            },
 
             reporterFilter(option, label, search) {
                 let searchLowerCase = search.toLowerCase();
@@ -34,13 +41,13 @@ let app = new Vue({
                     (option.firstName.toLowerCase() + " " + option.lastName.toLowerCase()).indexOf(searchLowerCase) > -1
             },
 
-
-            projectChange($event) {
+            projectChange(event) {
                 isDirty = true;
             },
 
 
             addProject(event) {
+
                 for (let i = 0; i < event.target.files.length; i++) {
                     let file = event.target.files[i];
                     let project = {
@@ -51,17 +58,22 @@ let app = new Vue({
                         themeId: null,
                         reporterId: null,
                         linkedFileKey: null,
-                        id: null
+                        id: null,
+                        size:event.target.files[i].size,
                     };
                     this.projects.push(project);
                 }
+                this.totalFileSize = getFilesWeight(this.projects)
                 isDirty = true;
             },
 
             removeProject(index) {
                 this.projects.splice(index, 1);
+                this.totalFileSize = getFilesWeight(this.projects)
+                console.log(this.totalFileSize)
                 isDirty = true;
             },
+
             addAnnexes(event, project) {
                 for (let i = 0; i < event.target.files.length; i++) {
                     let file = event.target.files[i];
@@ -69,53 +81,59 @@ let app = new Vue({
                         file: file,
                         linkedFileKey: null,
                         fileName: file.name,
-                        id: null
-                    };
+                        id: null,
+                        size:event.target.files[i].size
+                };
                     project.annexes.push(annex);
                 }
+                this.totalFileSize = getFilesWeight(this.projects)
                 isDirty = true;
             },
             deleteAnnex(annexes, index) {
                 annexes.splice(index, 1);
+                this.totalFileSize = getFilesWeight(this.projects)
                 isDirty = true;
             },
 
             save() {
-                let formData = new FormData();
-                addProjectAndAnnexeFiles(this.projects, formData);
-                setProjectsRank(this.projects);
-                formData.append('projects', JSON.stringify(this.projects));
-                this.showModal = true;
-                this.uploadPercent = 0;
-                const config = {
-                    onUploadProgress: (progressEvent) => {
-                        this.uploadPercent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-
+                if (!checkNotOverweightFile(this.totalFileSize, this.maxSize)) {
+                    this.fileTooBig = true
+                    this.showMessageError("Le poids des documents de la séance dépasse 200 Mo, le PDF complet de la séance ne pourra pas être généré")
+                } else {
+                    localStorage.setItem('total', this.totalFileSize)
+                    let formData = new FormData();
+                    addProjectAndAnnexeFiles(this.projects, formData);
+                    setProjectsRank(this.projects);
+                    formData.append('projects', JSON.stringify(this.projects));
+                    this.showModal = true;
+                    this.uploadPercent = 0;
+                    const config = {
+                        onUploadProgress: (progressEvent) => {
+                            this.uploadPercent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                        }
                     }
-                }
 
-                axios.post(`/api/projects/${getSittingId()}`,
-                    formData,
-                    config
-                ).then(response => {
-                    console.log('done');
-                    this.showMessage('Modifications enregistrées');
-                    isDirty = false;
-                    this.showModal = false;
-                    window.scrollTo(0, 0);
-                }).catch((e, m) => {
-                    this.showModal = false;
-                    window.scrollTo(0, 0);
-                    console.log(e.response.data)
-                    let errorBody = e.response.data;
-                    this.showMessageError(errorBody.message ? errorBody.message :'Impossible d\'enregistrer les modifications');
-                });
+                    axios.post(`/api/projects/${getSittingId()}`,
+                        formData,
+                        config
+                    ).then(response => {
+                        console.log('done');
+                        this.showMessage('Modifications enregistrées');
+                        isDirty = false;
+                        this.showModal = false;
+                        window.scrollTo(0, 0);
+                    }).catch((e, m) => {
+                        this.showModal = false;
+                        window.scrollTo(0, 0);
+                        let errorBody = e.response.data;
+                        this.showMessageError(errorBody.message ? errorBody.message : 'Impossible d\'enregistrer les modifications');
+                    });
+                }
             },
 
             move(fromIndex, toIndex) {
                 arrayMove(this.projects, fromIndex, toIndex);
             },
-
 
             cancel() {
                 axios.get(`/api/projects/${getSittingId()}`).then((response) => {
@@ -135,28 +153,29 @@ let app = new Vue({
                 this.messageError = msg;
                 setTimeout(() => this.messageError = null, 3000);
             },
-
-
         },
+
         mounted() {
             Promise.all([
                 axios.get('/api/themes'),
                 axios.get('/api/actors'),
-                axios.get(`/api/projects/${getSittingId()}`)
+                axios.get(`/api/projects/${getSittingId()}`),
+                axios.get(`/api/sittings/maxSize`),
             ]).then((response) => {
                 this.themes = setThemeLevelName(response[0].data);
                 this.reporters = response[1].data;
                 this.projects = response[2].data;
+                this.maxSize = response[3].data.maxSize;
+                this.totalFileSize = getFilesWeight(this.projects);
             });
         }
-    })
-;
+    });
 
 
 function addProjectAndAnnexeFiles(projects, formData) {
     for (let i = 0; i < projects.length; i++) {
         if (isNewProject(projects[i])) {
-            formData.append(`projet_${i}_rapport`, projects[i].file, projects[i].file.name);
+            formData.append(`projet_${i}_rapport`, projects[i].file, projects[i].file.name, projects[i].size);
             projects[i].linkedFileKey = `projet_${i}_rapport`;
         }
         addAnnexeFiles(projects[i], i, formData);
@@ -168,16 +187,38 @@ function addAnnexeFiles(project, index, formData) {
         return;
     }
     for (let j = 0; j < project.annexes.length; j++) {
-        if (isNewAnnex(project.annexes[j]))
-            formData.append(`projet_${index}_${j}_annexe`, project.annexes[j].file, project.annexes[j].file.name);
-        project.annexes[j].linkedFileKey = `projet_${index}_${j}_annexe`;
+        if (isNewAnnex(project.annexes[j]) ) {
+            formData.append(`projet_${index}_${j}_annexe`, project.annexes[j].file, project.annexes[j].file.name, project.annexes[j].size);
+            project.annexes[j].linkedFileKey = `projet_${index}_${j}_annexe`;
+        }
     }
+}
+
+function formatBytes(a, b = 2) {
+    if (!+a)
+        return "0";
+    const c = 0 > b ? 0 : b, d = Math.floor(Math.log(a) / Math.log(1024));
+    return `${parseFloat((a / Math.pow(1024, d)).toFixed(c))} ${["Octets", "Ko", "Mo", "Go"][d]}`
+}
+
+function getFilesWeight(projects) {
+    let totalFileSize = 0;
+    for (let project of projects) {
+        totalFileSize += project.size;
+        for (let annexe of project.annexes) {
+            totalFileSize += annexe.size
+        }
+    }
+    return totalFileSize;
+}
+
+function  checkNotOverweightFile(totalFileSize, maxSize) {
+    return maxSize > totalFileSize;
 }
 
 function getPrettyNameFromFileName(fileName) {
     return fileName.replace(/\.[^/.]+$/, "").replace(/_/g, " ");
 }
-
 
 function arrayMove(arr, fromIndex, toIndex) {
     let element = arr[fromIndex];
@@ -208,21 +249,19 @@ function isNewAnnex(annex) {
     return !annex.id;
 }
 
+
 function setProjectsRank(projects) {
     for (let i = 0; i < projects.length; i++) {
         projects[i].rank = i;
         setAnnexesRank(projects[i].annexes)
     }
-
 }
-
 
 function setAnnexesRank(annexes) {
     for (let i = 0; i < annexes.length; i++) {
         annexes[i].rank = i;
     }
 }
-
 
 let isDirty = false;
 
@@ -247,11 +286,12 @@ $('.change-tab').click(function (event) {
     return true;
 });
 
-document.addEventListener('DOMContentLoaded', function() {
-    window.onscroll = function(ev) {
+document.addEventListener('DOMContentLoaded', function () {
+    window.onscroll = function (ev) {
         document.getElementById("cRetour").className = (window.pageYOffset > 100) ? "cVisible" : "cInvisible";
     };
-    $('#cRetour').click( function() {
+    $('#cRetour').click(function () {
         $('html,body').animate({scrollTop: 0}, 'slow');
     });
 });
+

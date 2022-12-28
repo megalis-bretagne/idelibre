@@ -4,11 +4,14 @@ namespace App\Service\Pdf;
 
 use Howtomakeaturn\PDFInfo\PDFInfo;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class PdfChecker
 {
-    public function __construct(private LoggerInterface $logger)
-    {
+    public function __construct(
+        private LoggerInterface $logger,
+        private ParameterBagInterface $bag
+    ) {
     }
 
     /**
@@ -18,7 +21,7 @@ class PdfChecker
     {
         $this->sanitizeEncrypted($pdfDocPaths);
 
-        return true;
+        return $this->sizeChecker($pdfDocPaths);
     }
 
     /**
@@ -50,5 +53,25 @@ class PdfChecker
             $cmd = 'qpdf --decrypt' . ' ' . $ef . ' ' . '--replace-input';
             shell_exec($cmd);
         }
+    }
+
+    /**
+     * @param array<string> $pdfDocPaths
+     */
+    private function sizeChecker(array $pdfDocPaths): bool
+    {
+        $fileSizeArray = [];
+
+        foreach ($pdfDocPaths as $path) {
+            $pdfInfo = new PDFInfo($path);
+            $fileSizeArray[] = $pdfInfo->fileSize;
+        }
+        $totalFileSize = array_sum($fileSizeArray);
+
+        if ($this->bag->get('maximum_size_pdf_zip_generation') <= $totalFileSize) {
+            return false;
+        }
+
+        return true;
     }
 }

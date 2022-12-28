@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
   - soit il est possible de définir le mot de passe
 - Mise en place d'envoie d'un mail de réinitialisation du mot de passe.
 - Mise en place de l'invalidation des mots de passe de tous les utilisateurs de la structure.
+- Empêcher IL de générer les pdf complet si il y a trop de volume (#290)
 
 ### Correction
 - la suppression d'une structure supprime bien tout ce qui lui est associée

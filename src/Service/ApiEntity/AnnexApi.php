@@ -11,6 +11,7 @@ class AnnexApi
     public ?string $linkedFileKey = null;
     #[NotBlank]
     public ?int $rank = null;
+    private ?int $size = null;
 
     public ?string $fileName = null;
 
@@ -58,6 +59,18 @@ class AnnexApi
     public function setId(?string $id): AnnexApi
     {
         $this->id = $id;
+
+        return $this;
+    }
+
+    public function getSize(): ?int
+    {
+        return $this->size;
+    }
+
+    public function setSize(?int $size): AnnexApi
+    {
+        $this->size = $size;
 
         return $this;
     }

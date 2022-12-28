@@ -24,9 +24,7 @@ class PdfSittingGenerator
 
     public function generateFullSittingPdf(Sitting $sitting): void
     {
-        $pdfDocPaths = [];
-        $pdfDocPaths[] = $this->getConvocationPath($sitting);
-        $pdfDocPaths = [...$pdfDocPaths, ...$this->getProjectsAndAnnexesPath($sitting->getProjects())];
+        $pdfDocPaths = $this->getPdfDocPaths($sitting);
 
         $cmd = 'pdfunite ' . implode(' ', $pdfDocPaths) . ' ' . $this->getPdfPath($sitting);
 
@@ -108,5 +106,16 @@ class PdfSittingGenerator
     public function createPrettyName(Sitting $sitting): string
     {
         return $sitting->getName() . '_' . $this->dateUtil->getUnderscoredDate($sitting->getDate()) . '.pdf';
+    }
+
+    /**
+     * @return array<string>
+     */
+    public function getPdfDocPaths(Sitting $sitting): array
+    {
+        $pdfDocPaths = [];
+        $pdfDocPaths[] = $this->getConvocationPath($sitting);
+
+        return [...$pdfDocPaths, ...$this->getProjectsAndAnnexesPath($sitting->getProjects())];
     }
 }

@@ -18,6 +18,7 @@ class ProjectApi
 
     #[NotBlank]
     private ?int $rank = null;
+    private ?int $size = null;
 
     /**
      * @var AnnexApi[]
@@ -122,6 +123,18 @@ class ProjectApi
     public function setFileName(?string $fileName): ProjectApi
     {
         $this->fileName = $fileName;
+
+        return $this;
+    }
+
+    public function getSize(): ?int
+    {
+        return $this->size;
+    }
+
+    public function setSize(?int $size): ProjectApi
+    {
+        $this->size = $size;
 
         return $this;
     }

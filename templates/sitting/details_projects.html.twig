@@ -25,7 +25,12 @@
 
         <div class="col-10 offset-1 mt-4 form-white">
             {{ macroTab.showTabs('projects', sitting) }}
-            <h2>Projets</h2>
+            <div class="d-flex justify-content-between">
+                <h2>Projets</h2>
+                <span><small>Poids total: <span class="text-success"> {{ totalSize|sizeFormatter }} </span> </small></span>
+            </div>
+
+
             <div class="mt-4"></div>
 
             {% if projects | length == 0 %}
@@ -50,6 +55,9 @@
                             </div>
                             <div class="project-item">
                                 {{ project.file.name }}
+                            </div>
+                            <div class="projectSize">
+                                <small>{{ project.file.size|sizeFormatter }}</small>
                             </div>
                             <div class="project-item action">
                                 <a class="btn btn-outline-secondary borderless"
@@ -83,6 +91,7 @@
                                     <div class="project-item">
                                         {{ annex.rank + 1 }} - {{ annex.file.name }}
                                     </div>
+                                    <div class="annexeSize"><small> {{ annex.file.size|sizeFormatter }} </small></div>
                                     <div class="project-item action">
                                         <a class="btn btn-outline-secondary borderless"
                                            href="{{ path('file_download', {'id': annex.file.id}) }}"

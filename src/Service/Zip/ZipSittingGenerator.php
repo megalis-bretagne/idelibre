@@ -3,7 +3,9 @@
 namespace App\Service\Zip;
 
 use App\Entity\Sitting;
+use App\Service\Pdf\PdfSittingGenerator;
 use App\Service\Util\DateUtil;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use ZipArchive;
@@ -13,13 +15,25 @@ class ZipSittingGenerator
     public function __construct(
         private ParameterBagInterface $bag,
         private Filesystem $filesystem,
-        private DateUtil $dateUtil
+        private DateUtil $dateUtil,
+        private ZipChecker $checker,
+        private PdfSittingGenerator $generator,
+        private LoggerInterface $logger
     ) {
     }
 
     public function generateZipSitting(Sitting $sitting): string
     {
+        $pdfDocPaths = $this->generator->getPdfDocPaths($sitting);
+
+        if (!$this->checker->isValid($pdfDocPaths)) {
+            $this->logger->error('PDF is too heavy, max size is' . $this->bag->get('maximum_size_pdf_zip_generation'));
+
+            return  'no zip created';
+        }
+
         $zip = new ZipArchive();
+
         $zipPath = $this->getAndCreateZipPath($sitting);
         $this->deleteZipIfAlreadyExists($zipPath);
         $zip->open($zipPath, ZipArchive::CREATE);

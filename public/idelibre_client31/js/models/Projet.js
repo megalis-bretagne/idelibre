@@ -21,8 +21,6 @@ var Projet = function (id, name, document_text, theme, rank, vote, rapporteur, r
     this.rapporteurId = rapporteurId;
     this.annexes = [];
     this.annotations = [];
-
-
 };
 
 /**
@@ -186,4 +184,5 @@ Projet.prototype.getType = function(){
 Projet.prototype.deleteAllAnnotations = function(){
     this.annotations =[];
 };
+
 

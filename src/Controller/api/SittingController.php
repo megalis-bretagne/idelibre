@@ -3,11 +3,16 @@
 namespace App\Controller\api;
 
 use App\Entity\Sitting;
+use App\Requirements\Is;
+use App\Service\ApiEntity\AnnexApi;
+use App\Service\ApiEntity\ProjectApi;
 use App\Service\Connector\ComelusConnectorManager;
 use App\Service\Convocation\ConvocationManager;
 use App\Service\Email\NotificationService;
+use App\Service\Project\ProjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -33,7 +38,7 @@ class SittingController extends AbstractController
         return $this->json(['success' => true]);
     }
 
-    #[Route(path: '/api/sittings/{id}', name: 'api_sitting_details', methods: ['GET'])]
+    #[Route(path: '/api/sittings/{id}', name: 'api_sitting_details', requirements: ['id' => Is::UUID], methods: ['GET'])]
     #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
     public function getSitting(Sitting $sitting): JsonResponse
     {
@@ -48,4 +53,11 @@ class SittingController extends AbstractController
 
         return $this->json(['comelusId' => $comelusId]);
     }
+
+    #[Route(path: '/api/sittings/maxSize', name: 'api_sitting_maxSize', methods: ['GET'])]
+    public function getMaxSittingSizeForGeneration(ParameterBagInterface $bag): jsonResponse
+    {
+        return $this->json(['maxSize' => $bag->get('maximum_size_pdf_zip_generation')]);
+    }
+
 }

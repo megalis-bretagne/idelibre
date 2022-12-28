@@ -35,11 +35,24 @@
         <div class="col-10 offset-1 mt-4 form-white">
             {{ macroTab.editTabs('projects', sitting) }}
 
+            <div class="d-flex justify-content-between">
 
-            <label class="project-file-btn btn btn-primary" title="Ajouter des projets">
-                <input class="project-file-btn" type="file" accept=".pdf,.PDF" multiple @change="addProject($event)" onclick="this.value=null">
-                <span class="fa fa-plus-circle"></span> Ajouter des projets
-            </label>
+                <label class="project-file-btn btn btn-primary" title="Ajouter des projets">
+                    <input class="project-file-btn" type="file" accept=".pdf,.PDF" multiple @change="addProject($event)" onclick="this.value=null">
+                    <span class="fa fa-plus-circle"></span> Ajouter des projets
+                </label>
+
+                <div class=" ml-auto d-flex justify-content-end mt-2">
+                    <p v-if="fileTooBig === true">
+                        <small> Poids total: <span class="text-danger">${formatSize(totalFileSize)} </span></small>
+                    </p>
+                    <p v-else >
+                        <small> Poids total: <span class="text-success">${formatSize(totalFileSize)} </span></small>
+                    </p>
+                </div>
+
+
+            </div>
 
             <div class="mt-4"></div>
 
@@ -67,9 +80,13 @@
                                 <div class="project-item">
                                     <textarea v-model="project.name" class="form-control" v-on:change="projectChange()"> </textarea>
                                 </div>
-                                <div class="project-item">
+                                <div class="project-item d-flex justify-content-between">
                                     ${project.fileName}
+                                    <span class="ml-5"><small> ${formatSize(project.size)} </small></span>
+
                                 </div>
+
+
 
                                 <div class="project-item action">
                                     <button class="btn btn-outline-danger borderless float-right"
@@ -138,8 +155,11 @@
 
                             <draggable v-model="project.annexes" v-on:change="projectChange()" class="annex-list">
                                 <div class="project-line annex cursor-grab" v-for="(annex, index) in project.annexes">
-                                    <div class="project-item">
-                                        <span class="">${index + 1} - </span> ${annex.fileName}
+                                    <div class="project-item d-flex justify-content-between">
+                                        <div>
+                                            <span class="">${index + 1} - </span> ${annex.fileName}
+                                        </div>
+                                        <span class="ml-5"><small> ${formatSize(annex.size)} </small></span>
                                     </div>
 
                                     <div class="project-item action">
@@ -148,12 +168,9 @@
                                             <span class="fa fa-trash-alt" title="Supprimer"></span>
                                         </button>
                                     </div>
-
                                 </div>
 
-
                             </draggable>
-
 
                         </div>
                     </div>
@@ -168,6 +185,9 @@
                 <button class="btn btn-primary" @click="save()">
                     <span class="fa fa-save"></span>
                     Enregistrer les modifications
+
+
+
                 </button>
             </div>
 
@@ -191,7 +211,6 @@
                     </div>
                 </transition>
             </div>
-
 
         </div>
 
