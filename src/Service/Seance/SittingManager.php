@@ -79,16 +79,24 @@ class SittingManager
         }
     }
 
+    public function deleteByStructure(Structure $structure): void
+    {
+        $sittings = $this->sittingRepository->findByStructure($structure)->getQuery()->getResult();
+        foreach ($sittings as $sitting) {
+            $this->delete($sitting);
+        }
+    }
+
     public function delete(Sitting $sitting): void
     {
         $this->fileManager->delete($sitting->getConvocationFile());
         $this->projectManager->deleteProjects($sitting->getProjects());
         $this->convocationManager->deleteConvocations($sitting->getConvocations());
-        $this->em->remove($sitting);
-        $this->em->flush();
-
         $this->pdfSittingGenerator->deletePdf($sitting);
         $this->zipSittingGenerator->deleteZip($sitting);
+
+        $this->em->remove($sitting);
+        $this->em->flush();
     }
 
     public function update(Sitting $sitting, ?UploadedFile $uploadedConvocationFile, ?UploadedFile $uploadedInvitationFile): void

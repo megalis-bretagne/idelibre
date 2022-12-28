@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [4.2.0] - 2023-xx-xx
 
 ### Evolution
-- Docker passage  en Ubuntu 22:04Ajout
+- Docker passage  en Ubuntu 22:04
 - Node 12 -> 16
 - php 8 -> php8.1
 - Concatenation -> pdftk to pdfunite
@@ -17,6 +17,10 @@ All notable changes to this project will be documented in this file.
   - soit il est possible de définir le mot de passe
 - Mise en place d'envoie d'un mail de réinitialisation du mot de passe.
 - Mise en place de l'invalidation des mots de passe de tous les utilisateurs de la structure.
+
+### Correction
+- la suppression d'une structure supprime bien tout ce qui lui est associée
+
 
 ### Suppression
 - Lors de la création / modification d'un admin de group ou d'un superadmind, il n'est plus possible de définir le mot de passe du nouveau utilisateur.

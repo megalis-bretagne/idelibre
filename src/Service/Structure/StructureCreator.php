@@ -46,8 +46,8 @@ class StructureCreator
         $this->em->persist($structure);
 
         $this->addSuffixToUsername($user, $structure->getSuffix());
-        $errors = $this->userManager->saveStructureAdmin($user, $structure);
 
+        $errors = $this->userManager->saveStructureAdmin($user, $structure);
         if (!empty($errors)) {
             $this->em->getConnection()->rollBack();
 
@@ -56,6 +56,7 @@ class StructureCreator
 
         $this->initConfig($structure);
         $this->em->flush();
+
         $this->em->getConnection()->commit();
 
         $this->resetPassword->sendEmailDefinePassword($user);

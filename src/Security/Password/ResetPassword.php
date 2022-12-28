@@ -48,7 +48,7 @@ class ResetPassword
     public function reset(string $username): void
     {
         $user = $this->userRepository->findOneBy([
-            'username' => $username
+            'username' => $username,
         ]);
 
         if (empty($user)) {
@@ -68,7 +68,7 @@ class ResetPassword
     {
         $token = $this->tokenRepository->findOneBy(['token' => $token]);
         if (empty($token)) {
-            throw new EntityNotFoundException("this token does not exist", Response::HTTP_BAD_REQUEST);
+            throw new EntityNotFoundException('this token does not exist', Response::HTTP_BAD_REQUEST);
         }
 
         if (new DateTime() > $token->getExpireAt()) {

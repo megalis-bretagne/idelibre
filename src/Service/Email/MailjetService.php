@@ -153,23 +153,23 @@ class MailjetService implements EmailServiceInterface
             [
                 'From' => [
                     'Email' => $this->bag->get('email_from'),
-                    'Name' => $this->bag->get('email_alias')
+                    'Name' => $this->bag->get('email_alias'),
                 ],
                 'To' => [
                     [
                         'Email' => $userEmail,
-                    ]
+                    ],
                 ],
                 'Subject' => $subject,
                 'HTMLPart' => $contentHtml,
                 'TextPart' => $contentText,
-            ]
+            ],
         ];
 
         $result = $this->mailjetClient->post(Resources::$Email, [
             'body' => [
-                'Messages' => $message
-            ]
+                'Messages' => $message,
+            ],
         ]);
 
         if (false === $result->success()) {
