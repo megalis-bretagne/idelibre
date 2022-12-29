@@ -68,6 +68,7 @@ class FileManager
         $file = (new File())
             ->setName($uploadedFile->getClientOriginalName())
             ->setSize($uploadedFile->getSize())
+            ->setCatchedAt(new \DateTimeImmutable($this->bag->get('duration_catched_files')))
         ;
 
         $fileName = $this->sanitizeAndUniqueFileName($uploadedFile);
@@ -139,44 +140,6 @@ class FileManager
         }
     }
 
-//    public function saveToS3(File $file, string $pathFile): bool
-//    {
-//        try {
-//            $this->s3Manager->addObject(
-//                $file->getPath(),
-//                $pathFile
-//            );
-//        } catch (ObjectStorageException $e) {
-//            $this->logger->error($e);
-//            return false;
-//        }
-//
-//        return true;
-//    }
-
-//    private function sendS3(Structure $structure, UploadedFile $uploadedFile)
-//    {
-//        if (false === $this->checkVirusFile($uploadedFile)) {
-//            return false;
-//        }
-//
-//        $fileName = $this->sanitizeAndUniqueFileName($uploadedFile);
-//
-//        $key = $this->bag->get('document_files_directory') . $structure->getId() . date('/Y/m/') . $fileName;
-//
-//        try {
-//            $this->s3Manager->addObject(
-//                $uploadedFile->getRealPath(),
-//                $key
-//            );
-//        } catch (ObjectStorageException $e) {
-//            $this->logger->error($e);
-//            return false;
-//        }
-//
-//        return $key;
-//    }
-
     private function sanitizeAndUniqueFileName(UploadedFile $file): string
     {
         $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
@@ -201,12 +164,23 @@ class FileManager
         return $file->getClientOriginalExtension() ? '.' . $file->getClientOriginalExtension() : '';
     }
 
+    public function deleteSittingFiles(Sitting $sitting)
+    {
+        $this->delete($sitting->getConvocationFile());
+        $this->delete($sitting->getInvitationFile());
+    }
+
     public function delete(?File $file): void
     {
         if (!$file) {
             return;
         }
-        $this->filesystem->remove($file->getPath());
+
+        $filePath = $file->getPath();
+
+        $this->filesystem->remove($filePath);
+        $this->s3Manager->deleteObject($filePath);
+
         $this->em->remove($file);
     }
 
@@ -275,5 +249,13 @@ class FileManager
         }
 
         return true;
+    }
+
+    public function updateCatchedAt(File $file, $date = null)
+    {
+        $file->setCatchedAt($date);
+
+        $this->em->persist($file);
+        $this->em->flush();
     }
 }

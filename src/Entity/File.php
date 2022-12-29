@@ -68,6 +68,9 @@ class File
     #[OneToOne(mappedBy: 'file', targetEntity: Otherdoc::class)]
     private $otherdoc;
 
+    #[Column(nullable: true)]
+    private ?\DateTimeImmutable $catchedAt = null;
+
     public function __construct()
     {
         $this->createdAt = new DateTimeImmutable();
@@ -142,5 +145,17 @@ class File
     public function getInvitationSitting(): ?Sitting
     {
         return $this->invitationSitting;
+    }
+
+    public function getCatchedAt(): ?\DateTimeImmutable
+    {
+        return $this->catchedAt;
+    }
+
+    public function setCatchedAt(?\DateTimeImmutable $catchedAt): self
+    {
+        $this->catchedAt = $catchedAt;
+
+        return $this;
     }
 }

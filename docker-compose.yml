@@ -27,7 +27,6 @@ services:
       - data-public:/app/public
       - /data/files:/data
       - ./docker-resources/zz-idelibre.conf:/usr/local/etc/php-fpm.d/zz-idelibre.conf
-
     command: [ "/app/docker-resources/initApp.sh" ]
 
   node-idelibre:
@@ -51,7 +50,6 @@ services:
       - PASSPHRASE=${PASSPHRASE:-passphrase}
       - JWT_SECRET=${JWT_SECRET:-jwtsecret}
       - JWT_TIMEOUT=${JWT_TIMEOUT:-86400}
-
     command: [ "/app/docker-resources/init.sh" ]
 
   nginx-idelibre:
@@ -92,7 +90,6 @@ services:
     volumes:
       - /data/certificates:/certificates
     command: [ "/app/docker-resources/init.sh" ]
-
 
   idelibre_mailcatcher:
     container_name: idelibre_mailcatcher
