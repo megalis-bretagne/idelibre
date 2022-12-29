@@ -51,7 +51,7 @@ WORKDIR /app
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 RUN cd /app && \
-    composer install --no-scripts --no-dev --no-cache && \
+    composer install --no-cache && \
     npm install && \
     npm run build
 

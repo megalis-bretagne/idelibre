@@ -5,15 +5,15 @@ namespace App\Command;
 use App\Repository\SittingRepository;
 use App\Repository\StructureRepository;
 use App\Service\Seance\SittingManager;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+#[AsCommand(name: 'purge:structures')]
 class PurgeDataCommand extends Command
 {
-    protected static $defaultName = 'purge:structures';
-
     private SittingRepository $sittingRepository;
     private StructureRepository $structureRepository;
     private SittingManager $sittingManager;

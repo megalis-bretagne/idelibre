@@ -6,6 +6,7 @@ use App\Entity\Annex;
 use App\Entity\Project;
 use App\Entity\Sitting;
 use App\Service\File\FileManager;
+use App\Service\S3\S3Manager;
 use App\Service\Util\DateUtil;
 use Exception;
 use Psr\Log\LoggerInterface;
@@ -21,6 +22,7 @@ class PdfSittingGenerator
         private readonly DateUtil $dateUtil,
         private readonly PdfChecker $checker,
         private readonly FileManager $fileManager,
+        private readonly S3Manager $s3Manager,
     ) {
     }
 
@@ -104,7 +106,9 @@ class PdfSittingGenerator
     public function deletePdf(Sitting $sitting): void
     {
         $path = $this->getPdfPath($sitting);
+
         $this->filesystem->remove($path);
+        $this->s3Manager->deleteObject($path);
     }
 
     public function createPrettyName(Sitting $sitting): string

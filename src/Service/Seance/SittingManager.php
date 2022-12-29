@@ -11,6 +11,7 @@ use App\Repository\ProjectRepository;
 use App\Repository\SittingRepository;
 use App\Service\Convocation\ConvocationManager;
 use App\Service\File\FileManager;
+use App\Service\Otherdoc\OtherdocManager;
 use App\Service\Pdf\PdfSittingGenerator;
 use App\Service\Project\ProjectManager;
 use App\Service\role\RoleManager;
@@ -32,7 +33,8 @@ class SittingManager
         private SittingRepository $sittingRepository,
         private PdfSittingGenerator $pdfSittingGenerator,
         private ZipSittingGenerator $zipSittingGenerator,
-        private ProjectRepository $projectRepository
+        private ProjectRepository $projectRepository,
+        private readonly OtherdocManager $otherdocManager,
     ) {
     }
 
@@ -91,10 +93,11 @@ class SittingManager
 
     public function delete(Sitting $sitting): void
     {
-        $this->fileManager->delete($sitting->getConvocationFile());
-        $this->fileManager->delete($sitting->getInvitationFile());
+        $this->fileManager->deleteSittingFiles($sitting);
+
         $this->projectManager->deleteProjects($sitting->getProjects());
         $this->convocationManager->deleteConvocations($sitting->getConvocations());
+        $this->otherdocManager->deleteOtherdocs($sitting->getOtherdocs());
 
         $this->pdfSittingGenerator->deletePdf($sitting);
         $this->zipSittingGenerator->deleteZip($sitting);

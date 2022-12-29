@@ -3,22 +3,18 @@
 namespace App\Command;
 
 use App\Command\ServiceCmd\AttendanceNotification;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+#[AsCommand(name: 'attendance:notification')]
 class AttendanceNotificationCommand extends Command
 {
-    protected static $defaultName = 'attendance:notification';
-    private AttendanceNotification $attendanceNotification;
-
-    public function __construct(
-        AttendanceNotification $attendanceNotification,
-        string $name = null
-    ) {
+    public function __construct(private readonly AttendanceNotification $attendanceNotification, string $name = null)
+    {
         parent::__construct($name);
-        $this->attendanceNotification = $attendanceNotification;
     }
 
     protected function configure(): void

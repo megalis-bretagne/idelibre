@@ -5,6 +5,7 @@ namespace App\Service\Zip;
 use App\Entity\Sitting;
 use App\Service\Pdf\PdfSittingGenerator;
 use App\Service\File\FileManager;
+use App\Service\S3\S3Manager;
 use App\Service\Util\DateUtil;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -21,6 +22,7 @@ class ZipSittingGenerator
         private readonly PdfSittingGenerator $generator,
         private readonly LoggerInterface $logger,
         private readonly FileManager $fileManager,
+        private readonly S3Manager $s3Manager,
     ) {
     }
 
@@ -64,7 +66,9 @@ class ZipSittingGenerator
     public function deleteZip(Sitting $sitting): void
     {
         $path = $this->getAndCreateZipPath($sitting);
+
         $this->filesystem->remove($path);
+        $this->s3Manager->deleteObject($path);
     }
 
     private function addProjectAndAnnexesFiles(ZipArchive $zip, Sitting $sitting): void
