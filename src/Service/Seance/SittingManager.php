@@ -2,7 +2,6 @@
 
 namespace App\Service\Seance;
 
-use App\Entity\Project;
 use App\Entity\Reminder;
 use App\Entity\Sitting;
 use App\Entity\Structure;
@@ -91,6 +90,7 @@ class SittingManager
     public function delete(Sitting $sitting): void
     {
         $this->fileManager->delete($sitting->getConvocationFile());
+        $this->fileManager->delete($sitting->getInvitationFile());
         $this->projectManager->deleteProjects($sitting->getProjects());
         $this->convocationManager->deleteConvocations($sitting->getConvocations());
 
@@ -209,23 +209,20 @@ class SittingManager
         $this->em->flush();
     }
 
-    /**
-     * @param Sitting $sitting
-     * @return int
-     */
     public function getProjectsAndAnnexesTotalSize(Sitting $sitting): int
     {
         $projects = $this->projectRepository->getProjectsBySitting($sitting);
         $total = 0;
 
         foreach ($projects as $project) {
-             $size =  $project->getFile()->getSize();
-             $total += $size;
-             foreach ($project->getAnnexes() as $annex ) {
-                 $size = $annex->getFile()->getSize();
-                 $total += $size;
-             }
+            $size = $project->getFile()->getSize();
+            $total += $size;
+            foreach ($project->getAnnexes() as $annex) {
+                $size = $annex->getFile()->getSize();
+                $total += $size;
+            }
         }
+
         return $total;
     }
 }

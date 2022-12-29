@@ -18,10 +18,8 @@ use App\Service\ApiEntity\ProjectApi;
 use App\Service\ClientNotifier\ClientNotifierInterface;
 use App\Service\File\FileManager;
 use Doctrine\ORM\EntityManagerInterface;
-use phpDocumentor\Reflection\Types\Integer;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\Routing\Annotation\Route;
 
 class ProjectManager
 {
@@ -154,7 +152,8 @@ class ProjectManager
     }
 
     /**
-     * @param project[] $projects     *
+     * @param project[] $projects *
+     *
      * @return ProjectApi[]
      */
     public function getApiProjectsFromProjects(iterable $projects): array
@@ -177,7 +176,6 @@ class ProjectManager
         return $apiProjects;
     }
 
-
     /**
      * @param annex[] $annexes
      *
@@ -194,6 +192,7 @@ class ProjectManager
                 ->setSize($annex->getFile()->getSize());
             $apiAnnexes[] = $annexApi;
         }
+
         return $apiAnnexes;
     }
 
@@ -269,6 +268,7 @@ class ProjectManager
                 $ids[] = $clientProject->getId();
             }
         }
+
         return $ids;
     }
 }
