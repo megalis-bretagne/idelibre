@@ -13,17 +13,20 @@ class SizeFormatter extends AbstractExtension
             new TwigFilter('sizeFormatter', [$this, 'sizeFormatter']),
         ];
     }
+
     public function sizeFormatter($rawSize): string
     {
-        $kilooctets = 1024;
-        $megaoctets = $kilooctets * 1024;
-        $gigaoctets = $megaoctets * 1024;
+        $kiloOctets = 1024;
+        $megaOctets = $kiloOctets * 1024;
+        $gigaOctets = $megaOctets * 1024;
 
-        if ($rawSize < $megaoctets) {
-            return number_format($rawSize / $kilooctets, 2, '.') . ' Ko';
-        } elseif ($rawSize < $gigaoctets) {
-            return number_format($rawSize / $megaoctets, 2, '.') . ' Mo';
+        if ($rawSize < $megaOctets) {
+            return number_format($rawSize / $kiloOctets, 2, '.') . ' Ko';
         }
-        return $rawSize . ' O';
+        if ($rawSize < $gigaOctets) {
+            return number_format($rawSize / $megaOctets, 2, '.') . ' Mo';
+        }
+
+        return number_format($rawSize / $gigaOctets, 2, '.') . ' Go';
     }
 }

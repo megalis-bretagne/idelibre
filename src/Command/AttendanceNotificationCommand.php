@@ -21,7 +21,6 @@ class AttendanceNotificationCommand extends Command
         $this->attendanceNotification = $attendanceNotification;
     }
 
-
     protected function configure(): void
     {
         $this

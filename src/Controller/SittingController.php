@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Project;
 use App\Entity\Sitting;
 use App\Form\SearchType;
 use App\Form\SittingType;
@@ -188,7 +187,6 @@ class SittingController extends AbstractController
         return $this->render('sitting/details_actors.html.twig', [
             'sitting' => $sitting,
             'emailTemplate' => $emailTemplate,
-
         ]);
     }
 
@@ -202,7 +200,7 @@ class SittingController extends AbstractController
         return $this->render('sitting/details_projects.html.twig', [
             'sitting' => $sitting,
             'projects' => $projectRepository->getProjectsWithAssociatedEntities($sitting),
-            'totalSize' =>$sittingManager->getProjectsAndAnnexesTotalSize($sitting)
+            'totalSize' => $sittingManager->getProjectsAndAnnexesTotalSize($sitting),
         ]);
     }
 

@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 
 ### Correction
 - la suppression d'une structure supprime bien tout ce qui lui est associée
+- La suppression d'une séance supprime aussi le fichier d'invitation
 
 
 ### Suppression
