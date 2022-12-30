@@ -40,11 +40,8 @@ class SittingApiController extends AbstractController
     }
 
     #[Route('', name: 'get_all_sittings', methods: ['GET'])]
-    public function getAll(
-        Structure $structure,
-        Request $request,
-        SittingRepository $sittingRepository
-    ): JsonResponse {
+    public function getAll(Structure $structure, Request $request, SittingRepository $sittingRepository): JsonResponse
+    {
         $sittings = $sittingRepository->findByStructure($structure, null, $request->query->get('status'))
             ->getQuery()->getResult();
 
@@ -53,21 +50,16 @@ class SittingApiController extends AbstractController
 
     #[Route('/{id}', name: 'get_one_sitting', methods: ['GET'])]
     #[IsGranted('API_SAME_STRUCTURE', subject: ['structure', 'sitting'])]
-    public function getById(
-        Structure $structure,
-        Sitting $sitting
-    ): JsonResponse {
+    public function getById(Sitting $sitting): JsonResponse
+    {
         return $this->json($sitting, context: ['groups' => ['sitting:detail', 'sitting:read']]);
     }
 
     #[Route('/{sittingId}/convocations', name: 'get_all_convocations_by_sitting', methods: ['GET'])]
     #[ParamConverter('sitting', class: Sitting::class, options: ['id' => 'sittingId'])]
     #[IsGranted('API_SAME_STRUCTURE', subject: ['structure', 'sitting'])]
-    public function getAllConvocations(
-        Structure $structure,
-        Sitting $sitting,
-        ConvocationRepository $convocationRepository
-    ): JsonResponse {
+    public function getAllConvocations(Sitting $sitting, ConvocationRepository $convocationRepository): JsonResponse
+    {
         $convocations = $convocationRepository->getConvocationsWithUserBySitting($sitting);
 
         return $this->json($convocations, context: ['groups' => 'convocation:read']);
@@ -76,22 +68,16 @@ class SittingApiController extends AbstractController
     #[Route('/{sittingId}/projects', name: 'get_all_projects_by_sitting', methods: ['GET'])]
     #[ParamConverter('sitting', class: Sitting::class, options: ['id' => 'sittingId'])]
     #[IsGranted('API_SAME_STRUCTURE', subject: ['structure', 'sitting'])]
-    public function getAllProjects(
-        Structure $structure,
-        Sitting $sitting,
-        ProjectRepository $projectRepository
-    ): JsonResponse {
+    public function getAllProjects(Sitting $sitting, ProjectRepository $projectRepository): JsonResponse
+    {
         $projects = $projectRepository->getProjectsBySitting($sitting);
 
         return $this->json($projects, context: ['groups' => 'project:read']);
     }
 
     #[Route('', name: 'add_sitting', methods: ['POST'])]
-    public function addSitting(
-        Structure $structure,
-        Request $request,
-        SittingManager $sittingManager
-    ) {
+    public function addSitting(Structure $structure, Request $request, SittingManager $sittingManager)
+    {
         $context = ['groups' => ['sitting:write', 'sitting:write:post'], 'normalize_relations' => true];
         /** @var Sitting $sitting */
         $sitting = $this->denormalizer->denormalize($request->request->all(), Sitting::class, context: $context);
@@ -113,7 +99,6 @@ class SittingApiController extends AbstractController
     #[Route('/{id}', name: 'update_sitting', methods: ['PUT'])]
     #[IsGranted('API_SAME_STRUCTURE', subject: ['structure', 'sitting'])]
     public function updateSitting(
-        Structure $structure,
         Sitting $sitting,
         Request $request,
         SittingManager $sittingManager,
@@ -139,7 +124,6 @@ class SittingApiController extends AbstractController
     #[ParamConverter('sitting', class: Sitting::class, options: ['id' => 'sittingId'])]
     #[IsGranted('API_SAME_STRUCTURE', subject: ['structure', 'sitting'])]
     public function addProjectsToSitting(
-        Structure $structure,
         Sitting $sitting,
         Request $request,
         ProjectManager $projectManager,
@@ -174,11 +158,9 @@ class SittingApiController extends AbstractController
     #[ParamConverter('sitting', class: Sitting::class, options: ['id' => 'sittingId'])]
     #[IsGranted('API_SAME_STRUCTURE', subject: ['structure', 'sitting'])]
     public function DeleteProject(
-        Structure $structure,
         Sitting $sitting,
         Project $project,
         ProjectManager $projectManager,
-        ProjectRepository $projectRepository,
         SittingManager $sittingManager
     ): JsonResponse {
         $projectManager->deleteProjects([$project]);

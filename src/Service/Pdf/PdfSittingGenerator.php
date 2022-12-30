@@ -3,9 +3,12 @@
 namespace App\Service\Pdf;
 
 use App\Entity\Annex;
+use App\Entity\File;
+use App\Entity\GeneratedFile;
 use App\Entity\Project;
 use App\Entity\Sitting;
 use App\Service\File\FileManager;
+use App\Service\GeneratedFile\GeneratedFileManager;
 use App\Service\S3\S3Manager;
 use App\Service\Util\DateUtil;
 use Doctrine\ORM\Mapping as ORM;
@@ -20,13 +23,15 @@ class PdfSittingGenerator
 {
     public function __construct(
         private readonly ParameterBagInterface $bag,
-        private readonly Filesystem $filesystem,
-        private readonly LoggerInterface $logger,
-        private readonly DateUtil $dateUtil,
-        private readonly PdfChecker $checker,
-        private readonly FileManager $fileManager,
-        private readonly S3Manager $s3Manager,
-    ) {
+        private readonly Filesystem            $filesystem,
+        private readonly LoggerInterface       $logger,
+        private readonly DateUtil              $dateUtil,
+        private readonly PdfChecker            $checker,
+        private readonly FileManager           $fileManager,
+        private readonly S3Manager             $s3Manager,
+        private readonly GeneratedFileManager  $generatedFileManager,
+    )
+    {
     }
 
     public function generateFullSittingPdf(Sitting $sitting): void
@@ -47,7 +52,15 @@ class PdfSittingGenerator
             $this->logger->error('MergePdf : ' . $exception->getMessage());
         }
 
-        $this->fileManager->transfertToS3($this->getPdfPath($sitting));
+        $pathFilePdf = $this->getPdfPath($sitting);
+
+        $this->generatedFileManager->add(
+            GeneratedFile::PDF,
+            $sitting,
+            $pathFilePdf
+        );
+
+        $this->fileManager->transfertToS3($pathFilePdf);
     }
 
     private function getConvocationPath(Sitting $sitting): string

@@ -2,8 +2,9 @@
 
 namespace App\Service\Zip;
 
+use App\Entity\GeneratedFile;
 use App\Entity\Sitting;
-use App\Service\File\FileManager;
+use App\Service\GeneratedFile\GeneratedFileManager;
 use App\Service\Pdf\PdfSittingGenerator;
 use App\Service\File\FileManager;
 use App\Service\S3\S3Manager;
@@ -24,6 +25,7 @@ class ZipSittingGenerator
         private readonly LoggerInterface $logger,
         private readonly FileManager $fileManager,
         private readonly S3Manager $s3Manager,
+        private readonly GeneratedFileManager $generatedFileManager,
     ) {
     }
 
@@ -45,6 +47,12 @@ class ZipSittingGenerator
         $zip->addFile($sitting->getConvocationFile()->getPath(), $sitting->getConvocationFile()->getName());
         $this->addProjectAndAnnexesFiles($zip, $sitting);
         $zip->close();
+
+        $this->generatedFileManager->add(
+            GeneratedFile::ZIP,
+            $sitting,
+            $zipPath
+        );
 
         $this->fileManager->transfertToS3($zipPath);
 

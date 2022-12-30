@@ -12,7 +12,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
 
 #[AsCommand(name: 'purge:tmp_files')]
-class PurgeTmpFileCommand extends Command
+class PurgeCachedFileCommand extends Command
 {
     public function __construct(
         private readonly FileRepository $fileRepository,
@@ -35,18 +35,18 @@ class PurgeTmpFileCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        $files = $this->fileRepository->findAllCatchedExpired();
+        $files = $this->fileRepository->findAllCachedExpired();
 
         foreach ($files as $file) {
             $pathFile = $file->getPath();
 
             if (true === $this->fileManager->fileExist($pathFile)) {
                 $this->filesystem->remove($pathFile);
-
-                $this->fileManager->updateCatchedAt($file);
-
-                $io->success('Fichier supprimées : ' . $pathFile);
             }
+
+            $this->fileManager->removeCachedAt($file);
+
+            $io->success('Fichier supprimées : ' . $pathFile);
         }
 
         return Command::SUCCESS;

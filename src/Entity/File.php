@@ -69,7 +69,7 @@ class File
     private $otherdoc;
 
     #[Column(nullable: true)]
-    private ?\DateTimeImmutable $catchedAt = null;
+    private ?\DateTimeImmutable $cachedAt = null;
 
     public function __construct()
     {
@@ -147,14 +147,14 @@ class File
         return $this->invitationSitting;
     }
 
-    public function getCatchedAt(): ?\DateTimeImmutable
+    public function getCachedAt(): ?\DateTimeImmutable
     {
-        return $this->catchedAt;
+        return $this->cachedAt;
     }
 
-    public function setCatchedAt(?\DateTimeImmutable $catchedAt): self
+    public function setCachedAt(?\DateTimeImmutable $cachedAt): self
     {
-        $this->catchedAt = $catchedAt;
+        $this->cachedAt = $cachedAt;
 
         return $this;
     }

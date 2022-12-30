@@ -129,11 +129,11 @@ class OtherdocManager
     /**
      * @param Otherdoc[] $otherdocs
      */
-    public function deleteOtherdocs(iterable $otherdocs): void
+    public function deleteOtherdocs(iterable $otherdocs, bool $isDeleteS3 = true): void
     {
         foreach ($otherdocs as $otherdoc) {
             $this->em->remove($otherdoc);
-            $this->fileManager->delete($otherdoc->getFile());
+            $this->fileManager->delete($otherdoc->getFile(), $isDeleteS3);
         }
     }
 

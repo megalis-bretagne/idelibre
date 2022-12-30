@@ -19,10 +19,10 @@ class FileRepository extends ServiceEntityRepository
         parent::__construct($registry, File::class);
     }
 
-    public function findAllCatchedExpired()
+    public function findAllCachedExpired(): iterable
     {
         $qb = $this->createQueryBuilder('f')
-            ->andWhere('f.catchedAt <= :dateExpired')
+            ->andWhere('f.cachedAt <= :dateExpired')
             ->setParameter('dateExpired', date('Y-m-d H:m:s'))
         ;
 

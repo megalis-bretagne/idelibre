@@ -21,10 +21,10 @@ class AnnexManager
     /**
      * @param Annex[] $annexes
      */
-    public function deleteAnnexes(iterable $annexes): void
+    public function deleteAnnexes(iterable $annexes, bool $isDeleteS3 = true): void
     {
         foreach ($annexes as $annex) {
-            $this->fileManager->delete($annex->getFile());
+            $this->fileManager->delete($annex->getFile(), $isDeleteS3);
             $this->em->remove($annex);
         }
     }

@@ -108,6 +108,9 @@ class Sitting
     #[OrderBy(value: ['rank' => 'ASC'])]
     private $otherdocs;
 
+    #[ORM\OneToMany(mappedBy: 'sitting', targetEntity: GeneratedFile::class)]
+    private Collection $generatedFiles;
+
     public function __construct()
     {
         $this->createdAt = new DateTimeImmutable();
@@ -115,6 +118,7 @@ class Sitting
         $this->projects = new ArrayCollection();
         $this->otherdocs = new ArrayCollection();
         $this->updatedTimestamps = new ArrayCollection();
+        $this->generatedFiles = new ArrayCollection();
     }
 
     public function getId(): ?string
@@ -389,6 +393,36 @@ class Sitting
             // set the owning side to null (unless already changed)
             if ($otherdoc->getSitting() === $this) {
                 $otherdoc->setSitting(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, GeneratedFile>
+     */
+    public function getGeneratedFiles(): Collection
+    {
+        return $this->generatedFiles;
+    }
+
+    public function addGeneratedFile(GeneratedFile $generatedFile): self
+    {
+        if (!$this->generatedFiles->contains($generatedFile)) {
+            $this->generatedFiles->add($generatedFile);
+            $generatedFile->setSitting($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGeneratedFile(GeneratedFile $generatedFile): self
+    {
+        if ($this->generatedFiles->removeElement($generatedFile)) {
+            // set the owning side to null (unless already changed)
+            if ($generatedFile->getSitting() === $this) {
+                $generatedFile->setSitting(null);
             }
         }
 

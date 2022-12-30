@@ -6,7 +6,6 @@ use App\Entity\File;
 use App\Service\File\FileManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -17,16 +16,16 @@ class FileController extends AbstractController
 {
     #[Route(path: '/file/download/{id}', name: 'file_download', methods: ['GET'])]
     #[IsGranted(data: 'DOWNLOAD_FILES', subject: 'file')]
-    public function download(File $file, FileManager $fileManager, ParameterBagInterface $bag): Response
+    public function download(File $file, FileManager $fileManager): Response
     {
         $filePath = $file->getPath();
 
-        if (false === $fileManager->fileExist($filePath)) {
+        if (null === $file->getCachedAt() || false === $fileManager->fileExist($filePath)) {
             if (false === $fileManager->downloadToS3($filePath)) {
                 throw new NotFoundHttpException("file not found : $filePath");
             }
 
-            $fileManager->updateCatchedAt($file, new \DateTimeImmutable($bag->get('duration_catched_files')));
+            $fileManager->updateCachedAt($file);
         }
 
         $response = new BinaryFileResponse($filePath);
