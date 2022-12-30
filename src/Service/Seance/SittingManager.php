@@ -7,6 +7,7 @@ use App\Entity\Sitting;
 use App\Entity\Structure;
 use App\Entity\User;
 use App\Message\UpdatedSitting;
+use App\Repository\OtherdocRepository;
 use App\Repository\ProjectRepository;
 use App\Repository\SittingRepository;
 use App\Service\Convocation\ConvocationManager;
@@ -15,6 +16,7 @@ use App\Service\Otherdoc\OtherdocManager;
 use App\Service\Pdf\PdfSittingGenerator;
 use App\Service\Project\ProjectManager;
 use App\Service\role\RoleManager;
+use App\Service\S3\S3Manager;
 use App\Service\Zip\ZipSittingGenerator;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
@@ -24,17 +26,19 @@ use Symfony\Component\Messenger\MessageBusInterface;
 class SittingManager
 {
     public function __construct(
-        private ConvocationManager $convocationManager,
-        private FileManager $fileManager,
-        private EntityManagerInterface $em,
-        private MessageBusInterface $messageBus,
-        private ProjectManager $projectManager,
-        private RoleManager $roleManager,
-        private SittingRepository $sittingRepository,
-        private PdfSittingGenerator $pdfSittingGenerator,
-        private ZipSittingGenerator $zipSittingGenerator,
-        private ProjectRepository $projectRepository,
+        private readonly ConvocationManager $convocationManager,
+        private readonly FileManager $fileManager,
+        private readonly EntityManagerInterface $em,
+        private readonly MessageBusInterface $messageBus,
+        private readonly ProjectManager $projectManager,
+        private readonly RoleManager $roleManager,
+        private readonly SittingRepository $sittingRepository,
+        private readonly PdfSittingGenerator $pdfSittingGenerator,
+        private readonly ZipSittingGenerator $zipSittingGenerator,
+        private readonly ProjectRepository $projectRepository,
         private readonly OtherdocManager $otherdocManager,
+        private readonly OtherdocRepository $otherdocRepository,
+        private readonly S3Manager $s3Manager,
     ) {
     }
 
@@ -93,17 +97,21 @@ class SittingManager
 
     public function delete(Sitting $sitting): void
     {
-        $this->fileManager->deleteSittingFiles($sitting);
+        $sittingFilePaths = $this->getSittingFilePaths($sitting);
 
-        $this->projectManager->deleteProjects($sitting->getProjects());
+        $this->fileManager->deleteConvocationAndInvitationFiles($sitting, false);
+
+        $this->projectManager->deleteProjects($sitting->getProjects(), false);
         $this->convocationManager->deleteConvocations($sitting->getConvocations());
-        $this->otherdocManager->deleteOtherdocs($sitting->getOtherdocs());
+        $this->otherdocManager->deleteOtherdocs($sitting->getOtherdocs(), false);
 
         $this->pdfSittingGenerator->deletePdf($sitting);
         $this->zipSittingGenerator->deleteZip($sitting);
 
         $this->em->remove($sitting);
         $this->em->flush();
+
+        $this->s3Manager->deleteObjects($sittingFilePaths);
     }
 
     public function update(Sitting $sitting, ?UploadedFile $uploadedConvocationFile, ?UploadedFile $uploadedInvitationFile): void
@@ -230,4 +238,27 @@ class SittingManager
 
         return $total;
     }
+
+    private function getSittingFilePaths(Sitting $sitting): array
+    {
+        $projects = $this->projectRepository->getProjectsBySitting($sitting);
+        $paths = [];
+        $paths[] = $sitting->getConvocationFile()->getPath();
+        $paths[] = $sitting->getInvitationFile()?->getPath();
+
+        foreach ($projects as $project) {
+            $paths[] = $project->getFile()->getPath();
+            foreach ($project->getAnnexes() as $annex) {
+                $paths[] = $annex->getFile()->getPath();
+            }
+        }
+        $otherDocs = $this->otherdocRepository->findBy(['sitting' => $sitting]);
+        foreach ($otherDocs as $otherDoc) {
+            $paths[] = $otherDoc->getFile()->getPath();
+        }
+
+        return $paths;
+    }
+
+
 }

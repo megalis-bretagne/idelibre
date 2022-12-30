@@ -218,6 +218,8 @@ class SittingController extends AbstractController
     ): Response {
         $zipPath = $zipSittingGenerator->getAndCreateZipPath($sitting);
 
+        //@TODO
+//        if (null === $file->getCachedAt() || false === $fileManager->fileExist($zipPath)) {
         if (false === $fileManager->fileExist($zipPath)) {
             if (false === $fileManager->downloadToS3($zipPath)) {
                 throw new NotFoundHttpException("zip file not found : $zipPath");
@@ -243,6 +245,8 @@ class SittingController extends AbstractController
     ): Response {
         $pdfPath = $pdfSittingGenerator->getPdfPath($sitting);
 
+        //@TODO
+//        if (null === $file->getCachedAt() || false === $fileManager->fileExist($pdfPath)) {
         if (false === $fileManager->fileExist($pdfPath)) {
             if (false === $fileManager->downloadToS3($pdfPath)) {
                 throw new NotFoundHttpException("pdf file not found : $pdfPath");

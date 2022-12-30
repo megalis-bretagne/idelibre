@@ -53,7 +53,7 @@ parameters:
   s3.region: '%env(S3_REGION)%'
   s3.endpoint: '%env(S3_ENDPOINT)%'
 
-  duration_catched_files: '+2 weeks'
+  duration_cached_files: '+4 weeks'
 
 services:
   # default configuration for services in *this* file

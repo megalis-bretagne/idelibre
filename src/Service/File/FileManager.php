@@ -45,12 +45,11 @@ class FileManager
         $file = $this->s3Manager->getObject($path);
 
         if (!$fp = fopen($path, 'w+')) {
-//            dd( "Impossible d'ouvrir le fichier ($path)");
             return false;
         }
 
         if (false === fwrite($fp, $file['Body'])) {
-//            dd("Impossible d'écrire dans le fichier ($path)");
+            fclose($fp);
             return false;
         }
 
@@ -69,7 +68,7 @@ class FileManager
         $file
             ->setName($uploadedFile->getClientOriginalName())
             ->setSize($uploadedFile->getSize())
-            ->setCatchedAt(new \DateTimeImmutable($this->bag->get('duration_catched_files')))
+            ->setCachedAt(new \DateTimeImmutable($this->bag->get('duration_cached_files')))
         ;
 
         $fileName = $this->sanitizeAndUniqueFileName($uploadedFile);
@@ -127,13 +126,13 @@ class FileManager
         return $file->getClientOriginalExtension() ? '.' . $file->getClientOriginalExtension() : '';
     }
 
-    public function deleteSittingFiles(Sitting $sitting)
+    public function deleteConvocationAndInvitationFiles(Sitting $sitting, bool $isDeleteS3 = true)
     {
-        $this->delete($sitting->getConvocationFile());
-        $this->delete($sitting->getInvitationFile());
+        $this->delete($sitting->getConvocationFile(), $isDeleteS3);
+        $this->delete($sitting->getInvitationFile(), $isDeleteS3);
     }
 
-    public function delete(?File $file): void
+    public function delete(?File $file, bool $isDeleteS3 = true): void
     {
         if (!$file) {
             return;
@@ -142,7 +141,10 @@ class FileManager
         $filePath = $file->getPath();
 
         $this->filesystem->remove($filePath);
-        $this->s3Manager->deleteObject($filePath);
+
+        if ($isDeleteS3) {
+            $this->s3Manager->deleteObject($filePath);
+        }
 
         $this->em->remove($file);
     }
@@ -214,9 +216,17 @@ class FileManager
         return true;
     }
 
-    public function updateCatchedAt(File $file, $date = null)
+    public function updateCachedAt(File $file): void
     {
-        $file->setCatchedAt($date);
+        $file->setCachedAt(new \DateTimeImmutable($bag->get('duration_cached_files')));
+
+        $this->em->persist($file);
+        $this->em->flush();
+    }
+
+    public function removeCachedAt(File $file): void
+    {
+        $file->setCachedAt(null);
 
         $this->em->persist($file);
         $this->em->flush();

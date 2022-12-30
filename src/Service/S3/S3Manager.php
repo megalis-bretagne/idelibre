@@ -31,11 +31,9 @@ class S3Manager
     }
 
     /**
-     * @param $name
-     *
      * @throws ObjectStorageException
      */
-    public function createBucket($name): bool
+    public function createBucket(string $name): bool
     {
         try {
             $this->s3Client->createBucket([
@@ -47,56 +45,6 @@ class S3Manager
         }
 
         return true;
-    }
-
-    /**
-     * @throws ObjectStorageException
-     */
-    public function listBuckets(): iterable
-    {
-        try {
-            $bucketList = $this->s3Client->listBuckets();
-        } catch (AwsException $e) {
-            $this->logger->error($e->getMessage());
-            throw new ObjectStorageException($e->getMessage());
-        }
-
-        return $bucketList;
-    }
-
-//    /**
-//     * @param $name
-//     * @throws ObjectStorageException
-//     */
-//    public function deleteBucket($name): bool
-//    {
-//        try {
-//            $this->s3Client->deleteBucket([
-//                "Bucket" => $name
-//            ]);
-//        } catch (AwsException $e) {
-//            $this->logger->error($e->getMessage());
-//            throw new ObjectStorageException($e->getMessage());
-//        }
-//
-//        return true;
-//    }
-
-    /**
-     * @throws ObjectStorageException
-     */
-    public function listObjects(?string $bucketName = null): iterable
-    {
-        $bucketName = $this->getBucketName($bucketName);
-
-        try {
-            return $this->s3Client->listObjects([
-                'Bucket' => $bucketName,
-            ]);
-        } catch (S3Exception $e) {
-            $this->logger->error($e->getMessage());
-            throw new ObjectStorageException($e->getMessage());
-        }
     }
 
     /**

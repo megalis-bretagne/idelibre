@@ -246,11 +246,11 @@ class ProjectManager
     /**
      * @param Project[] $projects
      */
-    public function deleteProjects(iterable $projects): void
+    public function deleteProjects(iterable $projects, bool $isDeleteS3 = true): void
     {
         foreach ($projects as $project) {
-            $this->annexManager->deleteAnnexes($project->getAnnexes());
-            $this->fileManager->delete($project->getFile());
+            $this->annexManager->deleteAnnexes($project->getAnnexes(), $isDeleteS3);
+            $this->fileManager->delete($project->getFile(), $isDeleteS3);
             $this->em->remove($project);
         }
     }
