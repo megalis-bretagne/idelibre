@@ -27,7 +27,7 @@ variables:
 build:
   stage: build
   tags:
-    - citoyen-shell
+    - docker-build
   script:
     - docker login -u "gitlab-ci-token" -p "$CI_JOB_TOKEN" $CI_REGISTRY
     - docker pull $CI_REGISTRY_IMAGE:latest || true
@@ -168,7 +168,7 @@ deploy_master:
     name: idelibre-4-2.dev.libriciel.net
     url: https://idelibre-4-2.dev.libriciel.net
   tags:
-    - citoyen-shell
+    - docker-build
   only:
     - master
   variables:
