@@ -36,6 +36,8 @@ class PdfSittingGenerator
 
     public function generateFullSittingPdf(Sitting $sitting): void
     {
+        $this->deletePdf($sitting);
+
         $pdfDocPaths = $this->getPdfDocPaths($sitting);
 
         $cmd = 'pdfunite ' . implode(' ', $pdfDocPaths) . ' ' . $this->getPdfPath($sitting);
@@ -54,7 +56,7 @@ class PdfSittingGenerator
 
         $pathFilePdf = $this->getPdfPath($sitting);
 
-        $this->generatedFileManager->add(
+        $this->generatedFileManager->addOrReplace(
             GeneratedFile::PDF,
             $sitting,
             $pathFilePdf
@@ -122,6 +124,8 @@ class PdfSittingGenerator
     public function deletePdf(Sitting $sitting): void
     {
         $path = $this->getPdfPath($sitting);
+
+        $this->generatedFileManager->deleteGeneratedFile($sitting, GeneratedFile::PDF);
 
         $this->filesystem->remove($path);
         $this->s3Manager->deleteObject($path);

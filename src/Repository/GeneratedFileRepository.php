@@ -3,7 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\GeneratedFile;
+use App\Entity\Sitting;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -21,46 +23,11 @@ class GeneratedFileRepository extends ServiceEntityRepository
         parent::__construct($registry, GeneratedFile::class);
     }
 
-    public function save(GeneratedFile $entity, bool $flush = false): void
+    public function getGeneratedFileBySitting(Sitting $sitting, $type): ?GeneratedFile
     {
-        $this->getEntityManager()->persist($entity);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
+        return $this->findOneBy([
+            'type' => $type,
+            'sitting' => $sitting,
+        ]);
     }
-
-    public function remove(GeneratedFile $entity, bool $flush = false): void
-    {
-        $this->getEntityManager()->remove($entity);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
-    }
-
-//    /**
-//     * @return GeneratedFile[] Returns an array of GeneratedFile objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('g')
-//            ->andWhere('g.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('g.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?GeneratedFile
-//    {
-//        return $this->createQueryBuilder('g')
-//            ->andWhere('g.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
 }

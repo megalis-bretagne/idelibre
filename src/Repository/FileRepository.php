@@ -28,4 +28,13 @@ class FileRepository extends ServiceEntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    public function getAllFiles(): iterable
+    {
+        $qb = $this->createQueryBuilder('f')
+            ->orderBy('f.createdAt')
+        ;
+
+        return $qb->getQuery()->getResult();
+    }
 }

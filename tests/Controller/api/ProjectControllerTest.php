@@ -21,6 +21,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Serializer;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
@@ -62,10 +63,11 @@ class ProjectControllerTest extends WebTestCase
     {
         $fakeS3Manager = $this->getMockBuilder(S3Manager::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['addObject'])
+            ->onlyMethods(['addObject', 'deleteObject'])
             ->getMock()
         ;
         $fakeS3Manager->method('addObject')->willReturn(true);
+        $fakeS3Manager->method('deleteObject')->willReturn(true);
         $container = self::getContainer();
         $container->set(S3Manager::class, $fakeS3Manager);
 
@@ -73,14 +75,40 @@ class ProjectControllerTest extends WebTestCase
         $this->loginAsAdminLibriciel();
 
         $filesystem = new Filesystem();
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', '/tmp/convocation');
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/project1.pdf');
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/project2.pdf');
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/annex1.pdf');
+        $filesystem->copy(
+            __DIR__ . '/../../resources/fichier.pdf',
+            '/tmp/convocation'
+        );
+        $filesystem->copy(
+            __DIR__ . '/../../resources/fichier.pdf',
+            __DIR__ . '/../../resources/project1.pdf'
+        );
+        $filesystem->copy(
+            __DIR__ . '/../../resources/fichier.pdf',
+            __DIR__ . '/../../resources/project2.pdf'
+        );
+        $filesystem->copy(
+            __DIR__ . '/../../resources/fichier.pdf',
+            __DIR__ . '/../../resources/annex1.pdf'
+        );
 
-        $fileProject1 = new UploadedFile(__DIR__ . '/../../resources/project1.pdf', 'fichier.pdf', 'application/pdf');
-        $fileProject2 = new UploadedFile(__DIR__ . '/../../resources/project2.pdf', 'fichier.pdf', 'application/pdf');
-        $fileAnnex1 = new UploadedFile(__DIR__ . '/../../resources/annex1.pdf', 'fichier.pdf', 'application/pdf');
+        $fileProject1 = new UploadedFile(
+            __DIR__ . '/../../resources/project1.pdf',
+            'fichier.pdf',
+            'application/pdf'
+        );
+
+        $fileProject2 = new UploadedFile(
+            __DIR__ . '/../../resources/project2.pdf',
+            'fichier.pdf',
+            'application/pdf'
+        );
+
+        $fileAnnex1 = new UploadedFile(
+            __DIR__ . '/../../resources/annex1.pdf',
+            'fichier.pdf',
+            'application/pdf'
+        );
 
         $annex = new AnnexApi();
         $annex->setLinkedFileKey('annex1')
@@ -112,7 +140,7 @@ class ProjectControllerTest extends WebTestCase
             ]
         );
 
-        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
         /** @var ProjectRepository $projectRepository */
         $projectRepository = $this->entityManager->getRepository(Project::class);
@@ -127,14 +155,36 @@ class ProjectControllerTest extends WebTestCase
         $this->loginAsAdminLibriciel();
 
         $filesystem = new Filesystem();
+        $filesystem->copy(
+            __DIR__ . '/../../resources/fichier.pdf',
+            __DIR__ . '/../../resources/project1.txt'
+        );
+        $filesystem->copy(
+            __DIR__ . '/../../resources/fichier.pdf',
+            __DIR__ . '/../../resources/project2.pdf'
+        );
+        $filesystem->copy(
+            __DIR__ . '/../../resources/fichier.pdf',
+            __DIR__ . '/../../resources/annex1.pdf'
+        );
 
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/project1.txt');
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/project2.pdf');
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/annex1.pdf');
+        $fileProject1 = new UploadedFile(
+            __DIR__ . '/../../resources/project1.txt',
+            'fichier.pdf',
+            'application/txt'
+        );
 
-        $fileProject1 = new UploadedFile(__DIR__ . '/../../resources/project1.txt', 'fichier.pdf', 'application/txt');
-        $fileProject2 = new UploadedFile(__DIR__ . '/../../resources/project2.pdf', 'fichier.pdf', 'application/pdf');
-        $fileAnnex1 = new UploadedFile(__DIR__ . '/../../resources/annex1.pdf', 'fichier.pdf', 'application/pdf');
+        $fileProject2 = new UploadedFile(
+            __DIR__ . '/../../resources/project2.pdf',
+            'fichier.pdf',
+            'application/pdf'
+        );
+
+        $fileAnnex1 = new UploadedFile(
+            __DIR__ . '/../../resources/annex1.pdf',
+            'fichier.pdf',
+            'application/pdf'
+        );
 
         $annex = new AnnexApi();
         $annex->setLinkedFileKey('annex1')
@@ -166,13 +216,22 @@ class ProjectControllerTest extends WebTestCase
             ]
         );
 
-        $this->assertResponseStatusCodeSame(400);
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
         $response = json_decode($this->client->getResponse()->getContent());
         $this->assertSame('Au moins un projet n\'est pas un pdf', $response->message);
     }
 
     public function testEditDeleteProjects()
     {
+        $fakeS3Manager = $this->getMockBuilder(S3Manager::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['deleteObject'])
+            ->getMock()
+        ;
+        $fakeS3Manager->method('deleteObject')->willReturn(true);
+        $container = self::getContainer();
+        $container->set(S3Manager::class, $fakeS3Manager);
+
         $filesystem = new Filesystem();
         $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', '/tmp/convocation');
         $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', '/tmp/fileProject2');
@@ -202,6 +261,15 @@ class ProjectControllerTest extends WebTestCase
 
     public function testEditDeleteAnnex()
     {
+        $fakeS3Manager = $this->getMockBuilder(S3Manager::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['deleteObject'])
+            ->getMock()
+        ;
+        $fakeS3Manager->method('deleteObject')->willReturn(true);
+        $container = self::getContainer();
+        $container->set(S3Manager::class, $fakeS3Manager);
+
         $filesystem = new Filesystem();
         $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', '/tmp/convocation');
         $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', '/tmp/fileProject1');
@@ -214,22 +282,25 @@ class ProjectControllerTest extends WebTestCase
 
         $this->loginAsAdminLibriciel();
 
-        $annex = new AnnexApi();
-        $annex->setRank(0)
-            ->setId($annexId);
+        $annex = (new AnnexApi())
+            ->setRank(0)
+            ->setId($annexId)
+        ;
 
-        $project1Client = new ProjectApi();
-        $project1Client->setName('Project 1')
+        $project1Client = (new ProjectApi())
+            ->setName('Project 1')
             ->setFileName('project1.pdf')
             ->setRank(0)
             ->setId($project1->getId())
-            ->setAnnexes([$annex]);
+            ->setAnnexes([$annex])
+        ;
 
-        $project2Client = new ProjectApi();
-        $project2Client->setName('Project 2')
+        $project2Client = (new ProjectApi())
+            ->setName('Project 2')
             ->setFileName('project2.pdf')
             ->setRank(1)
-            ->setId($project2->getId());
+            ->setId($project2->getId())
+        ;
 
         $serializedProjects = $this->serializer->serialize([$project1Client, $project2Client], 'json');
 
@@ -253,7 +324,7 @@ class ProjectControllerTest extends WebTestCase
         $sitting = $this->getOneSittingBy(['name' => ['Conseil Libriciel']]);
 
         $this->client->request(Request::METHOD_GET, '/api/projects/' . $sitting->getId());
-        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
         $projectsArray = json_decode($this->client->getResponse()->getContent(), true);
 

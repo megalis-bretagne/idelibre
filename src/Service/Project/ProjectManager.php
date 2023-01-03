@@ -116,10 +116,12 @@ class ProjectManager
             throw new BadRequestException('le projet n\'existe pas');
         }
 
-        $project->setName($clientProject->getName())
+        $project
+            ->setName($clientProject->getName())
             ->setRank($clientProject->getRank())
             ->setReporter($this->getReporter($clientProject->getReporterId()))
-            ->setTheme($this->getTheme($clientProject->getThemeId()));
+            ->setTheme($this->getTheme($clientProject->getThemeId()))
+        ;
 
         $this->createOrUpdateAnnexes($project, $clientProject->getAnnexes(), $uploadedFiles, $structure);
 
@@ -227,10 +229,11 @@ class ProjectManager
      */
     private function createAndAddAnnex(Project $project, AnnexApi $clientAnnex, array $uploadedFiles, Structure $structure): void
     {
-        $annex = new Annex();
-        $annex->setRank($clientAnnex->getRank())
+        $annex = (new Annex())
+            ->setRank($clientAnnex->getRank())
             ->setProject($project)
-            ->setFile($this->fileManager->save($uploadedFiles[$clientAnnex->getLinkedFileKey()], $structure));
+            ->setFile($this->fileManager->save($uploadedFiles[$clientAnnex->getLinkedFileKey()], $structure))
+        ;
         $this->em->persist($annex);
     }
 

@@ -68,10 +68,11 @@ class SittingControllerTest extends WebTestCase
         $this->client->disableReboot();
         $fakeS3Manager = $this->getMockBuilder(S3Manager::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['addObject'])
+            ->onlyMethods(['addObject', 'deleteObject'])
             ->getMock()
         ;
         $fakeS3Manager->method('addObject')->willReturn(true);
+        $fakeS3Manager->method('deleteObject')->willReturn(true);
         $container = self::getContainer();
         $container->set(S3Manager::class, $fakeS3Manager);
 
@@ -145,6 +146,17 @@ class SittingControllerTest extends WebTestCase
 
     public function testDelete()
     {
+        $fakeS3Manager = $this->getMockBuilder(S3Manager::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['addObject', 'deleteObject', 'deleteObjects'])
+            ->getMock()
+        ;
+        $fakeS3Manager->method('addObject')->willReturn(true);
+        $fakeS3Manager->method('deleteObject')->willReturn(true);
+        $fakeS3Manager->method('deleteObjects')->willReturn(true);
+        $container = self::getContainer();
+        $container->set(S3Manager::class, $fakeS3Manager);
+
         $this->loginAsAdminLibriciel();
         $sitting = SittingStory::sittingConseilLibriciel();
 
@@ -276,10 +288,11 @@ class SittingControllerTest extends WebTestCase
         $this->client->disableReboot();
         $fakeS3Manager = $this->getMockBuilder(S3Manager::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['addObject'])
+            ->onlyMethods(['addObject', 'deleteObject'])
             ->getMock()
         ;
         $fakeS3Manager->method('addObject')->willReturn(true);
+        $fakeS3Manager->method('deleteObject')->willReturn(true);
         $container = self::getContainer();
         $container->set(S3Manager::class, $fakeS3Manager);
 

@@ -11,7 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
 
-#[AsCommand(name: 'purge:tmp_files')]
+#[AsCommand(name: 'purge:cached_files')]
 class PurgeCachedFileCommand extends Command
 {
     public function __construct(

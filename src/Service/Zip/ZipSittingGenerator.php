@@ -31,6 +31,8 @@ class ZipSittingGenerator
 
     public function generateZipSitting(Sitting $sitting): string
     {
+        $this->deleteZip($sitting);
+
         $pdfDocPaths = $this->generator->getPdfDocPaths($sitting);
 
         if (!$this->checker->isValid($pdfDocPaths)) {
@@ -48,7 +50,7 @@ class ZipSittingGenerator
         $this->addProjectAndAnnexesFiles($zip, $sitting);
         $zip->close();
 
-        $this->generatedFileManager->add(
+        $this->generatedFileManager->addOrReplace(
             GeneratedFile::ZIP,
             $sitting,
             $zipPath
@@ -75,6 +77,8 @@ class ZipSittingGenerator
     public function deleteZip(Sitting $sitting): void
     {
         $path = $this->getAndCreateZipPath($sitting);
+
+        $this->generatedFileManager->deleteGeneratedFile($sitting, GeneratedFile::ZIP);
 
         $this->filesystem->remove($path);
         $this->s3Manager->deleteObject($path);

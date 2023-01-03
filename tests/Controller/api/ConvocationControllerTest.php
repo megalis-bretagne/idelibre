@@ -15,6 +15,7 @@ use Doctrine\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
 
@@ -53,7 +54,7 @@ class ConvocationControllerTest extends WebTestCase
 
         $this->loginAsAdminLibriciel();
         $this->client->request(Request::METHOD_GET, '/api/convocations/' . $sitting->getId());
-        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
         $convocations = json_decode($this->client->getResponse()->getContent(), true);
 
@@ -72,7 +73,8 @@ class ConvocationControllerTest extends WebTestCase
         $this->loginAsAdminLibriciel();
 
         $this->client->request(Request::METHOD_POST, '/api/convocations/' . $convocation->getId() . '/send');
-        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
         $this->assertNotEmpty($convocation->getSentTimestamp());
 
         $bag = static::getContainer()->getParameterBag();
@@ -93,7 +95,7 @@ class ConvocationControllerTest extends WebTestCase
                 ],
             ]
         );
-        $this->assertResponseStatusCodeSame(302);
+        $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
     }
 
     public function testSetAttendance()
@@ -112,7 +114,7 @@ class ConvocationControllerTest extends WebTestCase
             [],
             json_encode($data)
         );
-        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $this->assertEquals('absent', $convocation->getAttendance());
         $this->assertEquals('John Doe', $convocation->getDeputy());
     }
@@ -133,6 +135,6 @@ class ConvocationControllerTest extends WebTestCase
             [],
             json_encode($data)
         );
-        $this->assertResponseStatusCodeSame(403);
+        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 }
