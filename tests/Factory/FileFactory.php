@@ -39,7 +39,7 @@ final class FileFactory extends ModelFactory
     protected function getDefaults(): array
     {
         return [
-            // TODO add your default values here (https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories)
+            'cached_at' => new \DateTimeImmutable('+4 weeks')
         ];
     }
 

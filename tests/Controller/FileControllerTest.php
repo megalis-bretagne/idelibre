@@ -44,6 +44,7 @@ class FileControllerTest extends WebTestCase
             'name' => 'projet',
             'size' => 100,
             'path' => __DIR__ . '/../resources/fichier.pdf',
+            'cached_at' => new \DateTimeImmutable('+4 weeks')
         ])->create();
 
         $project = ProjectStory::project1();
@@ -60,6 +61,7 @@ class FileControllerTest extends WebTestCase
         $fileId = $this->prepareFile();
 
         $this->loginAsAdminLibriciel();
+
         $this->client->request(Request::METHOD_GET, '/file/download/' . $fileId);
         $this->assertResponseStatusCodeSame(200);
     }
@@ -69,6 +71,7 @@ class FileControllerTest extends WebTestCase
         $fileId = $this->prepareFile();
 
         $this->loginAsUserMontpellier();
+
         $this->client->request(Request::METHOD_GET, '/file/download/' . $fileId);
         $this->assertResponseStatusCodeSame(403);
     }

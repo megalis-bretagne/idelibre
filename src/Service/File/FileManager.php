@@ -74,7 +74,7 @@ class FileManager
         $fileName = $this->sanitizeAndUniqueFileName($uploadedFile);
         $savedFile = $uploadedFile->move($this->getAndCreateDestinationDirectory($structure), $fileName);
 
-        $pathFile = ($savedFile->getRealPath());
+        $pathFile = $savedFile->getRealPath();
 
         $file->setPath($pathFile);
         $this->em->persist($file);
@@ -87,7 +87,10 @@ class FileManager
     public function transfertToS3(string $path)
     {
         if (false === $this->fileExist($path)) {
-            throw new NotFoundResourceException("not find path ($path");
+            $errorMessage = "not find path ($path)";
+
+            $this->logger->error($errorMessage);
+            throw new NotFoundResourceException($errorMessage);
         }
 
         try {
@@ -218,7 +221,7 @@ class FileManager
 
     public function updateCachedAt(File $file): void
     {
-        $file->setCachedAt(new \DateTimeImmutable($bag->get('duration_cached_files')));
+        $file->setCachedAt(new \DateTimeImmutable($this->bag->get('duration_cached_files')));
 
         $this->em->persist($file);
         $this->em->flush();

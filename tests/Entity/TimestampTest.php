@@ -25,7 +25,8 @@ class TimestampTest extends WebTestCase
     {
         $timestamp = (new Timestamp())
             ->setFilePathContent('/tmp/timestamp_1234')
-            ->setFilePathTsa('/tmp/timestamp_1234.tsa');
+            ->setFilePathTsa('/tmp/timestamp_1234.tsa')
+        ;
 
         $this->assertHasValidationErrors($timestamp, 0);
     }

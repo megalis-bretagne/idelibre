@@ -20,6 +20,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\SerializerInterface;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
@@ -61,10 +62,16 @@ class SittingApiControllerTest extends WebTestCase
         $structure = StructureStory::libriciel();
         $apiUser = ApiUserStory::apiAdminLibriciel();
 
-        $this->client->request(Request::METHOD_GET, "/api/v2/structures/{$structure->getId()}/sittings", [], [], [
-            'HTTP_X-AUTH-TOKEN' => $apiUser->getToken(),
-            'CONTENT_TYPE' => 'application/json',
-        ]);
+        $this->client->request(
+            Request::METHOD_GET,
+            "/api/v2/structures/{$structure->getId()}/sittings",
+            [],
+            [],
+            [
+                'HTTP_X-AUTH-TOKEN' => $apiUser->getToken(),
+                'CONTENT_TYPE' => 'application/json',
+            ]
+        );
 
         $response = $this->client->getResponse();
         $sittings = json_decode($response->getContent(), true);
@@ -78,10 +85,16 @@ class SittingApiControllerTest extends WebTestCase
         $apiUser = ApiUserStory::apiAdminLibriciel();
         $sittingConseil = SittingStory::sittingConseilLibriciel();
 
-        $this->client->request(Request::METHOD_GET, "/api/v2/structures/{$structure->getId()}/sittings/{$sittingConseil->getId()}", [], [], [
-            'HTTP_X-AUTH-TOKEN' => $apiUser->getToken(),
-            'CONTENT_TYPE' => 'application/json',
-        ]);
+        $this->client->request(
+            Request::METHOD_GET,
+            "/api/v2/structures/{$structure->getId()}/sittings/{$sittingConseil->getId()}",
+            [],
+            [],
+            [
+                'HTTP_X-AUTH-TOKEN' => $apiUser->getToken(),
+                'CONTENT_TYPE' => 'application/json',
+            ]
+        );
 
         $response = $this->client->getResponse();
         $sitting = json_decode($response->getContent(), true);
@@ -107,7 +120,7 @@ class SittingApiControllerTest extends WebTestCase
             ]
         );
 
-        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
         $response = $this->client->getResponse();
         $convocations = json_decode($response->getContent(), true);
@@ -132,7 +145,7 @@ class SittingApiControllerTest extends WebTestCase
             ]
         );
 
-        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
         $response = $this->client->getResponse();
         $projects = json_decode($response->getContent(), true);
@@ -144,10 +157,11 @@ class SittingApiControllerTest extends WebTestCase
     {
         $fakeS3Manager = $this->getMockBuilder(S3Manager::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['addObject'])
+            ->onlyMethods(['addObject', 'deleteObject'])
             ->getMock()
         ;
         $fakeS3Manager->method('addObject')->willReturn(true);
+        $fakeS3Manager->method('deleteObject')->willReturn(true);
         $container = self::getContainer();
         $container->set(S3Manager::class, $fakeS3Manager);
 
@@ -169,10 +183,18 @@ class SittingApiControllerTest extends WebTestCase
 
         //  $filesystem->copy('/../../resources/fichier.pdf', '/../../resources/convocation.pdf');
 
-        $invitationFile = new UploadedFile(__DIR__ . '/../../resources/invitation.pdf', 'invitation.pdf', 'application/pdf');
-        $convocationFile = new UploadedFile(__DIR__ . '/../../resources/convocation.pdf', 'convocation.pdf', 'application/pdf');
+        $invitationFile = new UploadedFile(
+            __DIR__ . '/../../resources/invitation.pdf',
+            'invitation.pdf',
+            'application/pdf'
+        );
+        $convocationFile = new UploadedFile(
+            __DIR__ . '/../../resources/convocation.pdf',
+            'convocation.pdf',
+            'application/pdf'
+        );
 
-        $gg = $this->client->request(
+        $this->client->request(
             Request::METHOD_POST,
             "/api/v2/structures/{$structure->getId()}/sittings",
             [
@@ -221,7 +243,7 @@ class SittingApiControllerTest extends WebTestCase
             ],
         );
 
-        $this->assertResponseStatusCodeSame(400);
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
 
         $response = $this->client->getResponse();
         $decodedContent = json_decode($response->getContent());
@@ -232,10 +254,11 @@ class SittingApiControllerTest extends WebTestCase
     {
         $fakeS3Manager = $this->getMockBuilder(S3Manager::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['addObject'])
+            ->onlyMethods(['addObject', 'deleteObject'])
             ->getMock()
         ;
         $fakeS3Manager->method('addObject')->willReturn(true);
+        $fakeS3Manager->method('deleteObject')->willReturn(true);
         $container = self::getContainer();
         $container->set(S3Manager::class, $fakeS3Manager);
 
@@ -244,14 +267,33 @@ class SittingApiControllerTest extends WebTestCase
         $sittingConseil = SittingStory::sittingConseilLibriciel();
 
         $filesystem = new Filesystem();
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/invitation_updated.pdf');
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/convocation_updated.pdf');
+        $filesystem->copy(
+            __DIR__ . '/../../resources/fichier.pdf',
+            __DIR__ . '/../../resources/invitation_updated.pdf'
+        );
+        $filesystem->copy(
+            __DIR__ . '/../../resources/fichier.pdf',
+            __DIR__ . '/../../resources/convocation_updated.pdf'
+        );
+        $filesystem->copy(
+            __DIR__ . '/../../resources/fichier.pdf',
+            '/tmp/fileProject1'
+        );
+        $filesystem->copy(
+            __DIR__ . '/../../resources/fichier.pdf',
+            '/tmp/fileProject2'
+        );
 
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', '/tmp/fileProject1');
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', '/tmp/fileProject2');
-
-        $invitationFile = new UploadedFile(__DIR__ . '/../../resources/invitation_updated.pdf', 'invitation_updated.pdf', 'application/pdf');
-        $convocationFile = new UploadedFile(__DIR__ . '/../../resources/convocation_updated.pdf', 'convocation_updated.pdf', 'application/pdf');
+        $invitationFile = new UploadedFile(
+            __DIR__ . '/../../resources/invitation_updated.pdf',
+            'invitation_updated.pdf',
+            'application/pdf'
+        );
+        $convocationFile = new UploadedFile(
+            __DIR__ . '/../../resources/convocation_updated.pdf',
+            'convocation_updated.pdf',
+            'application/pdf'
+        );
 
         $this->client->request(
             Request::METHOD_PUT,
@@ -284,10 +326,11 @@ class SittingApiControllerTest extends WebTestCase
     {
         $fakeS3Manager = $this->getMockBuilder(S3Manager::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['addObject'])
+            ->onlyMethods(['addObject', 'deleteObject'])
             ->getMock()
         ;
         $fakeS3Manager->method('addObject')->willReturn(true);
+        $fakeS3Manager->method('deleteObject')->willReturn(true);
         $container = self::getContainer();
         $container->set(S3Manager::class, $fakeS3Manager);
 
@@ -297,34 +340,60 @@ class SittingApiControllerTest extends WebTestCase
         $themeBudget = ThemeStory::budgetTheme();
 
         $filesystem = new Filesystem();
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/project1.pdf');
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/project2.pdf');
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/annex1_project2.pdf');
+        $filesystem->copy(
+            __DIR__ . '/../../resources/fichier.pdf',
+            __DIR__ . '/../../resources/project1.pdf'
+        );
+        $filesystem->copy(
+            __DIR__ . '/../../resources/fichier.pdf',
+            __DIR__ . '/../../resources/project2.pdf'
+        );
+        $filesystem->copy(
+            __DIR__ . '/../../resources/fichier.pdf',
+            __DIR__ . '/../../resources/annex1_project2.pdf'
+        );
+        $filesystem->copy(
+            __DIR__ . '/../../resources/fichier.pdf',
+            '/tmp/convocation'
+        );
 
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', '/tmp/convocation');
-
-        $project1File = new UploadedFile(__DIR__ . '/../../resources/project1.pdf', 'project1.pdf', 'application/pdf');
-        $project2File = new UploadedFile(__DIR__ . '/../../resources/project2.pdf', 'project2.pdf', 'application/pdf');
-        $annex1Project2File = new UploadedFile(__DIR__ . '/../../resources/annex1_project2.pdf', 'annex1_project2.pdf', 'application/pdf');
+        $project1File = new UploadedFile(
+            __DIR__ . '/../../resources/project1.pdf',
+            'project1.pdf',
+            'application/pdf'
+        );
+        $project2File = new UploadedFile(
+            __DIR__ . '/../../resources/project2.pdf',
+            'project2.pdf',
+            'application/pdf'
+        );
+        $annex1Project2File = new UploadedFile(
+            __DIR__ . '/../../resources/annex1_project2.pdf',
+            'annex1_project2.pdf',
+            'application/pdf'
+        );
 
         $project1 = (new ProjectApi())
             ->setName('project1')
             ->setFileName('project1.pdf')
             ->setThemeId($themeBudget->getId())
             ->setRank(0)
-            ->setLinkedFileKey('project1File');
+            ->setLinkedFileKey('project1File')
+        ;
 
         $annex1Project2 = (new AnnexApi())
             ->setRank(0)
             ->setFileName('annex1_project2.pdf')
-            ->setLinkedFileKey('Annex1Project2');
+            ->setLinkedFileKey('Annex1Project2')
+        ;
 
         $project2 = (new ProjectApi())
             ->setName('project2')
             ->setFileName('project2.pdf')
             ->setRank(1)
             ->setLinkedFileKey('project2File')
-            ->setAnnexes([$annex1Project2]);
+            ->setAnnexes([$annex1Project2])
+        ;
 
         $serializedProjects = $this->serializer->serialize([$project1, $project2], 'json');
 
@@ -345,7 +414,7 @@ class SittingApiControllerTest extends WebTestCase
             ],
         );
 
-        $this->assertResponseStatusCodeSame(201);
+        $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
 
         $response = $this->client->getResponse();
         $projects = json_decode($response->getContent(), true);
@@ -375,7 +444,7 @@ class SittingApiControllerTest extends WebTestCase
             ],
         );
 
-        $this->assertResponseStatusCodeSame(400);
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
 
         $response = $this->client->getResponse();
         $error = json_decode($response->getContent(), true);
@@ -386,10 +455,11 @@ class SittingApiControllerTest extends WebTestCase
     {
         $fakeS3Manager = $this->getMockBuilder(S3Manager::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['addObject'])
+            ->onlyMethods(['addObject', 'deleteObject'])
             ->getMock()
         ;
         $fakeS3Manager->method('addObject')->willReturn(true);
+        $fakeS3Manager->method('deleteObject')->willReturn(true);
         $container = self::getContainer();
         $container->set(S3Manager::class, $fakeS3Manager);
 
@@ -409,7 +479,7 @@ class SittingApiControllerTest extends WebTestCase
             ],
         );
 
-        $this->assertResponseStatusCodeSame(204);
+        $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
 
         $deleted = $this->getOneProjectBy(['name' => 'Project 1']);
         $this->assertEmpty($deleted);

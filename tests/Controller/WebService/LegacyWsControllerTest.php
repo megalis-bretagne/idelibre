@@ -19,6 +19,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
 
@@ -54,10 +55,11 @@ class LegacyWsControllerTest extends WebTestCase
     {
         $fakeS3Manager = $this->getMockBuilder(S3Manager::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['addObject'])
+            ->onlyMethods(['addObject', 'deleteObject'])
             ->getMock()
         ;
         $fakeS3Manager->method('addObject')->willReturn(true);
+        $fakeS3Manager->method('deleteObject')->willReturn(true);
         $container = self::getContainer();
         $container->set(S3Manager::class, $fakeS3Manager);
 
@@ -131,7 +133,7 @@ class LegacyWsControllerTest extends WebTestCase
             ]
         );
 
-        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
         $response = json_decode($this->client->getResponse()->getContent());
         $this->assertTrue($response->success);
@@ -167,10 +169,11 @@ class LegacyWsControllerTest extends WebTestCase
     {
         $fakeS3Manager = $this->getMockBuilder(S3Manager::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['addObject'])
+            ->onlyMethods(['addObject', 'deleteObject'])
             ->getMock()
         ;
         $fakeS3Manager->method('addObject')->willReturn(true);
+        $fakeS3Manager->method('deleteObject')->willReturn(true);
         $container = self::getContainer();
         $container->set(S3Manager::class, $fakeS3Manager);
 
@@ -245,7 +248,7 @@ class LegacyWsControllerTest extends WebTestCase
             ]
         );
 
-        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
         $response = json_decode($this->client->getResponse()->getContent());
         $this->assertTrue($response->success);
@@ -283,10 +286,11 @@ class LegacyWsControllerTest extends WebTestCase
     {
         $fakeS3Manager = $this->getMockBuilder(S3Manager::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['addObject'])
+            ->onlyMethods(['addObject', 'deleteObject'])
             ->getMock()
         ;
         $fakeS3Manager->method('addObject')->willReturn(true);
+        $fakeS3Manager->method('deleteObject')->willReturn(true);
         $container = self::getContainer();
         $container->set(S3Manager::class, $fakeS3Manager);
 
@@ -391,7 +395,7 @@ class LegacyWsControllerTest extends WebTestCase
             ]
         );
 
-        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
         $response = json_decode($this->client->getResponse()->getContent());
         $this->assertTrue($response->success);
@@ -419,10 +423,11 @@ class LegacyWsControllerTest extends WebTestCase
     {
         $fakeS3Manager = $this->getMockBuilder(S3Manager::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['addObject'])
+            ->onlyMethods(['addObject', 'deleteObject'])
             ->getMock()
         ;
         $fakeS3Manager->method('addObject')->willReturn(true);
+        $fakeS3Manager->method('deleteObject')->willReturn(true);
         $container = self::getContainer();
         $container->set(S3Manager::class, $fakeS3Manager);
 
@@ -463,7 +468,7 @@ class LegacyWsControllerTest extends WebTestCase
             ]
         );
 
-        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
         $response = json_decode($this->client->getResponse()->getContent());
 
@@ -485,7 +490,7 @@ class LegacyWsControllerTest extends WebTestCase
             ]
         );
 
-        $this->assertResponseStatusCodeSame(400);
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
         $content = json_decode($this->client->getResponse()->getContent());
         $this->assertFalse($content->success);
         $this->assertSame('fields jsonData, username, password and conn must be set', $content->message);
@@ -504,7 +509,7 @@ class LegacyWsControllerTest extends WebTestCase
             ]
         );
 
-        $this->assertResponseStatusCodeSame(400);
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
         $content = json_decode($this->client->getResponse()->getContent());
         $this->assertFalse($content->success);
         $this->assertSame('connection does not exist', $content->message);
@@ -523,7 +528,7 @@ class LegacyWsControllerTest extends WebTestCase
             ]
         );
 
-        $this->assertResponseStatusCodeSame(400);
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
         $content = json_decode($this->client->getResponse()->getContent());
         $this->assertFalse($content->success);
         $this->assertSame('Authentication error', $content->message);
@@ -542,7 +547,7 @@ class LegacyWsControllerTest extends WebTestCase
             ]
         );
 
-        $this->assertResponseStatusCodeSame(400);
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
         $content = json_decode($this->client->getResponse()->getContent());
         $this->assertFalse($content->success);
         $this->assertSame('Authentication error', $content->message);
@@ -561,7 +566,7 @@ class LegacyWsControllerTest extends WebTestCase
             ]
         );
 
-        $this->assertResponseStatusCodeSame(400);
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
         $content = json_decode($this->client->getResponse()->getContent());
         $this->assertFalse($content->success);
         $this->assertSame('date_seance is required', $content->message);
@@ -570,28 +575,28 @@ class LegacyWsControllerTest extends WebTestCase
     public function testPing()
     {
         $this->client->request(Request::METHOD_GET, '/api300/ping');
-        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $this->assertSame('ping', $this->client->getResponse()->getContent());
     }
 
     public function testPingCapitalUrl()
     {
         $this->client->request(Request::METHOD_GET, '/Api300/ping');
-        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $this->assertSame('ping', $this->client->getResponse()->getContent());
     }
 
     public function testVersion()
     {
         $this->client->request(Request::METHOD_GET, '/api300/version');
-        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $this->assertMatchesRegularExpression('/4.1.*|4.2.*/', $this->client->getResponse()->getContent());
     }
 
     public function testVersionCapitalUrl()
     {
         $this->client->request(Request::METHOD_GET, '/Api300/version');
-        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $this->assertMatchesRegularExpression('/4.1.*|4.2.*/', $this->client->getResponse()->getContent());
     }
 
@@ -607,7 +612,7 @@ class LegacyWsControllerTest extends WebTestCase
             ]
         );
 
-        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $this->assertSame('success', $this->client->getResponse()->getContent());
     }
 
@@ -623,7 +628,7 @@ class LegacyWsControllerTest extends WebTestCase
             ]
         );
 
-        $this->assertResponseStatusCodeSame(403);
+        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
         $this->assertSame('connection does not exist', $this->client->getResponse()->getContent());
     }
 
@@ -639,7 +644,7 @@ class LegacyWsControllerTest extends WebTestCase
             ]
         );
 
-        $this->assertResponseStatusCodeSame(403);
+        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
         $this->assertSame('Authentication error', $this->client->getResponse()->getContent());
     }
 }

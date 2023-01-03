@@ -4,11 +4,18 @@ namespace App\Entity;
 
 use App\Repository\GeneratedFileRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Table;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 #[ORM\Entity(repositoryClass: GeneratedFileRepository::class)]
+#[Table(name: '`generated_file`')]
+#[UniqueEntity(fields: ['sitting', 'type'], message: 'Le doit être unique par séance', errorPath: 'type')]
+#[UniqueConstraint(name: 'IDX_GENERATED_FILE_SITTING_TYPE', columns: ['sitting_id', 'type'])]
 class GeneratedFile
 {
     const PDF = 'pdf';
@@ -24,9 +31,10 @@ class GeneratedFile
     #[ORM\JoinColumn(nullable: false)]
     private ?Sitting $sitting;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 3)]
     #[NotBlank]
-    #[Length(max: '255')]
+    #[Length(max: '3')]
+    #[Choice([self::ZIP, self::PDF])]
     private string $type;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
@@ -61,8 +69,6 @@ class GeneratedFile
     {
         return $this->type;
     }
-
-
 
     public function getFile(): ?File
     {
