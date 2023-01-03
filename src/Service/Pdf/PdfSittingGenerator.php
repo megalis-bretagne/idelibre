@@ -11,11 +11,14 @@ use App\Service\File\FileManager;
 use App\Service\GeneratedFile\GeneratedFileManager;
 use App\Service\S3\S3Manager;
 use App\Service\Util\DateUtil;
+use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
+#[ORM\Entity]
+#[ORM\Table(name: 'pdf_sitting_generator')]
 class PdfSittingGenerator
 {
     public function __construct(

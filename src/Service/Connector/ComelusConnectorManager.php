@@ -7,8 +7,10 @@ use App\Entity\Connector\Exception\ComelusConnectorException;
 use App\Entity\Sitting;
 use App\Entity\Structure;
 use App\Repository\Connector\ComelusConnectorRepository;
-use App\Service\File\FileManager;
+use App\Repository\ProjectRepository;
 use App\Service\Util\DateUtil;
+use App\Service\Util\Sanitizer;
+use App\Service\Zip\ZipSittingGenerator;
 use Doctrine\ORM\EntityManagerInterface;
 use Libriciel\ComelusApiWrapper\ComelusException;
 use Libriciel\ComelusApiWrapper\ComelusWrapper;
@@ -21,9 +23,11 @@ class ComelusConnectorManager
         private EntityManagerInterface $em,
         private ComelusConnectorRepository $comelusConnectorRepository,
         private ComelusWrapper $comelusWrapper,
-        private FileManager $fileManager,
         private DateUtil $dateUtil,
-        private ComelusContentGenerator $comelusContentGenerator
+        private ComelusContentGenerator $comelusContentGenerator,
+        private ZipSittingGenerator $zipSittingGenerator,
+        private ProjectRepository $projectRepository,
+        private Sanitizer $sanitizer,
     ) {
     }
 
@@ -118,13 +122,35 @@ class ComelusConnectorManager
      */
     private function prepareFiles(Sitting $sitting): array
     {
-        $files = $this->fileManager->listFilesFromSitting($sitting);
+        $projects = $this->projectRepository->getProjectsBySitting($sitting);
         $uploadedFiles = [];
 
-        foreach ($files as $file) {
-            $uploadedFiles[] = new UploadedFile($file->getPath(), 0, 0, $file->getName());
+        foreach ($projects as $project) {
+            $uploadedFiles[] = $this->uploadProjectHelper($project);
+
+            foreach ($project->getAnnexes() as $annex) {
+                $uploadedFiles[] = $this->uploadAnnexesHelper($annex);
+            }
         }
+
+        $uploadedFiles[] = $this->uploadZipHelper($sitting);
 
         return $uploadedFiles;
     }
+
+
+   private function uploadProjectHelper ($project): UploadedFile
+   {
+       return new UploadedFile($project->getFile()->getPath, 0, 0, $project->getRank() + 1 . '. ' . $this->sanitizer->fileNameSanitizer($project->getName(), 150) . '.pdf' );
+   }
+
+   private function uploadAnnexesHelper($annex): UploadedFile
+   {
+       return new UploadedFile($annex->getFile()->getPath(),0,0,'- ' . $annex->getFile()->getName());
+   }
+
+   private function uploadZipHelper(Sitting $sitting): UploadedFile
+   {
+       return new UploadedFile($this->zipSittingGenerator->generateZipSitting($sitting), 0, 0, 'seance-complete.zip');
+   }
 }

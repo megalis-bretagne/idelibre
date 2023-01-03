@@ -182,7 +182,7 @@ class FileManager
      *
      * @return File[]
      */
-    private function addProjectsAndAnnexes(iterable $projects): array
+    public function addProjectsAndAnnexes(iterable $projects): array
     {
         $files = [];
         foreach ($projects as $project) {
