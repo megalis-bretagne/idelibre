@@ -17,7 +17,7 @@ class FileManager
     public function __construct(
         private Filesystem $filesystem,
         private EntityManagerInterface $em,
-        private ParameterBagInterface $bag
+        private ParameterBagInterface $bag,
     ) {
     }
 
@@ -99,7 +99,7 @@ class FileManager
      *
      * @return File[]
      */
-    private function addProjectsAndAnnexes(iterable $projects): array
+    public function addProjectsAndAnnexes(iterable $projects): array
     {
         $files = [];
         foreach ($projects as $project) {

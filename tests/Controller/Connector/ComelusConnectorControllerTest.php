@@ -51,7 +51,7 @@ class ComelusConnectorControllerTest extends WebTestCase
         $crawler = $this->client->request(Request::METHOD_GET, '/connector/comelus');
         $this->assertResponseStatusCodeSame(200);
 
-        $item = $crawler->filter('html:contains("Paramétrer le connnecteur Comélus")');
+        $item = $crawler->filter('html:contains("Paramétrer le connecteur Comélus")');
         $this->assertCount(1, $item);
 
         $form = $crawler->selectButton('Enregistrer')->form();
