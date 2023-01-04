@@ -83,44 +83,6 @@ class FileManager
         return $file;
     }
 
-//    public function saveToS3(File $file, string $pathFile): bool
-//    {
-//        try {
-//            $this->s3Manager->addObject(
-//                $file->getPath(),
-//                $pathFile
-//            );
-//        } catch (ObjectStorageException $e) {
-//            $this->logger->error($e);
-//            return false;
-//        }
-//
-//        return true;
-//    }
-
-//    private function sendS3(Structure $structure, UploadedFile $uploadedFile)
-//    {
-//        if (false === $this->checkVirusFile($uploadedFile)) {
-//            return false;
-//        }
-//
-//        $fileName = $this->sanitizeAndUniqueFileName($uploadedFile);
-//
-//        $key = $this->bag->get('document_files_directory') . $structure->getId() . date('/Y/m/') . $fileName;
-//
-//        try {
-//            $this->s3Manager->addObject(
-//                $uploadedFile->getRealPath(),
-//                $key
-//            );
-//        } catch (ObjectStorageException $e) {
-//            $this->logger->error($e);
-//            return false;
-//        }
-//
-//        return $key;
-//    }
-
     public function transfertToS3(string $path)
     {
         if (false === $this->fileExist($path)) {
