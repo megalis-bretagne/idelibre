@@ -54,13 +54,13 @@ class PurgeSittingsCommand extends Command
         $beforeString = $input->getArgument('before');
         $before = new \DateTimeImmutable($beforeString);
 
-        $sittings = $this->sittingRepository->findSittingsBeforeDate($structure, $before);
+        $sittings = $this->sittingRepository->findSittingsBefore($before, $structure);
         $numberSittings = count($sittings);
 
         $helper = $this->getHelper('question');
         $question = new ConfirmationQuestion(
-            "Confirmer vous vouloir purger les seances d'avant le {$before->format('d/m/y')} de la structure {$structure->getName()} ? \n" .
-             "({$numberSittings} Séances)(y/n)",
+            "Confirmez-vous vouloir purger les seances d'avant le {$before->format('d/m/y')} de la structure {$structure->getName()} ? \n" .
+            "({$numberSittings} Séances)(y/n)",
             false
         );
 

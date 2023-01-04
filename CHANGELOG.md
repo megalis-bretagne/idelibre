@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file.   
 
 
+## [4.1.7] - 2023-01-04
+
+###  Evolution
+-symfony 5.4.18
+
+### Correction
+- Le script de purge des séances ne possédait pas la bonne fonction de récupération des séances passées
+
 ## [4.1.6] - 2022-12-26
 ### Correction
 - L'envoi de SMS se fait uniquement si la séance autorise les envois de SMS
