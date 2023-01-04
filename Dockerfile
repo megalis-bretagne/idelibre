@@ -47,8 +47,15 @@ COPY --chown=www-data:www-data . /app
 
 WORKDIR /app
 
-RUN curl -s https://getcomposer.org/installer | php && sudo -u www-data php composer.phar install --no-interaction --no-cache
-RUN npm install && npm run build
+#RUN curl -s https://getcomposer.org/installer | php && sudo -u www-data php composer.phar install --no-interaction --no-cache
+#RUN npm install && npm run build
+
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+RUN cd /app && \
+    composer install --no-cache && \
+    npm install && \
+    npm run build
 
 
 RUN mkdir -p /data

@@ -54,7 +54,5 @@ final class ThemeStory extends Story
             'parent' => ThemeStory::rootThemeMtp(),
             'structure' => StructureStory::montpellier(),
         ]));
-
-        // TODO build your story here (https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#stories)
     }
 }

@@ -9,6 +9,7 @@ use App\Entity\User;
 use App\Security\Password\PasswordStrengthMeter;
 use App\Security\Password\ResetPassword;
 use App\Service\role\RoleManager;
+use App\Service\Subscription\SubscriptionManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
@@ -23,6 +24,7 @@ class UserManager
         private readonly RoleManager $roleManager,
         private readonly PasswordStrengthMeter $passwordStrengthMeter,
         private readonly ResetPassword $resetPassword,
+        private readonly SubscriptionManager $subscriptionManager,
     ) {
     }
 
@@ -41,6 +43,9 @@ class UserManager
         } else {
             $user = $this->setFirstPassword($user);
         }
+
+
+        $user->setSubscription($this->subscriptionManager->add($user));
 
         $this->em->persist($user);
         $this->em->flush();
@@ -135,6 +140,10 @@ class UserManager
 
         $this->em->persist($user);
         $this->em->flush();
+
+        if ($user->getSubscription()) {
+            $this->subscriptionManager->update($user->getSubscription());
+        }
 
         return true;
     }

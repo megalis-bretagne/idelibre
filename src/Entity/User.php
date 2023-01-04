@@ -105,9 +105,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['user:read', 'user:write'])]
     private $phone;
 
-    #[Column(type: 'boolean')]
-    #[Groups(['user', 'user:read', 'user:write'])]
-    private $acceptMailRecap = false;
+    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Subscription $subscription = null;
 
     public function __construct()
     {
@@ -360,14 +359,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getAcceptMailRecap(): bool
+    public function getSubscription(): ?Subscription
     {
-        return $this->acceptMailRecap;
+        return $this->subscription;
     }
 
-    public function setAcceptMailRecap(bool $acceptMailRecap): self
+    public function setSubscription(?Subscription $subscription): self
     {
-        $this->acceptMailRecap = $acceptMailRecap;
+        // unset the owning side of the relation if necessary
+        if ($subscription === null && $this->subscription !== null) {
+            $this->subscription->setUser(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($subscription !== null && $subscription->getUser() !== $this) {
+            $subscription->setUser($this);
+        }
+
+        $this->subscription = $subscription;
 
         return $this;
     }

@@ -3,6 +3,7 @@
 namespace App\Tests\Controller;
 
 use App\Entity\Role;
+use App\Entity\Subscription;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Service\User\PasswordInvalidator;
@@ -10,6 +11,7 @@ use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
 use App\Tests\Story\RoleStory;
 use App\Tests\Story\StructureStory;
+use App\Tests\Story\SubscriptionStory;
 use App\Tests\Story\TypeStory;
 use App\Tests\Story\UserStory;
 use Doctrine\Persistence\ObjectManager;
@@ -49,11 +51,13 @@ class UserControllerTest extends WebTestCase
         $this->loginAsAdminLibriciel();
         /** @var User $user */
         $user = $this->getOneEntityBy(User::class, ['username' => 'otherUser@libriciel']);
-        $crawler = $this->client->request(Request::METHOD_DELETE, '/user/delete/' . $user->getId());
+
+        $this->client->request(Request::METHOD_DELETE, '/user/delete/' . $user->getId());
         $this->assertTrue($this->client->getResponse()->isRedirect());
 
         $crawler = $this->client->followRedirect();
         $this->assertResponseStatusCodeSame(200);
+
         $successMsg = $crawler->filter('html:contains("L\'utilisateur a bien été supprimé")');
         $this->assertCount(1, $successMsg);
 
@@ -66,6 +70,7 @@ class UserControllerTest extends WebTestCase
 
         $crawler = $this->client->request(Request::METHOD_GET, '/user/deleteBatch');
         $this->assertResponseStatusCodeSame(200);
+
         $item = $crawler->filter('html:contains("Suppression des élus par lot")');
         $this->assertCount(1, $item);
 
@@ -230,15 +235,18 @@ class UserControllerTest extends WebTestCase
 
     public function testPreferences()
     {
+        SubscriptionStory::load();
+
         $this->loginAsAdminLibriciel();
 
         $crawler = $this->client->request(Request::METHOD_GET, '/user/preferences');
         $this->assertResponseStatusCodeSame(200);
-        $item = $crawler->filter('html:contains("Préférences utilisateur")');
-        $this->assertCount(1, $item);
+
+        $this->assertSelectorTextSame('h1', 'Préférences utilisateur');
 
         $form = $crawler->selectButton('Enregistrer')->form();
         $form['user_preference[email]'] = 'NewEmail@exameple.org';
+        $form['user_preference[subscription][acceptMailRecap]'] = true;
 
         $this->client->submit($form);
 
@@ -252,7 +260,16 @@ class UserControllerTest extends WebTestCase
         $successMsg = $crawler->filter('html:contains("Vos préférences utilisateur ont bien été modifiées")');
         $this->assertCount(1, $successMsg);
 
-        $this->assertNotEmpty($user = $this->getOneEntityBy(User::class, ['email' => 'NewEmail@exameple.org']));
+        $this->assertNotEmpty($user = $this->getOneEntityBy(User::class, [
+            'email' => 'NewEmail@exameple.org'
+        ]));
+
+        $subscription = $this->getOneEntityBy(Subscription::class, [
+            'user' => $user->getId(),
+            'acceptMailRecap' => true,
+        ]);
+        $this->assertNotEmpty($subscription);
+        $this->assertNotNull($subscription->getCreatedAt());
     }
 
     public function testInvalidateUsersPassword()

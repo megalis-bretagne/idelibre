@@ -10,9 +10,9 @@ use Doctrine\ORM\EntityManagerInterface;
 class StructureManager
 {
     public function __construct(
-        private EntityManagerInterface $em,
-        private SittingManager $sittingManager,
-        private ImpersonateStructure $impersonateStructure
+        private readonly EntityManagerInterface $em,
+        private readonly SittingManager $sittingManager,
+        private readonly ImpersonateStructure $impersonateStructure
     ) {
     }
 
