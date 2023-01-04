@@ -11,7 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
- * Commande utilisée uniquement pour un passage en v4.1
+ * Commande utilisée uniquement pour un passage en v4.1.
  */
 #[AsCommand(name: 'migrate:from40')]
 class MigrateFrom40Command extends Command

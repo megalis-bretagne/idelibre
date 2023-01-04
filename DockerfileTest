@@ -1,4 +1,4 @@
-FROM idelibre-fpm-idelibre
+FROM idelibre_fpm-idelibre
 
 RUN apt -y install php-xdebug
 RUN bin/phpunit --version

@@ -4,9 +4,9 @@ namespace App\Security\Voter\Api;
 
 use App\Entity\ApiUser;
 use App\Entity\Structure;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
-use Symfony\Component\Security\Core\Security;
 
 class AuthorizedStructureVoter extends Voter
 {

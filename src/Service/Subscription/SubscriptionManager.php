@@ -27,6 +27,7 @@ class SubscriptionManager
             ->setCreatedAt(null)
         ;
     }
+
     public function update(Subscription $subscription): void
     {
         $subscription->setCreatedAt(new DateTimeImmutable());

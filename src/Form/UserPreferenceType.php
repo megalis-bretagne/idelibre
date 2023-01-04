@@ -4,7 +4,7 @@ namespace App\Form;
 
 use App\Entity\Structure;
 use App\Entity\User;
-use App\Service\RoleTrait;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -12,8 +12,6 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Security\Core\Security;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class UserPreferenceType extends AbstractType
 {
@@ -97,6 +95,6 @@ class UserPreferenceType extends AbstractType
 
     private function isSubscriptionConfigurable(): bool
     {
-        return ($this->security->isGranted('ROLE_STRUCTURE_ADMIN') || $this->security->isGranted('ROLE_SECRETARY'));
+        return $this->security->isGranted('ROLE_STRUCTURE_ADMIN') || $this->security->isGranted('ROLE_SECRETARY');
     }
 }

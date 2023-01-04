@@ -44,7 +44,6 @@ class UserManager
             $user = $this->setFirstPassword($user);
         }
 
-
         $user->setSubscription($this->subscriptionManager->add($user));
 
         $this->em->persist($user);
