@@ -49,7 +49,7 @@ class SendFilesOnDiskToS3 extends Command
             foreach ($files as $file) {
                 try {
                     $filePath = $file->getPath();
-                    $this->fileManager->transfertToS3($filePath);
+//                    $this->fileManager->transfertToS3($filePath);
                     $file->setCachedAt(new \DateTimeImmutable($this->bag->get('duration_cached_files')));
                     $this->em->persist($file);
 

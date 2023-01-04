@@ -40,6 +40,12 @@ class PdfSittingGenerator
 
         $pdfDocPaths = $this->getPdfDocPaths($sitting);
 
+        foreach ($pdfDocPaths as $pdfDocPath) {
+            if (!$this->fileManager->fileExist($pdfDocPath)) {
+                $this->fileManager->downloadToS3($pdfDocPath);
+            }
+        }
+
         $cmd = 'pdfunite ' . implode(' ', $pdfDocPaths) . ' ' . $this->getPdfPath($sitting);
 
         if (!$this->checker->isValid($pdfDocPaths)) {

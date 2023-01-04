@@ -7,6 +7,7 @@ use App\Entity\File;
 use App\Entity\Project;
 use App\Entity\Sitting;
 use App\Entity\Structure;
+use App\Repository\FileRepository;
 use App\Service\S3\ObjectStorageException;
 use App\Service\S3\S3Manager;
 use App\Service\VirusScan\VirusScanInterface;
@@ -27,6 +28,7 @@ class FileManager
         private readonly LoggerInterface $logger,
         private readonly ParameterBagInterface $bag,
         private readonly VirusScanInterface $scan,
+        private readonly FileRepository $fileRepository,
     ) {
     }
 
@@ -54,6 +56,8 @@ class FileManager
         }
 
         fclose($fp);
+
+        $this->updateCachedAt($this->fileRepository->findByPath($path));
 
         return true;
     }

@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\File;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -27,6 +28,30 @@ class FileRepository extends ServiceEntityRepository
         ;
 
         return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * @throws NonUniqueResultException
+     */
+    public function findByPath(string $path): File
+    {
+        return $this->createQueryBuilder('f')
+            ->andWhere('f.path = :path')
+            ->setParameter('path' , $path)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
+    public function deleteCachedFiles(): void
+    {
+        $this->createQueryBuilder('f')
+            ->update(File::class, 'f')
+            ->set('f.cachedAt', ':value')
+            ->setParameter('value', null)
+            ->getQuery()
+            ->execute()
+        ;
     }
 
     public function getAllFiles(): iterable

@@ -35,6 +35,12 @@ class ZipSittingGenerator
 
         $pdfDocPaths = $this->generator->getPdfDocPaths($sitting);
 
+        foreach ($pdfDocPaths as $pdfDocPath) {
+            if (!$this->fileManager->fileExist($pdfDocPath)) {
+                $this->fileManager->downloadToS3($pdfDocPath);
+            }
+        }
+
         if (!$this->checker->isValid($pdfDocPaths)) {
             $this->logger->error('PDF is too heavy, max size is' . $this->bag->get('maximum_size_pdf_zip_generation'));
 
