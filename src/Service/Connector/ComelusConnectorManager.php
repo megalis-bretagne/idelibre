@@ -138,19 +138,18 @@ class ComelusConnectorManager
         return $uploadedFiles;
     }
 
+    private function uploadProjectHelper($project): UploadedFile
+    {
+        return new UploadedFile($project->getFile()->getPath, 0, 0, $project->getRank() + 1 . '. ' . $this->sanitizer->fileNameSanitizer($project->getName(), 150) . '.pdf');
+    }
 
-   private function uploadProjectHelper ($project): UploadedFile
-   {
-       return new UploadedFile($project->getFile()->getPath, 0, 0, $project->getRank() + 1 . '. ' . $this->sanitizer->fileNameSanitizer($project->getName(), 150) . '.pdf' );
-   }
+    private function uploadAnnexesHelper($annex): UploadedFile
+    {
+        return new UploadedFile($annex->getFile()->getPath(), 0, 0, '- ' . $annex->getFile()->getName());
+    }
 
-   private function uploadAnnexesHelper($annex): UploadedFile
-   {
-       return new UploadedFile($annex->getFile()->getPath(),0,0,'- ' . $annex->getFile()->getName());
-   }
-
-   private function uploadZipHelper(Sitting $sitting): UploadedFile
-   {
-       return new UploadedFile($this->zipSittingGenerator->generateZipSitting($sitting), 0, 0, 'seance-complete.zip');
-   }
+    private function uploadZipHelper(Sitting $sitting): UploadedFile
+    {
+        return new UploadedFile($this->zipSittingGenerator->generateZipSitting($sitting), 0, 0, 'seance-complete.zip');
+    }
 }

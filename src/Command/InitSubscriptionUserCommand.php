@@ -13,7 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
- * Commande utilisée uniquement pour un passage en v4.2
+ * Commande utilisée uniquement pour un passage en v4.2.
  */
 #[AsCommand(name: 'initBdd:subscription_user')]
 class InitSubscriptionUserCommand extends Command
@@ -43,7 +43,7 @@ class InitSubscriptionUserCommand extends Command
 
             return 0;
         }
-        
+
         $users = $this->userRepository->findAllSecretaryAndAdmin();
 
         if ($users) {
@@ -62,7 +62,6 @@ class InitSubscriptionUserCommand extends Command
 
         return Command::SUCCESS;
     }
-
 
     private function alreadyExistSubscriptions(): bool
     {

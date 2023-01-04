@@ -20,6 +20,8 @@ All notable changes to this project will be documented in this file.
 - Mise en place de l'invalidation des mots de passe de tous les utilisateurs de la structure.
 - Empêcher IL de générer les pdf complet si il y a trop de volume (#290)
 - Amélioration du nommage des fichiers lors de l'envoi à comelus et ajout d'un zip complet de la séance téléchargeable (#276)
+- Symfony 6.2
+- Remplacement du composant déprécié Security par le nouveau
 
 ### Correction
 - la suppression d'une structure supprime bien tout ce qui lui est associée

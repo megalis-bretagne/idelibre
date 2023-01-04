@@ -367,12 +367,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setSubscription(?Subscription $subscription): self
     {
         // unset the owning side of the relation if necessary
-        if ($subscription === null && $this->subscription !== null) {
+        if (null === $subscription && null !== $this->subscription) {
             $this->subscription->setUser(null);
         }
 
         // set the owning side of the relation if necessary
-        if ($subscription !== null && $subscription->getUser() !== $this) {
+        if (null !== $subscription && $subscription->getUser() !== $this) {
             $subscription->setUser($this);
         }
 
