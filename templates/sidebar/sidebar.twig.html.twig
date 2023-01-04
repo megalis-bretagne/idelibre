@@ -11,9 +11,7 @@
         </section>
         <section class="ls-sidebar-menu">
             <ul class="main-menu">
-
                 {% if  app.user.structure %}
-
                     {% if is_granted('ROLE_MANAGE_SITTINGS') %}
                         <li class="{{ 'sitting-nav' in activeNavs ? 'active' : '' }}">
                             <a href="{{ path('sitting_index') }}">
@@ -46,7 +44,6 @@
                         </li>
                     {% endif %}
 
-
                     {% if is_granted('ROLE_MANAGE_PARTIES') %}
                         <li class="{{ 'party-nav' in activeNavs ? 'active' : '' }}">
                             <a href="{{ path('party_index') }}">
@@ -57,7 +54,6 @@
                             </ul>
                         </li>
                     {% endif %}
-
 
                     {% if is_granted('ROLE_MANAGE_TYPES') %}
                         <li class="{{ 'type-nav' in activeNavs ? 'active' : '' }}">
@@ -127,13 +123,9 @@
                                         Configuration
                                     </a>
                                 </li>
-
-
-
                             </ul>
                         </li>
                     {% endif %}
-
 
                     {% if is_granted('ROLE_MANAGE_GDPR') %}
                         <li class="{{ 'gdpr-data-controller-nav' in activeNavs ? 'active' : '' }}">
@@ -146,16 +138,7 @@
                         </li>
                     {% endif %}
 
-
                     {% if is_granted('ROLE_MANAGE_SITTINGS') %}
-                        <li class="{{ 'subscription-nav' in activeNavs ? 'active' : '' }}">
-                            <a href="{{ path('subscription_index') }}">
-                                <i class="fas fa-bell"></i>
-                                <span>Notifications</span>
-                            </a>
-                            <ul class="sub-menu">
-                            </ul>
-                        </li>
                         <li class="{{ 'board-nav' in activeNavs ? 'active' : '' }}">
                             <a href="{{ path('board_index') }}">
                                 <i class="fas fa-tachometer-alt"></i>
@@ -165,9 +148,7 @@
                             </ul>
                         </li>
                     {% endif %}
-
                 {% endif %}
-
 
                 {% if is_granted('ROLE_MANAGE_STRUCTURES') %}
                     <li class="{{ 'platform-nav' in activeNavs ? 'active' : '' }}">
@@ -176,7 +157,6 @@
                             <span>Plateforme</span>
                         </a>
                         <ul class="sub-menu">
-
                             {% if is_granted('ROLE_SUPERADMIN') %}
                                 <li class="{{ 'group-nav' in activeNavs ? 'active' : '' }}">
                                     <a href="{{ path('group_index') }}">
@@ -216,7 +196,6 @@
                         </ul>
                     </li>
                 {% endif %}
-
             </ul>
         </section>
     </div>

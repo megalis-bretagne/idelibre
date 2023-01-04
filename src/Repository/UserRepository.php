@@ -75,6 +75,18 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         return $qb;
     }
 
+    public function findAllSecretaryAndAdmin(): iterable
+    {
+        $qb = $this->createQueryBuilder('u')
+            ->leftJoin('u.role', 'r')
+            ->andWhere('r.name = :secretary or r.name=:admin')
+            ->setParameter('secretary', 'Secretary')
+            ->setParameter('admin', 'Admin')
+            ->addSelect('r');
+
+        return $qb->getQuery()->getResult();
+    }
+
     public function findSuperAdminAndGroupAdmin(?Group $group, ?string $search = null): QueryBuilder
     {
         $qb = $this->createQueryBuilder('u')

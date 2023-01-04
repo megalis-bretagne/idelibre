@@ -3,6 +3,7 @@
 echo "init databases with symfony"
 ./bin/console migrate:from40
 ./bin/console doctrine:migrations:migrate --no-interaction
+./bin/console initBdd:subscription_user
 ./bin/console initBdd docker-resources/minimum.sql
 ./bin/console cache:clear --no-interaction
 

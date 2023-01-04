@@ -10,6 +10,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+/**
+ * Commande utilisée uniquement pour un passage en v4.1
+ */
 #[AsCommand(name: 'migrate:from40')]
 class MigrateFrom40Command extends Command
 {
@@ -21,7 +24,8 @@ class MigrateFrom40Command extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('update migration table');
+            ->setDescription('update migration table')
+        ;
     }
 
     /**
@@ -43,7 +47,7 @@ class MigrateFrom40Command extends Command
         }
 
         $io->text('Beginning update');
-        $pdo = $this->entityManager->getConnection()->getWrappedConnection();
+        $pdo = $this->entityManager->getConnection()->getNativeConnection();
         $sqlCreate = '
             create table doctrine_migration_versions(
                 version character VARYING(191) PRIMARY KEY not null,
@@ -72,7 +76,7 @@ class MigrateFrom40Command extends Command
 
     private function isInit(): bool
     {
-        $pdo = $this->entityManager->getConnection()->getWrappedConnection();
+        $pdo = $this->entityManager->getConnection()->getNativeConnection();
 
         try {
             $pdo->exec('select * from "user"');
@@ -85,7 +89,7 @@ class MigrateFrom40Command extends Command
 
     private function alreadyExistDoctrineMigrationTable(): bool
     {
-        $pdo = $this->entityManager->getConnection()->getWrappedConnection();
+        $pdo = $this->entityManager->getConnection()->getNativeConnection();
 
         try {
             $pdo->exec('select * from doctrine_migration_versions');

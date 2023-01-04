@@ -43,7 +43,7 @@ class UserTest extends WebTestCase
             ->setLastName('new lastName')
             ->setUsername('new username')
             ->setEmail('email@example.org')
-            ->setAcceptMailRecap(false);
+        ;
 
         $this->assertHasValidationErrors($user, 0);
     }
@@ -56,7 +56,7 @@ class UserTest extends WebTestCase
             ->setLastName('new lastName')
             ->setUsername('new username@toto')
             ->setEmail('email@example.org')
-            ->setAcceptMailRecap(false);
+        ;
 
         $this->assertHasValidationErrors($user, 0);
     }
@@ -69,7 +69,7 @@ class UserTest extends WebTestCase
             ->setLastName('new lastName')
             ->setUsername('new username@toto@extrasuffix')
             ->setEmail('email@example.org')
-            ->setAcceptMailRecap(false);
+        ;
 
         $this->assertHasValidationErrors($user, 1);
     }
@@ -82,7 +82,7 @@ class UserTest extends WebTestCase
             ->setLastName('new lastName')
             ->setUsername('admin@libriciel')
             ->setEmail('email@example.org')
-            ->setAcceptMailRecap(false);
+        ;
 
         $this->assertHasValidationErrors($user, 1);
     }
@@ -95,7 +95,7 @@ class UserTest extends WebTestCase
             ->setLastName('new lastName')
             ->setUsername('')
             ->setEmail('email@example.org')
-            ->setAcceptMailRecap(false);
+        ;
 
         $this->assertHasValidationErrors($user, 1);
     }
@@ -107,7 +107,7 @@ class UserTest extends WebTestCase
             ->setFirstName('new firstName')
             ->setLastName('new lastName')
             ->setEmail('email@example.org')
-            ->setAcceptMailRecap(false);
+        ;
 
         $this->assertHasValidationErrors($user, 1);
     }
@@ -120,7 +120,7 @@ class UserTest extends WebTestCase
             ->setLastName('new lastName')
             ->setUsername($this->genString(256))
             ->setEmail('email@example.org')
-            ->setAcceptMailRecap(false);
+        ;
 
         $this->assertHasValidationErrors($user, 1);
     }
@@ -133,7 +133,7 @@ class UserTest extends WebTestCase
             ->setLastName('new lastName')
             ->setUsername('new username')
             ->setEmail('email@example.org')
-            ->setAcceptMailRecap(false);
+        ;
 
         $this->assertHasValidationErrors($user, 1);
     }
@@ -145,7 +145,7 @@ class UserTest extends WebTestCase
             ->setLastName('new lastName')
             ->setUsername('new username')
             ->setEmail('email@example.org')
-            ->setAcceptMailRecap(false);
+        ;
 
         $this->assertHasValidationErrors($user, 1);
     }
@@ -158,7 +158,7 @@ class UserTest extends WebTestCase
             ->setLastName('new lastName')
             ->setUsername('new username')
             ->setEmail('email@example.org')
-            ->setAcceptMailRecap(false);
+        ;
 
         $this->assertHasValidationErrors($user, 1);
     }
@@ -171,7 +171,7 @@ class UserTest extends WebTestCase
             ->setLastName('')
             ->setUsername('new username')
             ->setEmail('email@example.org')
-            ->setAcceptMailRecap(false);
+        ;
 
         $this->assertHasValidationErrors($user, 1);
     }
@@ -184,7 +184,7 @@ class UserTest extends WebTestCase
             ->setLastName($this->genString(256))
             ->setUsername('new username')
             ->setEmail('email@example.org')
-            ->setAcceptMailRecap(false);
+        ;
 
         $this->assertHasValidationErrors($user, 1);
     }
@@ -196,7 +196,7 @@ class UserTest extends WebTestCase
             ->setFirstName('new firstName')
             ->setUsername('new username')
             ->setEmail('email@example.org')
-            ->setAcceptMailRecap(false);
+        ;
 
         $this->assertHasValidationErrors($user, 1);
     }
@@ -209,7 +209,7 @@ class UserTest extends WebTestCase
             ->setLastName('new lastName')
             ->setUsername('new username')
             ->setEmail('email.example.org')
-            ->setAcceptMailRecap(false);
+        ;
 
         $this->assertHasValidationErrors($user, 1);
     }

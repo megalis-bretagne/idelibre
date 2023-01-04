@@ -46,7 +46,7 @@ class InitBddCommand extends Command
 
         $file = $input->getArgument('arg1');
         $sql = file_get_contents($file);
-        $pdo = $this->entityManager->getConnection()->getWrappedConnection();
+        $pdo = $this->entityManager->getConnection()->getNativeConnection();
         $pdo->beginTransaction();
         try {
             $pdo->exec($sql);

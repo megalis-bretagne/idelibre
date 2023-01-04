@@ -2,7 +2,6 @@
 
 namespace App\Tests\Story;
 
-use App\Security\Password\LegacyPassword;
 use App\Service\Util\GenderConverter;
 use App\Tests\Factory\UserFactory;
 use Zenstruck\Foundry\Story;
@@ -53,7 +52,6 @@ final class UserStory extends Story
             'lastName' => 'libriciel',
             'structure' => StructureStory::libriciel(),
             'role' => RoleStory::admin(),
-            'accept_mail_recap' => false,
         ]));
 
         $this->addState('otherUserLibriciel', UserFactory::new([

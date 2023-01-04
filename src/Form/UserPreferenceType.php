@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Structure;
 use App\Entity\User;
+use App\Service\RoleTrait;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -12,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class UserPreferenceType extends AbstractType
 {
@@ -62,6 +64,14 @@ class UserPreferenceType extends AbstractType
             ])
         ;
 
+        if ($this->isSubscriptionConfigurable()) {
+            $builder
+                ->add('subscription', SubscriptionType::class, [
+                    'label' => false,
+                ])
+            ;
+        }
+
         $builder->get('username')->addModelTransformer(new CallbackTransformer(
             fn ($username) => preg_replace('/@.*/', '', $username),
             fn ($username) => $username . $this->getStructureSuffix($user->getStructure())
@@ -83,5 +93,10 @@ class UserPreferenceType extends AbstractType
         }
 
         return '@' . $structure->getSuffix();
+    }
+
+    private function isSubscriptionConfigurable(): bool
+    {
+        return ($this->security->isGranted('ROLE_STRUCTURE_ADMIN') || $this->security->isGranted('ROLE_SECRETARY'));
     }
 }

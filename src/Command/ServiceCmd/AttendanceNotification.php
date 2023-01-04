@@ -61,15 +61,17 @@ class AttendanceNotification
     {
         $users = $this->userRepository->findSecretariesAndAdminByStructure($structure)->getQuery()->getResult();
         $sittings = $this->listActiveSittingsByStructure($structure);
+
+        /** @var User $user */
         foreach ($users as $user) {
-            if ($user->getAcceptMailRecap()) {
-                $attendanceDatas = [];
+            if ($user->getSubscription()?->getAcceptMailRecap()) {
+                $attendanceData = [];
                 foreach ($sittings as $sitting) {
                     if ($this->isAuthorizedSittingType($sitting->getType(), $user)) {
-                        $attendanceDatas[] = $this->prepareDatas($sitting);
+                        $attendanceData[] = $this->prepareDatas($sitting);
                     }
                 }
-                $this->prepareAndSendMail($structure, $attendanceDatas, $user);
+                $this->prepareAndSendMail($structure, $attendanceData, $user);
             }
         }
     }
