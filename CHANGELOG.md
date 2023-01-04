@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 - Mise en place de l'invalidation des mots de passe de tous les utilisateurs de la structure.
 - Empêcher IL de générer les pdf complet si il y a trop de volume (#290)
 - Amélioration du nommage des fichiers lors de l'envoi à comelus et ajout d'un zip complet de la séance téléchargeable (#276)
+- Mise en place du stockage des fichiers sur un stockage objet (S3) avec mise en place d'un cache sur le disque
 
 ### Correction
 - la suppression d'une structure supprime bien tout ce qui lui est associée
