@@ -50,7 +50,7 @@ class SendLsmessageHandler implements MessageHandlerInterface
     {
         $smsList = [];
         foreach ($convocations as $convocation) {
-            if ( $convocation->getSitting()->getType()->getIsSms() && $this->isConvocation($convocation) && $this->hasPhone($convocation->getUser())) {
+            if ($convocation->getSitting()->getType()->getIsSms() && $this->isConvocation($convocation) && $this->hasPhone($convocation->getUser())) {
                 $smsList[] = new Sms('idelibre', $convocation->getUser()->getPhone(), $connector->getContent(), $connector->getSender());
             }
         }
