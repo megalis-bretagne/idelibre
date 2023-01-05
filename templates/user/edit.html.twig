@@ -26,12 +26,31 @@
     </div>
 
     {{ form_widget(form) }}
+
+
+
     <div class="float-right">
         {% block pageSaveReturn %}
             {{ macro.save('user_index') }}
         {% endblock %}
     </div>
     {{ form_end(form) }}
+
+    {% if isActor %}
+        &nbsp;
+        <div class="mt-5">
+            Invalider les connexions de l'élu
+
+            {{ macro.button_open_modal_post(
+                user.id,
+                'Ivalider la connexion',
+                'Voulez-vous detruire toute les sessions de connexion de cet élu ?',
+                'jwt_invalidate',
+                'fas fa-sign-out-alt fa-lg',
+                'deconnecter'
+            ) }}
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block javascripts %}

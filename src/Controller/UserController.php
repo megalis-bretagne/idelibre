@@ -9,6 +9,7 @@ use App\Form\UserType;
 use App\Repository\UserRepository;
 use App\Security\Password\ResetPassword;
 use App\Security\UserLoginEntropy;
+use App\Service\role\RoleManager;
 use App\Service\User\PasswordInvalidator;
 use App\Service\User\UserManager;
 use App\Sidebar\Annotation\Sidebar;
@@ -92,7 +93,7 @@ class UserController extends AbstractController
     #[Route(path: '/user/edit/{id}', name: 'user_edit')]
     #[IsGranted(data: 'MANAGE_USERS', subject: 'user')]
     #[Breadcrumb(title: 'Modifier {user.firstName} {user.lastName}')]
-    public function edit(User $user, Request $request, UserManager $manageUser): Response
+    public function edit(User $user, Request $request, UserManager $manageUser, RoleManager $roleManager): Response
     {
         $form = $this->createForm(UserType::class, $user, [
             'structure' => $this->getUser()->getStructure(),
@@ -128,6 +129,8 @@ class UserController extends AbstractController
         return $this->render('user/edit.html.twig', [
             'form' => $form->createView(),
             'suffix' => $this->getUser()->getStructure()->getSuffix(),
+            'user' => $user,
+            'isActor' => $roleManager->getActorRole()->getId() === $user->getRole()->getId(),
         ]);
     }
 
