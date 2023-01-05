@@ -26,16 +26,14 @@ class JwtController extends AbstractController
         return $this->redirectToRoute('user_edit', ['id' => $user->getId()]);
     }
 
-
     #[Route('/jwt/invalidateNodejs/{id}', name: 'jwt_invalidate_nodejs', methods: ['POST'])]
     public function invalidateBeforeNowFromNodejs(User $user, JwtInvalidator $jwtInvalidator, Request $request, ParameterBagInterface $bag): JsonResponse
     {
         if ($request->get('passPhrase') !== $bag->get('nodejs_passphrase')) {
-            throw new Http403Exception("Not authorized");
+            throw new Http403Exception('Not authorized');
         }
         $jwtInvalidator->invalidate($user);
+
         return $this->json(['success' => true]);
     }
-
-
 }

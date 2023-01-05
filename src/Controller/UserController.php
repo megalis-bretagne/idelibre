@@ -9,7 +9,6 @@ use App\Form\UserType;
 use App\Repository\UserRepository;
 use App\Security\Password\ResetPassword;
 use App\Security\UserLoginEntropy;
-use App\Service\role\RoleManager;
 use App\Service\User\PasswordInvalidator;
 use App\Service\User\UserManager;
 use App\Sidebar\Annotation\Sidebar;
