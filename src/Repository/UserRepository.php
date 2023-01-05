@@ -9,6 +9,7 @@ use App\Entity\Sitting;
 use App\Entity\Structure;
 use App\Entity\Type;
 use App\Entity\User;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\Expr\Join;
@@ -447,5 +448,17 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->andWhere('u.structure = :structure')
             ->setParameter('structure', $structure)
             ->orderBy('u.lastName', 'ASC');
+    }
+
+    public function updateUserJwtInvalidBefore(Structure $structure, DateTime $dateTime): mixed
+    {
+        return $this->createQueryBuilder('u')
+            ->update(User::class, 'u')
+            ->set('u.jwtInvalidBefore', ':before')
+            ->setParameter('before', $dateTime)
+            ->where('u.structure = :structure')
+            ->setParameter('structure', $structure)
+            ->getQuery()
+            ->execute();
     }
 }

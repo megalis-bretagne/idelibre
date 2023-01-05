@@ -6,6 +6,7 @@ use App\Repository\UserRepository;
 use App\Validator\OneAtMax;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
@@ -107,6 +108,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
     private ?Subscription $subscription = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $jwtInvalidBefore = null;
 
     public function __construct()
     {
@@ -377,6 +381,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         $this->subscription = $subscription;
+
+        return $this;
+    }
+
+    public function getJwtInvalidBefore(): ?\DateTimeInterface
+    {
+        return $this->jwtInvalidBefore;
+    }
+
+    public function setJwtInvalidBefore(?\DateTimeInterface $jwtInvalidBefore): self
+    {
+        $this->jwtInvalidBefore = $jwtInvalidBefore;
 
         return $this;
     }

@@ -145,6 +145,44 @@
     </div>
 {%- endmacro -%}
 
+
+{% macro button_open_modal_post(id, title, content, pathAction, icon = "fa fa-paper-plane", btn_title = "Envoyer",
+    confirmMessage = '<span class="fas fa-exclamation-circle"></span> Confirmer' ) %}
+    <button type="button" class="btn btn-outline-warning borderless" title="{{ btn_title }}"
+            data-target="#post{{ id }}" data-toggle="modal">
+        <span class="{{ icon }}"></span>
+    </button>
+
+    <div id="post{{ id }}" class="modal fade" role="dialog" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        {{ title }}
+                    </h4>
+                    <button class="close" data-dismiss="modal" type="button">&times;</button>
+                </div>
+                <div class="modal-body">
+                    {{ content }}
+                </div>
+                <div class="modal-footer">
+                    {{ _self.cancelBtnModal() }}
+
+                    <form method="post" action="{{ path(pathAction, {id: id}) }}" style="display: inline-block">
+                        <input type="hidden" name="_token" value="{{ csrf_token('postForm' ~ id) }}">
+                        <button type="submit" class="btn btn-danger submit_post">
+                            {{ confirmMessage | raw }}
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{%- endmacro -%}
+
+
+
+
 {% macro button_top_open_modal_post(title, content, pathAction, icon, btn_description = "Envoyer",
     confirmMessage = '<span class="fas fa-exclamation-circle"></span> Confirmer' ) %}
 
