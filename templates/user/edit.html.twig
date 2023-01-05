@@ -36,21 +36,19 @@
     </div>
     {{ form_end(form) }}
 
-    {% if isActor %}
-        &nbsp;
-        <div class="mt-5">
-            Invalider les connexions de l'élu
+    &nbsp;
+    <div class="mt-5">
+        Invalider les connexions de l'élu
 
-            {{ macro.button_open_modal_post(
-                user.id,
-                'Ivalider la connexion',
-                'Voulez-vous detruire toute les sessions de connexion de cet élu ?',
-                'jwt_invalidate',
-                'fas fa-sign-out-alt fa-lg',
-                'deconnecter'
-            ) }}
-        </div>
-    {% endif %}
+        {{ macro.button_open_modal_post(
+            user.id,
+            'Ivalider la connexion',
+            'Voulez-vous detruire toute les sessions de connexion de cet élu ?',
+            'jwt_invalidate',
+            'fas fa-sign-out-alt fa-lg',
+            'deconnecter'
+        ) }}
+    </div>
 {% endblock %}
 
 {% block javascripts %}

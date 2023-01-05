@@ -93,7 +93,7 @@ class UserController extends AbstractController
     #[Route(path: '/user/edit/{id}', name: 'user_edit')]
     #[IsGranted(data: 'MANAGE_USERS', subject: 'user')]
     #[Breadcrumb(title: 'Modifier {user.firstName} {user.lastName}')]
-    public function edit(User $user, Request $request, UserManager $manageUser, RoleManager $roleManager): Response
+    public function edit(User $user, Request $request, UserManager $manageUser): Response
     {
         $form = $this->createForm(UserType::class, $user, [
             'structure' => $this->getUser()->getStructure(),
@@ -130,7 +130,6 @@ class UserController extends AbstractController
             'form' => $form->createView(),
             'suffix' => $this->getUser()->getStructure()->getSuffix(),
             'user' => $user,
-            'isActor' => $roleManager->getActorRole()->getId() === $user->getRole()->getId(),
         ]);
     }
 
