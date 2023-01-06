@@ -126,6 +126,10 @@ body {
     box-shadow: 0 0 1rem rgba(0, 0, 0, .25);
 }
 
+.table td, .table th {
+    display: flex;
+    align-items: center;
+}
 
 .required:before {
     content: none !important;
@@ -309,4 +313,8 @@ input[type="file"].project-file-btn {
     font-style: italic;
     opacity: 0.7;
     color:#a3a3a3;
+}
+
+button .small{
+    font-size: 75%;
 }

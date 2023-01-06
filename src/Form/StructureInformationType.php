@@ -19,7 +19,8 @@ class StructureInformationType extends AbstractType
                 'label' => 'Dénomination',
             ])
             ->add('replyTo', TextType::class, [
-                'label' => 'Adresse de réponse',
+                'label' => 'Email de réponse',
+                'disabled' => true
             ])
             ->add('timezone', EntityType::class, [
                 'class' => Timezone::class,
@@ -45,6 +46,7 @@ class StructureInformationType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Structure::class,
+            'disabled' => false,
         ]);
     }
 }
