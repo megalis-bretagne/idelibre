@@ -12,10 +12,14 @@
         };
 
         $scope.present = function () {
-            seance.setPresentStatus(Seance.PRESENT);
-            accountSrv.save();
-            socketioSrv.sendConfirmPresence(account, seance.id, Seance.PRESENT, null);
-            $modalInstance.dismiss('cancel');
+            if(account.type != ACTEURS) {
+                seance.setPresentStatus(Seance.PRESENT);
+                accountSrv.save();
+                socketioSrv.sendConfirmPresence(account, seance.id, Seance.PRESENT, null);
+                $modalInstance.dismiss('cancel');
+            }else {
+                $modalInstance.close(Seance.PRESENT);
+            }
         };
 
         $scope.absent = function () {

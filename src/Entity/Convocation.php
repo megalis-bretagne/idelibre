@@ -82,6 +82,10 @@ class Convocation
     #[Groups(groups: ['convocation', 'convocation:read'])]
     private $deputy;
 
+    #[Column(type: 'boolean')]
+    #[Groups(groups: ['convocation', 'convocation:read'])]
+    private bool $isRemote = false;
+
     public function __construct()
     {
         $this->createdAt = new DateTimeImmutable();
@@ -228,5 +232,17 @@ class Convocation
     public function isInvitation(): bool
     {
         return self::CATEGORY_INVITATION === $this->category;
+    }
+
+    public function isIsRemote(): bool
+    {
+        return $this->isRemote;
+    }
+
+    public function setIsRemote(bool $isRemote): self
+    {
+        $this->isRemote = $isRemote;
+
+        return $this;
     }
 }

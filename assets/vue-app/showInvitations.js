@@ -104,7 +104,6 @@ let app = new Vue({
                 this.isAlreadySentGuests = isAlreadySentSitting(this.guestConvocations);
                 this.isAlreadySentEmployees = isAlreadySentSitting(this.employeeConvocations);
                 this.convocationIdCurrent = getConvocationCurrentId(convocations);
-console.log(this.convocationIdCurrent);
             })
         },
 
@@ -174,7 +173,8 @@ console.log(this.convocationIdCurrent);
         },
 
         changeAttendance(status) {
-            this.changedAttendance.push({convocationId: status.convocationId, attendance: status.attendance, deputy: status.deputy})
+
+            this.changedAttendance.push({convocationId: status.convocationId, attendance: status.attendance, deputy: status.deputy, isRemote: status.isRemote})
         },
 
         saveAttendance() {
@@ -229,7 +229,8 @@ function formatAttendanceStatus(convocations) {
             lastName: convocation.user.lastName,
             attendance: convocation.attendance,
             deputy: convocation.deputy,
-            category: convocation.category
+            category: convocation.category,
+            isRemote: convocation.isRemote,
         })
     }
 

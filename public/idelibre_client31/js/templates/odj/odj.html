@@ -50,7 +50,7 @@
 
     <projet-btn data = "projet" collectivite ="collectivite" account="accountId" seance="seanceId" state='state' ></projet-btn>
 
-    <div ng-repeat="annexe in projet.annexes" >
+    <div ng-repeat="annexe in projet.annexes| orderBy: sortAnnexe" >
 
         <annexe-btn data = "annexe" collectivite ="collectivite" seanceid="seanceId" accountid ='accountId' projetid = projet.id state='state'></annexe-btn>
     </div>
