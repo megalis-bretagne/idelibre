@@ -2,11 +2,13 @@
  * @constructor
  * @param {uuid} id
  * @param {string} name
+ * @param {int} rank
  * @returns {Annexe}
  */
-var Annexe = function(annexe_id, annexe_name){
+var Annexe = function(annexe_id, annexe_name, annexe_rank){
   this.annexe_id = annexe_id;
   this.name = annexe_name;
+  this.rank = annexe_rank;
 };
 
 

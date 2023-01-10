@@ -268,6 +268,7 @@ Account.prototype.formatDataSeance = function (data) {
         name: data.seance_name,
         date: data.seance_date,
         presentStatus: data.presentStatus,
+        isRemoteStatus: data.isRemoteStatus,
         // convocation: {
         //     id: data.convocation.document_id,
         //     isRead: data.convocation.isRead,

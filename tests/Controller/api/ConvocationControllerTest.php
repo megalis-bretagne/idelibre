@@ -100,7 +100,7 @@ class ConvocationControllerTest extends WebTestCase
     {
         $convocation = ConvocationStory::convocationActor1();
 
-        $data = [['convocationId' => $convocation->getId(), 'attendance' => 'absent', 'deputy' => 'John Doe']];
+        $data = [['convocationId' => $convocation->getId(), 'attendance' => 'absent', 'deputy' => 'John Doe', 'isRemote' => false]];
 
         $this->loginAsAdminLibriciel();
 
@@ -115,13 +115,14 @@ class ConvocationControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(200);
         $this->assertEquals('absent', $convocation->getAttendance());
         $this->assertEquals('John Doe', $convocation->getDeputy());
+        $this->assertEquals(false, $convocation->isIsRemote() );
     }
 
     public function testSetAttendanceConvocationNotExists()
     {
         $randomUUID = 'ce854a57-0e0b-459e-b93e-53239680b30e';
 
-        $data = [['convocationId' => $randomUUID, 'attendance' => 'absent', 'deputy' => 'John Doe']];
+        $data = [['convocationId' => $randomUUID, 'attendance' => 'absent', 'deputy' => 'John Doe', 'isRemote' => false]];
 
         $this->loginAsAdminLibriciel();
 

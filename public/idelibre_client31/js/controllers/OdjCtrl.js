@@ -37,6 +37,7 @@ console.log( seance);
 
         //tri des projet par ...
         $scope.sortProjet = 'rank';
+        $scope.sortAnnexe = 'annexe_rank';
         $scope.sortOtherdoc = 'rank';
 
 
@@ -60,6 +61,13 @@ console.log( seance);
             }
         };
 
+        $scope.sortBy = function (arg) {
+            if ($scope.sortAnnexe == arg) {
+                $scope.sortAnnexe = '-' + $scope.sortAnnexe;
+            } else {
+                $scope.sortAnnexe = arg;
+            }
+        };
         $scope.collectivite = account.name;
         $scope.seance = seance;
 
@@ -133,7 +141,7 @@ console.log( seance);
         };
 
 
-        $scope.popupPresence =function(){
+        $scope.popupPresence = function(){
             $log.debug("popupPresence");
             $modal.open({
                 templateUrl: 'js/templates/modalInfo/ModalpresenceCtrl.html',
@@ -149,9 +157,12 @@ console.log( seance);
                 },
 
             })
-                .result.then(function(res){
-                if(res == Seance.ABSENT ){
+            .result.then(function(res){
+                if(res === Seance.ABSENT ){
                     openConfirmAbsent()
+                }
+                else if(res === Seance.PRESENT ) {
+                    openConfirmIsRemote();
                 }
             });
         };
@@ -161,6 +172,23 @@ console.log( seance);
             $modal.open({
                 templateUrl: 'js/templates/modalInfo/ModalConfirmAbsent.html',
                 controller: 'ModalConfirmAbsentCtrl',
+                size: 'md',
+                resolve: {
+                    account: function () {
+                        return account;
+                    },
+                    seance: function () {
+                        return seance;
+                    }
+                },
+
+            })
+        }
+
+        var openConfirmIsRemote = function(){
+            $modal.open({
+                templateUrl: 'js/templates/modalInfo/ModalConfirmIsRemote.html',
+                controller: 'ModalConfirmIsRemoteCtrl',
                 size: 'md',
                 resolve: {
                     account: function () {

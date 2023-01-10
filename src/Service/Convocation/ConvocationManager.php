@@ -304,7 +304,7 @@ class ConvocationManager
         return $notSentConvocations;
     }
 
-    public function updateConvocationAttendances(array $convocationAttendances)
+    public function updateConvocationAttendances(array $convocationAttendances): void
     {
         foreach ($convocationAttendances as $convocationAttendance) {
             $convocation = $this->convocationRepository->find($convocationAttendance['convocationId']);
@@ -313,6 +313,7 @@ class ConvocationManager
             }
             $convocation->setAttendance($convocationAttendance['attendance']);
             $convocation->setDeputy($convocationAttendance['deputy']);
+            $convocation->setIsRemote($convocationAttendance['isRemote']);
         }
         $this->em->flush();
     }

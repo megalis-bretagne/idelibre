@@ -448,5 +448,15 @@ Seance.prototype.getDate = function () {
     return this.date;
 };
 
+Seance.prototype.getIsRemoteStatus = function(){
+    if(this.isRemoteStatus)
+        return this.isRemoteStatus;
+    return Seance.UNDEFINED;
+
+};
+
+Seance.prototype.setIsRemoteStatus = function(isRemote){
+    this.isRemote = isRemote;
+};
 
 

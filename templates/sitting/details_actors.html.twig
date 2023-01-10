@@ -491,13 +491,13 @@
                                     </div>
                                     <div class="modal-body">
                                         <table class="table table-striped">
-                                            <tbody style="display: block;overflow-y: auto;max-height: 60vh;">
+                                            <tbody  style="display: block;overflow-y: auto;max-height: 60vh;">
                                                 <tr class="d-flex" v-for="status in attendanceStatus">
                                                     <td class="col-5">
                                                         ${status.firstName} ${status.lastName}
                                                     </td>
 
-                                                    <td class="col-3">
+                                                    <td class="col-2">
                                                         <select class="select form-control" v-model="status.attendance"
                                                                 @change="changeAttendance(status)">
                                                             <option value="">Sans Réponse</option>
@@ -506,10 +506,21 @@
                                                         </select>
                                                     </td>
 
-                                                    <td class="col-4" v-if="status.category === 'convocation'">
-                                                        <input class="select form-control" v-model="status.deputy"
+                                                    <td class="col-3" v-if="status.category === 'convocation'">
+                                                        <input  :disabled="status.attendance == 'present'" class="select form-control" v-model="status.deputy"
                                                                @change="changeAttendance(status)" placeholder="Mandataire">
                                                     </td>
+
+                                                    {% if sitting.isRemote %}
+                                                        <td class="col-2" v-if="status.category === 'convocation'">
+                                                            <select :disabled="status.attendance == 'absent'"  class="select form-control" v-model="status.isRemote"
+                                                                    @change="changeAttendance(status)">
+                                                                <option value=""></option>
+                                                                <option value="false">Sur site</option>
+                                                                <option value="true">A distance</option>
+                                                            </select>
+                                                        </td>
+                                                    {% endif %}
                                                 </tr>
                                             </tbody>
                                         </table>

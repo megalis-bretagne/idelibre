@@ -108,6 +108,10 @@ class Sitting
     #[OrderBy(value: ['rank' => 'ASC'])]
     private $otherdocs;
 
+    #[Column(type: 'boolean')]
+    #[Groups(groups: ['sitting', 'sitting:read'])]
+    private $isRemote = false;
+
     public function __construct()
     {
         $this->createdAt = new DateTimeImmutable();
@@ -391,6 +395,18 @@ class Sitting
                 $otherdoc->setSitting(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isIsRemote(): bool
+    {
+        return $this->isRemote;
+    }
+
+    public function setIsRemote(bool $isRemote): self
+    {
+        $this->isRemote = $isRemote;
 
         return $this;
     }
