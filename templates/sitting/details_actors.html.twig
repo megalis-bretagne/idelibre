@@ -225,7 +225,7 @@
         {#                                <button v-on:click="sendConvocation(convocation.id)" class="btn btn-outline-primary borderless mt-n2"#}
         {#                                        title="Envoyer"><span class="fa fa-paper-plane"></span></button>#}
 
-                                    <button @click="openShowModalMailExample(convocation.id)"
+                                    <button @click="openShowModalMailExample(convocation.id, true)"
                                             class="btn btn-outline-primary borderless mt-n2" title="Envoyer">
                                         <span class="fa fa-paper-plane"></span>
                                     </button>
@@ -315,7 +315,7 @@
         {#                                <button v-on:click="sendConvocation(convocation.id)" class="btn btn-outline-primary borderless mt-n2"#}
         {#                                        title="Envoyer"><span class="fa fa-paper-plane"></span></button>#}
 
-                                    <button @click="openShowModalMailExample(convocation.id)"
+                                    <button @click="openShowModalMailExample(convocation.id, true)"
                                             class="btn btn-outline-primary borderless mt-n2" title="Envoyer">
                                         <span class="fa fa-paper-plane"></span>
                                     </button>
@@ -384,7 +384,7 @@
                         <div class="modal-body">
                             Chaque élu recevra un mail sous le format suivant :
                             <div class="form-group mt-4">
-                                <label for="subject">Message</label>
+                                <label for="subject">Objet: {{ emailTemplate.subject }} </label>
                                 <iframe class="mt-3 bg-white" :src=`/api/convocations/previewForSecretary/${convocationIdCurrent}`
                                         width="100%" height="300px" style="border: 1px solid #ced4da; border-radius: .25rem;">
                                 </iframe>
@@ -411,8 +411,8 @@
                         <div class="modal-body">
                             Chaque personnel administratif recevra un mail sous le format suivant :
                             <div class="form-group mt-4">
-                                <label for="subject">Message</label>
-                                <iframe class="mt-3 bg-white" :src=`/api/convocations/previewForSecretary/${convocationIdCurrent}`
+                                <label for="subject">Objet: {{ emailTemplate.subject }} </label>
+                                <iframe class="mt-3 bg-white" :src=`/api/convocations/previewForSecretaryOther/${convocationIdCurrent}`
                                         width="100%" height="300px" style="border: 1px solid #ced4da; border-radius: .25rem;">
                                 </iframe>
                             </div>
@@ -436,10 +436,10 @@
                             <button class="close" data-dismiss="modal" type="button">&times;</button>
                         </div>
                         <div class="modal-body">
-                            Chaque invigé recevra un mail sous le format suivant :
+                            Chaque invité recevra un mail sous le format suivant :
                             <div class="form-group mt-4">
-                                <label for="subject">Message</label>
-                                <iframe class="mt-3 bg-white" :src=`/api/convocations/previewForSecretary/${convocationIdCurrent}`
+                                <label for="subject">Objet: {{ emailTemplate.subject }} </label>
+                                <iframe class="mt-3 bg-white" :src=`/api/convocations/previewForSecretaryOther/${convocationIdCurrent}`
                                         width="100%" height="300px" style="border: 1px solid #ced4da; border-radius: .25rem;">
                                 </iframe>
                             </div>
@@ -558,7 +558,7 @@
                                     <div class="modal-body">
 
                                         <div class="form-group mt-4">
-                                            <label for="subject">Message</label>
+                                            <label for="subject">Objet: {{ emailTemplate.subject }} </label>
                                             <iframe class="mt-3 bg-white" :src="previewUrl"
                                                     width="100%" height="300px" style="border: 1px solid #ced4da; border-radius: .25rem;">
                                             </iframe>
@@ -571,7 +571,7 @@
                                             </button>
                                             <button type="button" class="btn btn-primary" v-on:click="sendConvocation(convocationId)" @click="showModalMailExample = false">
                                                 <span class="fa fa-paper-plane"></span>
-                                                Confirmer l'envoi ?
+                                                Envoyer
                                             </button>
                                         </div>
                                     </div>

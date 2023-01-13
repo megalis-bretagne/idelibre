@@ -202,9 +202,12 @@ let app = new Vue({
             setTimeout(() => this.infoMessage = null, 3000);
         },
 
-        openShowModalMailExample(convocationId) {
+        openShowModalMailExample(convocationId, invitation) {
             this.convocationId = convocationId;
             this.previewUrl = `/api/convocations/previewForSecretary/${convocationId}`;
+            if( invitation ) {
+                this.previewUrl = `/api/convocations/previewForSecretaryOther/${convocationId}`;
+            }
             this.showModalMailExample = true;
         },
 
