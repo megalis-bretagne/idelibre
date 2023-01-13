@@ -55,6 +55,21 @@ class ConvocationController extends AbstractController
     #[IsGranted(data: 'MANAGE_CONVOCATIONS', subject: 'convocation')]
     public function iframePreviewForSecretary(Convocation $convocation, EmailGenerator $generator): Response
     {
+        $convocation->setCategory('convocation');
+        $emailData = $generator->generateFromTemplateAndConvocation($convocation->getSitting()->getType()->getEmailTemplate(), $convocation);
+        $content = $emailData->getContent();
+        if (EmailData::FORMAT_TEXT === $emailData->getFormat()) {
+            $content = htmlspecialchars($content);
+            $content = nl2br($content);
+        }
+
+        return new Response($content);
+    }
+    #[Route(path: '/api/convocations/previewForSecretaryOther/{id}', name: 'api_convocation_preview_for_secretary_other', methods: ['GET'])]
+    #[IsGranted(data: 'MANAGE_CONVOCATIONS', subject: 'convocation')]
+    public function iframePreviewForSecretaryOther(Convocation $convocation, EmailGenerator $generator): Response
+    {
+        $convocation->setCategory('invitation');
         $emailData = $generator->generateFromTemplateAndConvocation($convocation->getSitting()->getType()->getEmailTemplate(), $convocation);
         $content = $emailData->getContent();
         if (EmailData::FORMAT_TEXT === $emailData->getFormat()) {
