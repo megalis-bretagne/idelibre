@@ -5,6 +5,7 @@ namespace App\Command;
 use App\Repository\SittingRepository;
 use App\Repository\StructureRepository;
 use App\Service\Seance\SittingManager;
+use DateTimeImmutable;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -45,7 +46,7 @@ class PurgeSittingsCommand extends Command
         }
 
         $beforeString = $input->getArgument('before');
-        $before = new \DateTimeImmutable($beforeString);
+        $before = DateTimeImmutable::createFromFormat('d/m/yy', $beforeString);
 
         $sittings = $this->sittingRepository->findSittingsBefore($before, $structure);
         $numberSittings = count($sittings);
