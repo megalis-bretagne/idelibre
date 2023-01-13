@@ -110,7 +110,8 @@ class OtherdocManager
             $apiOtherdoc->setName($otherdoc->getName())
                 ->setRank($otherdoc->getRank())
                 ->setFileName($otherdoc->getFile()->getName())
-                ->setId($otherdoc->getId());
+                ->setId($otherdoc->getId())
+                ->setSize($otherdoc->getFile()->getSize());
             $apiOtherdocs[] = $apiOtherdoc;
         }
 

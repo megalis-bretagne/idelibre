@@ -5,15 +5,11 @@ namespace App\Controller;
 use App\Entity\Sitting;
 use App\Form\SearchType;
 use App\Form\SittingType;
-use App\Repository\ConvocationRepository;
 use App\Repository\EmailTemplateRepository;
 use App\Repository\OtherdocRepository;
 use App\Repository\ProjectRepository;
-use App\Service\Convocation\ConvocationManager;
-use App\Service\Pdf\PdfSittingGenerator;
-use App\Service\Seance\ActorManager;
+use App\Service\File\Generator\FileGenerator;
 use App\Service\Seance\SittingManager;
-use App\Service\Zip\ZipSittingGenerator;
 use App\Sidebar\Annotation\Sidebar;
 use App\Sidebar\State\SidebarState;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
@@ -23,6 +19,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpClient\Exception\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
@@ -87,7 +84,7 @@ class SittingController extends AbstractController
     #[IsGranted(data: 'ROLE_MANAGE_SITTINGS')]
     #[Sidebar(active: ['sitting-active-nav'])]
     #[Breadcrumb(title: 'Modifier {sitting.nameWithDate}')]
-    public function editUsers(Sitting $sitting, Request $request, ActorManager $actorManager, ConvocationManager $convocationManager): Response
+    public function editUsers(Sitting $sitting): Response
     {
         if ($sitting->getIsArchived()) {
             throw new InvalidArgumentException('Impossible de modifier une séance archivée');
@@ -116,7 +113,7 @@ class SittingController extends AbstractController
     #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
     #[Sidebar(active: ['sitting-active-nav'])]
     #[Breadcrumb(title: 'Modifier {sitting.nameWithDate}')]
-    public function editInformation(Sitting $sitting, Request $request, SittingManager $sittingManager): Response
+    public function editInformation(Sitting $sitting, Request $request, SittingManager $sittingManager, RequestStack $requestStack): Response
     {
         if ($sitting->getIsArchived()) {
             throw new InvalidArgumentException('Impossible de modifier une séance archivée');
@@ -129,10 +126,9 @@ class SittingController extends AbstractController
                 $form->get('convocationFile')->getData(),
                 $form->get('invitationFile')->getData(),
             );
-
             $this->addFlash('success', 'Modifications enregistrées');
 
-            return $this->redirectToRoute('edit_sitting_information', ['id' => $sitting->getId()]);
+            return $this->redirectToRoute('sitting_show_information', ['id' => $sitting->getId()]);
         }
 
         return $this->render('sitting/edit_information.html.twig', [
@@ -193,7 +189,7 @@ class SittingController extends AbstractController
     #[Route(path: '/sitting/show/{id}/projects', name: 'sitting_show_projects', methods: ['GET'])]
     #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
     #[Breadcrumb(title: 'Détail {sitting.nameWithDate}')]
-    public function showProjects(Sitting $sitting, ConvocationRepository $convocationRepository, ProjectRepository $projectRepository, SidebarState $sidebarState, SittingManager $sittingManager): Response
+    public function showProjects(Sitting $sitting, ProjectRepository $projectRepository, OtherdocRepository $otherdocRepository, SidebarState $sidebarState, SittingManager $sittingManager): Response
     {
         $sidebarState->setActiveNavs(['sitting-nav', $this->activeSidebarNav($sitting->getIsArchived())]);
 
@@ -201,18 +197,20 @@ class SittingController extends AbstractController
             'sitting' => $sitting,
             'projects' => $projectRepository->getProjectsWithAssociatedEntities($sitting),
             'totalSize' => $sittingManager->getProjectsAndAnnexesTotalSize($sitting),
+            'otherdocs' => $otherdocRepository->getOtherdocsWithAssociatedEntities($sitting),
+            'otherdocsTotalSize' => $sittingManager->getOtherDocsTotalSize($sitting),
         ]);
     }
 
     #[Route(path: '/sitting/zip/{id}', name: 'sitting_zip', methods: ['GET'])]
     #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
-    public function getZipSitting(Sitting $sitting, ZipSittingGenerator $zipSittingGenerator): Response
+    public function getZipSitting(Sitting $sitting, FileGenerator $fileGenerator): Response
     {
-        $zipPath = $zipSittingGenerator->getAndCreateZipPath($sitting);
+        $zipPath = $fileGenerator->genFullSittingDirPath($sitting, 'zip');
         $response = new BinaryFileResponse($zipPath);
         $response->setContentDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            $zipSittingGenerator->createName($sitting)
+            $fileGenerator->createPrettyName($sitting, 'zip')
         );
         $response->headers->set('X-Accel-Redirect', $zipPath);
 
@@ -221,13 +219,13 @@ class SittingController extends AbstractController
 
     #[Route(path: '/sitting/pdf/{id}', name: 'sitting_full_pdf', methods: ['GET'])]
     #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
-    public function getFullPdfSitting(Sitting $sitting, PdfSittingGenerator $pdfSittingGenerator): Response
+    public function getFullPdfSitting(Sitting $sitting, FileGenerator $fileGenerator): Response
     {
-        $pdfPath = $pdfSittingGenerator->getPdfPath($sitting);
+        $pdfPath = $fileGenerator->genFullSittingDirPath($sitting, 'pdf');
         $response = new BinaryFileResponse($pdfPath);
         $response->setContentDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            $pdfSittingGenerator->createPrettyName($sitting)
+            $fileGenerator->createPrettyName($sitting, 'pdf')
         );
         $response->headers->set('X-Accel-Redirect', $pdfPath);
 
@@ -263,32 +261,5 @@ class SittingController extends AbstractController
         }
 
         return 'sitting-active-nav';
-    }
-
-    #[Route(path: '/sitting/edit/{id}/otherdocs', name: 'edit_sitting_otherdoc')]
-    #[Sidebar(active: ['sitting-active-nav'])]
-    #[Breadcrumb(title: 'Modifier {sitting.nameWithDate}')]
-    public function editOtherdocs(Sitting $sitting): Response
-    {
-        if ($sitting->getIsArchived()) {
-            throw new InvalidArgumentException('Impossible de modifier une séance archivée');
-        }
-
-        return $this->render('sitting/edit_otherdocs.html.twig', [
-            'sitting' => $sitting,
-        ]);
-    }
-
-    #[Route(path: '/sitting/show/{id}/otherdocs', name: 'sitting_show_otherdocs', methods: ['GET'])]
-    #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
-    #[Breadcrumb(title: 'Détail {sitting.nameWithDate}')]
-    public function showOtherdocs(Sitting $sitting, ConvocationRepository $convocationRepository, OtherdocRepository $otherdocRepository, SidebarState $sidebarState): Response
-    {
-        $sidebarState->setActiveNavs(['sitting-nav', $this->activeSidebarNav($sitting->getIsArchived())]);
-
-        return $this->render('sitting/details_otherdocs.html.twig', [
-            'sitting' => $sitting,
-            'otherdocs' => $otherdocRepository->getOtherdocsWithAssociatedEntities($sitting),
-        ]);
     }
 }

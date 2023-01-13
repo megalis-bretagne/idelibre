@@ -50,5 +50,11 @@ final class FileStory extends Story
             'size' => 100,
             'path' => '/tmp/convocation',
         ]));
+
+        $this->addState('fileEncrypted', FileFactory::new([
+            'name' => 'Fichier crypter',
+            'size' => 100,
+            'path' => 'tests/resources/toDecrypt.pdf',
+        ]));
     }
 }

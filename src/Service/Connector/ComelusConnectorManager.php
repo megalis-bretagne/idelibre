@@ -8,9 +8,9 @@ use App\Entity\Sitting;
 use App\Entity\Structure;
 use App\Repository\Connector\ComelusConnectorRepository;
 use App\Repository\ProjectRepository;
+use App\Service\File\Generator\FileGenerator;
 use App\Service\Util\DateUtil;
 use App\Service\Util\Sanitizer;
-use App\Service\Zip\ZipSittingGenerator;
 use Doctrine\ORM\EntityManagerInterface;
 use Libriciel\ComelusApiWrapper\ComelusException;
 use Libriciel\ComelusApiWrapper\ComelusWrapper;
@@ -20,15 +20,16 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 class ComelusConnectorManager
 {
     public function __construct(
-        private EntityManagerInterface $em,
-        private ComelusConnectorRepository $comelusConnectorRepository,
-        private ComelusWrapper $comelusWrapper,
-        private DateUtil $dateUtil,
-        private ComelusContentGenerator $comelusContentGenerator,
-        private ZipSittingGenerator $zipSittingGenerator,
-        private ProjectRepository $projectRepository,
-        private Sanitizer $sanitizer,
-    ) {
+        private readonly EntityManagerInterface     $em,
+        private readonly ComelusConnectorRepository $comelusConnectorRepository,
+        private readonly ComelusWrapper             $comelusWrapper,
+        private readonly DateUtil                   $dateUtil,
+        private readonly ComelusContentGenerator    $comelusContentGenerator,
+        private readonly ProjectRepository          $projectRepository,
+        private readonly Sanitizer                  $sanitizer,
+        private readonly FileGenerator              $fileGenerator
+    )
+    {
     }
 
     /**
@@ -150,6 +151,7 @@ class ComelusConnectorManager
 
     private function uploadZipHelper(Sitting $sitting): UploadedFile
     {
-        return new UploadedFile($this->zipSittingGenerator->generateZipSitting($sitting), 0, 0, 'seance-complete.zip');
+//        return new UploadedFile($this->zipSittingGenerator->generateZipSitting($sitting), 0, 0, 'seance-complete.zip');
+        return new UploadedFile($this->fileGenerator->genFullSittingZip($sitting), 0, 0, 'seance-complete.zip');
     }
 }

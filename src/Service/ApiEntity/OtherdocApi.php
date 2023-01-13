@@ -13,6 +13,7 @@ class OtherdocApi
     private ?string $name;
     private ?string $linkedFileKey = null;
     private ?string $fileName = null;
+    private ?int $size = null;
 
     #[NotBlank]
     private ?int $rank = null;
@@ -37,6 +38,18 @@ class OtherdocApi
     public function setLinkedFileKey(?string $linkedFileKey): OtherdocApi
     {
         $this->linkedFileKey = $linkedFileKey;
+
+        return $this;
+    }
+
+    public function getSize(): ?int
+    {
+        return $this->size;
+    }
+
+    public function setSize(?int $size): OtherdocApi
+    {
+        $this->size = $size;
 
         return $this;
     }

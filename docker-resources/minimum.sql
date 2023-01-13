@@ -24,10 +24,10 @@ INSERT INTO role (id, name, composites, is_in_structure_role, pretty_name)
 VALUES ('811a1329-0cd0-49e8-b59b-5394219c50dd', 'Employee', '["ROLE_EMPLOYEE"]', true, 'Personnel administratif');
 
 
-INSERT INTO "user" (id, structure_id, email, username, role_id, password, first_name, last_name, is_active)
+INSERT INTO "user" (id, structure_id, email, username, role_id, password, first_name, last_name, is_active, accept_mail_recap)
 values (UUID_GENERATE_V4(), NULL, 'superadmin@exemple.org', 'superadminInstall', '94663bed-16e9-4990-8493-323c3d5e5565',
-        '$argon2i$v=19$m=65536,t=4,p=1$Z0VzcDRsSmthand0M01ZYg$83i4gMDGxZcJSUk8rWopQn/q6Z0uRggGmAkX/k0Yt+E', 'super ',
-        'admin ', true);
+        '$argon2id$v=19$m=65536,t=4,p=1$jCNjXFnpctIdKy2XKJ3d9w$B2THO9hICaf20D73R6PB0FDiR1+2RpJCZlpG6RExTlg', 'super ',
+        'admin ', true, true);
 
 
 INSERT INTO timezone (id, name)

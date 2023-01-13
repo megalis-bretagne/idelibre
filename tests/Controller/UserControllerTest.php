@@ -261,7 +261,7 @@ class UserControllerTest extends WebTestCase
         $this->assertCount(1, $successMsg);
 
         $this->assertNotEmpty($user = $this->getOneEntityBy(User::class, [
-            'email' => 'NewEmail@exameple.org'
+            'email' => 'NewEmail@exameple.org',
         ]));
 
         $subscription = $this->getOneEntityBy(Subscription::class, [

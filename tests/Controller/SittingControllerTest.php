@@ -185,7 +185,7 @@ class SittingControllerTest extends WebTestCase
 
         $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
 
-        $zipDirectory = $bag->get('document_zip_directory') . $sitting->getStructure()->getId() . '/';
+        $zipDirectory = $bag->get('document_full_zip_directory') . $sitting->getStructure()->getId() . '/';
 
         $filesystem = new FileSystem();
         $filesystem->copy(__DIR__ . '/../resources/fichier.zip', $zipDirectory . $sitting->getId() . '.zip');
@@ -218,12 +218,12 @@ class SittingControllerTest extends WebTestCase
 
         $sitting = SittingStory::sittingConseilLibriciel();
 
-        $zipDirectory = $bag->get('document_full_pdf_directory') . $sitting->getStructure()->getId() . '/';
+        $pdfDirectory = $bag->get('document_full_pdf_directory') . $sitting->getStructure()->getId() . '/';
 
         $filesystem = new FileSystem();
-        $filesystem->copy(__DIR__ . '/../resources/fichier.pdf', $zipDirectory . $sitting->getId() . '.pdf');
+        $filesystem->copy('tests/resources/fichier.pdf', $pdfDirectory . $sitting->getId() . '.pdf');
 
-        $this > self::assertFileExists($zipDirectory . $sitting->getId() . '.pdf');
+        $this > self::assertFileExists($pdfDirectory . $sitting->getId() . '.pdf');
 
         $this->loginAsAdminLibriciel();
 
@@ -253,15 +253,12 @@ class SittingControllerTest extends WebTestCase
 
         $form['sitting[place]'] = 'MyUniquePlace';
 
-        $crawler = $this->client->submit($form);
+        $this->client->submit($form);
 
         $this->assertTrue($this->client->getResponse()->isRedirect());
 
         $crawler = $this->client->followRedirect();
         $this->assertResponseStatusCodeSame(200);
-
-        $successMsg = $crawler->filter('html:contains("Modifier la séance")');
-        $this->assertCount(1, $successMsg);
 
         $this->assertNotEmpty($this->getOneEntityBy(Sitting::class, ['place' => 'MyUniquePlace']));
     }

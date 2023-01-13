@@ -21,12 +21,12 @@ class SizeFormatter extends AbstractExtension
         $gigaOctets = $megaOctets * 1024;
 
         if ($rawSize < $megaOctets) {
-            return number_format($rawSize / $kiloOctets, 2, '.') . ' Ko';
+            return number_format($rawSize / $kiloOctets, 0, '.') . ' Ko';
         }
         if ($rawSize < $gigaOctets) {
-            return number_format($rawSize / $megaOctets, 2, '.') . ' Mo';
+            return number_format($rawSize / $megaOctets, 0, '.') . ' Mo';
         }
 
-        return number_format($rawSize / $gigaOctets, 2, '.') . ' Go';
+        return number_format($rawSize / $gigaOctets, 0, '.') . ' Go';
     }
 }
