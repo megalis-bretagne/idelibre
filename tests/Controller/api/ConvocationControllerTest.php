@@ -65,8 +65,8 @@ class ConvocationControllerTest extends WebTestCase
     public function testSendConvocation()
     {
         $sitting = SittingStory::sittingConseilLibriciel();
-        $actor = UserStory::actorLibriciel1();
-        $emailTemplate = EmailTemplateStory::emailTemplateConseilLs()->object();
+        UserStory::actorLibriciel1();
+        EmailTemplateStory::emailTemplateConseilLs()->object();
         $convocation = ConvocationStory::convocationActor1();
 
         $this->loginAsAdminLibriciel();

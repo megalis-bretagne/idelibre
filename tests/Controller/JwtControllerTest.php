@@ -2,17 +2,13 @@
 
 namespace App\Tests\Controller;
 
-use App\Controller\JwtController;
-use App\Entity\User;
 use App\Tests\Factory\UserFactory;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
-use App\Tests\Story\PartyStory;
 use App\Tests\Story\RoleStory;
 use App\Tests\Story\StructureStory;
 use App\Tests\Story\UserStory;
 use Doctrine\Persistence\ObjectManager;
-use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -22,7 +18,6 @@ use Zenstruck\Foundry\Test\ResetDatabase;
 
 class JwtControllerTest extends WebTestCase
 {
-
     use ResetDatabase;
     use Factories;
     use FindEntityTrait;
@@ -30,6 +25,7 @@ class JwtControllerTest extends WebTestCase
 
     private ?KernelBrowser $client;
     private ObjectManager $entityManager;
+
     protected function setUp(): void
     {
         $this->client = static::createClient();
@@ -45,14 +41,13 @@ class JwtControllerTest extends WebTestCase
         UserStory::load();
     }
 
-
     public function testInvalidateBeforeNow()
     {
         $this->loginAsAdminLibriciel();
 
         $user = UserFactory::createOne([
             'role' => RoleStory::actor(),
-            'structure' => StructureStory::libriciel()
+            'structure' => StructureStory::libriciel(),
         ]);
 
         $this->client->request(Request::METHOD_POST, '/jwt/invalidate/' . $user->getId());
@@ -64,9 +59,8 @@ class JwtControllerTest extends WebTestCase
         $successMsg = $crawler->filter('html:contains("Toutes les connexions actives de consultation des séances de l\'utilisateur ont été supprimées")');
         $this->assertCount(1, $successMsg);
 
-        $this-> assertNotNull($user->getJwtInvalidBefore());
+        $this->assertNotNull($user->getJwtInvalidBefore());
     }
-
 
     public function testInvalidateBeforeNowFromNodejs()
     {
@@ -74,7 +68,7 @@ class JwtControllerTest extends WebTestCase
 
         $user = UserFactory::createOne([
             'role' => RoleStory::actor(),
-            'structure' => StructureStory::libriciel()
+            'structure' => StructureStory::libriciel(),
         ]);
 
         $passPhrase = self::getContainer()->get(ParameterBagInterface::class)->get('nodejs_passphrase');
@@ -85,7 +79,6 @@ class JwtControllerTest extends WebTestCase
         $response = $this->client->getResponse()->getContent();
 
         $this->assertSame(true, json_decode($response)->success);
-
     }
 
     public function testInvalidateBeforeNowFromNodejsWrongPassPhrase()
@@ -94,7 +87,7 @@ class JwtControllerTest extends WebTestCase
 
         $user = UserFactory::createOne([
             'role' => RoleStory::actor(),
-            'structure' => StructureStory::libriciel()
+            'structure' => StructureStory::libriciel(),
         ]);
 
         $this->client->request(Request::METHOD_POST, "/jwt/invalidateNodejs/{$user->getId()}?passPhrase=fake");
@@ -102,23 +95,17 @@ class JwtControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(403);
     }
 
-
     public function testInvalidateBeforeNowFromNodejsNoPassPhrase()
     {
         $this->loginAsAdminLibriciel();
 
         $user = UserFactory::createOne([
             'role' => RoleStory::actor(),
-            'structure' => StructureStory::libriciel()
+            'structure' => StructureStory::libriciel(),
         ]);
 
         $this->client->request(Request::METHOD_POST, "/jwt/invalidateNodejs/{$user->getId()}");
 
         $this->assertResponseStatusCodeSame(403);
     }
-
-
-
-
-
 }

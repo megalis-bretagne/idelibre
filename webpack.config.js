@@ -32,7 +32,6 @@ Encore
     .addEntry('select-all-users', './assets/js/selectAllUsers.js')
     .addEntry('toggle-calendar', './assets/js/toggleCalendar.js')
     .addEntry('toggle-calendar-new-sitting', './assets/js/toggleCalendarNewSitting.js')
-    .addEntry('vue-manage-other-docs', './assets/vue-app/manageOtherdocs.js')
     .addEntry('showPasswordEntropy', './assets/js/password/showPasswordEntropy.js')
     .addEntry('setPasswordUser', './assets/js/password/setPasswordUser.js')
 

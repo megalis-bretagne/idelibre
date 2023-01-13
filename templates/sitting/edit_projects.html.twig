@@ -36,12 +36,12 @@
             {{ macroTab.editTabs('projects', sitting) }}
 
             <div class="d-flex justify-content-between">
-
+                {# CTA Ajouter des projets #}
                 <label class="project-file-btn btn btn-primary" title="Ajouter des projets">
                     <input class="project-file-btn" type="file" accept=".pdf,.PDF" multiple @change="addProject($event)" onclick="this.value=null">
                     <span class="fa fa-plus-circle"></span> Ajouter des projets
                 </label>
-
+                {# Poids Total #}
                 <div class=" ml-auto d-flex justify-content-end mt-2">
                     <p v-if="fileTooBig === true">
                         <small> Poids total: <span class="text-danger">${formatSize(totalFileSize)} </span></small>
@@ -50,17 +50,16 @@
                         <small> Poids total: <span class="text-success">${formatSize(totalFileSize)} </span></small>
                     </p>
                 </div>
-
-
             </div>
 
             <div class="mt-4"></div>
 
+            {# Pas de projet #}
             <div v-if="projects.length == 0" class="text-center">
                 Aucun projet associé
             </div>
 
-
+            {# Loop projects #}
             <draggable v-model="projects" class="bg-white" v-on:change="projectChange()" handle=".handle">
 
                 <div v-for="(project, index) in projects">
@@ -85,8 +84,6 @@
                                     <span class="ml-5"><small> ${formatSize(project.size)} </small></span>
 
                                 </div>
-
-
 
                                 <div class="project-item action">
                                     <button class="btn btn-outline-danger borderless float-right"
@@ -143,7 +140,6 @@
 
                             </div>
 
-
                             <div class="project-line">
                                 <div class="project-item">
                                     <label class="project-file-btn btn btn-outline-primary" title="Ajouter des annexes">
@@ -177,6 +173,74 @@
                 </div>
             </draggable>
 
+
+        </div>
+
+
+        {# Edit Otherdocs #}
+        <div class="col-10 offset-1 mt-4 form-white">
+
+            <div class="d-flex justify-content-between">
+                {# CTA Ajouter des otherdocs #}
+                <label class="project-file-btn btn btn-primary" title="Ajouter des documents">
+                    <input class="project-file-btn" type="file" accept=".pdf,.PDF" multiple @change="addOtherdoc($event)" onclick="this.value=null">
+                    <span class="fa fa-plus-circle"></span> Ajouter des documents
+                </label>
+
+                <div class=" ml-auto d-flex justify-content-end mt-2">
+                   <p><small> Poids total: <span class="text-success">${formatSize(otherdocsTotalFileSize)}  </span></small></p>
+                </div>
+            </div>
+
+            <div class="mt-4"></div>
+
+            {# Pas de otherdocs #}
+            <div v-if="otherdocs.length == 0" class="text-center">
+                Aucun document associé
+            </div>
+
+            {# Loop otherdocs #}
+            <draggable v-model="otherdocs" class="bg-white" v-on:change="otherdocChange()" handle=".handle">
+
+                <div v-for="(otherdoc, index) in otherdocs">
+                    <div class="il-project">
+                        <div class="project-left cursor-grab handle">
+                            <div class="dropdown">
+                                <span class="badge badge-primary rank">${index + 1}</span>
+                                <div class="dropdown-content">
+                                    <div v-for="rank in otherdocs.length" class="newRank" v-on:click="move(index, rank -1)"> ${rank}</div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="project-right">
+                            <div class="project-line">
+                                <div class="project-item">
+                                    <textarea v-model="otherdoc.name" class="form-control" v-on:change="otherdocChange()"> </textarea>
+                                </div>
+                                <div class="project-item d-flex justify-content-between">
+                                    ${otherdoc.fileName}
+                                    <span class="ml-5"><small> ${formatSize(otherdoc.size)}</small></span>
+
+                                </div>
+
+                                <div class="project-item action">
+                                    <button class="btn btn-outline-danger borderless float-right"
+                                            v-on:click="removeOtherdoc(index)">
+                                        <span class="fa fa-trash-alt" title="Supprimer"></span>
+                                    </button>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </draggable>
+
+            {# CTA save or cancel #}
             <div class="float-right mt-5">
                 <button class="btn btn-outline-dark" @click="cancel()">
                     <span class="fa fa-times"></span> Annuler Les modifications
@@ -191,7 +255,7 @@
                 </button>
             </div>
 
-
+            {# Modale #}
             <div v-if="showModal">
                 <transition name="modal">
                     <div class="modal-mask">
@@ -228,3 +292,4 @@
 {% block javascripts %}
     {{ encore_entry_script_tags('vue-manage-projects') }}
 {% endblock %}
+

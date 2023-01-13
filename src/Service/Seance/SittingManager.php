@@ -7,14 +7,14 @@ use App\Entity\Sitting;
 use App\Entity\Structure;
 use App\Entity\User;
 use App\Message\UpdatedSitting;
+use App\Repository\OtherdocRepository;
 use App\Repository\ProjectRepository;
 use App\Repository\SittingRepository;
 use App\Service\Convocation\ConvocationManager;
 use App\Service\File\FileManager;
-use App\Service\Pdf\PdfSittingGenerator;
+use App\Service\File\Generator\FileGenerator;
 use App\Service\Project\ProjectManager;
 use App\Service\role\RoleManager;
-use App\Service\Zip\ZipSittingGenerator;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -30,9 +30,9 @@ class SittingManager
         private ProjectManager $projectManager,
         private RoleManager $roleManager,
         private SittingRepository $sittingRepository,
-        private PdfSittingGenerator $pdfSittingGenerator,
-        private ZipSittingGenerator $zipSittingGenerator,
-        private ProjectRepository $projectRepository
+        private FileGenerator $fileGenerator,
+        private ProjectRepository $projectRepository,
+        private OtherdocRepository $otherdocRepository
     ) {
     }
 
@@ -70,7 +70,7 @@ class SittingManager
         ?UploadedFile $uploadedInvitationFile,
         Sitting $sitting,
         Structure $structure
-    ) {
+    ): void {
         if ($uploadedInvitationFile) {
             $invitationFile = $this->fileManager->save($uploadedInvitationFile, $structure);
             $this->convocationManager->createConvocationsInvitableEmployees($sitting);
@@ -94,8 +94,8 @@ class SittingManager
         $this->projectManager->deleteProjects($sitting->getProjects());
         $this->convocationManager->deleteConvocations($sitting->getConvocations());
 
-        $this->pdfSittingGenerator->deletePdf($sitting);
-        $this->zipSittingGenerator->deleteZip($sitting);
+        $this->fileGenerator->deleteFullSittingFile($sitting, 'pdf');
+        $this->fileGenerator->deleteFullSittingFile($sitting, 'zip');
 
         $this->em->remove($sitting);
         $this->em->flush();
@@ -114,11 +114,10 @@ class SittingManager
 
         $this->em->persist($sitting);
         $this->em->flush();
-
         $this->messageBus->dispatch(new UpdatedSitting($sitting->getId()));
     }
 
-    private function createOrReplaceInvitation(UploadedFile $uploadedInvitationFile, Sitting $sitting)
+    private function createOrReplaceInvitation(UploadedFile $uploadedInvitationFile, Sitting $sitting): void
     {
         if (!$sitting->getInvitationFile()) {
             $this->createInvitationsInvitableEmployeesAndGuests($uploadedInvitationFile, $sitting, $sitting->getStructure());
@@ -138,7 +137,7 @@ class SittingManager
         $this->em->flush();
     }
 
-    public function unArchive(Sitting $sitting)
+    public function unArchive(Sitting $sitting): void
     {
         $sitting->setIsArchived(false);
         $this->convocationManager->reactivate($sitting->getConvocations());
@@ -215,12 +214,23 @@ class SittingManager
         $total = 0;
 
         foreach ($projects as $project) {
-            $size = $project->getFile()->getSize();
-            $total += $size;
+            $total += $project->getFile()->getSize();
+
             foreach ($project->getAnnexes() as $annex) {
-                $size = $annex->getFile()->getSize();
-                $total += $size;
+                $total += $annex->getFile()->getSize();
             }
+        }
+
+        return $total;
+    }
+
+    public function getOtherDocsTotalSize(Sitting $sitting): int
+    {
+        $otherDocs = $this->otherdocRepository->getOtherdocsBySitting($sitting);
+        $total = 0;
+
+        foreach ($otherDocs as $otherDoc) {
+            $total += $otherDoc->getFile()->getSize();
         }
 
         return $total;

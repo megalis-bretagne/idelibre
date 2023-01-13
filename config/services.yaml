@@ -9,7 +9,7 @@ parameters:
   product_editor: '%env(PRODUCT_EDITOR)%'
 
   document_files_directory: '/data/workspace/'
-  document_zip_directory: '/data/zip/'
+  document_full_zip_directory: '/data/zip/'
   document_full_pdf_directory: '/data/pdf/'
   token_directory: '/data/token/'
 

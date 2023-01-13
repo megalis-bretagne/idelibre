@@ -20,7 +20,7 @@ class StructureInformationType extends AbstractType
             ])
             ->add('replyTo', TextType::class, [
                 'label' => 'Email de réponse',
-                'disabled' => true
+                'disabled' => true,
             ])
             ->add('timezone', EntityType::class, [
                 'class' => Timezone::class,

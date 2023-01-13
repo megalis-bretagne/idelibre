@@ -247,7 +247,6 @@ class SittingApiControllerTest extends WebTestCase
 
         $response = $this->client->getResponse();
         $sitting = json_decode($response->getContent(), true);
-
         $this->assertSame($sittingConseil->getId(), $sitting['id']);
         $this->assertSame('Conseil Libriciel', $sitting['name']);
         $this->assertSame('convocation_updated.pdf', $sitting['convocationFile']['name']);
