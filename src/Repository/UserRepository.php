@@ -54,6 +54,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->andWhere('u.structure =:structure')
             ->setParameter('structure', $structure)
             ->leftJoin('u.role', 'r')
+            ->leftJoin('u.party', 'p')
             ->andWhere('
             (r.name !=:superAdmin AND r.name !=:groupAdmin )
             OR 
@@ -65,11 +66,12 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         if (!empty($search)) {
             $qb->andWhere(
                 'LOWER(u.lastName) like :search 
-            OR LOWER(u.username) like :search 
-            OR LOWER(u.firstName) like :search 
-            OR LOWER(r.prettyName) like :search
-            OR LOWER(CONCAT(u.firstName, \' \', u.lastName )) like :search'
-            )
+                OR LOWER(u.username) like :search 
+                OR LOWER(u.firstName) like :search 
+                OR LOWER(r.prettyName) like :search
+                OR LOWER(CONCAT(u.firstName, \' \', u.lastName )) like :search
+                OR LOWER(p.name) like :search'
+                )
                 ->setParameter('search', mb_strtolower("%${search}%"));
         }
 
