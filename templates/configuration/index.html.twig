@@ -13,7 +13,7 @@
 {% block pageTable %}
     <table class="table table-striped bg-white mt-5 col-8 offset-2">
         <tbody>
-        <tr>
+        <tr class="d-flex">
             <td class="col-11">Autoriser le partage d'annotation</td>
             <td class="col-1">
                 {% if configuration.isSharedAnnotation %}
@@ -23,7 +23,7 @@
                 {% endif %}
             </td>
         </tr>
-        <tr>
+        <tr class="d-flex">
             <td class="col-11">Durée de sauvegarde d'une séance</td>
             <td class="col-1">
                 <small>{{ formattedSuppressionDelay }}</small>
