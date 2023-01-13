@@ -69,7 +69,7 @@ COPY docker-resources/opcache.ini /etc/php/8.1/fpm/conf.d/opcache.ini
 COPY docker-resources/zz-php.ini /etc/php/8.1/fpm/conf.d/zz-php.ini
 COPY docker-resources/zz-idelibre.conf /etc/php/8.1/fpm/conf.d/zz-idelibre.conf
 
-#RUN echo  "0 2 * * * /app/bin/console purge:structure" > /etc/cron.d/idelibre_purge_daily
+RUN echo  "0 2 * * * /app/bin/console purge:structures" > /etc/cron.d/idelibre_purge_daily
 
 
 EXPOSE 9000
