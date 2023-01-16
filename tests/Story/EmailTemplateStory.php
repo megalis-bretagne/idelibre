@@ -35,6 +35,13 @@ final class EmailTemplateStory extends Story
             'content' => 'Voici un template sans type associé apartenant à Montpellier',
         ]));
 
+        $this->addState('emailTemplateInvitation', EmailTemplateFactory::new([
+            'structure' => StructureStory::libriciel(),
+            'name' => 'Invitation',
+            'subject' => 'idelibre : une nouvelle invitation ...',
+            'category' => EmailTemplate::CATEGORY_INVITATION,
+            'content' => 'Voici un template pour une invitation',
+        ]));
         // TODO build your story here (https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#stories)
     }
 }
