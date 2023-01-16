@@ -60,7 +60,9 @@ class AdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $userManager->saveAdmin(
                 $form->getData(),
-                $roleManager->getSuperAdminRole()
+                $roleManager->getSuperAdminRole(),
+                null,
+                true
             );
 
             $this->addFlash('success', 'Votre administrateur a bien été ajouté');
@@ -93,7 +95,8 @@ class AdminController extends AbstractController
             $userManager->saveAdmin(
                 $form->getData(),
                 $roleManager->getGroupAdminRole(),
-                $group ?? null
+                $group ?? null,
+                true
             );
 
             $this->addFlash('success', 'Votre administrateur a bien été ajouté');
@@ -109,8 +112,10 @@ class AdminController extends AbstractController
     #[Route(path: '/admin/edit/{id}', name: 'admin_edit')]
     #[IsGranted(data: 'MY_GROUP', subject: 'user')]
     #[Breadcrumb(title: 'Modifier {user.firstName} {user.lastName}')]
-    public function edit(User $user, Request $request, UserManager $userManager, ParameterBagInterface $bag): Response
+    public function edit(User $user, Request $request, UserManager $userManager, RoleManager $roleManager, ParameterBagInterface $bag): Response
     {
+        $isAdminGroup = in_array('ROLE_GROUP_ADMIN', $user->getRoles());
+
         $form = $this->createForm(SuperUserType::class, $user, [
             'isEditMode' => true,
             'entropyForUser' => $bag->get('minimumEntropyForUserWithRoleHigh'),
@@ -118,6 +123,17 @@ class AdminController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $role = $roleManager->getSuperAdminRole();
+            if ($isAdminGroup) {
+                $group = $user->getGroup();
+                $role = $roleManager->getGroupAdminRole();
+            }
+
+            $userManager->saveAdmin(
+                $form->getData(),
+                $role,
+                $group ?? null
+            );
             $userManager->saveAdmin(
                 $form->getData(),
             );
