@@ -55,6 +55,16 @@
                     </td>
                     <td class="active_column">{{ user.isActive }}</td>
                     <td class="col-2 actionButton">
+                        {% if (app.user != user) %}
+                            {{ macros.btnReloadPasswordWithModal(
+                                user.id,
+                                'Réinitialisation du mot de passe de l\'utilisateur',
+                                'user_reload_password',
+                                'Voulez-vous vraiment activer la procédure de réinitialisation du mot de passe de l\'utilisateur ?',
+                                users.currentPageNumber
+                            ) }}
+                        {% endif %}
+
                         {{ macros.editButton('admin_edit', user.id) }}
 
                         {% if (app.user != user) %}

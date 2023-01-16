@@ -52,7 +52,7 @@ class SuperUserType extends AbstractType
             ])
             ->add('email', EmailType::class, [
                 'label' => 'Email',
-                'disabled' => $disable,
+//                'disabled' => $disable,
             ])
             ->add('role', HiddenEntityType::class, [
                 'data' => $this->roleManager->getSuperAdminRole(),

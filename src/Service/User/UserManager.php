@@ -92,9 +92,8 @@ class UserManager
         return null;
     }
 
-    public function saveAdmin(User $user, Role $role = null, ?Group $group = null): void
+    public function saveAdmin(User $user, Role $role = null, ?Group $group = null, $resetPassword = false): void
     {
-        $user = $this->setFirstPassword($user);
 
         if ($role) {
             $user->setRole($role);
@@ -107,7 +106,10 @@ class UserManager
         $this->em->persist($user);
         $this->em->flush();
 
-        $this->resetPassword->sendEmailDefinePassword($user);
+        if( $resetPassword ) {
+            $user = $this->setFirstPassword($user);
+            $this->resetPassword->sendEmailDefinePassword($user);
+        }
     }
 
     public function setFirstPassword(User $user): User
