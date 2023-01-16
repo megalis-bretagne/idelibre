@@ -46,6 +46,7 @@ let app = new Vue({
             content: "",
         },
         convocationIdCurrent: "",
+        isInvitation: false,
     },
 
     computed: {
@@ -205,8 +206,10 @@ let app = new Vue({
         openShowModalMailExample(convocationId, invitation) {
             this.convocationId = convocationId;
             this.previewUrl = `/api/convocations/previewForSecretary/${convocationId}`;
+            this.isInvitation = false;
             if( invitation ) {
                 this.previewUrl = `/api/convocations/previewForSecretaryOther/${convocationId}`;
+                this.isInvitation = true;
             }
             this.showModalMailExample = true;
         },
