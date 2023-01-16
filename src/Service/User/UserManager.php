@@ -95,6 +95,10 @@ class UserManager
     public function saveAdmin(User $user, Role $role = null, ?Group $group = null, $resetPassword = false): void
     {
 
+        if( $resetPassword ) {
+            $user = $this->setFirstPassword($user);
+        }
+
         if ($role) {
             $user->setRole($role);
         }
@@ -107,7 +111,6 @@ class UserManager
         $this->em->flush();
 
         if( $resetPassword ) {
-            $user = $this->setFirstPassword($user);
             $this->resetPassword->sendEmailDefinePassword($user);
         }
     }
