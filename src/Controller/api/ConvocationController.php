@@ -65,6 +65,7 @@ class ConvocationController extends AbstractController
 
         return new Response($content);
     }
+
     #[Route(path: '/api/convocations/previewForSecretaryOther/{id}', name: 'api_convocation_preview_for_secretary_other', methods: ['GET'])]
     #[IsGranted(data: 'MANAGE_CONVOCATIONS', subject: 'convocation')]
     public function iframePreviewForSecretaryOther(Convocation $convocation, EmailGenerator $generator): Response

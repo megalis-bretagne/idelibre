@@ -20,16 +20,15 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 class ComelusConnectorManager
 {
     public function __construct(
-        private readonly EntityManagerInterface     $em,
+        private readonly EntityManagerInterface $em,
         private readonly ComelusConnectorRepository $comelusConnectorRepository,
-        private readonly ComelusWrapper             $comelusWrapper,
-        private readonly DateUtil                   $dateUtil,
-        private readonly ComelusContentGenerator    $comelusContentGenerator,
-        private readonly ProjectRepository          $projectRepository,
-        private readonly Sanitizer                  $sanitizer,
-        private readonly FileGenerator              $fileGenerator
-    )
-    {
+        private readonly ComelusWrapper $comelusWrapper,
+        private readonly DateUtil $dateUtil,
+        private readonly ComelusContentGenerator $comelusContentGenerator,
+        private readonly ProjectRepository $projectRepository,
+        private readonly Sanitizer $sanitizer,
+        private readonly FileGenerator $fileGenerator
+    ) {
     }
 
     /**
