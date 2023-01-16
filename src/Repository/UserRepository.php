@@ -71,7 +71,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
                 OR LOWER(r.prettyName) like :search
                 OR LOWER(CONCAT(u.firstName, \' \', u.lastName )) like :search
                 OR LOWER(p.name) like :search'
-                )
+            )
                 ->setParameter('search', mb_strtolower("%${search}%"));
         }
 
