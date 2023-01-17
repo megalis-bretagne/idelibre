@@ -30,7 +30,6 @@ services:
     volumes:
       - data-public:/app/public
       - /data/files:/data
-      - ./docker-resources/zz-idelibre.conf:/usr/local/etc/php-fpm.d/zz-idelibre.conf
     command: [ "/app/docker-resources/initApp.sh" ]
 
   node-idelibre:
