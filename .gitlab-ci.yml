@@ -184,7 +184,6 @@ deploy_master:
     - scp ./docker-resources/nginx.conf idelibreci@idelibre-4-2.dev.libriciel.net:/data/docker-files/docker-resources/nginx.conf
     - scp ./docker-resources/options-ssl-nginx.conf idelibreci@idelibre-4-2.dev.libriciel.net:/data/docker-files/docker-resources/options-ssl-nginx.conf
     - scp ./docker-resources/ssl-dhparams.pem idelibreci@idelibre-4-2.dev.libriciel.net:/data/docker-files/docker-resources/ssl-dhparams.pem
-    - scp ./docker-resources/zz-idelibre.conf idelibreci@idelibre-4-2.dev.libriciel.net:/data/docker-files/docker-resources/zz-idelibre.conf
     - echo "$MASTER_ENV_FILE_CONTENT" > /tmp/.env.dist
     - scp /tmp/.env.dist idelibreci@idelibre-4-2.dev.libriciel.net:/data/docker-files/.env
     - ssh -tt idelibreci@idelibre-4-2.dev.libriciel.net "cd /data/docker-files/  && docker compose pull && ./initializeCertificatesDeploy.sh -f"

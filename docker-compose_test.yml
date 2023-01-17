@@ -20,7 +20,6 @@ services:
       - ./vendor:/app/vendor
       - ./public:/app/public
       - ./tests:/app/tests
-      - ./docker-resources/zz-idelibre.conf:/usr/local/etc/php-fpm.d/zz-idelibre.conf
       - ./phpunit.xml.dist:/app/phpunit.xml.dist
     #command: ["/app/docker-resources/initApp.sh"]
     command: sleep 3000
