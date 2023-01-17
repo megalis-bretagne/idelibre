@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Evolution
 - Docker passage  en Ubuntu 22:04
-- Node 12 -> 16
+- Node 12 -> 18
 - php 8 -> php8.1
 - Concatenation -> pdftk to pdfunite
 - Gestion des fichiers 'encrypted' avec qpdf
