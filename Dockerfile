@@ -6,7 +6,18 @@ RUN ln -snf /usr/share/zoneinfo/$TIMEZONE /etc/localtime && echo $TIMEZONE > /et
 ENV PHP_OPCACHE_VALIDATE_TIMESTAMPS="0" \
     PHP_OPCACHE_MAX_ACCELERATED_FILES="10000" \
     PHP_OPCACHE_MEMORY_CONSUMPTION="192" \
-    PHP_OPCACHE_MAX_WASTED_PERCENTAGE="10"
+    PHP_OPCACHE_MAX_WASTED_PERCENTAGE="10" \
+    PHP_MAX_FILE_UPLOADS='600' \
+    PHP_UPLOAD_MAX_FILESIZE='200M' \
+    PHP_POST_MAX_SIZE='2000M' \
+    PHP_MEMORY_LIMIT='2100M' \
+    PHP_MAX_INPUT_VAR='5000'  \
+    PHP_MAX_EXECUTION_TIME='300' \
+    PHP_PM_MAX_CHILDREN='15' \
+    PHP_PM_START_SERVERS='3' \
+    PHP_PM_MIN_SPARE_SERVERS='2' \
+    PHP_PM_MAX_SPARE_SERVERS='4'
+
 
 RUN apt-get update -yqq \
     && apt-get install \
@@ -63,8 +74,7 @@ RUN sed -i "s|/run/php/php8.1-fpm.sock|9000|g" /etc/php/8.1/fpm/pool.d/www.conf
 RUN sed -i "s|;clear_env = no|clear_env = no|g" /etc/php/8.1/fpm/pool.d/www.conf
 
 COPY docker-resources/opcache.ini /etc/php/8.1/fpm/conf.d/opcache.ini
-COPY docker-resources/zz-php.ini /etc/php/8.1/fpm/conf.d/zz-php.ini
-COPY docker-resources/zz-idelibre.conf /etc/php/8.1/fpm/conf.d/zz-idelibre.conf
+COPY docker-resources/zz-idelibre.ini /etc/php/8.1/fpm/conf.d/zz-idelibre.ini
 
 RUN echo  "0 2 * * * /app/bin/console purge:structures" > /etc/cron.d/idelibre_purge_daily
 
