@@ -13,7 +13,6 @@ services:
     volumes:
       - ./public:/app/public
       - /data/files:/data
-      - ./docker-resources/zz-idelibre.conf:/usr/local/etc/php-fpm.d/zz-idelibre.conf
       - ./docker-resources/initApp.sh:/app/docker-resources/initApp.sh
       - ./src:/app/src
       - ./templates:/app/templates
