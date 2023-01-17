@@ -40,15 +40,12 @@ apt-get update -yy
 RUN apt-get install postgresql-client-12 -yy
 
 
-RUN curl -sL https://deb.nodesource.com/setup_16.x | sudo bash -
+RUN curl -sL https://deb.nodesource.com/setup_18.x | sudo bash -
 RUN apt-get install nodejs -yqq
 
 COPY --chown=www-data:www-data . /app
 
 WORKDIR /app
-
-#RUN curl -s https://getcomposer.org/installer | php && sudo -u www-data php composer.phar install --no-interaction --no-cache
-#RUN npm install && npm run build
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
