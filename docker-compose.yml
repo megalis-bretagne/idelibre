@@ -5,9 +5,9 @@ services:
     environment:
       - APP_ENV=${APP_ENV:-prod}
       - APP_SECRET=${APP_SECRET:-b64dca717248e387bc88b36d9c485244}
-      - DATABASE_URL=${DATABASE_URL:-postgresql://idelibre:idelibre@172.17.0.1:5432/idelibre}
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
       - VERSION=${VERSION:-TAG}
-      - MAILER_URL=${MAILER_URL:-null://localhost}
+      - MAILER_DSN=${MAILER_DSN:-null://localhost}
       - MAILJET_KEY=${MAILJET_KEY:-null}
       - MAILJET_SECRET=${MAILJET_SECRET:-null}
       - EMAIL_FROM=${EMAIL_FROM:-email@service.fr}
@@ -16,14 +16,10 @@ services:
       - DOCUMENT_MAX_SIZE=${DOCUMENT_MAX_SIZE:-150Mi}
       - DOCUMENT_MAX_COUNT=${DOCUMENT_MAX_COUNT:-300}
       - PHP_OPCACHE_VALIDATE_TIMESTAMPS=${PHP_OPCACHE_VALIDATE_TIMESTAMPS:-0}
-      - PHP_OPCACHE_MAX_ACCELERATED_FILES=${PHP_OPCACHE_MAX_ACCELERATED_FILES:-20000}
-      - PHP_OPCACHE_MEMORY_CONSUMPTION=${PHP_OPCACHE_MEMORY_CONSUMPTION:-192}
-      - PHP_OPCACHE_MAX_WASTED_PERCENTAGE=${PHP_OPCACHE_MAX_WASTED_PERCENTAGE:-10}
       - PHP_MAX_FILE_UPLOADS=${PHP_MAX_FILE_UPLOADS:-600}
       - PHP_UPLOAD_MAX_FILESIZE=${PHP_UPLOAD_MAX_FILESIZE:-200M}
       - PHP_POST_MAX_SIZE=${PHP_POST_MAX_SIZE:-2000M}
       - PHP_MEMORY_LIMIT=${PHP_MEMORY_LIMIT:-2100M}
-      - PHP_MAX_INPUT_VAR=${PHP_MAX_INPUT_VAR:-5000}
       - PHP_MAX_EXECUTION_TIME=${PHP_MAX_EXECUTION_TIME:-300}
       - PHP_PM_MAX_CHILDREN=${PHP_PM_MAX_CHILDREN:-15}
       - PHP_PM_START_SERVERS=${PHP_PM_START_SERVERS:-3}
@@ -34,6 +30,9 @@ services:
       - PASSPHRASE=${PASSPHRASE:-passphrase}
       - DISABLE_LEFT_BANNER_LOGIN=${DISABLE_LEFT_BANNER_LOGIN:-false}
       - URL=${URL:-idelibre.collectivite.fr}
+      - ENTROPY_ADMIN=${ENTROPY_ADMIN:-130}
+      - MAXIMUM_SIZE_PDF_ZIP_GENERATION=${MAXIMUM_SIZE_PDF_ZIP_GENERATION:-200000000}
+      - LOCK_DSN=${LOCK_DSN:-semaphore}
     volumes:
       - data-public:/app/public
       - /data/files:/data
@@ -57,7 +56,6 @@ services:
       - TYPEORM_ENTITIES=src/entity/**/*.ts
       - SALT=${SALT:-saltsaltsalt}
       - LOG_LEVEL=${LOG_LEVEL:-error}
-      - LISTEN_PORT=${LISTEN_PORT:-3000}
       - PASSPHRASE=${PASSPHRASE:-passphrase}
       - JWT_SECRET=${JWT_SECRET:-jwtsecret}
       - JWT_TIMEOUT=${JWT_TIMEOUT:-86400}
@@ -102,15 +100,6 @@ services:
     volumes:
       - /data/certificates:/certificates
     command: [ "/app/docker-resources/init.sh" ]
-
-
-  idelibre_mailcatcher:
-    container_name: idelibre_mailcatcher
-    image: tophfr/mailcatcher:0.7.1
-    restart: always
-    ports:
-      - "2092:80"
-      - "2029:25"
 
 volumes:
   data-public:

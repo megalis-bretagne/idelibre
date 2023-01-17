@@ -27,6 +27,9 @@ services:
       - DISABLE_LEFT_BANNER_LOGIN=${DISABLE_LEFT_BANNER_LOGIN:-false}
       - MAILER_DSN=${MAILER_DSN:-smtp://idelibre_mailcatcher:25}
       - URL=${URL:-https://idelibre-4-2.dev.libriciel.net}
+      - ENTROPY_ADMIN=${ENTROPY_ADMIN:-130}
+      - MAXIMUM_SIZE_PDF_ZIP_GENERATION=${MAXIMUM_SIZE_PDF_ZIP_GENERATION:-200000000}
+      - LOCK_DSN=${LOCK_DSN:-semaphore}
     volumes:
       - data-public:/app/public
       - /data/files:/data
