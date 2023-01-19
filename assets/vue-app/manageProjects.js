@@ -27,6 +27,7 @@ let app = new Vue({
         messageError: null,
         fileTooBig: false,
         maxSize: 0,
+        fileMaxSize: 0,
         totalFileSize: 0,
         otherdocsTotalFileSize: 0,
     },
@@ -123,17 +124,11 @@ let app = new Vue({
         },
 
         save() {
-            if (!checkNotOverweightFile(this.totalFileSize, this.maxSize)) {
+            if (!checkNotOverweightFile(this.totalFileSize, this.maxSize) || !checkNotOverweightUniqueFile(this.fileMaxSize, this.maxSize)) {
                 this.fileTooBig = true
                 this.showMessageError("Le poids des documents de la séance dépasse 200 Mo, le PDF complet de la séance ne pourra pas être généré")
 
-                console.log(`${this.maxSize} : not saved`)
-
-
             } else {
-
-                console.log(`${this.maxSize} : saved`)
-
                 let formData = new FormData();
                 addProjectAndAnnexeFiles(this.projects, formData);
                 setProjectsRank(this.projects);
@@ -144,7 +139,7 @@ let app = new Vue({
                 setOtherdocsRank(this.otherdocs);
                 formDataDocs.append('otherdocs', JSON.stringify(this.otherdocs));
 
-                // window.location.href = `/sitting/show/${getSittingId()}/projects`
+                window.location.href = `/sitting/show/${getSittingId()}/projects`
 
                 this.showModal = true;
                 this.uploadPercent = 0;
@@ -219,12 +214,14 @@ let app = new Vue({
             axios.get(`/api/projects/${getSittingId()}`),
             axios.get(`/api/otherdocs/${getSittingId()}`),
             axios.get('/api/sittings/maxSize'),
+            axios.get('/api/sittings/fileMaxSize')
         ]).then((response) => {
             this.themes = setThemeLevelName(response[0].data);
             this.reporters = response[1].data;
             this.projects = response[2].data;
             this.otherdocs = response[3].data;
             this.maxSize = response[4].data.maxSize;
+            this.fileMaxSize = response[5].data.fileMaxSize;
             this.totalFileSize = getFilesWeight(this.projects);
             this.otherdocsTotalFileSize = getOtherdocsFilesWeight(this.otherdocs)
         });
@@ -292,6 +289,10 @@ function getOtherdocsFilesWeight(otherdocs) {
 
 function  checkNotOverweightFile(totalFileSize, maxSize) {
     return maxSize > totalFileSize;
+}
+
+function checkNotOverweightUniqueFile(fileMaxSize, maxSize) {
+    return maxSize > fileMaxSize;
 }
 
 function getPrettyNameFromFileName(fileName) {

@@ -53,6 +53,7 @@ class FileGenerator
     {
         if (!$this->fileChecker->isValid('zip', null, $sitting)) {
             $this->logger->error('zip is too heavy, max size is' . $this->bag->get('maximum_size_pdf_zip_generation'));
+
             return 'no zip created';
         }
 
@@ -86,6 +87,7 @@ class FileGenerator
     public function genFullSittingDirPath(Sitting $sitting, string $extension): string
     {
         $directoryPath = $this->getDirectoryPathByExtension($extension) . $sitting->getStructure()->getId();
+
         return $directoryPath . '/' . $sitting->getId() . '.' . $extension;
     }
 
@@ -94,7 +96,6 @@ class FileGenerator
      */
     private function getFullSittingDocsPath(Sitting $sitting): array
     {
-
         $fullSittingDocsPath = [];
         $fullSittingDocsPath[] = $this->getConvocationPath($sitting);
 

@@ -219,6 +219,7 @@ class SittingController extends AbstractController
             $fileGenerator->createPrettyName($sitting, 'zip')
         );
         $response->headers->set('X-Accel-Redirect', $zipPath);
+
         return $response;
     }
 

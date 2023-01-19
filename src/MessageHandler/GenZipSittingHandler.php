@@ -31,7 +31,6 @@ class GenZipSittingHandler implements MessageHandlerInterface
 
         try {
             $this->fileGenerator->genFullSittingZip($sitting);
-
         } catch (Exception $exception) {
             $this->logger->error($exception->getMessage());
         }

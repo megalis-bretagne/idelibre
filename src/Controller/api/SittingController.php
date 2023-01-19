@@ -54,7 +54,12 @@ class SittingController extends AbstractController
     #[Route(path: '/api/sittings/maxSize', name: 'api_sitting_maxSize', methods: ['GET'])]
     public function getMaxSittingSizeForGeneration(ParameterBagInterface $bag): jsonResponse
     {
-
         return $this->json(['maxSize' => $bag->get('maximum_size_pdf_zip_generation')]);
+    }
+
+    #[Route(path: '/api/sittings/fileMaxSize', name: 'api_sitting_file_maxSize', methods: ['GET'])]
+    public function getMaxFileSizeForGeneration(): jsonResponse
+    {
+        return $this->json(['maxSize' => getenv('PHP_UPLOAD_MAX_FILESIZE')]);
     }
 }

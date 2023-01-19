@@ -64,7 +64,6 @@ class GenZipAndPdf
 
     public function genAllTimeZipPdfByStructureId(string $structureId): void
     {
-
         $structure = $this->structureRepository->find($structureId);
         if (!$structure) {
             throw new EntityNotFoundException("Structure with id {$structureId} does not exist");
