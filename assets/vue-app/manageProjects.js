@@ -160,10 +160,10 @@ let app = new Vue({
                             formData,
                             config
                         ),
-                        // axios.post(`/api/otherdocs/${getSittingId()}`,
-                        //     formDataDocs,
-                        //     config
-                        // )
+                        axios.post(`/api/otherdocs/${getSittingId()}`,
+                            formDataDocs,
+                            config
+                        )
                     ])
                     .then(( response) => {
                         console.log('done');

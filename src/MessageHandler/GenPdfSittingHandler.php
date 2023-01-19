@@ -33,7 +33,7 @@ class GenPdfSittingHandler implements MessageHandlerInterface
         if (!$sitting) {
             throw new NotFoundHttpException('the sitting with id ' . $genFullSitting->getSittingId() . 'does not exists');
         }
-        dd();
+
         $this->fileGenerator->genFullSittingPdf($sitting);
     }
 }
