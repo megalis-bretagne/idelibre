@@ -23,6 +23,7 @@ class OtherdocController extends AbstractController
     {
         $rawOtherdocs = $request->request->get('otherdocs');
         $otherdocs = $serializer->deserialize($rawOtherdocs, OtherdocApi::class . '[]', 'json');
+//        dd($otherdocs);
         if (!$pdfValidator->isOtherdocsPdf($otherdocs)) {
             return $this->json(['success' => false, 'message' => 'Au moins un document n\'est pas un pdf'], 400);
         }

@@ -5,6 +5,7 @@ namespace App\MessageHandler;
 use App\Message\UpdatedSitting;
 use App\Repository\SittingRepository;
 use App\Service\File\Generator\FileGenerator;
+use App\Service\File\Generator\UnsupportedExtensionException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
@@ -22,6 +23,9 @@ class GenPdfSittingHandler implements MessageHandlerInterface
         $this->em = $em;
     }
 
+    /**
+     * @throws UnsupportedExtensionException
+     */
     public function __invoke(UpdatedSitting $genFullSitting)
     {
         $this->em->clear();
@@ -29,6 +33,7 @@ class GenPdfSittingHandler implements MessageHandlerInterface
         if (!$sitting) {
             throw new NotFoundHttpException('the sitting with id ' . $genFullSitting->getSittingId() . 'does not exists');
         }
+        dd();
         $this->fileGenerator->genFullSittingPdf($sitting);
     }
 }

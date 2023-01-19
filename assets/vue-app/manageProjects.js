@@ -126,7 +126,13 @@ let app = new Vue({
             if (!checkNotOverweightFile(this.totalFileSize, this.maxSize)) {
                 this.fileTooBig = true
                 this.showMessageError("Le poids des documents de la séance dépasse 200 Mo, le PDF complet de la séance ne pourra pas être généré")
+
+                console.log(`${this.maxSize} : not saved`)
+
+
             } else {
+
+                console.log(`${this.maxSize} : saved`)
 
                 let formData = new FormData();
                 addProjectAndAnnexeFiles(this.projects, formData);
@@ -138,7 +144,7 @@ let app = new Vue({
                 setOtherdocsRank(this.otherdocs);
                 formDataDocs.append('otherdocs', JSON.stringify(this.otherdocs));
 
-                window.location.href = `https://idelibre.recette.libriciel.fr/sitting/show/${getSittingId()}/projects`
+                // window.location.href = `/sitting/show/${getSittingId()}/projects`
 
                 this.showModal = true;
                 this.uploadPercent = 0;
@@ -154,10 +160,10 @@ let app = new Vue({
                             formData,
                             config
                         ),
-                        axios.post(`/api/otherdocs/${getSittingId()}`,
-                            formDataDocs,
-                            config
-                        )
+                        // axios.post(`/api/otherdocs/${getSittingId()}`,
+                        //     formDataDocs,
+                        //     config
+                        // )
                     ])
                     .then(( response) => {
                         console.log('done');
@@ -212,7 +218,7 @@ let app = new Vue({
             axios.get('/api/actors'),
             axios.get(`/api/projects/${getSittingId()}`),
             axios.get(`/api/otherdocs/${getSittingId()}`),
-            axios.get(`/api/sittings/maxSize`),
+            axios.get('/api/sittings/maxSize'),
         ]).then((response) => {
             this.themes = setThemeLevelName(response[0].data);
             this.reporters = response[1].data;
