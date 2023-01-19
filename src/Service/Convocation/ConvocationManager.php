@@ -17,6 +17,7 @@ use App\Service\Email\EmailNotSendException;
 use App\Service\Email\EmailServiceInterface;
 use App\Service\EmailTemplate\EmailGenerator;
 use App\Service\Timestamp\TimestampManager;
+use App\Util\AttendanceTokenUtil;
 use Doctrine\DBAL\ConnectionException;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -38,7 +39,8 @@ class ConvocationManager
         private UserRepository $userRepository,
         private ClientNotifierInterface $clientNotifier,
         private MessageBusInterface $messageBus,
-        private CalGenerator $icalGenerator
+        private CalGenerator $icalGenerator,
+        private AttendanceTokenUtil $attendanceTokenUtil
     ) {
     }
 
@@ -69,7 +71,8 @@ class ConvocationManager
             $convocation = new Convocation();
             $convocation->setSitting($sitting)
                 ->setUser($user)
-                ->setCategory($this->getConvocationCategory($user));
+                ->setCategory($this->getConvocationCategory($user))
+                ->setAttendanceToken($this->attendanceTokenUtil->prepareToken($sitting->getDate()));
             $this->em->persist($convocation);
         }
     }
@@ -95,6 +98,7 @@ class ConvocationManager
             $convocation = new Convocation();
             $convocation->setSitting($sitting)
                 ->setUser($user)
+                ->setAttendanceToken($this->attendanceTokenUtil->prepareToken($sitting->getDate()))
                 ->setCategory($this->getConvocationCategory($user));
             $this->em->persist($convocation);
         }
@@ -304,16 +308,21 @@ class ConvocationManager
         return $notSentConvocations;
     }
 
+    /**
+     * @param array<ConvocationAttendance> $convocationAttendances
+     */
     public function updateConvocationAttendances(array $convocationAttendances): void
     {
         foreach ($convocationAttendances as $convocationAttendance) {
-            $convocation = $this->convocationRepository->find($convocationAttendance['convocationId']);
+            $convocation = $this->convocationRepository->find($convocationAttendance->getConvocationId());
             if (!$convocation) {
                 throw new NotFoundHttpException("Convocation with id ${convocationAttendance['convocationId']} does not exists");
             }
-            $convocation->setAttendance($convocationAttendance['attendance']);
-            $convocation->setDeputy($convocationAttendance['deputy']);
-            $convocation->setIsRemote($convocationAttendance['isRemote']);
+            $convocation->setAttendance($convocationAttendance->getAttendance());
+            $convocation->setDeputy($convocationAttendance->getDeputy());
+            if ($convocation->getSitting()->isIsRemote()) {
+                $convocation->setIsRemote($convocationAttendance->getIsRemote());
+            }
         }
         $this->em->flush();
     }

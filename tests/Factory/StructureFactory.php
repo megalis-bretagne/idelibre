@@ -11,47 +11,57 @@ use Zenstruck\Foundry\RepositoryProxy;
 /**
  * @extends ModelFactory<Structure>
  *
+ * @method Structure|Proxy create(array|callable $attributes = [])
  * @method static          Structure|Proxy createOne(array $attributes = [])
- * @method static          Structure[]|Proxy[] createMany(int $number, array|callable $attributes = [])
- * @method static          Structure[]|Proxy[] createSequence(array|callable $sequence)
  * @method static          Structure|Proxy find(object|array|mixed $criteria)
  * @method static          Structure|Proxy findOrCreate(array $attributes)
  * @method static          Structure|Proxy first(string $sortedField = 'id')
  * @method static          Structure|Proxy last(string $sortedField = 'id')
  * @method static          Structure|Proxy random(array $attributes = [])
  * @method static          Structure|Proxy randomOrCreate(array $attributes = [])
- * @method static          Structure[]|Proxy[] all()
- * @method static          Structure[]|Proxy[] findBy(array $attributes)
- * @method static          Structure[]|Proxy[] randomSet(int $number, array $attributes = [])
- * @method static          Structure[]|Proxy[] randomRange(int $min, int $max, array $attributes = [])
  * @method static          StructureRepository|RepositoryProxy repository()
- * @method Structure|Proxy create(array|callable $attributes = [])
+ * @method static          Structure[]|Proxy[] all()
+ * @method static          Structure[]|Proxy[] createMany(int $number, array|callable $attributes = [])
+ * @method static          Structure[]|Proxy[] createSequence(array|callable $sequence)
+ * @method static          Structure[]|Proxy[] findBy(array $attributes)
+ * @method static          Structure[]|Proxy[] randomRange(int $min, int $max, array $attributes = [])
+ * @method static          Structure[]|Proxy[] randomSet(int $number, array $attributes = [])
  */
 final class StructureFactory extends ModelFactory
 {
+    /**
+     * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
+     *
+     * @todo inject services if required
+     */
     public function __construct()
     {
         parent::__construct();
-
-        // TODO inject services if required (https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services)
     }
 
+    /**
+     * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories
+     *
+     * @todo add your default values here
+     */
     protected function getDefaults(): array
     {
         return [
-            'name' => self::faker()->text(),
-            'replyTo' => self::faker()->text(),
-            'suffix' => self::faker()->text(),
-            'legacyConnectionName' => self::faker()->text(),
             'isActive' => true,
+            'legacyConnectionName' => self::faker()->text(255),
             'minimumEntropy' => self::faker()->randomNumber(),
+            'name' => self::faker()->text(255),
+            'replyTo' => self::faker()->text(255),
+            'suffix' => self::faker()->text(255),
             'timezone' => TimezoneFactory::new(),
         ];
     }
 
+    /**
+     * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#initialization
+     */
     protected function initialize(): self
     {
-        // see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#initialization
         return $this
             // ->afterInstantiate(function(Structure $structure): void {})
         ;

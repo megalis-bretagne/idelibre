@@ -25,5 +25,14 @@ final class StructureStory extends Story
             'timezone' => TimezoneStory::paris(),
             'group' => GroupStory::recia(),
         ]));
+
+        // PF
+        $this->addState('structureWithToken', StructureFactory::new([
+            'name' => 'Palavas',
+            'suffix' => 'Pal',
+            'legacyConnectionName' => 'pal',
+            'replyTo' => 'palavas@exemple.org',
+            'timezone' => TimezoneStory::paris(),
+        ]));
     }
 }

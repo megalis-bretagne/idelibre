@@ -1,3 +1,27 @@
+TODO 248-Ajout case au mail de validation
+
+- Ajout au template de mail une variable #presence#
+    - Cette variable sera un lien vers une page idelibre qui contiendra le form de confirmation de presence
+
+- Faire le front du form
+    - Le form doit contenir les élements suivants :
+     . Presence : oui/non
+     . Mandataire : xxx
+     . convocationId (caché)
+     . userId (caché et issus de convocationId)
+     . sittingId (caché et issus de convocationId)
+
+- Traitement du form
+
+- Créer l'entité qui contiendra la réponse: ConfirmAttendance
+
+- [ Feature ] Affichage des réponse ds le back ou envoi par mail a la collectivité, les réponses
+
+
+
+
+
+
 TODO faire une validation jsonb !!!! #[jsonComelus()] par exemple !
 #create user idelibre;
 #alter user idelibre with login superuser createdb encrypted password 'idelibre';

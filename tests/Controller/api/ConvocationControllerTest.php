@@ -2,6 +2,7 @@
 
 namespace App\Tests\Controller\api;
 
+use App\Service\Convocation\ConvocationManager;
 use App\Tests\FileTrait;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
@@ -28,6 +29,7 @@ class ConvocationControllerTest extends WebTestCase
 
     private ?KernelBrowser $client;
     private ObjectManager $entityManager;
+    private ConvocationManager $convocationManager;
 
     protected function setUp(): void
     {
@@ -35,6 +37,8 @@ class ConvocationControllerTest extends WebTestCase
         $this->entityManager = $kernel->getContainer()
             ->get('doctrine')
             ->getManager();
+
+        $this->convocationManager = self::getContainer()->get(ConvocationManager::class);
 
         self::ensureKernelShutdown();
         $this->client = static::createClient();
@@ -98,7 +102,7 @@ class ConvocationControllerTest extends WebTestCase
 
     public function testSetAttendance()
     {
-        $convocation = ConvocationStory::convocationActor1();
+        $convocation = ConvocationStory::convocationActor1()->object();
 
         $data = [['convocationId' => $convocation->getId(), 'attendance' => 'absent', 'deputy' => 'John Doe', 'isRemote' => false]];
 
@@ -112,10 +116,11 @@ class ConvocationControllerTest extends WebTestCase
             [],
             json_encode($data)
         );
+
         $this->assertResponseStatusCodeSame(200);
         $this->assertEquals('absent', $convocation->getAttendance());
         $this->assertEquals('John Doe', $convocation->getDeputy());
-        $this->assertEquals(false, $convocation->isIsRemote() );
+        $this->assertEquals(false, $convocation->isIsRemote());
     }
 
     public function testSetAttendanceConvocationNotExists()
