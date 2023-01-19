@@ -18,7 +18,7 @@ class EmailGenerator
         private readonly DateUtil $dateUtil,
         private readonly GenderConverter $genderConverter,
         private readonly EmailTemplateManager $emailTemplateManager,
-        private readonly ParameterBagInterface $params,
+        private readonly ParameterBagInterface $bag,
         private readonly RouterInterface $router
     ) {
     }
@@ -92,9 +92,10 @@ class EmailGenerator
             TemplateTag::ACTOR_USERNAME => $user->getUsername(),
             TemplateTag::ACTOR_TITLE => $user->getTitle() ?? '',
             TemplateTag::ACTOR_GENDER => $this->genderConverter->format($user->getGender()),
-            TemplateTag::SITTING_URL => $this->params->get('url_client'),
+            TemplateTag::SITTING_URL => $this->bag->get('url_client'),
             TemplateTag::ACTOR_ATTENDANCE => $convocation->getAttendance(),
             TemplateTag::ACTOR_DEPUTY => $convocation->getDeputy(),
+            TemplateTag::CONFIRM_PRESENCE_URL => $this->generateAttendanceUrl($convocation->getAttendanceToken()?->getToken()),
         ];
     }
 
@@ -103,7 +104,7 @@ class EmailGenerator
         return [
             TemplateTag::FIRST_NAME_RECIPIENT => $user->getFirstName(),
             TemplateTag::LAST_NAME_RECIPIENT => $user->getLastName(),
-            TemplateTag::PRODUCT_NAME => $this->params->get('product_name'),
+            TemplateTag::PRODUCT_NAME => $this->bag->get('product_name'),
         ];
     }
 
@@ -136,11 +137,11 @@ class EmailGenerator
         $generalParameter = $this->getGeneralParameter($user);
 
         $parameterForHtml = $generalParameter + [
-            TemplateTag::INITIALIZATION_PASSWORD_LINK => "<a href='$resetPasswordUrl'>Initialiser votre mot de passe</a>",
+            TemplateTag::INITIALIZATION_PASSWORD_URL => "<a href='$resetPasswordUrl'>Initialiser votre mot de passe</a>",
         ];
 
         $parameterForText = $generalParameter + [
-            TemplateTag::INITIALIZATION_PASSWORD_LINK => $resetPasswordUrl,
+            TemplateTag::INITIALIZATION_PASSWORD_URL => $resetPasswordUrl,
         ];
 
         return [
@@ -164,11 +165,11 @@ class EmailGenerator
         $generalParameter = $this->getGeneralParameter($user);
 
         $parameterForHtml = $generalParameter + [
-            TemplateTag::FORGET_PASSWORD_LINK => "<a href='$resetPasswordUrl'>Réinitialiser votre mot de passe oublié</a>",
+            TemplateTag::FORGET_PASSWORD_URL => "<a href='$resetPasswordUrl'>Réinitialiser votre mot de passe oublié</a>",
         ];
 
         $parameterForText = $generalParameter + [
-            TemplateTag::FORGET_PASSWORD_LINK => $resetPasswordUrl,
+            TemplateTag::FORGET_PASSWORD_URL => $resetPasswordUrl,
         ];
 
         return [
@@ -191,11 +192,11 @@ class EmailGenerator
         $generalParameter = $this->getGeneralParameter($user);
 
         $parameterForHtml = $generalParameter + [
-            TemplateTag::UPDATE_PASSWORD_LINK => "<a href='$resetPasswordUrl'>Réinitialiser votre mot de passe</a>",
+            TemplateTag::UPDATE_PASSWORD_URL => "<a href='$resetPasswordUrl'>Réinitialiser votre mot de passe</a>",
         ];
 
         $parameterForText = $generalParameter + [
-            TemplateTag::UPDATE_PASSWORD_LINK => $resetPasswordUrl,
+            TemplateTag::UPDATE_PASSWORD_URL => $resetPasswordUrl,
         ];
 
         return [
@@ -208,6 +209,19 @@ class EmailGenerator
     {
         return $this->router->generate(
             'app_reset',
+            ['token' => $token],
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
+    }
+
+    public function generateAttendanceUrl(?string $token): string
+    {
+        if (!$token) {
+            return 'Impossible de confirmer sa présence';
+        }
+
+        return $this->router->generate(
+            'app_attendance_confirmation',
             ['token' => $token],
             UrlGeneratorInterface::ABSOLUTE_URL
         );

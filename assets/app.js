@@ -13,6 +13,7 @@ import './js/lsmessage'
 import './js/expandable'
 import './js/refreshApiKey'
 import './js/showPassword'
+import './js/attendance'
 
 $(document).ready(function () {
     let config = {

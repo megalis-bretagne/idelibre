@@ -11,7 +11,6 @@ use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToOne;
-use http\Exception\InvalidArgumentException;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -81,6 +80,9 @@ class Convocation
     #[Column(type: 'string', length: 255, nullable: true)]
     #[Groups(groups: ['convocation', 'convocation:read'])]
     private $deputy;
+
+    #[ORM\OneToOne(mappedBy: 'convocation', cascade: ['persist', 'remove'])]
+    private ?AttendanceToken $attendanceToken = null;
 
     #[Column(type: 'boolean')]
     #[Groups(groups: ['convocation', 'convocation:read'])]
@@ -232,6 +234,23 @@ class Convocation
     public function isInvitation(): bool
     {
         return self::CATEGORY_INVITATION === $this->category;
+    }
+
+    public function getAttendanceToken(): ?AttendanceToken
+    {
+        return $this->attendanceToken;
+    }
+
+    public function setAttendanceToken(AttendanceToken $attendanceToken): self
+    {
+        // set the owning side of the relation if necessary
+        if ($attendanceToken->getConvocation() !== $this) {
+            $attendanceToken->setConvocation($this);
+        }
+
+        $this->attendanceToken = $attendanceToken;
+
+        return $this;
     }
 
     public function isIsRemote(): bool

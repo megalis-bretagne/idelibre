@@ -36,5 +36,14 @@ final class SittingStory extends Story
             'place' => 'Salle du conseil',
             'type' => TypeStory::typeBureauLibriciel(),
         ]));
+
+        $this->addState('sittingConseilWithTokenSent', SittingFactory::new([
+            'name' => 'Conseil',
+            'date' => new DateTime('2020-10-22'),
+            'structure' => StructureStory::structureWithToken(),
+            'convocationFile' => FileStory::fileConvocation4(),
+            'place' => 'Agora',
+            'type' => TypeStory::typeConseilLibriciel(),
+        ]));
     }
 }

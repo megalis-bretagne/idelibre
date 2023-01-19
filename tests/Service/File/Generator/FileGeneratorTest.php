@@ -54,12 +54,11 @@ class FileGeneratorTest extends KernelTestCase
         $extension = 'pdf';
         $sitting = SittingStory::sittingConseilLibriciel();
 
-        $expected = $this->bag->get('document_full_pdf_directory'). $sitting->getStructure()->getId() . '/' . $sitting->getId() . '.' . $extension;
+        $expected = $this->bag->get('document_full_pdf_directory') . $sitting->getStructure()->getId() . '/' . $sitting->getId() . '.' . $extension;
         $dirPath = $this->fileGenerator->genFullSittingDirPath($sitting->object(), $extension);
 
         $this->assertSame($expected, $dirPath);
     }
-
 
     public function testSanitizeEncryption()
     {
@@ -71,7 +70,6 @@ class FileGeneratorTest extends KernelTestCase
         $fileProject1 = new UploadedFile('tests/resources/toDecrypt1.pdf', 'toDecrypt.pdf', 'application/pdf');
         $fileProject2 = new UploadedFile('tests/resources/toDecrypt2.pdf', 'toDecrypt.pdf', 'application/pdf');
 
-
         $file1 = FileFactory::createOne([
             'name' => 'Fichier crypté',
             'size' => 100,
@@ -81,7 +79,7 @@ class FileGeneratorTest extends KernelTestCase
         $file2 = FileFactory::createOne([
             'name' => 'Fichier crypté',
             'size' => 100,
-            'path' => $fileProject2->getPath() . '/' . $fileProject2->getFilename()
+            'path' => $fileProject2->getPath() . '/' . $fileProject2->getFilename(),
         ])->object();
 
         $paths = [$file1->getPath(), $file2->getPath()];
@@ -90,7 +88,7 @@ class FileGeneratorTest extends KernelTestCase
 
         foreach ($paths as $path) {
             $pdfInfos = new PDFInfo($path);
-            if($pdfInfos->encrypted !== 'no') {
+            if ('no' !== $pdfInfos->encrypted) {
                 return $this->throwException(new Exception('some files are encrypted'));
             }
         }
@@ -125,7 +123,6 @@ class FileGeneratorTest extends KernelTestCase
         ]);
 
         $this->assertTrue($this->fileChecker->sizeChecker($sitting->object()));
-
     }
 
     public function testGetDirectoryPathByExtension()
@@ -136,7 +133,6 @@ class FileGeneratorTest extends KernelTestCase
         $this->assertSame($pdfPath, $this->fileGenerator->getDirectoryPathByExtension('pdf'));
         $this->assertSame($zipPath, $this->fileGenerator->getDirectoryPathByExtension('zip'));
     }
-
 
     public function testGetDirectoryPathByExtensionNotExist()
     {

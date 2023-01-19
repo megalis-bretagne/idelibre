@@ -7,11 +7,13 @@ use App\Service\EmailTemplate\EmailGenerator;
 use App\Service\EmailTemplate\EmailTemplateManager;
 use App\Service\Util\DateUtil;
 use App\Service\Util\GenderConverter;
+use App\Tests\Factory\AttendanceTokenFactory;
 use App\Tests\FindEntityTrait;
 use App\Tests\Story\ConvocationStory;
 use App\Tests\Story\StructureStory;
 use App\Tests\Story\UserStory;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Routing\RouterInterface;
 use Zenstruck\Foundry\Test\Factories;
@@ -23,8 +25,10 @@ class EmailGeneratorTest extends WebTestCase
     use Factories;
     use FindEntityTrait;
 
+    private ?KernelBrowser $kernelBrowser;
     private EntityManagerInterface $entityManager;
     private EmailTemplateManager $emailTemplateManager;
+    private ?EmailGenerator $emailGenerator;
 
     protected function setUp(): void
     {
@@ -34,9 +38,9 @@ class EmailGeneratorTest extends WebTestCase
             ->getManager();
 
         $this->emailTemplateManager = self::getContainer()->get(EmailTemplateManager::class);
-
         $this->params = self::getContainer()->getParameterBag();
         $this->router = self::getContainer()->get(RouterInterface::class);
+        $this->emailGenerator = self::getContainer()->get(EmailGenerator::class);
 
         self::ensureKernelShutdown();
 
@@ -74,21 +78,25 @@ class EmailGeneratorTest extends WebTestCase
 
     public function testGenerateParams()
     {
-        $convocation = ConvocationStory::convocationActor1();
+        $convocation = ConvocationStory::convocationActor2SentWithToken();
+        AttendanceTokenFactory::createOne([
+            'token' => 'mytoken',
+            'convocation' => $convocation,
+        ]);
 
         $generator = new EmailGenerator(
             new DateUtil(),
             new GenderConverter(),
             $this->emailTemplateManager,
             $this->params,
-            $this->router
+            $this->router,
         );
 
         $expected = [
-            '#typeseance#' => 'Conseil Libriciel',
+            '#typeseance#' => 'Conseil',
             '#dateseance#' => '22/10/2020',
             '#heureseance#' => '02:00',
-            '#lieuseance#' => 'Salle du conseil',
+            '#lieuseance#' => 'Agora',
             '#prenom#' => 'actor_1',
             '#nom#' => 'libriciel',
             '#username#' => 'actor1@libriciel',
@@ -97,6 +105,7 @@ class EmailGeneratorTest extends WebTestCase
             '#urlseance#' => 'idelibre-test.libriciel.fr/idelibre_client',
             '#mandataire#' => null,
             '#presence#' => null,
+            '#urlpresence#' => $this->emailGenerator->generateAttendanceUrl($convocation->getAttendanceToken()->getToken()),
         ];
 
         $this->assertEquals($expected, $generator->generateParams($convocation->object()));

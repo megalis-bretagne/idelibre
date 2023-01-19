@@ -34,8 +34,9 @@ Encore
     .addEntry('toggle-calendar-new-sitting', './assets/js/toggleCalendarNewSitting.js')
     .addEntry('showPasswordEntropy', './assets/js/password/showPasswordEntropy.js')
     .addEntry('setPasswordUser', './assets/js/password/setPasswordUser.js')
+    .addEntry('attendance', './assets/js/attendance.js')
 
-    // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
+        // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.

@@ -144,19 +144,16 @@ class SittingApiControllerTest extends WebTestCase
         $structure = StructureStory::libriciel();
         $apiUser = ApiUserStory::apiAdminLibriciel();
         $type = TypeStory::typeConseilLibriciel();
+        $convocation = ConvocationStory::load();
 
         $filesystem = new Filesystem();
         $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/invitation.pdf');
         $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/convocation.pdf');
 
-        //$filesystem->copy('/home/pmonin/www/idelibre/tests/resources/fichier.pdf', '/home/pmonin/www/idelibre/tests/resources/invitation.pdf');
-
-        //  $filesystem->copy('/../../resources/fichier.pdf', '/../../resources/convocation.pdf');
-
         $invitationFile = new UploadedFile(__DIR__ . '/../../resources/invitation.pdf', 'invitation.pdf', 'application/pdf');
         $convocationFile = new UploadedFile(__DIR__ . '/../../resources/convocation.pdf', 'convocation.pdf', 'application/pdf');
 
-        $gg = $this->client->request(
+        $this->client->request(
             Request::METHOD_POST,
             "/api/v2/structures/{$structure->getId()}/sittings",
             [

@@ -51,6 +51,12 @@ final class FileStory extends Story
             'path' => '/tmp/convocation',
         ]));
 
+        $this->addState('fileConvocation4', FileFactory::new([
+            'name' => 'Fichier de convocation 4',
+            'size' => 100,
+            'path' => '/tmp/convocation',
+        ]));
+
         $this->addState('fileEncrypted', FileFactory::new([
             'name' => 'Fichier crypter',
             'size' => 100,

@@ -11,45 +11,55 @@ use Zenstruck\Foundry\RepositoryProxy;
 /**
  * @extends ModelFactory<Sitting>
  *
+ * @method Sitting|Proxy create(array|callable $attributes = [])
  * @method static        Sitting|Proxy createOne(array $attributes = [])
- * @method static        Sitting[]|Proxy[] createMany(int $number, array|callable $attributes = [])
- * @method static        Sitting[]|Proxy[] createSequence(array|callable $sequence)
  * @method static        Sitting|Proxy find(object|array|mixed $criteria)
  * @method static        Sitting|Proxy findOrCreate(array $attributes)
  * @method static        Sitting|Proxy first(string $sortedField = 'id')
  * @method static        Sitting|Proxy last(string $sortedField = 'id')
  * @method static        Sitting|Proxy random(array $attributes = [])
  * @method static        Sitting|Proxy randomOrCreate(array $attributes = [])
- * @method static        Sitting[]|Proxy[] all()
- * @method static        Sitting[]|Proxy[] findBy(array $attributes)
- * @method static        Sitting[]|Proxy[] randomSet(int $number, array $attributes = [])
- * @method static        Sitting[]|Proxy[] randomRange(int $min, int $max, array $attributes = [])
  * @method static        SittingRepository|RepositoryProxy repository()
- * @method Sitting|Proxy create(array|callable $attributes = [])
+ * @method static        Sitting[]|Proxy[] all()
+ * @method static        Sitting[]|Proxy[] createMany(int $number, array|callable $attributes = [])
+ * @method static        Sitting[]|Proxy[] createSequence(array|callable $sequence)
+ * @method static        Sitting[]|Proxy[] findBy(array $attributes)
+ * @method static        Sitting[]|Proxy[] randomRange(int $min, int $max, array $attributes = [])
+ * @method static        Sitting[]|Proxy[] randomSet(int $number, array $attributes = [])
  */
 final class SittingFactory extends ModelFactory
 {
+    /**
+     * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
+     *
+     * @todo inject services if required
+     */
     public function __construct()
     {
         parent::__construct();
-
-        // TODO inject services if required (https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services)
     }
 
+    /**
+     * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories
+     *
+     * @todo add your default values here
+     */
     protected function getDefaults(): array
     {
         return [
-            // TODO add your default values here (https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories)
             'name' => self::faker()->text(),
             'date' => null, // TODO add DATETIME ORM type manually
             'revision' => self::faker()->randomNumber(),
             'isArchived' => false,
+            'isRemote' => true,
         ];
     }
 
+    /**
+     * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#initialization
+     */
     protected function initialize(): self
     {
-        // see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#initialization
         return $this
             // ->afterInstantiate(function(Sitting $sitting): void {})
         ;

@@ -5,6 +5,7 @@ namespace App\Controller\api;
 use App\Entity\Convocation;
 use App\Entity\Sitting;
 use App\Repository\ConvocationRepository;
+use App\Service\Convocation\ConvocationAttendance;
 use App\Service\Convocation\ConvocationManager;
 use App\Service\Email\EmailData;
 use App\Service\EmailTemplate\EmailGenerator;
@@ -14,6 +15,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 class ConvocationController extends AbstractController
 {
@@ -44,9 +46,10 @@ class ConvocationController extends AbstractController
 
     #[Route(path: '/api/convocations/attendance', name: 'api_convocation_attendance', methods: ['POST', 'PUT'])]
     #[IsGranted(data: 'MANAGE_ATTENDANCE', subject: 'request')]
-    public function setAttendance(ConvocationManager $convocationManager, Request $request): JsonResponse
+    public function setAttendance(ConvocationManager $convocationManager, Request $request, DenormalizerInterface $denormalizer): JsonResponse
     {
-        $convocationManager->updateConvocationAttendances($request->toArray());
+        $convocationAttendances = $denormalizer->denormalize($request->toArray(), ConvocationAttendance::class . '[]');
+        $convocationManager->updateConvocationAttendances($convocationAttendances);
 
         return $this->json(['success' => 'true']);
     }

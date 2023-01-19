@@ -1,0 +1,27 @@
+{% extends 'base_login.html.twig' %}
+
+{% block body %}
+
+    <div class="form-side d-flex flex-column align-items-center ">
+
+        <div class="form-content" style="width: 600px">
+            <div class="soft-logo">
+                <img id="libriciel-logo" alt="Image du Libriciel"
+                     height="10" width="10"
+                     src="{{ asset('assets/img/application_logo.svg') }}">
+            </div>
+        </div>
+
+
+        <section class="mt-5">
+            <div class="alert alert-info h5">
+                Votre status pour cette séance est actuellement définie sur
+                <u> {% if attendance == 'present' %} présent {% else %} absent {% endif %} </u> .
+                Merci pour votre retour.
+            </div>
+        </section>
+
+    </div>
+
+
+{% endblock %}

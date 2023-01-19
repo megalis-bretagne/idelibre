@@ -138,7 +138,7 @@ let app = new Vue({
                 setOtherdocsRank(this.otherdocs);
                 formDataDocs.append('otherdocs', JSON.stringify(this.otherdocs));
 
-                window.location.href = `https://idelibre.recette.libriciel.fr/sitting/show/${getSittingId()}/projects`
+                window.location.href = `/sitting/show/${getSittingId()}/projects`
 
                 this.showModal = true;
                 this.uploadPercent = 0;
