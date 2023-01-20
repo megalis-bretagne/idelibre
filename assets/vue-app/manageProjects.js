@@ -144,7 +144,7 @@ let app = new Vue({
                 setOtherdocsRank(this.otherdocs);
                 formDataDocs.append('otherdocs', JSON.stringify(this.otherdocs));
 
-                // window.location.href = `/sitting/show/${getSittingId()}/projects`
+                window.location.href = `/sitting/show/${getSittingId()}/projects`
 
                 this.showModal = true;
                 this.uploadPercent = 0;
@@ -295,10 +295,6 @@ function getOtherdocsFilesWeight(otherdocs) {
 
 function  checkNotOverweightFile(totalFileSize, maxSize) {
     return maxSize > totalFileSize;
-}
-
-function checkNotOverweightUniqueFile(fileMaxSize, maxSize) {
-    return maxSize > fileMaxSize;
 }
 
 function getPrettyNameFromFileName(fileName) {
