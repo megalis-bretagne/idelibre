@@ -7,6 +7,7 @@ use App\Requirements\Is;
 use App\Service\Connector\ComelusConnectorManager;
 use App\Service\Convocation\ConvocationManager;
 use App\Service\Email\NotificationService;
+use App\Service\Util\Converter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -58,8 +59,8 @@ class SittingController extends AbstractController
     }
 
     #[Route(path: '/api/sittings/fileMaxSize', name: 'api_sitting_file_maxSize', methods: ['GET'])]
-    public function getMaxFileSizeForGeneration(): jsonResponse
+    public function getMaxFileSizeForGeneration(Converter $converter): jsonResponse
     {
-        return $this->json(['maxSize' => getenv('PHP_UPLOAD_MAX_FILESIZE')]);
+        return $this->json(['fileMaxSize' => $converter->bytesConverter(ini_get('upload_max_filesize'))]);
     }
 }

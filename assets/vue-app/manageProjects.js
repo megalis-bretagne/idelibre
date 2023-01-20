@@ -32,6 +32,7 @@ let app = new Vue({
         otherdocsTotalFileSize: 0,
     },
 
+
     methods: {
 
         formatSize(value) {
@@ -66,6 +67,7 @@ let app = new Vue({
                     id: null,
                     size:event.target.files[i].size,
                 };
+                project.file.size > this.fileMaxSize ? this.showMessageError(`La taille du fichier ne doit pas dépasser les 200Mo. Taille actuelle de votre ficher : ${this.formatSize(project.file.size)}`) :
                 this.projects.push(project);
             }
             this.totalFileSize = getFilesWeight(this.projects)
@@ -88,6 +90,7 @@ let app = new Vue({
                     id: null,
                     size:event.target.files[i].size
                 };
+                annex.file.size > this.fileMaxSize ? this.showMessageError(`La taille du fichier ne doit pas dépasser les 200Mo. Taille actuelle de votre ficher : ${this.formatSize(annex.file.size)}`) :
                 project.annexes.push(annex);
             }
             this.totalFileSize = getFilesWeight(this.projects)
@@ -111,6 +114,7 @@ let app = new Vue({
                     id: null,
                     size:event.target.files[i].size,
                 };
+                otherdoc.file.size > this.fileMaxSize ? this.showMessageError(`La taille du fichier ne doit pas dépasser les 200Mo. Taille actuelle de votre ficher : ${this.formatSize(otherdoc.file.size)}`) :
                 this.otherdocs.push(otherdoc);
             }
             this.otherdocsTotalFileSize = getOtherdocsFilesWeight(this.otherdocs)
@@ -124,7 +128,8 @@ let app = new Vue({
         },
 
         save() {
-            if (!checkNotOverweightFile(this.totalFileSize, this.maxSize) || !checkNotOverweightUniqueFile(this.fileMaxSize, this.maxSize)) {
+            if (!checkNotOverweightFile(this.totalFileSize, this.maxSize)) {
+
                 this.fileTooBig = true
                 this.showMessageError("Le poids des documents de la séance dépasse 200 Mo, le PDF complet de la séance ne pourra pas être généré")
 
@@ -139,7 +144,7 @@ let app = new Vue({
                 setOtherdocsRank(this.otherdocs);
                 formDataDocs.append('otherdocs', JSON.stringify(this.otherdocs));
 
-                window.location.href = `/sitting/show/${getSittingId()}/projects`
+                // window.location.href = `/sitting/show/${getSittingId()}/projects`
 
                 this.showModal = true;
                 this.uploadPercent = 0;
@@ -202,6 +207,7 @@ let app = new Vue({
         },
 
         showMessageError(msg) {
+            window.scrollTo(0, 0);
             this.messageError = msg;
             setTimeout(() => this.messageError = null, 3000);
         },
@@ -214,7 +220,7 @@ let app = new Vue({
             axios.get(`/api/projects/${getSittingId()}`),
             axios.get(`/api/otherdocs/${getSittingId()}`),
             axios.get('/api/sittings/maxSize'),
-            axios.get('/api/sittings/fileMaxSize')
+            axios.get('/api/sittings/fileMaxSize'),
         ]).then((response) => {
             this.themes = setThemeLevelName(response[0].data);
             this.reporters = response[1].data;
