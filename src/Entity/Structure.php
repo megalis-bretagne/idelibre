@@ -77,6 +77,9 @@ class Structure
     #[Column(type: 'integer', unique: false, nullable: false)]
     private $minimumEntropy = 80;
 
+    #[ORM\Column]
+    private ?bool $canEditReplyTo = null;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -232,6 +235,18 @@ class Structure
     public function setMinimumEntropy(int $minimumEntropy): self
     {
         $this->minimumEntropy = $minimumEntropy;
+
+        return $this;
+    }
+
+    public function isCanEditReplyTo(): ?bool
+    {
+        return $this->canEditReplyTo;
+    }
+
+    public function setCanEditReplyTo(bool $canEditReplyTo): self
+    {
+        $this->canEditReplyTo = $canEditReplyTo;
 
         return $this;
     }
