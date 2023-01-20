@@ -5,6 +5,7 @@ namespace App\Service\Email;
 use App\Entity\User;
 use App\Service\EmailTemplate\EmailGenerator;
 use App\Service\EmailTemplate\HtmlTag;
+use App\Service\EmailTemplate\TemplateTag;
 use Mailjet\Client;
 use Mailjet\Resources;
 use Psr\Log\LoggerInterface;
@@ -104,7 +105,7 @@ class MailjetService implements EmailServiceInterface
      */
     public function sendInitPassword(User $user, string $token): void
     {
-        $contentSubject = '[#NOM_PRODUIT#] Initialisation de votre mot de passe';
+        $contentSubject = '[ ' . TemplateTag::PRODUCT_NAME . '] Initialisation de votre mot de passe';
         $subject = $this->emailGenerator->generateSubject($user, $contentSubject);
 
         $contents = $this->emailGenerator->generateInitPassword(
@@ -120,7 +121,7 @@ class MailjetService implements EmailServiceInterface
      */
     public function sendResetPassword(User $user, string $token): void
     {
-        $contentSubject = '[#NOM_PRODUIT#] Réinitialiser votre mot de passe';
+        $contentSubject = '[ ' . TemplateTag::PRODUCT_NAME . '] Réinitialiser votre mot de passe';
         $subject = $this->emailGenerator->generateSubject($user, $contentSubject);
 
         $contents = $this->emailGenerator->generateForgetPassword(
@@ -133,7 +134,7 @@ class MailjetService implements EmailServiceInterface
 
     public function sendReloadPassword(User $user, string $token): void
     {
-        $contentSubject = '[#NOM_PRODUIT#] Demande de réinitilisation par un administrateur';
+        $contentSubject = '[ ' . TemplateTag::PRODUCT_NAME . '] Demande de réinitilisation par un administrateur';
         $subject = $this->emailGenerator->generateSubject($user, $contentSubject);
 
         $contents = $this->emailGenerator->generateReloadPassword(
