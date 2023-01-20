@@ -9,6 +9,7 @@ use App\Repository\EmailTemplateRepository;
 use App\Repository\OtherdocRepository;
 use App\Repository\ProjectRepository;
 use App\Service\File\Generator\FileGenerator;
+use App\Service\File\Generator\UnsupportedExtensionException;
 use App\Service\Seance\SittingManager;
 use App\Sidebar\Annotation\Sidebar;
 use App\Sidebar\State\SidebarState;
@@ -204,6 +205,9 @@ class SittingController extends AbstractController
         ]);
     }
 
+    /**
+     * @throws UnsupportedExtensionException
+     */
     #[Route(path: '/sitting/zip/{id}', name: 'sitting_zip', methods: ['GET'])]
     #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
     public function getZipSitting(Sitting $sitting, FileGenerator $fileGenerator): Response

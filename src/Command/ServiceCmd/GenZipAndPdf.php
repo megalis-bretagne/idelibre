@@ -7,6 +7,7 @@ use App\Entity\Structure;
 use App\Repository\SittingRepository;
 use App\Repository\StructureRepository;
 use App\Service\File\Generator\FileGenerator;
+use App\Service\File\Generator\UnsupportedExtensionException;
 use DateTime;
 use Doctrine\ORM\EntityNotFoundException;
 
@@ -35,14 +36,20 @@ class GenZipAndPdf
         return $this->sittingRepository->findActiveSittingsAfterDate($structure, new DateTime('- 4month'));
     }
 
-    public function genAllZipPdf()
+    /**
+     * @throws UnsupportedExtensionException
+     */
+    public function genAllZipPdf(): void
     {
         foreach ($this->listStructures() as $structure) {
             $this->genZipAndPdfByStructure($structure);
         }
     }
 
-    public function genZipAndPdfByStructure(Structure $structure)
+    /**
+     * @throws UnsupportedExtensionException
+     */
+    public function genZipAndPdfByStructure(Structure $structure): void
     {
         dump('_________________________');
         dump('Structure : ' . $structure->getName());
@@ -55,7 +62,7 @@ class GenZipAndPdf
         }
     }
 
-    public function genAllTimeZipPdfByStructureId(string $structureId)
+    public function genAllTimeZipPdfByStructureId(string $structureId): void
     {
         $structure = $this->structureRepository->find($structureId);
         if (!$structure) {
@@ -66,6 +73,7 @@ class GenZipAndPdf
 
         foreach ($sittings as $key => $sitting) {
             dump('Sitting num : ' . $key);
+
             $this->fileGenerator->genFullSittingPdf($sitting);
             $this->fileGenerator->genFullSittingZip($sitting);
         }
