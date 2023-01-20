@@ -60,6 +60,12 @@ class StructureType extends AbstractType
             ]);
         }
 
+        $builder->add('can_edit_reply_to', CheckboxType::class, [
+            'label' => 'Autorisation pour les administrateurs de modifier l\'email de réponse ?',
+            'label_attr' => ['class' => 'switch-custom'],
+            'required' => false,
+        ]);
+
         if ($isNew) {
             $builder->add('user', SuperUserType::class, [
                 'mapped' => false,

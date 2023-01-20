@@ -15,6 +15,7 @@ final class StructureStory extends Story
             'legacyConnectionName' => 'libriciel',
             'replyTo' => 'libriciel@exemple.org',
             'timezone' => TimezoneStory::paris(),
+            'canEditReplyTo' => true,
         ]));
 
         $this->addState('montpellier', StructureFactory::new([
@@ -24,6 +25,7 @@ final class StructureStory extends Story
             'replyTo' => 'montpellier@exemple.org',
             'timezone' => TimezoneStory::paris(),
             'group' => GroupStory::recia(),
+            'canEditReplyTo' => true,
         ]));
 
         // PF
@@ -33,6 +35,7 @@ final class StructureStory extends Story
             'legacyConnectionName' => 'pal',
             'replyTo' => 'palavas@exemple.org',
             'timezone' => TimezoneStory::paris(),
+            'canEditReplyTo' => true,
         ]));
     }
 }

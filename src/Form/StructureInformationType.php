@@ -14,13 +14,16 @@ class StructureInformationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $structure = $builder->getData();
+        $isEditable = $structure->isCanEditReplyTo();
+
         $builder
             ->add('name', TextType::class, [
                 'label' => 'Dénomination',
             ])
             ->add('replyTo', TextType::class, [
                 'label' => 'Email de réponse',
-                'disabled' => true,
+                'disabled' => !$isEditable,
             ])
             ->add('timezone', EntityType::class, [
                 'class' => Timezone::class,
@@ -46,7 +49,6 @@ class StructureInformationType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Structure::class,
-            'disabled' => false,
         ]);
     }
 }

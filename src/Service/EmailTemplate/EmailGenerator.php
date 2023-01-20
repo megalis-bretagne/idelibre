@@ -125,15 +125,18 @@ class EmailGenerator
 
     public function generateInitPassword(User $user, string $token): array
     {
+        $prenom = TemplateTag::FIRST_NAME_RECIPIENT;
+        $nom = TemplateTag::LAST_NAME_RECIPIENT;
+        $lien = TemplateTag::INITIALIZATION_PASSWORD_URL;
+        $productName = TemplateTag::PRODUCT_NAME;
         $content = <<<HTML
-            <p>Bonjour #PRENOM_DESTINATAIRE# #NOM_DESTINATAIRE#,</p>\r
-            <p>Un administrateur de la plateforme #NOM_PRODUIT# vient de vous créer un compte sur la plateforme.</p>\r
-            <p>Veuillez cliquer sur le lien pour initialiser votre mot de passe : #LIEN_MDP_INITIALISATION#</p>\r
+            <p>Bonjour $prenom $nom,</p>\r
+            <p>Un administrateur de la plateforme $productName vient de vous créer un compte sur la plateforme.</p>\r
+            <p>Veuillez cliquer sur le lien pour initialiser votre mot de passe : $lien</p>\r
             <p>Merci</p>
         HTML;
 
         $resetPasswordUrl = $this->generateResetPasswordUrl($token);
-
         $generalParameter = $this->getGeneralParameter($user);
 
         $parameterForHtml = $generalParameter + [
