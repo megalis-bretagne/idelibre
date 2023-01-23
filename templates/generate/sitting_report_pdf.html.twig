@@ -19,26 +19,26 @@
 
     <h3> {{ sitting.name }} - {{ sitting.date | date('d/m/Y à H:i', timezone) }}</h3>
 
-    <table class=" table-striped mt4">
+    <table class="table table-striped mt-4">
         <thead>
-        <tr>
-            <th style="width: 20%;">Prénom</th>
-            <th style="width: 20%;">Nom</th>
-            <th style="width: 10%;">Envoi</th>
-            <th style="width: 10%;">Reception</th>
-            <th style="width: 10%;">Présence</th>
-            <th style="width: 20%;">Mandataire</th>
-        </tr>
+            <tr class="d-flex">
+                <th style="width: 15%;">Prénom</th>
+                <th style="width: 15%;">Nom</th>
+                <th style="width: 15%;">Envoi</th>
+                <th style="width: 15%;">Reception</th>
+                <th style="width: 10%;">Présence</th>
+                <th style="width: 30%;">Mandataire</th>
+            </tr>
         </thead>
         <tbody>
         {% for convocation in convocations %}
-            <tr>
-                <td style="width: 20%;">{{ convocation.user.firstName }} </td>
-                <td style="width: 20%;">{{ convocation.user.lastName }} </td>
-                <td style="width: 10%;">{{ convocation.sentTimestamp ? convocation.sentTimestamp.createdAt | date('d/m/Y H:i', timezone) : '' }} </td>
-                <td style="width: 10%;">{{ convocation.receivedTimestamp ? convocation.receivedTimestamp.createdAt | date('d/m/Y H:i', timezone) : '' }} </td>
-                <td style="width: 10%;">{{ convocation.attendance ? convocation.attendance : '' }} </td>
-                <td style="width: 20%;">{{ convocation.deputy ? convocation.deputy : '' }} </td>
+            <tr class="d-flex">
+                <td style="width: 15%;">{{ convocation.user.firstName }} </td>
+                <td style="width: 15%;">{{ convocation.user.lastName }} </td>
+                <td style="width: 15%;">{{ convocation.sentTimestamp ? convocation.sentTimestamp.createdAt | date('d/m/Y H:i', timezone) : '' }} </td>
+                <td style="width: 15%;">{{ convocation.receivedTimestamp ? convocation.receivedTimestamp.createdAt | date('d/m/Y H:i', timezone) : '' }} </td>
+                <td style="width: 10%;">{{ convocation.attendance ? convocation.attendance : '' }}</td>
+                <td style="width: 30%;">{{ convocation.deputy ? convocation.deputy : '' }}</td>
             </tr>
 
         {% endfor %}
