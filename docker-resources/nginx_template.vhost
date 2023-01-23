@@ -23,6 +23,8 @@ server {
     include /etc/letsencrypt/options-ssl-nginx.conf;
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 
+    include  /etc/nginx/conf.d/security.conf;
+
 
 
     root   /app/public;
