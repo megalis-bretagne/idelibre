@@ -73,6 +73,7 @@ services:
       - 443:443
     volumes:
       - ./docker-resources/nginx.vhost:/etc/nginx/conf.d/default.conf
+      - ./docker-resources/security.conf:/etc/nginx/conf.d/security.conf
       - ./docker-resources/nginx.conf:/etc/nginx/nginx.conf
       - ./docker-resources/options-ssl-nginx.conf:/etc/letsencrypt/options-ssl-nginx.conf
       - /data/certbot/conf:/etc/letsencrypt
