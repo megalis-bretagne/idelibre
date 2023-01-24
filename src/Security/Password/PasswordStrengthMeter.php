@@ -16,17 +16,17 @@ class PasswordStrengthMeter
     public function __construct(
         private readonly ParameterBagInterface $bag,
         private readonly RoleManager $roleManager,
+        private readonly PasswordStrengthMeterAnssi $passwordStrengthMeter,
+        private readonly PasswordGeneratorAnssi $passwordGeneratorAnssi
     ) {
     }
 
     public function getPasswordEntropy($plainPassword): string
     {
-        $pwdStrengthAnssi = new PasswordStrengthMeterAnssi();
-
-        return $pwdStrengthAnssi->entropy($plainPassword);
+        return $this->passwordStrengthMeter->entropy($plainPassword);
     }
 
-    public function checkPasswordEntropy(User $user, string $plainPassword)
+    public function checkPasswordEntropy(User $user, string $plainPassword): bool
     {
         if ($this->isSuperAdmin($user)) {
             $minimumEntropy = $this->bag->get('minimumEntropyForUserWithRoleHigh');
@@ -45,9 +45,7 @@ class PasswordStrengthMeter
     {
         $success = true;
 
-        $pwdStrengthAnssi = new PasswordStrengthMeterAnssi();
-
-        if ($pwdStrengthAnssi->entropy($plainPassword) < $minimumEntropy) {
+        if ($this->passwordStrengthMeter->entropy($plainPassword) < $minimumEntropy) {
             $success = false;
         }
 
@@ -56,10 +54,8 @@ class PasswordStrengthMeter
 
     public function generatePassword(): string
     {
-        $passwordGeneratorAnssi = new PasswordGeneratorAnssi();
-
         do {
-            $password = $passwordGeneratorAnssi->generate();
+            $password = $this->passwordGeneratorAnssi->generate();
             $success = $this->checkEntropy($password, $this->bag->get('minimumEntropyForUserWithRoleHigh'));
         } while (false === $success);
 

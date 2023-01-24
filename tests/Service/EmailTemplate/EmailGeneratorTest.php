@@ -27,7 +27,7 @@ class EmailGeneratorTest extends WebTestCase
 
     private ?KernelBrowser $kernelBrowser;
     private EntityManagerInterface $entityManager;
-    private EmailTemplateManager $emailTemplateManager;
+    private ?EmailTemplateManager $emailTemplateManager;
     private ?EmailGenerator $emailGenerator;
 
     protected function setUp(): void

@@ -94,6 +94,10 @@ services:
 
   Libriciel\LsMessageWrapper\LsMessageWrapper:
 
+  Libriciel\Password\Service\PasswordGeneratorAnssi:
+
+  Libriciel\Password\Service\PasswordStrengthMeterAnssi:
+
   App\EventListener\PartySaveNotifier:
     tags:
       - name: 'doctrine.orm.entity_listener'
