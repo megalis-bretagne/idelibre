@@ -155,10 +155,14 @@ class EmailGenerator
 
     public function generateForgetPassword(User $user, string $token): array
     {
+        $prenom = TemplateTag::FIRST_NAME_RECIPIENT;
+        $nom = TemplateTag::LAST_NAME_RECIPIENT;
+        $lien = TemplateTag::FORGET_PASSWORD_URL;
+        $productName = TemplateTag::PRODUCT_NAME;
         $content = <<<HTML
-            <p>Bonjour #PRENOM_DESTINATAIRE# #NOM_DESTINATAIRE#,</p>\r
-            <p>Vous avez effectué une demande remise &agrave; z&eacute;ro de mot de passe.</p>\r
-            <p>Veuillez cliquer sur le lien pour le r&eacute;initialiser : #LIEN_MDP_OUBLIE#</p>\r
+            <p>Bonjour $prenom $nom,</p>\r
+            <p>Vous avez effectué une demande remise &agrave; z&eacute;ro de mot de passe de l'application $productName.</p>\r
+            <p>Veuillez cliquer sur le lien pour le r&eacute;initialiser : $lien</p>\r
             <p>Si vous n'&ecirc;tes pas &agrave; l'origine de cette demande, veuillez contacter votre administrateur.</p>\r
             <p>Merci</p>
         HTML;
@@ -183,10 +187,14 @@ class EmailGenerator
 
     public function generateReloadPassword(User $user, string $token): array
     {
+        $prenom = TemplateTag::FIRST_NAME_RECIPIENT;
+        $nom = TemplateTag::LAST_NAME_RECIPIENT;
+        $lien = TemplateTag::UPDATE_PASSWORD_URL;
+        $productName = TemplateTag::PRODUCT_NAME;
         $content = <<<HTML
-            <p>Bonjour #PRENOM_DESTINATAIRE# #NOM_DESTINATAIRE#,</p>\r
-            <p>Une demande de réinitialisation de votre mot de passe a &eacute;t&eacute; faite par un administrateur de l'application #NOM_PRODUIT#</p>\r
-            <p>Veuillez cliquer sur le lien pour le r&eacute;initialiser : #LIEN_MDP_REACTUALISATION#</p>\r
+            <p>Bonjour $prenom $nom,</p>\r
+            <p>Une demande de réinitialisation de votre mot de passe a &eacute;t&eacute; faite par un administrateur de l'application $productName</p>\r
+            <p>Veuillez cliquer sur le lien pour le r&eacute;initialiser : $lien</p>\r
             <p>Merci</p>
         HTML;
 
