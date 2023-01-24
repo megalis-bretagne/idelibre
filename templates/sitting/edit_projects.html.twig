@@ -35,6 +35,71 @@
         <div class="col-11 offset-1 mt-4 form-white">
             {{ macroTab.editTabs('projects', sitting) }}
 
+            {# Edit Otherdocs #}
+            <div class="d-flex justify-content-between">
+                {# CTA Ajouter des otherdocs #}
+                <label class="project-file-btn btn btn-primary" title="Ajouter des documents">
+                    <input class="project-file-btn" type="file" accept=".pdf,.PDF" multiple @change="addOtherdoc($event)" onclick="this.value=null">
+                    <span class="fa fa-plus-circle"></span> Ajouter des documents
+                </label>
+
+                <div class=" ml-auto d-flex justify-content-end mt-2">
+                    <p><small> Poids total: <span class="text-success">${formatSize(otherdocsTotalFileSize)}  </span></small></p>
+                </div>
+            </div>
+
+            <div class="mt-4"></div>
+
+            {# Pas de otherdocs #}
+            <div v-if="otherdocs.length == 0" class="text-center">
+                Aucun document associé
+            </div>
+
+            {# Loop otherdocs #}
+            <draggable v-model="otherdocs" class="bg-white" v-on:change="otherdocChange()" handle=".handle">
+
+                <div v-for="(otherdoc, index) in otherdocs">
+                    <div class="il-project">
+                        <div class="project-left cursor-grab handle">
+                            <div class="dropdown">
+{#                                <span class="badge badge-primary rank">${index + 1}</span>#}
+                                <span class="badge badge-primary rank"></span>
+                                <div class="dropdown-content">
+                                    <div v-for="rank in otherdocs.length" class="newRank" v-on:click="move(index, rank -1)"> ${rank}</div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="project-right">
+                            <div class="project-line">
+                                <div class="project-item">
+                                    <textarea v-model="otherdoc.name" class="form-control" v-on:change="otherdocChange()"> </textarea>
+                                </div>
+                                <div class="project-item d-flex justify-content-between">
+                                    ${otherdoc.fileName}
+                                    <span class="ml-5"><small> ${formatSize(otherdoc.size)}</small></span>
+
+                                </div>
+
+                                <div class="project-item action">
+                                    <button class="btn btn-outline-danger borderless float-right"
+                                            v-on:click="removeOtherdoc(index)">
+                                        <span class="fa fa-trash-alt" title="Supprimer"></span>
+                                    </button>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </draggable>
+
+        </div>
+        <div class="col-11 offset-1 mt-4 form-white">
+
             <div class="d-flex justify-content-between">
                 {# CTA Ajouter des projets #}
                 <label class="project-file-btn btn btn-primary" title="Ajouter des projets">
@@ -172,112 +237,43 @@
                     </div>
                 </div>
             </draggable>
-
-
         </div>
 
+        {# CTA save or cancel #}
+        <div class="float-right mt-5">
+            <button class="btn btn-outline-dark" @click="cancel()">
+                <span class="fa fa-times"></span> Annuler Les modifications
+            </button>
 
-        {# Edit Otherdocs #}
-        <div class="col-11 offset-1 mt-4 form-white">
-
-            <div class="d-flex justify-content-between">
-                {# CTA Ajouter des otherdocs #}
-                <label class="project-file-btn btn btn-primary" title="Ajouter des documents">
-                    <input class="project-file-btn" type="file" accept=".pdf,.PDF" multiple @change="addOtherdoc($event)" onclick="this.value=null">
-                    <span class="fa fa-plus-circle"></span> Ajouter des documents
-                </label>
-
-                <div class=" ml-auto d-flex justify-content-end mt-2">
-                   <p><small> Poids total: <span class="text-success">${formatSize(otherdocsTotalFileSize)}  </span></small></p>
-                </div>
-            </div>
-
-            <div class="mt-4"></div>
-
-            {# Pas de otherdocs #}
-            <div v-if="otherdocs.length == 0" class="text-center">
-                Aucun document associé
-            </div>
-
-            {# Loop otherdocs #}
-            <draggable v-model="otherdocs" class="bg-white" v-on:change="otherdocChange()" handle=".handle">
-
-                <div v-for="(otherdoc, index) in otherdocs">
-                    <div class="il-project">
-                        <div class="project-left cursor-grab handle">
-                            <div class="dropdown">
-                                <span class="badge badge-primary rank">${index + 1}</span>
-                                <div class="dropdown-content">
-                                    <div v-for="rank in otherdocs.length" class="newRank" v-on:click="move(index, rank -1)"> ${rank}</div>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <div class="project-right">
-                            <div class="project-line">
-                                <div class="project-item">
-                                    <textarea v-model="otherdoc.name" class="form-control" v-on:change="otherdocChange()"> </textarea>
-                                </div>
-                                <div class="project-item d-flex justify-content-between">
-                                    ${otherdoc.fileName}
-                                    <span class="ml-5"><small> ${formatSize(otherdoc.size)}</small></span>
-
-                                </div>
-
-                                <div class="project-item action">
-                                    <button class="btn btn-outline-danger borderless float-right"
-                                            v-on:click="removeOtherdoc(index)">
-                                        <span class="fa fa-trash-alt" title="Supprimer"></span>
-                                    </button>
-                                </div>
-
-                            </div>
-
-
-                        </div>
-                    </div>
-                </div>
-            </draggable>
-
-            {# CTA save or cancel #}
-            <div class="float-right mt-5">
-                <button class="btn btn-outline-dark" @click="cancel()">
-                    <span class="fa fa-times"></span> Annuler Les modifications
-                </button>
-
-                <button class="btn btn-primary" @click="save()">
-                    <span class="fa fa-save"></span>
-                    Enregistrer les modifications
+            <button class="btn btn-primary" @click="save()">
+                <span class="fa fa-save"></span>
+                Enregistrer les modifications
 
 
 
-                </button>
-            </div>
+            </button>
+        </div>
 
-            {# Modale #}
-            <div v-if="showModal">
-                <transition name="modal">
-                    <div class="modal-mask">
-                        <div class="modal-wrapper">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-body text-center">
-                                        <div class=" display-2">
-                                            <span class=" fas fa-spinner fa-spin"> </span>
-                                        </div>
-                                        <b class="display-4" v-if="uploadPercent < 100"> ${uploadPercent} %</b>
-                                        <b class="display-4" v-else> Préparation de la séance en cours</b>
+        {# Modale #}
+        <div v-if="showModal">
+            <transition name="modal">
+                <div class="modal-mask">
+                    <div class="modal-wrapper">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-body text-center">
+                                    <div class=" display-2">
+                                        <span class=" fas fa-spinner fa-spin"> </span>
                                     </div>
+                                    <b class="display-4" v-if="uploadPercent < 100"> ${uploadPercent} %</b>
+                                    <b class="display-4" v-else> Préparation de la séance en cours</b>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </transition>
-            </div>
-
+                </div>
+            </transition>
         </div>
-
     </div>
 
 
