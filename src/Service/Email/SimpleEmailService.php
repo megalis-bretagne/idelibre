@@ -115,7 +115,7 @@ class SimpleEmailService implements EmailServiceInterface
 
     public function sendReloadPassword(User $user, string $token): void
     {
-        $contentSubject = '[ ' . TemplateTag::PRODUCT_NAME . '] Demande de réinitilisation par un administrateur';
+        $contentSubject = '[ ' . TemplateTag::PRODUCT_NAME . '] Demande de réinitialisation par un administrateur';
         $subject = $this->emailGenerator->generateSubject($user, $contentSubject);
 
         $contents = $this->emailGenerator->generateReloadPassword(
