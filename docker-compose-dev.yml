@@ -37,7 +37,7 @@ services:
     image: registry.libriciel.fr:443/public/citoyens/idelibre-node/idelibre-node:4.1.1
     volumes:
       - /data/files:/data
-      - ../idelibre4-nodejs:/app:ro
+#      - ../idelibre4-nodejs:/app:ro
     environment:
       - TYPEORM_CONNECTION=postgres
       - TYPEORM_HOST=${POSTGRES_HOST:-172.17.0.1}
@@ -55,8 +55,8 @@ services:
       - JWT_SECRET=${JWT_SECRET:-jwtsecret}
       - JWT_TIMEOUT=${JWT_TIMEOUT:-86400}
 
-#    command: [ "/app/docker-resources/init.sh" ]
-    command: "sleep 3000"
+    command: [ "/app/docker-resources/init.sh" ]
+#    command: "sleep 3000"
     networks:
       - network_idelibre_dev
 
