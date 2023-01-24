@@ -5,6 +5,9 @@ namespace App\Controller;
 use App\Entity\Role;
 use App\Entity\Structure;
 use App\Form\UserPasswordType;
+use App\Security\Password\PasswordChange;
+use App\Security\Password\PasswordUpdater;
+use App\Security\Password\PasswordUpdaterException;
 use App\Security\Password\ResetPassword;
 use App\Security\Password\TimeoutException;
 use App\Security\UserLoginEntropy;
@@ -14,11 +17,14 @@ use Exception;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 class SecurityController extends AbstractController
 {
@@ -159,5 +165,28 @@ class SecurityController extends AbstractController
     public function legacyLoginPath(): Response
     {
         return $this->redirectToRoute('app_login');
+    }
+
+    #[IsGranted(data: 'FROM_NODE', subject: 'request')]
+    #[Route(path: '/security/changePassword', name: 'node_change_password')]
+    public function changePasswordJson(Request $request, DenormalizerInterface $denormalizer, PasswordUpdater $passwordUpdater): JsonResponse
+    {
+        try {
+            /** @var PasswordChange $passwordChange */
+            $passwordChange = $denormalizer->denormalize($request->toArray(), PasswordChange::class);
+            $passwordUpdater->replace($passwordChange);
+        } catch (ExceptionInterface $e) {
+            return $this->json(['message' => 'malformedData'], 400);
+        } catch (PasswordUpdaterException $e) {
+            return $this->json(
+                [
+                'message' => $e->getMessage(),
+                'minEntropyValue' => $e->minEntropyValue,
+                'currentEntropyValue' => $e->currentEntropyValue, ],
+                400
+            );
+        }
+
+        return $this->json(['message' => 'success'], 200);
     }
 }

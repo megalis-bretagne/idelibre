@@ -49,11 +49,12 @@ final class StructureFactory extends ModelFactory
         return [
             'isActive' => true,
             'legacyConnectionName' => self::faker()->text(255),
-            'minimumEntropy' => self::faker()->randomNumber(),
+            'minimumEntropy' => 80,
             'name' => self::faker()->text(255),
             'replyTo' => self::faker()->text(255),
             'suffix' => self::faker()->text(255),
             'timezone' => TimezoneFactory::new(),
+
         ];
     }
 

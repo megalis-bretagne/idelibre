@@ -118,7 +118,7 @@ class ResetPassword
         return true;
     }
 
-    public function checkPasswordEntropy(User $user, string $plainPassword)
+    public function checkPasswordEntropy(User $user, string $plainPassword): bool
     {
         $passwordEntropy = $this->passwordStrengthMeter->getPasswordEntropy($plainPassword);
 
