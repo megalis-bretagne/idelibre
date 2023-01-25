@@ -122,13 +122,21 @@ class SittingController extends AbstractController
     #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
     #[Sidebar(active: ['sitting-active-nav'])]
     #[Breadcrumb(title: 'Modifier {sitting.nameWithDate}')]
-    public function editInformation(Sitting $sitting, Request $request, SittingManager $sittingManager, RequestStack $requestStack): Response
+    public function editInformation(Sitting $sitting, Request $request, SittingManager $sittingManager, PdfValidator $pdfValidator, RequestStack $requestStack): Response
     {
         if ($sitting->getIsArchived()) {
             throw new InvalidArgumentException('Impossible de modifier une séance archivée');
         }
         $form = $this->createForm(SittingType::class, $sitting, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
+
+        foreach ($pdfValidator->isOpenablePdf() as $projectUploaded => $allowed) {
+            if( !$allowed ) {
+                $this->addFlash('error', "Le fichier ".$projectUploaded.' n\'est pas valide');
+                return $this->redirectToRoute('sitting_show_information', ['id' => $sitting->getId()]);
+            }
+        }
+
         if ($form->isSubmitted() && $form->isValid()) {
             $sittingManager->update(
                 $form->getData(),
