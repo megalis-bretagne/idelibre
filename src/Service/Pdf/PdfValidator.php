@@ -57,26 +57,17 @@ class PdfValidator
         $success = [];
         if( !empty($_FILES)) {
             if (isset($_FILES['sitting'])) {
-                if (!empty($_FILES['sitting']['name']['convocationFile'])) {
-                    $filename = $_FILES['sitting']['name']['convocationFile'];
-                    $fileContent = file_get_contents($_FILES['sitting']['tmp_name']['convocationFile']);
-                    $success[$filename] = false;
-                    if (stripos($fileContent, '%PDF') === 0 && substr($fileContent, -5, 4) === "%EOF") {
-                        $success[$filename] = true;
-                    }
-                    if (stristr($fileContent, "/Encrypt")) {
+                foreach( $_FILES['sitting']['name'] as $typeDocument => $dataDocument ) {
+                    if (!empty($_FILES['sitting']['name'][$typeDocument])) {
+                        $filename = $_FILES['sitting']['name'][$typeDocument];
+                        $fileContent = file_get_contents($_FILES['sitting']['tmp_name'][$typeDocument]);
                         $success[$filename] = false;
-                    }
-                }
-                if (!empty($_FILES['sitting']['name']['invitationFile'])) {
-                    $filename = $_FILES['sitting']['name']['invitationFile'];
-                    $fileContent = file_get_contents($_FILES['sitting']['tmp_name']['invitationFile']);
-                    $success[$filename] = false;
-                    if (stripos($fileContent, '%PDF') === 0 && substr($fileContent, -5, 4) === "%EOF") {
-                        $success[$filename] = true;
-                    }
-                    if (stristr($fileContent, "/Encrypt")) {
-                        $success[$filename] = false;
+                        if (stripos($fileContent, '%PDF') === 0 && substr($fileContent, -5, 4) === "%EOF") {
+                            $success[$filename] = true;
+                        }
+                        if (stristr($fileContent, "/Encrypt")) {
+                            $success[$filename] = false;
+                        }
                     }
                 }
             } else {
