@@ -23,9 +23,14 @@ class OtherdocController extends AbstractController
     {
         $rawOtherdocs = $request->request->get('otherdocs');
         $otherdocs = $serializer->deserialize($rawOtherdocs, OtherdocApi::class . '[]', 'json');
-//        dd($otherdocs);
+
         if (!$pdfValidator->isOtherdocsPdf($otherdocs)) {
             return $this->json(['success' => false, 'message' => 'Au moins un document n\'est pas un pdf'], 400);
+        }
+        foreach ($pdfValidator->isOpenablePdf() as $otherdocUploaded => $allowed) {
+            if( !$allowed ) {
+                return $this->json(['success' => false, 'message' => "Le fichier ".$otherdocUploaded.' n\'est pas valide'], 400);
+            }
         }
         $otherdocManager->update($otherdocs, $request->files->all(), $sitting);
         $messageBus->dispatch(new UpdatedSitting($sitting->getId()));
