@@ -5,10 +5,13 @@ namespace App\Controller\api;
 use App\Entity\Sitting;
 use App\Message\UpdatedSitting;
 use App\Service\ApiEntity\ProjectApi;
+use App\Service\File\Generator\FileChecker;
+use App\Service\File\Generator\FileGenerator;
 use App\Service\Pdf\PdfValidator;
 use App\Service\Project\ProjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -25,6 +28,11 @@ class ProjectController extends AbstractController
         $projects = $serializer->deserialize($rawProjects, ProjectApi::class . '[]', 'json');
         if (!$pdfValidator->isProjectsPdf($projects)) {
             return $this->json(['success' => false, 'message' => 'Au moins un projet n\'est pas un pdf'], 400);
+        }
+        foreach ($pdfValidator->isOpenablePdf() as $projectUploaded => $allowed) {
+            if( !$allowed ) {
+                return $this->json(['success' => false, 'message' => "Le fichier ".$projectUploaded.' n\'est pas valide'], 400);
+            }
         }
         $projectManager->update($projects, $request->files->all(), $sitting);
         $messageBus->dispatch(new UpdatedSitting($sitting->getId()));

@@ -19,6 +19,7 @@ class ProjectApi
     #[NotBlank]
     private ?int $rank = null;
     private ?int $size = null;
+    private ?string $path = null;
 
     /**
      * @var AnnexApi[]
@@ -135,6 +136,18 @@ class ProjectApi
     public function setSize(?int $size): ProjectApi
     {
         $this->size = $size;
+
+        return $this;
+    }
+
+    public function getPath(): ?string
+    {
+        return $this->path;
+    }
+
+    public function setPath(?string $path): ProjectApi
+    {
+        $this->path = $path;
 
         return $this;
     }

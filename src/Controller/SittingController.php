@@ -10,6 +10,7 @@ use App\Repository\OtherdocRepository;
 use App\Repository\ProjectRepository;
 use App\Service\File\Generator\FileGenerator;
 use App\Service\File\Generator\UnsupportedExtensionException;
+use App\Service\Pdf\PdfValidator;
 use App\Service\Seance\SittingManager;
 use App\Sidebar\Annotation\Sidebar;
 use App\Sidebar\State\SidebarState;
@@ -59,10 +60,17 @@ class SittingController extends AbstractController
     #[IsGranted(data: 'ROLE_MANAGE_SITTINGS')]
     #[Sidebar(active: ['sitting-active-nav'])]
     #[Breadcrumb(title: 'Ajouter')]
-    public function createSitting(Request $request, SittingManager $sittingManager): Response
+    public function createSitting(Request $request, SittingManager $sittingManager, PdfValidator $pdfValidator): Response
     {
         $form = $this->createForm(SittingType::class, null, ['structure' => $this->getUser()->getStructure(), 'user' => $this->getUser()]);
         $form->handleRequest($request);
+
+        foreach ($pdfValidator->isOpenablePdf() as $projectUploaded => $allowed) {
+            if( !$allowed ) {
+                $this->addFlash('error', "Le fichier ".$projectUploaded.' n\'est pas valide');
+                return $this->redirectToRoute('sitting_add');
+            }
+        }
 
         if ($form->isSubmitted() && $form->isValid()) {
             $sittingId = $sittingManager->save(

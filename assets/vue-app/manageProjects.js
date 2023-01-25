@@ -144,7 +144,6 @@ let app = new Vue({
                 setOtherdocsRank(this.otherdocs);
                 formDataDocs.append('otherdocs', JSON.stringify(this.otherdocs));
 
-                window.location.href = `/sitting/show/${getSittingId()}/projects`
 
                 this.showModal = true;
                 this.uploadPercent = 0;
@@ -171,6 +170,7 @@ let app = new Vue({
                         isDirty = false;
                         this.showModal = false;
                         window.scrollTo(0, 0);
+                        window.location.href = `/sitting/show/${getSittingId()}/projects`;
                     })
                     .catch((e, m) => {
                         this.showModal = false;
