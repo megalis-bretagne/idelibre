@@ -45,25 +45,25 @@
 
                 {% for otherdoc in otherdocs %}
 
-                    <div class="il-project">
-                        <div class="project-left">
+                    <div class="il-otherdoc">
+                        <div class="otherdoc-left">
 {#                            <span class="badge badge-primary rank">{{ otherdoc.rank + 1 }}</span>#}
                             <span class="badge badge-primary rank"></span>
                         </div>
 
-                        <div class="project-right">
+                        <div class="otherdoc-right">
 
-                            <div class="project-line">
-                                <div class="project-item">
+                            <div class="otherdoc-line">
+                                <div class="otherdoc-item">
                                     <b>{{ otherdoc.name }}</b>
                                 </div>
-                                <div class="project-item">
+                                <div class="otherdoc-item">
                                     {{ otherdoc.file.name }}
                                 </div>
                                 <div class="projectSize">
                                     <small>{{ otherdoc.file.size|sizeFormatter }}</small>
                                 </div>
-                                <div class="project-item action">
+                                <div class="otherdoc-item action">
                                     <a class="btn btn-outline-secondary borderless"
                                        href="{{ path('file_download', {'id': otherdoc.file.id}) }}"
                                        title="Télécharger le document">

@@ -242,6 +242,47 @@ input[type="file"].project-file-btn {
     padding-top: 5px;
 }
 
+
+.il-otherdoc {
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+    padding: 0px;
+    background-color: var(--ls-grey-100);
+    display: flex;
+}
+
+.il-otherdoc .il-border-right {
+    border-right: 2px solid var(--ls-grey-200);
+}
+
+.il-otherdoc .il-border-right:hover {
+    cursor: grab;
+}
+
+.otherdoc-left {
+    border-right: 2px solid var(--ls-grey-200);
+    flex: 0 0 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+}
+
+.otherdoc-right {
+    width: 100%;
+    padding-left: 10px;
+}
+
+.otherdoc-line {
+    display: flex;
+    align-items: center;
+}
+
+.otherdoc-item {
+    flex: 1;
+    padding: 5px 5px 5px 5px;
+
+}
+
 .project-right {
     width: 100%;
     padding-left: 10px;
