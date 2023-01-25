@@ -56,46 +56,41 @@ class PdfValidator
     {
         $success = [];
         if( !empty($_FILES)) {
-            if( isset($_FILES['sitting']) ) {
-                if( !empty($_FILES['sitting']['name']['convocationFile']) ) {
+            if (isset($_FILES['sitting'])) {
+                if (!empty($_FILES['sitting']['name']['convocationFile'])) {
                     $filename = $_FILES['sitting']['name']['convocationFile'];
                     $fileContent = file_get_contents($_FILES['sitting']['tmp_name']['convocationFile']);
-
-                    $success[$filename] = false;
-                    if(stripos($fileContent,'%PDF') === 0 && substr($fileContent,-5, 4) === "%EOF") {
-                        $success[$filename] = true;
-                    }
-
-                    if(stristr($fileContent, "/Encrypt")){
-                        $success[$filename] = false;
-                    }
-                }
-                if( !empty($_FILES['sitting']['name']['invitationFile']) ) {
-                    $filename = $_FILES['sitting']['name']['invitationFile'];
-                    $fileContent = file_get_contents($_FILES['sitting']['tmp_name']['invitationFile']);
-                    $success[$filename] = false;
-                    if(stripos($fileContent,'%PDF') === 0 && substr($fileContent,-5, 4) === "%EOF") {
-                        $success[$filename] = true;
-                    }
-
-                    if( stristr($fileContent, "/Encrypt") ) {
-                        $success[$filename] = false;
-                    }
-                }
-            }
-            else {
-
-                foreach ($_FILES as $projectUploaded) {
-                    $filename = $projectUploaded['name'];
-
-                    $fileContent = file_get_contents($projectUploaded['tmp_name']);
                     $success[$filename] = false;
                     if (stripos($fileContent, '%PDF') === 0 && substr($fileContent, -5, 4) === "%EOF") {
                         $success[$filename] = true;
                     }
-
-                    if( stristr($fileContent, "/Encrypt") ) {
+                    if (stristr($fileContent, "/Encrypt")) {
                         $success[$filename] = false;
+                    }
+                }
+                if (!empty($_FILES['sitting']['name']['invitationFile'])) {
+                    $filename = $_FILES['sitting']['name']['invitationFile'];
+                    $fileContent = file_get_contents($_FILES['sitting']['tmp_name']['invitationFile']);
+                    $success[$filename] = false;
+                    if (stripos($fileContent, '%PDF') === 0 && substr($fileContent, -5, 4) === "%EOF") {
+                        $success[$filename] = true;
+                    }
+                    if (stristr($fileContent, "/Encrypt")) {
+                        $success[$filename] = false;
+                    }
+                }
+            } else {
+                foreach ($_FILES as $projectUploaded) {
+                    if( $projectUploaded['type'] === 'application/pdf' ) {
+                        $filename = $projectUploaded['name'];
+                        $fileContent = file_get_contents($projectUploaded['tmp_name']);
+                        $success[$filename] = false;
+                        if (stripos($fileContent, '%PDF') === 0 && substr($fileContent, -5, 4) === "%EOF") {
+                            $success[$filename] = true;
+                        }
+                        if (stristr($fileContent, "/Encrypt")) {
+                            $success[$filename] = false;
+                        }
                     }
                 }
             }
