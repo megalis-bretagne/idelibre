@@ -65,7 +65,8 @@ class SittingController extends AbstractController
         $form = $this->createForm(SittingType::class, null, ['structure' => $this->getUser()->getStructure(), 'user' => $this->getUser()]);
         $form->handleRequest($request);
 
-        foreach ($pdfValidator->isOpenablePdf() as $projectUploaded => $allowed) {
+        $allowedPdfsForSitting = $pdfValidator->listOfOpenablePdfForSittingCreation($request->files->all());
+        foreach ( $allowedPdfsForSitting as $projectUploaded => $allowed) {
             if( !$allowed ) {
                 $this->addFlash('error', "Le fichier ".$projectUploaded.' n\'est pas valide');
                 return $this->redirectToRoute('sitting_add');
@@ -130,7 +131,8 @@ class SittingController extends AbstractController
         $form = $this->createForm(SittingType::class, $sitting, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
 
-        foreach ($pdfValidator->isOpenablePdf() as $projectUploaded => $allowed) {
+        $allowedPdfsForSitting = $pdfValidator->listOfOpenablePdfForSittingCreation($request->files->all());
+        foreach ( $allowedPdfsForSitting as $projectUploaded => $allowed) {
             if( !$allowed ) {
                 $this->addFlash('error', "Le fichier ".$projectUploaded.' n\'est pas valide');
                 return $this->redirectToRoute('sitting_show_information', ['id' => $sitting->getId()]);

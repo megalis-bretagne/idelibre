@@ -52,40 +52,65 @@ class PdfValidator
         return true;
     }
 
-    public function isOpenablePdf(): array
+    public function listOfOpenablePdfForSittingCreation(?array $projects): array
     {
         $success = [];
-        if( !empty($_FILES)) {
-            if (isset($_FILES['sitting'])) {
-                foreach( $_FILES['sitting']['name'] as $typeDocument => $dataDocument ) {
-                    if (!empty($_FILES['sitting']['name'][$typeDocument])) {
-                        $filename = $_FILES['sitting']['name'][$typeDocument];
-                        $fileContent = file_get_contents($_FILES['sitting']['tmp_name'][$typeDocument]);
-                        $success[$filename] = false;
-                        if (stripos($fileContent, '%PDF') === 0 && substr($fileContent, -5, 4) === "%EOF") {
-                            $success[$filename] = true;
-                        }
-                        if (stristr($fileContent, "/Encrypt")) {
-                            $success[$filename] = false;
-                        }
+        if( isset($projects['sitting']) && !empty($projects['sitting']) ) {
+            foreach( $projects['sitting'] as $typeDocument => $dataDocument ) {
+                if (!empty($projects['sitting'][$typeDocument])) {
+                    $filename = $projects['sitting'][$typeDocument]->getClientOriginalName();
+                    $fileContent = file_get_contents($projects['sitting'][$typeDocument]->getPathname());
+                    $success[$filename] = false;
+                    if (stripos($fileContent, '%PDF') === 0 && substr($fileContent, -5, 4) === "%EOF") {
+                        $success[$filename] = true;
                     }
-                }
-            } else {
-                foreach ($_FILES as $projectUploaded) {
-                    if( $projectUploaded['type'] === 'application/pdf' ) {
-                        $filename = $projectUploaded['name'];
-                        $fileContent = file_get_contents($projectUploaded['tmp_name']);
+
+                    if (stristr($fileContent, "/Encrypt")) {
                         $success[$filename] = false;
-                        if (stripos($fileContent, '%PDF') === 0 && substr($fileContent, -5, 4) === "%EOF") {
-                            $success[$filename] = true;
-                        }
-                        if (stristr($fileContent, "/Encrypt")) {
-                            $success[$filename] = false;
-                        }
                     }
                 }
             }
         }
         return $success;
     }
+    public function listOfOpenablePdfWhenEditingProjects(?array $projects): array
+    {
+        $success = [];
+        foreach ($projects as $tmpName => $projectUploaded) {
+            if( $projectUploaded->getMimeType() === 'application/pdf' ) {
+                $filename = $projectUploaded->getClientOriginalName();
+                $fileContent = file_get_contents($projectUploaded->getPathname());
+                $success[$filename] = false;
+                if (stripos($fileContent, '%PDF') === 0 && substr($fileContent, -5, 4) === "%EOF") {
+                    $success[$filename] = true;
+                }
+                if (stristr($fileContent, "/Encrypt")) {
+                    $success[$filename] = false;
+                }
+            }
+        }
+        return $success;
+    }
+
+
+
+    public function listOfOpenablePdfWhenEditingOtherdocs(?array $otherdocs): array
+    {
+        $success = [];
+        foreach ($otherdocs as $tmpName => $otherdocUploaded) {
+            if( $otherdocUploaded->getMimeType() === 'application/pdf' ) {
+                $filename = $otherdocUploaded->getClientOriginalName();
+                $fileContent = file_get_contents($otherdocUploaded->getPathname());
+                $success[$filename] = false;
+                if (stripos($fileContent, '%PDF') === 0 && substr($fileContent, -5, 4) === "%EOF") {
+                    $success[$filename] = true;
+                }
+                if (stristr($fileContent, "/Encrypt")) {
+                    $success[$filename] = false;
+                }
+            }
+        }
+        return $success;
+    }
+
 }
