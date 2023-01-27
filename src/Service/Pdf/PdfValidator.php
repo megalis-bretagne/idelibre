@@ -61,7 +61,7 @@ class PdfValidator
                     $fileContent = file_get_contents($projects['sitting'][$typeDocument]->getPathname());
                     $success[$filename] = [
                         $this->isPdfContent($fileContent),
-                        $this->isPdfPasswordProtected($fileContent)
+                        !$this->isProtectedByPasswordPdf($projects['sitting'][$typeDocument]->getPathname())
                     ];
                 }
             }
@@ -77,7 +77,7 @@ class PdfValidator
                 $fileContent = file_get_contents($projectUploaded->getPathname());
                 $success[$filename] = [
                     $this->isPdfContent($fileContent),
-                    $this->isPdfPasswordProtected($fileContent)
+                    !$this->isProtectedByPasswordPdf($projectUploaded->getPathname())
                 ];
             }
         }
@@ -93,14 +93,14 @@ class PdfValidator
                 $fileContent = file_get_contents($otherdocUploaded->getPathname());
                 $success[$filename] = [
                     $this->isPdfContent($fileContent),
-                    $this->isPdfPasswordProtected($fileContent)
+                    !$this->isProtectedByPasswordPdf($otherdocUploaded->getPathname())
                 ];
             }
         }
         return $success;
     }
 
-    private function isPdfContent( $contentPdf ): bool
+    public function isPdfContent( $contentPdf ): bool
     {
         $success = false;
         $contentPdf = preg_replace( '/[\r \n]/', "",$contentPdf);
@@ -110,13 +110,15 @@ class PdfValidator
         return $success;
     }
 
-    private function isPdfPasswordProtected( $contentPdf ): bool
+    public function isProtectedByPasswordPdf( $filePath ): bool
     {
-        $success = true;
-        if (stristr($contentPdf, "/DocChecksum")) {
-            $success = false;
+        $success = false;
+        $cmd = 'pdfinfo '.$filePath;
+        $cmdResult = shell_exec($cmd);
+        if( empty($cmdResult) ) {
+            $success = true;
         }
         return $success;
-    }
 
+    }
 }
