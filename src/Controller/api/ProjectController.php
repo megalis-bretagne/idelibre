@@ -28,8 +28,8 @@ class ProjectController extends AbstractController
         }
         $allowedPdf = $pdfValidator->listOfOpenablePdfWhenAddingFiles($request->files->all());
         foreach ($allowedPdf as $projectUploaded => $allowed) {
-            if( in_array( false, $allowed ) ) {
-                return $this->json(['success' => false, 'message' => "Le fichier ".$projectUploaded.' n\'est pas valide'], 400);
+            if (in_array(false, $allowed)) {
+                return $this->json(['success' => false, 'message' => 'Le fichier ' . $projectUploaded . ' n\'est pas valide'], 400);
             }
         }
         $projectManager->update($projects, $request->files->all(), $sitting);

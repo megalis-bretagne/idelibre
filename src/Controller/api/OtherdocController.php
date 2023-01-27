@@ -31,7 +31,7 @@ class OtherdocController extends AbstractController
         $allowedOtherdocPdf = $pdfValidator->listOfOpenablePdfWhenAddingFiles($request->files->all());
         foreach ($allowedOtherdocPdf as $otherdocUploaded => $uploaded) {
             if (in_array(false, $uploaded)) {
-                return $this->json(['success' => false, 'message' => "Le fichier " . $otherdocUploaded . ' n\'est pas valide'], 400);
+                return $this->json(['success' => false, 'message' => 'Le fichier ' . $otherdocUploaded . ' n\'est pas valide'], 400);
             }
         }
         $otherdocManager->update($otherdocs, $request->files->all(), $sitting);
