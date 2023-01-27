@@ -69,7 +69,6 @@ class SittingController extends AbstractController
         foreach ($allowedPdfsForSitting as $projectUploaded => $allowed) {
             if (in_array(false, $allowed)) {
                 $this->addFlash('error', 'Le fichier ' . $projectUploaded . ' n\'est pas valide');
-
                 return $this->redirectToRoute('sitting_add');
             }
         }
@@ -136,7 +135,6 @@ class SittingController extends AbstractController
         foreach ($allowedPdfsForSitting as $projectUploaded => $allowed) {
             if (in_array(false, $allowed)) {
                 $this->addFlash('error', 'Le fichier ' . $projectUploaded . ' n\'est pas valide');
-
                 return $this->redirectToRoute('sitting_show_information', ['id' => $sitting->getId()]);
             }
         }
