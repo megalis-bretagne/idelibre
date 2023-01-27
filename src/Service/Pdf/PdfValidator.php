@@ -4,7 +4,6 @@ namespace App\Service\Pdf;
 
 use App\Service\ApiEntity\OtherdocApi;
 use App\Service\ApiEntity\ProjectApi;
-use Howtomakeaturn\PDFInfo\PDFInfo;
 
 class PdfValidator
 {
@@ -62,7 +61,7 @@ class PdfValidator
                     $fileContent = file_get_contents($projects['sitting'][$typeDocument]->getPathname());
                     $success[$filename] = [
                         $this->isPdfContent($fileContent),
-                        $this->isPdfEncrypted($fileContent)
+                        $this->isPdfPasswordProtected($fileContent)
                     ];
                 }
             }
@@ -78,7 +77,7 @@ class PdfValidator
                 $fileContent = file_get_contents($projectUploaded->getPathname());
                 $success[$filename] = [
                     $this->isPdfContent($fileContent),
-                    $this->isPdfEncrypted($fileContent)
+                    $this->isPdfPasswordProtected($fileContent)
                 ];
             }
         }
@@ -94,7 +93,7 @@ class PdfValidator
                 $fileContent = file_get_contents($otherdocUploaded->getPathname());
                 $success[$filename] = [
                     $this->isPdfContent($fileContent),
-                    $this->isPdfEncrypted($fileContent)
+                    $this->isPdfPasswordProtected($fileContent)
                 ];
             }
         }
@@ -104,16 +103,17 @@ class PdfValidator
     private function isPdfContent( $contentPdf ): bool
     {
         $success = false;
+        $contentPdf = preg_replace( '/[\r \n]/', "",$contentPdf);
         if (stripos($contentPdf, '%PDF') === 0 && ( str_ends_with($contentPdf, "%EOF") || substr( $contentPdf, -5, 4) === "%EOF" ) ) {
             $success = true;
         }
         return $success;
     }
 
-    private function isPdfEncrypted( $contentPdf ): bool
+    private function isPdfPasswordProtected( $contentPdf ): bool
     {
         $success = true;
-        if (stristr($contentPdf, "/Encrypt")) {
+        if (stristr($contentPdf, "/DocChecksum")) {
             $success = false;
         }
         return $success;
