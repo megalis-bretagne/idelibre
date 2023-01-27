@@ -4,6 +4,7 @@ namespace App\Service\Pdf;
 
 use App\Service\ApiEntity\OtherdocApi;
 use App\Service\ApiEntity\ProjectApi;
+use ECSPrefix20211002\Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class PdfValidator
 {
@@ -68,37 +69,33 @@ class PdfValidator
         }
         return $success;
     }
-    public function listOfOpenablePdfWhenEditingProjects(?array $projects): array
+
+    /**
+     * @param array<UploadedFile $uploadedFiles
+     * @return array
+     */
+    public function listOfOpenablePdfWhenAddingFiles(array $uploadedFiles): array
     {
         $success = [];
-        foreach ($projects as $tmpName => $projectUploaded) {
-            if( $projectUploaded->getMimeType() === 'application/pdf' ) {
-                $filename = $projectUploaded->getClientOriginalName();
-                $fileContent = file_get_contents($projectUploaded->getPathname());
+        foreach ($uploadedFiles as $uploadedFile) {
+            if( $this->isPdfMimeType($uploadedFile) ) {
+                $filename = $uploadedFile->getClientOriginalName();
+                $fileContent = file_get_contents($uploadedFile->getPathname());
                 $success[$filename] = [
                     $this->isPdfContent($fileContent),
-                    !$this->isProtectedByPasswordPdf($projectUploaded->getPathname())
+                    !$this->isProtectedByPasswordPdf($uploadedFile->getPathname())
                 ];
             }
         }
         return $success;
     }
 
-    public function listOfOpenablePdfWhenEditingOtherdocs(?array $otherdocs): array
+
+    public function isPdfMimeType(UploadedFile $uploadedFile): bool
     {
-        $success = [];
-        foreach ($otherdocs as $tmpName => $otherdocUploaded) {
-            if( $otherdocUploaded->getMimeType() === 'application/pdf' ) {
-                $filename = $otherdocUploaded->getClientOriginalName();
-                $fileContent = file_get_contents($otherdocUploaded->getPathname());
-                $success[$filename] = [
-                    $this->isPdfContent($fileContent),
-                    !$this->isProtectedByPasswordPdf($otherdocUploaded->getPathname())
-                ];
-            }
-        }
-        return $success;
+        return $uploadedFile->getMimeType() === 'application/pdf';
     }
+
 
     public function isPdfContent( $contentPdf ): bool
     {

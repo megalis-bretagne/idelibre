@@ -26,7 +26,7 @@ class ProjectController extends AbstractController
         if (!$pdfValidator->isProjectsPdf($projects)) {
             return $this->json(['success' => false, 'message' => 'Au moins un projet n\'est pas un pdf'], 400);
         }
-        $allowedPdf = $pdfValidator->listOfOpenablePdfWhenEditingProjects($request->files->all());
+        $allowedPdf = $pdfValidator->listOfOpenablePdfWhenAddingFiles($request->files->all());
         foreach ($allowedPdf as $projectUploaded => $allowed) {
             if( in_array( false, $allowed ) ) {
                 return $this->json(['success' => false, 'message' => "Le fichier ".$projectUploaded.' n\'est pas valide'], 400);

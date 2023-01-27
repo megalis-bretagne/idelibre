@@ -28,9 +28,9 @@ class OtherdocController extends AbstractController
             return $this->json(['success' => false, 'message' => 'Au moins un document n\'est pas un pdf'], 400);
         }
 
-        $allowedOtherdocPdf = $pdfValidator->listOfOpenablePdfWhenEditingOtherdocs($request->files->all());
-        foreach ($allowedOtherdocPdf as $otherdocUploaded => $uploadable) {
-            if (in_array(false, $uploadable)) {
+        $allowedOtherdocPdf = $pdfValidator->listOfOpenablePdfWhenAddingFiles($request->files->all());
+        foreach ($allowedOtherdocPdf as $otherdocUploaded => $uploaded) {
+            if (in_array(false, $uploaded)) {
                 return $this->json(['success' => false, 'message' => "Le fichier " . $otherdocUploaded . ' n\'est pas valide'], 400);
             }
         }
