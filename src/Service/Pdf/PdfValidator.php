@@ -60,14 +60,10 @@ class PdfValidator
                 if (!empty($projects['sitting'][$typeDocument])) {
                     $filename = $projects['sitting'][$typeDocument]->getClientOriginalName();
                     $fileContent = file_get_contents($projects['sitting'][$typeDocument]->getPathname());
-                    $success[$filename] = false;
-                    if (stripos($fileContent, '%PDF') === 0 && substr($fileContent, -5, 4) === "%EOF") {
-                        $success[$filename] = true;
-                    }
-
-                    if (stristr($fileContent, "/Encrypt")) {
-                        $success[$filename] = false;
-                    }
+                    $success[$filename] = [
+                        $this->isPdfContent($fileContent),
+                        $this->isPdfEncrypted($fileContent)
+                    ];
                 }
             }
         }
@@ -80,19 +76,14 @@ class PdfValidator
             if( $projectUploaded->getMimeType() === 'application/pdf' ) {
                 $filename = $projectUploaded->getClientOriginalName();
                 $fileContent = file_get_contents($projectUploaded->getPathname());
-                $success[$filename] = false;
-                if (stripos($fileContent, '%PDF') === 0 && substr($fileContent, -5, 4) === "%EOF") {
-                    $success[$filename] = true;
-                }
-                if (stristr($fileContent, "/Encrypt")) {
-                    $success[$filename] = false;
-                }
+                $success[$filename] = [
+                    $this->isPdfContent($fileContent),
+                    $this->isPdfEncrypted($fileContent)
+                ];
             }
         }
         return $success;
     }
-
-
 
     public function listOfOpenablePdfWhenEditingOtherdocs(?array $otherdocs): array
     {
@@ -101,14 +92,29 @@ class PdfValidator
             if( $otherdocUploaded->getMimeType() === 'application/pdf' ) {
                 $filename = $otherdocUploaded->getClientOriginalName();
                 $fileContent = file_get_contents($otherdocUploaded->getPathname());
-                $success[$filename] = false;
-                if (stripos($fileContent, '%PDF') === 0 && substr($fileContent, -5, 4) === "%EOF") {
-                    $success[$filename] = true;
-                }
-                if (stristr($fileContent, "/Encrypt")) {
-                    $success[$filename] = false;
-                }
+                $success[$filename] = [
+                    $this->isPdfContent($fileContent),
+                    $this->isPdfEncrypted($fileContent)
+                ];
             }
+        }
+        return $success;
+    }
+
+    private function isPdfContent( $contentPdf ): bool
+    {
+        $success = false;
+        if (stripos($contentPdf, '%PDF') === 0 && ( str_ends_with($contentPdf, "%EOF") || substr( $contentPdf, -5, 4) === "%EOF" ) ) {
+            $success = true;
+        }
+        return $success;
+    }
+
+    private function isPdfEncrypted( $contentPdf ): bool
+    {
+        $success = true;
+        if (stristr($contentPdf, "/Encrypt")) {
+            $success = false;
         }
         return $success;
     }
