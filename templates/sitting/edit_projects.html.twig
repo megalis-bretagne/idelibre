@@ -59,8 +59,8 @@
             <draggable v-model="otherdocs" class="bg-white" v-on:change="otherdocChange()" handle=".handle">
 
                 <div v-for="(otherdoc, index) in otherdocs">
-                    <div class="il-project">
-                        <div class="project-left cursor-grab handle">
+                    <div class="il-otherdoc">
+                        <div class="otherdoc-left cursor-grab handle">
                             <div class="dropdown">
 {#                                <span class="badge badge-primary rank">${index + 1}</span>#}
                                 <span class="badge badge-primary rank"></span>
@@ -71,18 +71,18 @@
                             </div>
                         </div>
 
-                        <div class="project-right">
-                            <div class="project-line">
-                                <div class="project-item">
+                        <div class="otherdoc-right">
+                            <div class="otherdoc-line">
+                                <div class="otherdoc-item">
                                     <textarea v-model="otherdoc.name" class="form-control" v-on:change="otherdocChange()"> </textarea>
                                 </div>
-                                <div class="project-item d-flex justify-content-between">
+                                <div class="otherdoc-item d-flex justify-content-between">
                                     ${otherdoc.fileName}
                                     <span class="ml-5"><small> ${formatSize(otherdoc.size)}</small></span>
 
                                 </div>
 
-                                <div class="project-item action">
+                                <div class="otherdoc-item action">
                                     <button class="btn btn-outline-danger borderless float-right"
                                             v-on:click="removeOtherdoc(index)">
                                         <span class="fa fa-trash-alt" title="Supprimer"></span>

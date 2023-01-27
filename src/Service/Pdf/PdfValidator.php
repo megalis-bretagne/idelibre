@@ -4,6 +4,7 @@ namespace App\Service\Pdf;
 
 use App\Service\ApiEntity\OtherdocApi;
 use App\Service\ApiEntity\ProjectApi;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class PdfValidator
 {
@@ -49,5 +50,72 @@ class PdfValidator
         }
 
         return true;
+    }
+
+    public function listOfOpenablePdfForSittingCreation(?array $projects): array
+    {
+        $success = [];
+        if (isset($projects['sitting']) && !empty($projects['sitting'])) {
+            foreach ($projects['sitting'] as $typeDocument => $dataDocument) {
+                if (!empty($projects['sitting'][$typeDocument])) {
+                    $filename = $projects['sitting'][$typeDocument]->getClientOriginalName();
+                    $fileContent = file_get_contents($projects['sitting'][$typeDocument]->getPathname());
+                    $success[$filename] = [
+                        $this->isPdfContent($fileContent),
+                        !$this->isProtectedByPasswordPdf($projects['sitting'][$typeDocument]->getPathname()),
+                    ];
+                }
+            }
+        }
+
+        return $success;
+    }
+
+    /**
+     * @param array<UploadedFile $uploadedFiles
+     */
+    public function listOfOpenablePdfWhenAddingFiles(array $uploadedFiles): array
+    {
+        $success = [];
+        foreach ($uploadedFiles as $uploadedFile) {
+            if ($this->isPdfMimeType($uploadedFile)) {
+                $filename = $uploadedFile->getClientOriginalName();
+                $fileContent = file_get_contents($uploadedFile->getPathname());
+                $success[$filename] = [
+                    $this->isPdfContent($fileContent),
+                    !$this->isProtectedByPasswordPdf($uploadedFile->getPathname()),
+                ];
+            }
+        }
+
+        return $success;
+    }
+
+    public function isPdfMimeType(UploadedFile $uploadedFile): bool
+    {
+        return 'application/pdf' === $uploadedFile->getMimeType();
+    }
+
+    public function isPdfContent($contentPdf): bool
+    {
+        $success = false;
+        $contentPdf = preg_replace('/[\r \n]/', '', $contentPdf);
+        if (0 === stripos($contentPdf, '%PDF') && (str_ends_with($contentPdf, '%EOF') || '%EOF' === substr($contentPdf, -5, 4))) {
+            $success = true;
+        }
+
+        return $success;
+    }
+
+    public function isProtectedByPasswordPdf($filePath): bool
+    {
+        $success = false;
+        $cmd = 'pdfinfo ' . $filePath;
+        $cmdResult = shell_exec($cmd);
+        if (empty($cmdResult)) {
+            $success = true;
+        }
+
+        return $success;
     }
 }

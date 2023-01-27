@@ -10,6 +10,7 @@ use App\Repository\OtherdocRepository;
 use App\Repository\ProjectRepository;
 use App\Service\File\Generator\FileGenerator;
 use App\Service\File\Generator\UnsupportedExtensionException;
+use App\Service\Pdf\PdfValidator;
 use App\Service\Seance\SittingManager;
 use App\Sidebar\Annotation\Sidebar;
 use App\Sidebar\State\SidebarState;
@@ -59,10 +60,18 @@ class SittingController extends AbstractController
     #[IsGranted(data: 'ROLE_MANAGE_SITTINGS')]
     #[Sidebar(active: ['sitting-active-nav'])]
     #[Breadcrumb(title: 'Ajouter')]
-    public function createSitting(Request $request, SittingManager $sittingManager): Response
+    public function createSitting(Request $request, SittingManager $sittingManager, PdfValidator $pdfValidator): Response
     {
         $form = $this->createForm(SittingType::class, null, ['structure' => $this->getUser()->getStructure(), 'user' => $this->getUser()]);
         $form->handleRequest($request);
+
+        $allowedPdfsForSitting = $pdfValidator->listOfOpenablePdfForSittingCreation($request->files->all());
+        foreach ($allowedPdfsForSitting as $projectUploaded => $allowed) {
+            if (in_array(false, $allowed)) {
+                $this->addFlash('error', 'Le fichier ' . $projectUploaded . ' n\'est pas valide');
+                return $this->redirectToRoute('sitting_add');
+            }
+        }
 
         if ($form->isSubmitted() && $form->isValid()) {
             $sittingId = $sittingManager->save(
@@ -114,13 +123,22 @@ class SittingController extends AbstractController
     #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
     #[Sidebar(active: ['sitting-active-nav'])]
     #[Breadcrumb(title: 'Modifier {sitting.nameWithDate}')]
-    public function editInformation(Sitting $sitting, Request $request, SittingManager $sittingManager, RequestStack $requestStack): Response
+    public function editInformation(Sitting $sitting, Request $request, SittingManager $sittingManager, PdfValidator $pdfValidator, RequestStack $requestStack): Response
     {
         if ($sitting->getIsArchived()) {
             throw new InvalidArgumentException('Impossible de modifier une séance archivée');
         }
         $form = $this->createForm(SittingType::class, $sitting, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
+
+        $allowedPdfsForSitting = $pdfValidator->listOfOpenablePdfForSittingCreation($request->files->all());
+        foreach ($allowedPdfsForSitting as $projectUploaded => $allowed) {
+            if (in_array(false, $allowed)) {
+                $this->addFlash('error', 'Le fichier ' . $projectUploaded . ' n\'est pas valide');
+                return $this->redirectToRoute('sitting_show_information', ['id' => $sitting->getId()]);
+            }
+        }
+
         if ($form->isSubmitted() && $form->isValid()) {
             $sittingManager->update(
                 $form->getData(),

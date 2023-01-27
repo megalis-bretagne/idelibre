@@ -169,6 +169,7 @@ class ProjectManager
                 ->setId($project->getId())
                 ->setAnnexes($this->getApiAnnexesFromAnnexes($project->getAnnexes()))
                 ->setSize($project->getFile()->getSize())
+                ->setPath($project->getFile()->getPath())
             ;
             $apiProjects[] = $apiProject;
         }
