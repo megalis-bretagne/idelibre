@@ -66,13 +66,13 @@ final class FileStory extends Story
         $this->addState('filePdfProject1', FileFactory::new([
             'name' => 'Fichier projet pdf 1',
             'size' => 100,
-            'path' => '/tmp/fileProjectPdf1.pdf',
+            'path' => 'tests/resources/fichier.pdf',
         ]));
 
         $this->addState('filePdfProject2', FileFactory::new([
             'name' => 'Fichier projet pdf 2',
             'size' => 100,
-            'path' => '/tmp/fileProject2.pdf',
+            'path' => 'tests/resources/project2.pdf',
         ]));
     }
 }
