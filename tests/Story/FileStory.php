@@ -66,13 +66,19 @@ final class FileStory extends Story
         $this->addState('filePdfProject1', FileFactory::new([
             'name' => 'Fichier projet pdf 1',
             'size' => 100,
-            'path' => 'tests/resources/fichier.pdf',
+            'path' => 'tests/resources/project1.pdf',
         ]));
 
         $this->addState('filePdfProject2', FileFactory::new([
             'name' => 'Fichier projet pdf 2',
             'size' => 100,
             'path' => 'tests/resources/project2.pdf',
+        ]));
+
+        $this->addState('fileConvocationOther', FileFactory::new([
+            'name' => 'Fichier de convocation autre',
+            'size' => 100,
+            'path' => '/tmp/convocation',
         ]));
     }
 }

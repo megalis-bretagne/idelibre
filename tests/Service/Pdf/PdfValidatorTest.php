@@ -144,7 +144,7 @@ class PdfValidatorTest extends WebTestCase
     public function testListOfOpenablePdfForSittingCreation()
     {
         $uploadedFile1 = new UploadedFile(__DIR__ . '/../../resources/fichier.pdf', 'fichier.pdf');
-        $uploadedFile2 = new UploadedFile(__DIR__ . '/../../resources/project2.pdf', 'project2.pdf');
+        $uploadedFile2 = new UploadedFile(__DIR__ . '/../../resources/pdfEncrypted.pdf', 'pdfEncrypted.pdf');
 
         $uploadedFiles = [
             'sitting' => [
@@ -158,7 +158,7 @@ class PdfValidatorTest extends WebTestCase
     }
 
 
-    public function testListOfOpenablePdfWhenEditingProjects()
+    public function testlistOfOpenablePdfWhenAddingFiles()
     {
         $uploadedFile1 = new UploadedFile(__DIR__ . '/../../resources/pdfEncrypted.pdf', 'pdfEncrypted.pdf');
         $uploadedFile2 = new UploadedFile(__DIR__ . '/../../resources/toDecrypt.pdf', 'toDecrypt.pdf');
@@ -168,7 +168,7 @@ class PdfValidatorTest extends WebTestCase
             $uploadedFile2
         ];
 
-        $files = $this->pdfvalidator->listOfOpenablePdfWhenEditingProjects($uploadedFiles);
+        $files = $this->pdfvalidator->listOfOpenablePdfWhenAddingFiles($uploadedFiles);
         $this->assertCount(2, $files);
     }
 
@@ -183,7 +183,7 @@ class PdfValidatorTest extends WebTestCase
             $uploadedFile2
         ];
 
-        $files = $this->pdfvalidator->listOfOpenablePdfWhenEditingOtherdocs($uploadedFiles);
+        $files = $this->pdfvalidator->listOfOpenablePdfWhenAddingFiles($uploadedFiles);
         $this->assertCount(2, $files);
     }
 

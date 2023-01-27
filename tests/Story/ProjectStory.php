@@ -29,14 +29,14 @@ final class ProjectStory extends Story
             'rank' => 1,
             'name' => 'Project PDF 1',
             'file' => FileStory::filePdfProject1(),
-            'sitting' => SittingStory::sittingConseilLibriciel(),
+            'sitting' => SittingStory::sittingOtherconseil(),
         ]));
 
         $this->addState('projectpdf2', ProjectFactory::new([
             'rank' => 2,
             'name' => 'Project PDF 2',
             'file' => FileStory::filePdfProject2(),
-            'sitting' => SittingStory::sittingConseilLibriciel(),
+            'sitting' => SittingStory::sittingOtherconseil(),
         ]));
     }
 }

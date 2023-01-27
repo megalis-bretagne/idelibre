@@ -46,14 +46,14 @@ class SittingRepositoryTest extends WebTestCase
 
         $this->assertCount(0, $this->sittingRepository->findWithTypesByStructure($structureLs->object(), [])->getQuery()->getResult());
         $this->assertCount(0, $this->sittingRepository->findWithTypesByStructure($structureLs->object(), [$typeNotUsed->getId()])->getQuery()->getResult());
-        $this->assertCount(1, $this->sittingRepository->findWithTypesByStructure($structureLs->object(), [$typeConseil->getId()])->getQuery()->getResult());
-        $this->assertCount(3, $this->sittingRepository->findWithTypesByStructure($structureLs->object(), [$typeConseil->getId(), $typeBureau->getId()])->getQuery()->getResult());
+        $this->assertCount(2, $this->sittingRepository->findWithTypesByStructure($structureLs->object(), [$typeConseil->getId()])->getQuery()->getResult());
+        $this->assertCount(4, $this->sittingRepository->findWithTypesByStructure($structureLs->object(), [$typeConseil->getId(), $typeBureau->getId()])->getQuery()->getResult());
     }
 
     public function testFindByStructure()
     {
         $structureLs = StructureStory::libriciel();
-        $this->assertCount(3, $this->sittingRepository->findByStructure($structureLs->object())->getQuery()->getResult());
+        $this->assertCount(4, $this->sittingRepository->findByStructure($structureLs->object())->getQuery()->getResult());
     }
 
     public function testFindActiveFromStructure()
@@ -66,14 +66,14 @@ class SittingRepositoryTest extends WebTestCase
     {
         $structureLs = StructureStory::libriciel();
         $sittings = $this->sittingRepository->findSittingsAfter(new \DateTime('-50 months'), $structureLs->object());
-        $this->assertCount(3, $sittings);
+        $this->assertCount(4, $sittings);
     }
 
     public function testFindSittingsAfter3Months()
     {
         $structureLs = StructureStory::libriciel();
         $sittings = $this->sittingRepository->findSittingsAfter(new \DateTime('-3 months'), $structureLs->object());
-        $this->assertCount(0, $sittings);
+        $this->assertCount(1, $sittings);
     }
 
     public function testFindSittingsBefore3Months()

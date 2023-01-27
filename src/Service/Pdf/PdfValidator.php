@@ -4,7 +4,7 @@ namespace App\Service\Pdf;
 
 use App\Service\ApiEntity\OtherdocApi;
 use App\Service\ApiEntity\ProjectApi;
-use ECSPrefix20211002\Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class PdfValidator
 {

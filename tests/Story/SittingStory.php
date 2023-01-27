@@ -45,5 +45,14 @@ final class SittingStory extends Story
             'place' => 'Agora',
             'type' => TypeStory::typeConseilLibriciel(),
         ]));
+
+        $this->addState('sittingOtherconseil', SittingFactory::new([
+            'name' => 'Autre Conseil Libriciel',
+            'date' => new DateTime('2023-01-22'),
+            'structure' => StructureStory::libriciel(),
+            'convocationFile' => FileStory::fileConvocationOther(),
+            'place' => 'Salle du conseil',
+            'type' => TypeStory::typeConseilLibriciel(),
+        ]));
     }
 }
