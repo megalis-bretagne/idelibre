@@ -60,20 +60,12 @@ class PdfValidator
                 if (!empty($projects['sitting'][$typeDocument])) {
                     $filename = $projects['sitting'][$typeDocument]->getClientOriginalName();
 
-                    $openDoc = fopen($projects['sitting'][$typeDocument]->getPathname(), 'r');
-                    while( !feof($openDoc) ) {
-                        $lines[] = fgets($openDoc);
-                    }
-                    $firstLine = $lines[0];
-
-                    $lastLine = $lines[count($lines) - 1];
-                    if( $lastLine === false ) {
-                        $lastLine = $lines[count($lines) - 2];
-                    }
-                    fclose($openDoc);
+                    $handle = fopen($projects['sitting'][$typeDocument]->getPathname(), "rb");
+                    $contents = fread($handle, filesize($projects['sitting'][$typeDocument]->getPathname()));
+                    fclose($handle);
 
                     $success[$filename] = [
-                        $this->isPdfContent($firstLine, $lastLine),
+                        $this->isPdfContent($contents),
                         !$this->isProtectedByPasswordPdf($projects['sitting'][$typeDocument]->getPathname()),
                     ];
                 }
@@ -93,19 +85,12 @@ class PdfValidator
             if ($this->isPdfMimeType($uploadedFile)) {
                 $filename = $uploadedFile->getClientOriginalName();
 
-                $openDoc = fopen($uploadedFile->getPathname(), 'r');
-                while( !feof($openDoc) ) {
-                    $lines[] = fgets($openDoc);
-                }
-                $firstLine = $lines[0];
-                $lastLine = $lines[count($lines) - 1];
-                if( $lastLine === false ) {
-                    $lastLine = $lines[count($lines) - 2];
-                }
-                fclose($openDoc);
+                $handle = fopen($uploadedFile->getPathname(), "rb");
+                $contents = fread($handle, filesize($uploadedFile->getPathname()));
+                fclose($handle);
 
                 $success[$filename] = [
-                    $this->isPdfContent($firstLine, $lastLine),
+                    $this->isPdfContent($contents),
                     !$this->isProtectedByPasswordPdf($uploadedFile->getPathname()),
                 ];
             }
@@ -119,12 +104,14 @@ class PdfValidator
         return 'application/pdf' === $uploadedFile->getMimeType();
     }
 
-    public function isPdfContent($firstLine, $lastLine): bool
+    public function isPdfContent($contentPdf): bool
     {
         $success = false;
-        if (0 === stripos($firstLine, '%PDF') && 0 === stripos($lastLine, '%%EOF')) {
+        $contentPdf = preg_replace('/[\r \n]/', '', $contentPdf);
+        if (0 === stripos($contentPdf, '%PDF') && (str_ends_with($contentPdf, '%EOF') || '%EOF' === substr($contentPdf, -5, 4))) {
             $success = true;
         }
+
         return $success;
     }
 
