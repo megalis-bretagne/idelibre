@@ -18,7 +18,7 @@ class ExceptionListener implements EventSubscriberInterface
 
     public function onKernelException(ExceptionEvent $event)
     {
-        if (!$this->isJsonContentTypeOrAccept($event)) {
+        if (!$this->shouldReturnJson($event)) {
             return;
         }
 
@@ -40,8 +40,12 @@ class ExceptionListener implements EventSubscriberInterface
         return $throwable->getCode() > 100 ? $throwable->getCode() : 500;
     }
 
-    private function isJsonContentTypeOrAccept(ExceptionEvent $event): bool
+    private function shouldReturnJson(ExceptionEvent $event): bool
     {
-        return 'json' === $event->getRequest()->getContentType() || in_array('application/json', $event->getRequest()->getAcceptableContentTypes());
+        if (str_starts_with($event->getRequest()->getPathInfo(), '/api/v2')) {
+            return true;
+        }
+
+        return 'json' === $event->getRequest()->getContentTypeFormat() || in_array('application/json', $event->getRequest()->getAcceptableContentTypes());
     }
 }
