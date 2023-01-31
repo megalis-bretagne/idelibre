@@ -15,6 +15,7 @@ use App\Service\Pdf\PdfValidator;
 use App\Service\Project\ProjectManager;
 use App\Service\Seance\SittingManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -156,7 +157,12 @@ class SittingApiController extends AbstractController
 
         $rawProjects = $request->get('projects');
 
-        $projects = $this->serializer->deserialize($rawProjects, ProjectApi::class . '[]', 'json');
+        try {
+            $projects = $this->serializer->deserialize($rawProjects, ProjectApi::class . '[]', 'json');
+        } catch (Exception) {
+            throw new Http400Exception('malformed json');
+        }
+
         if (!$this->pdfValidator->isProjectsPdf($projects)) {
             return $this->json(['success' => false, 'message' => 'Au moins un projet n\'est pas un pdf'], 400);
         }

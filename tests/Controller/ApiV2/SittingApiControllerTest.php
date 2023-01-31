@@ -320,6 +320,41 @@ class SittingApiControllerTest extends WebTestCase
         $this->assertSame('annex1_project2.pdf', $projects[01]['annexes'][0]['file']['name']);
     }
 
+
+
+
+
+
+    public function testAddProjectsToSittingMalformedJson()
+    {
+        $structure = StructureStory::libriciel();
+        $apiUser = ApiUserStory::apiAdminLibriciel();
+        $sittingBureau = SittingStory::sittingBureauLibriciel();
+
+        $this->client->request(
+            Request::METHOD_POST,
+            "/api/v2/structures/{$structure->getId()}/sittings/{$sittingBureau->getId()}/projects",
+            [
+                'projects' => "malformedJson",
+            ],
+            [],
+            [
+                'HTTP_ACCEPT' => 'application/json',
+                'HTTP_X-AUTH-TOKEN' => $apiUser->getToken(),
+            ],
+        );
+
+        $this->assertResponseStatusCodeSame(400);
+        $content = json_decode($this->client->getResponse()->getContent());
+        $this->assertSame('malformed json' ,$content->message);
+
+    }
+
+
+
+
+
+
     public function testAddProjectsToSittingWithProjects()
     {
         $structure = StructureStory::libriciel();

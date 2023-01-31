@@ -41,6 +41,7 @@ security:
     api:
       pattern: ^/api/v2
       provider: app_connector_provider
+      stateless: true
       custom_authenticators:
         - App\Security\TokenAuthenticator
 
