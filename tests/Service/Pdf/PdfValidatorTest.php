@@ -190,7 +190,10 @@ class PdfValidatorTest extends WebTestCase
     public function testIsPdfContent()
     {
         $uploadedFile1 = new UploadedFile(__DIR__ . '/../../resources/pdfEncrypted.pdf', 'pdfEncrypted.pdf');
-        $this->assertTrue($this->pdfvalidator->isPdfContent(file_get_contents($uploadedFile1)));
+        $handle = fopen($uploadedFile1, "rb");
+        $isGoofPdf = $this->pdfvalidator->isPdfContent($handle);
+        fclose($handle);
+        $this->assertTrue($isGoofPdf);
     }
 
     public function testIsNotProtectedByPasswordPdf()
