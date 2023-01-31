@@ -61,11 +61,11 @@ class PdfValidator
                     $filename = $projects['sitting'][$typeDocument]->getClientOriginalName();
 
                     $handle = fopen($projects['sitting'][$typeDocument]->getPathname(), "rb");
-                    $isGoofPdf = $this->isPdfContent($handle);
+                    $isGoodPdf = $this->isPdfContent($handle);
                     fclose($handle);
 
                     $success[$filename] = [
-                        $isGoofPdf,
+                        $isGoodPdf,
                         !$this->isProtectedByPasswordPdf($projects['sitting'][$typeDocument]->getPathname()),
                     ];
                 }
@@ -86,11 +86,11 @@ class PdfValidator
                 $filename = $uploadedFile->getClientOriginalName();
 
                 $handle = fopen($uploadedFile->getPathname(), "rb");
-                $isGoofPdf = $this->isPdfContent($handle);
+                $isGoodPdf = $this->isPdfContent($handle);
                 fclose($handle);
 
                 $success[$filename] = [
-                    $isGoofPdf,
+                    $isGoodPdf,
                     !$this->isProtectedByPasswordPdf($uploadedFile->getPathname()),
                 ];
             }
