@@ -30,7 +30,7 @@ class OtherdocController extends AbstractController
 
         $unreadablePdf = $pdfValidator->getListOfUnreadablePdf($request->files->all());
         if (count($unreadablePdf) > 0) {
-            return $this->json(['success' => false, 'message' => 'fichier(s) invalide(s) :  ' . implode(', ', $unreadablePdf)], 400);
+            return $this->json(['success' => false, 'message' => 'Fichier(s) invalide(s) :  ' . implode(', ', $unreadablePdf)], 400);
         }
 
         $otherdocManager->update($otherdocs, $request->files->all(), $sitting);
