@@ -52,82 +52,91 @@ class PdfValidator
         return true;
     }
 
-    public function listOfOpenablePdfForSittingCreation(?array $projects): array
+    /**
+     * array<?UploadedFile> $uploadedFiles.
+     *
+     * @return array<string>
+     */
+    public function getListOfUnreadablePdf(array $uploadedFiles): array
     {
-        $success = [];
-        if (isset($projects['sitting']) && !empty($projects['sitting'])) {
-            foreach ($projects['sitting'] as $typeDocument => $dataDocument) {
-                if (!empty($projects['sitting'][$typeDocument])) {
-                    $filename = $projects['sitting'][$typeDocument]->getClientOriginalName();
+        $pdfStatus = $this->listOfReadablePdfStatus($uploadedFiles);
 
-                    $handle = fopen($projects['sitting'][$typeDocument]->getPathname(), "rb");
-                    $isGoodPdf = $this->isPdfContent($handle);
-                    fclose($handle);
-
-                    $success[$filename] = [
-                        $isGoodPdf,
-                        !$this->isProtectedByPasswordPdf($projects['sitting'][$typeDocument]->getPathname()),
-                    ];
-                }
-            }
-        }
-
-        return $success;
+        return $this->listOfNotReadablePdfName($pdfStatus);
     }
 
     /**
-     * @param array<UploadedFile $uploadedFiles
+     * @param array<string, bool[]> $pdfStatus
+     *
+     * @return array<string>
      */
-    public function listOfOpenablePdfWhenAddingFiles(array $uploadedFiles): array
+    private function listOfNotReadablePdfName(array $pdfStatus): array
     {
-        $success = [];
+        $fileNames = [];
+        foreach ($pdfStatus as $fileName => $status) {
+            if (in_array(false, $status)) {
+                $fileNames[] = $fileName;
+            }
+        }
+
+        return $fileNames;
+    }
+
+    /**
+     * @param array<?UploadedFile> $uploadedFiles
+     *
+     * @return array<string, bool[]>
+     */
+    public function listOfReadablePdfStatus(array $uploadedFiles): array
+    {
+        $status = [];
         foreach ($uploadedFiles as $uploadedFile) {
+            if (!$uploadedFile) {
+                continue;
+            }
+
             if ($this->isPdfMimeType($uploadedFile)) {
                 $filename = $uploadedFile->getClientOriginalName();
 
-                $handle = fopen($uploadedFile->getPathname(), "rb");
+                $handle = fopen($uploadedFile->getPathname(), 'rb');
                 $isGoodPdf = $this->isPdfContent($handle);
                 fclose($handle);
 
-                $success[$filename] = [
+                $status[$filename] = [
                     $isGoodPdf,
                     !$this->isProtectedByPasswordPdf($uploadedFile->getPathname()),
                 ];
             }
         }
 
-        return $success;
+        return $status;
     }
 
     public function isPdfMimeType(UploadedFile $uploadedFile): bool
     {
         return 'application/pdf' === $uploadedFile->getMimeType();
     }
+
     public function isPdfContent($handle): bool
     {
-        $success = false;
         $firstLine = fgets($handle);
 
         $lastLine = null;
         while (($line = fgets($handle)) !== false) {
-            $lastLine= $line;
+            $lastLine = $line;
         }
         $lastLine = preg_replace('/[\r \n]/', '', $lastLine);
-        if (0 === stripos($firstLine, '%PDF') && 0 === stripos($lastLine, '%%EOF') ) {
-            $success = true;
+        if (0 === stripos($firstLine, '%PDF') && 0 === stripos($lastLine, '%%EOF')) {
+            return true;
         }
-        return $success;
+
+        return false;
     }
 
     public function isProtectedByPasswordPdf($filePath): bool
     {
-        $success = false;
         $cmd = 'pdfinfo ' . $filePath;
         $cmdResult = shell_exec($cmd);
-        if (empty($cmdResult)) {
-            $success = true;
-        }
 
-        return $success;
+        return empty($cmdResult);
     }
 }

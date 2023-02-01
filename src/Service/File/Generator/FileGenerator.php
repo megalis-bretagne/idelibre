@@ -31,14 +31,13 @@ class FileGenerator
         $fullSittingDocsPath = $this->getFullSittingDocsPath($sitting);
         $pdfDocsPathFinal = $this->genFullSittingDirPath($sitting, 'pdf');
 
-        $cmd = 'pdfunite ' . implode(' ', $fullSittingDocsPath) . ' ' . $pdfDocsPathFinal;
-
         if (!$this->fileChecker->isValid('pdf', $fullSittingDocsPath)) {
             $this->logger->error('PDF is too heavy, max size is' . $this->bag->get('maximum_size_pdf_zip_generation'));
 
             return;
         }
 
+        $cmd = 'pdfunite ' . implode(' ', $fullSittingDocsPath) . ' ' . $pdfDocsPathFinal;
         try {
             shell_exec($cmd);
         } catch (Exception $exception) {
@@ -87,6 +86,7 @@ class FileGenerator
     public function genFullSittingDirPath(Sitting $sitting, string $extension): string
     {
         $directoryPath = $this->getDirectoryPathByExtension($extension) . $sitting->getStructure()->getId();
+        $this->filesystem->mkdir($directoryPath);
 
         return $directoryPath . '/' . $sitting->getId() . '.' . $extension;
     }

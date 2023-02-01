@@ -22,7 +22,7 @@ class ActorFinderTest extends WebTestCase
     use LoginTrait;
 
     private ObjectManager $entityManager;
-    private UserRepository $userRepository;
+    private ?UserRepository $userRepository;
 
     protected function setUp(): void
     {

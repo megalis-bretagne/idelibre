@@ -66,7 +66,7 @@ RUN cd /app && \
     npm run build
 
 
-RUN mkdir -p /data
+RUN mkdir -p /data /data/workspace /data/pdf /data/token /data/zip
 RUN chown -R www-data:www-data /data
 
 

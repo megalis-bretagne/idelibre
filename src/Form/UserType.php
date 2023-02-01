@@ -156,7 +156,7 @@ class UserType extends AbstractType
         ;
 
         $builder->get('username')->addModelTransformer(new CallbackTransformer(
-            fn ($username) => preg_replace('/@.*/', '', $username),
+            fn ($username) => $username ? preg_replace('/@.*/', '', $username) : '',
             fn ($username) => $username . '@' . $this->getStructureSuffix($options['structure'])
         ));
     }

@@ -21,7 +21,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpClient\Exception\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
@@ -45,7 +44,7 @@ class SittingController extends AbstractController
             ]
         );
         if ($status = $request->query->get('status')) {
-            $sidebarState->setActiveNavs(['sitting-nav', "sitting-${status}-nav"]);
+            $sidebarState->setActiveNavs(['sitting-nav', "sitting-$status-nav"]);
         }
 
         return $this->render('sitting/index.html.twig', [
@@ -65,13 +64,15 @@ class SittingController extends AbstractController
         $form = $this->createForm(SittingType::class, null, ['structure' => $this->getUser()->getStructure(), 'user' => $this->getUser()]);
         $form->handleRequest($request);
 
-        $allowedPdfsForSitting = $pdfValidator->listOfOpenablePdfForSittingCreation($request->files->all());
-        foreach ($allowedPdfsForSitting as $projectUploaded => $allowed) {
-            if (in_array(false, $allowed)) {
-                $this->addFlash('error', 'Le fichier ' . $projectUploaded . ' n\'est pas valide');
+        $unreadablePdf = $pdfValidator->getListOfUnreadablePdf([
+            $form->get('convocationFile')->getData(),
+            $form->get('invitationFile')->getData(),
+        ]);
 
-                return $this->redirectToRoute('sitting_add');
-            }
+        if (count($unreadablePdf) > 0) {
+            $this->addFlash('error', 'Le(s) fichier(s) ' . implode(', ', $unreadablePdf) . ' n\'est pas valide');
+
+            return $this->redirectToRoute('sitting_add');
         }
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -124,7 +125,7 @@ class SittingController extends AbstractController
     #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
     #[Sidebar(active: ['sitting-active-nav'])]
     #[Breadcrumb(title: 'Modifier {sitting.nameWithDate}')]
-    public function editInformation(Sitting $sitting, Request $request, SittingManager $sittingManager, PdfValidator $pdfValidator, RequestStack $requestStack): Response
+    public function editInformation(Sitting $sitting, Request $request, SittingManager $sittingManager, PdfValidator $pdfValidator): Response
     {
         if ($sitting->getIsArchived()) {
             throw new InvalidArgumentException('Impossible de modifier une séance archivée');
@@ -132,13 +133,15 @@ class SittingController extends AbstractController
         $form = $this->createForm(SittingType::class, $sitting, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
 
-        $allowedPdfsForSitting = $pdfValidator->listOfOpenablePdfForSittingCreation($request->files->all());
-        foreach ($allowedPdfsForSitting as $projectUploaded => $allowed) {
-            if (in_array(false, $allowed)) {
-                $this->addFlash('error', 'Le fichier ' . $projectUploaded . ' n\'est pas valide');
+        $unreadablePdf = $pdfValidator->getListOfUnreadablePdf([
+            $form->get('convocationFile')->getData(),
+            $form->get('invitationFile')->getData(),
+        ]);
 
-                return $this->redirectToRoute('sitting_show_information', ['id' => $sitting->getId()]);
-            }
+        if (count($unreadablePdf) > 0) {
+            $this->addFlash('error', 'fichier(s) invalide(s) :  ' . implode(', ', $unreadablePdf));
+
+            return $this->redirectToRoute('sitting_add');
         }
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -271,7 +274,7 @@ class SittingController extends AbstractController
 
     #[Route(path: '/sitting/unarchive/{id}', name: 'sitting_unarchive', methods: ['POST'])]
     #[IsGranted(data: 'ROLE_SUPERADMIN')]
-    public function unArchiveSitting(Sitting $sitting, SittingManager $sittingManager, Request $request)
+    public function unArchiveSitting(Sitting $sitting, SittingManager $sittingManager, Request $request): Response
     {
         $sittingManager->unArchive($sitting);
         $this->addFlash('success', 'La séance a été déclassée');
