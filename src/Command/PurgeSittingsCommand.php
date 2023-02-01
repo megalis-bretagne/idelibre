@@ -46,7 +46,7 @@ class PurgeSittingsCommand extends Command
         }
 
         $beforeString = $input->getArgument('before');
-        $before = DateTimeImmutable::createFromFormat('d/m/yy', $beforeString);
+        $before = DateTimeImmutable::createFromFormat('d/m/y', $beforeString);
 
         $sittings = $this->sittingRepository->findSittingsBefore($before, $structure);
         $numberSittings = count($sittings);
