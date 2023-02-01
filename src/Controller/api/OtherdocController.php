@@ -28,12 +28,11 @@ class OtherdocController extends AbstractController
             return $this->json(['success' => false, 'message' => 'Au moins un document n\'est pas un pdf'], 400);
         }
 
-        $allowedOtherdocPdf = $pdfValidator->listOfOpenablePdfWhenAddingFiles($request->files->all());
-        foreach ($allowedOtherdocPdf as $otherdocUploaded => $uploaded) {
-            if (in_array(false, $uploaded)) {
-                return $this->json(['success' => false, 'message' => 'Le fichier ' . $otherdocUploaded . ' n\'est pas valide'], 400);
-            }
+        $unreadablePdf = $pdfValidator->getListOfUnreadablePdf($request->files->all());
+        if (count($unreadablePdf) > 0) {
+            return $this->json(['success' => false, 'message' => 'fichier(s) invalide(s) :  ' . implode(', ', $unreadablePdf)], 400);
         }
+
         $otherdocManager->update($otherdocs, $request->files->all(), $sitting);
         $messageBus->dispatch(new UpdatedSitting($sitting->getId()));
 

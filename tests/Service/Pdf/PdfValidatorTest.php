@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Tests\Service\PdfValidator;
+namespace App\Tests\Service\Pdf;
 
 use App\Service\ApiEntity\OtherdocApi;
 use App\Service\ApiEntity\ProjectApi;
 use App\Service\File\FileManager;
+use App\Service\Pdf\PdfValidator;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
 use App\Tests\Story\AnnexStory;
@@ -38,7 +39,7 @@ class PdfValidatorTest extends WebTestCase
             ->getManager();
 
         $container = self::getContainer();
-        $this->pdfvalidator = $container->get('App\Service\Pdf\PdfValidator');
+        $this->pdfvalidator = $container->get(PdfValidator::class);
 
         self::ensureKernelShutdown();
         $this->client = static::createClient();
@@ -141,24 +142,8 @@ class PdfValidatorTest extends WebTestCase
         $this->assertFalse($this->pdfvalidator->isotherdocsPdf($otherdocs));
     }
 
-    public function testListOfOpenablePdfForSittingCreation()
-    {
-        $uploadedFile1 = new UploadedFile(__DIR__ . '/../../resources/fichier.pdf', 'fichier.pdf');
-        $uploadedFile2 = new UploadedFile(__DIR__ . '/../../resources/pdfEncrypted.pdf', 'pdfEncrypted.pdf');
 
-        $uploadedFiles = [
-            'sitting' => [
-                'convocationFile' => $uploadedFile1,
-                'invitationFile' => $uploadedFile2
-            ]
-        ];
-
-        $files = $this->pdfvalidator->listOfOpenablePdfForSittingCreation($uploadedFiles);
-        $this->assertCount(2, $files);
-    }
-
-
-    public function testlistOfOpenablePdfWhenAddingFiles()
+    public function testlistOfReadablePdfStatus()
     {
         $uploadedFile1 = new UploadedFile(__DIR__ . '/../../resources/pdfEncrypted.pdf', 'pdfEncrypted.pdf');
         $uploadedFile2 = new UploadedFile(__DIR__ . '/../../resources/toDecrypt.pdf', 'toDecrypt.pdf');
@@ -168,12 +153,26 @@ class PdfValidatorTest extends WebTestCase
             $uploadedFile2
         ];
 
-        $files = $this->pdfvalidator->listOfOpenablePdfWhenAddingFiles($uploadedFiles);
+        $files = $this->pdfvalidator->listOfReadablePdfStatus($uploadedFiles);
         $this->assertCount(2, $files);
     }
 
 
-    public function testListOfOpenablePdfWhenEditingOtherdocs()
+    public function testListOfReadablePdfStatusWithNullUploadedFile()
+    {
+        $uploadedFile1 = new UploadedFile(__DIR__ . '/../../resources/pdfEncrypted.pdf', 'pdfEncrypted.pdf');
+
+        $uploadedFiles = [
+            $uploadedFile1,
+            null
+        ];
+
+        $files = $this->pdfvalidator->listOfReadablePdfStatus($uploadedFiles);
+        $this->assertCount(1, $files);
+    }
+
+
+    public function testListOfReadablePdfStatusWhenEditingOtherdocs()
     {
         $uploadedFile1 = new UploadedFile(__DIR__ . '/../../resources/pdfEncrypted.pdf', 'pdfEncrypted.pdf');
         $uploadedFile2 = new UploadedFile(__DIR__ . '/../../resources/toDecrypt.pdf', 'toDecrypt.pdf');
@@ -183,7 +182,7 @@ class PdfValidatorTest extends WebTestCase
             $uploadedFile2
         ];
 
-        $files = $this->pdfvalidator->listOfOpenablePdfWhenAddingFiles($uploadedFiles);
+        $files = $this->pdfvalidator->listOfReadablePdfStatus($uploadedFiles);
         $this->assertCount(2, $files);
     }
 
