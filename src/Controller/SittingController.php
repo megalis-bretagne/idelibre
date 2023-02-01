@@ -70,7 +70,7 @@ class SittingController extends AbstractController
         ]);
 
         if (count($unreadablePdf) > 0) {
-            $this->addFlash('error', 'Le(s) fichier(s) ' . implode(', ', $unreadablePdf) . ' n\'est pas valide');
+            $this->addFlash('error', 'fichier(s) invalide(s) :  ' . implode(', ', $unreadablePdf));
 
             return $this->redirectToRoute('sitting_add');
         }
