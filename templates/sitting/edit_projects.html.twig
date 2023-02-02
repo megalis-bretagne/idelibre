@@ -51,7 +51,7 @@
             <div class="mt-4"></div>
 
             {# Pas de otherdocs #}
-            <div v-if="otherdocs.length == 0" class="text-center">
+            <div v-if="otherdocs.length === 0" class="text-center">
                 Aucun document associé
             </div>
 
@@ -60,15 +60,8 @@
 
                 <div v-for="(otherdoc, index) in otherdocs">
                     <div class="il-otherdoc">
-                        <div class="otherdoc-left cursor-grab handle">
-                            <div class="dropdown">
-{#                                <span class="badge badge-primary rank">${index + 1}</span>#}
-                                <span class="badge badge-primary rank"></span>
-                                <div class="dropdown-content">
-                                    <div v-for="rank in otherdocs.length" class="newRank" v-on:click="move(index, rank -1)"> ${rank}</div>
-                                </div>
-
-                            </div>
+                        <div style="padding: 20px" class="otherdoc-left cursor-grab handle">
+                            <i class="fas fa-arrows-alt-v"></i>
                         </div>
 
                         <div class="otherdoc-right">

@@ -8,44 +8,33 @@
     <div ng-if="!isInvite" style="margin-top: 5px"><button ng-click="downloadPdfSeance()"  type="button" title="PDF" class="btn btn-warning" style="width: 55px"> PDF </button> </div>
 </div>
 
-<!--<div class ="center-block perso-margin-vertical-lg" style="display: block; width: 90%; margin-bottom: 10px;" >   
-    <div class="row" >
-        <div class="col-xs-1"> <button type="button" class="btn btn-warning" ng-click="sortBy('rank')"> <i class="fa fa-sort fa"> Rang</i> </button>  </div>
-        <div class="col-xs-5 nopadding"><button type="button" class="btn btn-warning" ng-click="sortBy('name')"> <i class="fa fa-sort fa"> Titre</i> </button>  </div>
-        <div class="col-xs-3 nopadding"><button type="button" class="btn btn-warning" ng-click="sortBy('theme')"> <i class="fa fa-sort fa"> Thème</i> </button> </div>
-    </div>
-</div>
--->
-
-<!--<button class ="btn btn-default btn-lg center-block projet " style="display: block; width: 90%;" ng-click="downloadAll()">   
-    <i ng-class="{'fa-cloud-download fa fa-2x': true  }" ></i><span style="font-size: 1.2em"> Charger l'ensemble de la séance </span>
-</button>-->
 
 
-<button ng-click="clickOnConvocation()" class ="btn btn-default btn-lg center-block projet perso_align_left menuButton" style="background: #e8eaf6; margin-top: 30px ">
+<button ng-click="clickOnConvocation()" class ="btn btn-default btn-lg center-block projet perso_align_left menuButton"
+        style="background: #e8eaf6; margin-top: 30px; padding: 15px">
     <div class="row">
         <div class="col-xs-offset-1 col-xs-9 nopadding" style="overflow: hidden">
             <i class = "icon telechargement ou  telecharger">
             </i> Convocation
         </div>
-         
+
         <div class="col-xs-2">
             <span ng-if="annotations.private > 0" class='fa-user fa label-as-badge label-primary'>  {{annotations.private}}</span>
             <span ng-if="annotations.sharred > 0" class='fa-users fa label-as-badge label-success'>  {{annotations.sharred}}</span>
 <!--            <span ng-class="{'fa-users fa label-warning label-as-badge' : data.unreadAnnotation }"></span>-->
         </div>
     </div>
-    
+
 </button>
 
 
-<legend><h1>Autres documents</h1></legend>
+<legend ng-show="seance.otherdocs.length > 0" class="title-odj menuButton center-block perso-margin-vertical"><h2>Autres documents</h2></legend>
 <div ng-repeat="otherdoc in seance.otherdocs| orderBy: sortOtherdoc" >
     <otherdoc-btn data = "otherdoc" collectivite ="collectivite" account="accountId" seance="seanceId" state='state' ></otherdoc-btn>
 </div>
 
 
-<legend><h1>Projets</h1></legend>
+<legend ng-show="seance.projets.length > 0" class="title-odj menuButton center-block perso-margin-vertical-lg"><h2>Projets</h2></legend>
 <div ng-repeat="projet in seance.projets| orderBy: sortProjet" >
 
     <projet-btn data = "projet" collectivite ="collectivite" account="accountId" seance="seanceId" state='state' ></projet-btn>

@@ -111,10 +111,28 @@ span.glyphicon-envelope {
 
 
 .projet {
-
     margin-top: 10px;
     margin-bottom: 10px;
-    // height: 50px;
+    border-color: #CCC;
+    box-shadow: 3px 3px 5px #DDD;
+    cursor: pointer;
+    background-color: #F5F5F5;
+    background-image: linear-gradient(to bottom, #FFF, #E6E6E6);
+    background-repeat: repeat-x;
+    color: #333;
+    font-size: 14px;
+
+    font-weight: bold;
+}
+
+.title-odj {
+    opacity: 0.7;
+}
+
+
+.otherdoc {
+    margin-top: 10px;
+    margin-bottom: 10px;
     border-color: #CCC;
     box-shadow: 3px 3px 5px #DDD;
     cursor: pointer;
