@@ -2,7 +2,6 @@
 
 namespace App\Tests\Command;
 
-use App\Tests\Story\SittingStory;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -29,5 +28,4 @@ class genPdfAndZipSittingCommandTest extends WebTestCase
         $display = $cmdTester->getDisplay();
         $this->assertEquals('[OK] OK', str_replace("\n", '', trim($display)));
     }
-
 }

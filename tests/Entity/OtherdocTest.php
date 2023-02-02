@@ -12,11 +12,11 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class OtherdocTest extends WebTestCase
 {
-
     use HasValidationError;
     use StringTrait;
 
     private ValidatorInterface $validator;
+
     protected function setUp(): void
     {
         self::bootKernel();
@@ -42,7 +42,6 @@ class OtherdocTest extends WebTestCase
             ->setSitting(new Sitting());
 
         $this->assertHasValidationErrors($otherdoc, 1);
-
     }
 
     public function testNameNotTooLong()

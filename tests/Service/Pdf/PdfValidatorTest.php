@@ -53,7 +53,7 @@ class PdfValidatorTest extends WebTestCase
     public function testIsPdfFile()
     {
         $file = FileStory::fileEncrypted();
-        $this->assertTrue($this->pdfvalidator->isPdfFile($file->getPath()) );
+        $this->assertTrue($this->pdfvalidator->isPdfFile($file->getPath()));
     }
 
     public function testIsProjectsPdf()
@@ -72,7 +72,7 @@ class PdfValidatorTest extends WebTestCase
 
         $projects = [
             $project1,
-            $project2
+            $project2,
         ];
         $this->assertTrue($this->pdfvalidator->isProjectsPdf($projects));
     }
@@ -93,11 +93,10 @@ class PdfValidatorTest extends WebTestCase
 
         $projects = [
             $project1,
-            $project2
+            $project2,
         ];
         $this->assertFalse($this->pdfvalidator->isProjectsPdf($projects));
     }
-
 
     public function testIsOtherdocsPdf()
     {
@@ -115,7 +114,7 @@ class PdfValidatorTest extends WebTestCase
 
         $otherdocs = [
             $otherdoc1,
-            $otherdoc2
+            $otherdoc2,
         ];
         $this->assertTrue($this->pdfvalidator->isotherdocsPdf($otherdocs));
     }
@@ -136,7 +135,7 @@ class PdfValidatorTest extends WebTestCase
 
         $otherdocs = [
             $otherdoc1,
-            $otherdoc2
+            $otherdoc2,
         ];
         $this->assertFalse($this->pdfvalidator->isotherdocsPdf($otherdocs));
     }
@@ -149,14 +148,13 @@ class PdfValidatorTest extends WebTestCase
         $uploadedFiles = [
             'sitting' => [
                 'convocationFile' => $uploadedFile1,
-                'invitationFile' => $uploadedFile2
-            ]
+                'invitationFile' => $uploadedFile2,
+            ],
         ];
 
         $files = $this->pdfvalidator->listOfOpenablePdfForSittingCreation($uploadedFiles);
         $this->assertCount(2, $files);
     }
-
 
     public function testlistOfOpenablePdfWhenAddingFiles()
     {
@@ -165,13 +163,12 @@ class PdfValidatorTest extends WebTestCase
 
         $uploadedFiles = [
             $uploadedFile1,
-            $uploadedFile2
+            $uploadedFile2,
         ];
 
         $files = $this->pdfvalidator->listOfOpenablePdfWhenAddingFiles($uploadedFiles);
         $this->assertCount(2, $files);
     }
-
 
     public function testListOfOpenablePdfWhenEditingOtherdocs()
     {
@@ -180,7 +177,7 @@ class PdfValidatorTest extends WebTestCase
 
         $uploadedFiles = [
             $uploadedFile1,
-            $uploadedFile2
+            $uploadedFile2,
         ];
 
         $files = $this->pdfvalidator->listOfOpenablePdfWhenAddingFiles($uploadedFiles);
@@ -190,7 +187,7 @@ class PdfValidatorTest extends WebTestCase
     public function testIsPdfContent()
     {
         $uploadedFile1 = new UploadedFile(__DIR__ . '/../../resources/pdfEncrypted.pdf', 'pdfEncrypted.pdf');
-        $handle = fopen($uploadedFile1, "rb");
+        $handle = fopen($uploadedFile1, 'rb');
         $isGoodPdf = $this->pdfvalidator->isPdfContent($handle);
         fclose($handle);
         $this->assertTrue($isGoodPdf);

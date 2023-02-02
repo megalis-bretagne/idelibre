@@ -9,7 +9,6 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 class GenAllPdfAndZipSittingForStructureCommandTest extends WebTestCase
 {
-
     protected function setUp(): void
     {
         $kernel = self::bootKernel();
@@ -19,7 +18,6 @@ class GenAllPdfAndZipSittingForStructureCommandTest extends WebTestCase
 
         self::ensureKernelShutdown();
         $this->client = static::createClient();
-
     }
 
     public function testGeneration()
@@ -29,12 +27,10 @@ class GenAllPdfAndZipSittingForStructureCommandTest extends WebTestCase
         $cmdToTest = (new Application(self::$kernel))->find('gen:all_zip_pdf');
         $cmdTester = new CommandTester($cmdToTest);
         $cmdTester->execute([
-            "structureId" => $structure->getId()
+            'structureId' => $structure->getId(),
         ]);
         $cmdTester->assertCommandIsSuccessful();
         $display = $cmdTester->getDisplay();
         $this->assertEquals('[OK] OK', str_replace("\n", '', trim($display)));
     }
-
-
 }

@@ -6,17 +6,14 @@ use App\Repository\SittingRepository;
 use App\Repository\StructureRepository;
 use App\Service\Seance\SittingManager;
 use App\Tests\Factory\StructureFactory;
-use App\Tests\Story\StructureStory;
-use DateTime;
-use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
-use function Symfony\Component\String\s;
 
 class PurgeSittingsCommandTest extends WebTestCase
 {
     private SittingRepository $sittingRepository;
+
     protected function setUp(): void
     {
         $kernel = self::bootKernel();
@@ -33,8 +30,8 @@ class PurgeSittingsCommandTest extends WebTestCase
     {
         $structure = StructureFactory::createOne();
         $numberSittings = count($this->sittingRepository->findAll());
-        $date =date("d/m/y");
-        $expected ="Confirmez-vous vouloir purger les seances d'avant le {$date} de la structure {$structure->getName()} ? \n" .
+        $date = date('d/m/y');
+        $expected = "Confirmez-vous vouloir purger les seances d'avant le {$date} de la structure {$structure->getName()} ? \n" .
             "({$numberSittings} Séances)(y/n)\n"
         . " Operation annulée\n";
 
@@ -44,20 +41,20 @@ class PurgeSittingsCommandTest extends WebTestCase
         $cmdTester->setInputs(['n']);
         $cmdTester->execute([
             'structureId' => $structure->getId(),
-            'before' => $date
+            'before' => $date,
         ]);
 
         $cmdTester->assertCommandIsSuccessful();
         $displayedMsg = $cmdTester->getDisplay();
-        $this->assertEquals($expected, $displayedMsg );
+        $this->assertEquals($expected, $displayedMsg);
     }
 
     public function testPurgeSittingsConfirmYes()
     {
         $structure = StructureFactory::createOne();
         $numberSittings = count($this->sittingRepository->findAll());
-        $date =date("d/m/y");
-        $expected ="Confirmez-vous vouloir purger les seances d'avant le {$date} de la structure {$structure->getName()} ? ({$numberSittings} Séances)(y/n) [OK] Séances supprimées";
+        $date = date('d/m/y');
+        $expected = "Confirmez-vous vouloir purger les seances d'avant le {$date} de la structure {$structure->getName()} ? ({$numberSittings} Séances)(y/n) [OK] Séances supprimées";
 
         $cmdToTest = (new Application(self::$kernel))->find('purge:sitting');
         $cmdTester = new CommandTester($cmdToTest);
@@ -65,7 +62,7 @@ class PurgeSittingsCommandTest extends WebTestCase
         $cmdTester->setInputs(['y']);
         $cmdTester->execute([
             'structureId' => $structure->getId(),
-            'before' => $date
+            'before' => $date,
         ]);
 
         $cmdTester->assertCommandIsSuccessful();

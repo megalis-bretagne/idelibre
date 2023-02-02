@@ -5,7 +5,6 @@ namespace App\Tests\Command;
 use App\Repository\SittingRepository;
 use App\Repository\StructureRepository;
 use App\Service\Seance\SittingManager;
-use App\Tests\Story\StructureStory;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -33,5 +32,4 @@ class PurgeDataCommandTest extends WebTestCase
         $display = $cmdTester->getDisplay();
         $this->assertEquals('[OK] Séances supprimées', str_replace("\n", '', trim($display)));
     }
-
 }

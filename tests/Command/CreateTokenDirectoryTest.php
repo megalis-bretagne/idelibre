@@ -14,26 +14,25 @@ class CreateTokenDirectoryTest extends WebTestCase
     private ?KernelBrowser $client;
     private StructureRepository $structureRepository;
 
-   protected function setUp(): void
-   {
+    protected function setUp(): void
+    {
         $kernel = self::bootKernel();
 
-       $this->structureRepository = self::getContainer()->get(StructureRepository::class);
+        $this->structureRepository = self::getContainer()->get(StructureRepository::class);
 
-       self::ensureKernelShutdown();
+        self::ensureKernelShutdown();
         $this->client = self::createClient();
 
-       StructureStory::libriciel();
-   }
+        StructureStory::libriciel();
+    }
 
-   public function testCreateTokenDirectory()
-   {
-       $cmdToTest = (new Application(self::$kernel))->find('createdir:token');
-       $cmdTester = new CommandTester($cmdToTest);
-       $cmdTester->execute([]);
-       $cmdTester->assertCommandIsSuccessful();
-       $display = $cmdTester->getDisplay();
-       $this->assertEquals('[OK] token dir create', str_replace("\n", '', trim($display)));
-   }
-
+    public function testCreateTokenDirectory()
+    {
+        $cmdToTest = (new Application(self::$kernel))->find('createdir:token');
+        $cmdTester = new CommandTester($cmdToTest);
+        $cmdTester->execute([]);
+        $cmdTester->assertCommandIsSuccessful();
+        $display = $cmdTester->getDisplay();
+        $this->assertEquals('[OK] token dir create', str_replace("\n", '', trim($display)));
+    }
 }

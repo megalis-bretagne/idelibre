@@ -60,7 +60,7 @@ class PdfValidator
                 if (!empty($projects['sitting'][$typeDocument])) {
                     $filename = $projects['sitting'][$typeDocument]->getClientOriginalName();
 
-                    $handle = fopen($projects['sitting'][$typeDocument]->getPathname(), "rb");
+                    $handle = fopen($projects['sitting'][$typeDocument]->getPathname(), 'rb');
                     $isGoodPdf = $this->isPdfContent($handle);
                     fclose($handle);
 
@@ -85,7 +85,7 @@ class PdfValidator
             if ($this->isPdfMimeType($uploadedFile)) {
                 $filename = $uploadedFile->getClientOriginalName();
 
-                $handle = fopen($uploadedFile->getPathname(), "rb");
+                $handle = fopen($uploadedFile->getPathname(), 'rb');
                 $isGoodPdf = $this->isPdfContent($handle);
                 fclose($handle);
 
@@ -103,6 +103,7 @@ class PdfValidator
     {
         return 'application/pdf' === $uploadedFile->getMimeType();
     }
+
     public function isPdfContent($handle): bool
     {
         $success = false;
@@ -110,12 +111,13 @@ class PdfValidator
 
         $lastLine = null;
         while (($line = fgets($handle)) !== false) {
-            $lastLine= $line;
+            $lastLine = $line;
         }
         $lastLine = preg_replace('/[\r \n]/', '', $lastLine);
-        if (0 === stripos($firstLine, '%PDF') && 0 === stripos($lastLine, '%%EOF') ) {
+        if (0 === stripos($firstLine, '%PDF') && 0 === stripos($lastLine, '%%EOF')) {
             $success = true;
         }
+
         return $success;
     }
 
