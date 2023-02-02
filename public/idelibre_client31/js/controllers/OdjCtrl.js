@@ -146,7 +146,7 @@ console.log( seance);
             $modal.open({
                 templateUrl: 'js/templates/modalInfo/ModalpresenceCtrl.html',
                 controller: 'ModalpresenceCtrl',
-                size: 'sm',
+                size: 'md',
                 resolve: {
                     account: function () {
                         return account;
@@ -161,9 +161,9 @@ console.log( seance);
                 if(res === Seance.ABSENT ){
                     openConfirmAbsent()
                 }
-                else if(res === Seance.PRESENT ) {
+                /*else if(res === Seance.PRESENT ) {
                     openConfirmIsRemote();
-                }
+                }*/
             });
         };
 
