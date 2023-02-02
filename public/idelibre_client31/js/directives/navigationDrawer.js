@@ -13,6 +13,9 @@
                 action: '&'
             },
             controller: function ($scope) {
+
+                //console.log($scope.seance.otherdocs);
+
                 //for each projet showAnnexe = false !
                 $scope.seance.projets.forEach(function(projet){
                     projet.showAnnexe = false;
