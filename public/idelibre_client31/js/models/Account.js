@@ -204,19 +204,16 @@ Account.prototype.formatDataProjet = function (data) {
  */
 Account.prototype.formatDataOtherdoc = function (data) {
 
-    var otherdoc = {
+    return {
         id: data.otherdoc_id,
         name: data.otherdoc_name,
         rank: data.otherdoc_rank,
         document_text: {
-            id: data.otherdoc_documentId,
+            id: data.otherdoc_document_id,
             name: data.otherdoc_name,
             isLoaded: NOTLOADED,
         }
     };
-
-    return otherdoc;
-
 };
 
 

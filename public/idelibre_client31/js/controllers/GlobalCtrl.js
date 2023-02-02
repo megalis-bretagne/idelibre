@@ -43,25 +43,15 @@
             account.status = OFFLINE;
         });
         
-        
-        
+
         annotationSrv.load();
         arSrv.load();
        
-        
-        
-        
-        
-                
-
         $scope.accounts = accountSrv.getList();
         localDbSrv.getAllConvocation();
         localDbSrv.checkAllProjetsDocument();
         localDbSrv.checkAllOtherdocsDocument();
         socketioSrv.initSockets();
-
-
-
 
 
         $scope.logging = function () {

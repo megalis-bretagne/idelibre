@@ -8,7 +8,6 @@
         var PROJET = 2;
         var ANNEXE = 3;
         var INVITATION = 4;
-        var OTHERDOC = 5;
 
         var pouch = {};
         var pouchdb;
@@ -55,7 +54,6 @@
                 init();
                 pouch.getAllConvocation();
                 pouch.checkAllProjetsDocument();
-                pouch.checkAllOtherdocsDocument();
             }).catch(function (err) {
                 console.log(err);
             })
@@ -84,7 +82,7 @@
 
 
 
-        // enregistre une donnée 
+        // enregistre une donnée
         pouch.save = function (id, data, callback) {
             $log.debug('begin save');
             pouchdb.put({
@@ -149,17 +147,11 @@
                 removeById(documentId);
             });
 
-            //supression des documents des autres documents TODO: faire avec un db.bulkDocs pour plus de performence (un seul acces db)
-            _.each(seance.getOtherdocDocumentsId(), function (documentId) {
-                removeById(documentId);
-            });
         };
 
 
         var projetQueue = [];
         var isRunningProjetQueue = false;
-        var otherdocQueue = [];
-        var isRunningOtherdocQueue = false;
 
 
         pouch.getProjet = function (document, collectivite, seance, accountId) {
@@ -170,13 +162,6 @@
         }
 
 
-        pouch.getOtherdoc = function (document, collectivite, seance, accountId) {
-            //seulement si ce morceau n'a pas encore été chargé
-            if (!(document.isLoaded == LOADED)) {
-                addQueue(collectivite, seance, accountId, document, OTHERDOC);
-            }
-        }
-
 
         pouch.addAnnexeToDownload = function (collectivite, seance, accountId, annexe) {
             addQueue(collectivite, seance, accountId, annexe, ANNEXE);
@@ -185,13 +170,8 @@
 
         var addQueue = function (collectivite, seance, accountId, document, type) {
             var alreadyInQueue;
-
             if (type != ANNEXE) {
                 alreadyInQueue = _.find(projetQueue, function (el) {
-                    return el.document.id == document.id;
-                });
-            } else if (type == OTHERDOC) {
-                alreadyInQueue = _.find(otherdocQueue, function (el) {
                     return el.document.id == document.id;
                 });
             } else {
@@ -201,16 +181,13 @@
             }
 
 
+
             if (!alreadyInQueue) {
                 projetQueue.push({collectivite: collectivite, seance: seance, accountId: accountId, document: document, type: type});
                 execProjetQueue();
-
-                otherdocQueue.push({collectivite: collectivite, seance: seance, accountId: accountId, document: document, type: type});
-                execOtherdocQueue();
             } else {
                 execProjetQueue();
                 //alert ('already in ouh');
-                execOtherdocQueue();
             }
         };
 
@@ -222,7 +199,6 @@
                 isRunningProjetQueue = true;
                 //recupération du premier el de la queue
                 var part = projetQueue.splice(0, 1)[0];
-
                 if (!(part.document.isLoaded == LOADED)) {
                     getAndSaveDoc(part.collectivite, part.seance, part.accountId, part.document, part.type, execProjetQueue);
                 } else {
@@ -234,40 +210,24 @@
 
 
 
-        var execOtherdocQueue = function () {
-            //si la queue n'est pas vide et pas deja en train d'etre dépilée
-            if (!_.isEmpty(otherdocQueue) && !isRunningOtherdocQueue) {
-                isRunningOtherdocQueue = true;
-                //recupération du premier el de la queue
-                var part = otherdocQueue.splice(0, 1)[0];
-
-                if (!(part.document.isLoaded == LOADED)) {
-                    getAndSaveDoc(part.collectivite, part.seance, part.accountId, part.document, part.type, execOtherdocQueue());
-                } else {
-                    isRunningOtherdocQueue = false;
-                    execOtherdocQueue();
-                }
-            }
-        }
-
 // USELESS ??
-  /*      var execQueue = function () {
-            //si la queue n'est pas vide et pas deja en train d'etre dépilée
-            if (!_.isEmpty(partQueue) && !isRunningQueue) {
-                isRunningQueue = true;
-                //recupération du premier el de la queue
-                var part = partQueue.splice(0, 1)[0];
+        /*      var execQueue = function () {
+                  //si la queue n'est pas vide et pas deja en train d'etre dépilée
+                  if (!_.isEmpty(partQueue) && !isRunningQueue) {
+                      isRunningQueue = true;
+                      //recupération du premier el de la queue
+                      var part = partQueue.splice(0, 1)[0];
 
 
-                if (!part.pdfPart.isLoaded) {
-                    getAndSaveParts(part.pdfPart, part.collectivite, part.seance, part.accountId, part.document, part.type, execQueue);
-                } else {
-                    isRunningQueue = false;
-                    execQueue();
-                }
-            }
-        }
-*/
+                      if (!part.pdfPart.isLoaded) {
+                          getAndSaveParts(part.pdfPart, part.collectivite, part.seance, part.accountId, part.document, part.type, execQueue);
+                      } else {
+                          isRunningQueue = false;
+                          execQueue();
+                      }
+                  }
+              }
+      */
 
         var saveInDataBase = function (data, typeDocument, pdfdata, accountId, seance, document, callback) {
             $rootScope.$broadcast('download');
@@ -292,6 +252,7 @@
                 }
             }, {conflicts: false}).then(function (response) {
                 $rootScope.$broadcast('download');
+                console.log("success in db");
                 // emission des loaded
                 if (typeDocument === CONVOCATION) {
                     // blob = null;
@@ -328,20 +289,10 @@
                     callback();
                 }
 
-                if (typeDocument === OTHERDOC) {
-                    // blob = null;
-                    document.isLoaded = 2; //LOADED
-                    $rootScope.$broadcast('update loaded other document', {
-                        documentId: document.id,
-                        accountId: accountId,
-                        seanceId: seance.id
-                    });
-                    isRunningOtherdocQueue = false;
-                    callback();
-                }
-
 
             }).catch(function (err) {
+
+
 
                 if (typeDocument == PROJET) {
                     errorSaveProjet(err, document, accountId, seance);
@@ -351,14 +302,9 @@
                     errorSaveAnnexe(err, document, accountId, seance);
                 }
 
-                if (typeDocument == OTHERDOC) {
-                    errorSaveAnnexe(err, document, accountId, seance);
-                }
-
 
                 isRunningQueueConvocation = false;
                 isRunningProjetQueue = false;
-                isRunningOtherdocQueue = false;
                 callback();
             });
         };
@@ -404,25 +350,6 @@
         }
 
 
-
-        var errorSaveOtherdoc = function (err, document, accountId, seance) {
-
-            if (err.status === 409) {
-                document.isLoaded = LOADED; //LOADED
-                $rootScope.$broadcast('update loaded other document', {
-                    documentId: document.id,
-                    accountId: accountId,
-                    seanceId: seance.id
-                });
-            } else {
-                $log.error(err);
-                $rootScope.$broadcast('error loaded other document', {
-                    documentId: document.id,
-                    accountId: accountId,
-                    seanceId: seance.id
-                });
-            }
-        }
 
         /** X
          * Télécharge et sauvegarde une annexe en pdf
@@ -588,10 +515,9 @@
             }
 
 
-            if (typeDocument != ANNEXE && typeDocument != OTHERDOC) {
+
+            if (typeDocument != ANNEXE) {
                 var url = account.url + '/nodejs/' + config.API_LEVEL + '/projets/dlPdf/' + document.id;
-            } else if (typeDocument == OTHERDOC) {
-                var url = account.url + '/nodejs/' + config.API_LEVEL + '/otherdocs/dlPdf/' + document.id;
             } else {
                 var url = account.url + "/nodejs/" + config.API_LEVEL + "/annexes/dlAnnexe/" + document.annexe_id;
             }
@@ -615,26 +541,19 @@
                 , headers: {
                     'token': account.token}
             }).
-            // $http.get(url, {timeout: timeout}).
-            success(function (data, status, headers, config) {
-                saveInDataBase(data, typeDocument, null, accountId, seance, document, callback);
-            }).
+                // $http.get(url, {timeout: timeout}).
+                success(function (data, status, headers, config) {
+                    saveInDataBase(data, typeDocument, null, accountId, seance, document, callback);
+                }).
             error(function (data, status, headers, config) {
                 $log.error('error');
-                if (typeDocument != ANNEXE && typeDocument != OTHERDOC) {
+                if (typeDocument != ANNEXE) {
                     $rootScope.$broadcast('error loaded projet', {
                         documentId: document.id,
                         accountId: accountId,
                         seanceId: seance.id
                     });
-                } else if (typeDocument != ANNEXE && typeDocument == OTHERDOC) {
-                    $rootScope.$broadcast('error loaded other document', {
-                        documentId: document.id,
-                        accountId: accountId,
-                        seanceId: seance.id
-                    });
-                }
-                else {
+                } else {
                     $rootScope.$broadcast('error loaded annexe', {
                         documentId: document.annexe_id,
                         accountId: accountId,
@@ -645,7 +564,6 @@
                 console.log("error");
                 isRunningProjetQueue = false;
                 isRunningQueueConvocation = false;
-                isRunningOtherdocQueue = false;
                 callback();
             });
         };
@@ -668,18 +586,10 @@
             }
         };
 
-
-        /** X
-         * test si un autre document est déja chargé
-         * @param {type} documentId
-         * @param {type} otherdoc
-         * @param {type} seanceId
-         * @param {type} accountId
-         * @returns {undefined}
-         */
         pouch.checkOtherdocDocument = function (document, otherdoc, seance, account) {
-            lookForOtherdocPdf(document, otherdoc, account, seance);
+            lookForProjetPdf(document, otherdoc, account, seance);
         };
+
 
 
         var lookForAnnexePdf = function (annexe, projet, account, seance) {
@@ -743,39 +653,6 @@
         };
 
 
-        /**
-         *  recherche des morceau de pdf de autre document
-         * @param {type} pdfdatas
-         * @param {type} document
-         * @param {type} otherdoc
-         * @param {type} account
-         * @param {type} seance
-         * @returns {undefined}
-         */
-        var lookForOtherdocPdf = function (document, otherdoc, account, seance) {
-
-            pouch.find(document.id, function (doc) {
-                if (doc) {
-                    document.isLoaded = LOADED; //LOADED
-                    $rootScope.$broadcast('update loaded other document', {
-                        documentId: document.id,
-                        accountId: account.id,
-                        seanceId: seance.id,
-                        otherdocId: otherdoc.id
-                    });
-
-                }else{
-                    document.isLoaded = NOTLOADED; //LOADED
-                    $rootScope.$broadcast('update loaded other document', {
-                        documentId: document.id,
-                        accountId: account.id,
-                        seanceId: seance.id,
-                        otherdocId: otherdoc.id
-                    });
-                }
-            });
-        };
-
 
         /**
          * verification si l'annexe est deja chargée
@@ -833,6 +710,7 @@
 
 
 
+
         /** X
          *  //TODO checkAllOtherdocsDocumentByAccount
          *
@@ -870,6 +748,8 @@
                 }
             }
         };
+
+
 
 
         pouch.getData = function (docId) {

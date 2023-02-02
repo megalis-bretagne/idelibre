@@ -127,7 +127,7 @@ console.log( seance);
 
             _.each(sortedOtherdoc, function (otherdoc) {
                 if (otherdoc.document_text.isLoaded !== 2) {
-                    localDbSrv.getOtherdoc(otherdoc.document_text, $scope.collectivite, $scope.seance, $scope.accountId);
+                    localDbSrv.getProjet(otherdoc.document_text, $scope.collectivite, $scope.seance, $scope.accountId);
                 }
             });
 
