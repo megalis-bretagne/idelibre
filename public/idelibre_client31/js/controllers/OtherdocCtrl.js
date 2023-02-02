@@ -3,11 +3,12 @@
 
     angular.module('idelibreApp').controller('OtherdocCtrl', function ($rootScope, $scope, $routeParams, $location, dlOriginalSrv, usSpinnerService, $timeout, fakeUrlSrv, workerSrv, accountSrv) {
 
+
         workerSrv.clearDocument();
 
         fakeUrlSrv.removeUrls();
 
-        $scope.accountId = $routeParams.acountId;
+        $scope.accountId = $routeParams.accountId;
         $scope.seanceId = $routeParams.seanceId;
         $scope.documentId = $routeParams.documentId;
         $scope.otherdocId = $routeParams.otherdocId;
@@ -15,6 +16,8 @@
         var account = accountSrv.findAccountById($scope.accountId);
         var seance = account.findSeance($scope.seanceId);
         var otherdoc = seance.findOtherdoc($scope.otherdocId);
+
+
 
         $scope.seance = seance;
         $scope.account = account;
