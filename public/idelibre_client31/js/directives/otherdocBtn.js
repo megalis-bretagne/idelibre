@@ -56,7 +56,7 @@
                             $scope.loadingState = PENDING;
                             $scope.data.document_text.isLoaded = PENDING;
 
-                            localDbSrv.getOtherdoc($scope.data.document_text, null, $scope.seance, $scope.account);
+                            localDbSrv.getProjet($scope.data.document_text, null, $scope.seance, $scope.account);
                         }
                     }
                 };
@@ -71,7 +71,7 @@
 
 
                 //ecouteur pour la mise à jour du nombre de otherdoc chargée
-                var cleanup1 = $scope.$on('update loaded otherdoc', function (event, data) {
+                var cleanup1 = $scope.$on('update loaded projet', function (event, data) {
                     if (data.documentId === $scope.data.document_text.id) {
                         $scope.loadingState = $scope.data.document_text.isLoaded;
                         if (!$rootScope.$$phase) {
@@ -80,35 +80,14 @@
                     }
                 });
 
-                //ecouteur pour la mise a jour du nombre de part chargé
-                var cleanup2 = $scope.$on('update loaded otherdoc pdfpart', function (event, data) {
-                    if (data.documentId === $scope.data.document_text.id) {
-                        $scope.loadedOtherdocPart = $scope.data.countOtherdocPdfdatasLoaded();
-                        if (!$rootScope.$$phase) {
-                            $scope.$apply();
-                        }
-                    }
-                });
+
 
 
                 //si le téléchargement echoue
-                var cleanup3 = $rootScope.$on('error loaded otherdoc', function (event, data) {
+                var cleanup3 = $rootScope.$on('error loaded projet', function (event, data) {
                     if (data.documentId === $scope.data.document_text.id) {
                         $scope.data.document_text.isLoaded = NOTLOADED;
                         $scope.loadingState = LOAD_ERROR;
-                        if (!$rootScope.$$phase) {
-                            $scope.$apply();
-                        }
-                    }
-                });
-
-
-                //nombre de partie à téléchargés (pas forcement enregistrée) NON AFFICHé à l'écran !
-                $scope.loadedOtherdocPartdl = 0;
-                var cleanup4 = $scope.$on('update loaded otherdoc pdfpart dl', function (event, data) {
-                    if (data.documentId === $scope.data.document_text.id) {
-                        //  alert('toto');
-                        $scope.loadedOtherdocPartdl += 1;
                         if (!$rootScope.$$phase) {
                             $scope.$apply();
                         }
@@ -153,9 +132,7 @@
 
                 $scope.$on('$destroy', function () {
                     cleanup1();
-                    cleanup2();
                     cleanup3();
-                    cleanup4();
                     cleanup5();
                 });
 
