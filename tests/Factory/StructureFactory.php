@@ -54,6 +54,7 @@ final class StructureFactory extends ModelFactory
             'replyTo' => self::faker()->text(255),
             'suffix' => self::faker()->text(255),
             'timezone' => TimezoneFactory::new(),
+            'canEditReplyTo' => true
 
         ];
     }

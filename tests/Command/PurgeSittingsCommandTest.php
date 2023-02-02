@@ -5,6 +5,7 @@ namespace App\Tests\Command;
 use App\Repository\SittingRepository;
 use App\Repository\StructureRepository;
 use App\Service\Seance\SittingManager;
+use App\Tests\Factory\StructureFactory;
 use App\Tests\Story\StructureStory;
 use DateTime;
 use DateTimeImmutable;
@@ -28,9 +29,9 @@ class PurgeSittingsCommandTest extends WebTestCase
         $this->client = self::createClient();
     }
 
-    public function testPurgeSittings()
+    public function testPurgeSittingsConfirmNo()
     {
-        $structure = StructureStory::libriciel();
+        $structure = StructureFactory::createOne();
         $numberSittings = count($this->sittingRepository->findAll());
         $date =date("d/m/y");
         $expected ="Confirmez-vous vouloir purger les seances d'avant le {$date} de la structure {$structure->getName()} ? \n" .
@@ -46,16 +47,29 @@ class PurgeSittingsCommandTest extends WebTestCase
             'before' => $date
         ]);
 
-
         $cmdTester->assertCommandIsSuccessful();
         $displayedMsg = $cmdTester->getDisplay();
         $this->assertEquals($expected, $displayedMsg );
-
-
-
-//        $display = $cmdTester->getDisplay();
-//        $this->assertEquals('[OK] Séances supprimées', str_replace("\n", '', trim($display)));
     }
 
+    public function testPurgeSittingsConfirmYes()
+    {
+        $structure = StructureFactory::createOne();
+        $numberSittings = count($this->sittingRepository->findAll());
+        $date =date("d/m/y");
+        $expected ="Confirmez-vous vouloir purger les seances d'avant le {$date} de la structure {$structure->getName()} ? ({$numberSittings} Séances)(y/n) [OK] Séances supprimées";
 
+        $cmdToTest = (new Application(self::$kernel))->find('purge:sitting');
+        $cmdTester = new CommandTester($cmdToTest);
+
+        $cmdTester->setInputs(['y']);
+        $cmdTester->execute([
+            'structureId' => $structure->getId(),
+            'before' => $date
+        ]);
+
+        $cmdTester->assertCommandIsSuccessful();
+        $display = $cmdTester->getDisplay();
+        $this->assertEquals($expected, str_replace("\n", '', trim($display)));
+    }
 }

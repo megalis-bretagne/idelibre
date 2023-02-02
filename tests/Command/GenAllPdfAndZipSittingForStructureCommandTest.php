@@ -2,16 +2,10 @@
 
 namespace App\Tests\Command;
 
-use App\Entity\Structure;
-use App\Repository\SittingRepository;
-use App\Repository\StructureRepository;
-use App\Tests\Story\ConvocationStory;
-use App\Tests\Story\SittingStory;
-use App\Tests\Story\StructureStory;
+use App\Tests\Factory\StructureFactory;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
-use function Symfony\Component\String\s;
 
 class GenAllPdfAndZipSittingForStructureCommandTest extends WebTestCase
 {
@@ -30,7 +24,8 @@ class GenAllPdfAndZipSittingForStructureCommandTest extends WebTestCase
 
     public function testGeneration()
     {
-        $structure = StructureStory::libriciel();
+        $structure = StructureFactory::createOne();
+
         $cmdToTest = (new Application(self::$kernel))->find('gen:all_zip_pdf');
         $cmdTester = new CommandTester($cmdToTest);
         $cmdTester->execute([
