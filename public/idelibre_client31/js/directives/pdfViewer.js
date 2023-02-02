@@ -33,11 +33,6 @@
              */
             controller: function ($scope, $window, fakeUrlSrv, accountSrv, localDbSrv, $log, $anchorScroll, $location) {
 
-
-
-
-
-
                 $scope.$on('toggleRightDrawer', function (e, data) {
                     $scope.isDrawer = !$scope.isDrawer;
 
@@ -65,10 +60,10 @@
                 $scope.seance = seance;
                 $scope.account = account;
 
-                $scope.enableAnnotations = account.type == ACTEURS
+                $scope.enableAnnotations = (account.type == ACTEURS && $scope.typedocument != "otherdoc");
 
                 if($scope.enableAnnotations) {
-                    if ($scope.typedocument != "archivedProjet" && $scope.typedocument != "archivedAnnexe") {
+                    if ($scope.typedocument != "archivedProjet" && $scope.typedocument != "archivedAnnexe" && $scope.typedocument != "otherdoc") {
                         $scope.users = seance.getSharedUsers(account.userId);
                     }
                 }

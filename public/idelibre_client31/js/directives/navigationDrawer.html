@@ -15,6 +15,13 @@
 </style>
 
 <div id="navigationDrawer" class="leftDrawer">
+
+    <div ng-repeat="otherdoc in seance.otherdocs | orderBy:'rank'">
+        <navigation-drawer-otherdoc otherdoc="otherdoc" seance="seance" account="account"></navigation-drawer-otherdoc>
+    </div>
+
+    <div class="perso-margin-vertical"></div>
+
     <div id="anchor{{projet.id}}" ng-repeat="projet in seance.projets | orderBy:'rank'">
         <navigation-drawer-item projet="projet" seance="seance" account="account"></navigation-drawer-item>
     </div>
