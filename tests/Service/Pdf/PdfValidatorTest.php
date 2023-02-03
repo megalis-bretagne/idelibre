@@ -5,6 +5,7 @@ namespace App\Tests\Service\Pdf;
 use App\Service\ApiEntity\OtherdocApi;
 use App\Service\ApiEntity\ProjectApi;
 use App\Service\File\FileManager;
+use App\Service\Pdf\PdfValidator;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
 use App\Tests\Story\AnnexStory;
@@ -34,11 +35,11 @@ class PdfValidatorTest extends WebTestCase
     {
         $kernel = self::bootKernel();
         $this->entityManager = $kernel->getContainer()
-->get('doctrine')
-->getManager();
+            ->get('doctrine')
+            ->getManager();
 
         $container = self::getContainer();
-        $this->pdfvalidator = $container->get('App\Service\Pdf\PdfValidator');
+        $this->pdfvalidator = $container->get(PdfValidator::class);
 
         self::ensureKernelShutdown();
         $this->client = static::createClient();
@@ -60,20 +61,20 @@ class PdfValidatorTest extends WebTestCase
     {
         $project1 = new ProjectApi();
         $project1->setName('first Project')
-->setFileName('project1.pdf')
-->setRank(0)
-->setLinkedFileKey('project1');
+            ->setFileName('project1.pdf')
+            ->setRank(0)
+            ->setLinkedFileKey('project1');
 
         $project2 = new ProjectApi();
         $project2->setName('Second Project')
-->setFileName('project2.pdf')
-->setRank(0)
-->setLinkedFileKey('project2');
+            ->setFileName('project2.pdf')
+            ->setRank(0)
+            ->setLinkedFileKey('project2');
 
         $projects = [
-$project1,
-$project2,
-];
+            $project1,
+            $project2,
+        ];
         $this->assertTrue($this->pdfvalidator->isProjectsPdf($projects));
     }
 
@@ -81,20 +82,20 @@ $project2,
     {
         $project1 = new ProjectApi();
         $project1->setName('first Project')
-->setFileName('project1.pdf')
-->setRank(0)
-->setLinkedFileKey('project1');
+            ->setFileName('project1.pdf')
+            ->setRank(0)
+            ->setLinkedFileKey('project1');
 
         $project2 = new ProjectApi();
         $project2->setName('Second Project')
-->setFileName('project2.odt')
-->setRank(0)
-->setLinkedFileKey('project2');
+            ->setFileName('project2.odt')
+            ->setRank(0)
+            ->setLinkedFileKey('project2');
 
         $projects = [
-$project1,
-$project2,
-];
+            $project1,
+            $project2,
+        ];
         $this->assertFalse($this->pdfvalidator->isProjectsPdf($projects));
     }
 
@@ -102,20 +103,20 @@ $project2,
     {
         $otherdoc1 = new OtherdocApi();
         $otherdoc1->setName('first otherdoc')
-->setFileName('otherdoc1.pdf')
-->setRank(0)
-->setLinkedFileKey('otherdoc1');
+            ->setFileName('otherdoc1.pdf')
+            ->setRank(0)
+            ->setLinkedFileKey('otherdoc1');
 
         $otherdoc2 = new OtherdocApi();
         $otherdoc2->setName('Second otherdoc')
-->setFileName('otherdoc2.pdf')
-->setRank(0)
-->setLinkedFileKey('otherdoc2');
+            ->setFileName('otherdoc2.pdf')
+            ->setRank(0)
+            ->setLinkedFileKey('otherdoc2');
 
         $otherdocs = [
-$otherdoc1,
-$otherdoc2,
-];
+            $otherdoc1,
+            $otherdoc2,
+        ];
         $this->assertTrue($this->pdfvalidator->isotherdocsPdf($otherdocs));
     }
 
@@ -123,64 +124,61 @@ $otherdoc2,
     {
         $otherdoc1 = new OtherdocApi();
         $otherdoc1->setName('first otherdoc')
-->setFileName('otherdoc1.pdf')
-->setRank(0)
-->setLinkedFileKey('otherdoc1');
+            ->setFileName('otherdoc1.pdf')
+            ->setRank(0)
+            ->setLinkedFileKey('otherdoc1');
 
         $otherdoc2 = new OtherdocApi();
         $otherdoc2->setName('Second otherdoc')
-->setFileName('otherdoc2.odt')
-->setRank(0)
-->setLinkedFileKey('otherdoc2');
+            ->setFileName('otherdoc2.odt')
+            ->setRank(0)
+            ->setLinkedFileKey('otherdoc2');
 
         $otherdocs = [
-$otherdoc1,
-$otherdoc2,
-];
+            $otherdoc1,
+            $otherdoc2,
+        ];
         $this->assertFalse($this->pdfvalidator->isotherdocsPdf($otherdocs));
     }
 
-    public function testListOfOpenablePdfForSittingCreation()
-    {
-        $uploadedFile1 = new UploadedFile(__DIR__ . '/../../resources/fichier.pdf', 'fichier.pdf');
-        $uploadedFile2 = new UploadedFile(__DIR__ . '/../../resources/pdfEncrypted.pdf', 'pdfEncrypted.pdf');
-
-        $uploadedFiles = [
-'sitting' => [
-'convocationFile' => $uploadedFile1,
-'invitationFile' => $uploadedFile2,
-],
-];
-
-        $files = $this->pdfvalidator->listOfOpenablePdfForSittingCreation($uploadedFiles);
-        $this->assertCount(2, $files);
-    }
-
-    public function testlistOfOpenablePdfWhenAddingFiles()
+    public function testlistOfReadablePdfStatus()
     {
         $uploadedFile1 = new UploadedFile(__DIR__ . '/../../resources/pdfEncrypted.pdf', 'pdfEncrypted.pdf');
         $uploadedFile2 = new UploadedFile(__DIR__ . '/../../resources/toDecrypt.pdf', 'toDecrypt.pdf');
 
         $uploadedFiles = [
-$uploadedFile1,
-$uploadedFile2,
-];
+            $uploadedFile1,
+            $uploadedFile2,
+        ];
 
-        $files = $this->pdfvalidator->listOfOpenablePdfWhenAddingFiles($uploadedFiles);
+        $files = $this->pdfvalidator->listOfReadablePdfStatus($uploadedFiles);
         $this->assertCount(2, $files);
     }
 
-    public function testListOfOpenablePdfWhenEditingOtherdocs()
+    public function testListOfReadablePdfStatusWithNullUploadedFile()
+    {
+        $uploadedFile1 = new UploadedFile(__DIR__ . '/../../resources/pdfEncrypted.pdf', 'pdfEncrypted.pdf');
+
+        $uploadedFiles = [
+            $uploadedFile1,
+            null,
+        ];
+
+        $files = $this->pdfvalidator->listOfReadablePdfStatus($uploadedFiles);
+        $this->assertCount(1, $files);
+    }
+
+    public function testListOfReadablePdfStatusWhenEditingOtherdocs()
     {
         $uploadedFile1 = new UploadedFile(__DIR__ . '/../../resources/pdfEncrypted.pdf', 'pdfEncrypted.pdf');
         $uploadedFile2 = new UploadedFile(__DIR__ . '/../../resources/toDecrypt.pdf', 'toDecrypt.pdf');
 
         $uploadedFiles = [
-$uploadedFile1,
-$uploadedFile2,
-];
+            $uploadedFile1,
+            $uploadedFile2,
+        ];
 
-        $files = $this->pdfvalidator->listOfOpenablePdfWhenAddingFiles($uploadedFiles);
+        $files = $this->pdfvalidator->listOfReadablePdfStatus($uploadedFiles);
         $this->assertCount(2, $files);
     }
 
