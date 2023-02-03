@@ -22,8 +22,9 @@
     <table class="table table-striped mt-4">
         <thead>
             <tr class="d-flex">
-                <th style="width: 15%;">Prénom</th>
-                <th style="width: 15%;">Nom</th>
+                <th style="width: 10%;">Prénom</th>
+                <th style="width: 10%;">Nom</th>
+                <th style="width: 10%;">Groupe politique</th>
                 <th style="width: 15%;">Envoi</th>
                 <th style="width: 15%;">Reception</th>
                 <th style="width: 10%;">Présence</th>
@@ -33,11 +34,12 @@
         <tbody>
         {% for convocation in convocations %}
             <tr class="d-flex">
-                <td style="width: 15%;">{{ convocation.user.firstName }} </td>
-                <td style="width: 15%;">{{ convocation.user.lastName }} </td>
+                <td style="width: 10%;">{{ convocation.user.firstName }} </td>
+                <td style="width: 10%;">{{ convocation.user.lastName }} </td>
+                <td style="width: 10%;">{{ convocation.user.party ? convocation.user.party.name : '' }} </td>
                 <td style="width: 15%;">{{ convocation.sentTimestamp ? convocation.sentTimestamp.createdAt | date('d/m/Y H:i', timezone) : '' }} </td>
                 <td style="width: 15%;">{{ convocation.receivedTimestamp ? convocation.receivedTimestamp.createdAt | date('d/m/Y H:i', timezone) : '' }} </td>
-                <td style="width: 10%;">{{ convocation.attendance ? convocation.attendance : '' }}</td>
+                <td style="width: 10%;">{{ convocation.attendance ? convocation.attendance : '' }} {{ convocation.isRemote ? '(à distance)' : '' }}</td>
                 <td style="width: 30%;">{{ convocation.deputy ? convocation.deputy : '' }}</td>
             </tr>
 
