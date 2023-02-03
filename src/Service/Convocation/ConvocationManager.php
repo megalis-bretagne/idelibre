@@ -9,7 +9,6 @@ use App\Entity\Sitting;
 use App\Entity\User;
 use App\Message\ConvocationSent;
 use App\Repository\ConvocationRepository;
-use App\Repository\SittingRepository;
 use App\Repository\UserRepository;
 use App\Service\ClientNotifier\ClientNotifierInterface;
 use App\Service\Email\Attachment;
@@ -42,7 +41,6 @@ class ConvocationManager
         private MessageBusInterface $messageBus,
         private CalGenerator $icalGenerator,
         private AttendanceTokenUtil $attendanceTokenUtil,
-        private SittingRepository $sittingRepository
     ) {
     }
 

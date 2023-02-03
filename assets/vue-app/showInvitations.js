@@ -47,7 +47,6 @@ let app = new Vue({
         },
         convocationIdCurrent: "",
         isInvitation: false,
-        convocationStatus: false
     },
 
     computed: {
@@ -220,14 +219,6 @@ let app = new Vue({
     mounted() {
         this.getConvocations();
         this.getSitting();
-
-
-        Promise.all([
-            axios.get(`/api/sittings/show/${getSittingId()}/isSent`)
-        ]).then(response => {
-            this.convocationStatus = response[0].data.convocationStatus
-        })
-
     }
 });
 
