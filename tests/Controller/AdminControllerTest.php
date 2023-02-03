@@ -44,7 +44,6 @@ class AdminControllerTest extends WebTestCase
     {
         $this->loginAsSuperAdmin();
         $user = $this->getOneEntityBy(User::class, ['username' => 'otherSuperadmin']);
-
         $this->client->request(Request::METHOD_DELETE, '/admin/delete/' . $user->getId());
         $this->assertTrue($this->client->getResponse()->isRedirect());
 

@@ -9,9 +9,14 @@ use App\Tests\Factory\StructureFactory;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class PurgeSittingsCommandTest extends WebTestCase
 {
+    use ResetDatabase;
+    use Factories;
+
     private SittingRepository $sittingRepository;
 
     protected function setUp(): void

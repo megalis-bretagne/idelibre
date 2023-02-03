@@ -8,9 +8,14 @@ use App\Service\Seance\SittingManager;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class PurgeDataCommandTest extends WebTestCase
 {
+    use ResetDatabase;
+    use Factories;
+
     protected function setUp(): void
     {
         $kernel = self::bootKernel();

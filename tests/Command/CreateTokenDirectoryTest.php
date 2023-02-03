@@ -8,9 +8,14 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class CreateTokenDirectoryTest extends WebTestCase
 {
+    use ResetDatabase;
+    use Factories;
+
     private ?KernelBrowser $client;
     private StructureRepository $structureRepository;
 
