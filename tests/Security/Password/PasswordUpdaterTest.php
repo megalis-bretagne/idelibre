@@ -7,17 +7,13 @@ use App\Security\Password\PasswordChange;
 use App\Security\Password\PasswordUpdater;
 use App\Security\Password\PasswordUpdaterException;
 use App\Tests\FindEntityTrait;
-use App\Tests\LoginTrait;
-use App\Tests\Story\StructureStory;
 use App\Tests\Story\UserStory;
-use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
 
 class PasswordUpdaterTest extends KernelTestCase
 {
-
     use ResetDatabase;
     use Factories;
     use FindEntityTrait;
@@ -31,14 +27,13 @@ class PasswordUpdaterTest extends KernelTestCase
         $this->userRepository = self::getcontainer()->get(UserRepository::class);
     }
 
-
     public function testReplace()
     {
         $user = UserStory::actorLibriciel1();
 
         $passwordChange = new PasswordChange();
-        $passwordChange->plainNewPassword = "NewPassword1234567890!NewPassword1234567890!";
-        $passwordChange->plainCurrentPassword = "password";
+        $passwordChange->plainNewPassword = 'NewPassword1234567890!NewPassword1234567890!';
+        $passwordChange->plainCurrentPassword = 'password';
         $passwordChange->userId = $user->getId();
 
         /** @var PasswordUpdater $passwordUpdater */
@@ -50,9 +45,9 @@ class PasswordUpdaterTest extends KernelTestCase
     public function testReplaceUserIDDoesNotExist()
     {
         $passwordChange = new PasswordChange();
-        $passwordChange->plainNewPassword = "NewPassword1234567890!";
-        $passwordChange->plainCurrentPassword = "OldPassword1234567890!";
-        $passwordChange->userId = "74946758-7237-4130-9f7e-f2e4016e1590";
+        $passwordChange->plainNewPassword = 'NewPassword1234567890!';
+        $passwordChange->plainCurrentPassword = 'OldPassword1234567890!';
+        $passwordChange->userId = '74946758-7237-4130-9f7e-f2e4016e1590';
 
         /** @var PasswordUpdater $passwordUpdater */
         $passwordUpdater = self::getContainer()->get(PasswordUpdater::class);
@@ -62,16 +57,14 @@ class PasswordUpdaterTest extends KernelTestCase
         $passwordUpdater->replace($passwordChange);
     }
 
-
     public function testReplaceFalseCurrentPassword()
     {
         $user = UserStory::actorLibriciel1();
 
         $passwordChange = new PasswordChange();
-        $passwordChange->plainNewPassword = "NewPassword1234567890!";
-        $passwordChange->plainCurrentPassword = "OldPassword1234567890!";
+        $passwordChange->plainNewPassword = 'NewPassword1234567890!';
+        $passwordChange->plainCurrentPassword = 'OldPassword1234567890!';
         $passwordChange->userId = $user->getId();
-
 
         /** @var PasswordUpdater $passwordUpdater */
         $passwordUpdater = self::getContainer()->get(PasswordUpdater::class);
@@ -86,10 +79,9 @@ class PasswordUpdaterTest extends KernelTestCase
         $user = UserStory::actorLibriciel1();
 
         $passwordChange = new PasswordChange();
-        $passwordChange->plainNewPassword = "ToWeak";
-        $passwordChange->plainCurrentPassword = "password";
+        $passwordChange->plainNewPassword = 'ToWeak';
+        $passwordChange->plainCurrentPassword = 'password';
         $passwordChange->userId = $user->getId();
-
 
         /** @var PasswordUpdater $passwordUpdater */
         $passwordUpdater = self::getContainer()->get(PasswordUpdater::class);
@@ -98,9 +90,4 @@ class PasswordUpdaterTest extends KernelTestCase
         $this->expectExceptionMessage('ENTROPY_TOO_LOW');
         $passwordUpdater->replace($passwordChange);
     }
-
-
-
-
-
 }

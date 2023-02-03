@@ -257,7 +257,6 @@ class SecurityControllerTest extends WebTestCase
         $this->assertCount(1, $successMsg);
     }
 
-
     public function testChangePasswordJson()
     {
         $actor = UserStory::actorLibriciel1();
@@ -266,13 +265,12 @@ class SecurityControllerTest extends WebTestCase
             'passPhrase' => 'passphrase',
             'userId' => $actor->getId(),
             'plainNewPassword' => 'AZERTyuiop12345!AZERTyuiop12345!',
-            'plainCurrentPassword' => 'password'
+            'plainCurrentPassword' => 'password',
         ];
-        $this->client->request(Request::METHOD_POST, '/security/changePassword', content: json_encode($data) );
+        $this->client->request(Request::METHOD_POST, '/security/changePassword', content: json_encode($data));
 
         $this->assertResponseStatusCodeSame(200);
     }
-
 
     public function testChangePasswordJsonFakePassphrase()
     {
@@ -282,11 +280,10 @@ class SecurityControllerTest extends WebTestCase
             'passPhrase' => 'fakePassphrase',
             'userId' => $actor->getId(),
             'plainNewPassword' => 'AZERTyuiop12345!AZERTyuiop12345!',
-            'plainCurrentPassword' => 'password'
+            'plainCurrentPassword' => 'password',
         ];
-        $this->client->request(Request::METHOD_POST, '/security/changePassword', content: json_encode($data) );
+        $this->client->request(Request::METHOD_POST, '/security/changePassword', content: json_encode($data));
 
         $this->assertResponseStatusCodeSame(403);
     }
-
 }

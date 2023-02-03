@@ -213,8 +213,6 @@ let app = new Vue({
             }
             this.showModalMailExample = true;
         },
-
-
     },
 
 
@@ -223,7 +221,6 @@ let app = new Vue({
         this.getSitting();
     }
 });
-
 
 function formatAttendanceStatus(convocations) {
     let status = []

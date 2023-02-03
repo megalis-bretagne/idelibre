@@ -106,7 +106,8 @@ class SittingType extends AbstractType
             ->add('isRemote', CheckboxType::class, [
                 'required' => false,
                 'label_attr' => ['class' => 'switch-custom'],
-                'label' => 'Autoriser la participation à distance ?',
+                'label' => ($isNew || $isAlreadySentConvocation) ? 'Participation à distance' : 'Autoriser la participation à distance',
+                'disabled' => $isAlreadySentConvocation,
             ])
             ->add('structure', HiddenEntityType::class, [
                 'data' => $options['structure'],

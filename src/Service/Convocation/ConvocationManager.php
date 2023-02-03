@@ -40,7 +40,7 @@ class ConvocationManager
         private ClientNotifierInterface $clientNotifier,
         private MessageBusInterface $messageBus,
         private CalGenerator $icalGenerator,
-        private AttendanceTokenUtil $attendanceTokenUtil
+        private AttendanceTokenUtil $attendanceTokenUtil,
     ) {
     }
 
