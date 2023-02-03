@@ -53,7 +53,7 @@ class PurgeSittingsCommand extends Command
 
         $helper = $this->getHelper('question');
         $question = new ConfirmationQuestion(
-            "Confirmez-vous vouloir purger les seances d'avant le {$before->format('d/m/y')} de la structure {$structure->getName()} ? \n" .
+            "Confirmez-vous vouloir purger les seances d'avant le {$before->format('d/m/yy')} de la structure {$structure->getName()} ? \n" .
              "({$numberSittings} Séances)(y/n)",
             false
         );
