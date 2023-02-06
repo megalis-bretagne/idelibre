@@ -67,6 +67,12 @@
 
 
 
+                        if(!$scope.account.token){
+                         if(!$scope.account.password || !$scope.account.password === '') {
+                             return $rootScope.$broadcast('notify', {class: 'danger', content: "<b>" + $scope.account.name + "</b> " + Messages.LOGIN_MISSING_PASSWORD});
+                         }
+                        }
+
                         $rootScope.$broadcast('notify', {class: 'success', content: Messages.LOGIN_CHECK});
                         socketioSrv.killSockets();
 

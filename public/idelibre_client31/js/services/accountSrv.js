@@ -29,6 +29,15 @@
             list.push(account);
         };
 
+
+        accounts.removePassword = () =>  {
+            list.forEach(account => account.password = '' );
+        }
+
+        accounts.removeToken = () =>  {
+            list.forEach(account => account.token = null );
+        }
+
         accounts.delete = function (accountId) {
             var index = _.findIndex(list, function (account) {
                 return account.id == accountId;

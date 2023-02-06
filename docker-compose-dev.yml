@@ -55,8 +55,8 @@ services:
       - JWT_SECRET=${JWT_SECRET:-jwtsecret}
       - JWT_TIMEOUT=${JWT_TIMEOUT:-86400}
 
-    command: [ "/app/docker-resources/init.sh" ]
-#    command: "sleep 3000"
+#    command: [ "/app/docker-resources/init.sh" ]
+    command: "sleep 3000"
     networks:
       - network_idelibre_dev
 
