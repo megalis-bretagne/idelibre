@@ -3,7 +3,6 @@
 namespace App\Command;
 
 use App\Repository\StructureRepository;
-use App\Service\EmailTemplate\DefaultTemplateCreator;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -47,14 +46,19 @@ class InitEmailTemplateRecapitulatifCommand extends Command
             return 0;
         }
 
+        if ($this->alreadyExistDataRecapIntoEmailTemplateForStructureId()) {
+            $io->text('Recapitulatif email_template already set');
+
+            return 0;
+        }
+
         $io->text('Beginning update');
         $structures = $this->structureRepository->findAll();
         foreach ($structures as $structure) {
-            if (!$this->alreadyExistDataRecapIntoEmailTemplateForStructureId($structure->getId())) {
-                $pdo = $this->entityManager->getConnection()->getNativeConnection();
-                $structureId = "'".$structure->getId()."'";
-                $sqlInsertIntoEmailTemplateTable = "INSERT INTO email_template (id, structure_id, name, content, subject, is_default, category, is_attachment, format) VALUES
-     (UUID_GENERATE_V4(), $structureId, 'Récapitulatif par défaut', 'Bonjour #civilite# #nom# #prenom#, </br>
+            $pdo = $this->entityManager->getConnection()->getNativeConnection();
+            $structureId = "'".$structure->getId()."'";
+            $sqlInsertIntoEmailTemplateTable = "INSERT INTO email_template (id, structure_id, name, content, subject, is_default, category, is_attachment, format) VALUES
+ (UUID_GENERATE_V4(), $structureId, 'Récapitulatif par défaut', 'Bonjour #civilite# #nom# #prenom#, </br>
 </br>
 Ce mail est un récapitulatif des présents/absents pour les différentes séances en cours.</br>
 </br>
@@ -63,20 +67,18 @@ Ce mail est un récapitulatif des présents/absents pour les différentes séanc
 </br>
 Cordialement,', 'Récapitulatif des absences/présences aux séances', true, 'recapitulatif', false, 'html');";
 
-                $pdo->beginTransaction();
-                try {
-                    $pdo->exec($sqlInsertIntoEmailTemplateTable);
-                    $pdo->commit();
-                } catch (Exception $e) {
-                    $pdo->rollBack();
-                    throw $e;
-                }
-
-                $io->success('insert into email_template table done');
+            $pdo->beginTransaction();
+            try {
+                $pdo->exec($sqlInsertIntoEmailTemplateTable);
+                $pdo->commit();
+            } catch (Exception $e) {
+                $pdo->rollBack();
+                throw $e;
             }
+
         }
 
-        $io->info('All structure have recapitulatif email_template');
+        $io->success('insert into email_template table done');
         $io->text('Ending Update ');
 
         return Command::SUCCESS;
@@ -95,12 +97,12 @@ Cordialement,', 'Récapitulatif des absences/présences aux séances', true, 're
         return true;
     }
 
-    private function alreadyExistDataRecapIntoEmailTemplateForStructureId(string $structureId): bool
+    private function alreadyExistDataRecapIntoEmailTemplateForStructureId(): bool
     {
         $pdo = $this->entityManager->getConnection()->getNativeConnection();
-        $statement = $pdo->prepare("select * from email_template where structure_id = '".$structureId."'");
+        $statement = $pdo->prepare("select * from email_template where category= 'recapitulatif';");
         $statement->execute();
         $count = $statement->rowCount();
-        return $count > 2;
+        return $count > 0;
     }
 }
