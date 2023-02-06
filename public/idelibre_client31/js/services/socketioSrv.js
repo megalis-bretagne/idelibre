@@ -33,8 +33,11 @@
          */
         socketio.initSockets = function () {
             for (var i = 0, ln = accountSrv.getList().length; i < ln; i++) {
-                console.log( config.API_LEVEL);
-                var socket = io.connect(accountSrv.getList()[i].url + '/' + config.API_LEVEL, {forceNew: true, path: '/socket.io'});
+                console.log(config.API_LEVEL);
+                var socket = io.connect(accountSrv.getList()[i].url + '/' + config.API_LEVEL, {
+                    forceNew: true,
+                    path: '/socket.io'
+                });
                 initListener(socket, accountSrv.getList()[i]);
             }
         };
@@ -47,14 +50,17 @@
          */
         var initListener = function (socket, account) {
             //check if server is reachable
-            $http.get( account.url + '/nodejs/checkConnection')
+            $http.get(account.url + '/nodejs/checkConnection')
 
                 .success(function (data, status, headers, config) {
                     //data = server version
                 })
                 .error(function (data, status, headers, config) {
                     //close this websocket
-                    $rootScope.$broadcast('notify', {class: 'danger', content: "<b>" + account.name + "</b>" + Messages.CANT_REACH_SERVER});
+                    $rootScope.$broadcast('notify', {
+                        class: 'danger',
+                        content: "<b>" + account.name + "</b>" + Messages.CANT_REACH_SERVER
+                    });
                     //  socket.disconnect();
                     account.status = OFFLINE;
                     //  return;
@@ -63,10 +69,13 @@
 
             socket.on('hello', function () {
                 accountIdSocketMap[account.id] = socket;
+                console.log(account.token);
                 socket.emit('authenticate',
-                    {username: account.username,
+                    {
+                        username: account.username,
                         password: account.password,
-                        suffix: account.suffix
+                        suffix: account.suffix,
+                        token: account.token
                     });
             });
 
@@ -75,16 +84,25 @@
              */
             socket.on('authFeedback', function (data) {
 
-
                 if (!data.success) {
-                    $rootScope.$broadcast('notify', {class: 'danger', content: "<b>" + account.name + "</b> " + Messages.AUTH_ERROR});
+                    $rootScope.$broadcast('notify', {
+                        class: 'danger',
+                        content: "<b>" + account.name + "</b> " + Messages.AUTH_ERROR
+                    });
                     socket.disconnect();
                     account.status = OFFLINE;
+
+                    accountSrv.removePassword();
+                    accountSrv.removeToken();
+                    accountSrv.save();
                     return;
                 }
 
 
-                $rootScope.$broadcast('notify', {class: 'success', content: "<b>" + account.name + "</b>" + Messages.AUTH_SUCCESS});
+                $rootScope.$broadcast('notify', {
+                    class: 'success',
+                    content: "<b>" + account.name + "</b>" + Messages.AUTH_SUCCESS
+                });
                 account.token = data.token;
                 account.userId = data.userId;
                 //set account status online en broadcast it
@@ -104,6 +122,7 @@
                 });
 
                 //save locally
+                accountSrv.removePassword();
                 accountSrv.save();
 
 
@@ -115,10 +134,9 @@
                 //check all convocations !
 
 
-                if(account.type == ACTEURS ) {
+                if (account.type == ACTEURS) {
                     localDbSrv.getAllConvocationByAccount(account);
-                }
-                else {
+                } else {
                     localDbSrv.getAllInvitationsByAccount(account);
                 }
 
@@ -153,7 +171,7 @@
                         account.replaceSeance(seance);
                         //ask for user list
                         addUserList(socket, account.token, seance.seance_id);
-                        $rootScope.$broadcast('refresh_modify',{seanceId: seance.seance_id});
+                        $rootScope.$broadcast('refresh_modify', {seanceId: seance.seance_id});
                     });
 
 
@@ -183,7 +201,7 @@
 
 
             socket.on('updateSeancesInvitesFeedback', function (data) {
-                account.type= INVITES;
+                account.type = INVITES;
                 var json = JSON.parse(data);
                 console.log('updateSeancesInvitesFeedback');
                 console.log(json);
@@ -203,7 +221,7 @@
                     json.toModify.forEach(function (seance) {
                         //update modified seance
                         account.replaceSeance(seance);
-                        $rootScope.$broadcast('refresh_modify',{seanceId: seance.seance_id});
+                        $rootScope.$broadcast('refresh_modify', {seanceId: seance.seance_id});
                     });
 
                 }
@@ -218,8 +236,6 @@
                 accountSrv.save();
 
             });
-
-
 
 
             socket.on('updateSeancesAdministratifsFeedback', function (data) {
@@ -247,7 +263,7 @@
                     json.toModify.forEach(function (seance) {
                         //update modified seance
                         account.replaceSeance(seance);
-                        $rootScope.$broadcast('refresh_modify',{seanceId: seance.seance_id});
+                        $rootScope.$broadcast('refresh_modify', {seanceId: seance.seance_id});
                     });
 
                 }
@@ -262,9 +278,7 @@
                 accountSrv.save();
 
 
-
             });
-
 
 
             socket.on('userList', function (data) {
@@ -315,7 +329,7 @@
                     }
 
                     if (annot.annotation_annexe_id) {
-                        addAnnotationToAnnexe(annotation,account, annot.annotation_annexe_id);
+                        addAnnotationToAnnexe(annotation, account, annot.annotation_annexe_id);
                     }
 
                 }
@@ -347,7 +361,6 @@
                     annot.annotation_text, annot.annotation_rect, annot.annotation_page + 1, annot.annotation_shareduseridlist, annot.annotation_date);
 
 
-
                 if (annot.originType == DocType.PROJET) {
                     addAnnotationToProjet(annotation, account, annot.originId)
                 }
@@ -364,25 +377,25 @@
                 //TODO CHECK CONVOCATION AND ANNEXE (ANNEXE NO RELOAD IMAGE)
                 accountSrv.save();
 
-                $rootScope.$broadcast('notify', {class: 'info', content: '<b>Annotation : </b>' + annotation.authorName + Messages.ANNOTATION_SHARED});
+                $rootScope.$broadcast('notify', {
+                    class: 'info',
+                    content: '<b>Annotation : </b>' + annotation.authorName + Messages.ANNOTATION_SHARED
+                });
                 $rootScope.$broadcast('refreshAnnotationItems', {id: annot.originId});
             });
 
 
-
-
-            socket.on('sharedAnnotationDeleted', function(data){
+            socket.on('sharedAnnotationDeleted', function (data) {
                 //find the document and the annotaion position
                 var toDelete = account.findAnnotationIndex(data.annotation_Id);
                 //remove it
-                toDelete.doc.getAnnotations().splice(toDelete.pos,1);
+                toDelete.doc.getAnnotations().splice(toDelete.pos, 1);
 
                 $rootScope.$broadcast("refreshAnnotations", {});
 
                 accountSrv.save();
 
                 //todo refresh annotaions icones !
-
 
 
             });
@@ -523,7 +536,6 @@
         };
 
 
-
         function annotationFeedback(account) {
 
 
@@ -555,20 +567,18 @@
         }
 
 
-        function addAnnotationToAnnexe(annotation, account, annexeId){
+        function addAnnotationToAnnexe(annotation, account, annexeId) {
             for (var i = 0, ln = account.seances.length; i < ln; i++) {
-                for(var j = 0, lj = account.seances[i].getProjets().length; j < lj ; j++ ){
+                for (var j = 0, lj = account.seances[i].getProjets().length; j < lj; j++) {
                     var projet = account.seances[i].getProjets()[j];
                     var annexe = projet.findAnnexe(annexeId);
-                    if(annexe){
+                    if (annexe) {
                         annexe.addAnnotation(annotation)
                     }
 
                 }
             }
         }
-
-
 
 
         socketio.sendARByAccount = function (account) {
@@ -618,7 +628,6 @@
                 }
             }
         };
-
 
 
         socketio.sendAnnotationRead = function (accountId) {
@@ -679,7 +688,13 @@
         socketio.sendConfirmPresence = function (account, seanceId, status, mandataire, isRemote) {
             var socket = accountIdSocketMap[account.id];
             if (socket) {
-                socket.emit("sendPresence", {token: account.token, seanceId: seanceId, presentStatus: status, procuration_name: mandataire, isRemoteStatus: isRemote});
+                socket.emit("sendPresence", {
+                    token: account.token,
+                    seanceId: seanceId,
+                    presentStatus: status,
+                    procuration_name: mandataire,
+                    isRemoteStatus: isRemote
+                });
             }
         }
 
