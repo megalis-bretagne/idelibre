@@ -12,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
- * Commande utilisée uniquement pour un passage en v4.2.0
+ * Commande utilisée uniquement pour un passage en v4.2.0.
  */
 #[AsCommand(name: 'initBdd:email_template_recap')]
 class InitEmailTemplateRecapitulatifCommand extends Command
@@ -24,8 +24,6 @@ class InitEmailTemplateRecapitulatifCommand extends Command
     ) {
         parent::__construct($name);
     }
-
-
 
     protected function configure(): void
     {
@@ -56,7 +54,7 @@ class InitEmailTemplateRecapitulatifCommand extends Command
         $structures = $this->structureRepository->findAll();
         foreach ($structures as $structure) {
             $pdo = $this->entityManager->getConnection()->getNativeConnection();
-            $structureId = "'".$structure->getId()."'";
+            $structureId = "'" . $structure->getId() . "'";
             $sqlInsertIntoEmailTemplateTable = "INSERT INTO email_template (id, structure_id, name, content, subject, is_default, category, is_attachment, format) VALUES
  (UUID_GENERATE_V4(), $structureId, 'Récapitulatif par défaut', 'Bonjour #civilite# #nom# #prenom#, </br>
 </br>
@@ -75,7 +73,6 @@ Cordialement,', 'Récapitulatif des absences/présences aux séances', true, 're
                 $pdo->rollBack();
                 throw $e;
             }
-
         }
 
         $io->success('insert into email_template table done');
@@ -103,6 +100,7 @@ Cordialement,', 'Récapitulatif des absences/présences aux séances', true, 're
         $statement = $pdo->prepare("select * from email_template where category= 'recapitulatif';");
         $statement->execute();
         $count = $statement->rowCount();
+
         return $count > 0;
     }
 }
