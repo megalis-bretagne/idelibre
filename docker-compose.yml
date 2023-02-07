@@ -99,8 +99,8 @@ services:
       - NODE_ENV=production
       - POSTGRES_HOST=${POSTGRES_HOST:-172.17.0.1}
       - POSTGRES_DB=lshorodatage
-      - POSTGRES_USER=lshorodatage
-      - POSTGRES_PASSWORD=lshorodatage
+      - POSTGRES_USER=${POSTGRES_USER:-idelibre}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-idelibre}
       - POSTGRES_PORT=${POSTGRES_PORT:-5432}
       - SITE_HOSTNAME=${URL:-lshorodatage.libriciel.fr}
     volumes:
