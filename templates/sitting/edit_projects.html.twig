@@ -102,7 +102,7 @@
                 {# Poids Total #}
                 <div class=" ml-auto d-flex justify-content-end mt-2">
                     <p v-if="fileTooBig === true">
-                        <small> Poids total: <span class="text-danger">${formatSize(totalFileSize)} </span></small>
+                        <small><span class="text-danger">Le PDF complet ainsi que le ZIP de la séance ne seront pas générés - Poids total: ${formatSize(totalFileSize)} </span></small>
                     </p>
                     <p v-else >
                         <small> Poids total: <span class="text-success">${formatSize(totalFileSize)} </span></small>

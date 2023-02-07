@@ -18,6 +18,7 @@ use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpClient\Exception\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -215,7 +216,7 @@ class SittingController extends AbstractController
     #[Route(path: '/sitting/show/{id}/projects', name: 'sitting_show_projects', methods: ['GET'])]
     #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
     #[Breadcrumb(title: 'Détail {sitting.nameWithDate}')]
-    public function showProjects(Sitting $sitting, ProjectRepository $projectRepository, OtherdocRepository $otherdocRepository, SidebarState $sidebarState, SittingManager $sittingManager): Response
+    public function showProjects(Sitting $sitting, ProjectRepository $projectRepository, OtherdocRepository $otherdocRepository, SidebarState $sidebarState, SittingManager $sittingManager, ParameterBagInterface $bag): Response
     {
         $sidebarState->setActiveNavs(['sitting-nav', $this->activeSidebarNav($sitting->getIsArchived())]);
 
@@ -225,6 +226,7 @@ class SittingController extends AbstractController
             'totalSize' => $sittingManager->getProjectsAndAnnexesTotalSize($sitting),
             'otherdocs' => $otherdocRepository->getOtherdocsWithAssociatedEntities($sitting),
             'otherdocsTotalSize' => $sittingManager->getOtherDocsTotalSize($sitting),
+            'isProjectsSizeTooBig' => $sittingManager->getProjectsAndAnnexesTotalSize($sitting) > intval($bag->get('maximum_size_pdf_zip_generation'))
         ]);
     }
 

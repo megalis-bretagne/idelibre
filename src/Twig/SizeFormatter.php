@@ -16,9 +16,9 @@ class SizeFormatter extends AbstractExtension
 
     public function sizeFormatter($rawSize): string
     {
-        $kiloOctets = 1024;
-        $megaOctets = $kiloOctets * 1024;
-        $gigaOctets = $megaOctets * 1024;
+        $kiloOctets = 1000;
+        $megaOctets = $kiloOctets * 1000;
+        $gigaOctets = $megaOctets * 1000;
 
         if ($rawSize < $megaOctets) {
             return number_format($rawSize / $kiloOctets, 0, '.') . ' Ko';
@@ -26,7 +26,6 @@ class SizeFormatter extends AbstractExtension
         if ($rawSize < $gigaOctets) {
             return number_format($rawSize / $megaOctets, 0, '.') . ' Mo';
         }
-
         return number_format($rawSize / $gigaOctets, 0, '.') . ' Go';
     }
 }
