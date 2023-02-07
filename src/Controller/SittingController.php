@@ -226,7 +226,7 @@ class SittingController extends AbstractController
             'totalSize' => $sittingManager->getProjectsAndAnnexesTotalSize($sitting),
             'otherdocs' => $otherdocRepository->getOtherdocsWithAssociatedEntities($sitting),
             'otherdocsTotalSize' => $sittingManager->getOtherDocsTotalSize($sitting),
-            'isProjectsSizeTooBig' => $sittingManager->getProjectsAndAnnexesTotalSize($sitting) > intval($bag->get('maximum_size_pdf_zip_generation'))
+            'isProjectsSizeTooBig' => $sittingManager->getProjectsAndAnnexesTotalSize($sitting) > intval($bag->get('maximum_size_pdf_zip_generation')),
         ]);
     }
 

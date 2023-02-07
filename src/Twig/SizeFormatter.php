@@ -26,6 +26,7 @@ class SizeFormatter extends AbstractExtension
         if ($rawSize < $gigaOctets) {
             return number_format($rawSize / $megaOctets, 0, '.') . ' Mo';
         }
+
         return number_format($rawSize / $gigaOctets, 0, '.') . ' Go';
     }
 }
