@@ -204,11 +204,13 @@ class SittingController extends AbstractController
         $sidebarState->setActiveNavs(['sitting-nav', $this->activeSidebarNav($sitting->getIsArchived())]);
 
         $emailTemplate = $emailTemplateRepository->findOneByStructureAndCategory($sitting->getStructure(), 'convocation');
+        $emailTemplateBySittingType = $emailTemplateRepository->findOneByStructureAndCategoryAndType($sitting->getStructure(), $sitting->getType(), 'convocation');
         $emailTemplateInvitation = $emailTemplateRepository->findOneByStructureAndCategory($sitting->getStructure(), 'invitation');
 
         return $this->render('sitting/details_actors.html.twig', [
             'sitting' => $sitting,
             'emailTemplate' => $emailTemplate,
+            'emailTemplateBySittingType' => $emailTemplateBySittingType,
             'emailTemplateInvitation' => $emailTemplateInvitation,
         ]);
     }
