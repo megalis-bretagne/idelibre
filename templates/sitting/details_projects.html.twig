@@ -37,7 +37,7 @@
                 <div class="mt-4"></div>
 
                 {% if otherdocs | length == 0 %}
-                    <div class="text-center" >
+                    <div class="text-center">
                         Aucun document associé
                     </div>
                 {% endif %}
@@ -77,16 +77,22 @@
 
             <div class="d-flex justify-content-between">
                 <h2>Projets</h2>
-                <span><small>Poids total: <span class="text-success"> {{ totalSize|sizeFormatter }} </span> </small></span>
+                {% if isProjectsSizeTooBig %}
+                    <span class="text-danger"><small>Le PDF complet ainsi que le ZIP de la séance n'ont pas été générés  -  Poids total: <span
+                                    class={{ isProjectsSizeTooBig ? "text-danger" : "text-success"  }}> {{ totalSize|sizeFormatter }} </span> </small></span>
+                {% else %}
+                    <span><small> Poids total: <span
+                                    class="text-success">{{ totalSize|sizeFormatter }} </span> </small></span>
+                {% endif %}
             </div>
 
 
             <div class="mt-4"></div>
 
             {% if projects | length == 0 %}
-            <div class="text-center" >
-                Aucun projet associé
-            </div>
+                <div class="text-center">
+                    Aucun projet associé
+                </div>
             {% endif %}
 
 

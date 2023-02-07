@@ -72,12 +72,14 @@ let app = new Vue({
             }
             this.totalFileSize = getFilesWeight(this.projects)
             isDirty = true;
+            setFileTooBig(this.totalFileSize, this.maxSize, this.fileTooBig);
         },
 
         removeProject(index) {
             this.projects.splice(index, 1);
             this.totalFileSize = getFilesWeight(this.projects)
             isDirty = true;
+            setFileTooBig(this.totalFileSize, this.maxSize, this.fileTooBig);
         },
 
         addAnnexes(event, project) {
@@ -95,12 +97,14 @@ let app = new Vue({
             }
             this.totalFileSize = getFilesWeight(this.projects)
             isDirty = true;
+            setFileTooBig(this.totalFileSize, this.maxSize, this.fileTooBig);
         },
 
         deleteAnnex(annexes, index) {
             annexes.splice(index, 1);
             this.totalFileSize = getFilesWeight(this.projects)
             isDirty = true;
+            setFileTooBig(this.totalFileSize, this.maxSize, this.fileTooBig);
         },
 
         addOtherdoc(event) {
@@ -119,66 +123,66 @@ let app = new Vue({
             }
             this.otherdocsTotalFileSize = getOtherdocsFilesWeight(this.otherdocs)
             isDirty = true;
+            setFileTooBig(this.totalFileSize, this.maxSize, this.fileTooBig);
         },
 
         removeOtherdoc(index) {
             this.otherdocs.splice(index, 1);
             this.otherdocsTotalFileSize = getOtherdocsFilesWeight(this.otherdocs)
             isDirty = true;
+            setFileTooBig(this.totalFileSize, this.maxSize, this.fileTooBig);
         },
 
         save() {
             if (!checkNotOverweightFile(this.totalFileSize, this.maxSize)) {
-
                 this.fileTooBig = true
                 this.showMessageError("Le poids des documents de la séance dépasse 200 Mo, le PDF complet de la séance ne pourra pas être généré")
-
-            } else {
-                let formData = new FormData();
-                addProjectAndAnnexeFiles(this.projects, formData);
-                setProjectsRank(this.projects);
-                formData.append('projects', JSON.stringify(this.projects));
-
-                let formDataDocs = new FormData();
-                addOtherdocFiles(this.otherdocs, formDataDocs);
-                setOtherdocsRank(this.otherdocs);
-                formDataDocs.append('otherdocs', JSON.stringify(this.otherdocs));
-
-
-                this.showModal = true;
-                this.uploadPercent = 0;
-                const config = {
-                    onUploadProgress: (progressEvent) => {
-                        this.uploadPercent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-                    }
-                }
-
-                Promise
-                    .all([
-                        axios.post(`/api/projects/${getSittingId()}`,
-                            formData,
-                            config
-                        ),
-                        axios.post(`/api/otherdocs/${getSittingId()}`,
-                            formDataDocs,
-                            config
-                        )
-                    ])
-                    .then(( response) => {
-                        console.log('done');
-                        this.showMessage('Modifications enregistrées');
-                        isDirty = false;
-                        this.showModal = false;
-                        window.scrollTo(0, 0);
-                        window.location.href = `/sitting/show/${getSittingId()}/projects`;
-                    })
-                    .catch((e, m) => {
-                        this.showModal = false;
-                        window.scrollTo(0, 0);
-                        let errorBody = e.response.data;
-                        this.showMessageError(errorBody.message ? errorBody.message : 'Impossible d\'enregistrer les modifications');
-                    });
             }
+
+            let formData = new FormData();
+            addProjectAndAnnexeFiles(this.projects, formData);
+            setProjectsRank(this.projects);
+            formData.append('projects', JSON.stringify(this.projects));
+
+            let formDataDocs = new FormData();
+            addOtherdocFiles(this.otherdocs, formDataDocs);
+            setOtherdocsRank(this.otherdocs);
+            formDataDocs.append('otherdocs', JSON.stringify(this.otherdocs));
+
+
+            this.showModal = true;
+            this.uploadPercent = 0;
+            const config = {
+                onUploadProgress: (progressEvent) => {
+                    this.uploadPercent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                }
+            }
+
+            Promise
+                .all([
+                    axios.post(`/api/projects/${getSittingId()}`,
+                        formData,
+                        config
+                    ),
+                    axios.post(`/api/otherdocs/${getSittingId()}`,
+                        formDataDocs,
+                        config
+                    )
+                ])
+                .then(( response) => {
+                    console.log('done');
+                    this.showMessage('Modifications enregistrées');
+                    isDirty = false;
+                    this.showModal = false;
+                    window.scrollTo(0, 0);
+                    window.location.href = `/sitting/show/${getSittingId()}/projects`;
+                })
+                .catch((e, m) => {
+                    this.showModal = false;
+                    window.scrollTo(0, 0);
+                    let errorBody = e.response.data;
+                    this.showMessageError(errorBody.message ? errorBody.message : 'Impossible d\'enregistrer les modifications');
+                });
         },
 
         move(fromIndex, toIndex) {
@@ -229,11 +233,16 @@ let app = new Vue({
             this.maxSize = response[4].data.maxSize;
             this.fileMaxSize = response[5].data.fileMaxSize;
             this.totalFileSize = getFilesWeight(this.projects);
-            this.otherdocsTotalFileSize = getOtherdocsFilesWeight(this.otherdocs)
+            this.otherdocsTotalFileSize = getOtherdocsFilesWeight(this.otherdocs);
+            this.fileTooBig = getFileTooBig(this.totalFileSize, this.maxSize);
         });
     }
 });
 
+
+function getFileTooBig(totalFileSize, maxSize) {
+    return !checkNotOverweightFile(totalFileSize, maxSize);
+}
 
 function addProjectAndAnnexeFiles(projects, formData) {
     for (let i = 0; i < projects.length; i++) {
@@ -266,11 +275,11 @@ function addOtherdocFiles(otherdocs, formDataDocs) {
     }
 }
 
-function formatBytes(a, b = 2) {
+function formatBytes(a, b = 0) {
     if (!+a)
         return "0";
-    const c = 0 > b ? 0 : b, d = Math.floor(Math.log(a) / Math.log(1024));
-    return `${parseFloat((a / Math.pow(1024, d)).toFixed(c))} ${["Octets", "Ko", "Mo", "Go"][d]}`
+    const c = 0 > b ? 0 : b, d = Math.floor(Math.log(a) / Math.log(1000));
+    return `${parseFloat((a / Math.pow(1000, d)).toFixed(c))} ${["Octets", "Ko", "Mo", "Go"][d]}`
 }
 
 function getFilesWeight(projects) {
