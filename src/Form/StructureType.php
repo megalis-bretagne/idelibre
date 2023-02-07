@@ -33,6 +33,11 @@ class StructureType extends AbstractType
         $builder->add('replyTo', TextType::class, [
             'label' => 'Email de réponse',
         ])
+            ->add('can_edit_reply_to', CheckboxType::class, [
+                'label' => 'Autorisation pour les administrateurs de modifier l\'email de réponse ?',
+                'label_attr' => ['class' => 'switch-custom'],
+                'required' => false,
+            ])
             ->add('siren', TextType::class, [
                 'label' => 'Numéro de siren',
                 'required' => false,
@@ -59,12 +64,6 @@ class StructureType extends AbstractType
                 'required' => false,
             ]);
         }
-
-        $builder->add('can_edit_reply_to', CheckboxType::class, [
-            'label' => 'Autorisation pour les administrateurs de modifier l\'email de réponse ?',
-            'label_attr' => ['class' => 'switch-custom'],
-            'required' => false,
-        ]);
 
         if ($isNew) {
             $builder->add('user', SuperUserType::class, [

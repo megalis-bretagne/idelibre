@@ -12,6 +12,7 @@ class genPdfAndZipSittingCommandTest extends WebTestCase
 {
     use ResetDatabase;
     use Factories;
+
     protected function setUp(): void
     {
         $kernel = self::bootKernel();

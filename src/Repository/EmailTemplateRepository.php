@@ -62,7 +62,7 @@ class EmailTemplateRepository extends ServiceEntityRepository
         return null;
     }
 
-    public function findOneByStructureAndCategoryAndType(Structure $structure, Type $type,string $category): ?EmailTemplate
+    public function findOneByStructureAndCategoryAndType(Structure $structure, Type $type, string $category): ?EmailTemplate
     {
         $qb = $this->createQueryBuilder('et')
             ->andWhere('et.structure =:structure')
