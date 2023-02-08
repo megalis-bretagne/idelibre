@@ -51,14 +51,14 @@ class AttendanceControllerTest extends WebTestCase
         );
         $this->assertResponseStatusCodeSame(200);
 
-        $item = $crawler->filter('h2:contains("Confirmez-vous être présent")');
+        //dd($crawler);
+
+        $item = $crawler->filter('html:contains("Merci de confirmer votre présence")');
         $this->assertCount(1, $item);
 
-        $form = $crawler->selectButton('attendanceConfirmation')->form();
-
-        $form['attendance'] = 'present';
-        $form['isRemote'] = 'true';
-        $form['deputy'] = null;
+        $form = $crawler->selectButton('Enregistrer')->form();
+        $form['attendance[attendance]'] = 'remote';
+        $form['attendance[deputy]'] = null;
 
         $this->client->submit($form);
 
@@ -69,7 +69,7 @@ class AttendanceControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(200);
         $crawler->filter('section')->children('div.alert')->count(1);
 
-        $this->assertNotEmpty($this->getOneEntityBy(Convocation::class, ['isRemote' => 'true']));
+        $this->assertNotEmpty($this->getOneEntityBy(Convocation::class, ['attendance' => 'remote']));
     }
 
     public function testAttendanceRedirect()

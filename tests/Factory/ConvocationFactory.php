@@ -50,7 +50,6 @@ final class ConvocationFactory extends ModelFactory
             'category' => self::faker()->text(255),
             'isActive' => true,
             'isRead' => false,
-            'isRemote' => false,
             'sitting' => SittingFactory::new(),
             'user' => UserFactory::new(),
         ];
