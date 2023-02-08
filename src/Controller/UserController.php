@@ -229,8 +229,13 @@ class UserController extends AbstractController
             'Un e-mail de réinitialisation du mot de passe a été envoyé'
         );
 
-        return $this->redirectToRoute('user_index', [
-            'page' => $request->get('page'),
-        ]);
+        if( empty($this->getUser()->getStructure()) ) {
+            return $this->redirectToRoute('admin_index' );
+        }
+        else {
+            return $this->redirectToRoute('user_index', [
+                'page' => $request->get('page'),
+            ]);
+        }
     }
 }
