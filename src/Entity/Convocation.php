@@ -21,8 +21,11 @@ class Convocation
 {
     public const CATEGORY_CONVOCATION = 'convocation';
     public const CATEGORY_INVITATION = 'invitation';
+
     public const PRESENT = 'present';
+    public const REMOTE = 'remote';
     public const ABSENT = 'absent';
+
     public const UNDEFINED = '';
 
     #[ORM\Id]
@@ -83,10 +86,6 @@ class Convocation
 
     #[ORM\OneToOne(mappedBy: 'convocation', cascade: ['persist', 'remove'])]
     private ?AttendanceToken $attendanceToken = null;
-
-    #[Column(type: 'boolean', options: ['default' => false])]
-    #[Groups(groups: ['convocation', 'convocation:read'])]
-    private bool $isRemote = false;
 
     public function __construct()
     {
@@ -253,15 +252,5 @@ class Convocation
         return $this;
     }
 
-    public function isIsRemote(): bool
-    {
-        return $this->isRemote;
-    }
 
-    public function setIsRemote(bool $isRemote): self
-    {
-        $this->isRemote = $isRemote;
-
-        return $this;
-    }
 }

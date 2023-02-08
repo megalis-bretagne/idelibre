@@ -153,18 +153,17 @@
                                     <i class="fas fa-question"></i>
                                 </span>
 
-                            <span v-else-if="convocation.attendance === 'present' && !convocation.isRemote"
+                            <span v-else-if="convocation.attendance === 'present'"
                                   class="text-success"
                                   title="Présent">
                                     <i class="fas fa-check"></i>
                                 </span>
 
-                            <span v-else-if="convocation.attendance === 'present' && convocation.isRemote"
+                            <span v-else-if="convocation.attendance === 'remote'"
                                   class="text-success"
                                   title="En distanciel">
                                     <i class="fas fa-laptop-house"></i>
                                 </span>
-
 
                             <span v-else class="text-danger" title="Absent">
                                     <i class="fas fa-times"></i>
@@ -256,13 +255,13 @@
                                           title="Sans réponse">
                                         <i class="fas fa-question"></i>
                                     </span>
-                                <span v-else-if="convocation.attendance === 'present' && !convocation.isRemote"
+                                <span v-else-if="convocation.attendance === 'present'"
                                       class="text-success"
                                       title="Présent">
                                         <i class="fas fa-check"></i>
                                     </span>
 
-                                <span v-else-if="convocation.attendance === 'present' && convocation.isRemote"
+                                <span v-else-if="convocation.attendance === 'remote'"
                                       class="text-success"
                                       title="En distanciel">
                                     <i class="fas fa-laptop-house"></i>
@@ -353,13 +352,13 @@
                                       title="Sans réponse">
                                         <i class="fas fa-question"></i>
                                     </span>
-                                <span v-else-if="convocation.attendance === 'present' && !convocation.isRemote"
+                                <span v-else-if="convocation.attendance === 'present'"
                                       class="text-success"
                                       title="Présent">
                                         <i class="fas fa-check"></i>
                                     </span>
 
-                                <span v-else-if="convocation.attendance === 'present' && convocation.isRemote"
+                                <span v-else-if="convocation.attendance === 'remote'"
                                       class="text-success"
                                       title="En distanciel">
                                     <i class="fas fa-laptop-house"></i>
@@ -413,7 +412,7 @@
                                     <label for="subject">Objet : {{ emailTemplateBySittingType.subject }} </label>
                                 {% else %}
                                     <label for="subject">Objet : {{ emailTemplate.subject }} </label>
-                                {%  endif %}
+                                {% endif %}
 
                                 <iframe class="mt-3 bg-white"
                                         :src=`/api/convocations/previewForSecretary/${convocationIdCurrent}`
@@ -547,14 +546,14 @@
                                                 </td>
 
                                                 <td class="col-3" v-if="status.category === 'convocation'">
-                                                    <input :disabled="status.attendance == 'present'"
+                                                    <input :disabled="status.attendance === 'present'"
                                                            class="select form-control" v-model="status.deputy"
                                                            @change="changeAttendance(status)" placeholder="Mandataire">
                                                 </td>
 
                                                 {% if sitting.isRemoteAllowed %}
                                                     <td class="col-2" v-if="status.category === 'convocation'">
-                                                        <select :disabled="status.attendance == 'absent'"
+                                                        <select :disabled="status.attendance === 'absent'"
                                                                 class="select form-control" v-model="status.isRemote"
                                                                 @change="changeAttendance(status)">
                                                             <option value=""></option>
@@ -603,11 +602,11 @@
 
                                         <div class="form-group mt-4">
                                             <label for="subject" v-if="!isInvitation">
-                                                {% if emailTemplateBySittingType  %}
+                                                {% if emailTemplateBySittingType %}
                                                     Objet : {{ emailTemplateBySittingType.subject }}
                                                 {% else %}
                                                     Objet : {{ emailTemplate.subject }}
-                                                {%  endif %}
+                                                {% endif %}
 
                                             </label>
 
