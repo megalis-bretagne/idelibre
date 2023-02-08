@@ -84,7 +84,7 @@ class Convocation
     #[ORM\OneToOne(mappedBy: 'convocation', cascade: ['persist', 'remove'])]
     private ?AttendanceToken $attendanceToken = null;
 
-    #[Column(type: 'boolean')]
+    #[Column(type: 'boolean', options: ['default' => false])]
     #[Groups(groups: ['convocation', 'convocation:read'])]
     private bool $isRemote = false;
 

@@ -74,11 +74,11 @@ class Structure
     #[Column(type: 'boolean', options: ['default' => true])]
     private $isActive = true;
 
-    #[Column(type: 'integer', unique: false, nullable: false)]
+    #[Column(type: 'integer', unique: false, nullable: false, options: ['default' => 80])]
     private $minimumEntropy = 80;
 
-    #[ORM\Column]
-    private ?bool $canEditReplyTo = null;
+    #[ORM\Column(type: 'boolean', options: ['default' => true])]
+    private ?bool $canEditReplyTo = true;
 
     public function __construct()
     {

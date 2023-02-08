@@ -108,9 +108,9 @@ class Sitting
     #[OrderBy(value: ['rank' => 'ASC'])]
     private $otherdocs;
 
-    #[Column(type: 'boolean')]
+    #[Column(type: 'boolean', options: ['default' => false])]
     #[Groups(groups: ['sitting', 'sitting:read'])]
-    private $isRemote = false;
+    private $isRemoteAllowed = false;
 
     public function __construct()
     {
@@ -399,14 +399,14 @@ class Sitting
         return $this;
     }
 
-    public function isIsRemote(): bool
+    public function getIsRemoteAllowed(): bool
     {
-        return $this->isRemote;
+        return $this->isRemoteAllowed;
     }
 
-    public function setIsRemote(bool $isRemote): self
+    public function setIsRemoteAllowed(bool $isRemoteAllowed): self
     {
-        $this->isRemote = $isRemote;
+        $this->isRemoteAllowed = $isRemoteAllowed;
 
         return $this;
     }

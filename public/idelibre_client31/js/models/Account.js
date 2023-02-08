@@ -265,26 +265,9 @@ Account.prototype.formatDataSeance = function (data) {
         name: data.seance_name,
         date: data.seance_date,
         presentStatus: data.presentStatus,
-        isRemoteStatus: data.isRemoteStatus,
-        // convocation: {
-        //     id: data.convocation.document_id,
-        //     isRead: data.convocation.isRead,
-        //     document_text: {
-        //         id: data.seance_document_id,
-        //         name: "Convocation",
-        //         isLoaded: NOTLOADED,
-        //         //pdfdatas: data.Document.Pdfdata
-        //         /* pdfdatas: _.each(data.Document.Pdfdata, function (pdf) {
-        //          pdf.isLoaded = false;
-        //          })*/
-        //
-        //         // pas d'annotation car convocation
-        //     }
-        // },
-        //  users: data.Users,
+        isRemoteAllowed: data.isRemoteAllowed,
         projets: _.map(data.projets, this.formatDataProjet),
         otherdocs: _.map(data.otherdocs, this.formatDataOtherdoc)
-
     };
 
 
@@ -297,7 +280,6 @@ Account.prototype.formatDataSeance = function (data) {
                 name: "Convocation",
                 isLoaded: NOTLOADED
             }
-
         }
     }
 
@@ -311,7 +293,6 @@ Account.prototype.formatDataSeance = function (data) {
                 name: "Invitation",
                 isLoaded: NOTLOADED
             }
-
         }
     }
 

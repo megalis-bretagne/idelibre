@@ -1,7 +1,7 @@
 (function () {
     angular.module('idelibreApp').controller('ModalpresenceCtrl', function ($scope, account, seance, $rootScope, $modalInstance, socketioSrv, accountSrv) {
 
-        $scope.isAllowedRemote = seance.isRemoteStatus
+        $scope.isAllowedRemote = seance.isRemoteAllowed
 
 
         var maDate = Date.now();

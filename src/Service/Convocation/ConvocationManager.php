@@ -320,7 +320,7 @@ class ConvocationManager
             }
             $convocation->setAttendance($convocationAttendance->getAttendance());
             $convocation->setDeputy($convocationAttendance->getDeputy());
-            if ($convocation->getSitting()->isIsRemote()) {
+            if ($convocation->getSitting()->getIsRemoteAllowed()) {
                 $convocation->setIsRemote($convocationAttendance->getIsRemote());
             }
         }

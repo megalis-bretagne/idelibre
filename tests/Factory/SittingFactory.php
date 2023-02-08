@@ -51,7 +51,7 @@ final class SittingFactory extends ModelFactory
             'date' => null, // TODO add DATETIME ORM type manually
             'revision' => self::faker()->randomNumber(),
             'isArchived' => false,
-            'isRemote' => true,
+            'isRemoteAllowed' => true,
         ];
     }
 
