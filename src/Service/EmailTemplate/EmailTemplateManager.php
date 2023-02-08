@@ -17,6 +17,7 @@ class EmailTemplateManager
 
     public function save(EmailTemplate $template): void
     {
+        $template->setContent(html_entity_decode($template->getContent()));
         $this->em->persist($template);
         $this->em->flush();
     }
