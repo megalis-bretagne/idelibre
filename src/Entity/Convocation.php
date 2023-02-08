@@ -251,6 +251,4 @@ class Convocation
 
         return $this;
     }
-
-
 }
