@@ -205,7 +205,7 @@ class Convocation
 
     public function setAttendance(?string $attendance): self
     {
-        if (!in_array($attendance, [self::PRESENT, self::ABSENT, self::UNDEFINED])) {
+        if (!in_array($attendance, [self::PRESENT, self::ABSENT, self::UNDEFINED, self::REMOTE])) {
             throw new InvalidArgumentException('attendance not allowed');
         }
         $this->attendance = $attendance;

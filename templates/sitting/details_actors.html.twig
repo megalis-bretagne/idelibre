@@ -536,32 +536,23 @@
                                                     ${status.firstName} ${status.lastName}
                                                 </td>
 
-                                                <td class="col-2">
+                                                <td class="col-3">
                                                     <select class="select form-control" v-model="status.attendance"
                                                             @change="changeAttendance(status)">
                                                         <option value="">Sans Réponse</option>
-                                                        <option value="present">Présent</option>
                                                         <option value="absent">Absent</option>
+                                                        <option value="present">Présent</option>
+                                                        {% if sitting.isRemoteAllowed %}
+                                                        <option value="remote">À distance</option>
+                                                        {% endif %}
                                                     </select>
                                                 </td>
 
-                                                <td class="col-3" v-if="status.category === 'convocation'">
-                                                    <input :disabled="status.attendance === 'present'"
+                                                <td class="col-4" v-if="status.category === 'convocation'">
+                                                    <input :disabled="status.attendance !== 'absent'"
                                                            class="select form-control" v-model="status.deputy"
                                                            @change="changeAttendance(status)" placeholder="Mandataire">
                                                 </td>
-
-                                                {% if sitting.isRemoteAllowed %}
-                                                    <td class="col-2" v-if="status.category === 'convocation'">
-                                                        <select :disabled="status.attendance === 'absent'"
-                                                                class="select form-control" v-model="status.isRemote"
-                                                                @change="changeAttendance(status)">
-                                                            <option value=""></option>
-                                                            <option value="false">Sur site</option>
-                                                            <option value="true">A distance</option>
-                                                        </select>
-                                                    </td>
-                                                {% endif %}
                                             </tr>
                                             </tbody>
                                         </table>
