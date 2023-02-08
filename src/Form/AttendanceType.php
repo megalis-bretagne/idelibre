@@ -18,16 +18,15 @@ class AttendanceType extends AbstractType
                 'required' => true,
                 'label' => 'Merci de confirmer votre présence',
                 'choices' => $this->getAttendanceValues($options['isRemoteAllowed'] ?? null),
-                'empty_data' => Convocation::PRESENT
+                'empty_data' => Convocation::PRESENT,
             ])
 
             ->add('deputy', TextType::class, [
                 'label' => 'Mandataire',
-                'required' => false
+                'required' => false,
             ])
             ;
     }
-
 
     private function getAttendanceValues(?bool $isRemoteAllowed): array
     {
@@ -39,9 +38,8 @@ class AttendanceType extends AbstractType
         if ($isRemoteAllowed) {
             $values = [
                 'Présent' => Convocation::PRESENT,
-                'Présent à distance'=> Convocation::REMOTE,
+                'Présent à distance' => Convocation::REMOTE,
                 'Absent' => Convocation::ABSENT,
-
             ];
         }
 
@@ -51,7 +49,7 @@ class AttendanceType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'isRemoteAllowed' => false
+            'isRemoteAllowed' => false,
         ]);
     }
 }

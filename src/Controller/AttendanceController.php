@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\AttendanceToken;
-use App\Entity\Convocation;
 use App\Form\AttendanceType;
 use App\Service\Convocation\ConvocationAttendance;
 use App\Service\Convocation\ConvocationManager;
@@ -18,14 +17,13 @@ class AttendanceController extends AbstractController
     public function confirmAttendanceFromEmail(AttendanceToken $attendanceToken, Request $request, ConvocationManager $convocationManager): Response
     {
         $sitting = $attendanceToken->getConvocation()->getSitting();
-        $form = $this->createForm(AttendanceType::class,null, [
+        $form = $this->createForm(AttendanceType::class, null, [
             'isRemoteAllowed' => $sitting->getIsRemoteAllowed(),
         ]);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $convocationAttendance = (new ConvocationAttendance())
                 ->setAttendance($form->get('attendance')->getData())
                 ->setDeputy($form->get('deputy')->getData())
@@ -44,7 +42,7 @@ class AttendanceController extends AbstractController
             'sitting' => $attendanceToken->getConvocation()->getSitting(),
             'timezone' => $attendanceToken->getConvocation()->getSitting()->getStructure()->getTimezone()->getName(),
             'attendance' => $attendanceToken->getConvocation()->getAttendance(),
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 
