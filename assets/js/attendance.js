@@ -2,23 +2,21 @@ import $ from "jquery";
 
 $('document').ready(() => {
 
-    $('#deputy').addClass('d-none')
-    $('#presentiel').addClass('d-none')
 
-    $('#confirmPresence').change(() => {
-        if (!($('#deputy').hasClass('d-none'))) {
-            $('#deputy').addClass('d-none')
+    let $selectAttendance= $("#attendance_attendance");
+    let $deputyDiv = $('#deputy-div');
+    let $deputyInput= $('#attendance_deputy');
+
+    $selectAttendance.change(() => {
+        const status = $selectAttendance.val();
+        if(status === 'absent') {
+            $deputyDiv.removeClass('d-none');
+            $deputyInput.attr('disabled', false)
+            return;
         }
 
-        if ($('#presentiel').hasClass('d-none')) {
-            $('#presentiel').removeClass('d-none')
-        }
-    })
-
-    $('#confirmAbsence').change(() => {
-        $('#deputy').removeClass('d-none')
-        $('#presentiel').addClass('d-none')
-
+        $deputyDiv.addClass('d-none');
+        $deputyInput.attr('disabled', true)
     })
 
 })

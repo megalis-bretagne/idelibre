@@ -1,0 +1,54 @@
+{% extends 'base_login.html.twig' %}
+
+{% block title %}Confirmation de présence à la séance{% endblock %}
+
+{% block body %}
+
+
+    <div class="form-side">
+
+        <div class="form-content" style="width: 600px">
+            <div class="soft-logo">
+                <img id="libriciel-logo" alt="Image du Libriciel"
+                     height="10" width="10"
+                     src="{{ asset('assets/img/application_logo.svg') }}">
+            </div>
+
+            <section class="mt-5">
+                <div class="d-flex">
+                    <h1 class="h3 mb-4"> {{ user.firstName }} {{ user.lastName }}
+                        {% if not attendance %}
+                            <div class="badge badge-secondary">Présence à définir</div>
+                        {% elseif attendance == 'absent' %}
+                            <div class="badge badge-danger" id=""> Absent</div>
+                        {% elseif attendance == 'present' %}
+                            <div class="badge badge-info"> Présent</div>
+                        {% elseif attendance == 'remote' %}
+                            <div class="badge badge-info"> Présent à distance</div>
+                        {% endif %}
+                    </h1>
+
+                </div>
+                <p><b>Séance : </b> {{ sitting.name }}</p>
+                <p><b>Date de la séance : </b> {{ sitting.date | date('d/m/y : H:i', timezone) }}</p>
+
+                <div class="mt-5">
+                    {{ form_start(form) }}
+                    {{ form_row(form.attendance) }}
+                    <div id="deputy-div" class="d-none">
+                        {{ form_row(form.deputy, {attr:{"disabled": true}}) }}
+                    </div>
+                    <input type="submit" class="btn btn-primary float-right" value="Enregistrer">
+                    {{ form_end(form) }}
+                </div>
+
+            </section>
+
+        </div>
+    </div>
+
+    {% block javascripts %}
+        {{ encore_entry_script_tags('attendance') }}
+    {% endblock %}
+
+{% endblock %}
