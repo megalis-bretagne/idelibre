@@ -1,23 +1,22 @@
 (function () {
     'use strict';
 
-    angular.module('idelibreApp').controller('OdjCtrl', function ($scope, $log, $routeParams, $rootScope,  $location, dlOriginalSrv, localDbSrv, fakeUrlSrv, accountSrv, $modal) {
-        $rootScope.$broadcast('buttonDrawersVisibility',{visibility: false});
+    angular.module('idelibreApp').controller('OdjCtrl', function ($scope, $log, $routeParams, $rootScope, $location, dlOriginalSrv, localDbSrv, fakeUrlSrv, accountSrv, $modal) {
+        $rootScope.$broadcast('buttonDrawersVisibility', {visibility: false});
 
         $scope.seanceId = $routeParams.seanceId;
         $scope.accountId = $routeParams.accountId;
-
 
 
         var account = accountSrv.findAccountById($scope.accountId);
 
 
         var seance = account.findSeance($scope.seanceId);
-console.log( seance);
+        console.log(seance);
 
         $scope.isInvite = account.type == INVITES;
 
-        if(seance.convocation) {
+        if (seance.convocation) {
             $scope.annotations = seance.convocation.countAnnotations();
         }
 
@@ -92,19 +91,14 @@ console.log( seance);
         };
 
 
-
-
-
-
         $scope.clickOnConvocation = function () {
             //TODO : a way to reload convocation !
             //always loaded else you can't go there !!!
             // !
 
-            if(seance.convocation) {
+            if (seance.convocation) {
                 $location.path('/convocation/' + seance.convocation.document_text.id + '/' + seance.id + '/' + $scope.accountId);
-            }
-            else if(seance.invitation){
+            } else if (seance.invitation) {
                 $location.path('/convocation/' + seance.invitation.document_text.id + '/' + seance.id + '/' + $scope.accountId);
             }
         };
@@ -112,7 +106,7 @@ console.log( seance);
 
         $scope.downloadAll = function () {
             //sort projet by rank :
-            var sortedProjet = _.sortBy(seance.projets, function(projet){
+            var sortedProjet = _.sortBy(seance.projets, function (projet) {
                 return projet.rank;
             });
             _.each(sortedProjet, function (projet) {
@@ -121,7 +115,7 @@ console.log( seance);
                 }
             });
 
-            var sortedOtherdoc = _.sortBy(seance.otherdocs, function(otherdoc){
+            var sortedOtherdoc = _.sortBy(seance.otherdocs, function (otherdoc) {
                 return otherdoc.rank;
             });
 
@@ -141,7 +135,7 @@ console.log( seance);
         };
 
 
-        $scope.popupPresence = function(){
+        $scope.popupPresence = function () {
             $log.debug("popupPresence");
             $modal.open({
                 templateUrl: 'js/templates/modalInfo/ModalpresenceCtrl.html',
@@ -157,38 +151,18 @@ console.log( seance);
                 },
 
             })
-            .result.then(function(res){
-                if(res === Seance.ABSENT ){
+                .result.then(function (res) {
+                if (res === Seance.ABSENT) {
                     openConfirmAbsent()
                 }
-                /*else if(res === Seance.PRESENT ) {
-                    openConfirmIsRemote();
-                }*/
             });
         };
 
 
-        var openConfirmAbsent = function(){
+        var openConfirmAbsent = function () {
             $modal.open({
                 templateUrl: 'js/templates/modalInfo/ModalConfirmAbsent.html',
                 controller: 'ModalConfirmAbsentCtrl',
-                size: 'md',
-                resolve: {
-                    account: function () {
-                        return account;
-                    },
-                    seance: function () {
-                        return seance;
-                    }
-                },
-
-            })
-        }
-
-        var openConfirmIsRemote = function(){
-            $modal.open({
-                templateUrl: 'js/templates/modalInfo/ModalConfirmIsRemote.html',
-                controller: 'ModalConfirmIsRemoteCtrl',
                 size: 'md',
                 resolve: {
                     account: function () {
@@ -206,32 +180,43 @@ console.log( seance);
         var callbackSuccess = function () {
             $scope.dlStatus = false;
             $scope.stateClass = "fa fa-download fa-lg perso-color-yellow";
-            $rootScope.$broadcast('modalOpen', {title: 'Téléchargement terminé', content: 'Votre document a bien été téléchargé'});
+            $rootScope.$broadcast('modalOpen', {
+                title: 'Téléchargement terminé',
+                content: 'Votre document a bien été téléchargé'
+            });
         }
 
 
         var callbackError = function () {
             $scope.dlStatus = false;
             $scope.stateClass = "fa fa-download fa-lg perso-color-yellow";
-            $rootScope.$broadcast('modalOpen', {title: 'Téléchargement erreur', content: 'Votre document n\'a pas été téléchargé'});
+            $rootScope.$broadcast('modalOpen', {
+                title: 'Téléchargement erreur',
+                content: 'Votre document n\'a pas été téléchargé'
+            });
         };
 
-        $scope.downloadZipSeance = function(){
+        $scope.downloadZipSeance = function () {
             //function (account, url, filename, mimeType, callback, callbackError)
-            var url = account.url + '/nodejs/' + config.API_LEVEL + '/zips/dlZip/' +  $scope.seanceId;
+            var url = account.url + '/nodejs/' + config.API_LEVEL + '/zips/dlZip/' + $scope.seanceId;
             var filename = seance.name + '_' + DateUtils.formattedDateZip(seance.date) + '.zip';
-            $rootScope.$broadcast('notify', {class: 'info', content: "<b>" + account.name + "</b>" + Messages.DONWLOAD_ZIP});
+            $rootScope.$broadcast('notify', {
+                class: 'info',
+                content: "<b>" + account.name + "</b>" + Messages.DONWLOAD_ZIP
+            });
             dlOriginalSrv.dlPDF(account, url, filename, 'application/zip', "idelibre/", callbackSuccess, callbackError);
         };
 
 
-        $scope.downloadPdfSeance = function(){
-            var url = account.url + '/nodejs/' + config.API_LEVEL + '/pdf/dlPdf/' +  $scope.seanceId;
+        $scope.downloadPdfSeance = function () {
+            var url = account.url + '/nodejs/' + config.API_LEVEL + '/pdf/dlPdf/' + $scope.seanceId;
             var filename = 'seance.pdf';
-            $rootScope.$broadcast('notify', {class: 'info', content: "<b>" + account.name + "</b>" + Messages.DONWLOAD_PDF});
+            $rootScope.$broadcast('notify', {
+                class: 'info',
+                content: "<b>" + account.name + "</b>" + Messages.DONWLOAD_PDF
+            });
             dlOriginalSrv.dlPDF(account, url, filename, 'application/pdf', "idelibre/", callbackSuccess, callbackError);
         };
-
 
 
         //TODO UTILITY CLASS !!
@@ -262,12 +247,6 @@ console.log( seance);
             var fhour = "" + hours + "h" + minutes;
             return fhour;
         }
-
-
-
-
-
-
 
 
 /////////
