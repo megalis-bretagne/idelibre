@@ -318,11 +318,9 @@ class ConvocationManager
             if (!$convocation) {
                 throw new NotFoundHttpException("Convocation with id ${convocationAttendance['convocationId']} does not exists");
             }
+            // TODO check si le remote est autorisé
             $convocation->setAttendance($convocationAttendance->getAttendance());
             $convocation->setDeputy($convocationAttendance->getDeputy());
-            if ($convocation->getSitting()->getIsRemoteAllowed()) {
-                $convocation->setIsRemote($convocationAttendance->getIsRemote());
-            }
         }
         $this->em->flush();
     }

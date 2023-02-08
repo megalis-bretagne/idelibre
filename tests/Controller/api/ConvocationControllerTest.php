@@ -120,7 +120,6 @@ class ConvocationControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(200);
         $this->assertEquals('absent', $convocation->getAttendance());
         $this->assertEquals('John Doe', $convocation->getDeputy());
-        $this->assertEquals(false, $convocation->isIsRemote());
     }
 
     public function testSetAttendanceConvocationNotExists()

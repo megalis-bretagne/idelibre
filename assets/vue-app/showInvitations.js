@@ -175,7 +175,7 @@ let app = new Vue({
 
         changeAttendance(status) {
 
-            this.changedAttendance.push({convocationId: status.convocationId, attendance: status.attendance, deputy: status.deputy, isRemote: status.isRemote})
+            this.changedAttendance.push({convocationId: status.convocationId, attendance: status.attendance, deputy: status.deputy})
         },
 
         saveAttendance() {
@@ -233,7 +233,6 @@ function formatAttendanceStatus(convocations) {
             attendance: convocation.attendance,
             deputy: convocation.deputy,
             category: convocation.category,
-            isRemote: convocation.isRemote,
         })
     }
 

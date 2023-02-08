@@ -48,6 +48,7 @@ class ConvocationController extends AbstractController
     #[IsGranted(data: 'MANAGE_ATTENDANCE', subject: 'request')]
     public function setAttendance(ConvocationManager $convocationManager, Request $request, DenormalizerInterface $denormalizer): JsonResponse
     {
+        //dd($request->toArray());
         $convocationAttendances = $denormalizer->denormalize($request->toArray(), ConvocationAttendance::class . '[]');
         $convocationManager->updateConvocationAttendances($convocationAttendances);
 

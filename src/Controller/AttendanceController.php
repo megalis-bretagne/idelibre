@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\AttendanceToken;
-use App\Entity\Convocation;
+use App\Form\AttendanceType;
 use App\Service\Convocation\ConvocationAttendance;
 use App\Service\Convocation\ConvocationManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,18 +14,20 @@ use Symfony\Component\Routing\Annotation\Route;
 class AttendanceController extends AbstractController
 {
     #[Route('/attendance/confirmation/{token}', name: 'app_attendance_confirmation')]
-    public function index(AttendanceToken $attendanceToken, Request $request, ConvocationManager $convocationManager): Response
+    public function confirmAttendanceFromEmail(AttendanceToken $attendanceToken, Request $request, ConvocationManager $convocationManager): Response
     {
-        if ($request->isMethod('POST')) {
-            $attendance = $request->get('attendance');
-            $deputy = Convocation::PRESENT === $attendance ? null : $request->get('deputy');
-            $isRemote = Convocation::ABSENT === $attendance ? false : $request->get('isRemote');
+        $sitting = $attendanceToken->getConvocation()->getSitting();
+        $form = $this->createForm(AttendanceType::class, null, [
+            'isRemoteAllowed' => $sitting->getIsRemoteAllowed(),
+        ]);
 
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
             $convocationAttendance = (new ConvocationAttendance())
-               ->setAttendance('present' === $attendance ? Convocation::PRESENT : Convocation::ABSENT)
-               ->setDeputy($deputy)
-               ->setIsRemote($isRemote)
-               ->setConvocationId($attendanceToken->getConvocation()->getId());
+                ->setAttendance($form->get('attendance')->getData())
+                ->setDeputy($form->get('deputy')->getData())
+                ->setConvocationId($attendanceToken->getConvocation()->getId());
 
             $convocationManager->updateConvocationAttendances([$convocationAttendance]);
 
@@ -34,12 +36,13 @@ class AttendanceController extends AbstractController
             return $this->redirectToRoute('app_attendance_redirect', ['token' => $attendanceToken->getToken()]);
         }
 
-        return $this->render('confirm_attendance/index.html.twig', [
+        return $this->render('confirm_attendance/confirm.html.twig', [
             'token' => $attendanceToken->getToken(),
             'user' => $attendanceToken->getConvocation()->getUser(),
             'sitting' => $attendanceToken->getConvocation()->getSitting(),
             'timezone' => $attendanceToken->getConvocation()->getSitting()->getStructure()->getTimezone()->getName(),
             'attendance' => $attendanceToken->getConvocation()->getAttendance(),
+            'form' => $form->createView(),
         ]);
     }
 
