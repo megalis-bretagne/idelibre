@@ -49,6 +49,7 @@ var Seance = function (id, name, rev, dateSeance) {
 
 Seance.PRESENT = "present";
 Seance.ABSENT = "absent";
+Seance.REMOTE = "remote";
 Seance.UNDEFINED = "undefined";
 
 /**
@@ -449,19 +450,4 @@ Seance.prototype.getDate = function () {
     return this.date;
 };
 
-
-// TODO USELESS !!
-/*
-Seance.prototype.getIsRemoteStatus = function(){
-    if(this.isRemoteStatus)
-        return this.isRemoteStatus;
-    return Seance.UNDEFINED;
-
-};
-*/
-/*
-Seance.prototype.setIsRemoteStatus = function(isRemote){
-    this.isRemote = isRemote;
-};
-*/
 

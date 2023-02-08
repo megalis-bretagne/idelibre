@@ -685,15 +685,14 @@
             }
         }
 
-        socketio.sendConfirmPresence = function (account, seanceId, status, mandataire, isRemote) {
+        socketio.sendConfirmPresence = function (account, seanceId, status, mandataire) {
             var socket = accountIdSocketMap[account.id];
             if (socket) {
                 socket.emit("sendPresence", {
                     token: account.token,
                     seanceId: seanceId,
                     presentStatus: status,
-                    procuration_name: mandataire,
-                    isRemoteStatus: isRemote
+                    procuration_name: mandataire
                 });
             }
         }

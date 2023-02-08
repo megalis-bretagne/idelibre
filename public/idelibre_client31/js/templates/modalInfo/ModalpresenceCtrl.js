@@ -18,19 +18,19 @@
         $scope.present = function () {
             seance.setPresentStatus(Seance.PRESENT);
             accountSrv.save();
-            socketioSrv.sendConfirmPresence(account, seance.id, Seance.PRESENT, null, false);
+            socketioSrv.sendConfirmPresence(account, seance.id, Seance.PRESENT, null);
             $modalInstance.dismiss('cancel');
         };
 
         $scope.presentRemotely = function () {
             seance.setPresentStatus(Seance.PRESENT);
             accountSrv.save();
-            socketioSrv.sendConfirmPresence(account, seance.id, Seance.PRESENT, null, true);
+            socketioSrv.sendConfirmPresence(account, seance.id, Seance.REMOTE, null);
             $modalInstance.dismiss('cancel');
         }
 
         $scope.absent = function () {
-            if (account.type != ACTEURS) {
+            if (account.type !== ACTEURS) {
                 seance.setPresentStatus(Seance.ABSENT);
                 accountSrv.save();
                 socketioSrv.sendConfirmPresence(account, seance.id, Seance.ABSENT);
