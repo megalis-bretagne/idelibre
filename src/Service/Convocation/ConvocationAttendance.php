@@ -32,7 +32,6 @@ class ConvocationAttendance
         return $this;
     }
 
-
     public function getConvocationId(): string
     {
         return $this->convocationId;
