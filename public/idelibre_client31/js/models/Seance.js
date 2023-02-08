@@ -13,6 +13,7 @@ var Seance = function (id, name, rev, dateSeance) {
     this.rev = rev;
     this.date = dateSeance;
 
+    this.isRemoteAllowed = false;
 
     /*
      * si la seance a été modifiée
@@ -448,15 +449,19 @@ Seance.prototype.getDate = function () {
     return this.date;
 };
 
+
+// TODO USELESS !!
+/*
 Seance.prototype.getIsRemoteStatus = function(){
     if(this.isRemoteStatus)
         return this.isRemoteStatus;
     return Seance.UNDEFINED;
 
 };
-
+*/
+/*
 Seance.prototype.setIsRemoteStatus = function(isRemote){
     this.isRemote = isRemote;
 };
-
+*/
 

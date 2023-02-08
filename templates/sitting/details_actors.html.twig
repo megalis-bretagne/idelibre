@@ -552,7 +552,7 @@
                                                            @change="changeAttendance(status)" placeholder="Mandataire">
                                                 </td>
 
-                                                {% if sitting.isRemote %}
+                                                {% if sitting.isRemoteAllowed %}
                                                     <td class="col-2" v-if="status.category === 'convocation'">
                                                         <select :disabled="status.attendance == 'absent'"
                                                                 class="select form-control" v-model="status.isRemote"

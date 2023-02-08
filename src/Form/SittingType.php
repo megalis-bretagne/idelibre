@@ -103,7 +103,7 @@ class SittingType extends AbstractType
             ->add('reminder', ReminderSittingType::class, [
                 'label' => false,
             ])
-            ->add('isRemote', CheckboxType::class, [
+            ->add('isRemoteAllowed', CheckboxType::class, [
                 'required' => false,
                 'label_attr' => ['class' => 'switch-custom'],
                 'label' => ($isNew || $isAlreadySentConvocation) ? 'Participation à distance' : 'Autoriser la participation à distance',
