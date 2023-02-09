@@ -16,7 +16,14 @@
         <section class="mt-5">
             <div class="alert alert-info h5">
                 Votre status pour cette séance est actuellement définie sur
-                <u> {% if attendance == 'present' %} présent {% else %} absent {% endif %} </u> .
+                <u> {% if attendance == 'absent' %}
+                        absent
+                    {% elseif attendance == 'present' %}
+                        présent
+                    {% elseif attendance == 'remote' %}
+                         présent à distance
+                    {% endif %}
+                </u> .
                 Merci pour votre retour.
             </div>
         </section>
