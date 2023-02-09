@@ -22,7 +22,7 @@ class AttendanceToken
     private ?string $token = null;
 
     #[ORM\OneToOne(inversedBy: 'attendanceToken', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?Convocation $convocation = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
