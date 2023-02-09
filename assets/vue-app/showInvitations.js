@@ -12,18 +12,6 @@ Vue.filter('formatDateString', function (value) {
     }
 });
 
-Vue.filter('formatDateWithTimezone', function (value) {
-    if(value) {
-        const tz = "";
-        axios.get('/api/sittings/' + getSittingId() + '/timezone')
-            .then(response => {
-                const tz = response.data.timezone
-            });
-        return value.toLocaleDateString(tz);
-    }
-})
-
-
 let app = new Vue({
     delimiters: ['${', '}'],
     el: "#app",
@@ -60,6 +48,7 @@ let app = new Vue({
         },
         convocationIdCurrent: "",
         isInvitation: false,
+        timezone: ""
     },
 
     computed: {
@@ -128,6 +117,18 @@ let app = new Vue({
                 this.isComelus = sitting?.type.isComelus ?? false
                 this.isArchived = sitting.isArchived;
             })
+        },
+
+        getSittingTimezone(value) {
+
+            console.log(typeof (value))
+
+            // axios.get(`/api/sittings/${getSittingId()}/timezone`)
+            //     .then(response => {
+            //         this.timezone = response.data.timezone
+            //     })
+            //
+            // return value.toLocaleDateString(this.timezone)
         },
 
         resetFilters() {
@@ -231,6 +232,7 @@ let app = new Vue({
     mounted() {
         this.getConvocations();
         this.getSitting();
+        this.getSittingTimezone();
     }
 });
 
