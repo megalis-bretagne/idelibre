@@ -43,6 +43,12 @@ class SecurityController extends AbstractController
             return $this->redirectToRoute('structure_index');
         }
 
+        if( !$this->getUser()->getStructure()->getIsActive() )
+        {
+            $this->addFlash('error', 'La structure à laquelle vous êtes associé est désactivée');
+            return $this->redirectToRoute('app_login');
+        }
+
         return $this->redirectToRoute('sitting_index', ['status' => 'active']);
     }
 
