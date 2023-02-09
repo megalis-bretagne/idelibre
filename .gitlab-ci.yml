@@ -11,6 +11,8 @@ include:
     file: 'jobs/security-check/security-check.yml'
 
 security-check:
+  only:
+    - master
   allow_failure: true
   variables:
     TRIVY_IMAGE_TIMEOUT: 10m
