@@ -57,6 +57,7 @@ class PasswordInvalidator
 
         $this->emailService->sendBatch($emailsData);
     }
+
     private function getContentMail($user)
     {
         $prenom = $user->getFirstName();
