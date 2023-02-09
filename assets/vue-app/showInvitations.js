@@ -5,11 +5,24 @@ import axios from 'axios';
 import dayjs from 'dayjs';
 
 
+
 Vue.filter('formatDateString', function (value) {
     if (value) {
-        return dayjs(value).format('DD/MM/YY H:mm')
+       return dayjs(value).format('DD/MM/YY H:mm')
     }
 });
+
+Vue.filter('formatDateWithTimezone', function (value) {
+    if(value) {
+        const tz = "";
+        axios.get('/api/sittings/' + getSittingId() + '/timezone')
+            .then(response => {
+                const tz = response.data.timezone
+            });
+        return value.toLocaleDateString(tz);
+    }
+})
+
 
 let app = new Vue({
     delimiters: ['${', '}'],
@@ -214,7 +227,6 @@ let app = new Vue({
             this.showModalMailExample = true;
         },
     },
-
 
     mounted() {
         this.getConvocations();
