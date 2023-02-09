@@ -6,9 +6,15 @@ include:
   - project: "libriciel/integration-continue/templates"
     ref: master
     file: '/publish-container-to-registry.yml'
-#  - project: "libriciel/integration-continue/templates"
-#    ref: master
-#    file: '/security-check.yml'
+  - project: "libriciel/integration-continue/templates"
+    ref:  security-check-1.0.0
+    file: 'jobs/security-check/security-check.yml'
+
+security-check:
+  allow_failure: true
+  variables:
+    TRIVY_IMAGE_TIMEOUT: 10m
+
 
 stages:
   - build
