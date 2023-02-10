@@ -8,9 +8,12 @@ use App\Service\EmailTemplate\EmailTemplateManager;
 use App\Service\Util\DateUtil;
 use App\Service\Util\GenderConverter;
 use App\Tests\Factory\AttendanceTokenFactory;
+use App\Tests\Factory\EmailTemplateFactory;
 use App\Tests\FindEntityTrait;
 use App\Tests\Story\ConvocationStory;
+use App\Tests\Story\SittingStory;
 use App\Tests\Story\StructureStory;
+use App\Tests\Story\TypeStory;
 use App\Tests\Story\UserStory;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -109,5 +112,56 @@ class EmailGeneratorTest extends WebTestCase
         ];
 
         $this->assertEquals($expected, $generator->generateParams($convocation->object()));
+    }
+
+
+    public function testGenerateSittingParams()
+    {
+
+        $sitting = SittingStory::sittingConseilLibriciel();
+
+        $generator = new EmailGenerator(
+            new DateUtil(),
+            new GenderConverter(),
+            $this->emailTemplateManager,
+            $this->params,
+            $this->router,
+        );
+
+        $expected = [
+            '#typeseance#' => 'Conseil Libriciel',
+            '#dateseance#' => '22/10/2020',
+            '#heureseance#' => '02:00',
+            '#lieuseance#' => 'Salle du conseil',
+            '#urlseance#' => 'idelibre-test.libriciel.fr/idelibre_client',
+        ];
+
+        $this->assertEquals($expected, $generator->generateSittingParams($sitting->object()));
+    }
+
+    public function testGenerateEmailTemplateSubject()
+    {
+        $sitting = SittingStory::sittingConseilLibriciel();
+        $emailTemplate = EmailTemplateFactory::new([
+            'structure' => StructureStory::libriciel(),
+            'type' => TypeStory::typeConseilLibriciel(),
+            'name' => 'Conseil Libriciel ',
+            'subject' => 'idelibre : une nouvelle convocation pour le type #typeseance#',
+            'category' => EmailTemplate::CATEGORY_CONVOCATION,
+            'content' => 'Voici mon template pour les seance de type conseil de la structure libriciel',
+        ])->create();
+
+        $generator = new EmailGenerator(
+            new DateUtil(),
+            new GenderConverter(),
+            $this->emailTemplateManager,
+            $this->params,
+            $this->router,
+        );
+
+        $expected = 'idelibre : une nouvelle convocation pour le type Conseil Libriciel';
+
+        $this->assertEquals($expected, $generator->generateEmailTemplateSubject($sitting->object(), $emailTemplate->getSubject()) );
+
     }
 }
