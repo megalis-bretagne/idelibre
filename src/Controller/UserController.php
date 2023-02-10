@@ -9,6 +9,7 @@ use App\Form\UserType;
 use App\Repository\UserRepository;
 use App\Security\Password\ResetPassword;
 use App\Security\UserLoginEntropy;
+use App\Service\role\RoleManager;
 use App\Service\User\PasswordInvalidator;
 use App\Service\User\UserManager;
 use App\Sidebar\Annotation\Sidebar;
@@ -16,6 +17,7 @@ use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -92,11 +94,13 @@ class UserController extends AbstractController
     #[Route(path: '/user/edit/{id}', name: 'user_edit')]
     #[IsGranted(data: 'MANAGE_USERS', subject: 'user')]
     #[Breadcrumb(title: 'Modifier {user.firstName} {user.lastName}')]
-    public function edit(User $user, Request $request, UserManager $manageUser): Response
+    public function edit(User $user, Request $request, UserManager $manageUser, ParameterBagInterface $bag, RoleManager $roleManager): Response
     {
+        $isOneOfAdminRole = in_array($user->getRole(), $roleManager->getAllRolesAdmin());
+        $entropy = ($isOneOfAdminRole) ? $bag->get('minimumEntropyForUserWithRoleHigh') : $this->getUser()->getStructure()->getMinimumEntropy();
         $form = $this->createForm(UserType::class, $user, [
             'structure' => $this->getUser()->getStructure(),
-            'entropyForUser' => $this->getUser()->getStructure()->getMinimumEntropy(),
+            'entropyForUser' => $entropy,
             'referer' => $request->headers->get('referer'),
         ]);
         $form->handleRequest($request);
