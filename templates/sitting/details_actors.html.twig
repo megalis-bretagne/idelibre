@@ -125,7 +125,7 @@
                         <td v-if="convocation.sentTimestamp" class="col-2">
                             <span class="fas fa-check text-success {{ classToChange }}"></span>
 
-                            ${ getSittingTimezone(convocation.sentTimestamp.createdAt) }
+                            ${ convocation.sentTimestamp.createdAt | formatDateString}
                         </td>
 
                         <td v-else-if="!isArchived" class="col-2 {{ classToChange }}">
@@ -141,7 +141,7 @@
 
                         <td v-if="convocation.receivedTimestamp" class="col-2 {{ classToChange }}">
                             <span class="fas fa-check text-success"></span>
-                            ${convocation.receivedTimestamp.createdAt | formatDateWithTimezone }
+                            ${convocation.receivedTimestamp.createdAt | formatDateString }
                         </td>
 
                         <td v-else class="col-2 {{ classToChange }}">

@@ -119,17 +119,16 @@ let app = new Vue({
             })
         },
 
-        getSittingTimezone(value) {
-
-            console.log(typeof (value))
-
-            // axios.get(`/api/sittings/${getSittingId()}/timezone`)
-            //     .then(response => {
-            //         this.timezone = response.data.timezone
-            //     })
-            //
-            // return value.toLocaleDateString(this.timezone)
-        },
+        // getSittingTimezone(value) {
+        //     axios.get(`/api/sittings/${getSittingId()}/timezone`)
+        //         .then(response => {
+        //             this.timezone = response.data.timezone
+        //         })
+        //     const date = new Date(value)
+        //     let timezone = this.timezone
+        //     // return date.toLocaleDateString({timezone: this.timezone})
+        //     return console.log(date.toLocaleDateString(this.timezone))
+        // },
 
         resetFilters() {
             this.filter = {actor: "", guest: "", employees: ""};
@@ -232,7 +231,7 @@ let app = new Vue({
     mounted() {
         this.getConvocations();
         this.getSitting();
-        this.getSittingTimezone();
+        // this.getSittingTimezone();
     }
 });
 
