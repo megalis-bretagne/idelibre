@@ -103,9 +103,6 @@ let app = new Vue({
                 this.guestConvocations = convocations.data['guests'];
                 this.employeeConvocations = convocations.data['employees'];
 
-
-                console.log(this.actorConvocations);
-
                 this.isAlreadySentActors = isAlreadySentSitting(this.actorConvocations);
                 this.isAlreadySentGuests = isAlreadySentSitting(this.guestConvocations);
                 this.isAlreadySentEmployees = isAlreadySentSitting(this.employeeConvocations);
@@ -129,10 +126,6 @@ let app = new Vue({
                 });
         },
 
-//         function convertTZ(date, tzString) {
-//     return new Date((typeof date === "string" ? new Date(date) : date).toLocaleString("en-US", {timeZone: tzString}));
-// }
-//
         resetFilters() {
             this.filter = {actor: "", guest: "", employees: ""};
         },
@@ -157,7 +150,6 @@ let app = new Vue({
                 .finally(() => {
                     this.showModalNotifyAgain = false
                 });
-
         },
 
         sendComelus() {
