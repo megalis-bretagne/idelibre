@@ -68,11 +68,13 @@ class EmailTemplateType extends AbstractType
                 'attr' => ['rows' => 15],
             ]);
 
-        $builder->add('isAttachment', CheckboxType::class, [
-            'required' => false,
-            'label_attr' => ['class' => 'switch-custom'],
-            'label' => $this->isConvocation($options['data'] ?? null) ? 'Joindre le fichier de convocation' : 'Joindre le fichier d\'invitation',
-        ]);
+        if($options['data']->getCategory() != EmailTemplate::CATEGORY_RECAPITULATIF ){
+            $builder->add('isAttachment', CheckboxType::class, [
+                'required' => false,
+                'label_attr' => ['class' => 'switch-custom'],
+                'label' => $this->isConvocation($options['data'] ?? null) ? 'Joindre le fichier de convocation' : 'Joindre le fichier d\'invitation',
+            ]);
+        }
 
         $builder->add('structure', HiddenEntityType::class, [
             'data' => $options['structure'],
