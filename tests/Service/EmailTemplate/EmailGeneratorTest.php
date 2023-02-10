@@ -8,7 +8,6 @@ use App\Service\EmailTemplate\EmailTemplateManager;
 use App\Service\Util\DateUtil;
 use App\Service\Util\GenderConverter;
 use App\Tests\Factory\AttendanceTokenFactory;
-use App\Tests\Factory\ConvocationFactory;
 use App\Tests\Factory\EmailTemplateFactory;
 use App\Tests\FindEntityTrait;
 use App\Tests\Story\ConvocationStory;
