@@ -10,4 +10,8 @@ trait RoleTrait
     {
         return in_array('ROLE_SUPERADMIN', $user->getRoles());
     }
+    public function isGroupAdmin(UserInterface $user): bool
+    {
+        return in_array('ROLE_GROUP_ADMIN', $user->getRoles());
+    }
 }
