@@ -159,7 +159,7 @@
                                     <i class="fas fa-check"></i>
                                 </span>
 
-                            <span v-else-if="convocation.attendance === 'distanciel'"
+                            <span v-else-if="convocation.attendance === 'remote'"
                                   class="text-success"
                                   title="En distanciel">
                                     <i class="fas fa-laptop-house"></i>
@@ -259,7 +259,7 @@
                                         <i class="fas fa-check"></i>
                                     </span>
 
-                                <span v-else-if="convocation.attendance === 'distanciel'"
+                                <span v-else-if="convocation.attendance === 'remote'"
                                       class="text-success"
                                       title="En distanciel">
                                     <i class="fas fa-laptop-house"></i>
@@ -353,7 +353,7 @@
                                         <i class="fas fa-check"></i>
                                     </span>
 
-                                <span v-else-if="convocation.attendance === 'distanciel'"
+                                <span v-else-if="convocation.attendance === 'remote'"
                                       class="text-success"
                                       title="En distanciel">
                                     <i class="fas fa-laptop-house"></i>
@@ -538,7 +538,7 @@
                                                         <option value="absent">Absent</option>
                                                         <option value="present">Présent</option>
                                                         {% if sitting.isRemoteAllowed %}
-                                                        <option value="distanciel">À distance</option>
+                                                        <option value="remote">À distance</option>
                                                         {% endif %}
                                                     </select>
                                                 </td>

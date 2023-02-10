@@ -23,7 +23,7 @@ class Convocation
     public const CATEGORY_INVITATION = 'invitation';
 
     public const PRESENT = 'present';
-    public const REMOTE = 'distanciel';
+    public const REMOTE = 'remote';
     public const ABSENT = 'absent';
 
     public const UNDEFINED = '';
