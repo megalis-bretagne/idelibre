@@ -14,10 +14,12 @@ class NotificationService
     {
         $emails = [];
         foreach ($sitting->getConvocations() as $convocation) {
-            $emailData = new EmailData($subject, $content, EmailData::FORMAT_TEXT);
-            $emailData->setTo($convocation->getUser()->getEmail());
-            $emailData->setReplyTo($sitting->getStructure()->getReplyTo());
-            $emails[] = $emailData;
+            if( $convocation->getUser()->getIsActive() ) {
+                $emailData = new EmailData($subject, $content, EmailData::FORMAT_TEXT);
+                $emailData->setTo($convocation->getUser()->getEmail());
+                $emailData->setReplyTo($sitting->getStructure()->getReplyTo());
+                $emails[] = $emailData;
+            }
         }
 
         return $emails;
