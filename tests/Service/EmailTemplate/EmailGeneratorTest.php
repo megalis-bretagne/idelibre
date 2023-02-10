@@ -114,10 +114,8 @@ class EmailGeneratorTest extends WebTestCase
         $this->assertEquals($expected, $generator->generateParams($convocation->object()));
     }
 
-
     public function testGenerateSittingParams()
     {
-
         $sitting = SittingStory::sittingConseilLibriciel();
 
         $generator = new EmailGenerator(
@@ -161,7 +159,6 @@ class EmailGeneratorTest extends WebTestCase
 
         $expected = 'idelibre : une nouvelle convocation pour le type Conseil Libriciel';
 
-        $this->assertEquals($expected, $generator->generateEmailTemplateSubject($sitting->object(), $emailTemplate->getSubject()) );
-
+        $this->assertEquals($expected, $generator->generateEmailTemplateSubject($sitting->object(), $emailTemplate->getSubject()));
     }
 }
