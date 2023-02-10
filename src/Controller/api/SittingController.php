@@ -63,4 +63,10 @@ class SittingController extends AbstractController
     {
         return $this->json(['fileMaxSize' => $converter->bytesConverter(ini_get('upload_max_filesize'))]);
     }
+
+    #[Route(path: '/api/sittings/{id}/timezone', name: 'api_sitting_timezone', methods: ['GET'])]
+    public function getCurrentStructureSittingTimezone(Sitting $sitting): jsonResponse
+    {
+        return $this->json(['timezone' => $sitting->getStructure()->getTimezone()->getName()]);
+    }
 }

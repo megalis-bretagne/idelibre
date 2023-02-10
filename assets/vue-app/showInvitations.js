@@ -2,12 +2,13 @@ import './vue-app.css';
 
 import Vue from 'vue/dist/vue';
 import axios from 'axios';
-import dayjs from 'dayjs';
 
 
-Vue.filter('formatDateString', function (value) {
+Vue.filter('formatDateString', function (value, timezone) {
     if (value) {
-        return dayjs(value).format('DD/MM/YY H:mm')
+        const date = new Date(value);
+        const tz = date.toLocaleString("utc", {timeZone: timezone});
+        return tz.substring(0, tz.length-3)
     }
 });
 
@@ -47,6 +48,7 @@ let app = new Vue({
         },
         convocationIdCurrent: "",
         isInvitation: false,
+        timezone: ""
     },
 
     computed: {
@@ -117,6 +119,13 @@ let app = new Vue({
             })
         },
 
+        getSittingTimezone() {
+            axios.get(`/api/sittings/${getSittingId()}/timezone`)
+                .then(response => {
+                    this.timezone = response.data.timezone
+                });
+        },
+
         resetFilters() {
             this.filter = {actor: "", guest: "", employees: ""};
         },
@@ -141,7 +150,6 @@ let app = new Vue({
                 .finally(() => {
                     this.showModalNotifyAgain = false
                 });
-
         },
 
         sendComelus() {
@@ -175,7 +183,11 @@ let app = new Vue({
 
         changeAttendance(status) {
 
-            this.changedAttendance.push({convocationId: status.convocationId, attendance: status.attendance, deputy: status.deputy})
+            this.changedAttendance.push({
+                convocationId: status.convocationId,
+                attendance: status.attendance,
+                deputy: status.deputy
+            })
         },
 
         saveAttendance() {
@@ -207,7 +219,7 @@ let app = new Vue({
             this.convocationId = convocationId;
             this.previewUrl = `/api/convocations/previewForSecretary/${convocationId}`;
             this.isInvitation = false;
-            if( invitation ) {
+            if (invitation) {
                 this.previewUrl = `/api/convocations/previewForSecretaryOther/${convocationId}`;
                 this.isInvitation = true;
             }
@@ -215,10 +227,11 @@ let app = new Vue({
         },
     },
 
-
     mounted() {
+        this.getSittingTimezone();
         this.getConvocations();
         this.getSitting();
+
     }
 });
 
@@ -248,6 +261,7 @@ function getConvocationCurrentId(convocations) {
     let convocationCurrentId = formatAttendanceStatus(convocations.data['actors'])[0].convocationId;
     return convocationCurrentId;
 }
+
 function updateConvocations(convocations, convocation) {
     for (let i = 0; i < convocations.length; i++) {
         if (convocations[i].id === convocation.id) {
