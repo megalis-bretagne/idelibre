@@ -8,6 +8,7 @@ use App\Form\SittingType;
 use App\Repository\EmailTemplateRepository;
 use App\Repository\OtherdocRepository;
 use App\Repository\ProjectRepository;
+use App\Service\EmailTemplate\EmailGenerator;
 use App\Service\File\Generator\FileGenerator;
 use App\Service\File\Generator\UnsupportedExtensionException;
 use App\Service\Pdf\PdfValidator;
@@ -199,7 +200,7 @@ class SittingController extends AbstractController
     #[Route(path: '/sitting/show/{id}/actors', name: 'sitting_show_actors', methods: ['GET'])]
     #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
     #[Breadcrumb(title: 'Détail {sitting.nameWithDate}')]
-    public function showActors(Sitting $sitting, EmailTemplateRepository $emailTemplateRepository, SidebarState $sidebarState): Response
+    public function showActors(Sitting $sitting, EmailTemplateRepository $emailTemplateRepository, SidebarState $sidebarState, EmailGenerator $emailGenerator): Response
     {
         $sidebarState->setActiveNavs(['sitting-nav', $this->activeSidebarNav($sitting->getIsArchived())]);
 
@@ -207,11 +208,18 @@ class SittingController extends AbstractController
         $emailTemplateBySittingType = $emailTemplateRepository->findOneByStructureAndCategoryAndType($sitting->getStructure(), $sitting->getType(), 'convocation');
         $emailTemplateInvitation = $emailTemplateRepository->findOneByStructureAndCategory($sitting->getStructure(), 'invitation');
 
+        $subjectGenerated = $emailGenerator->generateEmailTemplateSubject( $sitting, $emailTemplate->getSubject() );
+        $subjectBySittingTypeGenerated = $emailGenerator->generateEmailTemplateSubject( $sitting, $emailTemplateBySittingType->getSubject() );
+        $subjectInvitation = $emailGenerator->generateEmailTemplateSubject( $sitting, $emailTemplateInvitation->getSubject() );
+
         return $this->render('sitting/details_actors.html.twig', [
             'sitting' => $sitting,
             'emailTemplate' => $emailTemplate,
             'emailTemplateBySittingType' => $emailTemplateBySittingType,
             'emailTemplateInvitation' => $emailTemplateInvitation,
+            'subjectGenerated' => $subjectGenerated,
+            'subjectBySittingTypeGenerated' => $subjectBySittingTypeGenerated,
+            'subjectInvitation' => $subjectInvitation,
         ]);
     }
 

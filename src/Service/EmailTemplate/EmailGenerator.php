@@ -4,6 +4,7 @@ namespace App\Service\EmailTemplate;
 
 use App\Entity\Convocation;
 use App\Entity\EmailTemplate;
+use App\Entity\Sitting;
 use App\Entity\User;
 use App\Service\Email\EmailData;
 use App\Service\Util\DateUtil;
@@ -236,5 +237,28 @@ class EmailGenerator
             ['token' => $token],
             UrlGeneratorInterface::ABSOLUTE_URL
         );
+    }
+
+
+    public function generateSittingParams(Sitting $sitting )
+    {
+        return [
+            TemplateTag::SITTING_TYPE => $sitting->getName(),
+            TemplateTag::SITTING_DATE => $this->dateUtil->getFormattedDate(
+                $sitting->getDate(),
+                $sitting->getStructure()->getTimezone()->getName()
+            ),
+            TemplateTag::SITTING_TIME => $this->dateUtil->getFormattedTime(
+                $sitting->getDate(),
+                $sitting->getStructure()->getTimezone()->getName()
+            ),
+            TemplateTag::SITTING_PLACE => $sitting->getPlace() ?? '',
+            TemplateTag::SITTING_URL => $this->bag->get('url_client'),
+        ];
+    }
+
+    public function generateEmailTemplateSubject(Sitting $sitting, string $subject ): string
+    {
+        return $this->generate($subject, $this->generateSittingParams($sitting));
     }
 }
