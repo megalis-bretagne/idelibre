@@ -68,7 +68,8 @@ class EmailTemplateType extends AbstractType
                 'attr' => ['rows' => 15],
             ]);
 
-        if($options['data']->getCategory() != EmailTemplate::CATEGORY_RECAPITULATIF ){
+
+        if( !$isDefaultTemplate || $options['data']->getCategory() != EmailTemplate::CATEGORY_RECAPITULATIF) {
             $builder->add('isAttachment', CheckboxType::class, [
                 'required' => false,
                 'label_attr' => ['class' => 'switch-custom'],
