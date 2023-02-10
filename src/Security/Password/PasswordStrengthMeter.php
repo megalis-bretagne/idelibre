@@ -28,14 +28,10 @@ class PasswordStrengthMeter
 
     public function checkPasswordEntropy(User $user, string $plainPassword): bool
     {
-        if ($this->isSuperAdmin($user)) {
+        if ($this->isSuperAdmin($user) || $this->isGroupAdmin($user)) {
             $minimumEntropy = $this->bag->get('minimumEntropyForUserWithRoleHigh');
         } else {
-            if (in_array($user->getRole(), $this->roleManager->getAllRolesAdmin())) {
-                $minimumEntropy = $this->bag->get('minimumEntropyForUserWithRoleHigh');
-            } else {
-                $minimumEntropy = $user->getStructure()->getMinimumEntropy();
-            }
+            $minimumEntropy = $user->getStructure()->getMinimumEntropy();
         }
 
         return $this->checkEntropy($plainPassword, $minimumEntropy);
