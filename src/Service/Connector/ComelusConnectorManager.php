@@ -138,7 +138,7 @@ class ComelusConnectorManager
         }
 
         foreach ($otherDocs as $otherDoc) {
-            $uploadedFiles = $this->uploadOtherDocHelper($otherDoc);
+            $uploadedFiles[] = $this->uploadOtherDocHelper($otherDoc);
         }
 
         $uploadedFiles[] = $this->uploadZipHelper($sitting);
