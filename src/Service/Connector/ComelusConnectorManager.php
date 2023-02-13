@@ -140,7 +140,7 @@ class ComelusConnectorManager
 
     private function uploadProjectHelper($project): UploadedFile
     {
-        return new UploadedFile($project->getFile()->getPath, 0, 0, $project->getRank() + 1 . '. ' . $this->sanitizer->fileNameSanitizer($project->getName(), 150) . '.pdf');
+        return new UploadedFile($project->getFile()->getPath(), 0, 0, $project->getRank() + 1 . '. ' . $this->sanitizer->fileNameSanitizer($project->getName(), 150) . '.pdf');
     }
 
     private function uploadAnnexesHelper($annex): UploadedFile
