@@ -141,7 +141,6 @@ class ComelusConnectorManager
             }
         }
 
-
         $uploadedFiles[] = $this->uploadZipHelper($sitting);
 
         return $uploadedFiles;
@@ -154,7 +153,7 @@ class ComelusConnectorManager
 
     private function uploadOtherDocHelper($otherDoc): UploadedFile
     {
-        return new UploadedFile($otherDoc->getFile()->getPath(), 0, 0, $this->sanitizer->fileNameSanitizer($otherDoc->getName(), 150) . '.pdf' );
+        return new UploadedFile($otherDoc->getFile()->getPath(), 0, 0, $this->sanitizer->fileNameSanitizer($otherDoc->getName(), 150) . '.pdf');
     }
 
     private function uploadAnnexesHelper($annex): UploadedFile
@@ -169,6 +168,4 @@ class ComelusConnectorManager
     {
         return new UploadedFile($this->fileGenerator->genFullSittingZip($sitting), 0, 0, 'seance-complete.zip');
     }
-
-
 }
