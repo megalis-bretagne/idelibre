@@ -82,6 +82,15 @@ class AttendanceNotification
 
         return $this->twig->render('generate/mailing_recap_template.html.twig', [
             'convocations' => $convocations,
+            'attendance' => [
+                'present' => 'Présent',
+                'absent' => 'Absent',
+                'remote' => 'Distanciel'
+            ],
+            'category' => [
+                'convocation' => 'Élus',
+                'invitation' => 'Invités/Personnels administratifs'
+            ],
             'sitting' => $sitting,
             'timezone' => $sitting->getStructure()->getTimezone()->getName(),
         ]);

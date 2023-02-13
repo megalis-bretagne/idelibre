@@ -21,10 +21,13 @@
         border-left:none
     }
 
+    th:first-child {
+        border-left:none
+    }
+
     tbody > tr:last-child > td {
         border-bottom: none;
     }
-    
     
 </style>
 
@@ -33,6 +36,7 @@
 <table>
     <thead>
         <tr>
+            <th>Catégorie</th>
             <th>Utilisateur</th>
             <th>Statut</th>
             <th>Mandataire</th>
@@ -41,8 +45,9 @@
     <tbody>
     {% for convocation in convocations %}
         <tr>
+            <td>{{ convocation.category |trans(category) }}</td>
             <td>{{ convocation.user.firstName }} {{ convocation.user.lastName }}</td>
-            <td>{{ convocation.attendance ? (convocation.attendance |capitalize) : 'Non renseigné'}} </td>
+            <td>{{ convocation.attendance ? convocation.attendance |trans(attendance)  : 'Non renseigné'}} </td>
             <td>{{ convocation.deputy ? convocation.deputy  : '' }} </td>
         </tr>
     {% endfor %}
