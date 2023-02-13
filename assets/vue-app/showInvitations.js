@@ -5,7 +5,7 @@ import axios from 'axios';
 
 
 Vue.filter('formatDateString', function (value, timezone) {
-    if (value) {
+    if (value && timezone) {
         const date = new Date(value);
         const tz = date.toLocaleString("utc", {timeZone: timezone});
         return tz.substring(0, tz.length-3)
