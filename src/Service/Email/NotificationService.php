@@ -14,7 +14,7 @@ class NotificationService
     {
         $emails = [];
         foreach ($sitting->getConvocations() as $convocation) {
-            if( $convocation->getUser()->getIsActive() ) {
+            if ($convocation->getUser()->getIsActive()) {
                 $emailData = new EmailData($subject, $content, EmailData::FORMAT_TEXT);
                 $emailData->setTo($convocation->getUser()->getEmail());
                 $emailData->setReplyTo($sitting->getStructure()->getReplyTo());

@@ -85,11 +85,11 @@ class AttendanceNotification
             'attendance' => [
                 'present' => 'Présent',
                 'absent' => 'Absent',
-                'remote' => 'Distanciel'
+                'remote' => 'Distanciel',
             ],
             'category' => [
                 'convocation' => 'Élus',
-                'invitation' => 'Invités/Personnels administratifs'
+                'invitation' => 'Invités/Personnels administratifs',
             ],
             'sitting' => $sitting,
             'timezone' => $sitting->getStructure()->getTimezone()->getName(),
