@@ -208,11 +208,11 @@ class SittingController extends AbstractController
         $emailTemplateBySittingType = $emailTemplateRepository->findOneByStructureAndCategoryAndType($sitting->getStructure(), $sitting->getType(), 'convocation');
         $emailTemplateInvitation = $emailTemplateRepository->findOneByStructureAndCategory($sitting->getStructure(), 'invitation');
 
-        $subjectGenerated = $emailGenerator->generateEmailTemplateSubject( $sitting, $emailTemplate->getSubject() );
-        $subjectInvitation = $emailGenerator->generateEmailTemplateSubject( $sitting, $emailTemplateInvitation->getSubject() );
+        $subjectGenerated = $emailGenerator->generateEmailTemplateSubject($sitting, $emailTemplate->getSubject());
+        $subjectInvitation = $emailGenerator->generateEmailTemplateSubject($sitting, $emailTemplateInvitation->getSubject());
 
         $subjectBySittingTypeGenerated = '';
-        if( isset($emailTemplateBySittingType)) {
+        if (isset($emailTemplateBySittingType)) {
             $subjectBySittingTypeGenerated = $emailGenerator->generateEmailTemplateSubject($sitting, $emailTemplateBySittingType->getSubject());
         }
 

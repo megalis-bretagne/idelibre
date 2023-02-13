@@ -22,6 +22,11 @@ class PdfSittingReport
             'convocations' => $this->convocationRepository->getActorConvocationsBySitting($sitting),
             'sitting' => $sitting,
             'timezone' => $sitting->getStructure()->getTimezone()->getName(),
+            'attendance' => [
+                'present' => 'Présent',
+                'absent' => 'Absent',
+                'remote' => 'Distanciel',
+            ],
         ]);
 
         $generatedPdfPath = '/tmp/' . uniqid('pdf_report');
