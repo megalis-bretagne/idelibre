@@ -20,6 +20,7 @@ security-check:
 
 stages:
   - build
+  - build-nocache
   - deploy
   - testWithoutCovering
   - test
@@ -36,10 +37,28 @@ build:
   stage: build
   tags:
     - citoyen-shell
+  except:
+    variables:
+      - $CI_COMMIT_MESSAGE =~ /nocache/
   script:
     - docker login -u "gitlab-ci-token" -p "$CI_JOB_TOKEN" $CI_REGISTRY
     - docker pull $CI_REGISTRY_IMAGE:latest || true
     - docker build --cache-from $CI_REGISTRY_IMAGE:latest --tag ${CONTAINER_IMAGE} --tag $CI_REGISTRY_IMAGE:latest .
+    - docker login -u "gitlab-ci-token" -p "$CI_JOB_TOKEN" $CI_REGISTRY
+    - docker push ${CONTAINER_IMAGE}
+    - docker push $CI_REGISTRY_IMAGE:latest
+
+
+build-nocache:
+  stage: build-nocache
+  only:
+    variables:
+      - $CI_COMMIT_MESSAGE =~ /nocache/
+  tags:
+    - citoyen-shell
+  script:
+    - docker login -u "gitlab-ci-token" -p "$CI_JOB_TOKEN" $CI_REGISTRY
+    - docker build --tag ${CONTAINER_IMAGE} --tag $CI_REGISTRY_IMAGE:latest . --no-cache
     - docker login -u "gitlab-ci-token" -p "$CI_JOB_TOKEN" $CI_REGISTRY
     - docker push ${CONTAINER_IMAGE}
     - docker push $CI_REGISTRY_IMAGE:latest
