@@ -69,7 +69,7 @@ class EmailTemplateType extends AbstractType
             ]);
 
 
-        if( !$isDefaultTemplate || $options['data']->getCategory() != EmailTemplate::CATEGORY_RECAPITULATIF) {
+        if( !$this->IsEmailRecapitulatif($options['data'] ?? null)) {
             $builder->add('isAttachment', CheckboxType::class, [
                 'required' => false,
                 'label_attr' => ['class' => 'switch-custom'],
@@ -104,4 +104,10 @@ class EmailTemplateType extends AbstractType
 
         return EmailTemplate::CATEGORY_CONVOCATION === $emailTemplate->getCategory();
     }
+
+    private function IsEmailRecapitulatif(?EmailTemplate $emailTemplate):bool
+    {
+        return $emailTemplate && $emailTemplate->getCategory() === EmailTemplate::CATEGORY_RECAPITULATIF ;
+    }
+
 }
