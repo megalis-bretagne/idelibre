@@ -129,6 +129,10 @@ class ComelusConnectorManager
         $otherDocs = $this->otherdocRepository->getOtherdocsBySitting($sitting);
         $uploadedFiles = [];
 
+        foreach ($otherDocs as $otherDoc) {
+            $uploadedFiles[] = $this->uploadOtherDocHelper($otherDoc);
+        }
+
         foreach ($projects as $project) {
             $uploadedFiles[] = $this->uploadProjectHelper($project);
 
@@ -137,9 +141,6 @@ class ComelusConnectorManager
             }
         }
 
-        foreach ($otherDocs as $otherDoc) {
-            $uploadedFiles[] = $this->uploadOtherDocHelper($otherDoc);
-        }
 
         $uploadedFiles[] = $this->uploadZipHelper($sitting);
 
@@ -153,7 +154,7 @@ class ComelusConnectorManager
 
     private function uploadOtherDocHelper($otherDoc): UploadedFile
     {
-        return new UploadedFile($otherDoc->getFile()->getPath(), 0, 0, $otherDoc->getRank() + 1 . ' . ' . $this->sanitizer->fileNameSanitizer($otherDoc->getName(), 150) . '.pdf' );
+        return new UploadedFile($otherDoc->getFile()->getPath(), 0, 0, $this->sanitizer->fileNameSanitizer($otherDoc->getName(), 150) . '.pdf' );
     }
 
     private function uploadAnnexesHelper($annex): UploadedFile
