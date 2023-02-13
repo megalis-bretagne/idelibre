@@ -239,8 +239,7 @@ class EmailGenerator
         );
     }
 
-
-    public function generateSittingParams(Sitting $sitting )
+    public function generateSittingParams(Sitting $sitting)
     {
         return [
             TemplateTag::SITTING_TYPE => $sitting->getName(),
@@ -257,7 +256,7 @@ class EmailGenerator
         ];
     }
 
-    public function generateEmailTemplateSubject(Sitting $sitting, string $subject ): string
+    public function generateEmailTemplateSubject(Sitting $sitting, string $subject): string
     {
         return $this->generate($subject, $this->generateSittingParams($sitting));
     }
