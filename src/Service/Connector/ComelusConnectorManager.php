@@ -7,8 +7,10 @@ use App\Entity\Connector\Exception\ComelusConnectorException;
 use App\Entity\Sitting;
 use App\Entity\Structure;
 use App\Repository\Connector\ComelusConnectorRepository;
+use App\Repository\OtherdocRepository;
 use App\Repository\ProjectRepository;
 use App\Service\File\Generator\FileGenerator;
+use App\Service\File\Generator\UnsupportedExtensionException;
 use App\Service\Util\DateUtil;
 use App\Service\Util\Sanitizer;
 use Doctrine\ORM\EntityManagerInterface;
@@ -26,6 +28,7 @@ class ComelusConnectorManager
         private readonly DateUtil $dateUtil,
         private readonly ComelusContentGenerator $comelusContentGenerator,
         private readonly ProjectRepository $projectRepository,
+        private readonly OtherdocRepository $otherdocRepository,
         private readonly Sanitizer $sanitizer,
         private readonly FileGenerator $fileGenerator
     ) {
@@ -123,6 +126,7 @@ class ComelusConnectorManager
     private function prepareFiles(Sitting $sitting): array
     {
         $projects = $this->projectRepository->getProjectsBySitting($sitting);
+        $otherDocs = $this->otherdocRepository->getOtherdocsBySitting($sitting);
         $uploadedFiles = [];
 
         foreach ($projects as $project) {
@@ -131,6 +135,10 @@ class ComelusConnectorManager
             foreach ($project->getAnnexes() as $annex) {
                 $uploadedFiles[] = $this->uploadAnnexesHelper($annex);
             }
+        }
+
+        foreach ($otherDocs as $otherDoc) {
+            $uploadedFiles = $this->uploadOtherDocHelper($otherDoc);
         }
 
         $uploadedFiles[] = $this->uploadZipHelper($sitting);
@@ -143,14 +151,23 @@ class ComelusConnectorManager
         return new UploadedFile($project->getFile()->getPath(), 0, 0, $project->getRank() + 1 . '. ' . $this->sanitizer->fileNameSanitizer($project->getName(), 150) . '.pdf');
     }
 
+    private function uploadOtherDocHelper($otherDoc): UploadedFile
+    {
+        return new UploadedFile($otherDoc->getFile()->getPath(), 0, 0, $otherDoc->getRank() + 1 . ' . ' . $this->sanitizer->fileNameSanitizer($otherDoc->getName(), 150) . '.pdf' );
+    }
+
     private function uploadAnnexesHelper($annex): UploadedFile
     {
         return new UploadedFile($annex->getFile()->getPath(), 0, 0, '- ' . $annex->getFile()->getName());
     }
 
+    /**
+     * @throws UnsupportedExtensionException
+     */
     private function uploadZipHelper(Sitting $sitting): UploadedFile
     {
-//        return new UploadedFile($this->zipSittingGenerator->generateZipSitting($sitting), 0, 0, 'seance-complete.zip');
         return new UploadedFile($this->fileGenerator->genFullSittingZip($sitting), 0, 0, 'seance-complete.zip');
     }
+
+
 }
