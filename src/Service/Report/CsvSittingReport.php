@@ -46,7 +46,7 @@ class CsvSittingReport
             $convocation->getUser()->getLastName(),
             $this->getDateFormattedTimeStamp($convocation->getSentTimestamp(), $structure),
             $this->getDateFormattedTimeStamp($convocation->getReceivedTimestamp(), $structure),
-            $convocation->getAttendance() ?? '',
+            $this->formatConvocationAttendance($convocation->getAttendance()),
             $convocation->getDeputy() ?? '',
         ];
     }
@@ -58,5 +58,24 @@ class CsvSittingReport
         }
 
         return $this->dateUtil->getFormattedDateTime($timestamp->getCreatedAt(), $structure->getTimezone()->getName());
+    }
+
+    private function formatConvocationAttendance($convocation)
+    {
+        switch ($convocation) {
+            case  'remote':
+                return 'Distanciel';
+
+            case  'absent':
+                return 'Absent';
+
+            case 'present':
+                return 'Présent';
+
+            case '':
+                return '';
+        }
+
+        return '';
     }
 }

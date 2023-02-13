@@ -25,7 +25,7 @@ class PdfSittingReport
             'attendance' => [
                 'present' => 'Présent',
                 'absent' => 'Absent',
-                'remote' => 'Distanciel'
+                'remote' => 'Distanciel',
             ],
         ]);
 
