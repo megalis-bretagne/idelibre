@@ -1,8 +1,4 @@
 include:
-  #  - remote: 'https://jobs.r2devops.io/0.1.0/php_security_checker.yml'
-  #  - remote: 'https://jobs.r2devops.io/0.3.0/sls_scan.yml'
-  #  - remote: 'https://jobs.r2devops.io/0.2.0/trivy_dependency.yml'
-  #  - remote: 'https://jobs.r2devops.io/0.1.0/twig_lint.yml'
   - project: "libriciel/integration-continue/templates"
     ref: master
     file: '/publish-container-to-registry.yml'
