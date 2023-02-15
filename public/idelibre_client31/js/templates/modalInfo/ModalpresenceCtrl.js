@@ -3,12 +3,28 @@
 
         $scope.isAllowedRemote = seance.isRemoteAllowed
 
+        $scope.isPresenceStatusEditable = seance.getDate() > Date.now();
 
-        var maDate = Date.now();
-        $scope.presenceStatus = 'undefined';
 
-        if (maDate > seance.getDate()) {
-            $scope.presenceStatus = seance.getPresentStatus();
+        $scope.presenceStatus = seance.getPresentStatus();
+
+        $scope.getPresenceMessageNonEditable = () => {
+            switch (seance.getPresentStatus()) {
+                case Seance.ABSENT : return "Vous aviez signalé absent"
+                case Seance.PRESENT : return "Vous aviez signalé présent"
+                case Seance.REMOTE : return "Vous aviez signalé présent à distance"
+                case Seance.undefined : return "vous n'aviez pas signalier votre présence"
+                default : return "vous n'aviez pas signalier votre présence"
+            }
+        }
+        $scope.getPresenceMessageEditable = () => {
+            switch (seance.getPresentStatus()) {
+                case Seance.ABSENT : return "Vous êtes enregistré absent"
+                case Seance.PRESENT : return "Vous êtes enregistré présent"
+                case Seance.REMOTE : return "Vous êtes enregistré présent à distance"
+                case Seance.undefined : return "Merci de renseigner votre présence"
+                default : return "Merci de renseigner votre présence"
+            }
         }
 
         $scope.cancel = function () {
