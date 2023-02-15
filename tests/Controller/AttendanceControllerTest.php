@@ -51,8 +51,6 @@ class AttendanceControllerTest extends WebTestCase
         );
         $this->assertResponseStatusCodeSame(200);
 
-        //dd($crawler);
-
         $item = $crawler->filter('html:contains("Merci de confirmer votre présence")');
         $this->assertCount(1, $item);
 
