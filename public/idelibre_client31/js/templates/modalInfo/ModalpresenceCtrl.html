@@ -1,4 +1,3 @@
-
 <div class="modal-header">
     <h3 class="modal-title">Présence à la Séance</h3>
 </div>
@@ -6,31 +5,25 @@
 
 <div class="modal-body">
 
-    <div ng-show="presenceStatus == 'undefined'">
-        Veuillez confirmer votre présence à la séance.
+    <div ng-show="!isPresenceStatusEditable">
+        {{ getPresenceMessageNonEditable() }}
     </div>
 
-
-    <div ng-hide="presenceStatus == 'undefined'">
-        <div ng-show="presenceStatus == 'present'">
-            Vous avez signalé être présent à cette séance
-        </div>
-        <div ng-show="presenceStatus == 'absent'">
-            Vous avez signalé être absent à cette séance
-        </div>
+    <div ng-show="isPresenceStatusEditable">
+        {{ getPresenceMessageEditable() }}
     </div>
-
-
 
 </div>
 
 
 <div class="modal-footer">
-    <button  class="btn btn-danger pull-left" ng-click="cancel()" >Annuler</button>
-    <button ng-show="presenceStatus == 'undefined'" class="btn btn-warning" ng-click="absent()">Absent</button>
-    <!--<input type="text">-->
+    <button class="btn btn-danger pull-left" ng-click="cancel()">Annuler</button>
 
-    <button ng-show="presenceStatus == 'undefined'" class="btn btn-success" ng-click="present()">Présent</button>
-
-    <button ng-show="presenceStatus == 'undefined' && isAllowedRemote" class="btn btn-success" ng-click="presentRemotely()">Présent en distanciel</button>
+    <div ng-show="isPresenceStatusEditable">
+        <button  class="btn btn-warning" ng-click="absent()">Absent</button>
+        <button  class="btn btn-success" ng-click="present()">Présent</button>
+        <button ng-show="isAllowedRemote" class="btn btn-success"
+                ng-click="presentRemotely()">Présent en distanciel
+        </button>
+    </div>
 </div>
