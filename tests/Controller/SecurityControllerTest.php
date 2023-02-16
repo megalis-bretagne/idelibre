@@ -3,6 +3,7 @@
 namespace App\Tests\Controller;
 
 use App\Entity\Structure;
+use App\Entity\User;
 use App\Security\Password\LegacyPassword;
 use App\Tests\Factory\UserFactory;
 use App\Tests\FindEntityTrait;
@@ -259,7 +260,9 @@ class SecurityControllerTest extends WebTestCase
 
     public function testChangePasswordJson()
     {
+        /** @var User $actor */
         $actor = UserStory::actorLibriciel1();
+        $oldEncodedPassword = $actor->getPassword();
 
         $data = [
             'passPhrase' => 'passphrase',
@@ -270,6 +273,7 @@ class SecurityControllerTest extends WebTestCase
         $this->client->request(Request::METHOD_POST, '/security/changePassword', content: json_encode($data));
 
         $this->assertResponseStatusCodeSame(200);
+        $this->assertNotSame($oldEncodedPassword, $actor->getPassword());
     }
 
     public function testChangePasswordJsonFakePassphrase()
