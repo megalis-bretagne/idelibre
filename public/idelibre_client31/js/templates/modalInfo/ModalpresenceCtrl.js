@@ -8,15 +8,7 @@
 
         $scope.presenceStatus = seance.getPresentStatus();
 
-        $scope.getPresenceMessageNonEditable = () => {
-            switch (seance.getPresentStatus()) {
-                case Seance.ABSENT : return "Vous aviez signalé absent"
-                case Seance.PRESENT : return "Vous aviez signalé présent"
-                case Seance.REMOTE : return "Vous aviez signalé présent à distance"
-                case Seance.undefined : return "vous n'aviez pas signalier votre présence"
-                default : return "vous n'aviez pas signalier votre présence"
-            }
-        }
+
         $scope.getPresenceMessageEditable = () => {
             switch (seance.getPresentStatus()) {
                 case Seance.ABSENT : return "Vous êtes enregistré absent"
