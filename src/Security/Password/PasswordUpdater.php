@@ -11,7 +11,8 @@ class PasswordUpdater
     public function __construct(
         private readonly UserRepository $userRepository,
         private readonly UserPasswordHasherInterface $passwordHasher,
-        private readonly PasswordStrengthMeterAnssi $passwordStrengthMeter
+        private readonly PasswordStrengthMeterAnssi $passwordStrengthMeter,
+        private readonly ResetPassword $resetPassword,
     ) {
     }
 
@@ -35,6 +36,6 @@ class PasswordUpdater
             throw new PasswordUpdaterException('ENTROPY_TOO_LOW', $requiredEntropy, $passwordEntropy);
         }
 
-        return true;
+        return $this->resetPassword->setNewPassword($user, $passwordChange->plainNewPassword);
     }
 }
