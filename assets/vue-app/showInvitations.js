@@ -66,6 +66,7 @@ let app = new Vue({
     },
 
     methods: {
+
         sendConvocation(convocationId) {
 
             axios.post(`/api/convocations/${convocationId}/send`).then(response => {
@@ -231,7 +232,6 @@ let app = new Vue({
         this.getSittingTimezone();
         this.getConvocations();
         this.getSitting();
-
     }
 });
 

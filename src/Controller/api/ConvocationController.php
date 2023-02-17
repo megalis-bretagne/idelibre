@@ -41,7 +41,7 @@ class ConvocationController extends AbstractController
     {
         $convocationManager->sendConvocation($convocation);
 
-        return $this->json($convocation, 200, [], ['groups' => ['convocation', 'user']]);
+        return $this->json($convocation, 200, [], ['groups' => ['convocation', 'user', 'party:read']]);
     }
 
     #[Route(path: '/api/convocations/attendance', name: 'api_convocation_attendance', methods: ['POST', 'PUT'])]
