@@ -48,8 +48,7 @@ let app = new Vue({
         },
         convocationIdCurrent: "",
         isInvitation: false,
-        timezone: "",
-        // actorParty: ""
+        timezone: ""
     },
 
     computed: {
@@ -68,20 +67,12 @@ let app = new Vue({
 
     methods: {
 
-        getParty() {
-            axios.get(`/api/convocations/${getSittingId()}/party`)
-                .then(response => { this.actorParty = response.data.actorParty } )
-            console.log(this.actorParty)
-        },
-
         sendConvocation(convocationId) {
 
             axios.post(`/api/convocations/${convocationId}/send`).then(response => {
                 updateConvocations(this.actorConvocations, response.data);
                 updateConvocations(this.guestConvocations, response.data);
                 updateConvocations(this.employeeConvocations, response.data);
-
-                console.log(this.actorConvocations)
 
                 this.isAlreadySentActors = isAlreadySentSitting(this.actorConvocations);
                 this.isAlreadySentGuests = isAlreadySentSitting(this.guestConvocations);
@@ -241,8 +232,6 @@ let app = new Vue({
         this.getSittingTimezone();
         this.getConvocations();
         this.getSitting();
-        this.getParty();
-
     }
 });
 
