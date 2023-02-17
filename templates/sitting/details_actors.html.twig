@@ -229,7 +229,7 @@
 
                             <td v-if="convocation.sentTimestamp" class="col-2">
                                 <span class="fas fa-check text-success"></span>
-                                ${convocation.sentTimestamp.createdAt | formatDateString }
+                                ${convocation.sentTimestamp.createdAt | formatDateString(timezone) }
                             </td>
 
                             <td v-else class="col-2">
@@ -242,7 +242,7 @@
 
                             <td v-if="convocation.receivedTimestamp" class="col-2">
                                 <span class="fas fa-check text-success"></span>
-                                ${convocation.receivedTimestamp.createdAt | formatDateString }
+                                ${convocation.receivedTimestamp.createdAt | formatDateString(timezone) }
                             </td>
 
                             <td v-else class="col-2">
@@ -324,7 +324,7 @@
 
                             <td v-if="convocation.sentTimestamp" class="col-2"><span
                                         class="fas fa-check text-success"> </span>
-                                ${convocation.sentTimestamp.createdAt | formatDateString }
+                                ${convocation.sentTimestamp.createdAt | formatDateString(timezone) }
                             </td>
 
                             <td v-else class="col-2">
@@ -336,7 +336,7 @@
 
                             <td v-if="convocation.receivedTimestamp" class="col-2">
                                 <span class="fas fa-check text-success"> </span>
-                                ${convocation.receivedTimestamp.createdAt | formatDateString }
+                                ${convocation.receivedTimestamp.createdAt | formatDateString(timezone) }
                             </td>
 
                             <td v-else class="col-2">
