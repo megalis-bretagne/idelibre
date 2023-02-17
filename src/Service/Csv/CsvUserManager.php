@@ -58,8 +58,10 @@ class CsvUserManager
             if (!$this->isExistUsername($username, $structure)) {
                 $user = $this->createUserFromRecord($structure, $record);
 
-                if (Role::NAME_ROLE_SECRETARY === $user->getRole()->getName() || Role::NAME_ROLE_STRUCTURE_ADMINISTRATOR === $user->getRole()->getName()) {
-                    $user->setSubscription($this->subscriptionManager->add($user));
+                if( !empty($user->getRole()) ) {
+                    if (Role::NAME_ROLE_SECRETARY === $user->getRole()->getName() || Role::NAME_ROLE_STRUCTURE_ADMINISTRATOR === $user->getRole()->getName()) {
+                        $user->setSubscription($this->subscriptionManager->add($user));
+                    }
                 }
 
                 if (0 !== $this->validator->validate($user)->count()) {
