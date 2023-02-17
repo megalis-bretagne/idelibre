@@ -8,8 +8,18 @@
 (function () {
     angular.module('idelibreApp').controller('ModalPasswordCtrl', function ($scope, account, $rootScope, $modalInstance, accountSrv, $http, socketioSrv) {
 
-        console.log("ModalPasswordCtrl");
-        console.log(account);
+        $scope.isVisiblePassword = false
+        $scope.togglePasswordClass = 'fa fa-eye fa-lg'
+
+        $scope.togglePassword = () => {
+            $scope.isVisiblePassword = !$scope.isVisiblePassword
+            if(!$scope.isVisiblePassword) {
+                $scope.togglePasswordClass = 'fa fa-eye fa-lg'
+            }
+            else {
+                $scope.togglePasswordClass = 'fa fa-eye-slash fa-lg'
+            }
+        }
 
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');

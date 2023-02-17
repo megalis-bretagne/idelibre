@@ -26,6 +26,20 @@
                 $scope.cordova = config.cordova;
 
 
+                $scope.isVisiblePassword = false
+                $scope.togglePasswordClass = 'fa fa-eye fa-lg'
+
+                $scope.togglePassword = () => {
+                    $scope.isVisiblePassword = !$scope.isVisiblePassword
+                    if(!$scope.isVisiblePassword) {
+                        $scope.togglePasswordClass = 'fa fa-eye fa-lg'
+                    }
+                    else {
+                        $scope.togglePasswordClass = 'fa fa-eye-slash fa-lg'
+                    }
+                }
+
+
                 if($scope.account.status == ONLINE){
                     $scope.online  = true;
                 }else{
