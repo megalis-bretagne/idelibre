@@ -56,10 +56,9 @@ RUN apt-get install nodejs -yqq
 
 COPY --chown=www-data:www-data . /app
 
-RUN chmod +x docker-resources/initApp.sh
-
-
 WORKDIR /app
+
+RUN chmod +x docker-resources/initApp.sh
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
