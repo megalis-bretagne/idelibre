@@ -83,4 +83,10 @@ class ConvocationController extends AbstractController
 
         return new Response($content);
     }
+//
+//    #[Route(path: '/api/sittings/{id}/party', name: 'api_convocation_user_party', methods: ['GET'])]
+//    public function getUserParty(ConvocationRepository $convocationRepository, Sitting $sitting): JsonResponse
+//    {
+//        return  $this->json(["actorParty" => $convocationRepository->getActorConvocationsBySitting($sitting)]) ;
+//    }
 }
