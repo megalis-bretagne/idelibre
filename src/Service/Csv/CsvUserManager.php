@@ -9,6 +9,7 @@ use App\Entity\User;
 use App\Repository\TypeRepository;
 use App\Repository\UserRepository;
 use App\Service\role\RoleManager;
+use App\Service\Subscription\SubscriptionManager;
 use App\Service\Util\GenderConverter;
 use Doctrine\ORM\EntityManagerInterface;
 use ForceUTF8\Encoding;
@@ -30,7 +31,8 @@ class CsvUserManager
         private UserRepository $userRepository,
         private TypeRepository $typeRepository,
         private UserPasswordHasherInterface $passwordHasher,
-        private RoleManager $roleManager
+        private RoleManager $roleManager,
+        private SubscriptionManager $subscriptionManager
     ) {
     }
 
@@ -47,6 +49,7 @@ class CsvUserManager
         $records = $csv->getRecords();
 
         foreach ($records as $record) {
+
             if ($this->isMissingFields($record)) {
                 $errors[] = $this->missingFieldViolation($record);
                 continue;
@@ -55,6 +58,11 @@ class CsvUserManager
             $username = $this->sanitize($record[1] ?? '') . '@' . $structure->getSuffix();
             if (!$this->isExistUsername($username, $structure)) {
                 $user = $this->createUserFromRecord($structure, $record);
+
+                if (Role::NAME_ROLE_SECRETARY === $user->getRole()->getName()) {
+                    $user->setSubscription($this->subscriptionManager->add($user));
+                }
+
 
                 if (0 !== $this->validator->validate($user)->count()) {
                     $errors[] = $this->validator->validate($user);
