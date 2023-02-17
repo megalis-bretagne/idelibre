@@ -16,11 +16,11 @@ while getopts "f" option; do
 done
 
 #check if file exists
-FILE=docker-resources/nginx.vhost
+FILE=./docker-resources/nginx.vhost
 if [ ! -f "$FILE" ] || [ $force = true ]; then
   echo "### Generate vhost nginx "
-  cp docker-resources/nginx_template.vhost docker-resources/nginx.vhost
-  sed -i -e"s|URL|$URL|" docker-resources/nginx.vhost
+  cp ./docker-resources/nginx_template.vhost ./docker-resources/nginx.vhost
+  sed -i -e"s|URL|$URL|" ./docker-resources/nginx.vhost
 fi
 
 
@@ -49,8 +49,8 @@ fi
 if [ ! -e "$data_path/conf/options-ssl-nginx.conf" ] || [ ! -e "$data_path/conf/ssl-dhparams.pem" ]; then
   echo "### COPY TLS parameters ..."
   mkdir -p "$data_path/conf"
-  cat docker-resources/options-ssl-nginx.conf > "$data_path/conf/options-ssl-nginx.conf"
-  cat  docker-resources/ssl-dhparams.pem > "$data_path/conf/ssl-dhparams.pem"
+  cat ./docker-resources/options-ssl-nginx.conf > "$data_path/conf/options-ssl-nginx.conf"
+  cat  ./docker-resources/ssl-dhparams.pem > "$data_path/conf/ssl-dhparams.pem"
   echo
 fi
 
