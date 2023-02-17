@@ -17,7 +17,8 @@
                 <br>
                 <div class="input-group">
                     <div class="input-group-addon"><i class="fa fa-unlock"></i></div>
-                    <input type="password" class="form-control" placeholder="Mot de passe" ng-model="account.password" autocomplete="off" required autofocus>
+                    <span id="showPassword" class=" eye-password" ng-class="togglePasswordClass" ng-click="togglePassword()"></span>
+                    <input type="{{isVisiblePassword ? 'text' :'password'}}" class="form-control" placeholder="Mot de passe" ng-model="account.password" autocomplete="off" required autofocus>
                 </div>
                 <br>
 
