@@ -8,10 +8,9 @@
 
         $scope.presenceStatus = seance.getPresentStatus();
 
-
         $scope.getPresenceMessageEditable = () => {
             switch (seance.getPresentStatus()) {
-                case Seance.ABSENT : return "Vous êtes enregistré absent"
+                case Seance.ABSENT : return "Vous êtes enregistré absent" + ( !!seance.deputy ? ". Vous avez donné pouvoir à : " + seance.deputy : "")
                 case Seance.PRESENT : return "Vous êtes enregistré présent"
                 case Seance.REMOTE : return "Vous êtes enregistré présent à distance"
                 case Seance.undefined : return "Merci de renseigner votre présence"
@@ -31,7 +30,7 @@
         };
 
         $scope.presentRemotely = function () {
-            seance.setPresentStatus(Seance.PRESENT);
+            seance.setPresentStatus(Seance.REMOTE);
             accountSrv.save();
             socketioSrv.sendConfirmPresence(account, seance.id, Seance.REMOTE, null);
             $modalInstance.dismiss('cancel');

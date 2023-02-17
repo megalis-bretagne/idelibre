@@ -265,6 +265,7 @@ Account.prototype.formatDataSeance = function (data) {
         name: data.seance_name,
         date: data.seance_date,
         presentStatus: data.presentStatus,
+        deputy: data.deputy,
         isRemoteAllowed: data.isRemoteAllowed,
         projets: _.map(data.projets, this.formatDataProjet),
         otherdocs: _.map(data.otherdocs, this.formatDataOtherdoc)
