@@ -58,6 +58,8 @@ COPY --chown=www-data:www-data . /app
 
 WORKDIR /app
 
+RUN chmod +x docker-resources/initApp.sh
+
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 RUN cd /app && \
