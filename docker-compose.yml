@@ -64,8 +64,13 @@ services:
       - PASSPHRASE=${PASSPHRASE:-passphrase}
       - JWT_SECRET=${JWT_SECRET:-jwtsecret}
       - JWT_TIMEOUT=${JWT_TIMEOUT:-86400}
-
     command: [ "/app/docker-resources/init.sh" ]
+    labels:
+      ofelia.enabled: "true"
+      ofelia.job-exec.purge.schedule: "0 2 * * * "
+      ofelia.job-exec.purge.command: "/app/bin/console purge:structures"
+      ofelia.job-exec.attendance.schedule: "0 8 * * * "
+      ofelia.job-exec.attendance.command: "/app/bin/console attendance:notification"
 
   nginx-idelibre:
     container_name: nginx-idelibre
