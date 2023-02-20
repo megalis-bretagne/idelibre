@@ -40,7 +40,12 @@ RUN apt-get update -yqq \
 
 RUN apt install php-fpm php-intl php-mbstring php-xml php-zip php-pgsql  -y
 
-RUN apt install wkhtmltopdf -y
+COPY docker-resources/libssl1.1_1.1.0g-2ubuntu4_amd64.deb /tmp/libssl.deb
+COPY docker-resources/wkhtmltox_0.12.6-1.focal_amd64.deb /tmp/wkhtmltox.deb
+
+
+
+RUN apt install /tmp/libssl.deb /tmp/wkhtmltox.deb -y
 
 RUN apt install gnupg -yy
 RUN sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt bullseye-pgdg main" > /etc/apt/sources.list.d/pgdg.list' && \
@@ -63,7 +68,7 @@ RUN chmod +x docker-resources/initApp.sh
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 RUN cd /app && \
-    composer install --no-cache && \
+    composer install && \
     npm install && \
     npm run build
 
