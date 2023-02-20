@@ -84,6 +84,3 @@ COPY docker-resources/opcache.ini /etc/php/8.1/fpm/conf.d/opcache.ini
 COPY docker-resources/zz-idelibre.ini /etc/php/8.1/fpm/conf.d/zz-idelibre.ini
 
 EXPOSE 9000
-#ENTRYPOINT php-fpm8.1 --nodaemonize"
-
-#CMD "php-fpm8.1 -F"
