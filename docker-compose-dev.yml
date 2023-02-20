@@ -28,6 +28,12 @@ services:
     command: ["/app/docker-resources/initApp.sh"]
     networks:
       - network_idelibre_dev
+    labels:
+      ofelia.enabled: "true"
+      ofelia.job-exec.purge.schedule: "0 2 * * * "
+      ofelia.job-exec.purge.command: "/app/bin/console purge:structures"
+      ofelia.job-exec.attendance.schedule: "0 8 * * * "
+      ofelia.job-exec.attendance.command: "/app/bin/console attendance:notification"
 
 
   ## il faut partager le /data/workspace entre le node et le fpm sinon on ne peut pas recuperer les fichiers
@@ -127,6 +133,15 @@ services:
       - "2029:25"
     networks:
       - network_idelibre_dev
+
+
+  ofelia:
+    image: mcuadros/ofelia:latest
+    depends_on:
+      - fpm-idelibre
+    command: daemon --docker
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
 
 networks:
   network_idelibre_dev:
