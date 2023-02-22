@@ -16,7 +16,7 @@ parameters:
   email_from: '%env(EMAIL_FROM)%'
   email_alias: '%env(EMAIL_ALIAS)%'
 
-  url_client: '%env(URL)%/idelibre_client'
+  url_client: 'https://%env(URL)%/idelibre_client'
 
   max_batch_email: 50
   max_email_attachment_file_size: 512000

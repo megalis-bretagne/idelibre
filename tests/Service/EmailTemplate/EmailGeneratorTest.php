@@ -105,7 +105,7 @@ class EmailGeneratorTest extends WebTestCase
             '#username#' => 'actor1@libriciel',
             '#titre#' => 'Madame le maire',
             '#civilite#' => 'Monsieur',
-            '#urlseance#' => 'idelibre-test.libriciel.fr/idelibre_client',
+            '#urlseance#' => 'https://idelibre-test.libriciel.fr/idelibre_client',
             '#mandataire#' => null,
             '#presence#' => null,
             '#urlpresence#' => $this->emailGenerator->generateAttendanceUrl($convocation->getAttendanceToken()->getToken()),
@@ -131,7 +131,7 @@ class EmailGeneratorTest extends WebTestCase
             '#dateseance#' => '22/10/2020',
             '#heureseance#' => '02:00',
             '#lieuseance#' => 'Salle du conseil',
-            '#urlseance#' => 'idelibre-test.libriciel.fr/idelibre_client',
+            '#urlseance#' => 'https://idelibre-test.libriciel.fr/idelibre_client',
         ];
 
         $this->assertEquals($expected, $generator->generateSittingParams($sitting->object()));
