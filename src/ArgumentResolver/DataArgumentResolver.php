@@ -20,8 +20,7 @@ class DataArgumentResolver implements ValueResolverInterface
 
     public function resolve(Request $request, ArgumentMetadata $argument): \Generator
     {
-
-        if(!$this->supports($request, $argument)) {
+        if (!$this->supports($request, $argument)) {
             return [];
         }
 
@@ -36,7 +35,6 @@ class DataArgumentResolver implements ValueResolverInterface
 
     private function isApiPath(Request $request): bool
     {
-
         return str_starts_with($request->getPathInfo(), '/api/v2/');
     }
 

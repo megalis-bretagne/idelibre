@@ -35,7 +35,7 @@ class ModifiedSittingTimestampGeneratorHandler
         $this->sittingManager = $sittingManager;
     }
 
-    public function __invoke(UpdatedSitting $genZipSitting):void
+    public function __invoke(UpdatedSitting $genZipSitting): void
     {
         $this->em->clear();
         $sitting = $this->sittingRepository->findWithProjectsAndAnnexes($genZipSitting->getSittingId());

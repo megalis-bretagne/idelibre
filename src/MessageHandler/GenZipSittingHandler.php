@@ -15,12 +15,11 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 class GenZipSittingHandler
 {
     public function __construct(
-        private readonly FileGenerator          $fileGenerator,
-        private readonly SittingRepository      $sittingRepository,
+        private readonly FileGenerator $fileGenerator,
+        private readonly SittingRepository $sittingRepository,
         private readonly EntityManagerInterface $em,
-        private readonly LoggerInterface        $logger
-    )
-    {
+        private readonly LoggerInterface $logger
+    ) {
     }
 
     public function __invoke(UpdatedSitting $genFullSitting): void
