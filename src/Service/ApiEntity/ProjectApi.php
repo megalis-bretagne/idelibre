@@ -9,7 +9,7 @@ class ProjectApi
 {
     private ?string $id = null;
     #[NotBlank(message: 'Un projet doit avoir un nom')]
-    #[Length(max: 'Le nom du projet ne doit pas excéder 500 caractères')]
+    #[Length(max: 500, maxMessage: 'Le nom du projet ne doit pas excéder 500 caractères')]
     private ?string $name;
     private ?string $themeId = null;
     private ?string $reporterId = null;

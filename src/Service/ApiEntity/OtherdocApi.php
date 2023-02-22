@@ -9,7 +9,7 @@ class OtherdocApi
 {
     private ?string $id = null;
     #[NotBlank(message: 'Un document doit avoir un nom')]
-    #[Length(max: 'Le nom du document ne doit pas excéder 500 caractères')]
+    #[Length(max: 500, maxMessage: 'Le nom du document ne doit pas excéder 500 caractères')]
     private ?string $name;
     private ?string $linkedFileKey = null;
     private ?string $fileName = null;
