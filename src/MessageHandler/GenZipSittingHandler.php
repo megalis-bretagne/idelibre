@@ -9,19 +9,21 @@ use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-class GenZipSittingHandler implements MessageHandlerInterface
+#[AsMessageHandler]
+class GenZipSittingHandler
 {
     public function __construct(
-        private readonly FileGenerator $fileGenerator,
-        private readonly SittingRepository $sittingRepository,
+        private readonly FileGenerator          $fileGenerator,
+        private readonly SittingRepository      $sittingRepository,
         private readonly EntityManagerInterface $em,
-        private readonly LoggerInterface $logger
-    ) {
+        private readonly LoggerInterface        $logger
+    )
+    {
     }
 
-    public function __invoke(UpdatedSitting $genFullSitting)
+    public function __invoke(UpdatedSitting $genFullSitting): void
     {
         $this->em->clear();
         $sitting = $this->sittingRepository->findWithProjectsAndAnnexes($genFullSitting->getSittingId());

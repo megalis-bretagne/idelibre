@@ -7,7 +7,7 @@ use Twig\TwigFilter;
 
 class SizeFormatter extends AbstractExtension
 {
-    public function getFilters()
+    public function getFilters(): array
     {
         return [
             new TwigFilter('sizeFormatter', [$this, 'sizeFormatter']),

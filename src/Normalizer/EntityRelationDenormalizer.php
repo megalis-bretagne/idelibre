@@ -4,14 +4,15 @@ namespace App\Normalizer;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Serializer\Normalizer\ContextAwareDenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 /**
  * Get related entity by id
  * add ['normalize_relations' => true ] to context.
  */
-class EntityRelationDenormalizer implements ContextAwareDenormalizerInterface
+class EntityRelationDenormalizer implements DenormalizerInterface
 {
-    public function __construct(private EntityManagerInterface $entityManager)
+    public function __construct(private readonly EntityManagerInterface $entityManager)
     {
     }
 

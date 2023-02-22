@@ -10,9 +10,10 @@ use Doctrine\ORM\EntityManagerInterface;
 use Libriciel\LshorodatageApiWrapper\LsHorodatageException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-class ModifiedSittingTimestampGeneratorHandler implements MessageHandlerInterface
+#[AsMessageHandler]
+class ModifiedSittingTimestampGeneratorHandler
 {
     private SittingRepository $sittingRepository;
     private EntityManagerInterface $em;
@@ -34,7 +35,7 @@ class ModifiedSittingTimestampGeneratorHandler implements MessageHandlerInterfac
         $this->sittingManager = $sittingManager;
     }
 
-    public function __invoke(UpdatedSitting $genZipSitting)
+    public function __invoke(UpdatedSitting $genZipSitting):void
     {
         $this->em->clear();
         $sitting = $this->sittingRepository->findWithProjectsAndAnnexes($genZipSitting->getSittingId());

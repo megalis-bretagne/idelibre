@@ -8,9 +8,10 @@ use App\Service\File\Generator\FileGenerator;
 use App\Service\File\Generator\UnsupportedExtensionException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-class GenPdfSittingHandler implements MessageHandlerInterface
+#[AsMessageHandler]
+class GenPdfSittingHandler
 {
     private FileGenerator $fileGenerator;
     private SittingRepository $sittingRepository;
@@ -26,7 +27,7 @@ class GenPdfSittingHandler implements MessageHandlerInterface
     /**
      * @throws UnsupportedExtensionException
      */
-    public function __invoke(UpdatedSitting $genFullSitting)
+    public function __invoke(UpdatedSitting $genFullSitting): void
     {
         $this->em->clear();
         $sitting = $this->sittingRepository->findWithProjectsAndAnnexes($genFullSitting->getSittingId());

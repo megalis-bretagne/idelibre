@@ -103,4 +103,4 @@ services:
 
   App\ArgumentResolver\DataArgumentResolver:
     tags:
-      - { name: controller.argument_value_resolver, priority: 50 }
+      - { name: controller.value_resolver, priority: 50 }
