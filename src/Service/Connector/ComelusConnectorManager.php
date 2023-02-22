@@ -47,7 +47,7 @@ class ComelusConnectorManager
         $this->em->flush();
     }
 
-    private function isAlreadyCreated(Structure $structure): bool
+    public function isAlreadyCreated(Structure $structure): bool
     {
         return null !== $this->comelusConnectorRepository->findOneBy(['structure' => $structure]);
     }
@@ -89,6 +89,7 @@ class ComelusConnectorManager
         if (!$comelusConnetor->getActive() || !$comelusConnetor->getMailingListId()) {
             throw new BadRequestHttpException('Comelus is not enabled');
         }
+
         $uploadedFiles = $this->prepareFiles($sitting);
 
         $this->comelusWrapper->setApiKey($comelusConnetor->getApiKey());
