@@ -25,6 +25,7 @@ services:
       - ./webpack.config.js:/app/webpack.config.js
       - ./assets:/app/assets
       - ./tests:/app/tests
+      - ./package-lock.json:/app/package-lock.json
     command: ["/app/docker-resources/initApp.sh"]
     networks:
       - network_idelibre_dev
