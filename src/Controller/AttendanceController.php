@@ -19,6 +19,7 @@ class AttendanceController extends AbstractController
         $sitting = $attendanceToken->getConvocation()->getSitting();
         $form = $this->createForm(AttendanceType::class, null, [
             'isRemoteAllowed' => $sitting->getIsRemoteAllowed(),
+            'convocation' => $attendanceToken->getConvocation(),
         ]);
 
         $form->handleRequest($request);
