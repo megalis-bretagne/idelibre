@@ -40,12 +40,9 @@ RUN apt-get update -yqq \
 
 RUN apt install php-fpm php-intl php-mbstring php-xml php-zip php-pgsql  -y
 
-COPY docker-resources/libssl1.1_1.1.0g-2ubuntu4_amd64.deb /tmp/libssl.deb
-COPY docker-resources/wkhtmltox_0.12.6-1.focal_amd64.deb /tmp/wkhtmltox.deb
+COPY docker-resources/wkhtmltox_0.12.6.1-2.jammy_amd64.deb /tmp/wkhtmltox.deb
 
-
-
-RUN apt install /tmp/libssl.deb /tmp/wkhtmltox.deb -y
+RUN apt install /tmp/wkhtmltox.deb -y
 
 RUN apt install gnupg -yy
 RUN sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt bullseye-pgdg main" > /etc/apt/sources.list.d/pgdg.list' && \
