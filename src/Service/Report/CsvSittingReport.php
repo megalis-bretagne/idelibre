@@ -16,8 +16,7 @@ class CsvSittingReport
     public function __construct(
         private readonly ConvocationRepository $convocationRepository,
         private readonly DateUtil $dateUtil
-    )
-    {
+    ) {
     }
 
     /**
@@ -73,6 +72,5 @@ class CsvSittingReport
             'present' => 'Présent',
             default => '',
         };
-
     }
 }

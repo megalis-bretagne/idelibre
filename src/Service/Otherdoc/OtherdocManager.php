@@ -4,7 +4,6 @@ namespace App\Service\Otherdoc;
 
 use App\Entity\Otherdoc;
 use App\Entity\Sitting;
-use App\Entity\Structure;
 use App\Repository\OtherdocRepository;
 use App\Service\ApiEntity\OtherdocApi;
 use App\Service\ClientNotifier\ClientNotifierInterface;
@@ -70,7 +69,6 @@ class OtherdocManager
 
         return $otherdoc;
     }
-
 
     private function updateOtherdoc(OtherdocApi $clientOtherdoc): Otherdoc
     {

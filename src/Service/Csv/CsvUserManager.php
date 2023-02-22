@@ -26,15 +26,14 @@ class CsvUserManager
     public const TYPE_SEPARATOR = '|';
 
     public function __construct(
-        private EntityManagerInterface      $em,
-        private ValidatorInterface          $validator,
-        private UserRepository              $userRepository,
-        private TypeRepository              $typeRepository,
+        private EntityManagerInterface $em,
+        private ValidatorInterface $validator,
+        private UserRepository $userRepository,
+        private TypeRepository $typeRepository,
         private UserPasswordHasherInterface $passwordHasher,
-        private RoleManager                 $roleManager,
-        private SubscriptionManager         $subscriptionManager
-    )
-    {
+        private RoleManager $roleManager,
+        private SubscriptionManager $subscriptionManager
+    ) {
     }
 
     /**
@@ -102,6 +101,7 @@ class CsvUserManager
         if (Role::NAME_ROLE_SECRETARY === $user->getRole()->getName() || Role::NAME_ROLE_STRUCTURE_ADMINISTRATOR === $user->getRole()->getName()) {
             return true;
         }
+
         return false;
     }
 
