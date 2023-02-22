@@ -4,7 +4,6 @@ namespace App\Service\Otherdoc;
 
 use App\Entity\Otherdoc;
 use App\Entity\Sitting;
-use App\Entity\Structure;
 use App\Repository\OtherdocRepository;
 use App\Service\ApiEntity\OtherdocApi;
 use App\Service\ClientNotifier\ClientNotifierInterface;
@@ -47,7 +46,7 @@ class OtherdocManager
             return $this->createOtherdoc($clientOtherdoc, $uploadedFiles, $sitting);
         }
 
-        return $this->updateOtherdoc($clientOtherdoc, $uploadedFiles, $sitting->getStructure());
+        return $this->updateOtherdoc($clientOtherdoc);
     }
 
     /**
@@ -71,10 +70,7 @@ class OtherdocManager
         return $otherdoc;
     }
 
-    /**
-     * @param UploadedFile[] $uploadedFiles
-     */
-    private function updateOtherdoc(OtherdocApi $clientOtherdoc, array $uploadedFiles, Structure $structure): Otherdoc
+    private function updateOtherdoc(OtherdocApi $clientOtherdoc): Otherdoc
     {
         $otherdoc = $this->otherdocRepository->findOneBy(['id' => $clientOtherdoc->getId()]);
         if (!$otherdoc) {

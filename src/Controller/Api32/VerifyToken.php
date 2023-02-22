@@ -18,6 +18,9 @@ class VerifyToken
         $this->structureRepository = $structureRepository;
     }
 
+    /**
+     * @throws Exception
+     */
     public function validate(Request $request): Structure
     {
         $envId = getenv('STRUCTURE_ID');

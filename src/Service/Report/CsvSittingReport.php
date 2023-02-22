@@ -8,16 +8,20 @@ use App\Entity\Structure;
 use App\Entity\Timestamp;
 use App\Repository\ConvocationRepository;
 use App\Service\Util\DateUtil;
+use League\Csv\CannotInsertRecord;
 use League\Csv\Writer;
 
 class CsvSittingReport
 {
     public function __construct(
-        private ConvocationRepository $convocationRepository,
-        private DateUtil $dateUtil
+        private readonly ConvocationRepository $convocationRepository,
+        private readonly DateUtil $dateUtil
     ) {
     }
 
+    /**
+     * @throws CannotInsertRecord
+     */
     public function generate(Sitting $sitting): string
     {
         $csvPath = '/tmp/' . uniqid('csv_report');
@@ -60,22 +64,13 @@ class CsvSittingReport
         return $this->dateUtil->getFormattedDateTime($timestamp->getCreatedAt(), $structure->getTimezone()->getName());
     }
 
-    private function formatConvocationAttendance($convocation)
+    private function formatConvocationAttendance($convocation): string
     {
-        switch ($convocation) {
-            case  'remote':
-                return 'Distanciel';
-
-            case  'absent':
-                return 'Absent';
-
-            case 'present':
-                return 'Présent';
-
-            case '':
-                return '';
-        }
-
-        return '';
+        return match ($convocation) {
+            'remote' => 'Distanciel',
+            'absent' => 'Absent',
+            'present' => 'Présent',
+            default => '',
+        };
     }
 }

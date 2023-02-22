@@ -115,7 +115,7 @@ class ApiUser implements UserInterface
 
     public function getUserIdentifier(): string
     {
-        return $this->name;
+        return $this->getName();
     }
 
     public function getApiRole(): ?ApiRole

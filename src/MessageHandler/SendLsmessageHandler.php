@@ -10,9 +10,10 @@ use App\Repository\ConvocationRepository;
 use App\Repository\SittingRepository;
 use App\Service\Connector\LsmessageConnectorManager;
 use Libriciel\LsMessageWrapper\Sms;
-use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-class SendLsmessageHandler implements MessageHandlerInterface
+#[AsMessageHandler]
+class SendLsmessageHandler
 {
     private LsmessageConnectorManager $lsmessageConnectorManager;
     private ConvocationRepository $convocationRepository;
@@ -25,7 +26,7 @@ class SendLsmessageHandler implements MessageHandlerInterface
         $this->sittingRepository = $sittingRepository;
     }
 
-    public function __invoke(ConvocationSent $convocationSent)
+    public function __invoke(ConvocationSent $convocationSent): void
     {
         if ('test' === getenv('APP_ENV')) {
             return;
