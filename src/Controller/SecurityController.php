@@ -72,6 +72,7 @@ class SecurityController extends AbstractController
     #[Route(path: '/logout', name: 'app_logout', methods: ['GET'])]
     public function logout()
     {
+        // symfony needs this empty method
     }
 
     #[Route(path: '/security/impersonate/{id}', name: 'security_impersonate')]

@@ -26,14 +26,15 @@ class CsvUserManager
     public const TYPE_SEPARATOR = '|';
 
     public function __construct(
-        private EntityManagerInterface $em,
-        private ValidatorInterface $validator,
-        private UserRepository $userRepository,
-        private TypeRepository $typeRepository,
+        private EntityManagerInterface      $em,
+        private ValidatorInterface          $validator,
+        private UserRepository              $userRepository,
+        private TypeRepository              $typeRepository,
         private UserPasswordHasherInterface $passwordHasher,
-        private RoleManager $roleManager,
-        private SubscriptionManager $subscriptionManager
-    ) {
+        private RoleManager                 $roleManager,
+        private SubscriptionManager         $subscriptionManager
+    )
+    {
     }
 
     /**
@@ -58,10 +59,8 @@ class CsvUserManager
             if (!$this->isExistUsername($username, $structure)) {
                 $user = $this->createUserFromRecord($structure, $record);
 
-                if (!empty($user->getRole())) {
-                    if (Role::NAME_ROLE_SECRETARY === $user->getRole()->getName() || Role::NAME_ROLE_STRUCTURE_ADMINISTRATOR === $user->getRole()->getName()) {
-                        $user->setSubscription($this->subscriptionManager->add($user));
-                    }
+                if ($this->isSecretaryOrAdmin($user)) {
+                    $user->setSubscription($this->subscriptionManager->add($user));
                 }
 
                 if (0 !== $this->validator->validate($user)->count()) {
@@ -92,6 +91,18 @@ class CsvUserManager
     private function isMissingFields(array $record): bool
     {
         return 7 > count($record);
+    }
+
+    private function isSecretaryOrAdmin(User $user): bool
+    {
+        if (empty($user->getRole())) {
+            return false;
+        }
+
+        if (Role::NAME_ROLE_SECRETARY === $user->getRole()->getName() || Role::NAME_ROLE_STRUCTURE_ADMINISTRATOR === $user->getRole()->getName()) {
+            return true;
+        }
+        return false;
     }
 
     private function missingFieldViolation($record): ConstraintViolationList

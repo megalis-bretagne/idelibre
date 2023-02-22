@@ -14,11 +14,6 @@ use Symfony\Component\Filesystem\Filesystem;
 #[AsCommand(name: 'export:user')]
 class ExportCsvCommand extends Command
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     protected function configure(): void
     {
         $this
