@@ -38,7 +38,7 @@ RUN apt-get update -yqq \
         qpdf \
         -yqq
 
-RUN apt install php-fpm php-intl php-mbstring php-xml php-zip php-pgsql  -y
+RUN apt install php-fpm php-intl php-mbstring php-xml php-zip php-pgsql php-curl -y
 
 COPY docker-resources/wkhtmltox_0.12.6.1-2.jammy_amd64.deb /tmp/wkhtmltox.deb
 
