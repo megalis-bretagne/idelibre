@@ -18,7 +18,6 @@ ENV PHP_OPCACHE_VALIDATE_TIMESTAMPS="0" \
     PHP_PM_MIN_SPARE_SERVERS='2' \
     PHP_PM_MAX_SPARE_SERVERS='4'
 
-
 RUN apt dist-upgrade -yqq \
     && apt-get update -yqq \
     && apt-get install \
