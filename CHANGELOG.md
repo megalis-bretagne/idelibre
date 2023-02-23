@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [4.2.0] - 2023-xx-xx
 
 ### Evolution
+- Changement de version de nginx en 1.23
 - Docker passage  en Ubuntu 22:04
 - Node 12 -> 18
 - php 8 -> php8.1

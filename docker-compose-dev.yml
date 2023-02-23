@@ -70,7 +70,7 @@ services:
 
   nginx-idelibre:
     container_name: nginx-idelibre
-    image: nginx:1.17
+    image: nginx:1.23
     depends_on:
       - fpm-idelibre
       - node-idelibre
@@ -118,12 +118,6 @@ services:
     networks:
       - network_idelibre_dev
 
-#  maildev-idelibre:
-#    container_name: maildev-idelibre
-#    image: djfarrelly/maildev
-#    ports:
-#      - 1280:80
-    #command: bin/maildev --web 80 --smtp 25 --hide-extensions STARTTLS
 
   maildev-idelibre:
     container_name: idelibre_mailcatcher_dev
