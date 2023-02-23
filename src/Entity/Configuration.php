@@ -27,9 +27,9 @@ class Configuration
     #[JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private $structure;
 
-    #[ORM\Column(length: 255, nullable: false, options: ['default' => '10000 years'])]
+    #[ORM\Column(length: 255, nullable: false, options: ['default' => '100 years'])]
     #[Constraint\NotBlank]
-    private ?string $sittingSuppressionDelay = '10000 years';
+    private ?string $sittingSuppressionDelay = '100 years';
 
     public function getId(): ?string
     {
