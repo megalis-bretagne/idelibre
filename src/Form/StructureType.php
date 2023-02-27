@@ -74,7 +74,7 @@ class StructureType extends AbstractType
         } else {
             $builder
                 ->add('minimumEntropy', IntegerType::class, [
-                    'label' => 'Force du mot de passe minimum pour les utilisateurs de la structure (hors administrateur)',
+                    'label' => 'Force du mot de passe minimum pour les utilisateurs de la structure (hors administrateur de groupe)',
                 ])
             ;
         }
