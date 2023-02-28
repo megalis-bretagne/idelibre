@@ -8,14 +8,15 @@ use App\Entity\Type;
 use App\Entity\User;
 use App\Repository\TypeRepository;
 use App\Repository\UserRepository;
+use App\Service\Email\EmailNotSendException;
 use App\Service\role\RoleManager;
 use App\Service\Subscription\SubscriptionManager;
+use App\Service\User\PasswordInvalidator;
 use App\Service\Util\GenderConverter;
 use Doctrine\ORM\EntityManagerInterface;
 use ForceUTF8\Encoding;
 use League\Csv\Reader;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
@@ -24,20 +25,23 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class CsvUserManager
 {
     public const TYPE_SEPARATOR = '|';
+    public const INVALID_PASSWORD = 'CHANGEZMOI';
 
     public function __construct(
         private EntityManagerInterface $em,
         private ValidatorInterface $validator,
         private UserRepository $userRepository,
         private TypeRepository $typeRepository,
-        private UserPasswordHasherInterface $passwordHasher,
+//        private UserPasswordHasherInterface $passwordHasher,
         private RoleManager $roleManager,
-        private SubscriptionManager $subscriptionManager
+        private SubscriptionManager $subscriptionManager,
+        private PasswordInvalidator $passwordInvalidator
     ) {
     }
 
     /**
      * @return ConstraintViolationListInterface[]
+     * @throws EmailNotSendException
      */
     public function importUsers(UploadedFile $file, Structure $structure): array
     {
@@ -57,6 +61,8 @@ class CsvUserManager
             $username = $this->sanitize($record[1] ?? '') . '@' . $structure->getSuffix();
             if (!$this->isExistUsername($username, $structure)) {
                 $user = $this->createUserFromRecord($structure, $record);
+
+                $this->passwordInvalidator->prepareAndSendMailFromCSV($record, $structure->getReplyTo());
 
                 if ($this->isSecretaryOrAdmin($user)) {
                     $user->setSubscription($this->subscriptionManager->add($user));
@@ -86,6 +92,8 @@ class CsvUserManager
 
         return $errors;
     }
+
+
 
     private function isMissingFields(array $record): bool
     {
@@ -226,8 +234,8 @@ class CsvUserManager
         if (0 === strlen($sanitizedPassword)) {
             return 'NotInitialized';
         }
-
-        return $this->passwordHasher->hashPassword($user, $sanitizedPassword);
+        return self::INVALID_PASSWORD;
+//        return $this->passwordHasher->hashPassword($user, $sanitizedPassword);
     }
 
     private function getGenderCode(?int $code): ?int
