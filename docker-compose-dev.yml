@@ -31,9 +31,9 @@ services:
       - network_idelibre_dev
     labels:
       ofelia.enabled: "true"
-      ofelia.job-exec.purge.schedule: "0 2 * * * "
+      ofelia.job-exec.purge.schedule: "0 0 2 * * * "
       ofelia.job-exec.purge.command: "/app/bin/console purge:structures"
-      ofelia.job-exec.attendance.schedule: "0 8 * * * "
+      ofelia.job-exec.attendance.schedule: "0 0 8 * * * "
       ofelia.job-exec.attendance.command: "/app/bin/console attendance:notification"
 
 
