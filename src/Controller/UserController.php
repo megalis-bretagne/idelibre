@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\EventLog\Action;
 use App\Entity\User;
 use App\Form\SearchType;
 use App\Form\UserPreferenceType;
@@ -64,7 +63,7 @@ class UserController extends AbstractController
 
             $success = $manageUser->save(
                 $form->getData(),
-                $initPassword ? $form->get('plainPassword')->getData() : null ,
+                $initPassword ? $form->get('plainPassword')->getData() : null,
                 $this->getUser()->getStructure()
             );
 

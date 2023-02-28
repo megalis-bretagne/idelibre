@@ -81,7 +81,7 @@ class MailjetService implements EmailServiceInterface
         return $messages;
     }
 
-    private function setAttachment(array & $message, EmailData $email)
+    private function setAttachment(array &$message, EmailData $email)
     {
         if (!$email->isAttachment() || !file_exists($email->getAttachment()->getPath())) {
             return;

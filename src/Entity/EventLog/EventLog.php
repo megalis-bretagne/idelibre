@@ -16,7 +16,6 @@ class EventLog
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
     private ?string $id = null;
 
-
     #[ORM\Column(length: 255)]
     private ?string $authorId = null;
 
@@ -38,7 +37,6 @@ class EventLog
     #[ORM\Column]
     private ?DateTimeImmutable $createdAt = null;
 
-
     public function __construct()
     {
         $this->createdAt = new DateTimeImmutable();
@@ -59,7 +57,9 @@ class EventLog
         $this->authorId = $authorId;
 
         return $this;
-    }public function getType(): ?string
+    }
+
+    public function getType(): ?string
     {
         return $this->type;
     }
@@ -135,6 +135,4 @@ class EventLog
     {
         return $this->createdAt;
     }
-
-
 }

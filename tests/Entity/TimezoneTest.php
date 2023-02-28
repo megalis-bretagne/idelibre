@@ -37,7 +37,7 @@ class TimezoneTest extends WebTestCase
     {
         $timezone = (new Timezone())
             ->setName('France/Montpellier')
-            ;
+        ;
 
         $this->assertHasValidationErrors($timezone, 0);
     }

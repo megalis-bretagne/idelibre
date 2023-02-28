@@ -25,7 +25,7 @@ class AttendanceType extends AbstractType
                 'label' => 'Mandataire',
                 'required' => false,
             ])
-            ;
+        ;
     }
 
     private function getAttendanceValues(Convocation $convocation, ?bool $isRemoteAllowed): array

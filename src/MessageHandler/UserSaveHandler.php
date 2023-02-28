@@ -17,7 +17,6 @@ use Doctrine\Persistence\Event\LifecycleEventArgs;
 #[AsEntityListener(event: Events::postUpdate, method: 'postUpdate', entity: User::class)]
 class UserSaveHandler
 {
-
     private ?EventLog $eventLog = null;
 
     public function __construct(private readonly EventLogManager $eventLogManager)
@@ -28,7 +27,6 @@ class UserSaveHandler
     {
         $this->eventLogManager->createLog(Action::USER_CREATE, $user->getId(), $user->getUsername(), $user->getStructure()?->getId());
     }
-
 
     public function preRemove(User $user, LifecycleEventArgs $args): void
     {
@@ -43,9 +41,9 @@ class UserSaveHandler
                 $user->getId(),
                 $user->getUsername(),
                 $user->getStructure()?->getId(),
-                false);
-        };
-
+                false
+            );
+        }
     }
 
     public function postUpdate(): void
@@ -55,5 +53,4 @@ class UserSaveHandler
         }
         $this->eventLog = null;
     }
-
 }

@@ -72,17 +72,17 @@ final class UserStory extends Story
             'lastName' => 'montpellier',
             'structure' => StructureStory::montpellier(),
         ]));
-//
-//        $passwordLegacy = $this->legacyPassword->encode('passwordLegacy');
-//        $this->addState('userLegacy', UserFactory::new([
-//            'username' => 'userLegacy@montpellier',
-//            'email' => 'userLegacy@example.org',
-//            'password' => $passwordLegacy,
-//            'firstName' => 'userLegacy',
-//            'lastName' => 'montpellier',
-//            'structure' => StructureStory::montpellier(),
-//            'role' => RoleStory::admin()
-//        ]));
+        //
+        //        $passwordLegacy = $this->legacyPassword->encode('passwordLegacy');
+        //        $this->addState('userLegacy', UserFactory::new([
+        //            'username' => 'userLegacy@montpellier',
+        //            'email' => 'userLegacy@example.org',
+        //            'password' => $passwordLegacy,
+        //            'firstName' => 'userLegacy',
+        //            'lastName' => 'montpellier',
+        //            'structure' => StructureStory::montpellier(),
+        //            'role' => RoleStory::admin()
+        //        ]));
 
         // Admin de groupe
         $this->addState('userGroupRecia', UserFactory::new([
