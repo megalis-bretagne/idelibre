@@ -8,7 +8,7 @@ enum Action: string
     case ARCHIVE_SITTING = "Séance archivée";
     case SENT_CONVOCATIONS = "convocation envoyée";
     case MODIFY_SITTING = "Séance modfiée";
-    case DELETE_USER = 'Utilisateur supprimé';
-    case CREATE_USER = 'utilisateur créé';
-    case CHANGE_PASSWORD = 'Mot de passe modifié';
+    case USER_DELETE = 'Utilisateur supprimé';
+    case USER_CREATE = 'utilisateur créé';
+    case USER_PASSWORD_UPDATED = 'Mot de passe modifié';
 }

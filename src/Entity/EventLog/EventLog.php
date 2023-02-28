@@ -14,7 +14,7 @@ class EventLog
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
-    private ?int $id = null;
+    private ?string $id = null;
 
 
     #[ORM\Column(length: 255)]
@@ -44,7 +44,7 @@ class EventLog
         $this->createdAt = new DateTimeImmutable();
     }
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }
