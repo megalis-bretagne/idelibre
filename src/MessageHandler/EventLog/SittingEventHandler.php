@@ -31,7 +31,8 @@ class SittingEventHandler
             $sitting->getId(),
             $sitting->getNameWithDate(),
             $sitting->getStructure()?->getId(),
-            false);
+            false
+        );
     }
 
     public function preUpdate(Sitting $sitting, PreUpdateEventArgs $args): void
@@ -55,6 +56,4 @@ class SittingEventHandler
         }
         $this->eventLog = null;
     }
-
-
 }
