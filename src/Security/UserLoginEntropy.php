@@ -42,7 +42,7 @@ class UserLoginEntropy
         if (in_array($user->getRole(), $this->roleManager->getAllRolesAdmin())) {
             $minimumEntropy = $this->bag->get('minimumEntropyForUserWithRoleHigh');
         } else {
-            $minimumEntropy = $user->getStructure()->getMinimumEntropy();
+            $minimumEntropy = $user->getStructure()->getConfiguration()->getMinimumEntropy();
         }
 
         return $minimumEntropy;

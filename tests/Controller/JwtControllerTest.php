@@ -5,6 +5,7 @@ namespace App\Tests\Controller;
 use App\Tests\Factory\UserFactory;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
+use App\Tests\Story\ConfigurationStory;
 use App\Tests\Story\RoleStory;
 use App\Tests\Story\StructureStory;
 use App\Tests\Story\UserStory;
@@ -39,6 +40,8 @@ class JwtControllerTest extends WebTestCase
         $this->client = static::createClient();
 
         UserStory::load();
+        StructureStory::load();
+        ConfigurationStory::load();
     }
 
     public function testInvalidateBeforeNow()

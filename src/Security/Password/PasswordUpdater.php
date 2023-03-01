@@ -31,7 +31,7 @@ class PasswordUpdater
         }
 
         $passwordEntropy = $this->passwordStrengthMeter->entropy($passwordChange->plainNewPassword);
-        $requiredEntropy = $user->getStructure()->getMinimumEntropy();
+        $requiredEntropy = $user->getStructure()->getConfiguration()->getMinimumEntropy();
         if ($passwordEntropy < $requiredEntropy) {
             throw new PasswordUpdaterException('ENTROPY_TOO_LOW', $requiredEntropy, $passwordEntropy);
         }

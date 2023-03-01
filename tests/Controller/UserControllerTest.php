@@ -9,6 +9,7 @@ use App\Repository\UserRepository;
 use App\Service\User\PasswordInvalidator;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
+use App\Tests\Story\ConfigurationStory;
 use App\Tests\Story\RoleStory;
 use App\Tests\Story\StructureStory;
 use App\Tests\Story\SubscriptionStory;
@@ -41,13 +42,11 @@ class UserControllerTest extends WebTestCase
         self::ensureKernelShutdown();
         $this->client = static::createClient();
 
-        UserStory::load();
-        RoleStory::load();
-        TypeStory::load();
     }
 
     public function testDelete()
     {
+        UserStory::load();
         $this->loginAsAdminLibriciel();
         /** @var User $user */
         $user = $this->getOneEntityBy(User::class, ['username' => 'otherUser@libriciel']);
@@ -66,6 +65,7 @@ class UserControllerTest extends WebTestCase
 
     public function testDeleteBatch()
     {
+        UserStory::load();
         $this->loginAsAdminLibriciel();
 
         $crawler = $this->client->request(Request::METHOD_GET, '/user/deleteBatch');
@@ -93,6 +93,7 @@ class UserControllerTest extends WebTestCase
 
     public function testDeleteOtherStructureUser()
     {
+        UserStory::load();
         $this->loginAsAdminLibriciel();
         /** @var User $user */
         $user = $this->getOneEntityBy(User::class, ['username' => 'user@montpellier']);
@@ -102,6 +103,7 @@ class UserControllerTest extends WebTestCase
 
     public function testDeleteMyself()
     {
+        UserStory::load();
         $this->loginAsAdminLibriciel();
         /** @var User $user */
         $user = $this->getOneEntityBy(User::class, ['username' => 'admin@libriciel']);
@@ -115,8 +117,9 @@ class UserControllerTest extends WebTestCase
 
     public function testAdd()
     {
-        /** @var Role $adminRole */
-        $adminRole = $this->getOneEntityBy(Role::class, ['name' => 'Admin']);
+        ConfigurationStory::load();
+        UserStory::load();
+        $adminRole = RoleStory::admin();
 
         $this->loginAsAdminLibriciel();
         $crawler = $this->client->request(Request::METHOD_GET, '/user/add');
@@ -150,9 +153,9 @@ class UserControllerTest extends WebTestCase
     //# A verifier ##
     public function testEdit()
     {
+        ConfigurationStory::load();
+        $user = UserStory::otherUserLibriciel();
         $this->loginAsAdminLibriciel();
-        /** @var User $user */
-        $user = $this->getOneEntityBy(User::class, ['username' => 'otherUser@libriciel']);
         $crawler = $this->client->request(Request::METHOD_GET, '/user/edit/' . $user->getId());
         $this->assertResponseStatusCodeSame(200);
         $item = $crawler->filter('html:contains("Modifier un utilisateur")');
@@ -172,9 +175,10 @@ class UserControllerTest extends WebTestCase
 
     public function testEditSecretary()
     {
-        $this->loginAsAdminLibriciel();
         $user = UserStory::secretaryLibriciel1();
-        $type = $this->getOneTypeBy(['name' => 'Bureau Communautaire Libriciel']);
+        ConfigurationStory::load();
+        $type = TypeStory::typeBureauLibriciel();
+        $this->loginAsAdminLibriciel();
 
         $crawler = $this->client->request(Request::METHOD_GET, '/user/edit/' . $user->getId());
         $this->assertResponseStatusCodeSame(200);
@@ -199,8 +203,10 @@ class UserControllerTest extends WebTestCase
 
     public function testEditSecretaryRemoveAllAuthorized()
     {
-        $this->loginAsAdminLibriciel();
         $user = UserStory::secretaryLibriciel1();
+        ConfigurationStory::load();
+        $type = TypeStory::typeBureauLibriciel();
+        $this->loginAsAdminLibriciel();
 
         $crawler = $this->client->request(Request::METHOD_GET, '/user/edit/' . $user->getId());
         $this->assertResponseStatusCodeSame(200);
@@ -225,6 +231,7 @@ class UserControllerTest extends WebTestCase
 
     public function testIndex()
     {
+        UserStory::load();
         $this->loginAsAdminLibriciel();
         $crawler = $this->client->request(Request::METHOD_GET, '/user');
         $this->assertResponseStatusCodeSame(200);
@@ -274,6 +281,8 @@ class UserControllerTest extends WebTestCase
 
     public function testInvalidateUsersPassword()
     {
+        ConfigurationStory::load();
+        UserStory::load();
         $libriciel = StructureStory::libriciel();
         $this->loginAsAdminLibriciel();
 

@@ -7,6 +7,8 @@ use App\Security\Password\PasswordChange;
 use App\Security\Password\PasswordUpdater;
 use App\Security\Password\PasswordUpdaterException;
 use App\Tests\FindEntityTrait;
+use App\Tests\Story\ConfigurationStory;
+use App\Tests\Story\StructureStory;
 use App\Tests\Story\UserStory;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Zenstruck\Foundry\Test\Factories;
@@ -29,6 +31,8 @@ class PasswordUpdaterTest extends KernelTestCase
 
     public function testReplace()
     {
+        StructureStory::libriciel();
+        ConfigurationStory::configurationLibriciel();
         $user = UserStory::actorLibriciel1();
 
         $passwordChange = new PasswordChange();
@@ -76,6 +80,8 @@ class PasswordUpdaterTest extends KernelTestCase
 
     public function testReplaceEntropyTooLowNewPassword()
     {
+        StructureStory::libriciel();
+        ConfigurationStory::configurationLibriciel();
         $user = UserStory::actorLibriciel1();
 
         $passwordChange = new PasswordChange();

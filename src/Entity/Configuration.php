@@ -31,6 +31,9 @@ class Configuration
     #[Constraint\NotBlank]
     private ?string $sittingSuppressionDelay = '100 years';
 
+    #[Column(type: 'integer', unique: false, nullable: false, options: ['default' => 80])]
+    private $minimumEntropy = 80;
+
     public function getId(): ?string
     {
         return $this->id;
@@ -68,6 +71,18 @@ class Configuration
     public function setSittingSuppressionDelay(?string $sittingSuppressionDelay): self
     {
         $this->sittingSuppressionDelay = $sittingSuppressionDelay;
+
+        return $this;
+    }
+
+    public function getMinimumEntropy(): ?int
+    {
+        return $this->minimumEntropy;
+    }
+
+    public function setMinimumEntropy(int $minimumEntropy): self
+    {
+        $this->minimumEntropy = $minimumEntropy;
 
         return $this;
     }
