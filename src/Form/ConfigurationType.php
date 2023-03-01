@@ -38,7 +38,7 @@ class ConfigurationType extends AbstractType
             ->add('minimumEntropy', IntegerType::class, [
                 'label' => 'Force du mot de passe minimum pour les utilisateurs de la structure (hors administrateur de groupe)',
             ])
-            ;
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
