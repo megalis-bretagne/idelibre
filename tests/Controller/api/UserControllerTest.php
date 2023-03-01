@@ -34,9 +34,11 @@ class UserControllerTest extends WebTestCase
         self::ensureKernelShutdown();
         $this->client = static::createClient();
 
+
         UserStory::actorLibriciel3();
         SittingStory::sittingConseilLibriciel();
         ConvocationStory::load();
+
     }
 
     public function testGetActors()

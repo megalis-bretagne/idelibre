@@ -123,10 +123,9 @@ class UserControllerTest extends WebTestCase
 
     public function testAdd()
     {
+        ConfigurationStory::load();
         UserStory::load();
         $roleAdmin = RoleStory::admin();
-        ConfigurationStory::load();
-        $adminRole = RoleStory::admin();
 
         $this->loginAsAdminLibriciel();
         $crawler = $this->client->request(Request::METHOD_GET, '/user/add');
@@ -165,6 +164,7 @@ class UserControllerTest extends WebTestCase
     //# A verifier ##
     public function testChangePassword()
     {
+        ConfigurationStory::load();
         UserStory::load();
         $user = UserFactory::createOne(['structure' => StructureStory::libriciel()]);
 
@@ -196,11 +196,10 @@ class UserControllerTest extends WebTestCase
 
     public function testEdit()
     {
+        ConfigurationStory::load();
         UserStory::load();
         $user = UserFactory::createOne(['structure' => StructureStory::libriciel()]);
 
-        ConfigurationStory::load();
-        $user = UserStory::otherUserLibriciel();
         $this->loginAsAdminLibriciel();
 
         $crawler = $this->client->request(Request::METHOD_GET, '/user/edit/' . $user->getId());
@@ -227,12 +226,10 @@ class UserControllerTest extends WebTestCase
 
     public function testEditSecretary()
     {
-        UserStory::load();
+        ConfigurationStory::load();
+        $user = UserStory::secretaryLibriciel1();
         $type = TypeStory::typeConseilLibriciel();
 
-        $this->loginAsAdminLibriciel();
-        $user = UserStory::secretaryLibriciel1();
-        ConfigurationStory::load();
         $this->loginAsAdminLibriciel();
 
         $crawler = $this->client->request(Request::METHOD_GET, '/user/edit/' . $user->getId());
