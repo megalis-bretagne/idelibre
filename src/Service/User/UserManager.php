@@ -116,8 +116,8 @@ class UserManager
 
     public function setFirstPassword(User $user): User
     {
-//        $password = $this->passwordStrengthMeter->generatePassword();
-//        $user->setPassword($this->passwordHasher->hashPassword($user, $password));
+        //        $password = $this->passwordStrengthMeter->generatePassword();
+        //        $user->setPassword($this->passwordHasher->hashPassword($user, $password));
         $user->setPassword('CHANGEZ-MOI');
 
         return $user;

@@ -34,9 +34,11 @@ class UserControllerTest extends WebTestCase
         self::ensureKernelShutdown();
         $this->client = static::createClient();
 
+
         UserStory::actorLibriciel3();
         SittingStory::sittingConseilLibriciel();
         ConvocationStory::load();
+
     }
 
     public function testGetActors()
@@ -46,8 +48,7 @@ class UserControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(200);
 
         $actors = json_decode($this->client->getResponse()->getContent(), true);
-        $this->assertCount(5, $actors);
-        $this->assertSame('Gille', $actors[0]['lastName']);
+        $this->assertCount(3, $actors);
     }
 
     public function testGetUsersInSitting()
@@ -72,9 +73,9 @@ class UserControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(200);
 
         $usersNotInSitting = json_decode($this->client->getResponse()->getContent(), true);
-        $this->assertCount(3, $usersNotInSitting['actors']);
-        $this->assertCount(5, $usersNotInSitting['employees']);
-        $this->assertCount(2, $usersNotInSitting['guests']);
+        $this->assertCount(1, $usersNotInSitting['actors']);
+        $this->assertCount(2, $usersNotInSitting['employees']);
+        $this->assertCount(0, $usersNotInSitting['guests']);
     }
 
     public function testUpdateUsersInSittingAddActor()

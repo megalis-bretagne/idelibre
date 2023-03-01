@@ -5,6 +5,7 @@ namespace App\Tests;
 use App\Entity\Annex;
 use App\Entity\ApiUser;
 use App\Entity\Convocation;
+use App\Entity\EventLog\EventLog;
 use App\Entity\ForgetToken;
 use App\Entity\Group;
 use App\Entity\Party;
@@ -92,4 +93,11 @@ trait FindEntityTrait
     {
         return $this->getOneEntityBy(ForgetToken::class, $criteria);
     }
+
+
+    public function getOneEventLog(array $criteria): ?EventLog
+    {
+        return $this->getOneEntityBy(EventLog::class, $criteria);
+    }
+
 }

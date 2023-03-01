@@ -29,7 +29,7 @@ class OtherdocApiTest extends WebTestCase
             ->setLinkedFileKey($this->genString(20))
             ->setSize(100)
             ->setRank(2)
-            ;
+        ;
         $this->assertHasValidationErrors($otherdocApi, 0);
     }
 
@@ -54,7 +54,7 @@ class OtherdocApiTest extends WebTestCase
     {
         $otherdocApi = (new OtherdocApi())
             ->setName($this->genString(501))
-            ;
+        ;
         $this->assertHasValidationErrors($otherdocApi, 2);
     }
 }

@@ -161,7 +161,7 @@ class TypeApiControllerTest extends WebTestCase
         $actorLs = UserStory::actorLibriciel1();
         $type = TypeStory::typeConseilLibriciel()
 
-;
+        ;
         $data = [
             'name' => 'updated name',
             'isSms' => true,

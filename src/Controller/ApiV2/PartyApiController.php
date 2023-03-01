@@ -54,7 +54,7 @@ class PartyApiController extends AbstractController
     public function add(Structure $structure, array $data): JsonResponse
     {
         /** @var Party $party */
-        $party = $this->denormalizer->denormalize($data, Party::class, context:['groups' => ['party:write']]);
+        $party = $this->denormalizer->denormalize($data, Party::class, context: ['groups' => ['party:write']]);
 
         $party->setStructure($structure);
 

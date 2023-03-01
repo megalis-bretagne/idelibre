@@ -2,6 +2,7 @@
 
 namespace App\Tests\Controller;
 
+use App\Entity\EventLog\Action;
 use App\Entity\Sitting;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
@@ -124,6 +125,8 @@ class SittingControllerTest extends WebTestCase
         $this->loginAsAdminLibriciel();
         $sitting = SittingStory::sittingConseilLibriciel();
 
+        $sittingId = $sitting->getId();
+
         $this->client->request(Request::METHOD_DELETE, '/sitting/delete/' . $sitting->getId());
         $this->assertTrue($this->client->getResponse()->isRedirect());
 
@@ -133,6 +136,10 @@ class SittingControllerTest extends WebTestCase
         $this->assertCount(1, $successMsg);
 
         $this->assertEmpty($this->getOneSittingBy(['name' => 'Conseil Libriciel']));
+
+        $logEvent = $this->getOneEventLog(["targetId" => $sittingId]);
+        $this->assertNotEmpty($logEvent);
+        $this->assertEquals(Action::SITTING_DELETE, $logEvent->getAction());
     }
 
     public function testDeleteSecretaryNotAuthorizedType()
@@ -267,6 +274,7 @@ class SittingControllerTest extends WebTestCase
     {
         $sitting = SittingStory::sittingConseilLibriciel();
         $this->loginAsAdminLibriciel();
+
         $this->client->request(Request::METHOD_POST, '/sitting/archive/' . $sitting->getId());
         $this->assertTrue($this->client->getResponse()->isRedirect());
 
@@ -278,5 +286,9 @@ class SittingControllerTest extends WebTestCase
 
         $item = $crawler->filter('html:contains("Séances")');
         $this->assertCount(1, $item);
+
+        $logEvent = $this->getOneEventLog(["targetId" => $sitting->getId()]);
+        $this->assertNotEmpty($logEvent);
+        $this->assertEquals(Action::SITTING_ARCHIVED, $logEvent->getAction());
     }
 }

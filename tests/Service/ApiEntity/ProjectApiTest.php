@@ -29,7 +29,7 @@ class ProjectApiTest extends WebTestCase
             ->setLinkedFileKey($this->genString(20))
             ->setRank(2)
             ->setSize(100)
-            ;
+        ;
         $this->assertHasValidationErrors($projectApi, 0);
     }
 
@@ -46,7 +46,7 @@ class ProjectApiTest extends WebTestCase
         $projectApi = (new ProjectApi())
             ->setName($this->genString(501))
             ->setRank(2)
-            ;
+        ;
         $this->assertHasValidationErrors($projectApi, 1);
     }
 

@@ -13,13 +13,13 @@ class Converter
         }
         switch (strtoupper(substr($str, -1))) {
             case 'P':  $num *= 1024;
-            // no break
+                // no break
             case 'T':  $num *= 1024;
-            // no break
+                // no break
             case 'G':  $num *= 1024;
-            // no break
+                // no break
             case 'M':  $num *= 1024;
-            // no break
+                // no break
             case 'K':  $num *= 1024;
         }
 

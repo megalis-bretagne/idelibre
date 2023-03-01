@@ -4,8 +4,11 @@ namespace App\Tests\Controller;
 
 use App\Entity\Structure;
 use App\Entity\Timezone;
+use App\Tests\Factory\UserFactory;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
+use App\Tests\Story\GroupStory;
+use App\Tests\Story\RoleStory;
 use App\Tests\Story\StructureStory;
 use App\Tests\Story\UserStory;
 use Doctrine\Persistence\ObjectManager;
@@ -109,7 +112,12 @@ class StructureControllerTest extends WebTestCase
 
     public function testAddGroupAdminNotStructureCreator()
     {
-        $this->login('adminNotStructureCreator');
+        $adminNotStructureCreator = UserFactory::createOne([
+            'role' => RoleStory::groupadmin(),
+            'group' => GroupStory::notStructureCreator()
+        ])->object();
+
+        $this->login($adminNotStructureCreator->getUsername());
         $this->client->request(Request::METHOD_GET, '/structure/add');
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }

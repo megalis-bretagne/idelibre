@@ -79,7 +79,7 @@
     "rector/rector": "^0.12.5",
     "symfony/css-selector": "6.2.*",
     "symfony/phpunit-bridge": "^6.2",
-    "symplify/easy-coding-standard": "^9",
+    "symplify/easy-coding-standard": "^11.2.10",
     "zenstruck/foundry": "^1.23"
   },
   "config": {

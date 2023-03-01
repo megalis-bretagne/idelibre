@@ -19,7 +19,7 @@ class ThemeRepository extends NestedTreeRepository
 {
     public function __construct(EntityManagerInterface $em)
     {
-        parent::__construct($em, new  ClassMetadata(Theme::class));
+        parent::__construct($em, new ClassMetadata(Theme::class));
     }
 
     public function findChildrenFromStructure(Structure $structure): QueryBuilder

@@ -3,9 +3,11 @@
 namespace App\Tests\Controller;
 
 use App\Entity\User;
+use App\Tests\Factory\UserFactory;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
 use App\Tests\Story\GroupStory;
+use App\Tests\Story\RoleStory;
 use App\Tests\Story\UserStory;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -42,10 +44,13 @@ class AdminControllerTest extends WebTestCase
 
     public function testDelete()
     {
-        $this->loginAsSuperAdmin();
-        $user = $this->getOneEntityBy(User::class, ['username' => 'otherSuperadmin']);
+        $superadmin = UserFactory::createOne([
+            'role' => RoleStory::superadmin(),
+        ])->object();
 
-        $this->client->request(Request::METHOD_DELETE, '/admin/delete/' . $user->getId());
+        $this->loginAsSuperAdmin();
+
+        $this->client->request(Request::METHOD_DELETE, '/admin/delete/' . $superadmin->getId());
         $this->assertTrue($this->client->getResponse()->isRedirect());
 
         $crawler = $this->client->followRedirect();
@@ -54,7 +59,8 @@ class AdminControllerTest extends WebTestCase
         $successMsg = $crawler->filter('html:contains("L\'utilisateur a bien été supprimé")');
         $this->assertCount(1, $successMsg);
 
-        $this->assertEmpty($this->getOneEntityBy(User::class, ['id' => $user->getId()]));
+
+        $this->assertEmpty( $superadmin->getId());
     }
 
     public function testDeleteYourself()

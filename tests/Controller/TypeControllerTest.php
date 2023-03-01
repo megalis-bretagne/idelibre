@@ -3,8 +3,11 @@
 namespace App\Tests\Controller;
 
 use App\Entity\Type;
+use App\Tests\Factory\UserFactory;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
+use App\Tests\Story\RoleStory;
+use App\Tests\Story\StructureStory;
 use App\Tests\Story\TypeStory;
 use App\Tests\Story\UserStory;
 use Doctrine\Persistence\ObjectManager;
@@ -99,8 +102,17 @@ class TypeControllerTest extends WebTestCase
     public function testAddWithAssociatedUsers()
     {
         $actorLs = UserStory::actorLibriciel1();
-        $guestLs = UserStory::guestLibriciel2();
-        $employeeLs = UserStory::employeeLibriciel2();
+
+        $guestLs = UserFactory::createOne([
+            'structure' => StructureStory::libriciel(),
+            'role' => RoleStory::guest(),
+        ]);
+
+        $employeeLs = UserFactory::createOne([
+            'structure' => StructureStory::libriciel(),
+            'role' => RoleStory::employee(),
+        ]);
+
 
         $this->loginAsAdminLibriciel();
         $crawler = $this->client->request(Request::METHOD_GET, '/type/add');

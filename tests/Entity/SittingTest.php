@@ -43,7 +43,7 @@ class SittingTest extends WebTestCase
             ->setConvocationFile(new File())
             ->setStructure(new Structure())
             ->setDate(new DateTime())
-            ;
+        ;
 
         $this->assertHasValidationErrors($sitting, 0);
     }

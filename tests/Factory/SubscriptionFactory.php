@@ -49,7 +49,7 @@ final class SubscriptionFactory extends ModelFactory
         // see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#initialization
         return $this
             // ->afterInstantiate(function(Subscription $subscription): void {})
-            ;
+        ;
     }
 
     protected static function getClass(): string

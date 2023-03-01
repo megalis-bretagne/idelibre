@@ -9,6 +9,7 @@ use App\Form\UserType;
 use App\Repository\UserRepository;
 use App\Security\Password\ResetPassword;
 use App\Security\UserLoginEntropy;
+use App\Service\EventLog\EventLogManager;
 use App\Service\User\PasswordInvalidator;
 use App\Service\User\UserManager;
 use App\Sidebar\Annotation\Sidebar;
@@ -49,7 +50,7 @@ class UserController extends AbstractController
     #[Route(path: '/user/add', name: 'user_add')]
     #[IsGranted(data: 'ROLE_MANAGE_USERS')]
     #[Breadcrumb(title: 'Ajouter')]
-    public function add(Request $request, UserManager $manageUser): Response
+    public function add(Request $request, UserManager $manageUser, EventLogManager $eventLog): Response
     {
         $form = $this->createForm(UserType::class, new User(), [
             'structure' => $this->getUser()->getStructure(),
@@ -60,21 +61,13 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $initPassword = $form->get('initPassword')->getData();
 
-            if (false === $initPassword) {
-                $success = $manageUser->save(
-                    $form->getData(),
-                    null,
-                    $this->getUser()->getStructure()
-                );
-            } else {
-                $success = $manageUser->save(
-                    $form->getData(),
-                    $form->get('plainPassword')->getData(),
-                    $this->getUser()->getStructure()
-                );
-            }
+            $success = $manageUser->save(
+                $form->getData(),
+                $initPassword ? $form->get('plainPassword')->getData() : null,
+                $this->getUser()->getStructure()
+            );
 
-            if (true === $success) {
+            if ($success) {
                 $this->addFlash('success', 'Votre utilisateur a bien été ajouté');
 
                 return $this->redirectToRoute('user_index');
@@ -104,17 +97,10 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $initPassword = $form->get('initPassword')->getData();
 
-            if (false === $initPassword) {
-                $success = $manageUser->editUser(
-                    $form->getData(),
-                    null,
-                );
-            } else {
-                $success = $manageUser->editUser(
-                    $form->getData(),
-                    $form->get('plainPassword')->getData(),
-                );
-            }
+            $success = $manageUser->editUser(
+                $form->getData(),
+                $initPassword ? $form->get('plainPassword')->getData() : null,
+            );
 
             if (true === $success) {
                 $this->addFlash('success', 'Votre utilisateur a bien été modifié');

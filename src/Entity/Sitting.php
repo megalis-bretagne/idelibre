@@ -32,7 +32,6 @@ use Symfony\Component\Validator\Constraints\NotNull;
 class Sitting
 {
     public const ARCHIVED = 'archived';
-    public const ACTIVE = 'active';
 
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
