@@ -4,6 +4,7 @@ namespace App\Tests\Factory;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Tests\Story\RoleStory;
 use Zenstruck\Foundry\ModelFactory;
 use Zenstruck\Foundry\Proxy;
 use Zenstruck\Foundry\RepositoryProxy;
@@ -53,6 +54,8 @@ final class UserFactory extends ModelFactory
             'firstName' => self::faker()->word(),
             'lastName' => self::faker()->word(),
             'isActive' => true,
+            'structure' => StructureFactory::new(),
+            'role' => RoleStory::actor()
         ];
     }
 

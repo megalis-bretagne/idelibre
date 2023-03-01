@@ -64,7 +64,7 @@ class UserApiControllerTest extends WebTestCase
         $response = $this->client->getResponse();
         $users = json_decode($response->getContent(), true);
 
-        $this->assertCount(12, $users);
+        $this->assertCount(5, $users);
     }
 
     public function testGetById()

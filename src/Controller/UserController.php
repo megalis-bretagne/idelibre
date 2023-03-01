@@ -97,17 +97,10 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $initPassword = $form->get('initPassword')->getData();
 
-            if (false === $initPassword) {
-                $success = $manageUser->editUser(
-                    $form->getData(),
-                    null,
-                );
-            } else {
-                $success = $manageUser->editUser(
-                    $form->getData(),
-                    $form->get('plainPassword')->getData(),
-                );
-            }
+            $success = $manageUser->editUser(
+                $form->getData(),
+                $initPassword ? $form->get('plainPassword')->getData() : null,
+            );
 
             if (true === $success) {
                 $this->addFlash('success', 'Votre utilisateur a bien été modifié');

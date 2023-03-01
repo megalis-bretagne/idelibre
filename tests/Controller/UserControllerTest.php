@@ -2,11 +2,12 @@
 
 namespace App\Tests\Controller;
 
-use App\Entity\Role;
+use App\Entity\EventLog\Action;
 use App\Entity\Subscription;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Service\User\PasswordInvalidator;
+use App\Tests\Factory\UserFactory;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
 use App\Tests\Story\ConfigurationStory;
@@ -41,15 +42,15 @@ class UserControllerTest extends WebTestCase
 
         self::ensureKernelShutdown();
         $this->client = static::createClient();
-
     }
 
     public function testDelete()
     {
         UserStory::load();
+        $user = UserFactory::createOne(['structure' => StructureStory::libriciel()])->object();
+
         $this->loginAsAdminLibriciel();
-        /** @var User $user */
-        $user = $this->getOneEntityBy(User::class, ['username' => 'otherUser@libriciel']);
+        $userId = $user->getId();
 
         $this->client->request(Request::METHOD_DELETE, '/user/delete/' . $user->getId());
         $this->assertTrue($this->client->getResponse()->isRedirect());
@@ -60,12 +61,16 @@ class UserControllerTest extends WebTestCase
         $successMsg = $crawler->filter('html:contains("L\'utilisateur a bien été supprimé")');
         $this->assertCount(1, $successMsg);
 
-        $this->assertEmpty($this->getOneEntityBy(User::class, ['id' => $user->getId()]));
+        $this->assertEmpty($user->getId());
+
+        $logEvent = $this->getOneEventLog(["targetId" => $userId, "action" => Action::USER_DELETE]);
+        $this->assertNotEmpty($logEvent);
     }
 
     public function testDeleteBatch()
     {
         UserStory::load();
+
         $this->loginAsAdminLibriciel();
 
         $crawler = $this->client->request(Request::METHOD_GET, '/user/deleteBatch');
@@ -94,19 +99,20 @@ class UserControllerTest extends WebTestCase
     public function testDeleteOtherStructureUser()
     {
         UserStory::load();
+        $user = UserFactory::createOne();
+
         $this->loginAsAdminLibriciel();
-        /** @var User $user */
-        $user = $this->getOneEntityBy(User::class, ['username' => 'user@montpellier']);
+
         $this->client->request(Request::METHOD_DELETE, '/user/delete/' . $user->getId());
         $this->assertResponseStatusCodeSame(403);
     }
 
     public function testDeleteMyself()
     {
-        UserStory::load();
+        $user = UserStory::adminLibriciel();
+
         $this->loginAsAdminLibriciel();
-        /** @var User $user */
-        $user = $this->getOneEntityBy(User::class, ['username' => 'admin@libriciel']);
+
         $this->client->request(Request::METHOD_DELETE, '/user/delete/' . $user->getId());
 
         $crawler = $this->client->followRedirect();
@@ -117,8 +123,9 @@ class UserControllerTest extends WebTestCase
 
     public function testAdd()
     {
-        ConfigurationStory::load();
         UserStory::load();
+        $roleAdmin = RoleStory::admin();
+        ConfigurationStory::load();
         $adminRole = RoleStory::admin();
 
         $this->loginAsAdminLibriciel();
@@ -133,7 +140,7 @@ class UserControllerTest extends WebTestCase
         $form['user[lastName]'] = 'user';
         $form['user[username]'] = 'newuser';
         $form['user[email]'] = 'newuser@example.org';
-        $form['user[role]'] = $adminRole->getId();
+        $form['user[role]'] = $roleAdmin->getId();
         $form['user[plainPassword][first]'] = 'password';
         $form['user[plainPassword][second]'] = 'password';
 
@@ -147,21 +154,63 @@ class UserControllerTest extends WebTestCase
         $successMsg = $crawler->filter('html:contains("Votre utilisateur a bien été ajouté")');
         $this->assertCount(1, $successMsg);
 
-        $this->assertNotEmpty($this->getOneEntityBy(User::class, ['username' => 'newuser@libriciel']));
+        $newUser = $this->getOneUserBy(['username' => 'newuser@libriciel']);
+        $this->assertNotEmpty($newUser);
+
+        $logEvent = $this->getOneEventLog(["targetId" => $newUser->getId()]);
+        $this->assertNotEmpty($logEvent);
+        $this->assertEquals(Action::USER_CREATE, $logEvent->getAction());
     }
 
     //# A verifier ##
-    public function testEdit()
+    public function testChangePassword()
     {
-        ConfigurationStory::load();
-        $user = UserStory::otherUserLibriciel();
+        UserStory::load();
+        $user = UserFactory::createOne(['structure' => StructureStory::libriciel()]);
+
         $this->loginAsAdminLibriciel();
+
         $crawler = $this->client->request(Request::METHOD_GET, '/user/edit/' . $user->getId());
         $this->assertResponseStatusCodeSame(200);
         $item = $crawler->filter('html:contains("Modifier un utilisateur")');
         $this->assertCount(1, $item);
 
         $form = $crawler->selectButton('Enregistrer')->form();
+
+        $form['user[initPassword]'] = true;
+        $form['user[plainPassword][first]'] = 'OoL3chaere6axuteeR2a';
+        $form['user[plainPassword][second]'] = 'OoL3chaere6axuteeR2a';
+        $this->client->submit($form);
+
+        $this->assertTrue($this->client->getResponse()->isRedirect());
+
+        $crawler = $this->client->followRedirect();
+        $this->assertResponseStatusCodeSame(200);
+        $successMsg = $crawler->filter('html:contains("Votre utilisateur a bien été modifié")');
+        $this->assertCount(1, $successMsg);
+
+        $logEvent = $this->getOneEventLog(["targetId" => $user->getId(), "action" => Action::USER_PASSWORD_UPDATED]);
+        $this->assertNotEmpty($logEvent);
+    }
+
+
+    public function testEdit()
+    {
+        UserStory::load();
+        $user = UserFactory::createOne(['structure' => StructureStory::libriciel()]);
+
+        ConfigurationStory::load();
+        $user = UserStory::otherUserLibriciel();
+        $this->loginAsAdminLibriciel();
+
+        $crawler = $this->client->request(Request::METHOD_GET, '/user/edit/' . $user->getId());
+        $this->assertResponseStatusCodeSame(200);
+        $item = $crawler->filter('html:contains("Modifier un utilisateur")');
+        $this->assertCount(1, $item);
+
+        $form = $crawler->selectButton('Enregistrer')->form();
+
+        $form['user[initPassword]'] = 0;
         $form['user[firstName]'] = 'new';
         $this->client->submit($form);
 
@@ -171,13 +220,19 @@ class UserControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(200);
         $successMsg = $crawler->filter('html:contains("Votre utilisateur a bien été modifié")');
         $this->assertCount(1, $successMsg);
+
+        $logEvent = $this->getOneEventLog(["targetId" => $user->getId(), "action" => Action::USER_PASSWORD_UPDATED]);
+        $this->assertEmpty($logEvent);
     }
 
     public function testEditSecretary()
     {
+        UserStory::load();
+        $type = TypeStory::typeConseilLibriciel();
+
+        $this->loginAsAdminLibriciel();
         $user = UserStory::secretaryLibriciel1();
         ConfigurationStory::load();
-        $type = TypeStory::typeBureauLibriciel();
         $this->loginAsAdminLibriciel();
 
         $crawler = $this->client->request(Request::METHOD_GET, '/user/edit/' . $user->getId());
@@ -232,6 +287,7 @@ class UserControllerTest extends WebTestCase
     public function testIndex()
     {
         UserStory::load();
+
         $this->loginAsAdminLibriciel();
         $crawler = $this->client->request(Request::METHOD_GET, '/user');
         $this->assertResponseStatusCodeSame(200);
@@ -243,6 +299,7 @@ class UserControllerTest extends WebTestCase
     public function testPreferences()
     {
         SubscriptionStory::load();
+        UserStory::load();
 
         $this->loginAsAdminLibriciel();
 
@@ -281,9 +338,10 @@ class UserControllerTest extends WebTestCase
 
     public function testInvalidateUsersPassword()
     {
-        ConfigurationStory::load();
         UserStory::load();
+        ConfigurationStory::load();
         $libriciel = StructureStory::libriciel();
+
         $this->loginAsAdminLibriciel();
 
         $crawler = $this->client->request(Request::METHOD_GET, '/user');
@@ -307,5 +365,8 @@ class UserControllerTest extends WebTestCase
         $users = $userRepository->findBy(['structure' => $libriciel->object()]);
 
         $this->assertSame($users[0]->getPassword(), PasswordInvalidator::INVALID_PASSWORD);
+
+        $logEvent = $this->getOneEventLog(["targetId" => $users[0]->getId(), "action" => Action::USER_PASSWORD_UPDATED]);
+        $this->assertNotEmpty($logEvent);
     }
 }

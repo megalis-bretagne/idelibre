@@ -1,6 +1,6 @@
 <?php
 
-namespace App\MessageHandler;
+namespace App\MessageHandler\EventLog;
 
 use App\Entity\EventLog\Action;
 use App\Entity\EventLog\EventLog;
@@ -13,9 +13,10 @@ use Doctrine\Persistence\Event\LifecycleEventArgs;
 
 #[AsEntityListener(event: Events::postPersist, method: 'postPersist', entity: User::class)]
 #[AsEntityListener(event: Events::preRemove, method: 'preRemove', entity: User::class)]
+#[AsEntityListener(event: Events::postRemove, method: 'postAction', entity: User::class)]
 #[AsEntityListener(event: Events::preUpdate, method: 'preUpdate', entity: User::class)]
-#[AsEntityListener(event: Events::postUpdate, method: 'postUpdate', entity: User::class)]
-class UserSaveHandler
+#[AsEntityListener(event: Events::postUpdate, method: 'postAction', entity: User::class)]
+class UserEventHandler
 {
     private ?EventLog $eventLog = null;
 
@@ -30,7 +31,13 @@ class UserSaveHandler
 
     public function preRemove(User $user, LifecycleEventArgs $args): void
     {
-        $this->eventLogManager->createLog(Action::USER_DELETE, $user->getId(), $user->getUsername(), $user->getStructure()?->getId());
+        $this->eventLog = $this->eventLogManager->createLog(
+            Action::USER_DELETE,
+            $user->getId(),
+            $user->getUsername(),
+            $user->getStructure()?->getId(),
+            false
+        );
     }
 
     public function preUpdate(User $user, PreUpdateEventArgs $args): void
@@ -46,7 +53,7 @@ class UserSaveHandler
         }
     }
 
-    public function postUpdate(): void
+    public function postAction(): void
     {
         if ($this->eventLog) {
             $this->eventLogManager->saveLog($this->eventLog);

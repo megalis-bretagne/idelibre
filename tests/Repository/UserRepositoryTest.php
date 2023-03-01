@@ -45,12 +45,12 @@ class UserRepositoryTest extends WebTestCase
     public function testFindByStructure()
     {
         $structure = StructureStory::libriciel();
-        $this->assertCount(12, $this->userRepository->findByStructure($structure->object())->getQuery()->getResult());
+        $this->assertCount(5, $this->userRepository->findByStructure($structure->object())->getQuery()->getResult());
     }
 
     public function testFindSuperAdminAndGroupAdmin()
     {
-        $this->assertCount(5, $this->userRepository->findSuperAdminAndGroupAdmin(null)->getQuery()->getResult());
+        $this->assertCount(2, $this->userRepository->findSuperAdminAndGroupAdmin(null)->getQuery()->getResult());
     }
 
     public function testFindSuperAdminAndGroupAdminLimitedRecia()
@@ -84,27 +84,27 @@ class UserRepositoryTest extends WebTestCase
     {
         $structure = StructureStory::libriciel();
         $actorQB = $this->userRepository->findActorsByStructure($structure->object());
-        $this->assertCount(5, $actorQB->getQuery()->getResult());
+        $this->assertCount(3, $actorQB->getQuery()->getResult());
     }
 
     public function testCountByRole()
     {
         $structure = StructureStory::libriciel();
         $countByRole = $this->userRepository->countByRole($structure->object());
-        $this->assertCount(5, $countByRole);
+        $this->assertCount(3, $countByRole);
     }
 
     public function testFindSecretariesByStructure()
     {
         $structure = StructureStory::libriciel();
         $secreateryQb = $this->userRepository->findSecretariesByStructure($structure->object());
-        $this->assertCount(2, $secreateryQb->getQuery()->getResult());
+        $this->assertCount(1, $secreateryQb->getQuery()->getResult());
     }
 
     public function testFindSecretariesAndAdminByStructure()
     {
         $structure = StructureStory::libriciel();
         $secreateryAdminQb = $this->userRepository->findSecretariesAndAdminByStructure($structure->object());
-        $this->assertCount(3, $secreateryAdminQb->getQuery()->getResult());
+        $this->assertCount(2, $secreateryAdminQb->getQuery()->getResult());
     }
 }
