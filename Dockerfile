@@ -18,8 +18,8 @@ ENV PHP_OPCACHE_VALIDATE_TIMESTAMPS="0" \
     PHP_PM_MIN_SPARE_SERVERS='2' \
     PHP_PM_MAX_SPARE_SERVERS='4'
 
-RUN apt dist-upgrade -yqq \
-    && apt-get update -yqq \
+RUN apt-get update -yqq \
+    && apt dist-upgrade -yqq \
     && apt-get install \
         wget \
         sudo \
