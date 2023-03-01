@@ -138,7 +138,7 @@ class ConvocationManager
         $isActiveUserConvocation = [];
 
         foreach ($convocations as $convocation) {
-            if (true === $convocation->getUser()->getIsActive()) {
+            if ($convocation->getUser()->getIsActive()) {
                 $isActiveUserConvocation[] = $convocation;
             }
         }
