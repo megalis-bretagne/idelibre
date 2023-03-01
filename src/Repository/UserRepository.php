@@ -448,6 +448,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->setParameter('secretary', 'Secretary')
             ->setParameter('admin', 'Admin')
             ->andWhere('u.structure = :structure')
+            ->andWhere('u.isActive = true')
             ->setParameter('structure', $structure)
             ->orderBy('u.lastName', 'ASC');
     }

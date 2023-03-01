@@ -135,16 +135,16 @@ class ConvocationManager
     public function sendAllConvocations(Sitting $sitting, ?string $userProfile): void
     {
         $convocations = $this->getConvocationNotSentByUserProfile($sitting, $userProfile);
-        $isActiveUserConvocation = [];
+        $isActiveUserConvocations = [];
 
         foreach ($convocations as $convocation) {
             if ($convocation->getUser()->getIsActive()) {
-                $isActiveUserConvocation[] = $convocation;
+                $isActiveUserConvocations[] = $convocation;
             }
         }
 
-        while (count($isActiveUserConvocation)) {
-            $convocationBatch = array_splice($isActiveUserConvocation, 0, $this->bag->get('max_batch_email'));
+        while (count($isActiveUserConvocations)) {
+            $convocationBatch = array_splice($isActiveUserConvocations, 0, $this->bag->get('max_batch_email'));
             $this->timestampAndActiveConvocations($sitting, $convocationBatch);
             $this->clientNotifier->newSittingNotification($convocationBatch);
             $emails = $this->generateEmailsData($sitting, $convocationBatch);
