@@ -21,11 +21,5 @@ final class SubscriptionStory extends Story
             'createdAt' => null,
         ]));
 
-    /*    $this->addState('subscription_secretaryLibriciel2', SubscriptionFactory::new([
-            'user' => UserStory::secretaryLibriciel2(),
-            'acceptMailRecap' => false,
-            'createdAt' => null,
-        ]));
-    */
     }
 }
