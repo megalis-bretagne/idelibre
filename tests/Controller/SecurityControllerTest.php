@@ -8,6 +8,7 @@ use App\Security\Password\LegacyPassword;
 use App\Tests\Factory\UserFactory;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
+use App\Tests\Story\ConfigurationStory;
 use App\Tests\Story\ForgetTokenStory;
 use App\Tests\Story\RoleStory;
 use App\Tests\Story\StructureStory;
@@ -42,12 +43,11 @@ class SecurityControllerTest extends WebTestCase
 
         $this->legacyPassword = self::getContainer()->get(LegacyPassword::class);
 
-        UserStory::load();
-        ForgetTokenStory::load();
     }
 
     public function testImpersonateAS()
     {
+        UserStory::load();
         $this->loginAsSuperAdmin();
         $structure = $this->getOneEntityBy(Structure::class, ['name' => 'Libriciel']);
 
@@ -62,6 +62,7 @@ class SecurityControllerTest extends WebTestCase
 
     public function testImpersonateASNotSuperAdmin()
     {
+        UserStory::load();
         $this->loginAsAdminLibriciel();
         $structure = $this->getOneEntityBy(Structure::class, ['name' => 'Libriciel']);
 
@@ -71,30 +72,36 @@ class SecurityControllerTest extends WebTestCase
 
     public function testResetPasswordwrongToken()
     {
+        UserStory::load();
         $this->client->request(Request::METHOD_GET, '/reset/aqwx');
         $this->assertResponseStatusCodeSame(404);
     }
 
     public function testResetPassword()
     {
+        UserStory::load();
+        ForgetTokenStory::load();
         $this->client->request(Request::METHOD_GET, '/reset/forgetToken');
         $this->assertResponseStatusCodeSame(200);
     }
 
     public function testForgetPasswordGet()
     {
+        UserStory::load();
         $this->client->request(Request::METHOD_GET, '/forget');
         $this->assertResponseStatusCodeSame(200);
     }
 
     public function testForgetPasswordWrongEmail()
     {
+        UserStory::load();
         $this->client->request(Request::METHOD_POST, '/forget', ['username' => 'notexist']);
         $this->assertResponseStatusCodeSame(302);
     }
 
     public function testForgetPassword()
     {
+        UserStory::load();
         $this->client->request(Request::METHOD_POST, '/forget', ['username' => 'superadmin']);
         $this->assertResponseRedirects('/login');
         $crawler = $this->client->followRedirect();
@@ -110,6 +117,7 @@ class SecurityControllerTest extends WebTestCase
 
     public function testForgetPasswordAlreadyForgetToken()
     {
+        UserStory::load();
         $this->client->request(Request::METHOD_POST, '/forget', ['username' => 'admin@libriciel']);
         $this->assertResponseRedirects('/login');
         $crawler = $this->client->followRedirect();
@@ -126,6 +134,7 @@ class SecurityControllerTest extends WebTestCase
 
     public function testLogout()
     {
+        UserStory::load();
         $this->loginAsSuperAdmin();
         $this->client->request(Request::METHOD_GET, '/logout');
         $this->assertResponseRedirects();
@@ -138,6 +147,7 @@ class SecurityControllerTest extends WebTestCase
 
     public function testImpersonateExit()
     {
+        UserStory::load();
         $this->loginAsSuperAdmin();
         $this->client->request(Request::METHOD_GET, '/security/impersonateExit');
         $this->assertResponseRedirects();
@@ -150,6 +160,7 @@ class SecurityControllerTest extends WebTestCase
 
     public function testLogin()
     {
+        UserStory::load();
         $crawler = $this->client->request(Request::METHOD_GET, '/login');
         $this->assertResponseStatusCodeSame(200);
         $title = $crawler->filter('html:contains("Veuillez saisir vos identifiants de connexion")');
@@ -175,6 +186,7 @@ class SecurityControllerTest extends WebTestCase
 
     public function testLoginLegacy()
     {
+        UserStory::load();
         $userLegacy = UserFactory::createOne([
             'email' => 'userLegacy@example.org',
             'username' => 'userLegacy@montpellier',
@@ -212,6 +224,7 @@ class SecurityControllerTest extends WebTestCase
 
     public function testLoginFalse()
     {
+        UserStory::load();
         $crawler = $this->client->request(Request::METHOD_GET, '/login');
         $this->assertResponseStatusCodeSame(200);
         $title = $crawler->filter('html:contains("Veuillez saisir vos identifiants de connexion")');
@@ -236,6 +249,7 @@ class SecurityControllerTest extends WebTestCase
 
     public function testLoginInactive()
     {
+        UserStory::load();
         $crawler = $this->client->request(Request::METHOD_GET, '/login');
         $this->assertResponseStatusCodeSame(200);
         $title = $crawler->filter('html:contains("Veuillez saisir vos identifiants de connexion")');
@@ -260,7 +274,8 @@ class SecurityControllerTest extends WebTestCase
 
     public function testChangePasswordJson()
     {
-        /** @var User $actor */
+        ConfigurationStory::load();
+        UserStory::load();
         $actor = UserStory::actorLibriciel1();
         $oldEncodedPassword = $actor->getPassword();
 
@@ -278,6 +293,7 @@ class SecurityControllerTest extends WebTestCase
 
     public function testChangePasswordJsonFakePassphrase()
     {
+        UserStory::load();
         $actor = UserStory::actorLibriciel1();
 
         $data = [

@@ -47,6 +47,7 @@ class ConfigurationControllerTest extends WebTestCase
 
         $form['configuration[isSharedAnnotation]'] = false;
         $form['configuration[sittingSuppressionDelay]'] = '6 months';
+        $form['configuration[minimumEntropy]'] = '80';
 
         $this->client->submit($form);
 

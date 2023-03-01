@@ -9,6 +9,7 @@ use App\Service\Util\SuppressionDelayFormatter;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -34,7 +35,10 @@ class ConfigurationType extends AbstractType
                 'choices' => SuppressionDelayFormatter::DELAYS,
                 'placeholder' => '-- Choisir une durée --',
             ])
-        ;
+            ->add('minimumEntropy', IntegerType::class, [
+                'label' => 'Force du mot de passe minimum pour les utilisateurs de la structure (hors administrateur de groupe)',
+            ])
+            ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -53,7 +53,7 @@ class UserController extends AbstractController
     {
         $form = $this->createForm(UserType::class, new User(), [
             'structure' => $this->getUser()->getStructure(),
-            'entropyForUser' => $this->getUser()->getStructure()->getMinimumEntropy(),
+            'entropyForUser' => $this->getUser()->getStructure()->getConfiguration()->getMinimumEntropy(),
         ]);
         $form->handleRequest($request);
 
@@ -96,7 +96,7 @@ class UserController extends AbstractController
     {
         $form = $this->createForm(UserType::class, $user, [
             'structure' => $this->getUser()->getStructure(),
-            'entropyForUser' => $this->getUser()->getStructure()->getMinimumEntropy(),
+            'entropyForUser' => $this->getUser()->getStructure()->getConfiguration()->getMinimumEntropy(),
             'referer' => $request->headers->get('referer'),
         ]);
         $form->handleRequest($request);

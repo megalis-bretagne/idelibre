@@ -74,9 +74,6 @@ class Structure
     #[Column(type: 'boolean', options: ['default' => true])]
     private $isActive = true;
 
-    #[Column(type: 'integer', unique: false, nullable: false, options: ['default' => 80])]
-    private $minimumEntropy = 80;
-
     #[ORM\Column(type: 'boolean', options: ['default' => true])]
     private ?bool $canEditReplyTo = true;
 
@@ -223,18 +220,6 @@ class Structure
     public function setIsActive(bool $isActive): self
     {
         $this->isActive = $isActive;
-
-        return $this;
-    }
-
-    public function getMinimumEntropy(): ?int
-    {
-        return $this->minimumEntropy;
-    }
-
-    public function setMinimumEntropy(int $minimumEntropy): self
-    {
-        $this->minimumEntropy = $minimumEntropy;
 
         return $this;
     }

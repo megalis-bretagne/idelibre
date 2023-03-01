@@ -29,6 +29,12 @@
                 <small>{{ formattedSuppressionDelay }}</small>
             </td>
         </tr>
+        <tr class="d-flex">
+            <td class="col-11">Force du mot de passe minimum pour les utilisateurs de la structure (hors administrateur de groupe)</td>
+            <td class="col-1">
+                <small>{{ configuration.minimumEntropy }}</small>
+            </td>
+        </tr>
     </table>
 
 {% endblock %}

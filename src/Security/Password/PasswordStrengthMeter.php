@@ -31,7 +31,7 @@ class PasswordStrengthMeter
         if ($this->isSuperAdmin($user) || $this->isGroupAdmin($user)) {
             $minimumEntropy = $this->bag->get('minimumEntropyForUserWithRoleHigh');
         } else {
-            $minimumEntropy = $user->getStructure()->getMinimumEntropy();
+            $minimumEntropy = $user->getStructure()->getConfiguration()->getMinimumEntropy();
         }
 
         return $this->checkEntropy($plainPassword, $minimumEntropy);
