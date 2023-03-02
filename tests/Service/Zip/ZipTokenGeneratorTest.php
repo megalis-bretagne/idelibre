@@ -33,4 +33,5 @@ class ZipTokenGeneratorTest extends WebTestCase
         $this->assertIsString($token);
         $this->assertStringContainsString('/tmp/zip_token', $token);
     }
+
 }
