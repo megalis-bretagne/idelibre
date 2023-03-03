@@ -35,7 +35,7 @@ class ForgetToken
     public function __construct(User $user)
     {
         $this->user = $user;
-        $this->expireAt = new DateTime('+1 hour');
+        $this->expireAt = new DateTime('+10 minutes');
         $this->token = bin2hex(random_bytes(60));
     }
 

@@ -43,6 +43,11 @@ parameters:
     'text/plain'
   ]
 
+  login_limit: 5
+  login_rate_interval: '3 minutes'
+  login_rate_amount: 1
+
+
 services:
   # default configuration for services in *this* file
   _defaults:

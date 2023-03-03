@@ -132,6 +132,7 @@ class SecurityController extends AbstractController
         return $this->json(['message' => 'email sent if username exists']);
     }
 
+
     /**
      * @throws Exception
      */
@@ -141,7 +142,8 @@ class SecurityController extends AbstractController
         try {
             $user = $resetPassword->getUserFromToken($token);
         } catch (TimeoutException $e) {
-            throw new TimeoutException('expired TOKEN', 498);
+            //throw new TimeoutException('expired TOKEN', 498);
+            return $this->render('security/expired_token_ls.html.twig');
         } catch (EntityNotFoundException $e) {
             throw new NotFoundHttpException('this token does not exist');
         }
@@ -187,9 +189,9 @@ class SecurityController extends AbstractController
         } catch (PasswordUpdaterException $e) {
             return $this->json(
                 [
-                'message' => $e->getMessage(),
-                'minEntropyValue' => $e->minEntropyValue,
-                'currentEntropyValue' => $e->currentEntropyValue, ],
+                    'message' => $e->getMessage(),
+                    'minEntropyValue' => $e->minEntropyValue,
+                    'currentEntropyValue' => $e->currentEntropyValue, ],
                 400
             );
         }
