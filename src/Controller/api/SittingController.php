@@ -52,18 +52,22 @@ class SittingController extends AbstractController
         return $this->json(['comelusId' => $comelusId]);
     }
 
+    #[IsGranted('ROLE_MANAGE_SITTINGS')]
     #[Route(path: '/api/sittings/maxSize', name: 'api_sitting_maxSize', methods: ['GET'])]
     public function getMaxSittingSizeForGeneration(ParameterBagInterface $bag): jsonResponse
     {
         return $this->json(['maxSize' => $bag->get('maximum_size_pdf_zip_generation')]);
     }
 
+
+    #[IsGranted('ROLE_MANAGE_SITTINGS')]
     #[Route(path: '/api/sittings/fileMaxSize', name: 'api_sitting_file_maxSize', methods: ['GET'])]
     public function getMaxFileSizeForGeneration(Converter $converter): jsonResponse
     {
         return $this->json(['fileMaxSize' => $converter->bytesConverter(ini_get('upload_max_filesize'))]);
     }
 
+    #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
     #[Route(path: '/api/sittings/{id}/timezone', name: 'api_sitting_timezone', methods: ['GET'])]
     public function getCurrentStructureSittingTimezone(Sitting $sitting): jsonResponse
     {

@@ -138,9 +138,4 @@ class File
 
         return $this->invitationSitting->getStructure();
     }
-
-    public function getInvitationSitting(): ?Sitting
-    {
-        return $this->invitationSitting;
-    }
 }

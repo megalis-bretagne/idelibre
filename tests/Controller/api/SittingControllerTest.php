@@ -2,9 +2,11 @@
 
 namespace App\Tests\Controller\api;
 
+use App\Service\Connector\ComelusConnectorManager;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
 use App\Tests\Story\SittingStory;
+use App\Tests\Story\UserStory;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -31,12 +33,11 @@ class SittingControllerTest extends WebTestCase
 
         self::ensureKernelShutdown();
         $this->client = static::createClient();
-
-        SittingStory::sittingConseilLibriciel();
     }
 
     public function testSendConvocations()
     {
+        UserStory::load();
         $sitting = SittingStory::sittingConseilLibriciel();
         $this->loginAsAdminLibriciel();
 
@@ -53,9 +54,78 @@ class SittingControllerTest extends WebTestCase
 
     public function testNotifyAgain()
     {
+        UserStory::load();
         $sitting = SittingStory::sittingConseilLibriciel();
         $this->loginAsAdminLibriciel();
         $this->client->request(Request::METHOD_POST, '/api/sittings/' . $sitting->getId() . '/notifyAgain', [], [], [], json_encode(['object' => 'test', 'content' => 'test']));
         $this->assertResponseStatusCodeSame(200);
     }
+
+
+    public function testGetSitting()
+    {
+        UserStory::load();
+        $sitting = SittingStory::sittingConseilLibriciel();
+        $this->loginAsAdminLibriciel();
+        $this->client->request(Request::METHOD_GET, '/api/sittings/' . $sitting->getId());
+        $this->assertResponseStatusCodeSame(200);
+        $content = json_decode($this->client->getResponse()->getContent());
+        $this->assertSame($sitting->getId(), $content->id);
+    }
+
+    public function testSendComelus()
+    {
+        UserStory::load();
+        $sitting = SittingStory::sittingConseilLibriciel();
+
+        $ComelusMock = $this->getMockBuilder(ComelusConnectorManager::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $ComelusMock->method('sendComelus')->willReturn('comelusUUID');
+        $container = self::getContainer();
+        $container->set(ComelusConnectorManager::class, $ComelusMock);
+
+        $this->loginAsAdminLibriciel();
+        $this->client->request(Request::METHOD_POST, "/api/sittings/{$sitting->getId()}/sendComelus");
+        $this->assertResponseStatusCodeSame(200);
+        $content = json_decode($this->client->getResponse()->getContent());
+        $this->assertSame('comelusUUID', $content->comelusId);
+    }
+
+
+    public function testGetMaxSittingSizeForGeneration()
+    {
+        UserStory::load();
+        $this->loginAsAdminLibriciel();
+        $this->client->request(Request::METHOD_GET, "/api/sittings/maxSize");
+        $this->assertResponseStatusCodeSame(200);
+        $content = json_decode($this->client->getResponse()->getContent());
+        $this->assertNotEmpty($content->maxSize);
+    }
+
+    public function testGetMaxFileSizeForGeneration()
+    {
+        UserStory::load();
+        $this->loginAsAdminLibriciel();
+        $this->client->request(Request::METHOD_GET, "/api/sittings/fileMaxSize");
+        $this->assertResponseStatusCodeSame(200);
+        $content = json_decode($this->client->getResponse()->getContent());
+        $this->assertNotEmpty($content->fileMaxSize);
+    }
+
+    public function testGetCurrentStructureSittingTimezone()
+    {
+        UserStory::load();
+        $sitting = SittingStory::sittingConseilLibriciel();
+
+        $this->loginAsAdminLibriciel();
+
+        $this->client->request(Request::METHOD_GET, "/api/sittings/{$sitting->getId()}/timezone");
+        $this->assertResponseStatusCodeSame(200);
+        $content = json_decode($this->client->getResponse()->getContent());
+        $this->assertNotEmpty($content->timezone);
+    }
+
+
 }

@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class StatisticController extends AbstractController
 {
     #[Route(path: '/statistic', name: 'statistic_index')]
-    #[IsGranted(data: 'ROLE_MANAGE_CONNECTORS')]
+    #[IsGranted(data: 'ROLE_SUPERADMIN')]
     public function index(): Response
     {
         return $this->render('statistic/statistic_index.html.twig', [
@@ -40,7 +40,7 @@ class StatisticController extends AbstractController
 
     #[Route('statistic/sitting', name: 'statistic_sitting')]
     #[IsGranted('ROLE_SUPERADMIN')]
-    public function SittingsInfoAfter(Request $request, SittingByStructureStatisticCsvGenerator $statisticCsvGenerator): Response
+    public function sittingsInfoAfter(Request $request, SittingByStructureStatisticCsvGenerator $statisticCsvGenerator): Response
     {
         $months = (int) $request->get('months') ?? 3;
         $response = new BinaryFileResponse($statisticCsvGenerator->generate($months));

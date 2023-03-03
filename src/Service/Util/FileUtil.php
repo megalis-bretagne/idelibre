@@ -4,7 +4,7 @@ namespace App\Service\Util;
 
 class FileUtil
 {
-    public function deleteFileInDirectory(string $path)
+    public function deleteFileInDirectory(string $path): void
     {
         $handle = opendir($path);
         if (!$handle) {

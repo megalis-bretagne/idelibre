@@ -4,6 +4,7 @@ namespace App\Tests\Entity;
 
 use App\Entity\EmailTemplate;
 use App\Entity\Structure;
+use App\Service\EmailTemplate\EmailTemplateException;
 use App\Tests\FindEntityTrait;
 use App\Tests\HasValidationError;
 use App\Tests\Story\EmailTemplateStory;
@@ -150,5 +151,11 @@ class EmailTemplateTest extends WebTestCase
             ->setSubject($this->genString(256))
             ->setStructure(new Structure());
         $this->assertHasValidationErrors($emailTemplate, 1);
+    }
+
+
+    public function testInvalidFormat() {
+        $this->expectException(EmailTemplateException::class);
+        (new EmailTemplate())->setFormat('Do no exists');
     }
 }

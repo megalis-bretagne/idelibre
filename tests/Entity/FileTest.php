@@ -81,4 +81,16 @@ class FileTest extends WebTestCase
 
         $this->assertHasValidationErrors($file, 1);
     }
+
+    public function testGetCreatedAt()
+    {
+        $file = (new File())
+            ->setName('my new file.pdf')
+            ->setPath('/tmp/strucutre/file.pdf');
+
+        $this->assertNotNull($file->getCreatedAt());
+
+
+
+    }
 }
