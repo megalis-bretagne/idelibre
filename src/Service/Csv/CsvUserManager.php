@@ -63,8 +63,6 @@ class CsvUserManager
             if (!$this->isExistUsername($username, $structure)) {
                 $user = $this->createUserFromRecord($structure, $record);
 
-                $this->passwordInvalidator->prepareAndSendMailFromCSV($record, $structure->getReplyTo());
-
                 if ($this->isSecretaryOrAdmin($user)) {
                     $user->setSubscription($this->subscriptionManager->add($user));
                 }

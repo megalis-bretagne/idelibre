@@ -58,31 +58,10 @@ class PasswordInvalidator
         $this->emailService->sendBatch($emailsData);
     }
 
-    /**
-     * @param $record $user
-     * @param string $replyTo
-     * @return void
-     * @throws EmailNotSendException
-     */
-    public function prepareAndSendMailFromCSV($record, string $replyTo): void
-    {
-        $emailsData = [];
-
-        $subject = self::INVALIDATE_PASSWORD_SUBJECT;
-        $content = $this->getContentMail($record);
-        $emailData = new EmailData($subject, $content, EmailData::FORMAT_HTML);
-        $emailData->setTo($record[4]);
-        $emailData->setReplyTo($replyTo);
-        $emailsData[] = $emailData;
-
-
-        $this->emailService->sendBatch($emailsData);
-    }
-
     private function getContentMail($user): string
     {
-        $prenom = in_array($user[2], $user) ? $user[2] : $user->getFirstName();
-        $nom = in_array($user[3], $user) ? $user[3] : $user->getLastName();
+        $prenom = $user->getFirstName();
+        $nom = $user->getLastName();
         $productName = $this->bag->get('product_name');
 
         return <<<HTML
