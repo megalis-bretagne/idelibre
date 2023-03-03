@@ -97,7 +97,10 @@ class FileGenerator
     private function getFullSittingDocsPath(Sitting $sitting): array
     {
         $fullSittingDocsPath = [];
+
         $fullSittingDocsPath[] = $this->getConvocationPath($sitting);
+
+
 
         return [...$fullSittingDocsPath, ...$this->getProjectsAndAnnexesPath($sitting->getProjects())];
     }

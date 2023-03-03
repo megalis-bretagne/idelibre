@@ -37,7 +37,7 @@ class OtherdocManagerTest extends WebTestCase
         self::ensureKernelShutdown();
     }
 
-    public function testGetOtherdocFroSitting()
+    public function testGetOtherdocFromSitting()
     {
         $sitting = SittingStory::sittingConseilLibriciel()->object();
         $file = FileFactory::createOne([

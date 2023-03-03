@@ -52,6 +52,9 @@ final class SittingFactory extends ModelFactory
             'revision' => self::faker()->randomNumber(),
             'isArchived' => false,
             'isRemoteAllowed' => true,
+            'convocationFile' => FileFactory::new(
+                ['path' => '/tmp/convocation.pdf']
+            )
         ];
     }
 

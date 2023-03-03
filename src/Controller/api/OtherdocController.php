@@ -22,6 +22,7 @@ class OtherdocController extends AbstractController
     public function edit(Sitting $sitting, Request $request, SerializerInterface $serializer, OtherdocManager $otherdocManager, MessageBusInterface $messageBus, PdfValidator $pdfValidator): JsonResponse
     {
         $rawOtherdocs = $request->request->get('otherdocs');
+
         $otherdocs = $serializer->deserialize($rawOtherdocs, OtherdocApi::class . '[]', 'json');
 
         if (!$pdfValidator->isOtherdocsPdf($otherdocs)) {
@@ -34,14 +35,16 @@ class OtherdocController extends AbstractController
         }
 
         $otherdocManager->update($otherdocs, $request->files->all(), $sitting);
+
         $messageBus->dispatch(new UpdatedSitting($sitting->getId()));
+
 
         return $this->json(['success' => true]);
     }
 
     #[Route(path: '/api/otherdocs/{id}', name: 'api_otherdoc_get', methods: ['GET'])]
     #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
-    public function getOtherdocsFromSitting(Sitting $sitting, SerializerInterface $serializer, OtherdocManager $otherdocManager): JsonResponse
+    public function getOtherdocsFromSitting(Sitting $sitting, OtherdocManager $otherdocManager): JsonResponse
     {
         $otherdocsApi = $otherdocManager->getApiOtherdocsFromOtherdocs($otherdocManager->getOtherdocsFromSitting($sitting));
 
