@@ -74,7 +74,7 @@ class CreateSuperAdminCommand extends Command
             ->setRole($roleSuperAdmin)
             ->setPassword($this->passwordHasher->hashPassword($user, $password))
         ;
-        $this->userManager->save($user);
+        $this->userManager->save($user, '', null);
 
         $io->success(sprintf('L\'utilisateur "superadmin" a bien été enregistré avec le mot de passe : %s', $password));
 

@@ -102,6 +102,5 @@ final class UserStory extends Story
             'structure' => StructureStory::libriciel(),
             'role' => RoleStory::secretary(),
         ]));
-
     }
 }

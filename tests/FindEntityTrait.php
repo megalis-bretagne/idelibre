@@ -99,5 +99,4 @@ trait FindEntityTrait
     {
         return $this->getOneEntityBy(EventLog::class, $criteria);
     }
-
 }

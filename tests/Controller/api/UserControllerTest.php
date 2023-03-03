@@ -38,7 +38,6 @@ class UserControllerTest extends WebTestCase
         UserStory::actorLibriciel3();
         SittingStory::sittingConseilLibriciel();
         ConvocationStory::load();
-
     }
 
     public function testGetActors()

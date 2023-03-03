@@ -20,6 +20,5 @@ final class SubscriptionStory extends Story
             'acceptMailRecap' => false,
             'createdAt' => null,
         ]));
-
     }
 }

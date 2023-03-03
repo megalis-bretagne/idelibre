@@ -2,13 +2,11 @@
 
 namespace App\Tests\Twig;
 
-
 use App\Twig\AppExtension;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class AppExtensionTest extends WebTestCase
 {
-
     public function testFormatMinutesOrHours()
     {
         $appExtension = new AppExtension();

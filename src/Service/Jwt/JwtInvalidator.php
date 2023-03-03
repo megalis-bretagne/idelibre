@@ -2,6 +2,7 @@
 
 namespace App\Service\Jwt;
 
+use App\Entity\Structure;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use DateTime;
