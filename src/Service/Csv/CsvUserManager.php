@@ -4,6 +4,7 @@ namespace App\Service\Csv;
 
 use App\Entity\Role;
 use App\Entity\Structure;
+use App\Entity\Timezone;
 use App\Entity\Type;
 use App\Entity\User;
 use App\Repository\TypeRepository;
@@ -67,6 +68,7 @@ class CsvUserManager
                     continue;
                 }
 
+
                 if (!$user->getRole()) {
                     $errors[] = $this->missingRoleViolation($record);
                     continue;
@@ -76,10 +78,10 @@ class CsvUserManager
                     $errors[] = $errorCsv;
                     continue;
                 }
+
                 $csvEmails[] = $username;
                 $this->associateActorToTypeSeances($user, $record[7] ?? null, $structure);
                 $this->em->persist($user);
-
                 $this->em->flush();
             }
         }

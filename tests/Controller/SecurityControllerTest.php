@@ -42,7 +42,6 @@ class SecurityControllerTest extends WebTestCase
         $this->client = static::createClient();
 
         $this->legacyPassword = self::getContainer()->get(LegacyPassword::class);
-
     }
 
     public function testImpersonateAS()

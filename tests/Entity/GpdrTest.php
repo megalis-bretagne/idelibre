@@ -8,7 +8,7 @@ use App\Tests\StringTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class GdprTest extends WebTestCase
+class GpdrTest extends WebTestCase
 {
     use HasValidationError;
     use StringTrait;
@@ -30,7 +30,7 @@ class GdprTest extends WebTestCase
 
     public function testInvalidAddressTooLong()
     {
-        $file = (new \App\Entity\Gdpr\GdprHosting())
+        $file = (new GdprHosting())
             ->setAddress($this->genString(515));
 
         $this->assertHasValidationErrors($file, 1);

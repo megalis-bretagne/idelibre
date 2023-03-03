@@ -60,7 +60,7 @@ class AdminControllerTest extends WebTestCase
         $this->assertCount(1, $successMsg);
 
 
-        $this->assertEmpty( $superadmin->getId());
+        $this->assertEmpty($superadmin->getId());
     }
 
     public function testDeleteYourself()
