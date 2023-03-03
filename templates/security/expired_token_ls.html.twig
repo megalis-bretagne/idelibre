@@ -1,0 +1,26 @@
+{% extends 'base_login.html.twig' %}
+
+{% block body %}
+
+    <div class="form-side">
+        <div class="form-content" style="width: 600px">
+            <div class="soft-logo">
+                <img id="libriciel-logo" alt="Image du Libriciel"
+                     height="10" width="10"
+                     src="{{ asset('assets/img/application_logo.svg') }}">
+            </div>
+
+            <section>
+                <h1 class="page-title">Lien de reinitialisation expiré</h1>
+
+                    <div class="mt-5">
+                        <a href="{{ path('app_forget') }}"> Votre Lien a expiré, cliquez ici pour demander un nouveau lien de reinitialisation du mot de passe de votre compte </a>
+                    </div>
+
+
+
+            </section>
+        </div>
+    </div>
+
+{% endblock %}

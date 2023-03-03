@@ -18,7 +18,7 @@
                 {% endfor %}
 
                 {% for message in app.flashes('error') %}
-                    <div class="alert alert-danger mt-3"><i class="fa fa-exclamation-triangle"></i> {{ message }}
+                    <div class="alert alert-danger mt-3"><i class="fa fa-exclamation-triangle"></i> {{ message |nl2br }}
                     </div>
                 {% endfor %}
 
