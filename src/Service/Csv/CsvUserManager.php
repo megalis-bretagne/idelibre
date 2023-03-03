@@ -33,23 +33,19 @@ class CsvUserManager
         private ValidatorInterface $validator,
         private UserRepository $userRepository,
         private TypeRepository $typeRepository,
-//        private UserPasswordHasherInterface $passwordHasher,
         private RoleManager $roleManager,
         private SubscriptionManager $subscriptionManager,
-        private PasswordInvalidator $passwordInvalidator
     ) {
     }
 
     /**
      * @return ConstraintViolationListInterface[]
-     * @throws EmailNotSendException
      */
     public function importUsers(UploadedFile $file, Structure $structure): array
     {
         $errors = [];
         $csvEmails = [];
 
-        /** @var Reader $csv */
         $csv = Reader::createFromPath($file->getRealPath(), 'r');
         $records = $csv->getRecords();
 
@@ -84,7 +80,7 @@ class CsvUserManager
                 }
 
                 $csvEmails[] = $username;
-                $this->associateActorToTypeSeances($user, $record[7] ?? null, $structure);
+                $this->associateActorToTypeSeances($user, $record[6] ?? null, $structure);
                 $this->em->persist($user);
                 $this->em->flush();
             }
@@ -97,7 +93,7 @@ class CsvUserManager
 
     private function isMissingFields(array $record): bool
     {
-        return 7 > count($record);
+        return 6 > count($record);
     }
 
     private function isSecretaryOrAdmin(User $user): bool
@@ -116,7 +112,7 @@ class CsvUserManager
     private function missingFieldViolation($record): ConstraintViolationList
     {
         $violation = new ConstraintViolation(
-            'Chaque ligne doit contenir 7 champs séparés par des virgules.',
+            'Chaque ligne doit contenir 6 champs séparés par des virgules.',
             null,
             $record,
             null,
@@ -220,22 +216,12 @@ class CsvUserManager
             ->setFirstName($this->sanitize($record[2] ?? ''))
             ->setLastName($this->sanitize($record[3] ?? ''))
             ->setEmail($this->sanitize($record[4] ?? ''))
-            ->setPassword($this->getPassword($user, $record[5] ?? ''))
-            ->setRole($this->getRoleFromCode(intval($record[6] ?? 0)))
+            ->setPassword("CHANGEZ-MOI")
+            ->setRole($this->getRoleFromCode(intval($record[5] ?? 0)))
             ->setGender($this->getGenderCode(intval($record[0] ?? 0)))
             ->setStructure($structure);
 
         return $user;
-    }
-
-    private function getPassword(User $user, string $plainPassword): string
-    {
-        $sanitizedPassword = $this->sanitize($plainPassword);
-        if (0 === strlen($sanitizedPassword)) {
-            return 'NotInitialized';
-        }
-        return self::INVALID_PASSWORD;
-//        return $this->passwordHasher->hashPassword($user, $sanitizedPassword);
     }
 
     private function getGenderCode(?int $code): ?int
