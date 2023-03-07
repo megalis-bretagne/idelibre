@@ -64,6 +64,7 @@ class EmailTemplateType extends AbstractType
         ])
             ->add('content', TextareaType::class, [
                 'sanitize_html' => true,
+                'sanitizer' => 'emailtemplate_content',
                 'label' => 'Contenu',
                 'attr' => ['rows' => 15],
             ]);

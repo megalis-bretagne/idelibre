@@ -1,0 +1,7 @@
+# config/packages/html_sanitizer.yaml
+framework:
+  html_sanitizer:
+    sanitizers:
+      emailtemplate_content:
+        allow_safe_elements: true
+        allow_relative_links: true
