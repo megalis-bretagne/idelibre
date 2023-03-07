@@ -12,13 +12,13 @@ final class ConfigurationStory extends Story
         $this->addState('configurationLibriciel', ConfigurationFactory::new([
             'structure' => StructureStory::libriciel(),
             'isSharedAnnotation' => true,
-            'minimumEntropy' => 80,
+            'minimumEntropy' => 82,
         ]));
 
         $this->addState('configurationMontpellier', ConfigurationFactory::new([
             'structure' => StructureStory::montpellier(),
             'isSharedAnnotation' => true,
-            'minimumEntropy' => 80,
+            'minimumEntropy' => 82,
         ]));
 
         // TODO build your story here (https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#stories)
