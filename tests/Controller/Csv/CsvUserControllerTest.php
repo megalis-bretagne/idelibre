@@ -82,38 +82,6 @@ class CsvUserControllerTest extends WebTestCase
         $this->assertSame(2, $employee->getGender());
     }
 
-    public function testImportUsersBlankPassword()
-    {
-        $csvFile = new UploadedFile(__DIR__ . '/../../resources/user_blank_password.csv', 'user.csv');
-        $this->assertNotEmpty($csvFile);
-
-        $this->loginAsAdminLibriciel();
-        $crawler = $this->client->request(Request::METHOD_GET, '/csv/importUsers');
-        $this->assertResponseStatusCodeSame(200);
-        $item = $crawler->filter('html:contains("Importer des utilisateurs via csv")');
-        $this->assertCount(1, $item);
-
-        $form = $crawler->selectButton('Enregistrer')->form();
-
-        $form['csv[csv]'] = $csvFile;
-
-        $this->client->submit($form);
-
-        $this->assertTrue($this->client->getResponse()->isRedirect());
-
-        $crawler = $this->client->followRedirect();
-        $this->assertResponseStatusCodeSame(200);
-
-        $successMsg = $crawler->filter('html:contains("Fichier csv importé avec succès")');
-        $this->assertCount(1, $successMsg);
-
-        /** @var User $user */
-        $user = $this->getOneEntityBy(User::class, ['username' => 'e.dupont@libriciel']);
-        $this->assertNotEmpty($user);
-
-        $this->assertSame('NotInitialized', $user->getPassword());
-    }
-
     public function testImportUsersMissingEmail()
     {
         $csvFile = new UploadedFile(__DIR__ . '/../../resources/user_email_missing.csv', 'user.csv');
@@ -170,7 +138,7 @@ class CsvUserControllerTest extends WebTestCase
         $title = $crawler->filter('html:contains("Erreurs lors de l\'import")');
         $this->assertCount(1, $title);
 
-        $errorMsg = $crawler->filter('html:contains("Chaque ligne doit contenir 7 champs séparés par des virgules.")');
+        $errorMsg = $crawler->filter('html:contains("Chaque ligne doit contenir 6 champs séparés par des virgules.")');
         $this->assertCount(1, $errorMsg);
     }
 

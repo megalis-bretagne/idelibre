@@ -9,14 +9,15 @@ use App\Entity\Type;
 use App\Entity\User;
 use App\Repository\TypeRepository;
 use App\Repository\UserRepository;
+use App\Service\Email\EmailNotSendException;
 use App\Service\role\RoleManager;
 use App\Service\Subscription\SubscriptionManager;
+use App\Service\User\PasswordInvalidator;
 use App\Service\Util\GenderConverter;
 use Doctrine\ORM\EntityManagerInterface;
 use ForceUTF8\Encoding;
 use League\Csv\Reader;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
@@ -25,15 +26,15 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class CsvUserManager
 {
     public const TYPE_SEPARATOR = '|';
+    public const INVALID_PASSWORD = 'CHANGEZMOI';
 
     public function __construct(
         private EntityManagerInterface $em,
         private ValidatorInterface $validator,
         private UserRepository $userRepository,
         private TypeRepository $typeRepository,
-        private UserPasswordHasherInterface $passwordHasher,
         private RoleManager $roleManager,
-        private SubscriptionManager $subscriptionManager
+        private SubscriptionManager $subscriptionManager,
     ) {
     }
 
@@ -45,7 +46,6 @@ class CsvUserManager
         $errors = [];
         $csvEmails = [];
 
-        /** @var Reader $csv */
         $csv = Reader::createFromPath($file->getRealPath(), 'r');
         $records = $csv->getRecords();
 
@@ -80,7 +80,7 @@ class CsvUserManager
                 }
 
                 $csvEmails[] = $username;
-                $this->associateActorToTypeSeances($user, $record[7] ?? null, $structure);
+                $this->associateActorToTypeSeances($user, $record[6] ?? null, $structure);
                 $this->em->persist($user);
                 $this->em->flush();
             }
@@ -89,9 +89,11 @@ class CsvUserManager
         return $errors;
     }
 
+
+
     private function isMissingFields(array $record): bool
     {
-        return 7 > count($record);
+        return 6 > count($record);
     }
 
     private function isSecretaryOrAdmin(User $user): bool
@@ -110,7 +112,7 @@ class CsvUserManager
     private function missingFieldViolation($record): ConstraintViolationList
     {
         $violation = new ConstraintViolation(
-            'Chaque ligne doit contenir 7 champs séparés par des virgules.',
+            'Chaque ligne doit contenir 6 champs séparés par des virgules.',
             null,
             $record,
             null,
@@ -214,22 +216,12 @@ class CsvUserManager
             ->setFirstName($this->sanitize($record[2] ?? ''))
             ->setLastName($this->sanitize($record[3] ?? ''))
             ->setEmail($this->sanitize($record[4] ?? ''))
-            ->setPassword($this->getPassword($user, $record[5] ?? ''))
-            ->setRole($this->getRoleFromCode(intval($record[6] ?? 0)))
+            ->setPassword("CHANGEZ-MOI")
+            ->setRole($this->getRoleFromCode(intval($record[5] ?? 0)))
             ->setGender($this->getGenderCode(intval($record[0] ?? 0)))
             ->setStructure($structure);
 
         return $user;
-    }
-
-    private function getPassword(User $user, string $plainPassword): string
-    {
-        $sanitizedPassword = $this->sanitize($plainPassword);
-        if (0 === strlen($sanitizedPassword)) {
-            return 'NotInitialized';
-        }
-
-        return $this->passwordHasher->hashPassword($user, $sanitizedPassword);
     }
 
     private function getGenderCode(?int $code): ?int
