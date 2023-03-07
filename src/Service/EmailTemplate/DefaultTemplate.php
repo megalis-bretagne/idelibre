@@ -11,11 +11,11 @@ class DefaultTemplate
         <br>
         <br>
         Pour télécharger les documents relatifs à la séance et vous y connecter veuillez vous rendre à cette adresse : 
-        <a href=#urlseance#>#urlseance#</a>
+        <a href='#urlseance#'>#urlseance#</a>
         <br>
         <br>
         Pour préciser votre participation, veuillez vous rendre à cette adresse : 
-        <a href=#urlpresence#>#urlpresence#</a>
+        <a href='#urlpresence#'>#urlpresence#</a>
         <br>
         <br>
         
@@ -28,7 +28,7 @@ class DefaultTemplate
         Vous êtes invité(e) au #typeseance# en date du #dateseance# à #heureseance# qui se déroulera #lieuseance#.
         <br>
         <br>
-        Pour vous connecter à la séance, veuillez vous rendre à l'adresse suivante : #urlseance#
+        Pour vous connecter à la séance, veuillez vous rendre à l'adresse suivante : <a href='#urlseance#'>#urlseance#</a>
         <br>
         <br>
         Cordialement,"

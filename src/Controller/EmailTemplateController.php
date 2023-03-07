@@ -13,6 +13,7 @@ use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HtmlSanitizer\HtmlSanitizerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -125,7 +126,7 @@ class EmailTemplateController extends AbstractController
 
         $emailData = $generator->generateFromTemplate($emailTemplate, [
             '#linkUrl#' => '<a href="#">Accéder aux dossiers</a>',
-            '#urlseance#' => '<a href="#">idelibre.example.fr/idelibre_client</a>',
+            '#urlseance#' => '<a href="#">https://idelibre.example.fr/idelibre_client</a>',
             '#reinitLink#' => '<a href="#">Réinitialiser le mot de passe</a>',
             '#typeseance#' => 'Conseil municipal',
             '#dateseance#' => '05/12/2020',
@@ -136,6 +137,7 @@ class EmailTemplateController extends AbstractController
             '#titre#' => 'Monsieur le Maire',
             '#civilite#' => 'Monsieur',
             '#recapitulatif#' => $recapitulatif,
+            '#urlpresence#' => '<a href="#">https://idelibre.example.fr/attendance/confirmation/828f33553de56813961a5c5fea8eee674b8499e8549a6a23d686d26652cb68acce7ae56288ac757d10a330a497d3643b6f3ee153ae0969c511945128</a>',
         ]);
         $content = $emailData->getContent();
         if (EmailData::FORMAT_TEXT === $emailData->getFormat()) {
