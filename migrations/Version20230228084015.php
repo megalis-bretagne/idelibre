@@ -20,7 +20,7 @@ final class Version20230228084015 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE configuration ADD minimum_entropy INT DEFAULT 80 NOT NULL');
+        $this->addSql('ALTER TABLE configuration ADD minimum_entropy INT DEFAULT 82 NOT NULL');
         $this->addSql('ALTER TABLE structure DROP minimum_entropy');
     }
 
@@ -28,7 +28,7 @@ final class Version20230228084015 extends AbstractMigration
     {
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE SCHEMA public');
-        $this->addSql('ALTER TABLE structure ADD minimum_entropy INT DEFAULT 80 NOT NULL');
+        $this->addSql('ALTER TABLE structure ADD minimum_entropy INT DEFAULT 82 NOT NULL');
         $this->addSql('ALTER TABLE configuration DROP minimum_entropy');
     }
 }

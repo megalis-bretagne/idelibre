@@ -32,7 +32,7 @@ class Configuration
     private ?string $sittingSuppressionDelay = '100 years';
 
     #[Column(type: 'integer', unique: false, nullable: false, options: ['default' => 80])]
-    private $minimumEntropy = 80;
+    private $minimumEntropy = 82;
 
     public function getId(): ?string
     {
