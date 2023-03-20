@@ -4,6 +4,13 @@ services:
     autowire: true
     autoconfigure: true
 
+  Libriciel\ComelusApiWrapper\ComelusWrapper:
+    public: true
+    autowire: true
+    autoconfigure: true
 
-
+  Libriciel\LsMessageWrapper\LsMessageWrapper:
+    public: true
+    autowire: true
+    autoconfigure: true
 
