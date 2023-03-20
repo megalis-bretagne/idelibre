@@ -2,11 +2,14 @@
 
 namespace App\Tests\Service\Connector;
 
+use App\Entity\Connector\LsmessageConnector;
 use App\Repository\Connector\LsmessageConnectorRepository;
 use App\Service\Connector\LsmessageConnectorManager;
 use App\Tests\Story\LsmessageConnectorStory;
 use App\Tests\Story\StructureStory;
 use Doctrine\ORM\EntityManagerInterface;
+use Libriciel\LsMessageWrapper\LsMessageException;
+use Libriciel\LsMessageWrapper\LsMessageWrapper;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Zenstruck\Foundry\Test\Factories;
@@ -29,22 +32,49 @@ class LsmessageConnectorManagerTest extends WebTestCase
             ->get('doctrine')
             ->getManager();
 
-        $container = self::getContainer();
-
-        $this->lsmessageConnectorManager = self::getContainer()->get(LsmessageConnectorManager::class);
         $this->lsmessageConnectorRepository = self::getContainer()->get(LsmessageConnectorRepository::class);
 
         self::ensureKernelShutdown();
     }
 
+
     public function testCheckApiKey()
     {
-        $url = 'https://lsmessage.recette.libriciel.fr';
-        $apiKey = '8da45828bb71ba4d677e8a1fb7f8b07216695641e90413e001699b87c42ae103a5c08b477270ca2ed98064e13c20d89c88ddae0a61dbdb55885e6e74';
+        $lsmessageWrapperMock = $this->getMockBuilder(LsMessageWrapper::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $checked = $this->lsmessageConnectorManager->checkApiKey($url, $apiKey);
+        $lsmessageWrapperMock->method('setUrl')->willReturn(null);
+        $lsmessageWrapperMock->method('setApiKey')->willReturn(null);
+
+        self::getContainer()->set(LsMessageWrapper::class, $lsmessageWrapperMock);
+        $lsmessageConnectorManager = self::getContainer()->get(LsmessageConnectorManager::class);
+
+        $url = 'https://lsmessage.fr';
+        $apiKey = '8da458285e6e74';
+
+        $checked = $lsmessageConnectorManager->checkApiKey($url, $apiKey);
         $this->assertIsArray($checked);
-        $this->assertNotEmpty($checked);
+    }
+
+    public function testCheckApiKeyNull()
+    {
+        $lsmessageWrapperMock = $this->getMockBuilder(LsMessageWrapper::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $lsmessageWrapperMock->method('setUrl')->willReturn(null);
+        $lsmessageWrapperMock->method('setApiKey')->willThrowException(new LsMessageException("error"));
+
+        self::getContainer()->set(LsMessageWrapper::class, $lsmessageWrapperMock);
+        $lsmessageConnectorManager = self::getContainer()->get(LsmessageConnectorManager::class);
+
+
+        $url = 'https://lsmessage.fr';
+        $apiKey = '8da458285e6e74';
+
+        $checked = $lsmessageConnectorManager->checkApiKey($url, $apiKey);
+        $this->assertNull($checked);
     }
 
     public function testGetLsmessageConnector()
@@ -52,6 +82,7 @@ class LsmessageConnectorManagerTest extends WebTestCase
         $structure = StructureStory::libriciel()->object();
         $lsmessageConnector = LsmessageConnectorStory::lsmessageConnectorLibriciel()->object();
 
+        $this->lsmessageConnectorManager = self::getContainer()->get(LsmessageConnectorManager::class);
         $connector = $this->lsmessageConnectorManager->getLsmessageConnector($structure);
 
         $this->assertSame($lsmessageConnector->getStructure()->getName(), $connector->getStructure()->getName());

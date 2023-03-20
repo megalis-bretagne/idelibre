@@ -15,8 +15,12 @@ class UserChecker implements UserCheckerInterface
             return;
         }
 
-        if (false === $user->getIsActive()) {
-            throw new CustomUserMessageAccountStatusException('Your user account no longer exists.');
+        if (!$user->getIsActive()) {
+            throw new CustomUserMessageAccountStatusException('Votre compte utilisateur est désactivé');
+        }
+
+        if($user->getStructure() && !$user->getStructure()->getIsActive()) {
+            throw new CustomUserMessageAccountStatusException('La structure de votre utilisateur a été désactivée');
         }
     }
 

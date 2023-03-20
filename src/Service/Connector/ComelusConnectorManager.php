@@ -95,6 +95,8 @@ class ComelusConnectorManager
         $this->comelusWrapper->setApiKey($comelusConnetor->getApiKey());
         $this->comelusWrapper->setUrl($comelusConnetor->getUrl());
 
+
+
         $response = $this->comelusWrapper->createDocument(
             $this->getDocumentName($sitting),
             $comelusConnetor->getMailingListId(),

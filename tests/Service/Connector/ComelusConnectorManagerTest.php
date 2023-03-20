@@ -12,6 +12,8 @@ use App\Tests\Story\StructureStory;
 use App\Tests\Story\TypeStory;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Libriciel\ComelusApiWrapper\ComelusException;
+use Libriciel\ComelusApiWrapper\ComelusWrapper;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Filesystem\Filesystem;
@@ -37,9 +39,6 @@ class ComelusConnectorManagerTest extends WebTestCase
             ->get('doctrine')
             ->getManager();
 
-        $container = self::getContainer();
-
-        $this->comelusConnectorManager = self::getContainer()->get(ComelusConnectorManager::class);
         $this->comelusConnectorRepository = self::getContainer()->get(ComelusConnectorRepository::class);
 
         self::ensureKernelShutdown();
@@ -49,25 +48,75 @@ class ComelusConnectorManagerTest extends WebTestCase
     {
         $structure = StructureStory::libriciel()->object();
 
+        $this->comelusConnectorManager = self::getContainer()->get(ComelusConnectorManager::class);
         $created = $this->comelusConnectorManager->isAlreadyCreated($structure);
         $this->assertFalse($created);
     }
 
     public function testCheckApiKey()
     {
-        $url = 'https://comelus.dev.libriciel.net';
-        $apiKey = 'a997931d6491b4c393be737bdcbdb7eb6db76d07fd92f85acacff81962ce5c3d4ca73b1f65c434deca72873f0c0a1a83f60cf22772bb210ba620a4d4';
+        $comelusWrapperMock = $this->getMockBuilder(ComelusWrapper::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $checked = $this->comelusConnectorManager->checkApiKey($url, $apiKey);
+        $comelusWrapperMock->method('setApiKey')->willReturn(null);
+        $comelusWrapperMock->method('setUrl')->willReturn(null);
+        $comelusWrapperMock->method('check')->willReturn([]);
+
+        $container = self::getContainer();
+        $container->set(ComelusWrapper::class, $comelusWrapperMock);
+
+        $comelusConnectorManager = $container->get(ComelusConnectorManager::class);
+
+
+        $url = 'https://comelus.dev.libriciel.net';
+        $apiKey = 'a772bb210ba620a4d4';
+
+        $checked = $comelusConnectorManager->checkApiKey($url, $apiKey);
         $this->assertTrue($checked);
+    }
+
+
+
+    public function testCheckApiKeyFalse()
+    {
+        $comelusWrapperMock = $this->getMockBuilder(ComelusWrapper::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $comelusWrapperMock->method('setApiKey')->willReturn(null);
+        $comelusWrapperMock->method('setUrl')->willThrowException(new ComelusException("bad url format"));
+        $comelusWrapperMock->method('check')->willReturn([]);
+
+        $container = self::getContainer();
+        $container->set(ComelusWrapper::class, $comelusWrapperMock);
+
+        $comelusConnectorManager = $container->get(ComelusConnectorManager::class);
+
+        $url = 'https://comelus.dev.libriciel.net';
+        $apiKey = 'a772bb210ba620a4d4';
+
+        $checked = $comelusConnectorManager->checkApiKey($url, $apiKey);
+        $this->assertFalse($checked);
     }
 
     public function testGetMailingList()
     {
-        $url = 'https://comelus.dev.libriciel.net';
-        $apiKey = 'a997931d6491b4c393be737bdcbdb7eb6db76d07fd92f85acacff81962ce5c3d4ca73b1f65c434deca72873f0c0a1a83f60cf22772bb210ba620a4d4';
+        $comelusWrapperMock = $this->getMockBuilder(ComelusWrapper::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $mailingListArray = $this->comelusConnectorManager->getMailingLists($url, $apiKey);
+        $comelusWrapperMock->method('getMailingLists')->willReturn([]);
+
+        $container = self::getContainer();
+        $container->set(ComelusWrapper::class, $comelusWrapperMock);
+
+        $comelusConnectorManager = $container->get(ComelusConnectorManager::class);
+
+        $url = 'https://comelus.dev.libriciel.net';
+        $apiKey = 'a997931df22772bb210ba620a4d4';
+
+        $mailingListArray = $comelusConnectorManager->getMailingLists($url, $apiKey);
 
         $this->assertIsArray($mailingListArray);
     }
@@ -80,6 +129,7 @@ class ComelusConnectorManagerTest extends WebTestCase
             'structure' => $structure,
             'date' => new \DateTime('now'),
         ])->object();
+        $this->comelusConnectorManager = self::getContainer()->get(ComelusConnectorManager::class);
 
         $this->expectException(BadRequestHttpException::class);
         $this->comelusConnectorManager->sendComelus($sitting);
@@ -87,12 +137,23 @@ class ComelusConnectorManagerTest extends WebTestCase
 
     public function testSendComelus()
     {
+        $comelusWrapperMock = $this->getMockBuilder(ComelusWrapper::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $comelusWrapperMock->method('createDocument')->willReturn(['id'=>'286bf9f6-668f-4724-a2b8-aab79048950b']);
+
+        $container = self::getContainer();
+        $container->set(ComelusWrapper::class, $comelusWrapperMock);
+        $comelusConnectorManager = $container->get(ComelusConnectorManager::class);
+
         $uuid_regex = ' ^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}^ ';
 
         $filesystem = new Filesystem();
-        $filesystem->copy('tests/resources/fichier.pdf', 'tests/resources/fichier.pdf');
 
-        $fileProject1 = new UploadedFile('tests/resources/fichier.pdf', 'fichier.pdf', 'application/pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', 'tests/resources/fichier.pdf');
+
+        $fileProject1 = new UploadedFile(__DIR__ . '/../../resources/fichier.pdf', 'fichier.pdf', 'application/pdf');
 
         $file1 = FileFactory::createOne([
             'name' => 'Convocation',
@@ -112,14 +173,14 @@ class ComelusConnectorManagerTest extends WebTestCase
         ComelusConnectorFactory::createOne([
             'structure' => $structure,
             'url' => 'https://comelus.dev.libriciel.net',
-            'apiKey' => 'a997931d6491b4c393be737bdcbdb7eb6db76d07fd92f85acacff81962ce5c3d4ca73b1f65c434deca72873f0c0a1a83f60cf22772bb210ba620a4d4',
+            'apiKey' => 'dsfdsdsfdsfdsfdsf',
             'active' => true,
             'description' => 'lorem ipsum',
             'mailingListId' => '3017fc63-7bca-4020-a51d-1daa760baf18',
         ]);
 
         $this->comelusConnectorRepository->findOneBy(['structure' => $structure]);
-        $comelusId = $this->comelusConnectorManager->sendComelus($sitting);
+        $comelusId = $comelusConnectorManager->sendComelus($sitting);
 
         $this->assertTrue(is_string($comelusId) && preg_match($uuid_regex, $comelusId));
     }
