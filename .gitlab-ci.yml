@@ -4,7 +4,7 @@ include:
     file: '/publish-container-to-registry.yml'
 
   - project: "libriciel/integration-continue/templates"
-    ref:  security-check-1.0.0
+    ref:  security-check@1.2.1
     file: 'jobs/security-check/security-check.yml'
 
   - project: "libriciel/integration-continue/templates"
