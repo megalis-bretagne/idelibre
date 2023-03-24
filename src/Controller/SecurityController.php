@@ -157,7 +157,7 @@ class SecurityController extends AbstractController
             $success = $resetPassword->setNewPassword($user, $form->get('plainPassword')->getData());
 
             if (true === $success) {
-                $this->addFlash('success', 'Modifiée avec succès');
+                $this->addFlash('success', 'Modifié avec succès');
 
                 return $this->redirectToRoute('app_login');
             }
