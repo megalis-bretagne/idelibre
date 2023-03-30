@@ -114,7 +114,7 @@ services:
 
 
   ofelia:
-    image: mcuadros/ofelia:latest
+    image: mcuadros/ofelia:v0.3.7
     depends_on:
       - fpm-idelibre
     command: daemon --docker
