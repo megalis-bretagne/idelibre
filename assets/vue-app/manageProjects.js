@@ -68,18 +68,18 @@ let app = new Vue({
                     size:event.target.files[i].size,
                 };
                 project.file.size > this.fileMaxSize ? this.showMessageError(`La taille du fichier ne doit pas dépasser les 200Mo. Taille actuelle de votre ficher : ${this.formatSize(project.file.size)}`) :
+                this.totalFileSize > this.maxSize ? this.showMessageError(`Le poids de la séance ne doit dépasser les ${this.formatSize(this.maxSize)}`) :
                 this.projects.push(project);
             }
             this.totalFileSize = getFilesWeight(this.projects)
             isDirty = true;
-            setFileTooBig(this.totalFileSize, this.maxSize, this.fileTooBig);
+
         },
 
         removeProject(index) {
             this.projects.splice(index, 1);
             this.totalFileSize = getFilesWeight(this.projects)
             isDirty = true;
-            setFileTooBig(this.totalFileSize, this.maxSize, this.fileTooBig);
         },
 
         addAnnexes(event, project) {
@@ -92,19 +92,18 @@ let app = new Vue({
                     id: null,
                     size:event.target.files[i].size
                 };
-                annex.file.size > this.fileMaxSize ? this.showMessageError(`La taille du fichier ne doit pas dépasser les 200Mo. Taille actuelle de votre ficher : ${this.formatSize(annex.file.size)}`) :
+                annex.file.size > this.fileMaxSize ? this.showMessageError(`La taille du fichier ne doit pas dépasser les 200Mo. Taille actuelle de votre ficher : ${this.formatSize(annex.file.size)}`):
+                this.totalFileSize > this.maxSize ? this.showMessageError(`Le poids de la séance ne doit dépasser les ${this.formatSize(this.maxSize)}`) :
                 project.annexes.push(annex);
             }
             this.totalFileSize = getFilesWeight(this.projects)
             isDirty = true;
-            setFileTooBig(this.totalFileSize, this.maxSize, this.fileTooBig);
         },
 
         deleteAnnex(annexes, index) {
             annexes.splice(index, 1);
             this.totalFileSize = getFilesWeight(this.projects)
             isDirty = true;
-            setFileTooBig(this.totalFileSize, this.maxSize, this.fileTooBig);
         },
 
         addOtherdoc(event) {
@@ -123,14 +122,12 @@ let app = new Vue({
             }
             this.otherdocsTotalFileSize = getOtherdocsFilesWeight(this.otherdocs)
             isDirty = true;
-            setFileTooBig(this.totalFileSize, this.maxSize, this.fileTooBig);
         },
 
         removeOtherdoc(index) {
             this.otherdocs.splice(index, 1);
             this.otherdocsTotalFileSize = getOtherdocsFilesWeight(this.otherdocs)
             isDirty = true;
-            setFileTooBig(this.totalFileSize, this.maxSize, this.fileTooBig);
         },
 
         save() {
@@ -146,6 +143,7 @@ let app = new Vue({
 
             let formDataDocs = new FormData();
             addOtherdocFiles(this.otherdocs, formDataDocs);
+            setOtherdocsRank(this.otherdocs);
             formDataDocs.append('otherdocs', JSON.stringify(this.otherdocs));
 
 
@@ -358,6 +356,14 @@ function setAnnexesRank(annexes) {
         annexes[i].rank = i;
     }
 }
+
+function setOtherdocsRank(otherdocs) {
+    for (let i = 0; i < otherdocs.length; i++) {
+        otherdocs[i].rank = i;
+    }
+}
+
+
 
 
 let isDirty = false;
