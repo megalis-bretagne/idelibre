@@ -12,6 +12,7 @@ use App\Service\Configuration\ConfigurationManager;
 use App\Service\Connector\ComelusConnectorManager;
 use App\Service\Connector\LsmessageConnectorManager;
 use App\Service\EmailTemplate\DefaultTemplateCreator;
+use App\Service\Subscription\SubscriptionManager;
 use App\Service\Theme\ThemeManager;
 use App\Service\User\UserManager;
 use Doctrine\DBAL\ConnectionException;
@@ -29,6 +30,7 @@ class StructureCreator
         private readonly DefaultTemplateCreator $defaultTemplateCreator,
         private readonly ConfigurationManager $configurationManager,
         private readonly ResetPassword $resetPassword,
+        private readonly SubscriptionManager $subscriptionManager,
     ) {
     }
 
@@ -56,6 +58,9 @@ class StructureCreator
 
         $this->initConfig($structure);
         $this->em->flush();
+
+        $subscription = $this->subscriptionManager->add($user);
+        $this->subscriptionManager->save($subscription);
 
         $this->em->getConnection()->commit();
 
