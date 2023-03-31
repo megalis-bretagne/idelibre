@@ -146,7 +146,6 @@ let app = new Vue({
 
             let formDataDocs = new FormData();
             addOtherdocFiles(this.otherdocs, formDataDocs);
-            setOtherdocsRank(this.otherdocs);
             formDataDocs.append('otherdocs', JSON.stringify(this.otherdocs));
 
 
@@ -191,7 +190,6 @@ let app = new Vue({
 
         move(fromIndex, toIndex) {
             arrayMove(this.projects, fromIndex, toIndex);
-            arrayMove(this.otherdocs, fromIndex, toIndex)
         },
 
         cancel() {
@@ -361,11 +359,6 @@ function setAnnexesRank(annexes) {
     }
 }
 
-function setOtherdocsRank(otherdocs) {
-    for (let i = 0; i < otherdocs.length; i++) {
-        otherdocs[i].rank = i;
-    }
-}
 
 let isDirty = false;
 
