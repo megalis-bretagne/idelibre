@@ -227,13 +227,9 @@
             </button>
 
 
-            <button v-if="sittingTooBig === true" class="btn btn-warning" @click="save()">
+            <button class="btn btn-primary" @click="save()" id="save-sitting">
                 <span class="fa fa-save"></span>
-                Impossible d'enregistrer
-            </button>
-            <button v-else class="btn btn-primary" @click="save()">
-                <span class="fa fa-save"></span>
-                Enregistrer les modifications plop
+                Enregistrer les modifications
             </button>
 
 

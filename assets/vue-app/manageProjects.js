@@ -77,7 +77,7 @@ let app = new Vue({
             this.totalFileSize = getFilesWeight(this.projects);
             this.totalFileSize > this.maxGenerationSize ? this.fileTooBig = true: this.fileTooBig = false ;
             console.log(this.sittingTooBig)
-            this.sittingTooBig === true ? document.querySelector('#save-sitting').disabled = true : console.log('ok');
+            this.totalSittingSize < this.totalFileSize + this.otherdocsTotalFileSize ? document.querySelector('#save-sitting').disabled = true : console.log('ok');
             isDirty = true;
 
         },
@@ -86,6 +86,10 @@ let app = new Vue({
             this.projects.splice(index, 1);
             this.totalFileSize = getFilesWeight(this.projects)
             this.totalFileSize > this.maxGenerationSize ? this.fileTooBig = true: this.fileTooBig = false ;
+            if(this.totalSittingSize < this.totalFileSize + this.otherdocsTotalFileSize){
+                this.showMessageError("le poids de la séance dépasse les 2Go, elle ne pourra pas être enregistrée. Veuillez réduire le poids de vos pdf.")
+                document.querySelector('#save-sitting').disabled = true
+            }
             isDirty = true;
         },
 
@@ -104,6 +108,11 @@ let app = new Vue({
             }
             this.totalFileSize = getFilesWeight(this.projects)
             this.totalFileSize > this.maxGenerationSize ? this.fileTooBig = true: this.fileTooBig = false ;
+
+            if(this.totalSittingSize < this.totalFileSize + this.otherdocsTotalFileSize){
+                this.showMessageError("le poids de la séance dépasse les 2Go, elle ne pourra pas être enregistrée. Veuillez réduire le poids de vos pdf.")
+                document.querySelector('#save-sitting').disabled = true
+            }
             isDirty = true;
         },
 
@@ -111,6 +120,7 @@ let app = new Vue({
             annexes.splice(index, 1);
             this.totalFileSize = getFilesWeight(this.projects)
             this.totalFileSize > this.maxGenerationSize ? this.fileTooBig = true: this.fileTooBig = false ;
+            this.totalSittingSize < this.totalFileSize + this.otherdocsTotalFileSize ? document.querySelector('#save-sitting').disabled = true : console.log('ok');
             isDirty = true;
         },
 
@@ -129,12 +139,14 @@ let app = new Vue({
                 this.otherdocs.push(otherdoc);
             }
             this.otherdocsTotalFileSize = getOtherdocsFilesWeight(this.otherdocs)
+            this.totalSittingSize < this.totalFileSize + this.otherdocsTotalFileSize ? document.querySelector('#save-sitting').disabled = true : console.log('ok');
             isDirty = true;
         },
 
         removeOtherdoc(index) {
             this.otherdocs.splice(index, 1);
             this.otherdocsTotalFileSize = getOtherdocsFilesWeight(this.otherdocs)
+            this.totalSittingSize < this.totalFileSize + this.otherdocsTotalFileSize ? document.querySelector('#save-sitting').disabled = true : console.log('ok');
             isDirty = true;
         },
 
