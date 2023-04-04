@@ -226,13 +226,18 @@
                 <span class="fa fa-times"></span> Annuler Les modifications
             </button>
 
-            <button class="btn btn-primary" @click="save()">
+
+            <button v-if="sittingTooBig === true" class="btn btn-warning" @click="save()">
                 <span class="fa fa-save"></span>
-                Enregistrer les modifications
-
-
-
+                Impossible d'enregistrer
             </button>
+            <button v-else class="btn btn-primary" @click="save()">
+                <span class="fa fa-save"></span>
+                Enregistrer les modifications plop
+            </button>
+
+
+
         </div>
 
         {# Modale #}
