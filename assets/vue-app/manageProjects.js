@@ -200,10 +200,10 @@ let app = new Vue({
                     isDirty = false;
                     this.showModal = false;
                     window.scrollTo(0, 0);
-                    // setTimeout(function(){
-                    //     window.location.href = `/sitting/show/${getSittingId()}/projects`
-                    // },
-                    //     1000);
+                    setTimeout(function(){
+                        window.location.href = `/sitting/show/${getSittingId()}/projects`
+                    },
+                        1000);
                     ;
                 })
                 .catch((e, m) => {
