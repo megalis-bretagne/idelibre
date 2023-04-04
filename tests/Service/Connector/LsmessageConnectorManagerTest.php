@@ -85,6 +85,6 @@ class LsmessageConnectorManagerTest extends WebTestCase
         $this->lsmessageConnectorManager = self::getContainer()->get(LsmessageConnectorManager::class);
         $connector = $this->lsmessageConnectorManager->getLsmessageConnector($structure);
 
-        $this->assertSame($lsmessageConnector->getStructure()->getName(), $connector->getStructure()->getName());
+        $this->assertSame($connector->getStructure()->getName(), $lsmessageConnector->getStructure()->getName());
     }
 }
