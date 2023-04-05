@@ -111,7 +111,7 @@ let app = new Vue({
             this.totalFileSize > this.maxGenerationSize ? this.fileTooBig = true: this.fileTooBig = false ;
 
             if(this.sittingMaxSize <  this.totalFileSize + this.otherdocsTotalFileSize){
-                this.showMessageError("le poids de la séance dépasse les 2Go, elle ne pourra pas être enregistrée. Veuillez réduire le poids de vos pdf.")
+                this.showMessageError("Le poids de la séance dépasse les 2Go, elle ne pourra pas être enregistrée. Veuillez réduire le poids de vos pdfs.")
                 document.querySelector('#save-sitting').disabled = true
             }
 
@@ -143,7 +143,7 @@ let app = new Vue({
             this.otherdocsTotalFileSize = getOtherdocsFilesWeight(this.otherdocs)
 
             if(this.sittingMaxSize <  this.totalFileSize + this.otherdocsTotalFileSize){
-                this.showMessageError("le poids de la séance dépasse les 2Go, elle ne pourra pas être enregistrée. Veuillez réduire le poids de vos pdf.")
+                this.showMessageError("Le poids de la séance dépasse les 2Go, elle ne pourra pas être enregistrée. Veuillez réduire le poids de vos pdfs.")
                 document.querySelector('#save-sitting').disabled = true
             }
 
@@ -161,7 +161,7 @@ let app = new Vue({
 
             if(!checkNotOverweightSitting(this.totalSittingSize, this.sittingMaxSize)) {
                 this.sittingTooBig = true
-                this.showMessageError("le poids de la séance dépasse les 2Go, elle ne pourra pas être enregistrée. Veuillez réduire le poids de vos pdf.")
+                this.showMessageError("Le poids de la séance dépasse les 2Go, elle ne pourra pas être enregistrée. Veuillez réduire le poids de vos pdfs.")
             }
 
             let formData = new FormData();
