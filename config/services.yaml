@@ -36,6 +36,7 @@ parameters:
   limit_line_table: '20'
 
   maximum_size_pdf_zip_generation: '%env(int:MAXIMUM_SIZE_PDF_ZIP_GENERATION)%'
+  max_sitting_size: '%env(int:SITTING_MAX_SIZE)%'
 
   csv_max_size: "5M"
   csv_mime_types_authorized: [

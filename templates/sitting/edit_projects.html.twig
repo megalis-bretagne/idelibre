@@ -35,9 +35,7 @@
         <div class="col-11 offset-1 mt-4 form-white">
             {{ macroTab.editTabs('projects', sitting) }}
 
-            {# Edit Otherdocs #}
             <div class="d-flex justify-content-between">
-                {# CTA Ajouter des otherdocs #}
                 <label class="project-file-btn btn btn-primary" title="Ajouter des documents">
                     <input class="project-file-btn" type="file" accept=".pdf,.PDF" multiple @change="addOtherdoc($event)" onclick="this.value=null">
                     <span class="fa fa-plus-circle"></span> Ajouter des documents
@@ -50,12 +48,10 @@
 
             <div class="mt-4"></div>
 
-            {# Pas de otherdocs #}
             <div v-if="otherdocs.length === 0" class="text-center">
                 Aucun document associé
             </div>
 
-            {# Loop otherdocs #}
             <draggable v-model="otherdocs" class="bg-white" v-on:change="otherdocChange()" handle=".handle">
 
                 <div v-for="(otherdoc, index) in otherdocs">
@@ -81,10 +77,7 @@
                                         <span class="fa fa-trash-alt" title="Supprimer"></span>
                                     </button>
                                 </div>
-
                             </div>
-
-
                         </div>
                     </div>
                 </div>
@@ -94,12 +87,10 @@
         <div class="col-11 offset-1 mt-4 form-white">
 
             <div class="d-flex justify-content-between">
-                {# CTA Ajouter des projets #}
                 <label class="project-file-btn btn btn-primary" title="Ajouter des projets">
                     <input class="project-file-btn" type="file" accept=".pdf,.PDF" multiple @change="addProject($event)" onclick="this.value=null">
                     <span class="fa fa-plus-circle"></span> Ajouter des projets
                 </label>
-                {# Poids Total #}
                 <div class=" ml-auto d-flex justify-content-end mt-2">
                     <p v-if="fileTooBig === true">
                         <small><span class="text-danger">Le PDF complet ainsi que le ZIP de la séance ne seront pas générés - Poids total: ${formatSize(totalFileSize)} </span></small>
@@ -112,12 +103,10 @@
 
             <div class="mt-4"></div>
 
-            {# Pas de projet #}
             <div v-if="projects.length == 0" class="text-center">
                 Aucun projet associé
             </div>
 
-            {# Loop projects #}
             <draggable v-model="projects" class="bg-white" v-on:change="projectChange()" handle=".handle">
 
                 <div v-for="(project, index) in projects">
@@ -232,19 +221,19 @@
             </draggable>
         </div>
 
-        {# CTA save or cancel #}
         <div class="float-right mt-5">
             <button class="btn btn-outline-dark" @click="cancel()">
                 <span class="fa fa-times"></span> Annuler Les modifications
             </button>
 
-            <button class="btn btn-primary" @click="save()">
+
+            <button class="btn btn-primary" @click="save()" id="save-sitting">
                 <span class="fa fa-save"></span>
                 Enregistrer les modifications
-
-
-
             </button>
+
+
+
         </div>
 
         {# Modale #}
