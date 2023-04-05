@@ -98,10 +98,10 @@ class SittingControllerTest extends WebTestCase
     {
         UserStory::load();
         $this->loginAsAdminLibriciel();
-        $this->client->request(Request::METHOD_GET, "/api/sittings/maxSize");
+        $this->client->request(Request::METHOD_GET, "/api/sittings/sittingMaxSize");
         $this->assertResponseStatusCodeSame(200);
         $content = json_decode($this->client->getResponse()->getContent());
-        $this->assertNotEmpty($content->maxSize);
+        $this->assertNotEmpty($content->sittingMaxSize);
     }
 
     public function testGetMaxFileSizeForGeneration()

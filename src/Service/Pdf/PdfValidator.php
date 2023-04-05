@@ -134,7 +134,7 @@ class PdfValidator
 
     public function isProtectedByPasswordPdf($filePath): bool
     {
-        $cmd = 'pdfinfo ' . $filePath .' 2>/dev/null'  ;
+        $cmd = 'pdfinfo ' . $filePath . ' 2>/dev/null';
         $cmdResult = shell_exec($cmd);
 
         return empty($cmdResult);
