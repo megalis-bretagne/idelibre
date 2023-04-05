@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [4.2.0] - 2023-xx-xx
+## [4.2.0] - 2023-03-31
 
 ### Evolution
 - Changement de version de nginx en 1.23
@@ -17,9 +17,9 @@ All notable changes to this project will be documented in this file.
 - Lors de la création d'un utilisateur dans une structure, il existe deux possiblité concernant le mot de passe :
   - soit un mail d'initialisation du mot de passe est envoyé
   - soit il est possible de définir le mot de passe
-- Mise en place d'envoie d'un mail de réinitialisation du mot de passe.
+- Mise en place d'envoi d'un mail de réinitialisation du mot de passe.
 - Mise en place de l'invalidation des mots de passe de tous les utilisateurs de la structure.
-- Empêcher IL de générer les pdf complet si il y a trop de volume (#290)
+- Empêcher IL de générer les pdfs complets s'il y a trop de volume (#290)
 - Amélioration du nommage des fichiers lors de l'envoi à comelus et ajout d'un zip complet de la séance téléchargeable (#276)
 - Rassemblement des projets et autres documents sur la même page (#336)
 - Ajout des "autres documents" dans le zip de la séance (#336)
