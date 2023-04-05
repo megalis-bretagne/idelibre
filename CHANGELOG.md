@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [4.2.0] - 2023-xx-xx
+## [4.2.0] - 2023-03-31
 
 ### Evolution
 - Changement de version de nginx en 1.23
