@@ -19,7 +19,7 @@ class UserChecker implements UserCheckerInterface
             throw new CustomUserMessageAccountStatusException('Votre compte utilisateur est désactivé');
         }
 
-        if($user->getStructure() && !$user->getStructure()->getIsActive()) {
+        if ($user->getStructure() && !$user->getStructure()->getIsActive()) {
             throw new CustomUserMessageAccountStatusException('La structure de votre utilisateur a été désactivée');
         }
     }
