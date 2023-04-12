@@ -3,7 +3,7 @@
 ## -f to force eveything !
 
 ## set the environement file you want to use
-source .env
+source ./.env
 
 force=false
 #get the options

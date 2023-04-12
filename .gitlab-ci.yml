@@ -201,7 +201,6 @@ publish-compose-to-nexus:
     - mkdir -p ${INPUT_DIRECTORY}
     - cp ./docker-compose.yml ${INPUT_DIRECTORY}/docker-compose.yml
     - cp ./.env.dist ${INPUT_DIRECTORY}/.env.dist
-    - cp ./docker-resources/initializeCertificates.sh ${INPUT_DIRECTORY}/initializeCertificates.sh
     - cp -R ./docker-resources ${INPUT_DIRECTORY}/docker-resources
     - rm ${INPUT_DIRECTORY}/docker-resources/initApp.sh ${INPUT_DIRECTORY}/docker-resources/minimum.sql ${INPUT_DIRECTORY}/docker-resources/opcache.ini ${INPUT_DIRECTORY}/docker-resources/zz-idelibre.ini
     - rm ${INPUT_DIRECTORY}/docker-resources/wkhtmltox_0.12.6.1-2.jammy_amd64.deb
