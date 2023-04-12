@@ -202,7 +202,7 @@ publish-compose-to-nexus:
     - cp ./docker-compose.yml ${INPUT_DIRECTORY}/docker-compose.yml
     - cp ./.env.dist ${INPUT_DIRECTORY}/.env.dist
     - cp -R ./docker-resources ${INPUT_DIRECTORY}/docker-resources
-    - mv ${INPUT_DIRECTORY}/docker-resources/initializeCertificates.sh ${INPUT_DIRECTORY}/initializeCertificates.sh
-    - rm ${INPUT_DIRECTORY}/docker-resources/initApp.sh ${INPUT_DIRECTORY}/docker-resources/minimum.sql ${INPUT_DIRECTORY}/docker-resources/opcache.ini ${INPUT_DIRECTORY}/docker-resources/zz-idelibre.ini
+    - cp ./docker-resources/initializeCertificates.sh ${INPUT_DIRECTORY}/initializeCertificates.sh
+    - rm ${INPUT_DIRECTORY}/docker-resources/initializeCertificates.sh ${INPUT_DIRECTORY}/docker-resources/initApp.sh ${INPUT_DIRECTORY}/docker-resources/minimum.sql ${INPUT_DIRECTORY}/docker-resources/opcache.ini ${INPUT_DIRECTORY}/docker-resources/zz-idelibre.ini
     - rm ${INPUT_DIRECTORY}/docker-resources/wkhtmltox_0.12.6.1-2.jammy_amd64.deb
     - sed -i -e"s|TAG|$CI_COMMIT_REF_NAME|" ${INPUT_DIRECTORY}/docker-compose.yml
