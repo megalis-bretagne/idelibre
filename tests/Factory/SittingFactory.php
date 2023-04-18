@@ -48,7 +48,7 @@ final class SittingFactory extends ModelFactory
     {
         return [
             'name' => self::faker()->text(),
-            'date' => null, // TODO add DATETIME ORM type manually
+            'date' => new \DateTime('now'), // TODO add DATETIME ORM type manually
             'revision' => self::faker()->randomNumber(),
             'isArchived' => false,
             'isRemoteAllowed' => true,

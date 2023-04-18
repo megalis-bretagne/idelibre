@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Sitting;
 use App\Service\Report\CsvSittingReport;
 use App\Service\Report\PdfSittingReport;
+use App\Service\Util\FileUtil;
 use App\Service\Zip\ZipTokenGenerator;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,42 +18,42 @@ class ReportSittingController extends AbstractController
 {
     #[Route(path: '/reportSitting/pdf/{id}', name: 'sitting_report_pdf')]
     #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
-    public function pdfReport(Sitting $sitting, PdfSittingReport $pdfSittingReport): Response
+    public function pdfReport(Sitting $sitting, PdfSittingReport $pdfSittingReport, FileUtil $fileUtil): Response
     {
         $response = new BinaryFileResponse($pdfSittingReport->generate($sitting));
         $response->setContentDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            $sitting->getName() . '_rapport.pdf'
+            $fileUtil->sanitizeName($sitting->getName()) . '_rapport.pdf'
         );
-        $response->deleteFileAfterSend(true);
+        $response->deleteFileAfterSend();
 
         return $response;
     }
 
     #[Route(path: '/reportSitting/csv/{id}', name: 'sitting_report_csv')]
     #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
-    public function csvReport(Sitting $sitting, CsvSittingReport $csvSittingReport): Response
+    public function csvReport(Sitting $sitting, CsvSittingReport $csvSittingReport, FileUtil $fileUtil): Response
     {
         $response = new BinaryFileResponse($csvSittingReport->generate($sitting));
         $response->setContentDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            $sitting->getName() . '_rapport.csv'
+            $fileUtil->sanitizeName($sitting->getName()) . '_rapport.csv'
         );
-        $response->deleteFileAfterSend(true);
+        $response->deleteFileAfterSend();
 
         return $response;
     }
 
     #[Route(path: '/reportSitting/token/{id}', name: 'sitting_report_token')]
     #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
-    public function getSittingZipTokens(Sitting $sitting, ZipTokenGenerator $zipTokenGenerator): Response
+    public function getSittingZipTokens(Sitting $sitting, ZipTokenGenerator $zipTokenGenerator, FileUtil $fileUtil): Response
     {
         $response = new BinaryFileResponse($zipTokenGenerator->generateZipToken($sitting));
         $response->setContentDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            $sitting->getName() . '_' . $sitting->getDate()->format('d_m_Y_H_i') . '_jetons.zip'
+            $fileUtil->sanitizeName($sitting->getName()) . '_' . $sitting->getDate()->format('d_m_Y_H_i') . '_jetons.zip'
         );
-        $response->deleteFileAfterSend(true);
+        $response->deleteFileAfterSend();
 
         return $response;
     }

@@ -4,6 +4,12 @@ namespace App\Service\Util;
 
 class FileUtil
 {
+
+    function sanitizeName(string $fileName): string
+    {
+        return preg_replace('/[^a-z0-9]+/', '_', strtolower($fileName));
+    }
+
     public function deleteFileInDirectory(string $path): void
     {
         $handle = opendir($path);
