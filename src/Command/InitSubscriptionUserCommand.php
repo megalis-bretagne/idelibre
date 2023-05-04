@@ -61,7 +61,6 @@ class InitSubscriptionUserCommand extends Command
             }
 
             $io->success("import done");
-
         }
 
         return Command::SUCCESS;
