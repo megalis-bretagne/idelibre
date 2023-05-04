@@ -108,7 +108,7 @@ class Sitting
     private $otherdocs;
 
     #[Column(type: 'boolean', options: ['default' => false])]
-    #[Groups(groups: ['sitting', 'sitting:read'])]
+    #[Groups(groups: ['sitting', 'sitting:read', 'sitting:write:post'])]
     private $isRemoteAllowed = false;
 
     public function __construct()

@@ -62,6 +62,6 @@ class GroupTest extends WebTestCase
     {
         $group = (new Group())
             ->setName('Recia');
-        $this->assertHasValidationErrors($group, 1);
+        $this->assertHasValidationErrors($group, 2);
     }
 }

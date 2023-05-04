@@ -7,10 +7,13 @@ use App\Entity\Sitting;
 use App\Entity\Structure;
 use App\Message\UpdatedSitting;
 use App\Repository\ConvocationRepository;
+use App\Repository\OtherdocRepository;
 use App\Repository\ProjectRepository;
 use App\Repository\SittingRepository;
 use App\Security\Http400Exception;
+use App\Service\ApiEntity\OtherdocApi;
 use App\Service\ApiEntity\ProjectApi;
+use App\Service\Otherdoc\OtherdocManager;
 use App\Service\Pdf\PdfValidator;
 use App\Service\Project\ProjectManager;
 use App\Service\Seance\SittingManager;
@@ -163,7 +166,7 @@ class SittingApiController extends AbstractController
             throw new Http400Exception('malformed json');
         }
 
-        if (!$this->pdfValidator->isProjectsPdf($projects)) {
+        if (!$this->pdfValidator->isFilesPdf($projects)) {
             return $this->json(['success' => false, 'message' => 'Au moins un projet n\'est pas un pdf'], 400);
         }
 
@@ -174,6 +177,47 @@ class SittingApiController extends AbstractController
         $updated = $projectRepository->getProjectsBySitting($sitting);
 
         return $this->json($updated, status: 201, context: ['groups' => 'project:read']);
+    }
+
+
+    #[Route('/{sittingId}/otherdocs', name: 'add_otherdocs_to_sitting', methods: ['POST'])]
+    #[ParamConverter('sitting', class: Sitting::class, options: ['id' => 'sittingId'])]
+    #[IsGranted('API_SAME_STRUCTURE', subject: ['structure', 'sitting'])]
+    public function addOtherdocsToSitting(
+        Structure $structure,
+        Sitting $sitting,
+        Request $request,
+        OtherdocManager $otherdocManager,
+        OtherdocRepository $otherdocRepository,
+        SittingManager $sittingManager
+    ): JsonResponse {
+        if (count($sitting->getOtherdocs())) {
+            throw new Http400Exception('Sitting already contain projects');
+        }
+
+        if ($sittingManager->isAlreadySent($sitting)) {
+            throw new Http400Exception('Sitting is already sent');
+        }
+
+        $rawProjects = $request->get('otherdocs');
+
+        try {
+            $otherdocs = $this->serializer->deserialize($rawProjects, OtherdocApi::class . '[]', 'json');
+        } catch (Exception) {
+            throw new Http400Exception('malformed json');
+        }
+
+        if (!$this->pdfValidator->isFilesPdf($otherdocs)) {
+            return $this->json(['success' => false, 'message' => 'Au moins un document n\'est pas un pdf'], 400);
+        }
+
+        $otherdocManager->update($otherdocs, $request->files->all(), $sitting);
+
+        $this->messageBus->dispatch(new UpdatedSitting($sitting->getId()));
+
+        $updated = $otherdocRepository->getOtherdocsBySitting($sitting);
+
+        return $this->json($updated, status: 201, context: ['groups' => 'otherdoc:read']);
     }
 
     #[Route('/{sittingId}/projects/{id}', name: 'deleteProject', methods: ['DELETE'])]
