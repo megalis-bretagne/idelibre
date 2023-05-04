@@ -48,7 +48,7 @@ final class SittingStory extends Story
 
         $this->addState('sittingOtherconseil', SittingFactory::new([
             'name' => 'Autre Conseil Libriciel',
-            'date' => new DateTime('2023-01-22'),
+            'date' => new DateTime('now'),
             'structure' => StructureStory::libriciel(),
             'convocationFile' => FileStory::fileConvocationOther(),
             'place' => 'Salle du conseil',
