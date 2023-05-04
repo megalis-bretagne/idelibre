@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Repository\SubscriptionRepository;
 use App\Repository\UserRepository;
 use App\Service\Subscription\SubscriptionManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -20,6 +21,7 @@ class InitSubscriptionUserCommand extends Command
 {
     public function __construct(
         private readonly UserRepository $userRepository,
+        private readonly EntityManagerInterface $entityManager,
         private readonly SubscriptionManager $subscriptionManager,
         private readonly SubscriptionRepository $subscriptionRepository,
         string $name = null
@@ -53,11 +55,12 @@ class InitSubscriptionUserCommand extends Command
             foreach ($users as $user) {
                 if (!$user->getSubscription()) {
                     $subscription = $this->subscriptionManager->add($user);
-                    $this->subscriptionManager->save($subscription);
-
-                    $io->success($user->getUsername());
+                    $this->entityManager->persist($subscription);
                 }
+                $this->entityManager->flush();
             }
+
+            $io->success("import done");
         }
 
         return Command::SUCCESS;

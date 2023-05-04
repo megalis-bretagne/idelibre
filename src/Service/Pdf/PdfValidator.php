@@ -27,7 +27,7 @@ class PdfValidator
     /**
      * @param ProjectApi[] $projects
      */
-    public function isProjectsPdf(array $projects): bool
+    public function isFilesPdf(array $projects): bool
     {
         foreach ($projects as $project) {
             if (!$this->isPdfFile($project->getFileName())) {

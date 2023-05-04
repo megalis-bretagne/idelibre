@@ -20,7 +20,7 @@ class File
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
-    #[Groups(['sitting:detail', 'project:read'])]
+    #[Groups(['sitting:detail', 'project:read', 'otherdoc:read'])]
     private $id;
 
     #[Column(type: 'string', length: 512)]
@@ -29,13 +29,13 @@ class File
     private $path;
 
     #[Column(type: 'float', nullable: true)]
-    #[Groups(['sitting:detail', 'project:read'])]
+    #[Groups(['sitting:detail', 'project:read, otherdoc:read'])]
     private $size;
 
     #[Column(type: 'string', length: 512)]
     #[NotBlank]
     #[Length(max: '125')]
-    #[Groups(['sitting:detail', 'project:read'])]
+    #[Groups(['sitting:detail', 'project:read', 'otherdoc:read'])]
     private $name;
 
     #[Column(type: 'datetime')]
