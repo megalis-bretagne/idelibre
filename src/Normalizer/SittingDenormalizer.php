@@ -13,8 +13,7 @@ class SittingDenormalizer implements DenormalizerInterface, CacheableSupportsMet
     public function __construct(
         #[Autowire(service: ObjectNormalizer::class)]
         private readonly DenormalizerInterface $denormalizer
-    )
-    {
+    ) {
     }
 
 
@@ -25,7 +24,7 @@ class SittingDenormalizer implements DenormalizerInterface, CacheableSupportsMet
 
     public function denormalize(mixed $data, string $type, string $format = null, array $context = [])
     {
-        if(isset($data["isRemoteAllowed"])) {
+        if (isset($data["isRemoteAllowed"])) {
             $data["isRemoteAllowed"] = boolval($data["isRemoteAllowed"]);
         }
 
