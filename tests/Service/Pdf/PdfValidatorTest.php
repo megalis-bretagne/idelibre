@@ -75,7 +75,7 @@ class PdfValidatorTest extends WebTestCase
             $project1,
             $project2,
         ];
-        $this->assertTrue($this->pdfvalidator->isProjectsPdf($projects));
+        $this->assertTrue($this->pdfvalidator->isFilesPdf($projects));
     }
 
     public function testIsProjectsPdfOneIsNone()
@@ -96,7 +96,7 @@ class PdfValidatorTest extends WebTestCase
             $project1,
             $project2,
         ];
-        $this->assertFalse($this->pdfvalidator->isProjectsPdf($projects));
+        $this->assertFalse($this->pdfvalidator->isFilesPdf($projects));
     }
 
     public function testIsOtherdocsPdf()

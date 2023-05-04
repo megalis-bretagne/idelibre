@@ -23,7 +23,7 @@ class ProjectController extends AbstractController
     {
         $rawProjects = $request->request->get('projects');
         $projects = $serializer->deserialize($rawProjects, ProjectApi::class . '[]', 'json');
-        if (!$pdfValidator->isProjectsPdf($projects)) {
+        if (!$pdfValidator->isFilesPdf($projects)) {
             return $this->json(['success' => false, 'message' => 'Au moins un projet n\'est pas un pdf'], 400);
         }
 

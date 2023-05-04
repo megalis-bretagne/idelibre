@@ -3,6 +3,7 @@
 namespace App\Tests\Controller\ApiV2;
 
 use App\Service\ApiEntity\AnnexApi;
+use App\Service\ApiEntity\OtherdocApi;
 use App\Service\ApiEntity\ProjectApi;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
@@ -178,6 +179,51 @@ class SittingApiControllerTest extends WebTestCase
         $this->assertSame($sitting['name'], 'Conseil Communautaire Libriciel');
         $this->assertNotEmpty($sitting['convocationFile']);
         $this->assertNotEmpty($sitting['invitationFile']);
+        $this->assertFalse($sitting['isRemoteAllowed']);
+    }
+
+
+
+    public function testAddSittingRemote()
+    {
+        $structure = StructureStory::libriciel();
+        $apiUser = ApiUserStory::apiAdminLibriciel();
+        $type = TypeStory::typeConseilLibriciel();
+        ConvocationStory::load();
+
+        $filesystem = new Filesystem();
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/convocation.pdf');
+
+        $convocationFile = new UploadedFile(__DIR__ . '/../../resources/convocation.pdf', 'convocation.pdf', 'application/pdf');
+
+        $this->client->request(
+            Request::METHOD_POST,
+            "/api/v2/structures/{$structure->getId()}/sittings",
+            [
+                'date' => '2020-10-22 11:00:00',
+                'type' => $type->getId(),
+                'place' => 'salle du conseil',
+                'isRemoteAllowed' => true
+            ],
+            [
+                'convocationFile' => $convocationFile,
+            ],
+            [
+                'HTTP_ACCEPT' => 'application/json',
+                'HTTP_X-AUTH-TOKEN' => $apiUser->getToken(),
+            ],
+        );
+
+        $response = $this->client->getResponse();
+        $sitting = json_decode($response->getContent(), true);
+
+        $this->assertNotEmpty($sitting['id']);
+        $this->assertSame($sitting['name'], 'Conseil Communautaire Libriciel');
+        $this->assertNotEmpty($sitting['convocationFile']);
+
+        $this->assertTrue($sitting['isRemoteAllowed']);
+
+
     }
 
     public function testAddSittingNoConvocationFile()
@@ -319,6 +365,70 @@ class SittingApiControllerTest extends WebTestCase
         $this->assertNotEmpty($projects[0]['file']);
         $this->assertSame('annex1_project2.pdf', $projects[01]['annexes'][0]['file']['name']);
     }
+
+
+
+
+    public function testAddOtherdocsToSitting()
+    {
+        $structure = StructureStory::libriciel();
+        $apiUser = ApiUserStory::apiAdminLibriciel();
+        $sittingBureau = SittingStory::sittingBureauLibriciel();
+
+
+
+        $filesystem = new Filesystem();
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', '/tmp/convocation');
+
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/otherdoc1.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/otherdoc2.pdf');
+
+
+
+        $otherdoc1File = new UploadedFile(__DIR__ . '/../../resources/otherdoc1.pdf', 'otherdoc1.pdf', 'application/pdf');
+        $otherdoc2File = new UploadedFile(__DIR__ . '/../../resources/otherdoc2.pdf', 'otherdoc2.pdf', 'application/pdf');
+
+        $otherdoc1 = (new OtherdocApi())
+            ->setName('otherdoc1')
+            ->setFileName('otherdoc1.pdf')
+            ->setRank(0)
+            ->setLinkedFileKey('project1File');
+
+        $otherdoc2 = (new OtherdocApi())
+            ->setName('project2')
+            ->setFileName('project2.pdf')
+            ->setRank(1)
+            ->setLinkedFileKey('project2File');
+
+        $serializedProjects = $this->serializer->serialize([$otherdoc1, $otherdoc2], 'json');
+
+        $this->client->request(
+            Request::METHOD_POST,
+            "/api/v2/structures/{$structure->getId()}/sittings/{$sittingBureau->getId()}/otherdocs",
+            [
+                'otherdocs' => $serializedProjects,
+            ],
+            [
+                'project1File' => $otherdoc1File,
+                'project2File' => $otherdoc2File,
+            ],
+            [
+                'HTTP_ACCEPT' => 'application/json',
+                'HTTP_X-AUTH-TOKEN' => $apiUser->getToken(),
+            ],
+        );
+
+        $this->assertResponseStatusCodeSame(201);
+
+        $response = $this->client->getResponse();
+        $otherdocs = json_decode($response->getContent(), true);
+
+
+        $this->assertcount(2, $otherdocs);
+        $this->assertSame('otherdoc1', $otherdocs[0]['name']);
+        $this->assertNotEmpty($otherdocs[0]['file']);
+    }
+
 
     public function testAddProjectsToSittingMalformedJson()
     {
