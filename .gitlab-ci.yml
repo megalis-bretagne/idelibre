@@ -14,9 +14,10 @@ purge:
   variables:
     IMAGE_VERSION: "$CI_COMMIT_REF_NAME"
     REGISTRY_CONTAINER_PATH: ""
+    NEXUS_URL: "${REGISTRY_CONTAINER_HOST}/public/citoyens/idelibre/"
   tags:
     - docker-build
   script:
     - echo "destructions des images rc dans ${REGISTRY_CONTAINER_HOST}/public/citoyens/idelibre/"
     - docker login -u "$REGISTRY_CONTAINER_USER" -p "$REGISTRY_CONTAINER_PASSWORD" "$REGISTRY_CONTAINER_HOST"
-    - docker images | grep "rc" | awk '{print "${REGISTRY_CONTAINER_HOST}/public/citoyens/idelibre/"$1":"$2}' | xargs docker rmi
+    - docker images | grep "rc" | awk -v registry_url=$NEXUS_URL '{print registry_url"/"$1":"$2}' | xargs docker rmi
