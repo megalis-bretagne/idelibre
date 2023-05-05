@@ -57,7 +57,6 @@ class InitSubscriptionUserCommand extends Command
                     $subscription = $this->subscriptionManager->add($user);
                     $this->entityManager->persist($subscription);
                 }
-
             }
             $this->entityManager->flush();
             $io->success("import done");

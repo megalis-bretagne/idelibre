@@ -1,6 +1,18 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.2.1] - 2023-05-05
+
+### Evolution
+ - Mise à jour symfony en 6.2.10
+ - Ajout des fonctionnalités manquantes dans l'api :
+   - Séance autorisée à distance
+   - Ajout de documents non numérotés
+
+### Correction
+  - Script de mise à jour initBdd:subscription_user trop long.
+  - Correction docker-compose.yml au niveau du tag de node-idelibre
+
 ## [4.2.0] - 2023-03-31
 
 ### Evolution
