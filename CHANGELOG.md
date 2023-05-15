@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.2.2] - 2023-05-15
+
+### Evolution
+- docker compose restart: unless-stopped
+
+### Correction
+- Bug client web crash après mise à jour (otherdoc null)
+
 ## [4.2.1] - 2023-05-05
 
 ### Evolution
