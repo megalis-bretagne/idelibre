@@ -48,7 +48,6 @@
         init();
 
 
-
         pouch.purge = function () {
             pouchdb.destroy().then(function () {
                 init();
@@ -73,13 +72,12 @@
                 //    alert('response');
             }).catch(function (err) {
                 console.log(err);
-                if(err.status === 500) {
+                if (err.status === 500) {
                     alert("Votre navigateur n'accepte pas qu'idelibre télécharge les documents dans sa mémoire. " +
                         "Peut-être êtes-vous en mode de navigation privée ?");
                 }
             });
         };
-
 
 
         // enregistre une donnée
@@ -135,7 +133,7 @@
          */
         pouch.removeSeanceLocalDb = function (seanceId, account) {
             var seance = account.findSeance(seanceId);
-            if(!seance){
+            if (!seance) {
                 return;
             }
 
@@ -162,7 +160,6 @@
         }
 
 
-
         pouch.addAnnexeToDownload = function (collectivite, seance, accountId, annexe) {
             addQueue(collectivite, seance, accountId, annexe, ANNEXE);
         }
@@ -181,16 +178,20 @@
             }
 
 
-
             if (!alreadyInQueue) {
-                projetQueue.push({collectivite: collectivite, seance: seance, accountId: accountId, document: document, type: type});
+                projetQueue.push({
+                    collectivite: collectivite,
+                    seance: seance,
+                    accountId: accountId,
+                    document: document,
+                    type: type
+                });
                 execProjetQueue();
             } else {
                 execProjetQueue();
                 //alert ('already in ouh');
             }
         };
-
 
 
         var execProjetQueue = function () {
@@ -207,7 +208,6 @@
                 }
             }
         }
-
 
 
 // USELESS ??
@@ -293,7 +293,6 @@
             }).catch(function (err) {
 
 
-
                 if (typeDocument == PROJET) {
                     errorSaveProjet(err, document, accountId, seance);
                 }
@@ -329,7 +328,6 @@
         }
 
 
-
         var errorSaveProjet = function (err, document, accountId, seance) {
 
             if (err.status === 409) {
@@ -350,7 +348,6 @@
         }
 
 
-
         /** X
          * Télécharge et sauvegarde une annexe en pdf
          * @param {uuid} annexeId
@@ -362,11 +359,12 @@
         pouch.getAnnexePdf = function (account, annexeId, collectiviteId, callbackSucess, callbackError) {
             var url = account.url + "/nodejs/" + config.API_LEVEL + "/annexes/dlAnnexe/" + annexeId;
             //$http.get(url, {timeout: TIMEOUT}).
-            $http({method: 'GET', url: url, responseType: "blob"
+            $http({
+                method: 'GET', url: url, responseType: "blob"
                 , headers: {
-                    'token': account.token}
-            }).
-            success(function (data, status, headers, config) {
+                    'token': account.token
+                }
+            }).success(function (data, status, headers, config) {
                 var blob = data;
                 pouchdb.put({
                     _id: annexeId,
@@ -382,8 +380,7 @@
                 }).catch(function (err) {
                     callbackSucess();
                 });
-            }).
-            error(function (data, status, headers, config) {
+            }).error(function (data, status, headers, config) {
                 $log.error('error');
                 callbackError();
             });
@@ -402,10 +399,10 @@
                     for (var iS = 0, lnS = accounts[iA].seances.length; iS < lnS; iS++) {
                         pouch.lookForConvocationDocument(accounts[iA].seances[iS].convocation.document_text, accounts[iA], accounts[iA].seances[iS]);
                     }
-                }else if(accounts[iA].seances && accounts[iA].type != ACTEURS ){
+                } else if (accounts[iA].seances && accounts[iA].type != ACTEURS) {
 
                     for (var iS = 0, lnS = accounts[iA].seances.length; iS < lnS; iS++) {
-                        if(accounts[iA].seances[iS].invitation)
+                        if (accounts[iA].seances[iS].invitation)
                             pouch.lookForConvocationDocument(accounts[iA].seances[iS].invitation.document_text, accounts[iA], accounts[iA].seances[iS]);
                     }
                 }
@@ -423,8 +420,6 @@
         };
 
 
-
-
         pouch.getAllInvitationsByAccount = function (account) {
             //récuperation des ids des documents, des accounts, des seances
             if (account.seances) {
@@ -433,12 +428,6 @@
                 }
             }
         };
-
-
-
-
-
-
 
 
         /**X
@@ -475,12 +464,8 @@
         };
 
 
-
-
         var queueConvocation = [];
         var isRunningQueueConvocation = false;
-
-
 
 
         var addQueueConvocation = function (document, accountName, seance, accountId) {
@@ -515,7 +500,6 @@
             }
 
 
-
             if (typeDocument != ANNEXE) {
                 var url = account.url + '/nodejs/' + config.API_LEVEL + '/projets/dlPdf/' + document.id;
             } else {
@@ -523,7 +507,7 @@
             }
 
 
-            if(typeDocument == CONVOCATION && account.type != ACTEURS){
+            if (typeDocument == CONVOCATION && account.type != ACTEURS) {
                 var url = account.url + "/nodejs/" + config.API_LEVEL + "/projets/dlPdf/" + document.id;
             }
 
@@ -537,15 +521,16 @@
                 $rootScope.$broadcast('make spin icon', {documentId: document.id});
             }
 
-            $http({method: 'GET', url: url, responseType: "blob"
+            $http({
+                method: 'GET', url: url, responseType: "blob"
                 , headers: {
-                    'token': account.token}
+                    'token': account.token
+                }
             }).
                 // $http.get(url, {timeout: timeout}).
                 success(function (data, status, headers, config) {
                     saveInDataBase(data, typeDocument, null, accountId, seance, document, callback);
-                }).
-            error(function (data, status, headers, config) {
+                }).error(function (data, status, headers, config) {
                 $log.error('error');
                 if (typeDocument != ANNEXE) {
                     $rootScope.$broadcast('error loaded projet', {
@@ -579,7 +564,7 @@
          */
         pouch.checkProjetDocument = function (document, projet, seance, account) {
             lookForProjetPdf(document, projet, account, seance);
-            if(projet && projet.annexes) {
+            if (projet && projet.annexes) {
                 for (var iP = 0, lnP = projet.annexes.length; iP < lnP; iP++) {
                     lookForAnnexePdf(projet.annexes[iP], projet, seance, account);
                 }
@@ -589,7 +574,6 @@
         pouch.checkOtherdocDocument = function (document, otherdoc, seance, account) {
             lookForProjetPdf(document, otherdoc, account, seance);
         };
-
 
 
         var lookForAnnexePdf = function (annexe, projet, account, seance) {
@@ -604,7 +588,7 @@
                         seanceId: seance.id,
                         projetId: projet.id
                     });
-                }else{
+                } else {
                     annexe.loaded = NOTLOADED; //LOADED
                     $rootScope.$broadcast('update loaded annexe', {
                         annexetId: annexe.annexe_id,
@@ -616,7 +600,6 @@
 
             });
         };
-
 
 
         /**
@@ -640,7 +623,7 @@
                         projetId: projet.id
                     });
 
-                }else{
+                } else {
                     document.isLoaded = NOTLOADED; //LOADED
                     $rootScope.$broadcast('update loaded projet', {
                         documentId: document.id,
@@ -651,7 +634,6 @@
                 }
             });
         };
-
 
 
         /**
@@ -667,7 +649,6 @@
                 }
             });
         };
-
 
 
         /** X
@@ -698,7 +679,7 @@
             if (account.seances) {
                 //pour chaque seance
                 for (var iS = 0, lnS = account.seances.length; iS < lnS; iS++) {
-                    if(account.seances[iS].projets) {
+                    if (account.seances[iS].projets) {
                         //pour chaque projet
                         for (var iP = 0, lnP = account.seances[iS].projets.length; iP < lnP; iP++) {
                             pouch.checkProjetDocument(account.seances[iS].projets[iP].document_text, account.seances[iS].projets[iP], account.seances[iS], account);
@@ -707,8 +688,6 @@
                 }
             }
         };
-
-
 
 
         /** X
@@ -726,8 +705,10 @@
                     //pour chaque seance
                     for (var iS = 0, lnS = accounts[iA].seances.length; iS < lnS; iS++) {
                         //pour chaque autre document
-                        for (var iP = 0, lnP = accounts[iA].seances[iS].otherdocs.length; iP < lnP; iP++) {
-                            pouch.checkOtherdocDocument(accounts[iA].seances[iS].otherdocs[iP].document_text, accounts[iA].seances[iS].otherdocs[iP], accounts[iA].seances[iS], accounts[iA]);
+                        if (accounts[iA].seances[iS].otherdocs) {
+                            for (var iP = 0, lnP = accounts[iA].seances[iS].otherdocs.length; iP < lnP; iP++) {
+                                pouch.checkOtherdocDocument(accounts[iA].seances[iS].otherdocs[iP].document_text, accounts[iA].seances[iS].otherdocs[iP], accounts[iA].seances[iS], accounts[iA]);
+                            }
                         }
                     }
                 }
@@ -739,7 +720,7 @@
             if (account.seances) {
                 //pour chaque seance
                 for (var iS = 0, lnS = account.seances.length; iS < lnS; iS++) {
-                    if(account.seances[iS].otherdocs) {
+                    if (account.seances[iS].otherdocs) {
                         //pour chaque autre document
                         for (var iP = 0, lnP = account.seances[iS].otherdocs.length; iP < lnP; iP++) {
                             pouch.checkOtherdocDocument(account.seances[iS].otherdocs[iP].document_text, account.seances[iS].otherdocs[iP], account.seances[iS], account);
@@ -748,8 +729,6 @@
                 }
             }
         };
-
-
 
 
         pouch.getData = function (docId) {
