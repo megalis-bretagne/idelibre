@@ -42,6 +42,7 @@ services:
       - data-public:/app/public
       - /data/files:/data
     command: [ "/app/docker-resources/initApp.sh" ]
+    restart: unless-stopped
     labels:
       ofelia.enabled: "true"
       ofelia.job-exec.purge.schedule: "0 0 2 * * * "
@@ -70,6 +71,7 @@ services:
       - JWT_SECRET=${JWT_SECRET:-jwtsecret}
       - JWT_TIMEOUT=${JWT_TIMEOUT:-86400}
     command: [ "/app/docker-resources/init.sh" ]
+    restart: unless-stopped
 
 
   nginx-idelibre:
@@ -90,6 +92,7 @@ services:
       - /data/certbot/www:/var/www/certbot
       - data-public:/app/public:ro
       - /data/files:/data:ro
+    restart: unless-stopped
 
   certbot:
     image: certbot/certbot
@@ -111,6 +114,7 @@ services:
     volumes:
       - /data/certificates:/certificates
     command: [ "/app/docker-resources/init.sh" ]
+    restart: unless-stopped
 
 
   ofelia:
@@ -118,6 +122,7 @@ services:
     depends_on:
       - fpm-idelibre
     command: daemon --docker
+    restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
