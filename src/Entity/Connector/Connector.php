@@ -16,7 +16,11 @@ use Ramsey\Uuid\Doctrine\UuidGenerator;
 #[Entity]
 #[Table(name: 'connector')]
 #[InheritanceType(value: 'SINGLE_TABLE')]
-#[DiscriminatorMap(value: ['comelus' => 'ComelusConnector', 'lsmessage' => 'LsmessageConnector'])]
+#[DiscriminatorMap(value: [
+    'comelus' => 'ComelusConnector',
+    'lsmessage' => 'LsmessageConnector',
+    'lsvote' => 'LsvoteConnector'
+])]
 abstract class Connector implements ConnectorInterface
 {
     #[ORM\Id]
