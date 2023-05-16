@@ -1,15 +1,22 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+
+## [4.2.3] - 2023-05-16
+
+### Evolution
+- nginx passage de la version 1.17 vers 1.23
+
+### Correction
+- Contournement du openssl posant souci lors de l'envoi des mails avec ajout du verify_peer=false
+
 ## [4.2.2] - 2023-05-15
 
 ### Evolution
 - docker compose restart: unless-stopped
-- nginx passage de la version 1.17 vers 1.23
 
 ### Correction
 - Bug client web crash après mise à jour (otherdoc null)
-- Contournement du openssl posant souci lors de l'envoi des mails avec ajout du verify_peer=false
 
 ## [4.2.1] - 2023-05-05
 
