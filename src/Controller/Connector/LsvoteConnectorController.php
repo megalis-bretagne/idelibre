@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class LsvoteConnectorController extends AbstractController
 {
-    #[Route('/lsvote/connector', name: 'app_lsvote_connector')]
+    #[Route('/lsvote/connector', name: 'lsvote_connector')]
     public function index(): Response
     {
         return $this->render('connector/lsvote.html.twig', [
