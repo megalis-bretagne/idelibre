@@ -76,7 +76,7 @@ services:
 
   nginx-idelibre:
     container_name: nginx-idelibre
-    image: nginx:1.17
+    image: nginx:1.23
     depends_on:
       - fpm-idelibre
       - node-idelibre
