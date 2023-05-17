@@ -6,8 +6,10 @@ use App\Entity\Sitting;
 use App\Form\SearchType;
 use App\Form\SittingType;
 use App\Repository\EmailTemplateRepository;
+use App\Repository\LsvoteConnectorRepository;
 use App\Repository\OtherdocRepository;
 use App\Repository\ProjectRepository;
+use App\Service\Connector\LsvoteConnectorManager;
 use App\Service\EmailTemplate\EmailGenerator;
 use App\Service\File\Generator\FileGenerator;
 use App\Service\File\Generator\UnsupportedExtensionException;
@@ -17,6 +19,7 @@ use App\Sidebar\Annotation\Sidebar;
 use App\Sidebar\State\SidebarState;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
+use phpDocumentor\Reflection\Types\This;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -307,4 +310,20 @@ class SittingController extends AbstractController
 
         return 'sitting-active-nav';
     }
+
+
+
+    #[Route(path: '/sitting/{id}/sendLsvote', name: 'sitting_sendLsvote', methods: ['GET'])]
+    #[IsGranted(data: 'ROLE_SUPERADMIN')]
+    public function sendToLsvote(Sitting $sitting, LsvoteConnectorManager $lsvoteConnectorManager, LsvoteConnectorRepository $lsvoteConnectorRepository): Response
+    {
+        $connector = $lsvoteConnectorRepository->findOneBy(["structure" => $this->getUser()->getStructure()]);
+        $url = $connector->getUrl();
+        $apiKey = $connector->getApiKey();
+
+        $lsvoteConnectorManager->createSitting($url, $apiKey, $sitting);
+
+        return $this->redirectToRoute('sitting_index', []);
+    }
+
 }

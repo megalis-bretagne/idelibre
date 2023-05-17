@@ -2,8 +2,6 @@
 
 namespace App\Entity\Connector;
 
-use App\Entity\Connector\Exception\LsmessageConnectorException;
-use App\Entity\Connector\Exception\LsvoteConnectorException;
 use App\Entity\Structure;
 use App\Repository\LsvoteConnectorRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -29,7 +27,6 @@ class LsvoteConnector extends Connector
     protected $fields = [
         'url' => null,
         'api_key' => null,
-        'content' => null,
         'active' => false,
     ];
     /**
@@ -81,18 +78,6 @@ class LsvoteConnector extends Connector
     public function setApiKey(?string $apiKey): self
     {
         $this->fields['api_key'] = $apiKey;
-
-        return $this;
-    }
-
-    public function getContent(): ?string
-    {
-        return $this->fields['content'];
-    }
-
-    public function setContent(?string $content): self
-    {
-        $this->fields['content'] = $content;
 
         return $this;
     }

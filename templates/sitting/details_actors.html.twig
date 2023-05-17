@@ -59,13 +59,7 @@
                             <button class="btn btn-outline-primary " @click="openShowModalAttendance()">
                                 Gérer les présences
                             </button>
-                            <button :disabled="comelusId || !isComelus || isComelusSending" class="btn btn-primary"
-                                    title="Envoyer à comelus"
-                                    data-target="#confirmComelus"
-                                    data-toggle="modal">
-                                <span class="fa fa-paper-plane"></span>
-                                Envoyer via comelus
-                            </button>
+
                             <button :disabled="isAlreadySentActors" class="btn btn-primary"
                                     title="Envoyer les convocations"
                                     data-target="#confirm"
@@ -73,6 +67,28 @@
                                 <span class="fa fa-paper-plane"></span>
                                 Envoyer les convocations
                             </button>
+
+                            <button :disabled="comelusId || !isComelus || isComelusSending" class="btn btn-primary"
+                                    title="Envoyer à comelus"
+                                    data-target="#confirmComelus"
+                                    data-toggle="modal">
+                                <span class="fa fa-paper-plane"></span>
+                                Envoyer via comelus
+                            </button>
+
+                            <a href="{{ path('sitting_sendLsvote', {"id" : sitting.id}) }}" class="btn btn-primary" title="Envoyer à lsvote">
+                                <span class="fa fa-paper-plane"></span>
+                                Envoyer à lsvote</a>
+
+{#                            <button class="btn btn-primary"#}
+{#                                    title="Envoyer à lsvote"#}
+{#                                    data-target="#confirmLsvote"#}
+{#                                    data-toggle="modal">#}
+{#                                <span class="fa fa-paper-plane"></span>#}
+{#                                Envoyer à Lsvote#}
+{#                            </button>#}
+
+
                         </div>
                     </div>
                 </div>
@@ -216,7 +232,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr class="d-flex" v-if="filteredEmployeeConvocations.length == 0">
+                        <tr class="d-flex" v-if="filteredEmployeeConvocations.length === 0">
                             <td class="col-12 text-center">
                                 Aucun administratif invité
                             </td>
@@ -311,7 +327,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr class="d-flex" v-if="filteredGuestConvocations.length == 0">
+                        <tr class="d-flex" v-if="filteredGuestConvocations.length === 0">
                             <td class="col-12 text-center">
                                 Aucun invité
                             </td>

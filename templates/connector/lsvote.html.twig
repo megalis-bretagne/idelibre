@@ -9,6 +9,18 @@
 
 {% block pageForm %}
 
+    {{ form_start(form) }}
 
+    {{ form_row(form.url) }}
+    {{ form_row(form.apiKey) }}
 
+    <div id="statusLsvote" class="alert alert-info" data-url-check="{{ path("lsvote_connector_check") }}">
+        Vérification de la configuration du connecteur
+    </div>
+
+    {{ form_widget(form) }}
+    <div class="float-right">
+        {% block pageSaveReturn %}{{ macro.save('connector_index') }}{% endblock %}
+    </div>
+    {{ form_end(form) }}
 {% endblock %}
