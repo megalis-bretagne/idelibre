@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.2.4] - 2023-05-19
+
+### Correction
+- Une erreur dans le docker-compose bloquait le memory_limit d'idelibre à la valeur minimale (128M)
 
 ## [4.2.3] - 2023-05-16
 
