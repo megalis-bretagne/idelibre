@@ -2,8 +2,12 @@
 All notable changes to this project will be documented in this file.
 
 
-## [4.2.3] - 2023-05-16
+## [4.2.4] - 2023-05-19
 
+### Correction
+- Une erreur dans le docker-compose bloquait le memory_limit d'idelibre à la valeur minimale (128M)
+
+## [4.2.3] - 2023-05-16
 ### Evolution
 - nginx passage de la version 1.17 vers 1.23
 
@@ -11,7 +15,6 @@ All notable changes to this project will be documented in this file.
 - Contournement du openssl posant souci lors de l'envoi des mails avec ajout du verify_peer=false
 
 ## [4.2.2] - 2023-05-15
-
 ### Evolution
 - docker compose restart: unless-stopped
 
@@ -19,7 +22,6 @@ All notable changes to this project will be documented in this file.
 - Bug client web crash après mise à jour (otherdoc null)
 
 ## [4.2.1] - 2023-05-05
-
 ### Evolution
  - Mise à jour symfony en 6.2.10
  - Ajout des fonctionnalités manquantes dans l'api :
