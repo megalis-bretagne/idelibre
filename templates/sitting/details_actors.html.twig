@@ -78,7 +78,8 @@
 
                             <a href="{{ path('sitting_sendLsvote', {"id" : sitting.id}) }}" class="btn btn-primary" title="Envoyer à lsvote">
                                 <span class="fa fa-paper-plane"></span>
-                                Envoyer à lsvote</a>
+                                Envoyer à lsvote
+                            </a>
 
 {#                            <button class="btn btn-primary"#}
 {#                                    title="Envoyer à lsvote"#}
@@ -527,6 +528,31 @@
                     </div>
                 </div>
             </div>
+
+            {# Send lsvote #}
+            <div id="confirmLsvote" ref="confirmLsvote" class="modal fade" role="dialog" data-backdrop="static">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Attention</h4>
+                            <button class="close" data-dismiss="modal" type="button">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            Veuillez valider l'envoi à Lsvote
+                        </div>
+
+                        <div class="modal-footer">
+                            {{ macro.cancelBtnModal() }}
+
+                            <button class="btn btn-primary" data-dismiss="modal" type="button"
+                                    v-on:click="sendComelus()">
+                                Envoyer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {# Fin send lsvote #}
 
             <div v-if="showModalAttendance">
                 <transition name="modal">

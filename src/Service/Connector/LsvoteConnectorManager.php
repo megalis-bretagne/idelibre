@@ -10,11 +10,13 @@ use App\Entity\User;
 use App\Repository\LsvoteConnectorRepository;
 use App\Repository\UserRepository;
 use App\Service\Connector\Lsvote\LsvoteClient;
+use App\Service\Connector\Lsvote\LsvoteException;
 use App\Service\Connector\Lsvote\Model\LsvoteEnveloppe;
 use App\Service\Connector\Lsvote\Model\LsvoteProject;
 use App\Service\Connector\Lsvote\Model\LsvoteSitting;
 use App\Service\Connector\Lsvote\Model\LsvoteVoter;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 
 class LsvoteConnectorManager
 {
@@ -24,6 +26,7 @@ class LsvoteConnectorManager
         private readonly LsvoteClient              $lsvoteClient,
         private readonly EntityManagerInterface    $entityManager,
         private readonly UserRepository            $userRepository,
+        private readonly LoggerInterface           $logger,
 
     )
     {
@@ -53,13 +56,26 @@ class LsvoteConnectorManager
         $this->entityManager->flush();
     }
 
-    public function checkApiKey(?string $url, ?string $apiKey): bool
+    public function getLsvoteConnector(Structure $structure): LsvoteConnector
     {
-        return $this->lsvoteClient->checkApiKey($url, $apiKey);
+        return $this->lsvoteConnectorRepository->findOneBy(['structure' => $structure]);
     }
 
-    public function createSitting(?string $url, ?string $apiKey, Sitting $sitting)
+    public function checkApiKey(?string $url, ?string $apiKey): bool
     {
+        try {
+            $this->lsvoteClient->checkApiKey($url, $apiKey);
+        } catch (LsvoteException $e) {
+            $this->logger->error($e->getMessage());
+            return false;
+        }
+
+        return true;
+    }
+
+    public function createSitting(?string $url, ?string $apiKey, Sitting $sitting): ?string
+    {
+        $connector = $this->lsvoteConnectorRepository->findOneBy(["structure" => $sitting->getStructure()]);
 
         $lsvoteSitting = new LsvoteEnveloppe();
 
@@ -69,7 +85,15 @@ class LsvoteConnectorManager
             ->setVoters($this->prepareLsvoteVoter($sitting));
 
 
-        $id = $this->lsvoteClient->sendSitting($url, $apiKey, $lsvoteSitting);
+        try {
+            $id = $this->lsvoteClient->sendSitting($connector->getUrl(), $connector->getApiKey(), $lsvoteSitting);
+            //   $sitting->getVote()->setLsvoteId($id)  Sauvegarder les infos de lsvote dans IL
+            return $id;
+        } catch (LsvoteException $e) {
+            $this->logger->error($e->getMessage());
+
+            return null;
+        }
     }
 
     /**
@@ -118,6 +142,22 @@ class LsvoteConnectorManager
             ->setDate($sitting->getDate()->format('y-m-d H:i'));
 
         return $lsvoteSitting;
+    }
+
+    public function deleteSitting(Sitting $sitting): bool
+    {
+        $lsvoteSittingId = $sitting->getLsvoteSitting()->getLsvoteSittingId();
+        $connector = $this->getLsvoteConnector($sitting->getStructure());
+
+        try {
+            $this->lsvoteClient->deleteSitting($connector->getUrl(), $connector->getApiKey(), $lsvoteSittingId);
+        } catch (LsvoteException $e) {
+            $this->logger->error($e->getMessage());
+
+            return false;
+        }
+
+        return true;
     }
 
 }

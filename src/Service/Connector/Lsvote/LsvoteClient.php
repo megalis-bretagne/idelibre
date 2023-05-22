@@ -4,11 +4,16 @@ namespace App\Service\Connector\Lsvote;
 
 use App\Entity\Sitting;
 use App\Service\Connector\Lsvote\Model\LsvoteEnveloppe;
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Throwable;
 
 class LsvoteClient
 {
@@ -22,6 +27,9 @@ class LsvoteClient
     }
 
 
+    /**
+     * @throws LsvoteException
+     */
     public function checkApiKey(string $url, string $apiKey): bool
     {
         try {
@@ -38,36 +46,48 @@ class LsvoteClient
                     "verify_host" => false
                 ]);
         } catch (TransportExceptionInterface $e) {
-            //todo log error
-            return false;
+            throw new LsvoteException($e);
         }
 
         return true;
-
     }
 
+    /**
+     * @throws LsvoteException
+     */
     public function sendSitting(string $url, string $apiKey, LsvoteEnveloppe $lsvoteSitting)
     {
         $serializedData = $this->serializer->serialize($lsvoteSitting, 'json');
-        $res = $this->httpClient->request(
-            Request::METHOD_POST,
-            $url . self::SITTING_CREATE,
-            [
-                "headers" => [
-                    "Authorization" => $apiKey,
-                    'Accept' => 'application/json',
-                    "content-type" => "application/json",
-                ],
+        try {
+            $response = $this->httpClient->request(
+                Request::METHOD_POST,
+                $url . self::SITTING_CREATE,
+                [
+                    "headers" => [
+                        "Authorization" => $apiKey,
+                        'Accept' => 'application/json',
+                        "content-type" => "application/json",
+                    ],
 
-                "verify_peer" => false,
-                "verify_host" => false,
+                    "verify_peer" => false,
+                    "verify_host" => false,
 
-                "body" => $serializedData
+                    "body" => $serializedData
 
-            ]
-        );
+                ]
+            );
+
+            $content = json_decode($response->getContent());
+            return $content['id'];
+
+        } catch (Throwable $e) {
+            throw new LsvoteException($e);
+        }
     }
 
+    /**
+     * @throws LsvoteException
+     */
     public function deleteSitting(string $url, string $apiKey, string $sitingId): bool
     {
         try {
@@ -77,8 +97,8 @@ class LsvoteClient
                 ["headers" => [
                     "Authorization" => $apiKey
                 ]]);
-        } catch (TransportExceptionInterface) {
-            return false;
+        } catch (TransportExceptionInterface $e) {
+            throw new LsvoteException($e);
         }
 
         return true;

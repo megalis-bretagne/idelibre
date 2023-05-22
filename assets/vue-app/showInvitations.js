@@ -169,7 +169,6 @@ let app = new Vue({
                 this.isComelusSending = false;
                 this.showModalComelus = false;
             });
-
         },
 
         openShowModalAttendance() {
