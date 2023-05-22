@@ -16,10 +16,10 @@ class LsvoteSitting
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
-    private ?int $id = null;
+    private ?string $id = null;
 
-    #[ORM\Column(type: 'uuid')]
-    private ?Uuid $LsvoteSittingId = null;
+    #[ORM\Column(type: 'string')]
+    private ?string $LsvoteSittingId = null;
 
     #[Column(type: 'json')]
     private array $results = [];
@@ -30,17 +30,23 @@ class LsvoteSitting
     #[ORM\OneToOne(inversedBy: 'lsvoteSitting', cascade: ['persist', 'remove'])]
     private ?Sitting $sitting = null;
 
-    public function getId(): ?int
+
+    public function __construct()
+    {
+        $this->createdAt = new DateTimeImmutable('now');
+    }
+
+    public function getId(): ?string
     {
         return $this->id;
     }
 
-    public function getLsvoteSittingId(): ?Uuid
+    public function getLsvoteSittingId(): ?string
     {
         return $this->LsvoteSittingId;
     }
 
-    public function setLsvoteSittingId(Uuid $LsvoteSittingId): self
+    public function setLsvoteSittingId(string $LsvoteSittingId): self
     {
         $this->LsvoteSittingId = $LsvoteSittingId;
 
@@ -64,12 +70,6 @@ class LsvoteSitting
         return $this->createdAt;
     }
 
-    public function setCreatedAt(DateTimeImmutable $createdAt): self
-    {
-        $this->createdAt = new DateTimeImmutable('now');
-
-        return $this;
-    }
 
     public function getSitting(): ?Sitting
     {

@@ -4,6 +4,7 @@ namespace App\Service\Connector;
 
 use App\Entity\Connector\Exception\LsvoteConnectorException;
 use App\Entity\Connector\LsvoteConnector;
+use App\Entity\LsvoteSitting;
 use App\Entity\Sitting;
 use App\Entity\Structure;
 use App\Entity\User;
@@ -13,7 +14,6 @@ use App\Service\Connector\Lsvote\LsvoteClient;
 use App\Service\Connector\Lsvote\LsvoteException;
 use App\Service\Connector\Lsvote\Model\LsvoteEnveloppe;
 use App\Service\Connector\Lsvote\Model\LsvoteProject;
-use App\Service\Connector\Lsvote\Model\LsvoteSitting;
 use App\Service\Connector\Lsvote\Model\LsvoteVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -73,7 +73,7 @@ class LsvoteConnectorManager
         return true;
     }
 
-    public function createSitting(?string $url, ?string $apiKey, Sitting $sitting): ?string
+    public function createSitting(Sitting $sitting): ?string
     {
         $connector = $this->lsvoteConnectorRepository->findOneBy(["structure" => $sitting->getStructure()]);
 
@@ -87,7 +87,9 @@ class LsvoteConnectorManager
 
         try {
             $id = $this->lsvoteClient->sendSitting($connector->getUrl(), $connector->getApiKey(), $lsvoteSitting);
-            //   $sitting->getVote()->setLsvoteId($id)  Sauvegarder les infos de lsvote dans IL
+
+            $this->createLsvotesitting($id, $sitting);
+
             return $id;
         } catch (LsvoteException $e) {
             $this->logger->error($e->getMessage());
@@ -95,6 +97,9 @@ class LsvoteConnectorManager
             return null;
         }
     }
+
+
+
 
     /**
      * @return array<LsvoteProject>
@@ -134,9 +139,9 @@ class LsvoteConnectorManager
         return $lsvoteVoters;
     }
 
-    private function prepareLsvoteSitting(Sitting $sitting): LsvoteSitting
+    private function prepareLsvoteSitting(Sitting $sitting): \App\Service\Connector\Lsvote\Model\LsvoteSitting
     {
-        $lsvoteSitting = new LsvoteSitting();
+        $lsvoteSitting = new \App\Service\Connector\Lsvote\Model\LsvoteSitting();
 
         $lsvoteSitting->setName($sitting->getName())
             ->setDate($sitting->getDate()->format('y-m-d H:i'));
@@ -144,7 +149,22 @@ class LsvoteConnectorManager
         return $lsvoteSitting;
     }
 
-    public function deleteSitting(Sitting $sitting): bool
+    /**
+     * @param mixed $id
+     * @param Sitting $sitting
+     * @return void
+     */
+    private function createLsvotesitting(mixed $id, Sitting $sitting): void
+    {
+        $lsvoteSitting = (new LsvoteSitting())
+            ->setLsvoteSittingId($id)
+            ->setSitting($sitting);
+
+        $this->entityManager->persist($lsvoteSitting);
+        $this->entityManager->flush();
+    }
+
+    public function deleteLsvoteSitting(Sitting $sitting): bool
     {
         $lsvoteSittingId = $sitting->getLsvoteSitting()->getLsvoteSittingId();
         $connector = $this->getLsvoteConnector($sitting->getStructure());

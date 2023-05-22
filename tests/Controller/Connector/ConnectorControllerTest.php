@@ -6,6 +6,7 @@ use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
 use App\Tests\Story\ComelusConnectorStory;
 use App\Tests\Story\LsmessageConnectorStory;
+use App\Tests\Story\LsvoteConnectorStory;
 use App\Tests\Story\UserStory;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -37,6 +38,7 @@ class ConnectorControllerTest extends WebTestCase
         UserStory::load();
         ComelusConnectorStory::load();
         LsmessageConnectorStory::load();
+        LsvoteConnectorStory::load();
     }
 
     public function testIndex()

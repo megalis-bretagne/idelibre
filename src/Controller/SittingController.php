@@ -311,8 +311,6 @@ class SittingController extends AbstractController
         return 'sitting-active-nav';
     }
 
-
-
     #[Route(path: '/sitting/{id}/sendLsvote', name: 'sitting_sendLsvote', methods: ['GET'])]
     #[IsGranted(data: 'ROLE_SUPERADMIN')]
     public function sendToLsvote(Sitting $sitting, LsvoteConnectorManager $lsvoteConnectorManager, LsvoteConnectorRepository $lsvoteConnectorRepository): Response
@@ -324,6 +322,12 @@ class SittingController extends AbstractController
         $lsvoteConnectorManager->createSitting($url, $apiKey, $sitting);
 
         return $this->redirectToRoute('sitting_index', []);
+    }
+
+    public function deleteLsvoteSitting(Sitting $sitting, LsvoteConnectorManager $lsvoteConnectorManager)
+    {
+        $lsvoteConnectorManager->deleteSitting($sitting);
+        return $this->redirectToRoute('sitting_index');
     }
 
 }

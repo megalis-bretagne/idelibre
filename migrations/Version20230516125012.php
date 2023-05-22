@@ -20,7 +20,6 @@ final class Version20230516125012 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('DROP SEQUENCE party_legacy_seq CASCADE');
         $this->addSql('ALTER TABLE configuration ALTER minimum_entropy SET DEFAULT 80');
     }
 
@@ -28,7 +27,6 @@ final class Version20230516125012 extends AbstractMigration
     {
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE SCHEMA public');
-        $this->addSql('CREATE SEQUENCE party_legacy_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('ALTER TABLE configuration ALTER minimum_entropy SET DEFAULT 82');
     }
 }

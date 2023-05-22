@@ -46,7 +46,7 @@ class LsvoteConnectorController extends AbstractController
 
     #[Route(path: '/connector/lsvote/check/', name: 'lsvote_connector_check')]
     #[IsGranted(data: 'ROLE_MANAGE_CONNECTORS')]
-    public function isValidApiKey( Request $request): JsonResponse
+    public function isValidApiKey(Request $request): JsonResponse
     {
         $url = $request->query->get('url');
         $apiKey = $request->query->get('apiKey');
@@ -58,6 +58,4 @@ class LsvoteConnectorController extends AbstractController
 
         return $this->json(["success" => true]);
     }
-
-
 }
