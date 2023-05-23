@@ -13,8 +13,7 @@ class LsvoteClient
 {
 
     const CHECK = '/api/v1/me';
-    const SITTING_DELETE = '/api/v1/sittings/';
-    const SITTING_CREATE = '/api/v1/sittings';
+    const API_SITTING_URI = '/api/v1/sittings/';
 
     public function __construct(private readonly HttpClientInterface $httpClient, private readonly SerializerInterface $serializer)
     {
@@ -55,7 +54,7 @@ class LsvoteClient
         try {
             $response = $this->httpClient->request(
                 Request::METHOD_POST,
-                $url . self::SITTING_CREATE,
+                $url . self::API_SITTING_URI,
                 [
                     "headers" => [
                         "Authorization" => $apiKey,
@@ -82,12 +81,12 @@ class LsvoteClient
     /**
      * @throws LsvoteException
      */
-    public function deleteSitting(string $url, string $apiKey, string $sitingId): bool
+    public function deleteSitting(string $url, string $apiKey, string $sittingId): bool
     {
         try {
             $this->httpClient->request(
                 "DELETE",
-                $url . "/" . self::SITTING_DELETE . $sitingId,
+                $url . "/" . self::API_SITTING_URI . '/' . $sittingId,
                 ["headers" => [
                     "Authorization" => $apiKey
                 ]]);
@@ -99,22 +98,20 @@ class LsvoteClient
 
     }
 
-
-    /*   public function resultSitting(string $url, string $apiKey, string $sitingId): bool
-       {
-           try {
-               $this->httpClient->request(
-                   "GET",
-                   $url . "/" . self::SITTING_DELETE . $sitingId,
-                   ["headers" => [
-                       "Authorization" => $apiKey
-                   ]]);
-           } catch (TransportExceptionInterface) {
-               return false;
-           }
-
-           return true;
-
+    public function resultSitting(string $url, string $apiKey, string $sittingId): bool
+    {
+       try {
+           $this->httpClient->request(
+               "GET",
+               $url . "/" . self::API_SITTING_URI .'/'. $sittingId . '/result',
+               ["headers" => [
+                   "Authorization" => $apiKey
+               ]]);
+       } catch (TransportExceptionInterface) {
+           return false;
        }
-   */
+
+       return true;
+
+    }
 }
