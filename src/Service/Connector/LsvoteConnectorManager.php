@@ -185,7 +185,6 @@ class LsvoteConnectorManager
         $lsvoteSittingId = $sitting->getLsvoteSitting()->getLsvoteSittingId();
         $connector = $this->getLsvoteConnector($sitting->getStructure());
 
-        ### no non no ###
         try {
             $this->lsvoteClient->resultSitting($connector->getUrl(), $connector->getApiKey(), $lsvoteSittingId);
         } catch (LsvoteException $e) {

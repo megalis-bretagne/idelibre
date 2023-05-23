@@ -86,7 +86,7 @@ class LsvoteClient
         try {
             $this->httpClient->request(
                 "DELETE",
-                $url . "/" . self::API_SITTING_URI . '/' . $sittingId,
+                $url . "/" . self::API_SITTING_URI . $sittingId,
                 ["headers" => [
                     "Authorization" => $apiKey
                 ]]);
@@ -103,7 +103,7 @@ class LsvoteClient
        try {
            $this->httpClient->request(
                "GET",
-               $url . "/" . self::API_SITTING_URI .'/'. $sittingId . '/result',
+               $url . '/' . self::API_SITTING_URI . $sittingId . '/result',
                ["headers" => [
                    "Authorization" => $apiKey
                ]]);
