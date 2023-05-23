@@ -320,12 +320,6 @@ class SittingController extends AbstractController
         return $this->redirectToRoute('sitting_index', []);
     }
 
-//    public function deleteLsvoteSitting(Sitting $sitting, LsvoteConnectorManager $lsvoteConnectorManager)
-//    {
-//        $lsvoteConnectorManager->deleteSitting($sitting);
-//        return $this->redirectToRoute('sitting_index');
-//    }
-
     #[Route(path: '/sitting/{id}/lsvote-results', name: 'sitting_lsvote_results', methods: ['GET'])]
     #[IsGranted(data: 'ROLE_MANAGE_SITTINGS')]
     public function getLsvoteResults(Sitting $sitting, LsvoteConnectorManager $lsvoteConnectorManager, Request $request): Response
