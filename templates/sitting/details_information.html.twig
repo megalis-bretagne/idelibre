@@ -160,6 +160,22 @@
                 </div>
             </div>
 
+            <div class="row mt-2">
+                <div class="col-4 text-right mt-1">
+                    <b>Télécharger les résultats depuis Lsvote:</b>
+                </div>
+                <div class="col-8">
+                    {{ sitting.name }}_results_lsvote.csv
+                    <a class="btn btn-outline-secondary borderless"
+                       href="#"
+                       title="Télécharger les résultats">
+                        <span class="fas fa-download"></span>
+                    </a>
+                </div>
+            </div>
+
+
+
             {% if isAlreadySent %}
                 <div class="row mt-2">
                     <div class="col-4 text-right mt-1">

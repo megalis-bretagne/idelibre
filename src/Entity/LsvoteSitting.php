@@ -21,7 +21,7 @@ class LsvoteSitting
     #[ORM\Column(type: 'string')]
     private ?string $LsvoteSittingId = null;
 
-    #[Column(type: 'json')]
+    #[Column(type: 'json',  options: ['jsonb' => true])]
     private array $results = [];
 
     #[ORM\Column]

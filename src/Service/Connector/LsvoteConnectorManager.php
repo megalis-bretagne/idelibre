@@ -86,6 +86,7 @@ class LsvoteConnectorManager
 
 
         try {
+
             $id = $this->lsvoteClient->sendSitting($connector->getUrl(), $connector->getApiKey(), $lsvoteSitting);
 
             $this->createLsvotesitting($id, $sitting);
@@ -149,6 +150,7 @@ class LsvoteConnectorManager
         return $lsvoteSitting;
     }
 
+
     /**
      * @param mixed $id
      * @param Sitting $sitting
@@ -180,17 +182,34 @@ class LsvoteConnectorManager
         return true;
     }
 
-    public function getLsvoteSittingResults(Sitting $sitting)
+    public function getLsvoteSittingResults(Sitting $sitting): array
     {
-        $lsvoteSittingId = $sitting->getLsvoteSitting()->getLsvoteSittingId();
         $connector = $this->getLsvoteConnector($sitting->getStructure());
 
         try {
-            $this->lsvoteClient->resultSitting($connector->getUrl(), $connector->getApiKey(), $lsvoteSittingId);
+
+            $results = $this->lsvoteClient->resultSitting($connector->getUrl(), $connector->getApiKey(), $sitting->getLsvoteSitting()->getLsvoteSittingId());
+            $this->saveResults($sitting, $results);
+
+            return $results;
+
         } catch (LsvoteException $e) {
-            return false;
+            $this->logger->error($e->getMessage());
         }
 
+
+    }
+
+    /**
+     * @param Sitting $sitting
+     * @param array $results
+     * @return void
+     */
+    public function saveResults(Sitting $sitting, array $results): void
+    {
+        $lsvoteSitting = $sitting->getLsvoteSitting();
+        $lsvoteSitting->setResults($results);
+        $this->entityManager->flush();
     }
 
 }

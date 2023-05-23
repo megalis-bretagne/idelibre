@@ -312,22 +312,28 @@ class SittingController extends AbstractController
     }
 
     #[Route(path: '/sitting/{id}/sendLsvote', name: 'sitting_sendLsvote', methods: ['GET'])]
-    #[IsGranted(data: 'ROLE_SUPERADMIN')]
-    public function sendToLsvote(Sitting $sitting, LsvoteConnectorManager $lsvoteConnectorManager, LsvoteConnectorRepository $lsvoteConnectorRepository): Response
+    #[IsGranted(data: 'ROLE_MANAGE_SITTINGS')]
+    public function sendToLsvote(Sitting $sitting, LsvoteConnectorManager $lsvoteConnectorManager): Response
     {
-        $connector = $lsvoteConnectorRepository->findOneBy(["structure" => $this->getUser()->getStructure()]);
-        $url = $connector->getUrl();
-        $apiKey = $connector->getApiKey();
-
-        $lsvoteConnectorManager->createSitting($url, $apiKey, $sitting);
+        $lsvoteConnectorManager->createSitting($sitting);
 
         return $this->redirectToRoute('sitting_index', []);
     }
 
-    public function deleteLsvoteSitting(Sitting $sitting, LsvoteConnectorManager $lsvoteConnectorManager)
+//    public function deleteLsvoteSitting(Sitting $sitting, LsvoteConnectorManager $lsvoteConnectorManager)
+//    {
+//        $lsvoteConnectorManager->deleteSitting($sitting);
+//        return $this->redirectToRoute('sitting_index');
+//    }
+
+    #[Route(path: '/sitting/{id}/lsvote-results', name: 'sitting_lsvote_results', methods: ['GET'])]
+    #[IsGranted(data: 'ROLE_MANAGE_SITTINGS')]
+    public function getLsvoteResults(Sitting $sitting, LsvoteConnectorManager $lsvoteConnectorManager, Request $request): Response
     {
-        $lsvoteConnectorManager->deleteSitting($sitting);
-        return $this->redirectToRoute('sitting_index');
+        $results = $lsvoteConnectorManager->getLsvoteSittingResults($sitting);
+        $this->addFlash('success', 'Les résultats ont bien été récupérés depuis lsvote');
+
+        return $this->redirect($request->headers->get('referer'));
     }
 
 }

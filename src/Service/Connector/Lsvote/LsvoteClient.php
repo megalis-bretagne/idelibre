@@ -3,8 +3,13 @@
 namespace App\Service\Connector\Lsvote;
 
 use App\Service\Connector\Lsvote\Model\LsvoteEnveloppe;
+use Exception;
+use http\Env\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Throwable;
@@ -13,7 +18,7 @@ class LsvoteClient
 {
 
     const CHECK = '/api/v1/me';
-    const API_SITTING_URI = '/api/v1/sittings/';
+    const API_SITTING_URI = '/api/v1/sittings';
 
     public function __construct(private readonly HttpClientInterface $httpClient, private readonly SerializerInterface $serializer)
     {
@@ -32,8 +37,6 @@ class LsvoteClient
                 [
                     "headers" => [
                         "Authorization" => $apiKey,
-
-
                     ],
                     "verify_peer" => false,
                     "verify_host" => false
@@ -70,7 +73,7 @@ class LsvoteClient
                 ]
             );
 
-            $content = json_decode($response->getContent());
+            $content = json_decode($response->getContent(), true);
             return $content['id'];
 
         } catch (Throwable $e) {
@@ -85,8 +88,8 @@ class LsvoteClient
     {
         try {
             $this->httpClient->request(
-                "DELETE",
-                $url . "/" . self::API_SITTING_URI . $sittingId,
+                Request::METHOD_DELETE,
+                $url . "/" . self::API_SITTING_URI ."/". $sittingId,
                 ["headers" => [
                     "Authorization" => $apiKey
                 ]]);
@@ -98,20 +101,31 @@ class LsvoteClient
 
     }
 
-    public function resultSitting(string $url, string $apiKey, string $sittingId): bool
+
+    /**
+     * @throws LsvoteException
+     */
+    public function resultSitting(string $url, string $apiKey, string $sittingId): array
     {
        try {
-           $this->httpClient->request(
+           $response = $this->httpClient->request(
                "GET",
-               $url . '/' . self::API_SITTING_URI . $sittingId . '/result',
+               $url . self::API_SITTING_URI ."/". $sittingId . '/result',
                ["headers" => [
                    "Authorization" => $apiKey
-               ]]);
-       } catch (TransportExceptionInterface) {
-           return false;
+               ],
+                   "verify_peer" => false,
+                   "verify_host" => false,
+                   ]);
+
+            return json_decode($response->getContent(), true);
+
+       } catch (Throwable $e) {
+           throw new LsvoteException($e);
        }
 
-       return true;
+
 
     }
+
 }

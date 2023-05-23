@@ -2,6 +2,7 @@
 
 namespace App\Tests\Service\Connector;
 
+use App\Entity\Connector\Exception\LsvoteConnectorException;
 use App\Entity\Structure;
 use App\Repository\LsvoteSittingRepository;
 use App\Service\Connector\Lsvote\LsvoteClient;
@@ -23,17 +24,12 @@ class LsvoteConnectorManagerTest extends KernelTestCase
     use Factories;
 
     private readonly LsvoteSittingRepository $lsvoteSittingRepository;
+    private readonly LsvoteConnectorManager $lsvoteConnectorManager;
 
     protected function setUp(): void
     {
         $this->lsvoteSittingRepository = self::getContainer()->get(LsvoteSittingRepository::class);
     }
-
-//    public function testCreateConnector()
-//    {
-//
-//
-//    }
 
     public function testCheckApiKey()
     {
@@ -75,12 +71,6 @@ class LsvoteConnectorManagerTest extends KernelTestCase
         $this->assertFalse($res);
     }
 
-
-
-//    public function testSave()
-//    {
-//
-//    }
 
     public function testCreateSitting()
     {
