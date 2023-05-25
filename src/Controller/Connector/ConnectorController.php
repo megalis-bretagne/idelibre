@@ -4,6 +4,7 @@ namespace App\Controller\Connector;
 
 use App\Repository\Connector\ComelusConnectorRepository;
 use App\Repository\Connector\LsmessageConnectorRepository;
+use App\Repository\LsvoteConnectorRepository;
 use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -17,11 +18,12 @@ class ConnectorController extends AbstractController
 {
     #[Route(path: '/connector', name: 'connector_index')]
     #[IsGranted(data: 'ROLE_MANAGE_CONNECTORS')]
-    public function index(ComelusConnectorRepository $comelusConnectorRepository, LsmessageConnectorRepository $lsmessageConnectorRepository): Response
+    public function index(ComelusConnectorRepository $comelusConnectorRepository, LsmessageConnectorRepository $lsmessageConnectorRepository, LsvoteConnectorRepository $lsvoteConnectorRepository): Response
     {
         return $this->render('connector/connector_index.html.twig', [
             'comelus' => $comelusConnectorRepository->findOneBy(['structure' => $this->getUser()->getStructure()]),
             'lsmessage' => $lsmessageConnectorRepository->findOneBy(['structure' => $this->getUser()->getStructure()]),
+            'lsvote' => $lsvoteConnectorRepository->findOneBy(['structure' => $this->getUser()->getStructure()]),
         ]);
     }
 }
