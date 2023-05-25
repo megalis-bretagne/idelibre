@@ -4,9 +4,13 @@ namespace App\Tests\Controller;
 
 use App\Entity\EventLog\Action;
 use App\Entity\Sitting;
+use App\Tests\Factory\LsvoteSittingFactory;
+use App\Tests\Factory\SittingFactory;
+use App\Tests\Factory\StructureFactory;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
 use App\Tests\Story\EmailTemplateStory;
+use App\Tests\Story\LsvoteConnectorStory;
 use App\Tests\Story\SittingStory;
 use App\Tests\Story\TypeStory;
 use Doctrine\Persistence\ObjectManager;
@@ -40,6 +44,8 @@ class SittingControllerTest extends WebTestCase
 
         SittingStory::load();
         EmailTemplateStory::load();
+        LsvoteConnectorStory::load();
+
     }
 
     public function testIndex()
@@ -248,6 +254,7 @@ class SittingControllerTest extends WebTestCase
         $filesystem = new Filesystem();
         $filesystem->copy(__DIR__ . '/../resources/fichier.pdf', '/tmp/convocation');
         $sitting = SittingStory::sittingConseilLibriciel();
+
 
         $this->loginAsAdminLibriciel();
         $crawler = $this->client->request(Request::METHOD_GET, '/sitting/edit/' . $sitting->getId());

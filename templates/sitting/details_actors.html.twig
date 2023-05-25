@@ -59,13 +59,7 @@
                             <button class="btn btn-outline-primary " @click="openShowModalAttendance()">
                                 Gérer les présences
                             </button>
-                            <button :disabled="comelusId || !isComelus || isComelusSending" class="btn btn-primary"
-                                    title="Envoyer à comelus"
-                                    data-target="#confirmComelus"
-                                    data-toggle="modal">
-                                <span class="fa fa-paper-plane"></span>
-                                Envoyer via comelus
-                            </button>
+
                             <button :disabled="isAlreadySentActors" class="btn btn-primary"
                                     title="Envoyer les convocations"
                                     data-target="#confirm"
@@ -73,6 +67,30 @@
                                 <span class="fa fa-paper-plane"></span>
                                 Envoyer les convocations
                             </button>
+
+                            <button :disabled="comelusId || !isComelus || isComelusSending" class="btn btn-primary"
+                                    title="Envoyer à comelus"
+                                    data-target="#confirmComelus"
+                                    data-toggle="modal">
+                                <span class="fa fa-paper-plane"></span>
+                                Envoyer via comelus
+                            </button>
+
+
+
+                            <button
+                                    {% if isActiveLsvote == false %} disabled="disabled" {% endif %}
+                                    class="btn btn-primary"
+                                    title="Envoyer à lsvote"
+                                    data-target="#confirmLsvote"
+                                    data-toggle="modal">
+                                <span class="fa fa-paper-plane"></span>
+                                <span v-if="!lsvoteId">Envoyer à lsvote </span>
+                                <span v-if="lsvoteId">Renvoyer à lsvote </span>
+
+                            </button>
+
+
                         </div>
                     </div>
                 </div>
@@ -216,7 +234,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr class="d-flex" v-if="filteredEmployeeConvocations.length == 0">
+                        <tr class="d-flex" v-if="filteredEmployeeConvocations.length === 0">
                             <td class="col-12 text-center">
                                 Aucun administratif invité
                             </td>
@@ -311,7 +329,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr class="d-flex" v-if="filteredGuestConvocations.length == 0">
+                        <tr class="d-flex" v-if="filteredGuestConvocations.length === 0">
                             <td class="col-12 text-center">
                                 Aucun invité
                             </td>
@@ -511,6 +529,36 @@
                     </div>
                 </div>
             </div>
+
+
+
+            <div id="confirmLsvote" ref="confirmLsvote" class="modal fade" role="dialog" data-backdrop="static">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Attention</h4>
+                            <button class="close" data-dismiss="modal" type="button">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <span v-if="!lsvoteId">Veuillez valider l'envoi de la séance vers lsvote</span>
+                            <span v-if="lsvoteId">La séance a déjà été envoyée à lsvote. Effectuer un renvoi effacera la séance actuellement présente sur lsvote. <br>
+                                Cette action est impossible si la séance est a déjà été démarrée.
+                            </span>
+                        </div>
+
+                        <div class="modal-footer">
+                            {{ macro.cancelBtnModal() }}
+
+                            <button class="btn btn-primary" data-dismiss="modal" type="button"
+                                    v-on:click="sendLsvote()">
+                                Envoyer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
 
             <div v-if="showModalAttendance">
                 <transition name="modal">

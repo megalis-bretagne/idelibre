@@ -24,6 +24,12 @@
                 <td class="col-3">{{ lsmessage.active ? 'Oui': 'Non' }}</td>
                 <td class="col-2">{{ macros.editButton('lsmessage_connector') }}</td>
             </tr>
+
+            <tr class="d-flex">
+                <td class="col-7">Connecteur Lsvote</td>
+                <td class="col-3">{{ lsvote.active ? 'Oui': 'Non' }}</td>
+                <td class="col-2">{{ macros.editButton('lsvote_connector') }}</td>
+            </tr>
         </tbody>
     </table>
 {% endblock %}

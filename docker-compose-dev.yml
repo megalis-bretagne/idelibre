@@ -130,13 +130,13 @@ services:
       - network_idelibre_dev
 
 
-  ofelia:
-    image: mcuadros/ofelia:latest
-    depends_on:
-      - fpm-idelibre
-    command: daemon --docker
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+#  ofelia:
+#    image: mcuadros/ofelia:latest
+#    depends_on:
+#      - fpm-idelibre
+#    command: daemon --docker
+#    volumes:
+#      - /var/run/docker.sock:/var/run/docker.sock:ro
 
 networks:
   network_idelibre_dev:

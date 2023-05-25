@@ -65,6 +65,7 @@ class PartyControllerTest extends WebTestCase
         $form['party[name]'] = 'New party';
         $form['party[actors]'] = [$actor2->getId()];
 
+
         $this->client->submit($form);
 
         $this->assertTrue($this->client->getResponse()->isRedirect());
