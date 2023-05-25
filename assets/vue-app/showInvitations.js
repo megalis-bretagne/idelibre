@@ -173,15 +173,14 @@ let app = new Vue({
             });
         },
         sendLsvote() {
-            axios.post(`/api/sittings/${getSittingId()}/sendLsvote`).then(
-                (response) => {
+            axios.post(`/api/sittings/${getSittingId()}/sendLsvote`)
+                .then((response) => {
                     this.setInfoMessage("Séance envoyée à lsvote");
                     this.lsvoteId = response.data['lsvoteId']
                 })
                 .catch((e) => {
                     console.log(e);
                     this.setErrorMessage("Erreur lors de l'envoi");
-
                 });
         },
 

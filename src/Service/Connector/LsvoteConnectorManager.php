@@ -79,15 +79,13 @@ class LsvoteConnectorManager
      */
     public function createSitting(Sitting $sitting): ?string
     {
-        $connector = $this->lsvoteConnectorRepository->findOneBy(["structure" => $sitting->getStructure()]);
+        $connector = $this->getLsvoteConnector($sitting->getStructure());
 
         $lsvoteSitting = new LsvoteEnveloppe();
-
         $lsvoteSitting
             ->setSitting($this->prepareLsvoteSitting($sitting))
             ->setProjects($this->prepareLsvoteProjects($sitting))
             ->setVoters($this->prepareLsvoteVoter($sitting));
-
 
         try {
 
@@ -113,11 +111,12 @@ class LsvoteConnectorManager
         foreach ($sitting->getProjects() as $project) {
             $lsvoteProject = new LsvoteProject();
             $lsvoteProject
-                ->setName($project->getName())
                 ->setExternalId($project->getId())
-                ->setRank($project->getRank());
+                ->setRank($project->getRank())
+                ->setName($project->getName());
             $lsvoteProjects[] = $lsvoteProject;
         }
+        dd($lsvoteProjects);
 
         return $lsvoteProjects;
     }
