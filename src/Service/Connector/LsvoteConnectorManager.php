@@ -116,7 +116,6 @@ class LsvoteConnectorManager
                 ->setName($project->getName());
             $lsvoteProjects[] = $lsvoteProject;
         }
-        dd($lsvoteProjects);
 
         return $lsvoteProjects;
     }
