@@ -7,6 +7,7 @@ use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Column;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints\Uuid;
 
 #[ORM\Entity(repositoryClass: LsvoteSittingRepository::class)]
@@ -19,7 +20,8 @@ class LsvoteSitting
     private ?string $id = null;
 
     #[ORM\Column(type: 'string')]
-    private ?string $LsvoteSittingId = null;
+    #[Groups(groups: ['sitting'])]
+    private ?string $lsvoteSittingId = null;
 
     #[Column(type: 'json',  options: ['jsonb' => true])]
     private array $results = [];
@@ -43,12 +45,12 @@ class LsvoteSitting
 
     public function getLsvoteSittingId(): ?string
     {
-        return $this->LsvoteSittingId;
+        return $this->lsvoteSittingId;
     }
 
-    public function setLsvoteSittingId(string $LsvoteSittingId): self
+    public function setLsvoteSittingId(string $lsvoteSittingId): self
     {
-        $this->LsvoteSittingId = $LsvoteSittingId;
+        $this->lsvoteSittingId = $lsvoteSittingId;
 
         return $this;
     }

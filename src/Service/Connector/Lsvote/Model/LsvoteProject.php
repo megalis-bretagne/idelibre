@@ -7,6 +7,21 @@ class LsvoteProject
     private string $name;
     private int $rank;
 
+    private string $externalId;
+
+    public function getExternalId(): string
+    {
+        return $this->externalId;
+    }
+
+    public function setExternalId(string $externalId): LsvoteProject
+    {
+        $this->externalId = $externalId;
+        return $this;
+    }
+
+
+
     public function getName(): string
     {
         return $this->name;

@@ -66,10 +66,10 @@
 
             <div class="row mt-3">
                 <div class="col-4 text-right">
-                        <b>Autoriser la participation à distance :</b>
+                    <b>Autoriser la participation à distance :</b>
                 </div>
                 <div class="col-8">
-                    {{ sitting.isRemoteAllowed ? 'Oui' : 'Non'  }}
+                    {{ sitting.isRemoteAllowed ? 'Oui' : 'Non' }}
                 </div>
             </div>
 
@@ -160,22 +160,6 @@
                 </div>
             </div>
 
-            <div class="row mt-2">
-                <div class="col-4 text-right mt-1">
-                    <b>Télécharger les résultats depuis Lsvote:</b>
-                </div>
-                <div class="col-8">
-                    {{ sitting.name }}_results_lsvote.csv
-                    <a class="btn btn-outline-secondary borderless"
-                       href="#"
-                       title="Télécharger les résultats">
-                        <span class="fas fa-download"></span>
-                    </a>
-                </div>
-            </div>
-
-
-
             {% if isAlreadySent %}
                 <div class="row mt-2">
                     <div class="col-4 text-right mt-1">
@@ -191,6 +175,40 @@
                     </div>
                 </div>
             {% endif %}
+
+            {% if isActiveLsvote and not isLsvoteResults and isSentLsvote %}
+                <div class="row mt-2">
+                    <div class="col-4 text-right mt-1">
+                        <b>Importer les résultats depuis Lsvote:</b>
+                    </div>
+                    <div class="col-8">
+                        <a class="btn btn-outline-primary"
+                           href="{{ path('sitting_lsvote_results', {'id': sitting.id}) }}"
+                           title="Télécharger les résultats">
+                            <span class="fa fa-cloud-download-alt"></span> Récupérer les résultats
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+
+
+            {% if isLsvoteResults %}
+                <div class="row mt-2">
+                    <div class="col-4 text-right mt-1">
+                        <b>Télécharger le rapport des résultats en json:</b>
+                    </div>
+                    <div class="col-8">
+                        {{ sitting.name }}_results_lsvote.json
+                        <a class="btn btn-outline-secondary borderless"
+                           href="{{ path('sitting_lsvote_results_json', {'id': sitting.id}) }}"
+                           title="Télécharger les résultats">
+                            <span class="fas fa-download"></span>
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+
+
 
         </div>
 

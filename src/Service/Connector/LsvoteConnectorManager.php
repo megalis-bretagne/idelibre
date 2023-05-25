@@ -17,6 +17,7 @@ use App\Service\Connector\Lsvote\Model\LsvoteProject;
 use App\Service\Connector\Lsvote\Model\LsvoteVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Filesystem\Filesystem;
 
 class LsvoteConnectorManager
 {
@@ -73,6 +74,9 @@ class LsvoteConnectorManager
         return true;
     }
 
+    /**
+     * @throws LsvoteSittingCreationException
+     */
     public function createSitting(Sitting $sitting): ?string
     {
         $connector = $this->lsvoteConnectorRepository->findOneBy(["structure" => $sitting->getStructure()]);
@@ -95,22 +99,22 @@ class LsvoteConnectorManager
         } catch (LsvoteException $e) {
             $this->logger->error($e->getMessage());
 
-            return null;
+            throw new LsvoteSittingCreationException("Erreur lors de la création de la séance");
         }
     }
-
-
 
 
     /**
      * @return array<LsvoteProject>
      */
-    public function prepareLsvoteProjects(Sitting $sitting): array
+    private function prepareLsvoteProjects(Sitting $sitting): array
     {
         $lsvoteProjects = [];
         foreach ($sitting->getProjects() as $project) {
             $lsvoteProject = new LsvoteProject();
-            $lsvoteProject->setName($project->getName())
+            $lsvoteProject
+                ->setName($project->getName())
+                ->setExternalId($project->getId())
                 ->setRank($project->getRank());
             $lsvoteProjects[] = $lsvoteProject;
         }
@@ -122,7 +126,7 @@ class LsvoteConnectorManager
     /**
      * @return array<LsvoteVoter>
      */
-    public function prepareLsvoteVoter(Sitting $sitting): array
+    private function prepareLsvoteVoter(Sitting $sitting): array
     {
 
         /** @var array<User> $users */
@@ -147,6 +151,7 @@ class LsvoteConnectorManager
         $lsvoteSitting->setName($sitting->getName())
             ->setDate($sitting->getDate()->format('y-m-d H:i'));
 
+
         return $lsvoteSitting;
     }
 
@@ -166,6 +171,8 @@ class LsvoteConnectorManager
         $this->entityManager->flush();
     }
 
+
+
     public function deleteLsvoteSitting(Sitting $sitting): bool
     {
         $lsvoteSittingId = $sitting->getLsvoteSitting()->getLsvoteSittingId();
@@ -182,21 +189,32 @@ class LsvoteConnectorManager
         return true;
     }
 
+    /**
+     * @throws LsvoteResultException
+     */
     public function getLsvoteSittingResults(Sitting $sitting): array
     {
         $connector = $this->getLsvoteConnector($sitting->getStructure());
 
         try {
-
             $results = $this->lsvoteClient->resultSitting($connector->getUrl(), $connector->getApiKey(), $sitting->getLsvoteSitting()->getLsvoteSittingId());
-            $this->saveResults($sitting, $results);
 
+            $this->saveResults($sitting, $results);
             return $results;
 
         } catch (LsvoteException $e) {
             $this->logger->error($e->getMessage());
+            throw new LsvoteResultException($this->formatError($e->getMessage()));
         }
+    }
 
+
+    private function formatError(string $message):string
+    {
+        return match ($message) {
+            '"sitting.not.over"' => "la séance n'est pas terminée sur lsvote",
+            default => 'Une erreur est survenue',
+        };
 
     }
 
@@ -210,6 +228,48 @@ class LsvoteConnectorManager
         $lsvoteSitting = $sitting->getLsvoteSitting();
         $lsvoteSitting->setResults($results);
         $this->entityManager->flush();
+    }
+
+    public function createJsonFile(Sitting $sitting): string
+    {
+        $results = $sitting->getLsvoteSitting()->getResults();
+        # pas de d'ID externe ici...
+        $resultsJson = json_encode($results);
+
+        $jsonPath = '/tmp/' . uniqid('json_vote');
+
+        file_put_contents($jsonPath, $resultsJson);
+
+        return $jsonPath;
+    }
+
+    /**
+     * @throws LsvoteSittingCreationException
+     */
+    public function editLsvoteSitting(Sitting $sitting): ?string
+    {
+        $connector = $this->getLsvoteConnector($sitting->getStructure());
+        $lsvoteEnvelope = new LsvoteEnveloppe();
+
+        $lsvoteEnvelope
+            ->setSitting($this->prepareLsvoteSitting($sitting))
+            ->setProjects($this->prepareLsvoteProjects($sitting))
+            ->setVoters($this->prepareLsvoteVoter($sitting));
+
+        $lsvotesittingId = $sitting->getLsvoteSitting()->getLsvoteSittingId();
+
+        try {
+            $id = $this->lsvoteClient->reSendSitting($connector->getUrl(), $connector->getApiKey(), $lsvotesittingId, $lsvoteEnvelope);
+
+            $sitting->getLsvoteSitting()->setLsvoteSittingId($id);
+            $this->entityManager->flush();
+
+            return $id;
+        } catch (LsvoteException $e) {
+            $this->logger->error($e->getMessage());
+
+            throw new LsvoteSittingCreationException("Impossible de mettre à jour la séance");
+        }
     }
 
 }

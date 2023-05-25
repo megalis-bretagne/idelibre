@@ -8,7 +8,7 @@ Vue.filter('formatDateString', function (value, timezone) {
     if (value && timezone) {
         const date = new Date(value);
         const tz = date.toLocaleString("utc", {timeZone: timezone});
-        return tz.substring(0, tz.length-3)
+        return tz.substring(0, tz.length - 3)
     }
 });
 
@@ -19,6 +19,7 @@ let app = new Vue({
         comelusId: null,
         isComelus: false,
         isComelusSending: false,
+        lsvoteId: null,
         actorConvocations: [],
         guestConvocations: [],
         employeeConvocations: [],
@@ -115,8 +116,9 @@ let app = new Vue({
             axios.get(`/api/sittings/${getSittingId()}`).then(response => {
                 const sitting = response.data;
                 this.comelusId = sitting?.comelusId ?? null;
-                this.isComelus = sitting?.type.isComelus ?? false
+                this.isComelus = sitting?.type.isComelus ?? false;
                 this.isArchived = sitting.isArchived;
+                this.lsvoteId = sitting?.lsvoteSitting?.lsvoteSittingId;
             })
         },
 
@@ -169,6 +171,18 @@ let app = new Vue({
                 this.isComelusSending = false;
                 this.showModalComelus = false;
             });
+        },
+        sendLsvote() {
+            axios.post(`/api/sittings/${getSittingId()}/sendLsvote`).then(
+                (response) => {
+                    this.setInfoMessage("Séance envoyée à lsvote");
+                    this.lsvoteId = response.data['lsvoteId']
+                })
+                .catch((e) => {
+                    console.log(e);
+                    this.setErrorMessage("Erreur lors de l'envoi");
+
+                });
         },
 
         openShowModalAttendance() {

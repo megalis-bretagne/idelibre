@@ -76,18 +76,19 @@
                                 Envoyer via comelus
                             </button>
 
-                            <a href="{{ path('sitting_sendLsvote', {"id" : sitting.id}) }}" class="btn btn-primary" title="Envoyer à lsvote">
-                                <span class="fa fa-paper-plane"></span>
-                                Envoyer à lsvote
-                            </a>
 
-{#                            <button class="btn btn-primary"#}
-{#                                    title="Envoyer à lsvote"#}
-{#                                    data-target="#confirmLsvote"#}
-{#                                    data-toggle="modal">#}
-{#                                <span class="fa fa-paper-plane"></span>#}
-{#                                Envoyer à Lsvote#}
-{#                            </button>#}
+
+                            <button
+                                    {% if isActiveLsvote == false %} disabled="disabled" {% endif %}
+                                    class="btn btn-primary"
+                                    title="Envoyer à lsvote"
+                                    data-target="#confirmLsvote"
+                                    data-toggle="modal">
+                                <span class="fa fa-paper-plane"></span>
+                                <span v-if="!lsvoteId">Envoyer à lsvote </span>
+                                <span v-if="lsvoteId">Renvoyer à lsvote </span>
+
+                            </button>
 
 
                         </div>
@@ -529,7 +530,8 @@
                 </div>
             </div>
 
-            {# Send lsvote #}
+
+
             <div id="confirmLsvote" ref="confirmLsvote" class="modal fade" role="dialog" data-backdrop="static">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -538,21 +540,25 @@
                             <button class="close" data-dismiss="modal" type="button">&times;</button>
                         </div>
                         <div class="modal-body">
-                            Veuillez valider l'envoi à Lsvote
+                            <span v-if="!lsvoteId">Veuillez valider l'envoi de la séance vers lsvote</span>
+                            <span v-if="lsvoteId">La séance a déjà été envoyée à lsvote. Effectuer un renvoi effacera la séance actuellement présente sur lsvote. <br>
+                                Cette action est impossible si la séance est a déjà été démarrée.
+                            </span>
                         </div>
 
                         <div class="modal-footer">
                             {{ macro.cancelBtnModal() }}
 
                             <button class="btn btn-primary" data-dismiss="modal" type="button"
-                                    v-on:click="sendComelus()">
+                                    v-on:click="sendLsvote()">
                                 Envoyer
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
-            {# Fin send lsvote #}
+
+
 
             <div v-if="showModalAttendance">
                 <transition name="modal">

@@ -89,16 +89,45 @@ class LsvoteClient
         try {
             $this->httpClient->request(
                 Request::METHOD_DELETE,
-                $url . "/" . self::API_SITTING_URI ."/". $sittingId,
+                $url . "/" . self::API_SITTING_URI . "/" . $sittingId,
                 ["headers" => [
                     "Authorization" => $apiKey
                 ]]);
         } catch (TransportExceptionInterface $e) {
-            throw new LsvoteException($e);
+            throw new LsvoteException($e->getMessage());
         }
 
         return true;
+    }
 
+    public function reSendSitting(string $url, string $apiKey, string $sittingId, LsvoteEnveloppe $lsvoteSitting)
+    {
+        $serializedData = $this->serializer->serialize($lsvoteSitting, 'json');
+        try {
+            $response = $this->httpClient->request(
+                Request::METHOD_PUT,
+                $url . self::API_SITTING_URI . '/' . $sittingId,
+                [
+                    "headers" => [
+                        "Authorization" => $apiKey,
+                        'Accept' => 'application/json',
+                        "content-type" => "application/json",
+                    ],
+
+                    "verify_peer" => false,
+                    "verify_host" => false,
+
+                    "body" => $serializedData
+
+                ]
+            );
+
+            $content = json_decode($response->getContent(), true);
+            return $content['id'];
+
+        } catch (Throwable $e) {
+            throw new LsvoteException($e->getMessage());
+        }
     }
 
 
@@ -107,23 +136,25 @@ class LsvoteClient
      */
     public function resultSitting(string $url, string $apiKey, string $sittingId): array
     {
-       try {
-           $response = $this->httpClient->request(
-               "GET",
-               $url . self::API_SITTING_URI ."/". $sittingId . '/result',
-               ["headers" => [
-                   "Authorization" => $apiKey
-               ],
-                   "verify_peer" => false,
-                   "verify_host" => false,
-                   ]);
+        try {
+            $response = $this->httpClient->request(
+                "GET",
+                $url . self::API_SITTING_URI . "/" . $sittingId . '/result',
+                ["headers" => [
+                    "Authorization" => $apiKey
+                ],
+                    "verify_peer" => false,
+                    "verify_host" => false,
+                ]);
 
             return json_decode($response->getContent(), true);
 
-       } catch (Throwable $e) {
-           throw new LsvoteException($e);
-       }
-
+        } catch (Throwable $e) {
+            if($response?->getContent(false)) {
+                throw new LsvoteException($response->getContent(false));
+            }
+            throw new LsvoteException($e->getMessage());
+        }
 
 
     }

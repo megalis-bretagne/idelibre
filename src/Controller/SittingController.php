@@ -9,12 +9,15 @@ use App\Repository\EmailTemplateRepository;
 use App\Repository\LsvoteConnectorRepository;
 use App\Repository\OtherdocRepository;
 use App\Repository\ProjectRepository;
+use App\Service\Connector\Lsvote\LsvoteException;
 use App\Service\Connector\LsvoteConnectorManager;
+use App\Service\Connector\LsvoteResultException;
 use App\Service\EmailTemplate\EmailGenerator;
 use App\Service\File\Generator\FileGenerator;
 use App\Service\File\Generator\UnsupportedExtensionException;
 use App\Service\Pdf\PdfValidator;
 use App\Service\Seance\SittingManager;
+use App\Service\Util\FileUtil;
 use App\Sidebar\Annotation\Sidebar;
 use App\Sidebar\State\SidebarState;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
@@ -189,13 +192,16 @@ class SittingController extends AbstractController
     #[Route(path: '/sitting/show/{id}/information', name: 'sitting_show_information', methods: ['GET'])]
     #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
     #[Breadcrumb(title: 'Détail {sitting.nameWithDate}')]
-    public function showInformation(Sitting $sitting, SittingManager $sittingManager, SidebarState $sidebarState): Response
+    public function showInformation(Sitting $sitting, SittingManager $sittingManager, SidebarState $sidebarState, LsvoteConnectorManager $lsvoteConnectorManager): Response
     {
         $sidebarState->setActiveNavs(['sitting-nav', $this->activeSidebarNav($sitting->getIsArchived())]);
 
         return $this->render('sitting/details_information.html.twig', [
             'isAlreadySent' => $sittingManager->isAlreadySent($sitting),
             'sitting' => $sitting,
+            'isActiveLsvote' => $lsvoteConnectorManager->getLsvoteConnector($sitting->getStructure())->getActive(),
+            'isLsvoteResults' => !empty($sitting->getLsvoteSitting()?->getResults()),
+            'isSentLsvote' => !empty($sitting->getLsvoteSitting()),
             'timezone' => $sitting->getStructure()->getTimezone()->getName(),
         ]);
     }
@@ -203,7 +209,7 @@ class SittingController extends AbstractController
     #[Route(path: '/sitting/show/{id}/actors', name: 'sitting_show_actors', methods: ['GET'])]
     #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
     #[Breadcrumb(title: 'Détail {sitting.nameWithDate}')]
-    public function showActors(Sitting $sitting, EmailTemplateRepository $emailTemplateRepository, SidebarState $sidebarState, EmailGenerator $emailGenerator): Response
+    public function showActors(Sitting $sitting, EmailTemplateRepository $emailTemplateRepository, SidebarState $sidebarState, EmailGenerator $emailGenerator, LsvoteConnectorManager $lsvoteConnectorManager): Response
     {
         $sidebarState->setActiveNavs(['sitting-nav', $this->activeSidebarNav($sitting->getIsArchived())]);
 
@@ -227,6 +233,7 @@ class SittingController extends AbstractController
             'subjectGenerated' => $subjectGenerated,
             'subjectBySittingTypeGenerated' => $subjectBySittingTypeGenerated,
             'subjectInvitation' => $subjectInvitation,
+            'isActiveLsvote' => $lsvoteConnectorManager->getLsvoteConnector($sitting->getStructure())->getActive()
         ]);
     }
 
@@ -311,23 +318,44 @@ class SittingController extends AbstractController
         return 'sitting-active-nav';
     }
 
-    #[Route(path: '/sitting/{id}/sendLsvote', name: 'sitting_sendLsvote', methods: ['GET'])]
-    #[IsGranted(data: 'ROLE_MANAGE_SITTINGS')]
-    public function sendToLsvote(Sitting $sitting, LsvoteConnectorManager $lsvoteConnectorManager): Response
-    {
-        $lsvoteConnectorManager->createSitting($sitting);
 
-        return $this->redirectToRoute('sitting_index', []);
-    }
 
     #[Route(path: '/sitting/{id}/lsvote-results', name: 'sitting_lsvote_results', methods: ['GET'])]
     #[IsGranted(data: 'ROLE_MANAGE_SITTINGS')]
     public function getLsvoteResults(Sitting $sitting, LsvoteConnectorManager $lsvoteConnectorManager, Request $request): Response
     {
-        $results = $lsvoteConnectorManager->getLsvoteSittingResults($sitting);
+        try {
+            $lsvoteConnectorManager->getLsvoteSittingResults($sitting);
+        }catch(LsvoteResultException $e) {
+            $this->addFlash('error', $e->getMessage());
+
+            return $this->redirect($request->headers->get('referer'));
+        }
+
         $this->addFlash('success', 'Les résultats ont bien été récupérés depuis lsvote');
 
         return $this->redirect($request->headers->get('referer'));
     }
+
+    #[Route(path: '/sitting/{id}/lsvote-results/json', name: 'sitting_lsvote_results_json', methods: ['GET'])]
+    #[IsGranted(data: 'ROLE_MANAGE_SITTINGS')]
+    public function downloadLsvoteResultsCsv(Sitting $sitting, LsvoteConnectorManager $lsvoteConnectorManager,FileGenerator $fileGenerator ): Response
+    {
+        $jsonPath = $lsvoteConnectorManager->createJsonFile($sitting);
+
+        $response = new BinaryFileResponse($jsonPath);
+        $response->setContentDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            $fileGenerator->createPrettyName($sitting, "json")
+        );
+
+        $response->deleteFileAfterSend();
+
+        return $response;
+    }
+
+
+
+
 
 }

@@ -112,6 +112,7 @@ class Sitting
     private $isRemoteAllowed = false;
 
     #[ORM\OneToOne(mappedBy: 'sitting', cascade: ['persist', 'remove'])]
+    #[Groups(groups: ['sitting'])]
     private ?LsvoteSitting $lsvoteSitting = null;
 
     public function __construct()

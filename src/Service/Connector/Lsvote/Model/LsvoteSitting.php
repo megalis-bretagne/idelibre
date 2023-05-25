@@ -8,6 +8,9 @@ class LsvoteSitting
 
     private string $date;
 
+    /**
+     * @return mixed
+     */
 
     public function getName(): string
     {
@@ -30,4 +33,5 @@ class LsvoteSitting
         $this->date = $date;
         return $this;
     }
+
 }
