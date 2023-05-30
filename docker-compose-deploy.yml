@@ -5,7 +5,7 @@ services:
     container_name: fpm-idelibre
     image: registry.libriciel.fr:443/public/citoyens/idelibre:canary
     environment:
-      - APP_ENV=${APP_ENV:-prod}
+      - APP_ENV=${APP_ENV:-dev}
       - APP_SECRET=${APP_SECRET:-b64dca717248e387bc88b36d9c485244}
       - DATABASE_URL=${DATABASE_URL:-postgresql://idelibre:idelibre@172.17.0.1:5432/idelibre}
       - VERSION=${VERSION:-TAG}
