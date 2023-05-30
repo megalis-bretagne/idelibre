@@ -5,8 +5,7 @@ services:
     container_name: fpm-idelibre
     image: registry.libriciel.fr:443/public/citoyens/idelibre/idelibre:TAG
     environment:
-#      - APP_ENV=${APP_ENV:-prod}
-      - APP_ENV=${APP_ENV:-dev}
+      - APP_ENV=${APP_ENV:-prod}
       - APP_SECRET=${APP_SECRET:-b64dca717248e387bc88b36d9c485244}
       - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
       - VERSION=${VERSION:-TAG}
