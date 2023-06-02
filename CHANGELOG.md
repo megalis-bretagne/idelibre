@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+
+## [4.2.5] - 2023-06-02
+
+### Correction
+- Le téléchargement des autres documents n'était pas possible
+
 ## [4.2.4] - 2023-05-19
 
 ### Correction
