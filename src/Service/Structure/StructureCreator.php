@@ -4,6 +4,7 @@ namespace App\Service\Structure;
 
 use App\Entity\Connector\Exception\ComelusConnectorException;
 use App\Entity\Connector\Exception\LsmessageConnectorException;
+use App\Entity\Connector\Exception\LsvoteConnectorException;
 use App\Entity\Group;
 use App\Entity\Structure;
 use App\Entity\User;
@@ -11,6 +12,7 @@ use App\Security\Password\ResetPassword;
 use App\Service\Configuration\ConfigurationManager;
 use App\Service\Connector\ComelusConnectorManager;
 use App\Service\Connector\LsmessageConnectorManager;
+use App\Service\Connector\LsvoteConnectorManager;
 use App\Service\EmailTemplate\DefaultTemplateCreator;
 use App\Service\Subscription\SubscriptionManager;
 use App\Service\Theme\ThemeManager;
@@ -27,6 +29,7 @@ class StructureCreator
         private readonly ThemeManager $themeManager,
         private readonly ComelusConnectorManager $comelusConnectorManager,
         private readonly LsmessageConnectorManager $lsmessageConnectorManager,
+        private readonly LsvoteConnectorManager $lsvoteConnectorManager,
         private readonly DefaultTemplateCreator $defaultTemplateCreator,
         private readonly ConfigurationManager $configurationManager,
         private readonly ResetPassword $resetPassword,
@@ -83,12 +86,14 @@ class StructureCreator
     /**
      * @throws ComelusConnectorException
      * @throws LsmessageConnectorException
+     * @throws LsvoteConnectorException
      */
     private function initConfig(Structure $structure)
     {
         $this->themeManager->createStructureRootNode($structure);
         $this->comelusConnectorManager->createConnector($structure);
         $this->lsmessageConnectorManager->createConnector($structure);
+        $this->lsvoteConnectorManager->createConnector($structure);
         $this->defaultTemplateCreator->initDefaultTemplates($structure);
         $this->configurationManager->createConfiguration($structure);
     }
