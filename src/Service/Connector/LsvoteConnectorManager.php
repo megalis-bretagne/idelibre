@@ -42,8 +42,8 @@ class LsvoteConnectorManager
             throw new LsvoteConnectorException('Already created lsvoteConnectorManager');
         }
         $connector = new LsvoteConnector($structure);
-        $this->em->persist($connector);
-        $this->em->flush();
+        $this->entityManager->persist($connector);
+        $this->entityManager->flush();
     }
 
     private function isAlreadyCreated(Structure $structure): bool
