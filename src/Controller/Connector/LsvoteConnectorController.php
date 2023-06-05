@@ -25,7 +25,7 @@ class LsvoteConnectorController extends AbstractController
     {
     }
 
-    #[Route('/lsvote/connector', name: 'lsvote_connector')]
+    #[Route('/lsvote/connector', name: 'lsvote_connector', methods: ['GET', 'POST'])]
     #[IsGranted(data: 'ROLE_MANAGE_CONNECTORS')]
     #[Breadcrumb(title: 'Lsvote')]
     public function edit(LsvoteConnectorRepository $lsvoteConnectorRepository, Request $request): Response
