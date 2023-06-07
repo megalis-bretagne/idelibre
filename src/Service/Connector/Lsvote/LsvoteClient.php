@@ -159,28 +159,4 @@ class LsvoteClient
             throw new LsvoteException($e->getMessage());
         }
     }
-
-    /**
-     * @throws LsvoteException
-     */
-    public function checkIfExist(string $url, string $apiKey, string $sittingId): bool
-    {
-        try {
-            $this->httpClient->request(
-                "GET",
-                $url . self::API_SITTING_URI . "/" . $sittingId,
-                ["headers" => [
-                    "Authorization" => $apiKey
-                ],
-                    "verify_peer" => false,
-                    "verify_host" => false,
-                ]);
-            return true;
-        }
-        catch(Throwable $e) {
-            throw new LsvoteException($e->getMessage());
-        }
-
-    }
-
 }
