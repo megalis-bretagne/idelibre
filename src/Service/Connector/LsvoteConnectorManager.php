@@ -12,6 +12,7 @@ use App\Repository\LsvoteConnectorRepository;
 use App\Repository\UserRepository;
 use App\Service\Connector\Lsvote\LsvoteClient;
 use App\Service\Connector\Lsvote\LsvoteException;
+use App\Service\Connector\Lsvote\LsvoteNotFoundException;
 use App\Service\Connector\Lsvote\Model\LsvoteEnveloppe;
 use App\Service\Connector\Lsvote\Model\LsvoteProject;
 use App\Service\Connector\Lsvote\Model\LsvoteVoter;
@@ -244,18 +245,21 @@ class LsvoteConnectorManager
 
     /**
      * @throws LsvoteSittingCreationException
+     * @throws LsvoteException
      */
     public function editLsvoteSitting(Sitting $sitting): ?string
     {
-        list($connector, $lsvoteEnvelope, $lsvotesittingId) = $this->prepareEdit($sitting);
+        [$connector, $lsvoteEnvelope, $lsvotesittingId] = $this->prepareEdit($sitting);
 
         try {
             $id = $this->lsvoteClient->reSendSitting($connector->getUrl(), $connector->getApiKey(), $lsvotesittingId, $lsvoteEnvelope);
             $sitting->getLsvoteSitting()->setLsvoteSittingId($id);
             $this->entityManager->flush();
             return $id;
-        } catch (LsvoteException $e) {
+        }catch(LsvoteNotFoundException $e) {
             return $this->editIfSittingWasDeleted($e, $sitting, $connector, $lsvoteEnvelope);
+        } catch (LsvoteException $e) {
+            throw new LsvoteException($e->getMessage());
         }
     }
 
@@ -274,7 +278,7 @@ class LsvoteConnectorManager
             ->setVoters($this->prepareLsvoteVoter($sitting));
 
         $lsvotesittingId = $sitting->getLsvoteSitting()->getLsvoteSittingId();
-        return array($connector, $lsvoteEnvelope, $lsvotesittingId);
+        return [$connector, $lsvoteEnvelope, $lsvotesittingId];
     }
 
     /**
@@ -289,8 +293,10 @@ class LsvoteConnectorManager
     {
         try {
             $this->logger->error($e->getMessage());
+
             $sitting->setLsvoteSitting(null);
             return $this->lsvoteClient->sendSitting($connector->getUrl(), $connector->getApiKey(), $lsvoteEnvelope);
+
         } catch (LsvoteException $e) {
             throw new LsvoteSittingCreationException("Impossible de mettre à jour la séance");
         }
