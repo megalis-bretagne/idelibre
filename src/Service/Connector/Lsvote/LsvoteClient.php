@@ -75,6 +75,7 @@ class LsvoteClient
             );
 
             $content = json_decode($response->getContent(), true);
+
             return $content['id'];
 
         } catch (Throwable $e) {

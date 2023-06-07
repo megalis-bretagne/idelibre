@@ -172,7 +172,6 @@ class LsvoteConnectorManager
     }
 
 
-
     public function deleteLsvoteSitting(Sitting $sitting): bool
     {
         $lsvoteSittingId = $sitting->getLsvoteSitting()->getLsvoteSittingId();
@@ -209,7 +208,7 @@ class LsvoteConnectorManager
     }
 
 
-    private function formatError(string $message):string
+    private function formatError(string $message): string
     {
         return match ($message) {
             '"sitting.not.over"' => "la séance n'est pas terminée sur lsvote",
@@ -256,8 +255,11 @@ class LsvoteConnectorManager
             $sitting->getLsvoteSitting()->setLsvoteSittingId($id);
             $this->entityManager->flush();
             return $id;
-        }catch(LsvoteNotFoundException $e) {
-            return $this->editIfSittingWasDeleted($e, $sitting, $connector, $lsvoteEnvelope);
+        } catch (LsvoteNotFoundException $e) {
+            $id = $this->editIfSittingWasDeleted($sitting, $connector, $lsvoteEnvelope);
+            $sitting->getLsvoteSitting()->setLsvoteSittingId($id);
+            $this->entityManager->flush();
+            return $id;
         } catch (LsvoteException $e) {
             throw new LsvoteException($e->getMessage());
         }
@@ -289,12 +291,9 @@ class LsvoteConnectorManager
      * @return mixed
      * @throws LsvoteSittingCreationException
      */
-    public function editIfSittingWasDeleted(LsvoteException|Exception $e, Sitting $sitting, mixed $connector, mixed $lsvoteEnvelope): mixed
+    public function editIfSittingWasDeleted(Sitting $sitting, mixed $connector, mixed $lsvoteEnvelope): mixed
     {
         try {
-            $this->logger->error($e->getMessage());
-
-            $sitting->setLsvoteSitting(null);
             return $this->lsvoteClient->sendSitting($connector->getUrl(), $connector->getApiKey(), $lsvoteEnvelope);
 
         } catch (LsvoteException $e) {
