@@ -12,10 +12,12 @@ use App\Repository\LsvoteConnectorRepository;
 use App\Repository\UserRepository;
 use App\Service\Connector\Lsvote\LsvoteClient;
 use App\Service\Connector\Lsvote\LsvoteException;
+use App\Service\Connector\Lsvote\LsvoteNotFoundException;
 use App\Service\Connector\Lsvote\Model\LsvoteEnveloppe;
 use App\Service\Connector\Lsvote\Model\LsvoteProject;
 use App\Service\Connector\Lsvote\Model\LsvoteVoter;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -170,7 +172,6 @@ class LsvoteConnectorManager
     }
 
 
-
     public function deleteLsvoteSitting(Sitting $sitting): bool
     {
         $lsvoteSittingId = $sitting->getLsvoteSitting()->getLsvoteSittingId();
@@ -207,7 +208,7 @@ class LsvoteConnectorManager
     }
 
 
-    private function formatError(string $message):string
+    private function formatError(string $message): string
     {
         return match ($message) {
             '"sitting.not.over"' => "la séance n'est pas terminée sur lsvote",
@@ -243,8 +244,32 @@ class LsvoteConnectorManager
 
     /**
      * @throws LsvoteSittingCreationException
+     * @throws LsvoteException
      */
     public function editLsvoteSitting(Sitting $sitting): ?string
+    {
+        [$connector, $lsvoteEnvelope, $lsvotesittingId] = $this->prepareEdit($sitting);
+
+        try {
+            $id = $this->lsvoteClient->reSendSitting($connector->getUrl(), $connector->getApiKey(), $lsvotesittingId, $lsvoteEnvelope);
+            $sitting->getLsvoteSitting()->setLsvoteSittingId($id);
+            $this->entityManager->flush();
+            return $id;
+        } catch (LsvoteNotFoundException $e) {
+            $id = $this->editIfSittingWasDeleted($sitting, $connector, $lsvoteEnvelope);
+            $sitting->getLsvoteSitting()->setLsvoteSittingId($id);
+            $this->entityManager->flush();
+            return $id;
+        } catch (LsvoteException $e) {
+            throw new LsvoteException($e->getMessage());
+        }
+    }
+
+    /**
+     * @param Sitting $sitting
+     * @return array
+     */
+    public function prepareEdit(Sitting $sitting): array
     {
         $connector = $this->getLsvoteConnector($sitting->getStructure());
         $lsvoteEnvelope = new LsvoteEnveloppe();
@@ -255,17 +280,23 @@ class LsvoteConnectorManager
             ->setVoters($this->prepareLsvoteVoter($sitting));
 
         $lsvotesittingId = $sitting->getLsvoteSitting()->getLsvoteSittingId();
+        return [$connector, $lsvoteEnvelope, $lsvotesittingId];
+    }
 
+    /**
+     * @param LsvoteException|Exception $e
+     * @param Sitting $sitting
+     * @param mixed $connector
+     * @param mixed $lsvoteEnvelope
+     * @return mixed
+     * @throws LsvoteSittingCreationException
+     */
+    public function editIfSittingWasDeleted(Sitting $sitting, mixed $connector, mixed $lsvoteEnvelope): mixed
+    {
         try {
-            $id = $this->lsvoteClient->reSendSitting($connector->getUrl(), $connector->getApiKey(), $lsvotesittingId, $lsvoteEnvelope);
+            return $this->lsvoteClient->sendSitting($connector->getUrl(), $connector->getApiKey(), $lsvoteEnvelope);
 
-            $sitting->getLsvoteSitting()->setLsvoteSittingId($id);
-            $this->entityManager->flush();
-
-            return $id;
         } catch (LsvoteException $e) {
-            $this->logger->error($e->getMessage());
-
             throw new LsvoteSittingCreationException("Impossible de mettre à jour la séance");
         }
     }

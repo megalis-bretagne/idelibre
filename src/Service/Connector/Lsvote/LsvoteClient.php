@@ -5,6 +5,7 @@ namespace App\Service\Connector\Lsvote;
 use App\Service\Connector\Lsvote\Model\LsvoteEnveloppe;
 use Exception;
 use http\Env\Response;
+use Symfony\Component\HttpClient\Exception\ClientException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
@@ -74,6 +75,7 @@ class LsvoteClient
             );
 
             $content = json_decode($response->getContent(), true);
+
             return $content['id'];
 
         } catch (Throwable $e) {
@@ -100,6 +102,10 @@ class LsvoteClient
         return true;
     }
 
+    /**
+     * @throws LsvoteException
+     * @throws LsvoteNotFoundException
+     */
     public function reSendSitting(string $url, string $apiKey, string $sittingId, LsvoteEnveloppe $lsvoteSitting)
     {
         $serializedData = $this->serializer->serialize($lsvoteSitting, 'json');
@@ -124,6 +130,11 @@ class LsvoteClient
 
             $content = json_decode($response->getContent(), true);
             return $content['id'];
+
+        } catch (ClientException $e) {
+            if($e->getCode() === 404) {
+                throw new LsvoteNotFoundException($e->getMessage());
+            }
 
         } catch (Throwable $e) {
             throw new LsvoteException($e->getMessage());
@@ -150,13 +161,10 @@ class LsvoteClient
             return json_decode($response->getContent(), true);
 
         } catch (Throwable $e) {
-            if($response?->getContent(false)) {
+            if ($response?->getContent(false)) {
                 throw new LsvoteException($response->getContent(false));
             }
             throw new LsvoteException($e->getMessage());
         }
-
-
     }
-
 }
