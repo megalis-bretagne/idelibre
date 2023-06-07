@@ -16,6 +16,7 @@ use App\Service\Connector\Lsvote\Model\LsvoteEnveloppe;
 use App\Service\Connector\Lsvote\Model\LsvoteProject;
 use App\Service\Connector\Lsvote\Model\LsvoteVoter;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -246,6 +247,24 @@ class LsvoteConnectorManager
      */
     public function editLsvoteSitting(Sitting $sitting): ?string
     {
+        list($connector, $lsvoteEnvelope, $lsvotesittingId) = $this->prepareEdit($sitting);
+
+        try {
+            $id = $this->lsvoteClient->reSendSitting($connector->getUrl(), $connector->getApiKey(), $lsvotesittingId, $lsvoteEnvelope);
+            $sitting->getLsvoteSitting()->setLsvoteSittingId($id);
+            $this->entityManager->flush();
+            return $id;
+        } catch (LsvoteException $e) {
+            return $this->editIfSittingWasDeleted($e, $sitting, $connector, $lsvoteEnvelope);
+        }
+    }
+
+    /**
+     * @param Sitting $sitting
+     * @return array
+     */
+    public function prepareEdit(Sitting $sitting): array
+    {
         $connector = $this->getLsvoteConnector($sitting->getStructure());
         $lsvoteEnvelope = new LsvoteEnveloppe();
 
@@ -255,17 +274,24 @@ class LsvoteConnectorManager
             ->setVoters($this->prepareLsvoteVoter($sitting));
 
         $lsvotesittingId = $sitting->getLsvoteSitting()->getLsvoteSittingId();
+        return array($connector, $lsvoteEnvelope, $lsvotesittingId);
+    }
 
+    /**
+     * @param LsvoteException|Exception $e
+     * @param Sitting $sitting
+     * @param mixed $connector
+     * @param mixed $lsvoteEnvelope
+     * @return mixed
+     * @throws LsvoteSittingCreationException
+     */
+    public function editIfSittingWasDeleted(LsvoteException|Exception $e, Sitting $sitting, mixed $connector, mixed $lsvoteEnvelope): mixed
+    {
         try {
-            $id = $this->lsvoteClient->reSendSitting($connector->getUrl(), $connector->getApiKey(), $lsvotesittingId, $lsvoteEnvelope);
-
-            $sitting->getLsvoteSitting()->setLsvoteSittingId($id);
-            $this->entityManager->flush();
-
-            return $id;
-        } catch (LsvoteException $e) {
             $this->logger->error($e->getMessage());
-
+            $sitting->setLsvoteSitting(null);
+            return $this->lsvoteClient->sendSitting($connector->getUrl(), $connector->getApiKey(), $lsvoteEnvelope);
+        } catch (LsvoteException $e) {
             throw new LsvoteSittingCreationException("Impossible de mettre à jour la séance");
         }
     }
