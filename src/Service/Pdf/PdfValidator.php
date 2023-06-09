@@ -121,15 +121,29 @@ class PdfValidator
         $firstLine = fgets($handle);
 
         $lastLine = null;
+        $beforeLastLine = null;
         while (($line = fgets($handle)) !== false) {
+            $beforeLastLine = $lastLine;
             $lastLine = $line;
+
         }
+        return $this->isFirstLinePdf($firstLine) && $this->isLastLineOrBeforeLastLineEOF($lastLine, $beforeLastLine);
+    }
+
+
+    private function isFirstLinePdf(string $firstLine)
+    {
+        return 0 === stripos($firstLine, '%PDF');
+    }
+
+    private function isLastLineOrBeforeLastLineEOF(string $lastLine, string $beforeLastLine)
+    {
         $lastLine = preg_replace('/[\r \n]/', '', $lastLine);
-        if (0 === stripos($firstLine, '%PDF') && 0 === stripos($lastLine, '%%EOF')) {
+        $beforeLastLine = preg_replace('/[\r \n]/', '', $beforeLastLine);
+        if (0 === stripos($lastLine, '%%EOF')) {
             return true;
         }
-
-        return false;
+        return 0 === stripos($beforeLastLine, '%%EOF');
     }
 
     public function isProtectedByPasswordPdf($filePath): bool
