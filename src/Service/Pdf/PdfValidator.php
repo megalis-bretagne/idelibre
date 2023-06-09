@@ -125,7 +125,6 @@ class PdfValidator
         while (($line = fgets($handle)) !== false) {
             $beforeLastLine = $lastLine;
             $lastLine = $line;
-
         }
         return $this->isFirstLinePdf($firstLine) && $this->isLastLineOrBeforeLastLineEOF($lastLine, $beforeLastLine);
     }
