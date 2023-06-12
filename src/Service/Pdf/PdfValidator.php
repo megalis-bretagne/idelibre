@@ -139,10 +139,10 @@ class PdfValidator
     {
         $lastLine = preg_replace('/[\r \n]/', '', $lastLine);
         $beforeLastLine = preg_replace('/[\r \n]/', '', $beforeLastLine);
-        if ( strpos($lastLine, '%%EOF') !== false ) {
+        if (strpos($lastLine, '%%EOF') !== false) {
             return true;
         }
-        return ( strpos($beforeLastLine, '%%EOF') !== false );
+        return (strpos($beforeLastLine, '%%EOF') !== false);
     }
 
     public function isProtectedByPasswordPdf($filePath): bool
