@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ￼	
+
+## [4.2.6] - 2023-06-02
+
+### Correction
+￼- Le chargement de certains PDFs posent soucis si leur contenu ne finit pas par un EOF
+
 ## [4.2.5] - 2023-06-02
 
 ### Correction
