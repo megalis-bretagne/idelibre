@@ -113,6 +113,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $jwtInvalidBefore = null;
 
+    #[Column(type: 'boolean', options: ['default' => false])]
+    private bool $isDeputy = false;
+
+    #[ORM\OneToOne(targetEntity: self::class, cascade: ['persist', 'remove'])]
+    private ?self $mandator = null;
+
     public function __construct()
     {
         $this->associatedTypes = new ArrayCollection();
@@ -395,6 +401,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setJwtInvalidBefore(?\DateTimeInterface $jwtInvalidBefore): self
     {
         $this->jwtInvalidBefore = $jwtInvalidBefore;
+
+        return $this;
+    }
+
+    public function isDeputy(): bool
+    {
+        return $this->isDeputy;
+    }
+
+    public function setIsDeputy(bool $isDeputy): self
+    {
+        $this->isDeputy = $isDeputy;
+
+        return $this;
+    }
+
+    public function getMandator(): ?self
+    {
+        return $this->mandator;
+    }
+
+    public function setMandator(?self $mandator): self
+    {
+        $this->mandator = $mandator;
 
         return $this;
     }
