@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Regex;
 
 class StructureType extends AbstractType
 {
@@ -26,6 +27,9 @@ class StructureType extends AbstractType
         if ($isNew) {
             $builder->add('suffix', TextType::class, [
                 'label' => 'Suffixe',
+                'constraints' => [
+                    new Regex('/^((?!@).)*$/', 'le champ ne doit pas contenir d\'@ ni de caractères spéciaux'),
+                ],
             ]);
         }
 
