@@ -464,4 +464,14 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getQuery()
             ->execute();
     }
+
+//    public function findAvailableActorsInSitting(Sitting $sitting) {
+//        return $this->createQueryBuilder('u')
+//            ->leftJoin('u.role', 'r')
+//            ->andWhere(' r.name = Actor')
+//            ->join(Convocation::class, 'c', Join::WITH, 'c.user = u')
+//            ->andWhere('c.sitting =:sitting')
+//            ->setParameter('sitting', $sitting)
+//            ->andWhere('u.')
+//    }
 }

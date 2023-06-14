@@ -116,6 +116,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Column(type: 'boolean', options: ['default' => false])]
     private bool $isDeputy = false;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $mandatorType = null;
+
     #[ORM\OneToOne(targetEntity: self::class, cascade: ['persist', 'remove'])]
     private ?self $mandator = null;
 
@@ -413,6 +416,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsDeputy(bool $isDeputy): self
     {
         $this->isDeputy = $isDeputy;
+
+        return $this;
+    }
+
+    public function getMandatorType(): ?string
+    {
+        return $this->mandatorType;
+    }
+
+    public function setMandatorType(?string $mandatorType): self
+    {
+        $this->mandatorType = $mandatorType;
 
         return $this;
     }
