@@ -11,5 +11,5 @@ use Symfony\Component\Validator\Constraint;
 #[Attribute]
 class OneAtMax extends Constraint
 {
-    public $message = 'Le text ne doit pas contenir de @';
+    public $message = 'Le texte ne doit pas contenir de @';
 }
