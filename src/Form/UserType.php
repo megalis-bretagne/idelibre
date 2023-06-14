@@ -33,7 +33,7 @@ class UserType extends AbstractType
         private readonly PartyRepository $partyRepository,
         private readonly RoleManager $roleManager,
         private readonly TypeRepository $typeRepository,
-        private readonly Security $security
+        private readonly Security $security,
     ) {
     }
 
@@ -74,7 +74,8 @@ class UserType extends AbstractType
             ->add('redirect_url', HiddenType::class, [
                 'mapped' => false,
                 'data' => $options['referer'],
-            ]);
+            ])
+        ;
 
         if ($this->isNew($options)) {
             $builder->add('role', EntityType::class, [
@@ -99,6 +100,31 @@ class UserType extends AbstractType
                     'class' => Party::class,
                     'query_builder' => $this->partyRepository->findByStructure($options['structure']),
                     'choice_label' => 'name',
+                ])
+
+                ->add('isDeputy', ChoiceType::class, [
+                    "label" => "Est suppléant",
+                    "choices" => [
+                        "Non" => false,
+                        "Oui" => true
+                    ],
+                    "placeholder" => "--"
+                ])
+                ->add("mandatorType", ChoiceType::class, [
+                    "label" => "Quelle type de mandataire souhaitez-vous désigner ?",
+                    "choices" => [
+                        "Aucun" => null,
+                        "Nomme un suppléant" => "deputy",
+                        "Donne procuration" => "mandator"
+                    ],
+                    "required" => false
+                ])
+                ->add('mandator', EntityType::class, [
+                    'label' => 'Nom du mandataire',
+                    'required' => false,
+                    'class' => User::class,
+                    'choice_label' => 'lastname',
+                    'placeholder' => '-- Liste des élus disponible --',
                 ])
             ;
         }
@@ -168,6 +194,7 @@ class UserType extends AbstractType
             'structure' => null,
             'entropyForUser' => null,
             'referer' => null,
+            'sitting' => null,
         ]);
     }
 
