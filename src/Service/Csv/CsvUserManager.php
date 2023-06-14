@@ -55,6 +55,11 @@ class CsvUserManager
                 continue;
             }
 
+            if($record[1] === "") {
+                $errors[] = $this->missingUsernameViolation($record);
+                continue;
+            }
+
             $username = $this->sanitize($record[1] ?? '') . '@' . $structure->getSuffix();
             if (!$this->isExistUsername($username, $structure)) {
                 $user = $this->createUserFromRecord($structure, $record);
@@ -118,6 +123,20 @@ class CsvUserManager
             null,
             'le nombre de champs',
             'le nombre de champs est faux'
+        );
+
+        return new ConstraintViolationList([$violation]);
+    }
+
+    private function missingUsernameViolation($record): ConstraintViolationList
+    {
+        $violation = new ConstraintViolation(
+            'La colonne username doit être renseignée pour chaque entrée',
+            null,
+            $record,
+            null,
+            'username',
+            'Username est vide'
         );
 
         return new ConstraintViolationList([$violation]);

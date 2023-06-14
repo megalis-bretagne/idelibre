@@ -113,6 +113,36 @@ class CsvUserControllerTest extends WebTestCase
         $this->assertNotEmpty($this->getOneEntityBy(User::class, ['username' => 'e.dupont@libriciel']));
     }
 
+    public function testImportUsersMissingUsername()
+    {
+        $csvFile = new UploadedFile(__DIR__ . '/../../resources/user_username_missing.csv', 'user.csv');
+        $this->assertNotEmpty($csvFile);
+
+        $this->loginAsAdminLibriciel();
+        $crawler = $this->client->request(Request::METHOD_GET, '/csv/importUsers');
+        $this->assertResponseStatusCodeSame(200);
+        $item = $crawler->filter('html:contains("Importer des utilisateurs via csv")');
+        $this->assertCount(1, $item);
+
+        $form = $crawler->selectButton('Enregistrer')->form();
+
+        $form['csv[csv]'] = $csvFile;
+
+        $this->client->submit($form);
+
+        $this->assertTrue($this->client->getResponse()->isRedirect());
+
+        $crawler = $this->client->followRedirect();
+        $this->assertResponseStatusCodeSame(200);
+
+        $title = $crawler->filter('html:contains("Erreurs lors de l\'import")');
+        $this->assertCount(1, $title);
+
+        $this->assertEmpty($this->getOneEntityBy(User::class, ['username' => 't.martin@libriciel']));
+        $this->assertNotEmpty($this->getOneEntityBy(User::class, ['username' => 'e.dupont@libriciel']));
+    }
+
+
     public function testImportUserCsvMissingField()
     {
         $csvFile = new UploadedFile(__DIR__ . '/../../resources/user_missing_fields.csv', 'user.csv');
