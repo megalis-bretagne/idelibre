@@ -468,30 +468,41 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
 
     # ADD ActorToExclude to the next 2 functions
-    public function findDeputyByStructure(Structure $structure, $toExclude): array
+    public function findDeputyByStructure(Structure $structure, array $toExclude): QueryBuilder
     {
-        return $this->createQueryBuilder('u')
+        $qb = $this->createQueryBuilder('u')
             ->andWhere('u.structure = :structure')
             ->setParameter('structure', $structure)
             ->andWhere('u.isDeputy = :isDeputy')
             ->setParameter('isDeputy', true)
             ->orderBy('u.lastName', 'ASC')
-            ->getQuery()
-            ->getResult()
+            ->andWhere('u.isActive = true')
             ;
+        if(!empty($toExclude)) {
+            $qb->andWhere('u NOT IN (:toExclude)')
+                ->setParameter('toExclude', $toExclude);
+        }
+
+        return $qb;
     }
 
-    public function findAvailableActorsInStructure(Structure $structure, $toExclude): array
+    public function findAvailableActorsInStructure(Structure $structure, array $toExclude): QueryBuilder
     {
-        return $this->createQueryBuilder('u')
+        $qb = $this->createQueryBuilder('u')
             ->andWhere('u.structure = :structure')
             ->setParameter('structure', $structure)
-            ->andWhere(' r.name =:actor')
+            ->leftJoin('u.role', 'r')
+            ->andWhere(' r.name = :actor')
             ->setParameter('actor', Role::NAME_ROLE_ACTOR)
             ->andWhere('u.isDeputy = :isDeputy')
             ->setParameter('isDeputy', false)
-            ->getQuery()
-            ->getResult()
+            ->andWhere('u.isActive = true')
             ;
+        if(!empty($toExclude)) {
+            $qb->andWhere('u NOT IN (:toExclude)')
+                ->setParameter('toExclude', $toExclude);
+        }
+
+        return $qb;
     }
 }

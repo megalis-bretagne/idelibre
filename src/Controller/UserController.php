@@ -234,19 +234,25 @@ class UserController extends AbstractController
         }
     }
 
-    #[Route('/user/list/deputies', name: 'user-deputies-list', methods: ["GET"])]
+    #[Route('/user/{id}/list/deputies', name: 'user-deputies-list', methods: ["GET"])]
     #[IsGranted(data: 'ROLE_MANAGE_USERS')]
-    public function getDeputiesList(?User $user)
+    public function getDeputiesList(?User $user):Response
     {
-        $toExclude = '';
-        return $this->userRepository->findDeputyByStructure($this->getUser()->getStructure(), $toExclude);
+        $deputies = $this->userRepository->findDeputyByStructure($this->getUser()->getStructure(), [$user])->getQuery()->getResult();
+//        dd($deputies);
+        return $this->render('include/user_lists/_available_deputies.html.twig', [
+            "deputies" => $deputies
+        ]);
     }
 
     #[Route('/user/{id}/list/actors', name: 'user-actors-list', methods: ["GET"])]
     #[IsGranted(data: 'ROLE_MANAGE_USERS')]
-    public function getMandatorsList(?User $user): array
+    public function getMandatorsList(?User $user): Response
     {
-        $toExclude = '';
-        return $this->userRepository->findAvailableActorsInStructure($this->getUser()->getStructure(), $toExclude);
+        $actors = $this->userRepository->findAvailableActorsInStructure($this->getUser()->getStructure(), [$user])->getQuery()->getResult();
+//        dd($actors);
+        return $this->render('include/user_lists/_available_actors.html.twig', [
+            "actors" => $actors
+        ]);
     }
 }
