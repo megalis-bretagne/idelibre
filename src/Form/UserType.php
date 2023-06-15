@@ -104,14 +104,15 @@ class UserType extends AbstractType
 
                 ->add('isDeputy', ChoiceType::class, [
                     "label" => "Est suppléant",
+                    "row_attr" => ['class' => "", 'id' => 'isDeputyGroup'],
                     "choices" => [
                         "Non" => false,
                         "Oui" => true
                     ],
-                    "placeholder" => "--"
                 ])
                 ->add("mandatorType", ChoiceType::class, [
                     "label" => "Quelle type de mandataire souhaitez-vous désigner ?",
+                    "row_attr" => ['class' => "", 'id' => 'mandatorTypeGroup'],
                     "choices" => [
                         "Aucun" => null,
                         "Nomme un suppléant" => "deputy",
@@ -121,6 +122,7 @@ class UserType extends AbstractType
                 ])
                 ->add('mandator', EntityType::class, [
                     'label' => 'Nom du mandataire',
+                    "row_attr" => ['class' => "", 'id' => 'mandatorGroup'],
                     'required' => false,
                     'class' => User::class,
                     'choice_label' => 'lastname',
