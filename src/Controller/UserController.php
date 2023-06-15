@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Structure;
 use App\Entity\User;
 use App\Form\SearchType;
 use App\Form\UserPreferenceType;
@@ -17,6 +18,7 @@ use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -25,13 +27,21 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Breadcrumb(title: 'Utilisateurs', routeName: 'user_index')]
 class UserController extends AbstractController
 {
+
+    public function __construct(
+        private readonly UserRepository $userRepository,
+    )
+    {
+    }
+
+
     #[Route(path: '/user', name: 'user_index')]
     #[IsGranted(data: 'ROLE_MANAGE_USERS')]
-    public function index(UserRepository $userRepository, PaginatorInterface $paginator, Request $request): Response
+    public function index(PaginatorInterface $paginator, Request $request): Response
     {
         $formSearch = $this->createForm(SearchType::class);
         $users = $paginator->paginate(
-            $userRepository->findByStructure($this->getUser()->getStructure(), $request->query->get('search')),
+            $this->userRepository->findByStructure($this->getUser()->getStructure(), $request->query->get('search')),
             $request->query->getInt('page', 1),
             $this->getParameter('limit_line_table'),
             [
@@ -139,15 +149,15 @@ class UserController extends AbstractController
     #[IsGranted(data: 'ROLE_MANAGE_USERS')]
 
 //    #[Breadcrumb(title: 'Suppression par lot')]
-    public function deleteBatch(UserRepository $userRepository, Request $request): Response
+    public function deleteBatch(Request $request): Response
     {
         if ($request->isMethod('POST')) {
-            $userRepository->deleteActorsByStructure($this->getUser()->getStructure(), $request->request->all('users') ?? []);
+            $this->userRepository->deleteActorsByStructure($this->getUser()->getStructure(), $request->request->all('users') ?? []);
             $this->addFlash('success', 'Les élus ont été supprimés.');
 
             return $this->redirectToRoute('user_index');
         }
-        $actors = $userRepository->findActorsByStructure($this->getUser()->getStructure())->getQuery()->getResult();
+        $actors = $this->userRepository->findActorsByStructure($this->getUser()->getStructure())->getQuery()->getResult();
 
         return $this->render('user/deleteBatch.html.twig', [
             'actors' => $actors,
@@ -222,5 +232,21 @@ class UserController extends AbstractController
                 'page' => $request->get('page'),
             ]);
         }
+    }
+
+    #[Route('/user/list/deputies', name: 'user-deputies-list', methods: ["GET"])]
+    #[IsGranted(data: 'ROLE_MANAGE_USERS')]
+    public function getDeputiesList(?User $user)
+    {
+        $toExclude = '';
+        return $this->userRepository->findDeputyByStructure($this->getUser()->getStructure(), $toExclude);
+    }
+
+    #[Route('/user/{id}/list/actors', name: 'user-actors-list', methods: ["GET"])]
+    #[IsGranted(data: 'ROLE_MANAGE_USERS')]
+    public function getMandatorsList(?User $user): array
+    {
+        $toExclude = '';
+        return $this->userRepository->findAvailableActorsInStructure($this->getUser()->getStructure(), $toExclude);
     }
 }
