@@ -30,8 +30,8 @@ server {
     root   /app/public;
     index  index.php index.html;
 
-    access_log /var/log/nginx/idelibre.local_ssl-access.log;
-    error_log /var/log/nginx/idelibre.local_ssl-error.log;
+    access_log /dev/stdout;
+    error_log /dev/stderr;
 
     location ~* \.(?:js|css|html)$ {
         expires    -1;
