@@ -77,6 +77,8 @@ class UserController extends AbstractController
                 $this->getUser()->getStructure()
             );
 
+//            dd($form->getData());
+
             if ($success) {
                 $this->addFlash('success', 'Votre utilisateur a bien été ajouté');
 
@@ -234,23 +236,27 @@ class UserController extends AbstractController
         }
     }
 
-    #[Route('/user/{id}/list/deputies', name: 'user-deputies-list', methods: ["GET"])]
+    #[Route('/user/list/deputies', name: 'user-deputies-creation-list', methods: ["GET"])]
+    #[Route('/user/{id}/list/deputies', name: 'user-deputies-edit-list', methods: ["GET"])]
     #[IsGranted(data: 'ROLE_MANAGE_USERS')]
     public function getDeputiesList(?User $user):Response
     {
-        $deputies = $this->userRepository->findDeputyByStructure($this->getUser()->getStructure(), [$user])->getQuery()->getResult();
-//        dd($deputies);
+        $user ? $toExclude[] = $user : $toExclude =  null;
+        $deputies = $this->userRepository->findDeputiesByStructure($this->getUser()->getStructure(), $toExclude)->getQuery()->getResult();
+
         return $this->render('include/user_lists/_available_deputies.html.twig', [
             "deputies" => $deputies
         ]);
     }
 
-    #[Route('/user/{id}/list/actors', name: 'user-actors-list', methods: ["GET"])]
+    #[Route('/user/list/actors', name: 'user-actors-creation-list', methods: ["GET"])]
+    #[Route('/user/{id}/list/actors', name: 'user-actors-edit-list', methods: ["GET"])]
     #[IsGranted(data: 'ROLE_MANAGE_USERS')]
     public function getMandatorsList(?User $user): Response
     {
-        $actors = $this->userRepository->findAvailableActorsInStructure($this->getUser()->getStructure(), [$user])->getQuery()->getResult();
-//        dd($actors);
+        $user ? $toExclude[] = $user : $toExclude =  null;
+
+        $actors = $this->userRepository->findAvailableActorsInStructure($this->getUser()->getStructure(), $toExclude)->getQuery()->getResult();
         return $this->render('include/user_lists/_available_actors.html.twig', [
             "actors" => $actors
         ]);
