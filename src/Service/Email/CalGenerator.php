@@ -49,8 +49,8 @@ class CalGenerator
             ->setDescription($sitting->getName())
             ->setOccurrence(
                 new TimeSpan(
-                    new DateTime($startDateTimeWithTz, true),
-                    new DateTime($endDateTimeWithTz, true)
+                    new DateTime($startDateTimeWithTz, false),
+                    new DateTime($endDateTimeWithTz, false)
                 )
             );
 
