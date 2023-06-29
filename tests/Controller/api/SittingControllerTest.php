@@ -126,8 +126,4 @@ class SittingControllerTest extends WebTestCase
         $content = json_decode($this->client->getResponse()->getContent());
         $this->assertNotEmpty($content->timezone);
     }
-
-
-
-
 }

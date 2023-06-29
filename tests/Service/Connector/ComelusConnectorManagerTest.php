@@ -141,7 +141,7 @@ class ComelusConnectorManagerTest extends WebTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $comelusWrapperMock->method('createDocument')->willReturn(['id'=>'286bf9f6-668f-4724-a2b8-aab79048950b']);
+        $comelusWrapperMock->method('createDocument')->willReturn(['id' => '286bf9f6-668f-4724-a2b8-aab79048950b']);
 
         $container = self::getContainer();
         $container->set(ComelusWrapper::class, $comelusWrapperMock);

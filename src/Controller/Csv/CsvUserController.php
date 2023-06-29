@@ -6,19 +6,19 @@ use App\Form\CsvType;
 use App\Service\Csv\CsvUserManager;
 use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Sidebar(active: ['user-nav'])]
 #[Breadcrumb(title: 'Utilisateurs', routeName: 'user_index')]
 class CsvUserController extends AbstractController
 {
     #[Route(path: '/csv/importUsers', name: 'csv_add_users')]
-    #[IsGranted( 'ROLE_MANAGE_USERS')]
+    #[IsGranted('ROLE_MANAGE_USERS')]
     #[Breadcrumb(title: 'Importer des utilisateurs via csv')]
     public function importUsers(Request $request, CsvUserManager $csvUserManager, Session $session): Response
     {
@@ -43,7 +43,7 @@ class CsvUserController extends AbstractController
     }
 
     #[Route(path: '/csv/userErrors', name: 'user_csv_error')]
-    #[IsGranted( 'ROLE_MANAGE_USERS')]
+    #[IsGranted('ROLE_MANAGE_USERS')]
     #[Breadcrumb(title: "Erreurs lors de l'import")]
     public function csvUsersError(Session $session): Response
     {

@@ -8,19 +8,19 @@ use App\Service\Connector\ComelusConnectorManager;
 use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Libriciel\ComelusApiWrapper\ComelusException;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Sidebar(active: ['configurations-nav'])]
 #[Breadcrumb(title: 'Configuration des connecteurs', routeName: 'connector_index')]
 class ComelusConnectorController extends AbstractController
 {
     #[Route(path: '/connector/comelus', name: 'comelus_connector')]
-    #[IsGranted( 'ROLE_MANAGE_CONNECTORS')]
+    #[IsGranted('ROLE_MANAGE_CONNECTORS')]
     #[Breadcrumb(title: 'Comelus')]
     public function edit(ComelusConnectorRepository $comelusConnectorRepository, ComelusConnectorManager $comelusConnectorManager, Request $request): Response
     {
@@ -40,7 +40,7 @@ class ComelusConnectorController extends AbstractController
     }
 
     #[Route(path: '/connector/comelus/check/', name: 'comelus_connector_check')]
-    #[IsGranted( 'ROLE_MANAGE_CONNECTORS')]
+    #[IsGranted('ROLE_MANAGE_CONNECTORS')]
     public function isValidApiKey(ComelusConnectorManager $comelusConnectorManager, Request $request): JsonResponse
     {
         $url = $request->query->get('url');
@@ -53,7 +53,7 @@ class ComelusConnectorController extends AbstractController
     }
 
     #[Route(path: '/connector/comelus/mailingLists', name: 'comelus_connector_mailing_lists')]
-    #[IsGranted( 'ROLE_MANAGE_CONNECTORS')]
+    #[IsGranted('ROLE_MANAGE_CONNECTORS')]
     public function getAvailableMailingLists(ComelusConnectorManager $comelusConnectorManager, Request $request): JsonResponse
     {
         $url = $request->query->get('url');

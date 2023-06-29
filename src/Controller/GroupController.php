@@ -11,12 +11,12 @@ use App\Service\ValidationTrait;
 use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Sidebar(active: ['platform-nav', 'group-nav'])]
 #[Breadcrumb(title: 'Groupes', routeName: 'group_index')]
@@ -25,7 +25,7 @@ class GroupController extends AbstractController
     use ValidationTrait;
 
     #[Route(path: '/group', name: 'group_index')]
-    #[IsGranted( 'ROLE_SUPERADMIN')]
+    #[IsGranted('ROLE_SUPERADMIN')]
     public function index(GroupRepository $groupRepository, PaginatorInterface $paginator, Request $request): Response
     {
         $groupQueryAll = $groupRepository->findAllQuery();
@@ -41,7 +41,7 @@ class GroupController extends AbstractController
     }
 
     #[Route(path: '/group/add', name: 'group_add')]
-    #[IsGranted( 'ROLE_SUPERADMIN')]
+    #[IsGranted('ROLE_SUPERADMIN')]
     #[Breadcrumb(title: 'Ajouter')]
     public function add(Request $request, GroupManager $groupManager, ParameterBagInterface $bag): Response
     {
@@ -76,7 +76,7 @@ class GroupController extends AbstractController
     }
 
     #[Route(path: '/group/manage/{id}', name: 'group_manage')]
-    #[IsGranted( 'ROLE_SUPERADMIN')]
+    #[IsGranted('ROLE_SUPERADMIN')]
     #[Breadcrumb(title: 'Gérer {group.name}')]
     public function manage(Group $group, Request $request, GroupManager $groupManager): Response
     {
@@ -95,7 +95,7 @@ class GroupController extends AbstractController
     }
 
     #[Route(path: '/group/edit/{id}', name: 'group_edit')]
-    #[IsGranted( 'ROLE_SUPERADMIN')]
+    #[IsGranted('ROLE_SUPERADMIN')]
     #[Breadcrumb(title: 'Modifier {group.name}')]
     public function edit(Group $group, Request $request, GroupManager $groupManager): Response
     {
@@ -114,7 +114,7 @@ class GroupController extends AbstractController
     }
 
     #[Route(path: '/group/delete/{id}', name: 'group_delete', methods: ['DELETE'])]
-    #[IsGranted( 'ROLE_SUPERADMIN')]
+    #[IsGranted('ROLE_SUPERADMIN')]
     public function delete(Group $group, GroupManager $groupManager, Request $request): Response
     {
         $groupManager->delete($group);

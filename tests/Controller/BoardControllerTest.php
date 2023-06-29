@@ -50,6 +50,4 @@ class BoardControllerTest extends WebTestCase
         $item = $crawler->filter('html:contains("Tableau de bord")');
         $this->assertCount(1, $item);
     }
-
-
 }

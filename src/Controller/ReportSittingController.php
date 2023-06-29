@@ -7,17 +7,17 @@ use App\Service\Report\CsvSittingReport;
 use App\Service\Report\PdfSittingReport;
 use App\Service\Util\FileUtil;
 use App\Service\Zip\ZipTokenGenerator;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class ReportSittingController extends AbstractController
 {
     #[Route(path: '/reportSitting/pdf/{id}', name: 'sitting_report_pdf')]
-    #[IsGranted( 'MANAGE_SITTINGS', subject: 'sitting')]
+    #[IsGranted('MANAGE_SITTINGS', subject: 'sitting')]
     public function pdfReport(Sitting $sitting, PdfSittingReport $pdfSittingReport, FileUtil $fileUtil): Response
     {
         $response = new BinaryFileResponse($pdfSittingReport->generate($sitting));
@@ -31,7 +31,7 @@ class ReportSittingController extends AbstractController
     }
 
     #[Route(path: '/reportSitting/csv/{id}', name: 'sitting_report_csv')]
-    #[IsGranted( 'MANAGE_SITTINGS', subject: 'sitting')]
+    #[IsGranted('MANAGE_SITTINGS', subject: 'sitting')]
     public function csvReport(Sitting $sitting, CsvSittingReport $csvSittingReport, FileUtil $fileUtil): Response
     {
         $response = new BinaryFileResponse($csvSittingReport->generate($sitting));
@@ -45,7 +45,7 @@ class ReportSittingController extends AbstractController
     }
 
     #[Route(path: '/reportSitting/token/{id}', name: 'sitting_report_token')]
-    #[IsGranted( 'MANAGE_SITTINGS', subject: 'sitting')]
+    #[IsGranted('MANAGE_SITTINGS', subject: 'sitting')]
     public function getSittingZipTokens(Sitting $sitting, ZipTokenGenerator $zipTokenGenerator, FileUtil $fileUtil): Response
     {
         $response = new BinaryFileResponse($zipTokenGenerator->generateZipToken($sitting));

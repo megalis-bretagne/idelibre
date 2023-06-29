@@ -19,18 +19,17 @@ use App\Service\Project\ProjectManager;
 use App\Service\Seance\SittingManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
-//use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('/api/v2/structures/{structureId}/sittings')]
-#[ParamConverter('structure', class: Structure::class, options: ['id' => 'structureId'])]
 #[IsGranted('API_AUTHORIZED_STRUCTURE', subject: 'structure')]
 class SittingApiController extends AbstractController
 {
@@ -45,7 +44,7 @@ class SittingApiController extends AbstractController
 
     #[Route('', name: 'get_all_sittings', methods: ['GET'])]
     public function getAll(
-        Structure $structure,
+        #[MapEntity(mapping: ['structureId' => 'id'])] Structure $structure,
         Request $request,
         SittingRepository $sittingRepository
     ): JsonResponse {
@@ -58,17 +57,18 @@ class SittingApiController extends AbstractController
     #[Route('/{id}', name: 'get_one_sitting', methods: ['GET'])]
     #[IsGranted('API_SAME_STRUCTURE', subject: ['structure', 'sitting'])]
     public function getById(
-        Structure $structure,
+        #[MapEntity(mapping: ['structureId' => 'id'])] Structure $structure,
         Sitting $sitting
     ): JsonResponse {
         return $this->json($sitting, context: ['groups' => ['sitting:detail', 'sitting:read']]);
     }
 
     #[Route('/{sittingId}/convocations', name: 'get_all_convocations_by_sitting', methods: ['GET'])]
-    #[ParamConverter('sitting', class: Sitting::class, options: ['id' => 'sittingId'])]
     #[IsGranted('API_SAME_STRUCTURE', subject: ['structure', 'sitting'])]
     public function getAllConvocations(
+        #[MapEntity(mapping: ['structureId' => 'id'])]
         Structure $structure,
+        #[MapEntity(mapping: ['sittingId' => 'id'])]
         Sitting $sitting,
         ConvocationRepository $convocationRepository
     ): JsonResponse {
@@ -78,11 +78,10 @@ class SittingApiController extends AbstractController
     }
 
     #[Route('/{sittingId}/projects', name: 'get_all_projects_by_sitting', methods: ['GET'])]
-    #[ParamConverter('sitting', class: Sitting::class, options: ['id' => 'sittingId'])]
     #[IsGranted('API_SAME_STRUCTURE', subject: ['structure', 'sitting'])]
     public function getAllProjects(
-        Structure $structure,
-        Sitting $sitting,
+        #[MapEntity(mapping: ['structureId' => 'id'])] Structure $structure,
+        #[MapEntity(mapping: ['sittingId' => 'id'])] Sitting $sitting,
         ProjectRepository $projectRepository
     ): JsonResponse {
         $projects = $projectRepository->getProjectsBySitting($sitting);
@@ -92,7 +91,7 @@ class SittingApiController extends AbstractController
 
     #[Route('', name: 'add_sitting', methods: ['POST'])]
     public function addSitting(
-        Structure $structure,
+        #[MapEntity(mapping: ['structureId' => 'id'])] Structure $structure,
         Request $request,
         SittingManager $sittingManager
     ) {
@@ -117,8 +116,8 @@ class SittingApiController extends AbstractController
     #[Route('/{id}', name: 'update_sitting', methods: ['PUT'])]
     #[IsGranted('API_SAME_STRUCTURE', subject: ['structure', 'sitting'])]
     public function updateSitting(
-        Structure $structure,
-        Sitting $sitting,
+        #[MapEntity(mapping: ['structureId' => 'id'])] Structure $structure,
+        #[MapEntity(mapping: ['id' => 'id'])] ?Sitting $sitting,
         Request $request,
         SittingManager $sittingManager,
         SittingRepository $sittingRepository
@@ -140,11 +139,10 @@ class SittingApiController extends AbstractController
     }
 
     #[Route('/{sittingId}/projects', name: 'add_projects_to_sitting', methods: ['POST'])]
-    #[ParamConverter('sitting', class: Sitting::class, options: ['id' => 'sittingId'])]
     #[IsGranted('API_SAME_STRUCTURE', subject: ['structure', 'sitting'])]
     public function addProjectsToSitting(
-        Structure $structure,
-        Sitting $sitting,
+        #[MapEntity(mapping: ['structureId' => 'id'])] Structure $structure,
+        #[MapEntity(mapping: ['sittingId' => 'id'])] Sitting $sitting,
         Request $request,
         ProjectManager $projectManager,
         ProjectRepository $projectRepository,
@@ -181,11 +179,10 @@ class SittingApiController extends AbstractController
 
 
     #[Route('/{sittingId}/otherdocs', name: 'add_otherdocs_to_sitting', methods: ['POST'])]
-    #[ParamConverter('sitting', class: Sitting::class, options: ['id' => 'sittingId'])]
     #[IsGranted('API_SAME_STRUCTURE', subject: ['structure', 'sitting'])]
     public function addOtherdocsToSitting(
-        Structure $structure,
-        Sitting $sitting,
+        #[MapEntity(mapping: ['structureId' => 'id'])] Structure $structure,
+        #[MapEntity(mapping: ['sittingId' => 'id'])] Sitting $sitting,
         Request $request,
         OtherdocManager $otherdocManager,
         OtherdocRepository $otherdocRepository,
@@ -221,11 +218,10 @@ class SittingApiController extends AbstractController
     }
 
     #[Route('/{sittingId}/projects/{id}', name: 'deleteProject', methods: ['DELETE'])]
-    #[ParamConverter('sitting', class: Sitting::class, options: ['id' => 'sittingId'])]
     #[IsGranted('API_SAME_STRUCTURE', subject: ['structure', 'sitting'])]
     public function DeleteProject(
-        Structure $structure,
-        Sitting $sitting,
+        #[MapEntity(mapping: ['structureId' => 'id'])] Structure $structure,
+        #[MapEntity(mapping: ['sittingId' => 'id'])] Sitting $sitting,
         Project $project,
         ProjectManager $projectManager,
         ProjectRepository $projectRepository,

@@ -11,19 +11,19 @@ use App\Service\EmailTemplate\EmailTemplateManager;
 use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HtmlSanitizer\HtmlSanitizerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Sidebar(active: ['email-template-nav'])]
 #[Breadcrumb(title: "Modèles d'email", routeName: 'email_template_index')]
 class EmailTemplateController extends AbstractController
 {
     #[Route(path: '/emailTemplate', name: 'email_template_index', methods: ['GET'])]
-    #[IsGranted( 'ROLE_MANAGE_EMAIL_TEMPLATES')]
+    #[IsGranted('ROLE_MANAGE_EMAIL_TEMPLATES')]
     public function index(EmailTemplateRepository $repository, PaginatorInterface $paginator, Request $request): Response
     {
         $emailTemplates = $paginator->paginate(
@@ -42,7 +42,7 @@ class EmailTemplateController extends AbstractController
     }
 
     #[Route(path: '/emailTemplate/add', name: 'email_template_add')]
-    #[IsGranted( 'ROLE_MANAGE_EMAIL_TEMPLATES')]
+    #[IsGranted('ROLE_MANAGE_EMAIL_TEMPLATES')]
     #[Breadcrumb(title: 'Ajouter')]
     public function add(Request $request, EmailTemplateManager $templateManager): Response
     {
@@ -61,7 +61,7 @@ class EmailTemplateController extends AbstractController
     }
 
     #[Route(path: '/emailTemplate/edit/{id}', name: 'email_template_edit', methods: ['GET', 'POST'])]
-    #[IsGranted( 'MANAGE_EMAIL_TEMPLATES', subject: 'emailTemplate')]
+    #[IsGranted('MANAGE_EMAIL_TEMPLATES', subject: 'emailTemplate')]
     #[Breadcrumb(title: 'Modifier {emailTemplate.name}')]
     public function edit(Request $request, EmailTemplate $emailTemplate, EmailTemplateManager $templateManager): Response
     {
@@ -81,7 +81,7 @@ class EmailTemplateController extends AbstractController
     }
 
     #[Route(path: '/emailTemplate/delete/{id}', name: 'email_template_delete', methods: ['DELETE'])]
-    #[IsGranted( 'MANAGE_EMAIL_TEMPLATES', subject: 'emailTemplate')]
+    #[IsGranted('MANAGE_EMAIL_TEMPLATES', subject: 'emailTemplate')]
     public function delete(EmailTemplate $emailTemplate, EmailTemplateManager $emailTemplateManager, Request $request): Response
     {
         $emailTemplateManager->delete($emailTemplate);
@@ -93,7 +93,7 @@ class EmailTemplateController extends AbstractController
     }
 
     #[Route(path: '/emailTemplate/preview/{id}', name: 'email_template_preview', methods: ['GET'])]
-    #[IsGranted( 'MANAGE_EMAIL_TEMPLATES', subject: 'emailTemplate')]
+    #[IsGranted('MANAGE_EMAIL_TEMPLATES', subject: 'emailTemplate')]
     #[Breadcrumb(title: 'Visualiser {emailTemplate.name}')]
     public function preview(EmailTemplate $emailTemplate, EmailGenerator $generator): Response
     {
@@ -119,7 +119,7 @@ class EmailTemplateController extends AbstractController
     }
 
     #[Route(path: '/emailTemplate/iframe/preview/{id}', name: 'email_template_iframe_preview', methods: ['GET'])]
-    #[IsGranted( 'MANAGE_EMAIL_TEMPLATES', subject: 'emailTemplate')]
+    #[IsGranted('MANAGE_EMAIL_TEMPLATES', subject: 'emailTemplate')]
     public function iframePreview(EmailTemplate $emailTemplate, EmailGenerator $generator): Response
     {
         $recapitulatif = $this->tableExample();
