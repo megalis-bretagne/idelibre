@@ -1,5 +1,16 @@
 # Changelog
 All notable changes to this project will be documented in this file.
+
+
+## [4.2.8] - 2023-06-29
+### Evolution
+- Mise à jour symfony en 6.3.1
+- suppression de la lib sensioExtraFramework dépréciée
+- Mise à jour des lib npm
+
+
+### Correction
+￼- Le fuseau horaire contenu dans le fichier ics envoyé dans le mail de la séance présentait un décalage d'1 heure selon certain logiciel de gestion d'agenda
 ￼	
 
 ## [4.2.7] - 2023-06-28
