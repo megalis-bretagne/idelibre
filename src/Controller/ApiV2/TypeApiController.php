@@ -7,11 +7,12 @@ use App\Entity\Type;
 use App\Repository\TypeRepository;
 use App\Service\Persistence\PersistenceHelper;
 use Doctrine\ORM\EntityManagerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 /**
@@ -26,7 +27,6 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
  * }.
  */
 #[Route('/api/v2/structures/{structureId}/types')]
-#[ParamConverter('structure', class: Structure::class, options: ['id' => 'structureId'])]
 #[IsGranted('API_AUTHORIZED_STRUCTURE', subject: 'structure')]
 class TypeApiController extends AbstractController
 {
@@ -38,8 +38,10 @@ class TypeApiController extends AbstractController
     }
 
     #[Route('', name: 'get_all_types', methods: ['GET'])]
-    public function getAll(Structure $structure, TypeRepository $typeRepository): JsonResponse
-    {
+    public function getAll(
+        #[MapEntity(mapping: ['structureId' => 'id'])] Structure $structure,
+        TypeRepository $typeRepository
+    ): JsonResponse {
         $types = $typeRepository->findByStructure($structure)->getQuery()->getResult();
 
         return $this->json($types, context: ['groups' => 'type:read']);
@@ -47,15 +49,19 @@ class TypeApiController extends AbstractController
 
     #[Route('/{id}', name: 'get_type', methods: ['GET'])]
     #[IsGranted('API_SAME_STRUCTURE', subject: ['structure', 'type'])]
-    public function getById(Structure $structure, Type $type): JsonResponse
-    {
+    public function getById(
+        #[MapEntity(mapping: ['structureId' => 'id'])] Structure $structure,
+        Type $type
+    ): JsonResponse {
         return $this->json($type, context: ['groups' => ['type:detail', 'type:read']]);
     }
 
     #[Route('', name: 'add_type', methods: ['POST'])]
     #[IsGranted('API_RELATION_TYPE_USERS', subject: ['structure' => 'structure', 'data' => 'data'])]
-    public function add(Structure $structure, array $data): JsonResponse
-    {
+    public function add(
+        #[MapEntity(mapping: ['structureId' => 'id'])] Structure $structure,
+        array $data
+    ): JsonResponse {
         $type = $this->denormalizer->denormalize($data, Type::class, context: ['groups' => ['type:write'], 'normalize_relations' => true]);
         $type->setStructure($structure);
 
@@ -67,8 +73,11 @@ class TypeApiController extends AbstractController
     #[Route('/{id}', name: 'edit_type', methods: ['PUT'])]
     #[IsGranted('API_SAME_STRUCTURE', subject: ['structure' => 'structure', 'entity' => 'type'])]
     #[IsGranted('API_RELATION_TYPE_USERS', subject: ['structure' => 'structure', 'data' => 'data'])]
-    public function update(Structure $structure, Type $type, array $data): JsonResponse
-    {
+    public function update(
+        #[MapEntity(mapping: ['structureId' => 'id'])] Structure $structure,
+        Type $type,
+        array $data
+    ): JsonResponse {
         $context = ['object_to_populate' => $type, 'groups' => ['type:write'], 'normalize_relations' => true];
 
         /** @var Type $type */
@@ -81,8 +90,10 @@ class TypeApiController extends AbstractController
 
     #[Route('/{id}', name: 'delete_type', methods: ['DELETE'])]
     #[IsGranted('API_SAME_STRUCTURE', subject: ['structure' => 'structure', 'entity' => 'type'])]
-    public function delete(Structure $structure, Type $type): JsonResponse
-    {
+    public function delete(
+        #[MapEntity(mapping: ['structureId' => 'id'])] Structure $structure,
+        Type $type
+    ): JsonResponse {
         $this->em->remove($type);
         $this->em->flush();
 

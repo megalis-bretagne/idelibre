@@ -9,18 +9,18 @@ use App\Repository\ThemeRepository;
 use App\Service\Theme\ThemeManager;
 use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Sidebar(active: ['theme-nav'])]
 #[Breadcrumb(title: 'Thèmes', routeName: 'theme_index')]
 class ThemeController extends AbstractController
 {
     #[Route(path: '/theme/index', name: 'theme_index')]
-    #[IsGranted(data: 'ROLE_MANAGE_THEMES')]
+    #[IsGranted('ROLE_MANAGE_THEMES')]
     public function index(ThemeRepository $themeRepository): Response
     {
         $root = $themeRepository->findOneBy(['name' => 'ROOT', 'structure' => $this->getUser()->getStructure()]);
@@ -34,7 +34,7 @@ class ThemeController extends AbstractController
     }
 
     #[Route(path: '/theme/add', name: 'theme_add')]
-    #[IsGranted(data: 'ROLE_MANAGE_THEMES')]
+    #[IsGranted('ROLE_MANAGE_THEMES')]
     #[Breadcrumb(title: 'Ajouter')]
     public function add(ThemeManager $themeManager, Request $request): Response
     {
@@ -54,7 +54,7 @@ class ThemeController extends AbstractController
     }
 
     #[Route(path: '/theme/edit/{id}', name: 'theme_edit')]
-    #[IsGranted(data: 'MANAGE_THEMES', subject: 'theme')]
+    #[IsGranted('MANAGE_THEMES', subject: 'theme')]
     #[Breadcrumb(title: 'Modifier {theme.name}')]
     public function edit(Theme $theme, ThemeManager $themeManager, Request $request): Response
     {
@@ -74,7 +74,7 @@ class ThemeController extends AbstractController
     }
 
     #[Route(path: '/theme/delete/{id}', name: 'theme_delete', methods: ['DELETE'])]
-    #[IsGranted(data: 'MANAGE_THEMES', subject: 'theme')]
+    #[IsGranted('MANAGE_THEMES', subject: 'theme')]
     public function delete(Theme $theme, ThemeManager $themeManager): Response
     {
         $themeManager->delete($theme);

@@ -89,8 +89,5 @@ class FileTest extends WebTestCase
             ->setPath('/tmp/strucutre/file.pdf');
 
         $this->assertNotNull($file->getCreatedAt());
-
-
-
     }
 }

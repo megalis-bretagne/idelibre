@@ -26,6 +26,7 @@ services:
       - ./assets:/app/assets
       - ./tests:/app/tests
       - ./package-lock.json:/app/package-lock.json
+      - ./package.json:/app/package.json
     command: ["/app/docker-resources/initApp.sh"]
     networks:
       - network_idelibre_dev

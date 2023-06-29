@@ -10,19 +10,19 @@ use App\Util\TokenUtil;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Sidebar(active: ['configurations-nav', 'connector-api-key-nav'])]
 #[Breadcrumb(title: "Clés d'api", routeName: 'apiUser_index')]
 class ApiUserController extends AbstractController
 {
     #[Route(path: '/apikey', name: 'apiUser_index', methods: ['GET'])]
-    #[IsGranted(data: 'ROLE_MANAGE_API_USER')]
+    #[IsGranted('ROLE_MANAGE_API_USER')]
     public function index(PaginatorInterface $paginator, ApiUserRepository $apiUserRepository, Request $request): Response
     {
         $apiUsers = $paginator->paginate(
@@ -41,7 +41,7 @@ class ApiUserController extends AbstractController
     }
 
     #[Route(path: '/apikey/add', name: 'apiUser_add', methods: ['GET', 'POST'])]
-    #[IsGranted(data: 'ROLE_MANAGE_API_USER')]
+    #[IsGranted('ROLE_MANAGE_API_USER')]
     #[Breadcrumb(title: 'Ajouter')]
     public function add(Request $request, EntityManagerInterface $em): Response
     {
@@ -61,7 +61,7 @@ class ApiUserController extends AbstractController
     }
 
     #[Route(path: '/apikey/edit/{id}', name: 'apiUser_edit', methods: ['PUT', 'GET', 'POST'])]
-    #[IsGranted(data: 'MANAGE_API_USERS', subject: 'apiUser')]
+    #[IsGranted('MANAGE_API_USERS', subject: 'apiUser')]
     #[Breadcrumb(title: 'Modifier {apiUser.name}')]
     public function edit(ApiUser $apiUser, Request $request, EntityManagerInterface $em): Response
     {
@@ -81,7 +81,7 @@ class ApiUserController extends AbstractController
     }
 
     #[Route(path: '/apikey/delete/{id}', name: 'apiUser_delete', methods: ['DELETE'])]
-    #[IsGranted(data: 'MANAGE_API_USERS', subject: 'apiUser')]
+    #[IsGranted('MANAGE_API_USERS', subject: 'apiUser')]
     public function delete(ApiUser $apiUser, EntityManagerInterface $em): Response
     {
         $em->remove($apiUser);

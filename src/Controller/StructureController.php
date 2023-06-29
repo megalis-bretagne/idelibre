@@ -13,12 +13,12 @@ use App\Service\Structure\StructureManager;
 use App\Service\ValidationTrait;
 use App\Sidebar\Annotation\Sidebar;
 use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Sidebar(active: ['platform-nav', 'structure-nav'])]
 class StructureController extends AbstractController
@@ -27,7 +27,7 @@ class StructureController extends AbstractController
     use RoleTrait;
 
     #[Route(path: '/structure', name: 'structure_index')]
-    #[IsGranted(data: 'ROLE_MANAGE_STRUCTURES')]
+    #[IsGranted('ROLE_MANAGE_STRUCTURES')]
     public function index(StructureRepository $structureRepository, PaginatorInterface $paginator, Request $request): Response
     {
         $formSearch = $this->createForm(SearchType::class);
@@ -55,7 +55,7 @@ class StructureController extends AbstractController
     }
 
     #[Route(path: '/structure/add', name: 'structure_add')]
-    #[IsGranted(data: 'CREATE_STRUCTURE')]
+    #[IsGranted('CREATE_STRUCTURE')]
     public function add(Request $request, StructureCreator $structureCreator, ParameterBagInterface $bag): Response
     {
         $form = $this->createForm(StructureType::class, null, [
@@ -88,7 +88,7 @@ class StructureController extends AbstractController
     }
 
     #[Route(path: '/structure/edit/{id}', name: 'structure_edit')]
-    #[IsGranted(data: 'MY_GROUP', subject: 'structure')]
+    #[IsGranted('MY_GROUP', subject: 'structure')]
     public function edit(Structure $structure, Request $request, StructureManager $structureManager): Response
     {
         $form = $this->createForm(StructureType::class, $structure);
@@ -107,7 +107,7 @@ class StructureController extends AbstractController
     }
 
     #[Route(path: '/structure/delete/{id}', name: 'structure_delete', methods: ['DELETE'])]
-    #[IsGranted(data: 'ROLE_SUPERADMIN')]
+    #[IsGranted('ROLE_SUPERADMIN')]
     public function delete(Structure $structure, StructureManager $structureManager, Request $request): Response
     {
         $structureManager->delete($structure);
@@ -119,7 +119,7 @@ class StructureController extends AbstractController
     }
 
     #[Route(path: '/structure/preferences', name: 'structure_preferences')]
-    #[IsGranted(data: 'ROLE_STRUCTURE_ADMIN')]
+    #[IsGranted('ROLE_STRUCTURE_ADMIN')]
     #[Sidebar(reset: true, active: ['structure-preference-nav'])]
     public function preferences(Request $request, StructureManager $structureManager): Response
     {

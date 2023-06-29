@@ -68,7 +68,6 @@ class SittingApiControllerTest extends WebTestCase
 
         $response = $this->client->getResponse();
         $sittings = json_decode($response->getContent(), true);
-
         $this->assertCount(4, $sittings);
     }
 
@@ -222,8 +221,6 @@ class SittingApiControllerTest extends WebTestCase
         $this->assertNotEmpty($sitting['convocationFile']);
 
         $this->assertTrue($sitting['isRemoteAllowed']);
-
-
     }
 
     public function testAddSittingNoConvocationFile()
