@@ -7,7 +7,7 @@ use App\Repository\Connector\LsmessageConnectorRepository;
 use App\Service\Connector\LsmessageConnectorManager;
 use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,7 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class LsmessageConnectorController extends AbstractController
 {
     #[Route(path: '/connector/lsmessage', name: 'lsmessage_connector')]
-    #[IsGranted(data: 'ROLE_MANAGE_CONNECTORS')]
+    #[IsGranted( 'ROLE_MANAGE_CONNECTORS')]
     #[Breadcrumb(title: 'Lsmessage')]
     public function edit(LsmessageConnectorRepository $lsmessageConnectorRepository, LsmessageConnectorManager $lsmessageConnectorManager, Request $request): Response
     {
@@ -39,7 +39,7 @@ class LsmessageConnectorController extends AbstractController
     }
 
     #[Route(path: '/connector/lsmessage/check/', name: 'lsmessage_connector_check')]
-    #[IsGranted(data: 'ROLE_MANAGE_CONNECTORS')]
+    #[IsGranted( 'ROLE_MANAGE_CONNECTORS')]
     public function isValidApiKey(LsmessageConnectorManager $lsmessageConnectorManager, Request $request): JsonResponse
     {
         $url = $request->query->get('url');

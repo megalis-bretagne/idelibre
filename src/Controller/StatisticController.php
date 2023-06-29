@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Service\Statistic\RoleByStructureStatisticCsvGenerator;
 use App\Service\Statistic\SittingByStructureStatisticCsvGenerator;
 use App\Sidebar\Annotation\Sidebar;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class StatisticController extends AbstractController
 {
     #[Route(path: '/statistic', name: 'statistic_index')]
-    #[IsGranted(data: 'ROLE_SUPERADMIN')]
+    #[IsGranted( 'ROLE_SUPERADMIN')]
     public function index(): Response
     {
         return $this->render('statistic/statistic_index.html.twig', [

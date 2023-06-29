@@ -7,7 +7,7 @@ use App\Message\UpdatedSitting;
 use App\Service\ApiEntity\OtherdocApi;
 use App\Service\Otherdoc\OtherdocManager;
 use App\Service\Pdf\PdfValidator;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,7 +18,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 class OtherdocController extends AbstractController
 {
     #[Route(path: '/api/otherdocs/{id}', name: 'api_otherdoc_add', methods: ['POST'])]
-    #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
+    #[IsGranted( 'MANAGE_SITTINGS', subject: 'sitting')]
     public function edit(Sitting $sitting, Request $request, SerializerInterface $serializer, OtherdocManager $otherdocManager, MessageBusInterface $messageBus, PdfValidator $pdfValidator): JsonResponse
     {
         $rawOtherdocs = $request->request->get('otherdocs');
@@ -43,7 +43,7 @@ class OtherdocController extends AbstractController
     }
 
     #[Route(path: '/api/otherdocs/{id}', name: 'api_otherdoc_get', methods: ['GET'])]
-    #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
+    #[IsGranted( 'MANAGE_SITTINGS', subject: 'sitting')]
     public function getOtherdocsFromSitting(Sitting $sitting, OtherdocManager $otherdocManager): JsonResponse
     {
         $otherdocsApi = $otherdocManager->getApiOtherdocsFromOtherdocs($otherdocManager->getOtherdocsFromSitting($sitting));

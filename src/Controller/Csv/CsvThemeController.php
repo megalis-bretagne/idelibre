@@ -6,7 +6,7 @@ use App\Form\CsvType;
 use App\Service\Csv\CsvThemeManager;
 use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class CsvThemeController extends AbstractController
 {
     #[Route(path: '/csv/importTheme', name: 'csv_add_themes')]
-    #[IsGranted(data: 'ROLE_MANAGE_THEMES')]
+    #[IsGranted( 'ROLE_MANAGE_THEMES')]
     #[Breadcrumb(title: 'Importer des utilisateurs via csv')]
     public function importTheme(Request $request, CsvThemeManager $csvThemeManager, Session $session): Response
     {
@@ -42,7 +42,7 @@ class CsvThemeController extends AbstractController
     }
 
     #[Route(path: '/csv/themeErrors', name: 'theme_csv_error')]
-    #[IsGranted(data: 'ROLE_MANAGE_THEMES')]
+    #[IsGranted( 'ROLE_MANAGE_THEMES')]
     #[Breadcrumb(title: "Erreurs lors de l'import")]
     public function csvUsersError(Session $session): Response
     {

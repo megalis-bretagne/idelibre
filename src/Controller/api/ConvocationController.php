@@ -9,7 +9,7 @@ use App\Service\Convocation\ConvocationAttendance;
 use App\Service\Convocation\ConvocationManager;
 use App\Service\Email\EmailData;
 use App\Service\EmailTemplate\EmailGenerator;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,7 +20,7 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 class ConvocationController extends AbstractController
 {
     #[Route(path: '/api/convocations/{id}', name: 'api_convocation_sitting', methods: ['GET'])]
-    #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
+    #[IsGranted( 'MANAGE_SITTINGS', subject: 'sitting')]
     public function getConvocations(Sitting $sitting, ConvocationRepository $convocationRepository): JsonResponse
     {
         return $this->json(
@@ -36,7 +36,7 @@ class ConvocationController extends AbstractController
     }
 
     #[Route(path: '/api/convocations/{id}/send', name: 'api_convocation_send', methods: ['POST'])]
-    #[IsGranted(data: 'MANAGE_CONVOCATIONS', subject: 'convocation')]
+    #[IsGranted( 'MANAGE_CONVOCATIONS', subject: 'convocation')]
     public function sendConvocation(Convocation $convocation, ConvocationManager $convocationManager): JsonResponse
     {
         $convocationManager->sendConvocation($convocation);
@@ -45,7 +45,7 @@ class ConvocationController extends AbstractController
     }
 
     #[Route(path: '/api/convocations/attendance', name: 'api_convocation_attendance', methods: ['POST', 'PUT'])]
-    #[IsGranted(data: 'MANAGE_ATTENDANCE', subject: 'request')]
+    #[IsGranted( 'MANAGE_ATTENDANCE', subject: 'request')]
     public function setAttendance(ConvocationManager $convocationManager, Request $request, DenormalizerInterface $denormalizer): JsonResponse
     {
         $convocationAttendances = $denormalizer->denormalize($request->toArray(), ConvocationAttendance::class . '[]');
@@ -55,7 +55,7 @@ class ConvocationController extends AbstractController
     }
 
     #[Route(path: '/api/convocations/previewForSecretary/{id}', name: 'api_convocation_preview_for_secretary', methods: ['GET'])]
-    #[IsGranted(data: 'MANAGE_CONVOCATIONS', subject: 'convocation')]
+    #[IsGranted( 'MANAGE_CONVOCATIONS', subject: 'convocation')]
     public function iframePreviewForSecretary(Convocation $convocation, EmailGenerator $generator): Response
     {
         $convocation->setCategory('convocation');
@@ -70,7 +70,7 @@ class ConvocationController extends AbstractController
     }
 
     #[Route(path: '/api/convocations/previewForSecretaryOther/{id}', name: 'api_convocation_preview_for_secretary_other', methods: ['GET'])]
-    #[IsGranted(data: 'MANAGE_CONVOCATIONS', subject: 'convocation')]
+    #[IsGranted( 'MANAGE_CONVOCATIONS', subject: 'convocation')]
     public function iframePreviewForSecretaryOther(Convocation $convocation, EmailGenerator $generator): Response
     {
         $convocation->setCategory('invitation');

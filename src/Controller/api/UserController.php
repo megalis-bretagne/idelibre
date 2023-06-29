@@ -7,7 +7,7 @@ use App\Entity\User;
 use App\Repository\ConvocationRepository;
 use App\Repository\UserRepository;
 use App\Service\Convocation\ConvocationManager;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserController extends AbstractController
 {
     #[Route(path: '/api/actors', name: 'api_actor_index', methods: ['GET'])]
-    #[IsGranted(data: 'ROLE_MANAGE_SITTINGS')]
+    #[IsGranted( 'ROLE_MANAGE_SITTINGS')]
     public function getActors(UserRepository $userRepository): JsonResponse
     {
         return $this->json(
@@ -28,7 +28,7 @@ class UserController extends AbstractController
     }
 
     #[Route(path: '/api/users/sittings/{id}', name: 'api_user_sitting', methods: ['GET'])]
-    #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
+    #[IsGranted( 'MANAGE_SITTINGS', subject: 'sitting')]
     public function getUsersInSitting(Sitting $sitting, UserRepository $userRepository): JsonResponse
     {
         return $this->json(
@@ -44,7 +44,7 @@ class UserController extends AbstractController
     }
 
     #[Route(path: '/api/users/sittings/{id}/not', name: 'api_user_not_sitting', methods: ['GET'])]
-    #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
+    #[IsGranted( 'MANAGE_SITTINGS', subject: 'sitting')]
     public function getUsersNotInSitting(Sitting $sitting, UserRepository $userRepository): JsonResponse
     {
         return $this->json(
@@ -60,7 +60,7 @@ class UserController extends AbstractController
     }
 
     #[Route(path: '/api/users/sittings/{id}', name: 'api_user_sitting_modify', methods: ['PUT'])]
-    #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
+    #[IsGranted( 'MANAGE_SITTINGS', subject: 'sitting')]
     public function updateActorsInSitting(Sitting $sitting, Request $request, ConvocationManager $convocationManager, UserRepository $userRepository, ConvocationRepository $convocationRepository): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
@@ -73,7 +73,7 @@ class UserController extends AbstractController
     }
 
     #[Route(path: '/api/users/sittings/{id}/sent', name: 'api_users_sitting_sent', methods: ['GET'])]
-    #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
+    #[IsGranted( 'MANAGE_SITTINGS', subject: 'sitting')]
     public function getUSerConvocationSent(Sitting $sitting, UserRepository $userRepository): JsonResponse
     {
         return $this->json([
@@ -84,7 +84,7 @@ class UserController extends AbstractController
     }
 
     #[Route(path: '/api/users/{id}', name: 'api_user', methods: ['GET'])]
-    #[IsGranted(data: 'MANAGE_USERS', subject: 'user')]
+    #[IsGranted( 'MANAGE_USERS', subject: 'user')]
     public function getUsersDataInSitting(User $user, UserRepository $userRepository): JsonResponse
     {
         return $this->json(

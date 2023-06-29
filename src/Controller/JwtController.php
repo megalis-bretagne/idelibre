@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Security\Http403Exception;
 use App\Service\Jwt\JwtInvalidator;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class JwtController extends AbstractController
 {
     #[Route('/jwt/invalidate/{id}', name: 'jwt_invalidate', methods: ['POST'])]
-    #[IsGranted(data: 'MANAGE_USERS', subject: 'user')]
+    #[IsGranted( 'MANAGE_USERS', subject: 'user')]
     public function invalidateBeforeNow(User $user, JwtInvalidator $jwtInvalidator): Response
     {
         $jwtInvalidator->invalidate($user);

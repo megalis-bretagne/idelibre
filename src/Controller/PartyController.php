@@ -9,7 +9,7 @@ use App\Service\Party\PartyManager;
 use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,7 +20,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class PartyController extends AbstractController
 {
     #[Route(path: '/party/index', name: 'party_index')]
-    #[IsGranted(data: 'ROLE_MANAGE_PARTIES')]
+    #[IsGranted( 'ROLE_MANAGE_PARTIES')]
     public function index(PartyRepository $partyRepository, PaginatorInterface $paginator, Request $request): Response
     {
         $parties = $paginator->paginate(
@@ -39,7 +39,7 @@ class PartyController extends AbstractController
     }
 
     #[Route(path: '/party/add', name: 'party_add')]
-    #[IsGranted(data: 'ROLE_MANAGE_PARTIES')]
+    #[IsGranted( 'ROLE_MANAGE_PARTIES')]
     #[Breadcrumb(title: 'Ajouter')]
     public function add(Request $request, PartyManager $partyManager): Response
     {
@@ -58,7 +58,7 @@ class PartyController extends AbstractController
     }
 
     #[Route(path: '/party/edit/{id}', name: 'party_edit')]
-    #[IsGranted(data: 'MANAGE_PARTIES', subject: 'party')]
+    #[IsGranted( 'MANAGE_PARTIES', subject: 'party')]
     #[Breadcrumb(title: 'Modifier {party.name}')]
     public function edit(Party $party, Request $request, PartyManager $partyManager): Response
     {
@@ -77,7 +77,7 @@ class PartyController extends AbstractController
     }
 
     #[Route(path: '/party/delete/{id}', name: 'party_delete')]
-    #[IsGranted(data: 'MANAGE_PARTIES', subject: 'party')]
+    #[IsGranted( 'MANAGE_PARTIES', subject: 'party')]
     public function delete(Party $party, PartyManager $partyManager, Request $request): Response
     {
         $partyManager->delete($party);

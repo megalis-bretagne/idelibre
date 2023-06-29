@@ -11,7 +11,7 @@ use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Libriciel\LshorodatageApiWrapper\LsHorodatageException;
 use Libriciel\LshorodatageApiWrapper\LshorodatageInterface;
 use Psr\Log\LoggerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,7 +22,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class CheckController extends AbstractController
 {
     #[Route(path: '/check', name: 'check_index')]
-    #[IsGranted(data: 'ROLE_SUPERADMIN')]
+    #[IsGranted( 'ROLE_SUPERADMIN')]
     #[Breadcrumb(title: 'Vérification de la plateforme')]
     public function index(ClientNotifier $clientNotifier, LshorodatageInterface $lshorodatage, LoggerInterface $logger, ServiceInfo $serviceInfo, ParameterBagInterface $bag): Response
     {
@@ -44,7 +44,7 @@ class CheckController extends AbstractController
     }
 
     #[Route(path: '/check/email', name: 'check_email', methods: ['POST'])]
-    #[IsGranted(data: 'ROLE_SUPERADMIN')]
+    #[IsGranted( 'ROLE_SUPERADMIN')]
     public function testMail(Request $request, EmailServiceInterface $emailService, ParameterBagInterface $bag): Response
     {
         $email = $request->request->get('email');

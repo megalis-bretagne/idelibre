@@ -17,7 +17,7 @@ use App\Sidebar\Annotation\Sidebar;
 use App\Sidebar\State\SidebarState;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpClient\Exception\InvalidArgumentException;
@@ -32,7 +32,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class SittingController extends AbstractController
 {
     #[Route(path: '/sitting', name: 'sitting_index')]
-    #[IsGranted(data: 'ROLE_MANAGE_SITTINGS')]
+    #[IsGranted( 'ROLE_MANAGE_SITTINGS')]
     public function index(PaginatorInterface $paginator, Request $request, SittingManager $sittingManager, SidebarState $sidebarState): Response
     {
         $formSearch = $this->createForm(SearchType::class);
@@ -58,7 +58,7 @@ class SittingController extends AbstractController
     }
 
     #[Route(path: '/sitting/add', name: 'sitting_add')]
-    #[IsGranted(data: 'ROLE_MANAGE_SITTINGS')]
+    #[IsGranted( 'ROLE_MANAGE_SITTINGS')]
     #[Sidebar(active: ['sitting-active-nav'])]
     #[Breadcrumb(title: 'Ajouter')]
     public function createSitting(Request $request, SittingManager $sittingManager, PdfValidator $pdfValidator): Response
@@ -95,7 +95,7 @@ class SittingController extends AbstractController
     }
 
     #[Route(path: '/sitting/edit/{id}/actors', name: 'edit_sitting_actor', methods: ['GET'])]
-    #[IsGranted(data: 'ROLE_MANAGE_SITTINGS')]
+    #[IsGranted( 'ROLE_MANAGE_SITTINGS')]
     #[Sidebar(active: ['sitting-active-nav'])]
     #[Breadcrumb(title: 'Modifier {sitting.nameWithDate}')]
     public function editUsers(Sitting $sitting): Response
@@ -124,7 +124,7 @@ class SittingController extends AbstractController
     }
 
     #[Route(path: '/sitting/edit/{id}', name: 'edit_sitting_information')]
-    #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
+    #[IsGranted( 'MANAGE_SITTINGS', subject: 'sitting')]
     #[Sidebar(active: ['sitting-active-nav'])]
     #[Breadcrumb(title: 'Modifier {sitting.nameWithDate}')]
     public function editInformation(Sitting $sitting, Request $request, SittingManager $sittingManager, PdfValidator $pdfValidator): Response
@@ -164,7 +164,7 @@ class SittingController extends AbstractController
     }
 
     #[Route(path: '/sitting/edit/{id}/cancel', name: 'edit_sitting_information_cancel')]
-    #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
+    #[IsGranted( 'MANAGE_SITTINGS', subject: 'sitting')]
     public function editInformationCancel(Sitting $sitting): Response
     {
         $this->addFlash('success', 'Modifications annulées');
@@ -173,7 +173,7 @@ class SittingController extends AbstractController
     }
 
     #[Route(path: '/sitting/delete/{id}', name: 'sitting_delete', methods: ['DELETE'])]
-    #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
+    #[IsGranted( 'MANAGE_SITTINGS', subject: 'sitting')]
     public function delete(Sitting $sitting, SittingManager $sittingManager, Request $request): Response
     {
         $sittingManager->delete($sitting);
@@ -184,7 +184,7 @@ class SittingController extends AbstractController
     }
 
     #[Route(path: '/sitting/show/{id}/information', name: 'sitting_show_information', methods: ['GET'])]
-    #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
+    #[IsGranted( 'MANAGE_SITTINGS', subject: 'sitting')]
     #[Breadcrumb(title: 'Détail {sitting.nameWithDate}')]
     public function showInformation(Sitting $sitting, SittingManager $sittingManager, SidebarState $sidebarState): Response
     {
@@ -198,7 +198,7 @@ class SittingController extends AbstractController
     }
 
     #[Route(path: '/sitting/show/{id}/actors', name: 'sitting_show_actors', methods: ['GET'])]
-    #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
+    #[IsGranted( 'MANAGE_SITTINGS', subject: 'sitting')]
     #[Breadcrumb(title: 'Détail {sitting.nameWithDate}')]
     public function showActors(Sitting $sitting, EmailTemplateRepository $emailTemplateRepository, SidebarState $sidebarState, EmailGenerator $emailGenerator): Response
     {
@@ -228,7 +228,7 @@ class SittingController extends AbstractController
     }
 
     #[Route(path: '/sitting/show/{id}/projects', name: 'sitting_show_projects', methods: ['GET'])]
-    #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
+    #[IsGranted( 'MANAGE_SITTINGS', subject: 'sitting')]
     #[Breadcrumb(title: 'Détail {sitting.nameWithDate}')]
     public function showProjects(Sitting $sitting, ProjectRepository $projectRepository, OtherdocRepository $otherdocRepository, SidebarState $sidebarState, SittingManager $sittingManager, ParameterBagInterface $bag): Response
     {
@@ -248,7 +248,7 @@ class SittingController extends AbstractController
      * @throws UnsupportedExtensionException
      */
     #[Route(path: '/sitting/zip/{id}', name: 'sitting_zip', methods: ['GET'])]
-    #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
+    #[IsGranted( 'MANAGE_SITTINGS', subject: 'sitting')]
     public function getZipSitting(Sitting $sitting, FileGenerator $fileGenerator): Response
     {
         $zipPath = $fileGenerator->genFullSittingDirPath($sitting, 'zip');
@@ -263,7 +263,7 @@ class SittingController extends AbstractController
     }
 
     #[Route(path: '/sitting/pdf/{id}', name: 'sitting_full_pdf', methods: ['GET'])]
-    #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
+    #[IsGranted( 'MANAGE_SITTINGS', subject: 'sitting')]
     public function getFullPdfSitting(Sitting $sitting, FileGenerator $fileGenerator): Response
     {
         $pdfPath = $fileGenerator->genFullSittingDirPath($sitting, 'pdf');
@@ -278,7 +278,7 @@ class SittingController extends AbstractController
     }
 
     #[Route(path: '/sitting/archive/{id}', name: 'sitting_archive', methods: ['POST'])]
-    #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
+    #[IsGranted( 'MANAGE_SITTINGS', subject: 'sitting')]
     public function archiveSitting(Sitting $sitting, SittingManager $sittingManager, Request $request): Response
     {
         $sittingManager->archive($sitting);
@@ -289,7 +289,7 @@ class SittingController extends AbstractController
     }
 
     #[Route(path: '/sitting/unarchive/{id}', name: 'sitting_unarchive', methods: ['POST'])]
-    #[IsGranted(data: 'ROLE_SUPERADMIN')]
+    #[IsGranted( 'ROLE_SUPERADMIN')]
     public function unArchiveSitting(Sitting $sitting, SittingManager $sittingManager, Request $request): Response
     {
         $sittingManager->unArchive($sitting);

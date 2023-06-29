@@ -11,7 +11,7 @@ use App\Service\User\UserManager;
 use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,7 +23,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class AdminController extends AbstractController
 {
     #[Route(path: '/admin', name: 'admin_index')]
-    #[IsGranted(data: 'ROLE_MANAGE_STRUCTURES')]
+    #[IsGranted( 'ROLE_MANAGE_STRUCTURES')]
     public function index(UserRepository $userRepository, PaginatorInterface $paginator, Request $request): Response
     {
         $formSearch = $this->createForm(SearchType::class);
@@ -48,7 +48,7 @@ class AdminController extends AbstractController
     }
 
     #[Route(path: '/admin/add', name: 'admin_add')]
-    #[IsGranted(data: 'ROLE_SUPERADMIN')]
+    #[IsGranted( 'ROLE_SUPERADMIN')]
     #[Breadcrumb(title: 'Ajouter')]
     public function add(Request $request, UserManager $userManager, RoleManager $roleManager, ParameterBagInterface $bag): Response
     {
@@ -76,7 +76,7 @@ class AdminController extends AbstractController
     }
 
     #[Route(path: '/admin/group/add', name: 'admin_goup_add')]
-    #[IsGranted(data: 'ROLE_MANAGE_STRUCTURES')]
+    #[IsGranted( 'ROLE_MANAGE_STRUCTURES')]
     #[Breadcrumb(title: 'Ajouter un administrateur de groupe')]
     public function addGroupAdmin(Request $request, UserManager $userManager, RoleManager $roleManager, ParameterBagInterface $bag): Response
     {
@@ -110,7 +110,7 @@ class AdminController extends AbstractController
     }
 
     #[Route(path: '/admin/edit/{id}', name: 'admin_edit')]
-    #[IsGranted(data: 'MY_GROUP', subject: 'user')]
+    #[IsGranted( 'MY_GROUP', subject: 'user')]
     #[Breadcrumb(title: 'Modifier {user.firstName} {user.lastName}')]
     public function edit(User $user, Request $request, UserManager $userManager, RoleManager $roleManager, ParameterBagInterface $bag): Response
     {
@@ -150,7 +150,7 @@ class AdminController extends AbstractController
     }
 
     #[Route(path: '/admin/delete/{id}', name: 'admin_delete', methods: ['DELETE'])]
-    #[IsGranted(data: 'MY_GROUP', subject: 'user')]
+    #[IsGranted( 'MY_GROUP', subject: 'user')]
     public function delete(User $user, UserManager $userManager, Request $request): Response
     {
         if ($this->getUser()->getid() == $user->getId()) {

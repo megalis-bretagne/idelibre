@@ -6,7 +6,7 @@ use App\Repository\Connector\ComelusConnectorRepository;
 use App\Repository\Connector\LsmessageConnectorRepository;
 use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ConnectorController extends AbstractController
 {
     #[Route(path: '/connector', name: 'connector_index')]
-    #[IsGranted(data: 'ROLE_MANAGE_CONNECTORS')]
+    #[IsGranted( 'ROLE_MANAGE_CONNECTORS')]
     public function index(ComelusConnectorRepository $comelusConnectorRepository, LsmessageConnectorRepository $lsmessageConnectorRepository): Response
     {
         return $this->render('connector/connector_index.html.twig', [
