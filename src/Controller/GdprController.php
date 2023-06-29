@@ -10,11 +10,11 @@ use App\Service\Gdpr\DataControllerManager;
 use App\Service\Gdpr\GdprManager;
 use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Sidebar(active: ['platform-nav', 'gdpr-nav'])]
 #[Breadcrumb(title: 'Notice RGPD')]
@@ -22,7 +22,7 @@ class GdprController extends AbstractController
 {
     #[Route(path: '/gdpr/notice', name: 'gdpr_notice')]
     #[Sidebar(reset: true)]
-    #[IsGranted(data: 'ROLE_DEFAULT')]
+    #[IsGranted('ROLE_DEFAULT')]
     public function notice(GdprManager $gdprManager): Response
     {
         /** @var Structure $structure */
@@ -35,7 +35,7 @@ class GdprController extends AbstractController
     }
 
     #[Route(path: '/gdpr/editHosting', name: 'gdpr_edit')]
-    #[IsGranted(data: 'ROLE_SUPERADMIN')]
+    #[IsGranted('ROLE_SUPERADMIN')]
     #[Breadcrumb(title: 'Modifier')]
     public function editHosting(GdprManager $gdprManager, Request $request): Response
     {
@@ -55,7 +55,7 @@ class GdprController extends AbstractController
     }
 
     #[Route(path: '/gdpr/editController', name: 'gdpr_controller_edit')]
-    #[IsGranted(data: 'ROLE_MANAGE_GDPR')]
+    #[IsGranted('ROLE_MANAGE_GDPR')]
     #[Sidebar(active: ['gdpr-data-controller-nav'], reset: true)]
     #[Breadcrumb(title: 'Modifier')]
     public function editDataController(Request $request, DataControllerManager $dataControllerManager): Response
