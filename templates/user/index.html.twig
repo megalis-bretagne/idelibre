@@ -69,7 +69,7 @@
                     <td class="col-2">
                         {{ user.party ?  ( user.party.name|length > 10 ? user.party.name|slice(0,20) ~ '...' : user.party.name)  : ''  }}
                     </td>
-                    <td class="col-2"> {% if user.mandator is not null %} {{ user.mandator.firstName|first|upper }}. {{ user.mandator.lastName}} {% endif %}</td>
+                    <td class="col-2"> {% if user.associatedWith is not null %} {{ user.associatedWith.firstName|first|upper }}. {{ user.associatedWith.lastName}} {% endif %}</td>
 
                     <td class="active_column">{{ user.isActive }}</td>
                     <td class="col-2 actionButton">
@@ -84,6 +84,12 @@
                         {% endif %}
 
                         {{ macros.editButton('user_edit', user.id) }}
+
+
+                        {% if user.role.name == "Actor" and user.isDeputy is same as false and user.a %}
+
+                            <a href="#" class="btn btn-outline-primary borderless"><i class="fa fa-users"></i></a>
+                        {% endif %}
 
                         {{ macros.button_open_modal_delete(
                             user.id,

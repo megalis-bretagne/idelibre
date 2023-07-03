@@ -120,7 +120,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $mandatorType = null;
 
     #[ORM\OneToOne(targetEntity: self::class, cascade: ['persist', 'remove'])]
-    private ?self $mandator = null;
+    private ?self $associatedWith = null;
 
     public function __construct()
     {
@@ -432,14 +432,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getMandator(): ?self
+    public function getAssociatedWith(): ?self
     {
-        return $this->mandator;
+        return $this->associatedWith;
     }
 
-    public function setMandator(?self $mandator): self
+    public function setAssociatedWith(?self $associatedWith): self
     {
-        $this->mandator = $mandator;
+        $this->associatedWith = $associatedWith;
 
         return $this;
     }
