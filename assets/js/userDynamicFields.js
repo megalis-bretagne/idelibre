@@ -8,7 +8,7 @@ let isDeputyValue = isDeputyInput.value
 
 const mandatorNameGroup = document.querySelector("#mandatorGroup")
 const mandatorNameLabel = document.querySelector("#mandatorNameLabel")
-const mandatorNameInput = document.querySelector("#user_mandator")
+const mandatorNameInput = document.querySelector("#user_associatedWith")
 const mandatorNameValue = mandatorNameInput.value
 
 
@@ -59,7 +59,7 @@ isDeputyInput.onchange = () => {
     if ("1" === value) {
         // console.log('est suppleant => hide mandatorType  show mandatorName')
         console.log(mandatorNameLabel.innerHTML)
-        mandatorNameLabel.innerHTML = "<b>Associer un élu <span class='text-danger ml-1'>*</span></b>";
+        mandatorNameLabel.innerHTML = "<b>Associer un élu <span class='text-danger'>*</span></b>";
         getList('actors')
         show(mandatorNameGroup)
         mandatorNameInput.setAttribute("required", "required")

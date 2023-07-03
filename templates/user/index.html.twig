@@ -86,9 +86,14 @@
                         {{ macros.editButton('user_edit', user.id) }}
 
 
-                        {% if user.role.name == "Actor" and user.isDeputy is same as false and user.a %}
-
-                            <a href="#" class="btn btn-outline-primary borderless"><i class="fa fa-users"></i></a>
+                        {% if user.role.name == "Actor" and user.isDeputy is same as false and user.associatedWith == null %}
+                            <a href="#" class="btn btn-outline-primary borderless" title="Assigner un suppléant à cet élu"><i class="fa fa-user-plus"></i></a>
+                        {% endif %}
+                        {% if user.role.name == "Actor" and user.isDeputy is same as true and user.associatedWith == null %}
+                            <a href="#" class="btn btn-outline-info borderless" title="Assigner un élu à ce suppléant"><i class="fa fa-user-plus"></i></a>
+                        {% endif %}
+                        {% if user.role.name == "Actor" and user.associatedWith != null %}
+                            <a href="#" class="btn btn-outline-danger borderless" title="Retirer l'élu ou le suppléant"><i class="fa fa-user-slash"></i></a>
                         {% endif %}
 
                         {{ macros.button_open_modal_delete(
