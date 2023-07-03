@@ -3,14 +3,9 @@
 namespace App\Service\Connector\Lsvote;
 
 use App\Service\Connector\Lsvote\Model\LsvoteEnveloppe;
-use Exception;
-use http\Env\Response;
 use Symfony\Component\HttpClient\Exception\ClientException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\SerializerInterface;
-use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Throwable;
@@ -21,7 +16,10 @@ class LsvoteClient
     const CHECK = '/api/v1/me';
     const API_SITTING_URI = '/api/v1/sittings';
 
-    public function __construct(private readonly HttpClientInterface $httpClient, private readonly SerializerInterface $serializer)
+    public function __construct(
+        private readonly HttpClientInterface $httpClient,
+        private readonly SerializerInterface $serializer
+    )
     {
     }
 
@@ -70,9 +68,9 @@ class LsvoteClient
                     "verify_host" => false,
 
                     "body" => $serializedData
-
                 ]
             );
+
 
             $content = json_decode($response->getContent(), true);
 
