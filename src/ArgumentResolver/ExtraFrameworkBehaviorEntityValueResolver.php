@@ -13,7 +13,7 @@ use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 class ExtraFrameworkBehaviorEntityValueResolver implements ValueResolverInterface
 {
     public function __construct(
-         private  readonly  EntityValueResolver $inner
+        private readonly EntityValueResolver $inner
     ) {
     }
 

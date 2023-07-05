@@ -16,8 +16,6 @@ class LsvoteConnectorType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-
-
         $builder
             ->add("url", TextType::class, [
                 "label" => "Url",
