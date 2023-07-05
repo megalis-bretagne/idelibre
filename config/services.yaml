@@ -110,3 +110,7 @@ services:
   App\ArgumentResolver\DataArgumentResolver:
     tags:
       - { name: controller.value_resolver, priority: 50 }
+
+  APY\BreadcrumbTrailBundle\EventListener\BreadcrumbListener:
+    tags:
+      - { name: kernel.event_listener, event: kernel.controller_arguments, method: onKernelController, priority: -1 }
