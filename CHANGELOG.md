@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.2.9] - 2023-07-06
+### Correction
+￼- Suite au passage en Symfony 6.3.1, le breadcrumb ne transformait plus les variables définies dnas les controller (données dans le fil d'ariane).
 
 ## [4.2.8] - 2023-06-29
 ### Evolution
