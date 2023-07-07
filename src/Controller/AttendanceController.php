@@ -30,6 +30,7 @@ class AttendanceController extends AbstractController
                 ->setDeputy($form->get('deputy')->getData())
                 ->setConvocationId($attendanceToken->getConvocation()->getId());
 
+
             $convocationManager->updateConvocationAttendances([$convocationAttendance]);
 
             $this->addFlash('success', 'Présence enregistrée');

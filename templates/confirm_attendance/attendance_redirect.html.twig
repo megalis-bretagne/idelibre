@@ -13,16 +13,14 @@
         </div>
 
 
-        <section class="mt-5">
+        <section class="mt-5 container">
             <div class="alert alert-info h5">
                 Votre statut pour cette séance est actuellement défini sur
-                <u> {% if attendance == 'absent' %}
-                        absent
-                    {% elseif attendance == 'present' %}
-                        présent
-                    {% elseif attendance == 'remote' %}
-                         présent à distance
-                    {% endif %}
+                <u> {% if attendance == 'absent' %}absent{% endif %}
+                    {% if attendance == 'present' %}présent{% endif %}
+                    {% if attendance == 'remote' %}présent à distance{% endif %}
+                    {% if attendance == 'suppleant' %}absent. Votre pouvoir a été transféré à votre suppléant {% endif %}
+                    {% if attendance == 'procuration' %}absent. Votre pouvoir a été transferé à l'élu detenteur de votre procuration{% endif %}
                 </u>.
                 Merci pour votre retour.
             </div>

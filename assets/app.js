@@ -14,7 +14,10 @@ import './js/lsvote'
 import './js/expandable'
 import './js/refreshApiKey'
 import './js/showPassword'
+import './js/genAssociatedWithLists'
 import './js/attendance'
+
+
 
 $(document).ready(function () {
     let config = {
@@ -38,3 +41,4 @@ $(document).ready(function () {
 })
 
 global.$ = $;
+

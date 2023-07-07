@@ -16,7 +16,7 @@
 
             <section class="mt-5">
                 <div class="d-flex">
-                    <h1 class="h3 mb-4"> {{ user.firstName }} {{ user.lastName }}
+                    <h1 class="h3 mb-4" data-deputy="{% if user.associatedWith is not null %}{{ user.associatedWith.firstname ~ " " ~ user.associatedWith.lastname}}{% endif %}"> {{ user.firstName }} {{ user.lastName }}
                         {% if not attendance %}
                             <div class="badge badge-secondary">Présence à définir</div>
                         {% elseif attendance == 'absent' %}
@@ -35,9 +35,8 @@
                 <div class="mt-5">
                     {{ form_start(form) }}
                     {{ form_row(form.attendance) }}
-                    <div id="deputy-div" class="d-none">
-                        {{ form_row(form.deputy, {attr:{"disabled": true}}) }}
-                    </div>
+                    {{ form_row(form.deputy, {attr:{"disabled": true}}) }}
+
                     <input type="submit" class="btn btn-primary float-right" value="Enregistrer">
                     {{ form_end(form) }}
                 </div>

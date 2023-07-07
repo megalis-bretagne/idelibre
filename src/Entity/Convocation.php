@@ -25,6 +25,8 @@ class Convocation
     public const PRESENT = 'present';
     public const REMOTE = 'remote';
     public const ABSENT = 'absent';
+    public const ABSENT_GIVE_POA = 'procuration'; # POA est l'acronyme de "power of attorney" qui signifie procuration
+    public const ABSENT_SEND_DEPUTY = 'suppleant';
 
     public const UNDEFINED = '';
 
@@ -205,7 +207,7 @@ class Convocation
 
     public function setAttendance(?string $attendance): self
     {
-        if (!in_array($attendance, [self::PRESENT, self::ABSENT, self::UNDEFINED, self::REMOTE])) {
+        if (!in_array($attendance, [self::PRESENT, self::ABSENT, self::UNDEFINED, self::REMOTE, self::ABSENT_GIVE_POA, self::ABSENT_SEND_DEPUTY])) {
             throw new InvalidArgumentException('attendance not allowed');
         }
         $this->attendance = $attendance;

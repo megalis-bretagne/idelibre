@@ -17,13 +17,15 @@ class AttendanceType extends AbstractType
             ->add('attendance', ChoiceType::class, [
                 'required' => true,
                 'label' => 'Merci de confirmer votre présence',
+                'row_attr' => ["id" => "attendanceGroup"],
                 'choices' => $this->getAttendanceValues($options['convocation'], $options['isRemoteAllowed'] ?? null),
                 'empty_data' => Convocation::PRESENT,
             ])
 
-            ->add('deputy', TextType::class, [
-                'label' => 'Mandataire',
-                'required' => false,
+            ->add('deputy', ChoiceType::class, [
+                'label' => 'Élu qui reçoit le pouvoir',
+                'row_attr' => ["id" => "deputyGroup"],
+                'required' => true,
             ])
         ;
     }
@@ -32,7 +34,9 @@ class AttendanceType extends AbstractType
     {
         $values = [
             'Présent' => Convocation::PRESENT,
-            'Absent' => Convocation::ABSENT,
+            'Absent non remplacé' => Convocation::ABSENT,
+            'Absent mais remplacé par son suppléant' => Convocation::ABSENT_SEND_DEPUTY,
+            'Absent mais donne procuration' => Convocation::ABSENT_GIVE_POA
         ];
 
         if ($isRemoteAllowed && Convocation::CATEGORY_CONVOCATION === $convocation->getCategory()) {
@@ -40,6 +44,8 @@ class AttendanceType extends AbstractType
                 'Présent' => Convocation::PRESENT,
                 'Présent à distance' => Convocation::REMOTE,
                 'Absent' => Convocation::ABSENT,
+                'Absent mais désigne un suppléant' => Convocation::ABSENT_SEND_DEPUTY,
+                'Absent mais donne procuration' => Convocation::ABSENT_GIVE_POA
             ];
         }
 
