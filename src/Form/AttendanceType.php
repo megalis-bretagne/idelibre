@@ -3,6 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Convocation;
+use App\Entity\Structure;
+use App\Form\Type\HiddenEntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -22,6 +24,17 @@ class AttendanceType extends AbstractType
                 'empty_data' => Convocation::PRESENT,
             ])
 
+            ->add('status', ChoiceType::class, [
+                "mapped" => false,
+                "label" => 'Remplacement',
+                'choices' => [
+                    "Non remplacé" => "none",
+                    "Envoyer votre suppléant" => "deputy",
+                    "Donner procuration" => "poa"
+                ],
+                "row_attr" => ["id" => "attendanceStatusGroup", "class" => "d-none"],
+            ])
+
             ->add('deputy', ChoiceType::class, [
                 'label' => 'Élu qui reçoit le pouvoir',
                 'row_attr' => ["id" => "deputyGroup"],
@@ -34,9 +47,7 @@ class AttendanceType extends AbstractType
     {
         $values = [
             'Présent' => Convocation::PRESENT,
-            'Absent non remplacé' => Convocation::ABSENT,
-            'Absent mais remplacé par son suppléant' => Convocation::ABSENT_SEND_DEPUTY,
-            'Absent mais donne procuration' => Convocation::ABSENT_GIVE_POA
+            'Absent' => Convocation::ABSENT,
         ];
 
         if ($isRemoteAllowed && Convocation::CATEGORY_CONVOCATION === $convocation->getCategory()) {
@@ -44,8 +55,6 @@ class AttendanceType extends AbstractType
                 'Présent' => Convocation::PRESENT,
                 'Présent à distance' => Convocation::REMOTE,
                 'Absent' => Convocation::ABSENT,
-                'Absent mais désigne un suppléant' => Convocation::ABSENT_SEND_DEPUTY,
-                'Absent mais donne procuration' => Convocation::ABSENT_GIVE_POA
             ];
         }
 

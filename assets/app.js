@@ -14,7 +14,10 @@ import './js/lsvote'
 import './js/expandable'
 import './js/refreshApiKey'
 import './js/showPassword'
-import './js/genAssociatedWithLists'
+import './js/utils/dropdownOptionCleaner'
+import './js/utils/retrieveFromUrl'
+import './js/utils/ajaxListGenerator'
+import './js/utils/showHide'
 import './js/attendance'
 
 

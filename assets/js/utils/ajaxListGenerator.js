@@ -1,12 +1,13 @@
-window.getList = (value, input) => {
-    // listCleaner(input)
-    ajaxListGeneration(value, input)
+window.getList = (url, value, input) => {
+    listCleaner(input)
+    ajaxListGeneration(url, value, input)
 }
 
-function ajaxListGeneration(value, input) {
+function ajaxListGeneration(url, value, input) {
     let httpRequest = new XMLHttpRequest();
     httpRequest.onreadystatechange = alterContents;
-    httpRequest.open('GET', `/user/${getUserId()}list/${value}`);
+    // httpRequest.open('GET', `/user/${getUserId()}list/${value}`);
+    httpRequest.open('GET', `${url}/${value}`);
     httpRequest.send();
     console.log("pas dans la requete ")
 
@@ -21,9 +22,3 @@ function ajaxListGeneration(value, input) {
     }
 }
 
-
-function getUserId() {
-    const voterId = window.location.pathname.split('/')[3];
-
-    return voterId ? voterId + '/' : '';
-}

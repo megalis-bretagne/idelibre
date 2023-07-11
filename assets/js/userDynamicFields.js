@@ -1,5 +1,3 @@
-import './genAssociatedWithLists';
-
 const hasRoleInput = document.querySelector("#user_role")
 const hasRoleValue =  hasRoleInput.value
 const roleActorId = "230a1c1d-eaec-4fb7-9ba7-d7ac47dc97bb";
@@ -32,42 +30,22 @@ window.onload = () => {
 }
 hasRoleInput.onchange = () => {
     let value = hasRoleInput.value
+    let url = `/user/${getUserId()}list`
 
     if(value === roleActorId) {
         mandatorNameLabel.innerHTML = "Désigner un suppléant "
-        getList("deputies", mandatorNameInput)
+        getList(url, "deputies", mandatorNameInput)
         show(mandatorNameGroup)
         return;
     }
 
     if(value === roleDeputyId) {
         mandatorNameLabel.innerHTML = "<b>Associer un élu titulaire <span class='text-danger'>*</span></b>"
-        getList("actors", mandatorNameInput)
+        getList(url, "actors", mandatorNameInput)
         show(mandatorNameGroup)
         return;
     }
 
     hide(mandatorNameGroup);
 }
-
-function listCleaner(value) {
-    let options = value.getElementsByTagName('option');
-    for (let i = options.length; i--;) {
-        if (i !== 0){
-            value.removeChild(options[i]);
-        }
-    }
-}
-
-function hide(value) {
-    value.classList.add('d-none')
-    value.children[1].setAttribute('disabled', 'disabled')
-    value.children[1].required = false
-}
-
-function show(value) {
-    value.classList.remove('d-none')
-    value.children[1].removeAttribute('disabled')
-}
-
 

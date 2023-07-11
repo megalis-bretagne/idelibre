@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\AttendanceToken;
 use App\Form\AttendanceType;
+use App\Repository\UserRepository;
 use App\Service\Convocation\ConvocationAttendance;
 use App\Service\Convocation\ConvocationManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,6 +14,12 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AttendanceController extends AbstractController
 {
+    public function __construct(
+        private readonly UserRepository $userRepository
+    )
+    {
+    }
+
     #[Route('/attendance/confirmation/{token}', name: 'app_attendance_confirmation')]
     public function confirmAttendanceFromEmail(AttendanceToken $attendanceToken, Request $request, ConvocationManager $convocationManager): Response
     {
@@ -57,4 +64,20 @@ class AttendanceController extends AbstractController
             'convocation' => $attendanceToken->getConvocation(),
         ]);
     }
+
+    #[Route('/attendance/{token}/list/actors', name: 'attendance_actors_list')]
+    public function getActorsList(AttendanceToken $attendanceToken)
+    {
+        $structure = $attendanceToken->getConvocation()->getSitting()->getStructure();
+        $user = $attendanceToken->getConvocation()->getUser();
+
+        $user ? $toExclude[] = $user : $toExclude = [];
+        $actors = $this->userRepository->findAvailableActorsInStructure($structure, $toExclude)->getQuery()->getResult();
+
+        return $this->render('include/user_lists/_available_actors.html.twig', [
+            "actors" => $actors
+        ]);
+    }
+
+
 }
