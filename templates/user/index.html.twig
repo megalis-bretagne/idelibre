@@ -89,11 +89,15 @@
 
 
                         {% if user.role.name == "Actor" and user.associatedWith == null %}
+                            {% if countDeputiesAvalaible %}
                             <a href="{{ path('sitting_deputy_add', {"id" : user.id}) }}" class="btn btn-outline-primary borderless" title="Assigner un suppléant à cet élu"><i class="fa fa-user-plus"></i></a>
-                        {% endif %}
+                                {% else %}
+                                    <a href="#" class="btn btn-outline-secondary borderless" title="Aucun suppléant à assigner"><i class="fa fa-user-plus"></i></a>
+                                    {% endif %}
+                            {% endif %}
 
                         {% if user.role.name == "Actor" and user.associatedWith != null %}
-                            <a href="#" class="btn btn-outline-danger borderless" title="Retirer l'élu ou le suppléant"><i class="fa fa-user-slash"></i></a>
+                            <a href="{{ path('sitting_procuration_deputy_delete', {id : user.id}) }}" class="btn btn-outline-danger borderless" title="Retirer l'élu ou le suppléant"><i class="fa fa-user-slash"></i></a>
                         {% endif %}
 
                         {{ macros.button_open_modal_delete(
