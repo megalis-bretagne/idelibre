@@ -465,13 +465,33 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->execute();
     }
 
-//    public function findAvailableActorsInSitting(Sitting $sitting) {
-//        return $this->createQueryBuilder('u')
-//            ->leftJoin('u.role', 'r')
-//            ->andWhere(' r.name = Actor')
-//            ->join(Convocation::class, 'c', Join::WITH, 'c.user = u')
-//            ->andWhere('c.sitting =:sitting')
-//            ->setParameter('sitting', $sitting)
-//            ->andWhere('u.')
-//    }
+
+
+    # ADD ActorToExclude to the next 2 functions
+    public function findDeputyByStructure(Structure $structure, $toExclude): array
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.structure = :structure')
+            ->setParameter('structure', $structure)
+            ->andWhere('u.isDeputy = :isDeputy')
+            ->setParameter('isDeputy', true)
+            ->orderBy('u.lastName', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findAvailableActorsInStructure(Structure $structure, $toExclude): array
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.structure = :structure')
+            ->setParameter('structure', $structure)
+            ->andWhere(' r.name =:actor')
+            ->setParameter('actor', Role::NAME_ROLE_ACTOR)
+            ->andWhere('u.isDeputy = :isDeputy')
+            ->setParameter('isDeputy', false)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
 }

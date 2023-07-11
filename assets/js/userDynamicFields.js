@@ -7,6 +7,8 @@ window.onload = () => {
     const mandatorNameGroup = document.querySelector("#mandatorGroup")
     const mandatorNameInput = document.querySelector("#user_mandator")
 
+    listCleaner(mandatorNameInput);
+
     isDeputyInput.onchange = () => {
         const isDeputyValue = isDeputyInput.value;
 
@@ -21,6 +23,48 @@ window.onload = () => {
             hide(mandatorNameGroup)
     }
 
+    mandatorTypeInput.onchange = () => {
+        const mandatorTypeValue = mandatorTypeInput.value;
+        console.log(mandatorTypeValue)
+
+
+    }
+
+    function getList(value) {
+        ajaxListGeneration(value)
+    }
+
+    function ajaxListGeneration(value) {
+        let httpRequest = new XMLHttpRequest();
+        httpRequest.onreadystatechange = alterContents;
+        httpRequest.open('GET', `/user/${getUserId()}/list/${value}`);
+        httpRequest.send();
+
+        function alterContents() {
+            if (httpRequest.readyState === XMLHttpRequest.DONE && httpRequest.status === 200) {
+                if(httpRequest.responseText.trim() === "") {
+                    console.log("aucun élu disponible")
+                    // showErrorMessage();
+                }
+                mandatorNameInput.innerHTML += httpRequest.responseText
+            } else {
+                console.log('Il y a eu un problème avec la requête.');
+            }
+        }
+    }
+
+    function getUserId(){
+        return "a9c4307a-bf77-4846-8888-ea5c8f2ccd17"
+    }
+
+    function listCleaner(value) {
+        let options = value.getElementsByTagName('option');
+        for (let i = options.length; i--;) {
+            if (i !== 0){
+                value.removeChild(options[i]);
+            }
+        }
+    }
 
     function hide(value) {
         value.classList.add('d-none')

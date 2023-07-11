@@ -63,7 +63,7 @@
                         {{ user.username | noSuffix }}
                     </td>
                     <td class="col-1">
-                        {{ user.role ? user.role.prettyName : '' }}
+                        {{ user.role ? user.role.prettyName : '' }} {% if user.isDeputy == true %} <span class="isDeputy" title="Est suppléant"></span> {% endif %}
                     </td>
                     <td class="col-2">
                         {{ user.party ?  ( user.party.name|length > 10 ? user.party.name|slice(0,20) ~ '...' : user.party.name)  : ''  }}
