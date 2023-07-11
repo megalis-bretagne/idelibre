@@ -85,9 +85,6 @@
                             ) }}
                         {% endif %}
 
-                        {{ macros.editButton('user_edit', user.id) }}
-
-
                         {% if user.role.name == "Actor" and user.associatedWith == null %}
                             {% if countDeputiesAvalaible %}
                             <a href="{{ path('sitting_deputy_add', {"id" : user.id}) }}" class="btn btn-outline-primary borderless" title="Assigner un suppléant à cet élu"><i class="fa fa-user-plus"></i></a>
@@ -99,6 +96,8 @@
                         {% if user.role.name == "Actor" and user.associatedWith != null %}
                             <a href="{{ path('sitting_procuration_deputy_delete', {id : user.id}) }}" class="btn btn-outline-danger borderless" title="Retirer l'élu ou le suppléant"><i class="fa fa-user-slash"></i></a>
                         {% endif %}
+
+                        {{ macros.editButton('user_edit', user.id) }}
 
                         {{ macros.button_open_modal_delete(
                             user.id,

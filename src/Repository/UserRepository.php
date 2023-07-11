@@ -477,7 +477,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->join('u.role', 'r' )
             ->andWhere(' r.name = :deputy')
             ->setParameter('deputy', Role::NAME_ROLE_DEPUTY)
-//            ->andWhere('u.associatedWith IS (:NULL)')
+            ->andWhere('u.associatedWith IS NULL')
             ->orderBy('u.lastName', 'ASC')
             ;
         if($toExclude) {
@@ -485,6 +485,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
                 ->setParameter('toExclude', $toExclude);
         }
 
+//        dd($qb);
         return $qb;
     }
 

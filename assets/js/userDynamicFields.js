@@ -53,7 +53,7 @@ hasRoleInput.onchange = () => {
 
 
 function getList(value) {
-    listCleaner(mandatorNameInput)
+    // listCleaner(mandatorNameInput)
     ajaxListGeneration(value)
 }
 
@@ -66,7 +66,7 @@ function ajaxListGeneration(value) {
 
     function alterContents() {
         if (httpRequest.readyState === XMLHttpRequest.DONE && httpRequest.status === 200) {
-            console.log("dans la requete")
+            console.log(httpRequest.responseText)
             mandatorNameInput.innerHTML += httpRequest.responseText
             return false;
         } else {
