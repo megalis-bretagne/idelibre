@@ -111,6 +111,10 @@ class Sitting
     #[Groups(groups: ['sitting', 'sitting:read', 'sitting:write:post'])]
     private $isRemoteAllowed = false;
 
+    #[ORM\OneToOne(mappedBy: 'sitting', cascade: ['persist', 'remove'])]
+    #[Groups(groups: ['sitting'])]
+    private ?LsvoteSitting $lsvoteSitting = null;
+
     public function __construct()
     {
         $this->createdAt = new DateTimeImmutable();
@@ -406,6 +410,28 @@ class Sitting
     public function setIsRemoteAllowed(bool $isRemoteAllowed): self
     {
         $this->isRemoteAllowed = $isRemoteAllowed;
+
+        return $this;
+    }
+
+    public function getLsvoteSitting(): ?LsvoteSitting
+    {
+        return $this->lsvoteSitting;
+    }
+
+    public function setLsvoteSitting(?LsvoteSitting $lsvoteSitting): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($lsvoteSitting === null && $this->lsvoteSitting !== null) {
+            $this->lsvoteSitting->setSitting(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($lsvoteSitting !== null && $lsvoteSitting->getSitting() !== $this) {
+            $lsvoteSitting->setSitting($this);
+        }
+
+        $this->lsvoteSitting = $lsvoteSitting;
 
         return $this;
     }

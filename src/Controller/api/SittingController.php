@@ -5,6 +5,8 @@ namespace App\Controller\api;
 use App\Entity\Sitting;
 use App\Requirements\Is;
 use App\Service\Connector\ComelusConnectorManager;
+use App\Service\Connector\LsvoteConnectorManager;
+use App\Service\Connector\LsvoteSittingCreationException;
 use App\Service\Convocation\ConvocationManager;
 use App\Service\Email\NotificationService;
 use App\Service\Util\Converter;
@@ -12,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -50,6 +53,27 @@ class SittingController extends AbstractController
         $comelusId = $comelusConnectorManager->sendComelus($sitting);
 
         return $this->json(['comelusId' => $comelusId]);
+    }
+
+
+    #[Route(path: '/api/sittings/{id}/sendLsvote', name: 'api_sitting_sendLsvote', methods: ['POST'])]
+    #[IsGranted(data: 'ROLE_MANAGE_SITTINGS')]
+    public function sendToLsvote(Sitting $sitting, LsvoteConnectorManager $lsvoteConnectorManager): Response
+    {
+        try {
+            if ($sitting->getLsvoteSitting()?->getLsvoteSittingId()) {
+                $lsvoteId = $lsvoteConnectorManager->editLsvoteSitting($sitting);
+
+                return $this->json(['lsvoteId' => $lsvoteId]);
+            }
+
+            $lsvoteId = $lsvoteConnectorManager->createSitting($sitting);
+
+            return $this->json(['lsvoteId' => $lsvoteId]);
+
+        } catch (LsvoteSittingCreationException $e) {
+            return $this->json($e->getMessage(), 400);
+        }
     }
 
 
