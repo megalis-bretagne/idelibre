@@ -45,6 +45,7 @@ class UserManager
         }
 
         $user->setSubscription($this->subscriptionManager->add($user));
+        $this->ifDeputy($user);
 
         $this->em->persist($user);
         $this->em->flush();
@@ -67,6 +68,8 @@ class UserManager
 
             $user->setPassword($this->passwordHasher->hashPassword($user, $plainPassword));
         }
+
+        $this->ifDeputy($user);
 
         $this->em->persist($user);
         $this->em->flush();
@@ -150,4 +153,20 @@ class UserManager
 
         return true;
     }
+
+
+    public function ifDeputy(User $user): void
+    {
+        if ($user->isDeputy() && $user->getMandator() !== null) {
+            $mandant = $user->getMandator();
+            $mandant->setMandator($user);
+            $this->em->persist($mandant);
+
+            $user->setMandator(null);
+            $this->em->persist($user);
+
+            $this->em->flush();
+        }
+    }
+
 }
