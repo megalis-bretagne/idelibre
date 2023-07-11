@@ -169,7 +169,12 @@ class UserManager
         }
     }
 
-    public function addDeputy(){}
+    public function addDeputy(User $user){
+
+        $user->getAssociatedWith()->setAssociatedWith($user);
+        $this->em->persist($user);
+        $this->em->flush();
+    }
 
     public function removeProcurationOrDeputy() {}
 

@@ -43,8 +43,9 @@
                 <th class="col-2">{{ knp_pagination_sortable(users, 'Prénom', 'u.firstName') }}</th>
                 <th class="col-2">{{ knp_pagination_sortable(users, 'Nom d\'utilisateur', 'u.username') }}</th>
                 <th class="col-1">{{ knp_pagination_sortable(users, 'Profil', 'r.prettyName') }}</th>
-                <th class="col-2">{{ knp_pagination_sortable(users, 'Groupe politique', 'p.name') }}</th>
+                <th class="col">{{ knp_pagination_sortable(users, 'Groupe politique', 'p.name') }}</th>
                 <th class="col">Suppléant</th>
+                <th class="col">Titulaire</th>
                 <th class="active_column">{{ knp_pagination_sortable(users, '', 'u.isActive') }}</th>
                 <th class="col-2">Actions</th>
             </tr>
@@ -66,10 +67,11 @@
                     <td class="col">
                         {{ user.role ? user.role.prettyName : '' }}
                     </td>
-                    <td class="col-2">
+                    <td class="col">
                         {{ user.party ?  ( user.party.name|length > 10 ? user.party.name|slice(0,20) ~ '...' : user.party.name)  : ''  }}
                     </td>
-                    <td class="col-2"> {% if user.associatedWith is not null %} {{ user.associatedWith.firstName|first|upper }}. {{ user.associatedWith.lastName}} {% endif %}</td>
+                    <td class="col"> {% if user.associatedWith is not null and user.role.name == "Actor" %} {{ user.associatedWith.firstName|first|upper }}. {{ user.associatedWith.lastName}} {% endif %}</td>
+                    <td class="col"> {% if user.associatedWith is not null and user.role.name != "Actor"%} {{ user.associatedWith.firstName|first|upper }}. {{ user.associatedWith.lastName}} {% endif %}</td>
 
                     <td class="active_column">{{ user.isActive }}</td>
                     <td class="col-2 actionButton">
