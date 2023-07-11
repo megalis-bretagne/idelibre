@@ -25,28 +25,45 @@ window.onload = () => {
 
     mandatorTypeInput.onchange = () => {
         const mandatorTypeValue = mandatorTypeInput.value;
-        console.log(mandatorTypeValue)
+
+        if('0' === mandatorTypeValue) {
+            mandatorNameGroup.classList.add('d-none')
+        }
+
+        show(mandatorNameGroup)
+
+        if('1' === mandatorTypeValue) {
+            console.log("Designe un suppléant : " + mandatorTypeValue)
+            getList('deputies')
+        }
+
+        if('2' === mandatorTypeValue) {
+            console.log("Donne procuration : " + mandatorTypeValue)
+            getList('actors')
+        }
 
 
     }
 
     function getList(value) {
+        listCleaner(mandatorNameInput)
         ajaxListGeneration(value)
     }
+
+
 
     function ajaxListGeneration(value) {
         let httpRequest = new XMLHttpRequest();
         httpRequest.onreadystatechange = alterContents;
-        httpRequest.open('GET', `/user/${getUserId()}/list/${value}`);
+        httpRequest.open('GET', `/user/${getUserId()}list/${value}`);
         httpRequest.send();
+        console.log("here")
 
         function alterContents() {
             if (httpRequest.readyState === XMLHttpRequest.DONE && httpRequest.status === 200) {
-                if(httpRequest.responseText.trim() === "") {
-                    console.log("aucun élu disponible")
-                    // showErrorMessage();
-                }
+                console.log("here2")
                 mandatorNameInput.innerHTML += httpRequest.responseText
+                return false;
             } else {
                 console.log('Il y a eu un problème avec la requête.');
             }
@@ -54,7 +71,9 @@ window.onload = () => {
     }
 
     function getUserId(){
-        return "a9c4307a-bf77-4846-8888-ea5c8f2ccd17"
+        const voterId = window.location.pathname.split('/')[3];
+
+        return voterId ? voterId + '/' : '';
     }
 
     function listCleaner(value) {

@@ -1,0 +1,5 @@
+{% block actorsOnly %}
+    {% for actor in actors %}
+        <option value="{{ actor.id }}"> {{ actor.firstName}} {{ actor.lastName}} </option>
+    {% endfor %}
+{% endblock %}
