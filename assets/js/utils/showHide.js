@@ -7,5 +7,4 @@ window.hide = (value) => {
 window.show = (value) => {
     value.classList.remove('d-none')
     value.children[1].removeAttribute('disabled');
-    console.log(value.children[0])
 }

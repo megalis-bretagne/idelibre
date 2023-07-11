@@ -1,4 +1,5 @@
 {% extends 'base_login.html.twig' %}
+{% import 'macro/_forms.html.twig' as macro %}
 
 {% block title %}Confirmation de présence à la séance{% endblock %}
 
@@ -16,28 +17,31 @@
 
             <section class="mt-5">
                 <div class="d-flex">
-                    <h1 class="h3 mb-4" data-deputy="{% if user.associatedWith is not null %}{{ user.associatedWith.firstname ~ " " ~ user.associatedWith.lastname}}{% endif %}"> {{ user.firstName }} {{ user.lastName }}
-                        {% if not attendance %}
-                            <div class="badge badge-secondary">Présence à définir</div>
-                        {% elseif attendance == 'absent' %}
-                            <div class="badge badge-danger" id=""> Absent</div>
-                        {% elseif attendance == 'present' %}
-                            <div class="badge badge-info"> Présent</div>
-                        {% elseif attendance == 'remote' %}
-                            <div class="badge badge-info"> Présent à distance</div>
-                        {% endif %}
+                    <h1 class="h3 mb-4"
+                        data-deputy="{% if user.associatedWith is not null %}{{ user.associatedWith.firstname ~ " " ~ user.associatedWith.lastname}}{% endif %}"
+                        data-deputyId="{% if user.associatedWith is not null %}{{ user.associatedWith.id }}{% endif %}"
+                        >
+                        {{ user.firstName }} {{ user.lastName }}
+                        {% if not attendance %} <div class="badge badge-secondary">Présence à définir</div> {% endif %}
+                        {% if attendance == 'present' %} <div class="badge badge-info"> Présent</div> {% endif %}
+                        {% if attendance == 'remote' %} <div class="badge badge-info"> Présent à distance</div> {% endif %}
+                        {% if attendance == 'absent' %} <div class="badge badge-danger"> Absent</div> {% endif %}
+
                     </h1>
 
                 </div>
                 <p><b>Séance : </b> {{ sitting.name }}</p>
                 <p><b>Date de la séance : </b> {{ sitting.date | date('d/m/y : H:i', timezone) }}</p>
+{#                {% if attendance == 'absent' and attendance.convocation.deputy is not null %} <p>Mandataire : {{ attendance.convocation.deputy.lastname ~ ' ' ~ attendance.convocation.deputy.lastname }} {% endif %}</p>#}
 
                 <div class="mt-5">
-                    {{ form_start(form) }}
-                    {{ form_row(form.attendance) }}
-                    {{ form_row(form.deputy, {attr:{"disabled": true}}) }}
+                    {{ form_start(form)}}
+                    {{ form_widget(form) }}
 
-                    <input type="submit" class="btn btn-primary float-right" value="Enregistrer">
+                    <div class="float-right">
+                        {% block pageSaveReturn %}{{ macro.save('sitting_index') }}{% endblock %}
+                    </div>
+
                     {{ form_end(form) }}
                 </div>
 

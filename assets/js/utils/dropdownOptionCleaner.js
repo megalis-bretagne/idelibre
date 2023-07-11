@@ -1,3 +1,5 @@
+console.log("List cleaner")
+
 window.listCleaner = (value) => {
     let options = value.getElementsByTagName('option');
     for (let i = options.length; i--;) {

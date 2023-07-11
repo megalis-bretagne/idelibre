@@ -15,13 +15,14 @@ use Symfony\Component\Routing\Annotation\Route;
 class AttendanceController extends AbstractController
 {
     public function __construct(
-        private readonly UserRepository $userRepository
+        private readonly UserRepository $userRepository,
+        private readonly ConvocationManager $convocationManager
     )
     {
     }
 
     #[Route('/attendance/confirmation/{token}', name: 'app_attendance_confirmation')]
-    public function confirmAttendanceFromEmail(AttendanceToken $attendanceToken, Request $request, ConvocationManager $convocationManager): Response
+    public function confirmAttendanceFromEmail(AttendanceToken $attendanceToken, Request $request): Response
     {
         $sitting = $attendanceToken->getConvocation()->getSitting();
         $form = $this->createForm(AttendanceType::class, null, [
@@ -31,14 +32,17 @@ class AttendanceController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() ) {
+
             $convocationAttendance = (new ConvocationAttendance())
                 ->setAttendance($form->get('attendance')->getData())
-                ->setDeputy($form->get('deputy')->getData())
+                ->setDeputy($form->get('deputy')->getData()->getFirstName() .  " " . $form->get('deputy')->getData()->getLastName())
                 ->setConvocationId($attendanceToken->getConvocation()->getId());
 
 
-            $convocationManager->updateConvocationAttendances([$convocationAttendance]);
+//            dd($convocationAttendance);
+
+            $this->convocationManager->updateConvocationAttendances([$convocationAttendance]);
 
             $this->addFlash('success', 'Présence enregistrée');
 
@@ -66,7 +70,7 @@ class AttendanceController extends AbstractController
     }
 
     #[Route('/attendance/{token}/list/actors', name: 'attendance_actors_list')]
-    public function getActorsList(AttendanceToken $attendanceToken)
+    public function getActorsList(AttendanceToken $attendanceToken): Response
     {
         $structure = $attendanceToken->getConvocation()->getSitting()->getStructure();
         $user = $attendanceToken->getConvocation()->getUser();
@@ -76,6 +80,20 @@ class AttendanceController extends AbstractController
 
         return $this->render('include/user_lists/_available_actors.html.twig', [
             "actors" => $actors
+        ]);
+    }
+
+    #[Route('/attendance/{token}/list/deputies', name: 'attendance_deputies_list')]
+    public function getDeputiesList(AttendanceToken $attendanceToken): Response
+    {
+        $structure = $attendanceToken->getConvocation()->getSitting()->getStructure();
+        $user = $attendanceToken->getConvocation()->getUser();
+
+        $user ? $toExclude[] = $user : $toExclude = [];
+        $deputies = $this->userRepository->findAvailableDeputiesInStructure($structure, $toExclude)->getQuery()->getResult();
+
+        return $this->render('include/user_lists/_available_deputies.html.twig', [
+            "deputies" => $deputies
         ]);
     }
 
