@@ -1,10 +1,7 @@
 const hasRoleInput = document.querySelector("#user_role")
 const hasRoleValue = hasRoleInput.value
 const roleActorId = "230a1c1d-eaec-4fb7-9ba7-d7ac47dc97bb";
-
-const isDeputyGroup = document.querySelector("#isDeputyGroup")
-const isDeputyInput = document.querySelector("#user_isDeputy");
-let isDeputyValue = isDeputyInput.value
+const roleDeputyId = "eb74e130-b142-476c-9439-f06b58472a17";
 
 const mandatorNameGroup = document.querySelector("#mandatorGroup")
 const mandatorNameLabel = document.querySelector("#mandatorNameLabel")
@@ -18,58 +15,38 @@ window.onload = () => {
     listCleaner(mandatorNameInput);
 
     if (roleActorId === hasRoleValue) {
-        show(isDeputyGroup)
         show(mandatorNameGroup)
-        if(isDeputyValue === "1") {
-            getList("actors")
-            return ;
-        }
         getList("deputies")
         return ;
     }
 
-    if (roleActorId !== hasRoleValue) {
-        hide(isDeputyGroup)
-        isDeputyInput.removeAttribute("disabled")
-        hide(mandatorNameGroup)
-        return false;
+    if(roleDeputyId === hasRoleValue) {
+        show(mandatorNameGroup)
+        getList("actors")
+        return;
     }
 
-
-
+    hide(mandatorNameGroup)
 }
 hasRoleInput.onchange = () => {
     let value = hasRoleInput.value
+
     if(value === roleActorId) {
-        console.log('role actor => show isDeputy')
-        show(isDeputyGroup)
-        show(mandatorNameGroup)
+        mandatorNameLabel.innerHTML = "Désigner un suppléant "
         getList("deputies")
-        return 0;
-    }
-    console.log('role pas actor => hide isDeputy')
-    hide(isDeputyGroup)
-    isDeputyInput.value = false;
-    return 0;
-}
-
-isDeputyInput.onchange = () => {
-    let value = isDeputyInput.value;
-
-    if ("1" === value) {
-        // console.log('est suppleant => hide mandatorType  show mandatorName')
-        console.log(mandatorNameLabel.innerHTML)
-        mandatorNameLabel.innerHTML = "<b>Associer un élu <span class='text-danger'>*</span></b>";
-        getList('actors')
         show(mandatorNameGroup)
-        mandatorNameInput.setAttribute("required", "required")
-        return false;
+        return;
     }
 
-    console.log("pas suppleant => show mandatorType")
-    mandatorNameLabel.textContent = "Associer un suppléant";
-    getList("deputies")
-    show(mandatorNameGroup)
+    if(value === roleDeputyId) {
+        mandatorNameLabel.innerHTML = "<b>Associer un élu titulaire <span class='text-danger'>*</span></b>"
+        getList("actors")
+        show(mandatorNameGroup)
+        return;
+    }
+
+    hide(mandatorNameGroup);
+
 }
 
 
@@ -124,10 +101,4 @@ function show(value) {
     value.children[1].removeAttribute('disabled')
 }
 
-function replace(input, value, string){
-    if(value === input) {
-        let group = input+'Group';
-        console.log(group)
-        group.child("label").innerHTML = " 000 Associé un " + string
-    }
-}
+

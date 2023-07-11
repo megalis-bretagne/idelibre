@@ -113,11 +113,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $jwtInvalidBefore = null;
 
-    #[Column(type: 'boolean', options: ['default' => false])]
-    private bool $isDeputy = false;
-
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $mandatorType = null;
+    private ?string $attendanceOption = null;
 
     #[ORM\OneToOne(targetEntity: self::class, cascade: ['persist', 'remove'])]
     private ?self $associatedWith = null;
@@ -408,26 +405,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function isDeputy(): bool
+    public function getAttendanceOption(): ?string
     {
-        return $this->isDeputy;
+        return $this->attendanceOption;
     }
 
-    public function setIsDeputy(bool $isDeputy): self
+    public function setAttendanceOption(?string $attendanceOption): self
     {
-        $this->isDeputy = $isDeputy;
-
-        return $this;
-    }
-
-    public function getMandatorType(): ?string
-    {
-        return $this->mandatorType;
-    }
-
-    public function setMandatorType(?string $mandatorType): self
-    {
-        $this->mandatorType = $mandatorType;
+        $this->attendanceOption = $attendanceOption;
 
         return $this;
     }

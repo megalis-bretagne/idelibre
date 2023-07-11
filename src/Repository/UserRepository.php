@@ -468,15 +468,17 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
 
     # ADD ActorToExclude to the next 2 functions
-    public function findDeputiesByStructure(Structure $structure, ?array $toExclude): QueryBuilder
+    public function findAvailableDeputiesInStructure(Structure $structure, ?array $toExclude): QueryBuilder
     {
         $qb = $this->createQueryBuilder('u')
             ->andWhere('u.structure = :structure')
             ->setParameter('structure', $structure)
-            ->andWhere('u.isDeputy = :isDeputy')
-            ->setParameter('isDeputy', true)
-            ->orderBy('u.lastName', 'ASC')
             ->andWhere('u.isActive = true')
+            ->join('u.role', 'r' )
+            ->andWhere(' r.name = :deputy')
+            ->setParameter('deputy', Role::NAME_ROLE_DEPUTY)
+//            ->andWhere('u.associatedWith IS (:NULL)')
+            ->orderBy('u.lastName', 'ASC')
             ;
         if($toExclude) {
             $qb->andWhere('u NOT IN (:toExclude)')
@@ -494,8 +496,6 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->leftJoin('u.role', 'r')
             ->andWhere(' r.name = :actor')
             ->setParameter('actor', Role::NAME_ROLE_ACTOR)
-            ->andWhere('u.isDeputy = :isDeputy')
-            ->setParameter('isDeputy', false)
             ->andWhere('u.isActive = true')
             ;
         if($toExclude) {

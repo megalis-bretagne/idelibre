@@ -1,0 +1,33 @@
+{% extends 'form.html.twig' %}
+{% import 'macro/_forms.html.twig' as macro %}
+
+
+{% block pageTitle 'Ajouter un suppléant' %}
+
+{% block pageActions %}
+    {{ macro.backButton('user_index') }}
+{% endblock %}
+
+
+
+{% block pageForm %}
+
+    {% if(form.children['associatedWith'].vars['choices'] | length < 1 ) %}
+
+        <div class="alert alert-warning"> Aucun votant disponible pour l'attribution d'un suppléant </div>
+
+    {% else %}
+
+        {{ form_start(form) }}
+
+        {{ form_widget(form) }}
+
+        <div class="float-right">
+            {% block pageSaveReturn %}{{ macro.save("user_index") }}{% endblock %}
+        </div>
+
+        {{ form_end(form) }}
+
+    {% endif %}
+
+{% endblock %}

@@ -101,16 +101,11 @@ class UserType extends AbstractType
                     'query_builder' => $this->partyRepository->findByStructure($options['structure']),
                     'choice_label' => 'name',
                 ])
+            ;
+        }
 
-                ->add('isDeputy', ChoiceType::class, [
-                    "label" => "Est suppléant",
-                    "row_attr" => ['class' => "d-none", 'id' => 'isDeputyGroup'],
-                    "choices" => [
-                        "Non" => false,
-                        "Oui" => true
-                    ],
-                ])
-
+        if ($this->isNewOrDeputy($options)) {
+            $builder
                 ->add('associatedWith', EntityType::class, [
                     'label' => 'Associer un suppléant',
                     'label_attr' => ["id"=>"mandatorNameLabel"],
@@ -216,9 +211,15 @@ class UserType extends AbstractType
         return $user->getRole()->getId() === $this->roleManager->getActorRole()->getId();
     }
 
-    public function isActor(array $options): bool
+    private function isNewOrDeputy(array $options): bool
     {
+        if ($this->isNew($options)) {
+            return true;
+        }
+
+        /** @var User $user */
         $user = $options['data'];
+
         return $user->getRole()->getId() === $this->roleManager->getActorRole()->getId();
     }
 

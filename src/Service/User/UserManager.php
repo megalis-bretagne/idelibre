@@ -157,16 +157,20 @@ class UserManager
 
     public function ifDeputy(User $user): void
     {
-        if ($user->isDeputy() && $user->getMandator() !== null) {
-            $mandant = $user->getMandator();
-            $mandant->setMandator($user);
-            $this->em->persist($mandant);
+        if ($user->getRole() === Role::NAME_ROLE_DEPUTY && $user->getAssociatedWith() !== null) {
+            $associatedWith = $user->getAssociatedWith();
+            $associatedWith->setAssociatedWith($user);
+            $this->em->persist($associatedWith);
 
-            $user->setMandator(null);
+        $user->setAssociatedWith(null);
             $this->em->persist($user);
 
             $this->em->flush();
         }
     }
+
+    public function addDeputy(){}
+
+    public function removeProcurationOrDeputy() {}
 
 }

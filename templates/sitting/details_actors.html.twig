@@ -576,7 +576,8 @@
                                         <table class="table table-striped">
                                             <tbody style="display: block;overflow-y: auto;max-height: 60vh;">
                                             <tr class="d-flex" v-for="status in attendanceStatus">
-                                                <td class="col-5">
+
+                                                <td class="col-3">
                                                     ${status.firstName} ${status.lastName}
                                                 </td>
 
@@ -592,11 +593,32 @@
                                                     </select>
                                                 </td>
 
-                                                <td class="col-4" v-if="status.category === 'convocation'">
-                                                    <input :disabled="status.attendance !== 'absent'"
-                                                           class="select form-control" v-model="status.deputy"
-                                                           @change="changeAttendance(status)" placeholder="Mandataire">
+                                                <td class="col-3">
+                                                    <select class="select form-control">
+                                                        <option value=""></option>
+                                                        <option value="">Non remplacé</option>
+                                                        <option value="absent">envoi son suppléant</option>
+                                                        <option value="present">Donne procuration</option>
+                                                    </select>
                                                 </td>
+
+{#                                                <td class="col-3" v-if="status.category === 'convocation'">#}
+{#                                                    <select name="" id="" class="select form-control">#}
+{#                                                        <option value="">Jean paul</option>#}
+{#                                                        <option value="">Cassidy</option>#}
+{#                                                        <option value="">Brigitte </option>#}
+{#                                                    </select>#}
+{#                                                    #}{#  si pas remplac" laisser vide  => set isPResent to false #}
+{#                                                    #}{#  si envoi son suppleant => afficher en input le nom du suppleant, input non modfiable #}
+{#                                                    #}{#  si donne procuration afficher la liste des élus convoqué et présent et mandataire null#}
+{#                                                    #}{#  si pas remplac" laisser vide  => set isPResent to false #}
+
+
+
+{#                                                    <input :disabled="status.attendance !== 'absent'"#}
+{#                                                           class="select form-control" v-model="status.deputy"#}
+{#                                                           @change="changeAttendance(status)" placeholder="Mandataire">#}
+{#                                                </td>#}
                                             </tr>
                                             </tbody>
                                         </table>
