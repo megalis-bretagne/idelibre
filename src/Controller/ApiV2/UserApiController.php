@@ -7,8 +7,6 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Service\Persistence\PersistenceHelper;
 use Doctrine\ORM\EntityManagerInterface;
-//use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-//use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
