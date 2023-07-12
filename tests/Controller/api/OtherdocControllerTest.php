@@ -113,7 +113,6 @@ class OtherdocControllerTest extends WebTestCase
 
     public function testGetOtherdocsFromSitting()
     {
-
         UserStory::load();
         $sitting = SittingFactory::createOne([
             "structure" => StructureStory::libriciel(),
@@ -143,7 +142,5 @@ class OtherdocControllerTest extends WebTestCase
         $content = json_decode($this->client->getResponse()->getContent());
 
         $this->assertCount(2, $content);
-
     }
-
 }

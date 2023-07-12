@@ -60,7 +60,6 @@ class GroupTest extends WebTestCase
 
     public function testInvalidNameAlreadyExists()
     {
-
         $groupRepository = $this->entityManager->getRepository(Group::class);
 
         $groupRepository->findAll();

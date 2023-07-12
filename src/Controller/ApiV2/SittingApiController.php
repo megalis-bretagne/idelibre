@@ -49,7 +49,6 @@ class SittingApiController extends AbstractController
         Request $request,
         SittingRepository $sittingRepository
     ): JsonResponse {
-
         $sittings = $sittingRepository->findByStructure($structure, null, $request->query->get('status'))
             ->getQuery()->getResult();
 
@@ -81,7 +80,7 @@ class SittingApiController extends AbstractController
     #[IsGranted('API_SAME_STRUCTURE', subject: ['structure', 'sitting'])]
     public function getAllProjects(
         #[MapEntity(mapping: ['structureId' => 'id'])] Structure $structure,
-        #[MapEntity(mapping: ['sittingId' => 'id'])]  Sitting $sitting,
+        #[MapEntity(mapping: ['sittingId' => 'id'])] Sitting $sitting,
         ProjectRepository $projectRepository
     ): JsonResponse {
         $projects = $projectRepository->getProjectsBySitting($sitting);
@@ -142,7 +141,7 @@ class SittingApiController extends AbstractController
     #[IsGranted('API_SAME_STRUCTURE', subject: ['structure', 'sitting'])]
     public function addProjectsToSitting(
         #[MapEntity(mapping: ['structureId' => 'id'])] Structure $structure,
-        #[MapEntity(mapping: ['sittingId' => 'id'])]  Sitting $sitting,
+        #[MapEntity(mapping: ['sittingId' => 'id'])] Sitting $sitting,
         Request $request,
         ProjectManager $projectManager,
         ProjectRepository $projectRepository,

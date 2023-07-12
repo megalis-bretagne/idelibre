@@ -221,8 +221,6 @@ class SittingApiControllerTest extends WebTestCase
         $this->assertNotEmpty($sitting['convocationFile']);
 
         $this->assertTrue($sitting['isRemoteAllowed']);
-
-
     }
 
     public function testAddSittingNoConvocationFile()

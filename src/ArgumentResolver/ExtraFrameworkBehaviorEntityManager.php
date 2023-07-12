@@ -19,7 +19,6 @@ class ExtraFrameworkBehaviorEntityManager implements ValueResolverInterface
 
     public function resolve(Request $request, ArgumentMetadata $argument): array
     {
-
         $object = $this->inner->resolve($request, $argument);
 
         if (!empty($object)) {

@@ -43,7 +43,7 @@ class UserApiController extends AbstractController
     #[IsGranted('API_SAME_STRUCTURE', subject: ['structure', 'user'])]
     public function getById(
         #[MapEntity(mapping: ['structureId' => 'id'])] Structure $structure,
-        #[MapEntity(mapping: ['id' => 'id'])]User $user
+        #[MapEntity(mapping: ['id' => 'id'])] User $user
     ): JsonResponse {
         return $this->json($user, context: ['groups' => ['user:detail', 'user:read']]);
     }
@@ -53,8 +53,7 @@ class UserApiController extends AbstractController
     public function add(
         #[MapEntity(mapping: ['structureId' => 'id'])] Structure $structure,
         ?array $data
-    ): JsonResponse
-    {
+    ): JsonResponse {
         /** @var User $user */
         $user = $this->denormalizer->denormalize($data, User::class, context: ['groups' => ['user:write', 'user:write:post'], 'normalize_relations' => true]);
         $user->setStructure($structure);
@@ -74,9 +73,9 @@ class UserApiController extends AbstractController
     #[IsGranted('API_RELATION_USERS', subject: ['structure', 'data'])]
     public function update(
         #[MapEntity(mapping: ['structureId' => 'id'])] Structure $structure,
-        #[MapEntity(mapping: ['id' => 'id'])]User $user, array $data
-    ): JsonResponse
-    {
+        #[MapEntity(mapping: ['id' => 'id'])] User $user,
+        array $data
+    ): JsonResponse {
         $context = ['object_to_populate' => $user, 'groups' => ['user:write'], 'normalize_relations' => true];
 
         /** @var User $updatedUser */
@@ -95,9 +94,8 @@ class UserApiController extends AbstractController
     #[IsGranted('API_SAME_STRUCTURE', subject: ['structure', 'user'])]
     public function delete(
         #[MapEntity(mapping: ['structureId' => 'id'])] Structure $structure,
-        #[MapEntity(mapping: ['id' => 'id'])]User $user
-    ): JsonResponse
-    {
+        #[MapEntity(mapping: ['id' => 'id'])] User $user
+    ): JsonResponse {
         $this->em->remove($user);
         $this->em->flush();
 

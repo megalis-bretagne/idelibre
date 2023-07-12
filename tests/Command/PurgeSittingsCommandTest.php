@@ -55,7 +55,7 @@ class PurgeSittingsCommandTest extends WebTestCase
         $structure = StructureFactory::createOne();
         $numberSittings = count($this->sittingRepository->findAll());
         $date = date('d/m/yy');
-        $expected =  "Confirmez-vous vouloir purger les seances d'avant le {$date} de la structure {$structure->getName()} ? " .
+        $expected = "Confirmez-vous vouloir purger les seances d'avant le {$date} de la structure {$structure->getName()} ? " .
             "({$numberSittings} Séances)(y/n) [OK] Séances supprimées";
 
         $cmdToTest = (new Application(self::$kernel))->find('purge:sitting');

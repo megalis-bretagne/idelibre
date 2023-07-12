@@ -4,8 +4,6 @@ namespace App\Service\Connector\Lsvote\Model;
 
 class LsvoteEnveloppe
 {
-
-
     private LsvoteSitting $sitting;
 
     /** @var array<LsvoteProject>  */
@@ -47,5 +45,4 @@ class LsvoteEnveloppe
         $this->voters = $voters;
         return $this;
     }
-
 }

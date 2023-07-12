@@ -23,16 +23,13 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class LsvoteConnectorManager
 {
-
     public function __construct(
         private readonly LsvoteConnectorRepository $lsvoteConnectorRepository,
         private readonly LsvoteClient              $lsvoteClient,
         private readonly EntityManagerInterface    $entityManager,
         private readonly UserRepository            $userRepository,
         private readonly LoggerInterface           $logger,
-
-    )
-    {
+    ) {
     }
 
     /**
@@ -90,7 +87,6 @@ class LsvoteConnectorManager
             ->setVoters($this->prepareLsvoteVoter($sitting));
 
         try {
-
             $id = $this->lsvoteClient->sendSitting($connector->getUrl(), $connector->getApiKey(), $lsvoteSitting);
 
             $this->createLsvotesitting($id, $sitting);
@@ -128,7 +124,6 @@ class LsvoteConnectorManager
      */
     private function prepareLsvoteVoter(Sitting $sitting): array
     {
-
         /** @var array<User> $users */
         $users = $this->userRepository->findActorsInSitting($sitting)->getQuery()->getResult();
 
@@ -200,7 +195,6 @@ class LsvoteConnectorManager
 
             $this->saveResults($sitting, $results);
             return $results;
-
         } catch (LsvoteException $e) {
             $this->logger->error($e->getMessage());
             throw new LsvoteResultException($this->formatError($e->getMessage()));
@@ -214,7 +208,6 @@ class LsvoteConnectorManager
             '"sitting.not.over"' => "la séance n'est pas terminée sur lsvote",
             default => 'Une erreur est survenue',
         };
-
     }
 
     /**
@@ -295,10 +288,8 @@ class LsvoteConnectorManager
     {
         try {
             return $this->lsvoteClient->sendSitting($connector->getUrl(), $connector->getApiKey(), $lsvoteEnvelope);
-
         } catch (LsvoteException $e) {
             throw new LsvoteSittingCreationException("Impossible de mettre à jour la séance");
         }
     }
-
 }

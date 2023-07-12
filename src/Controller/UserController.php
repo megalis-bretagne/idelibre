@@ -138,7 +138,7 @@ class UserController extends AbstractController
     #[Route(path: '/user/deleteBatch', name: 'user_delete_batch')]
     #[IsGranted('ROLE_MANAGE_USERS')]
 
-//    #[Breadcrumb(title: 'Suppression par lot')]
+    //    #[Breadcrumb(title: 'Suppression par lot')]
     public function deleteBatch(UserRepository $userRepository, Request $request): Response
     {
         if ($request->isMethod('POST')) {
@@ -158,7 +158,7 @@ class UserController extends AbstractController
     #[IsGranted('ROLE_MANAGE_PREFERENCES')]
     #[Breadcrumb(null)]
 
-//    #[Breadcrumb(title: 'Préférences utilisateur')]
+    //    #[Breadcrumb(title: 'Préférences utilisateur')]
     public function preferences(Request $request, UserManager $userManager, UserLoginEntropy $userLoginEntropy): Response
     {
         $user = $this->getUser();

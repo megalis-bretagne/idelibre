@@ -40,6 +40,4 @@ class LsvoteVoter
         $this->identifier = $identifier;
         return $this;
     }
-
-
 }

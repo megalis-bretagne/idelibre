@@ -14,15 +14,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-
 #[Sidebar(active: ['configurations-nav'])]
 #[Breadcrumb(title: 'Configuration des connecteurs', routeName: 'connector_index')]
 class LsvoteConnectorController extends AbstractController
 {
     public function __construct(
         private readonly LsvoteConnectorManager $lsvoteConnectorManager,
-    )
-    {
+    ) {
     }
 
     #[Route('/lsvote/connector', name: 'lsvote_connector', methods: ['GET', 'POST'])]

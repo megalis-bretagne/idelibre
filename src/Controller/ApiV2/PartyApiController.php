@@ -14,7 +14,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
-
 /**
  * body {
  *   "name": string,
@@ -54,8 +53,7 @@ class PartyApiController extends AbstractController
     public function add(
         #[MapEntity(mapping: ['structureId' => 'id'])] Structure $structure,
         array $data
-    ): JsonResponse
-    {
+    ): JsonResponse {
         /** @var Party $party */
         $party = $this->denormalizer->denormalize($data, Party::class, context: ['groups' => ['party:write']]);
 
@@ -70,9 +68,9 @@ class PartyApiController extends AbstractController
     #[IsGranted('API_SAME_STRUCTURE', subject: ['structure', 'party'])]
     public function update(
         #[MapEntity(mapping: ['structureId' => 'id'])] Structure $structure,
-        #[MapEntity(mapping: ['id' => 'id'])] Party $party, array $data)
-    : JsonResponse
-    {
+        #[MapEntity(mapping: ['id' => 'id'])] Party $party,
+        array $data
+    ): JsonResponse {
         $context = ['object_to_populate' => $party, 'groups' => ['party:write']];
 
         /** @var Party $updatedParty */
@@ -87,9 +85,8 @@ class PartyApiController extends AbstractController
     #[IsGranted('API_SAME_STRUCTURE', subject: ['structure', 'party'])]
     public function delete(
         #[MapEntity(mapping: ['structureId' => 'id'])] Structure $structure,
-        #[MapEntity(mapping: ['id' => 'id'])]Party $party
-    ): JsonResponse
-    {
+        #[MapEntity(mapping: ['id' => 'id'])] Party $party
+    ): JsonResponse {
         $this->em->remove($party);
         $this->em->flush();
 

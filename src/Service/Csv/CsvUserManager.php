@@ -55,7 +55,7 @@ class CsvUserManager
                 continue;
             }
 
-            if($record[1] === "") {
+            if ($record[1] === "") {
                 $errors[] = $this->missingUsernameViolation($record);
                 continue;
             }

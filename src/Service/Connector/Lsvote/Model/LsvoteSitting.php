@@ -33,5 +33,4 @@ class LsvoteSitting
         $this->date = $date;
         return $this;
     }
-
 }

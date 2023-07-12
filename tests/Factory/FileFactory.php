@@ -41,7 +41,7 @@ final class FileFactory extends ModelFactory
         return [
             "path" => '/tmp/fakePath',
             "size" => 100,
-            "name" => "project". uniqid()
+            "name" => "project" . uniqid()
         ];
     }
 

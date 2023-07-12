@@ -40,8 +40,7 @@ class TypeApiController extends AbstractController
     public function getAll(
         #[MapEntity(mapping: ['structureId' => 'id'])] Structure $structure,
         TypeRepository $typeRepository
-    ): JsonResponse
-    {
+    ): JsonResponse {
         $types = $typeRepository->findByStructure($structure)->getQuery()->getResult();
 
         return $this->json($types, context: ['groups' => 'type:read']);
@@ -52,8 +51,7 @@ class TypeApiController extends AbstractController
     public function getById(
         #[MapEntity(mapping: ['structureId' => 'id'])] Structure $structure,
         #[MapEntity(mapping: ['id' => 'id'])] Type $type
-    ): JsonResponse
-    {
+    ): JsonResponse {
         return $this->json($type, context: ['groups' => ['type:detail', 'type:read']]);
     }
 
@@ -62,8 +60,7 @@ class TypeApiController extends AbstractController
     public function add(
         #[MapEntity(mapping: ['structureId' => 'id'])] Structure $structure,
         array $data
-    ): JsonResponse
-    {
+    ): JsonResponse {
         $type = $this->denormalizer->denormalize($data, Type::class, context: ['groups' => ['type:write'], 'normalize_relations' => true]);
         $type->setStructure($structure);
 
@@ -79,8 +76,7 @@ class TypeApiController extends AbstractController
         #[MapEntity(mapping: ['structureId' => 'id'])] Structure $structure,
         #[MapEntity(mapping: ['id' => 'id'])] Type $type,
         array $data
-    ): JsonResponse
-    {
+    ): JsonResponse {
         $context = ['object_to_populate' => $type, 'groups' => ['type:write'], 'normalize_relations' => true];
 
         /** @var Type $type */
@@ -94,9 +90,9 @@ class TypeApiController extends AbstractController
     #[Route('/{id}', name: 'delete_type', methods: ['DELETE'])]
     #[IsGranted('API_SAME_STRUCTURE', subject: ['structure' => 'structure', 'entity' => 'type'])]
     public function delete(
-        #[MapEntity(mapping: ['structureId' => 'id'])]Structure $structure,
-        #[MapEntity(mapping: ['id' => 'id'])]Type $type): JsonResponse
-    {
+        #[MapEntity(mapping: ['structureId' => 'id'])] Structure $structure,
+        #[MapEntity(mapping: ['id' => 'id'])] Type $type
+    ): JsonResponse {
         $this->em->remove($type);
         $this->em->flush();
 

@@ -21,7 +21,6 @@ use Zenstruck\Foundry\Test\ResetDatabase;
 
 class LsvoteConnectorManagerTest extends WebTestCase
 {
-
     use ResetDatabase;
     use Factories;
 
@@ -112,7 +111,6 @@ class LsvoteConnectorManagerTest extends WebTestCase
         $this->assertSame("ca330f73-ccf2-46a4-a0c3-abe0d7e46689", $id);
 
         $this-> assertNotNull($sitting->getLsvoteSitting()->getLsvoteSittingId());
-
     }
 
     public function testSittingNotCreated()
@@ -242,7 +240,6 @@ class LsvoteConnectorManagerTest extends WebTestCase
 
         $this->expectException(LsvoteResultException::class);
         $res = $lsvoteConnectorManager->getLsvoteSittingResults($lsvoteSitting->getSitting());
-
     }
 
     public function testCreateJsonFile()
@@ -286,7 +283,6 @@ class LsvoteConnectorManagerTest extends WebTestCase
         $this->assertSame("ca330f73-ccf2-46a4-a0c3-abe0d7e46689", $id);
 
         $this-> assertNotNull($sitting->getLsvoteSitting()->getLsvoteSittingId());
-
     }
 
     public function testEditLsvoteSittingFailed()
@@ -313,6 +309,5 @@ class LsvoteConnectorManagerTest extends WebTestCase
 
         $this->expectException(LsvoteSittingCreationException::class);
         $id = $lsvoteConnectorManager->editLsvoteSitting($sitting->object());
-
     }
 }

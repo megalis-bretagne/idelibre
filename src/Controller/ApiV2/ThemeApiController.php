@@ -35,7 +35,7 @@ class ThemeApiController extends AbstractController
 
     #[Route('', name: 'get_all_themes', methods: ['GET'])]
     public function getAll(
-        #[MapEntity(mapping: ['structureId' => 'id'])]Structure $structure,
+        #[MapEntity(mapping: ['structureId' => 'id'])] Structure $structure,
         ThemeRepository $themeRepository
     ): JsonResponse {
         $themes = $themeRepository->findChildrenFromStructure($structure)->getQuery()->getResult();
@@ -58,8 +58,7 @@ class ThemeApiController extends AbstractController
         #[MapEntity(mapping: ['structureId' => 'id'])] Structure $structure,
         ThemeRepository $themeRepository,
         array $data
-    ): JsonResponse
-    {
+    ): JsonResponse {
         $context = ['groups' => ['theme:write', 'theme:write:post'], 'normalize_relations' => true];
         /** @var Theme $theme */
         $theme = $this->denormalizer->denormalize($data, Theme::class, context: $context);
@@ -73,11 +72,10 @@ class ThemeApiController extends AbstractController
     #[Route('/{id}', name: 'edit_theme', methods: ['PUT'])]
     #[IsGranted('API_SAME_STRUCTURE', subject: ['structure', 'theme'])]
     public function update(
-        #[MapEntity(mapping: ['structureId' => 'id'])]Structure $structure,
+        #[MapEntity(mapping: ['structureId' => 'id'])] Structure $structure,
         #[MapEntity(mapping: ['id' => 'id'])] Theme $theme,
         array $data
-    ): JsonResponse
-    {
+    ): JsonResponse {
         $context = ['object_to_populate' => $theme, 'groups' => ['theme:write']];
 
         /** @var Theme $updatedTheme */
@@ -93,8 +91,7 @@ class ThemeApiController extends AbstractController
     public function delete(
         #[MapEntity(mapping: ['structureId' => 'id'])] Structure $structure,
         #[MapEntity(mapping: ['id' => 'id'])] Theme $theme
-    ): JsonResponse
-    {
+    ): JsonResponse {
         $this->em->remove($theme);
         $this->em->flush();
 

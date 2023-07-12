@@ -326,7 +326,7 @@ class SittingController extends AbstractController
     {
         try {
             $lsvoteConnectorManager->getLsvoteSittingResults($sitting);
-        }catch(LsvoteResultException $e) {
+        } catch (LsvoteResultException $e) {
             $this->addFlash('error', $e->getMessage());
 
             return $this->redirect($request->headers->get('referer'));
@@ -339,7 +339,7 @@ class SittingController extends AbstractController
 
     #[Route(path: '/sitting/{id}/lsvote-results/json', name: 'sitting_lsvote_results_json', methods: ['GET'])]
     #[IsGranted('ROLE_MANAGE_SITTINGS')]
-    public function downloadLsvoteResultsCsv(Sitting $sitting, LsvoteConnectorManager $lsvoteConnectorManager,FileGenerator $fileGenerator ): Response
+    public function downloadLsvoteResultsCsv(Sitting $sitting, LsvoteConnectorManager $lsvoteConnectorManager, FileGenerator $fileGenerator): Response
     {
         $jsonPath = $lsvoteConnectorManager->createJsonFile($sitting);
 
@@ -353,9 +353,4 @@ class SittingController extends AbstractController
 
         return $response;
     }
-
-
-
-
-
 }

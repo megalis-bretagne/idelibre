@@ -70,7 +70,6 @@ class SittingController extends AbstractController
             $lsvoteId = $lsvoteConnectorManager->createSitting($sitting);
 
             return $this->json(['lsvoteId' => $lsvoteId]);
-
         } catch (LsvoteSittingCreationException $e) {
             return $this->json($e->getMessage(), 400);
         }
