@@ -7,12 +7,12 @@ use App\Repository\LsvoteConnectorRepository;
 use App\Service\Connector\LsvoteConnectorManager;
 use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
 #[Sidebar(active: ['configurations-nav'])]
@@ -26,7 +26,7 @@ class LsvoteConnectorController extends AbstractController
     }
 
     #[Route('/lsvote/connector', name: 'lsvote_connector', methods: ['GET', 'POST'])]
-    #[IsGranted(data: 'ROLE_MANAGE_CONNECTORS')]
+    #[IsGranted('ROLE_MANAGE_CONNECTORS')]
     #[Breadcrumb(title: 'Lsvote')]
     public function edit(LsvoteConnectorRepository $lsvoteConnectorRepository, Request $request): Response
     {
@@ -45,7 +45,7 @@ class LsvoteConnectorController extends AbstractController
     }
 
     #[Route(path: '/connector/lsvote/check/', name: 'lsvote_connector_check')]
-    #[IsGranted(data: 'ROLE_MANAGE_CONNECTORS')]
+    #[IsGranted('ROLE_MANAGE_CONNECTORS')]
     public function isValidApiKey(Request $request): JsonResponse
     {
         $url = $request->query->get('url');

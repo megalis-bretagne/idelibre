@@ -34,9 +34,7 @@ class PurgeSittingsCommandTest extends WebTestCase
         $structure = StructureFactory::createOne();
         $numberSittings = count($this->sittingRepository->findAll());
         $date = date('d/m/yy');
-        $expected = "Confirmez-vous vouloir purger les seances d'avant le {$date} de la structure {$structure->getName()} ? \n" .
-            "({$numberSittings} Séances)(y/n)\n"
-        . " Operation annulée\n";
+        $expected = "Confirmez-vous vouloir purger les seances d'avant le {$date} de la structure {$structure->getName()} ? \n(0 Séances)(y/n) Operation annulée\n";
 
         $cmdToTest = (new Application(self::$kernel))->find('purge:sitting');
         $cmdTester = new CommandTester($cmdToTest);
@@ -57,7 +55,8 @@ class PurgeSittingsCommandTest extends WebTestCase
         $structure = StructureFactory::createOne();
         $numberSittings = count($this->sittingRepository->findAll());
         $date = date('d/m/yy');
-        $expected = "Confirmez-vous vouloir purger les seances d'avant le {$date} de la structure {$structure->getName()} ? ({$numberSittings} Séances)(y/n) [OK] Séances supprimées";
+        $expected =  "Confirmez-vous vouloir purger les seances d'avant le {$date} de la structure {$structure->getName()} ? " .
+            "({$numberSittings} Séances)(y/n) [OK] Séances supprimées";
 
         $cmdToTest = (new Application(self::$kernel))->find('purge:sitting');
         $cmdTester = new CommandTester($cmdToTest);
