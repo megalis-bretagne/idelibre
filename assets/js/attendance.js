@@ -7,12 +7,12 @@ const deputy = document.querySelector("h1").dataset.deputy
 const deputyId = document.querySelector("h1").dataset.deputyId
 
 window.onload = () => {
-    const value = attendanceInput.value;
+    const value = attendanceInput.value ? attendanceInput.value : null;
     listCleaner(deputyInput)
 }
 
 attendanceInput.onchange = () => {
-    const value = attendanceInput.value;
+    const value = attendanceInput.value ? attendanceInput.value : null;
     console.log(value)
 
     if(value === "absent"){
