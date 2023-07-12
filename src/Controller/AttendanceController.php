@@ -79,7 +79,7 @@ class AttendanceController extends AbstractController
         $actors = $this->userRepository->findAvailableActorsInStructure($structure, $toExclude)->getQuery()->getResult();
 
         return $this->render('include/user_lists/_available_actors.html.twig', [
-            "actors" => $actors
+            "availables" => $actors
         ]);
     }
 
@@ -92,8 +92,8 @@ class AttendanceController extends AbstractController
         $user ? $toExclude[] = $user : $toExclude = [];
         $deputies = $this->userRepository->findAvailableDeputiesInStructure($structure, $toExclude)->getQuery()->getResult();
 
-        return $this->render('include/user_lists/_available_deputies.html.twig', [
-            "deputies" => $deputies
+        return $this->render('include/user_lists/_available_actors.html.twig', [
+            "availables" => $deputies
         ]);
     }
 
