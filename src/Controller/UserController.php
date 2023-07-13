@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Sitting;
 use App\Entity\User;
 use App\Form\ChooseDeputyType;
 use App\Form\SearchType;
@@ -60,7 +59,7 @@ class UserController extends AbstractController
     #[Route(path: '/user/add', name: 'user_add')]
     #[IsGranted('ROLE_MANAGE_USERS')]
     #[Breadcrumb(title: 'Ajouter')]
-    public function add(Request $request, UserManager $manageUser, EventLogManager $eventLog): Response
+    public function add(Request $request, UserManager $userManager, EventLogManager $eventLog): Response
     {
         $form = $this->createForm(UserType::class, new User(), [
             'structure' => $this->getUser()->getStructure(),
@@ -71,7 +70,7 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $initPassword = $form->get('initPassword')->getData();
 
-            $success = $manageUser->save(
+            $success = $userManager->save(
                 $form->getData(),
                 $initPassword ? $form->get('plainPassword')->getData() : null,
                 $this->getUser()->getStructure()
@@ -153,8 +152,6 @@ class UserController extends AbstractController
 
     #[Route(path: '/user/deleteBatch', name: 'user_delete_batch')]
     #[IsGranted('ROLE_MANAGE_USERS')]
-
-    //    #[Breadcrumb(title: 'Suppression par lot')]
     public function deleteBatch(UserRepository $userRepository, Request $request): Response
     {
         if ($request->isMethod('POST')) {
@@ -276,24 +273,22 @@ class UserController extends AbstractController
     }
 
     #[Route('/user/list/deputies', name: 'user_deputies_list', methods: ['GET'])]
-    #[Route('/user/{id}/list/deputies', name: 'user_id_deputies_list', methods: ['GET'])]
     public function getDeputyList(?User $user): Response
     {
         $toExcludes = [];
         $user ? $toExcludes[] = $user : $toExcludes[] = null;
         return $this->render('include/user_lists/_available_actors.html.twig', [
-            "availables" => $this->userRepository->findAvailableDeputiesInStructure($this->getUser()->getStructure(), $toExcludes)->getQuery()->getResult(),
+            "availables" => $this->userRepository->findAvailableDeputiesInStructure($this->getUser()->getStructure(), [])->getQuery()->getResult(),
         ]);
     }
 
     #[Route('/user/list/actors', name: 'user_actors_list', methods: ['GET'])]
-    #[Route('/user/{id}/list/actors', name: 'user_id_actors_list', methods: ['GET'])]
     public function getActorsList(?User $user): Response
     {
         $toExcludes = [];
         $user ? $toExcludes[] = $user : $toExcludes[] = null;
         return $this->render('include/user_lists/_available_actors.html.twig', [
-            "availables" => $this->userRepository->findAvailableActorsInStructure($this->getUser()->getStructure(), $toExcludes)->getQuery()->getResult(),
+            "availables" => $this->userRepository->findAvailableActorsInStructure($this->getUser()->getStructure(), [])->getQuery()->getResult(),
         ]);
     }
 

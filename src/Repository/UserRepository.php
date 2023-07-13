@@ -61,6 +61,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             (r.name is null)')
             ->setParameter('superAdmin', 'SuperAdmin')
             ->setParameter('groupAdmin', 'GroupAdmin')
+            ->addSelect('p')
             ->addSelect('r');
 
         if (!empty($search)) {
@@ -498,11 +499,14 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->andWhere(' r.name = :actor')
             ->setParameter('actor', Role::NAME_ROLE_ACTOR)
             ->andWhere('u.isActive = true')
+            ->andWhere('u.associatedWith IS null' )
             ;
         if($toExclude) {
             $qb->andWhere('u NOT IN (:toExclude)')
                 ->setParameter('toExclude', $toExclude);
         }
+//        dd($qb->getQuery()->getResult());
+
         return $qb;
     }
 }

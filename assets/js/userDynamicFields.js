@@ -11,18 +11,19 @@ const mandatorNameValue = mandatorNameInput.value
 
 
 window.onload = () => {
+    let url = `/user/${getUserId()}list`
 
     listCleaner(mandatorNameInput);
 
     if (roleActorId === hasRoleValue) {
         show(mandatorNameGroup)
-        getList("deputies")
+        getList(url, "deputies", mandatorNameInput)
         return ;
     }
 
     if(roleDeputyId === hasRoleValue) {
         show(mandatorNameGroup)
-        getList("actors")
+        getList(url, "actors", mandatorNameInput)
         return;
     }
 

@@ -2,9 +2,11 @@ console.log("List cleaner")
 
 window.listCleaner = (value) => {
     let options = value.getElementsByTagName('option');
-    for (let i = options.length; i--;) {
-        if (i !== 0){
-            value.removeChild(options[i]);
+    for (let i = options.length; i;) {
+        if (options[i]) {
+            value.removeChild(options[i])
         }
     }
 }
+
+

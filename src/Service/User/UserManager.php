@@ -47,7 +47,8 @@ class UserManager
         }
 
         $user->setSubscription($this->subscriptionManager->add($user));
-        $this->ifDeputy($user);
+
+        $user->getRole() === Role::NAME_ROLE_DEPUTY ?: $user->getAssociatedWith()->setAssociatedWith($user);
 
         $this->em->persist($user);
         $this->em->flush();
@@ -71,7 +72,7 @@ class UserManager
             $user->setPassword($this->passwordHasher->hashPassword($user, $plainPassword));
         }
 
-        $this->ifDeputy($user);
+        $user->getRole() === Role::NAME_ROLE_DEPUTY ?: $user->getAssociatedWith()->setAssociatedWith($user);
 
         $this->em->persist($user);
         $this->em->flush();
@@ -156,29 +157,14 @@ class UserManager
         return true;
     }
 
-
-    public function ifDeputy(User $user): void
-    {
-        if ($user->getRole() === Role::NAME_ROLE_DEPUTY && $user->getAssociatedWith() !== null) {
-            $associatedWith = $user->getAssociatedWith();
-            $associatedWith->setAssociatedWith($user);
-            $this->em->persist($associatedWith);
-
-        $user->setAssociatedWith(null);
-            $this->em->persist($user);
-
-            $this->em->flush();
-        }
-    }
-
-    public function addDeputy(User $user)
+    public function addDeputy(User $user): void
     {
         $user->getAssociatedWith()->setAssociatedWith($user);
         $this->em->persist($user);
         $this->em->flush();
     }
 
-    public function removeProcurationOrDeputy(User $user)
+    public function removeProcurationOrDeputy(User $user): void
     {
         $user->getAssociatedWith()->setAssociatedWith(null);
         $user->setAssociatedWith(null);
@@ -187,12 +173,12 @@ class UserManager
     }
 
 
-    public function countAvailableDeputies(Structure $structure)
+    public function countAvailableDeputies(Structure $structure): bool
     {
         $deputies = $this->userRepository->findAvailableDeputiesInStructure($structure, [])->getQuery()->getResult();
         $arrayAvailable = [];
         foreach ($deputies as $deputy) {
-            $deputy->getAssociatedWith() == null ? $arrayAvailable[] = $deputy : null;
+            $deputy->getAssociatedWith() == null ?: $arrayAvailable[] = $deputy;
         }
 
         return count($arrayAvailable) > 0;

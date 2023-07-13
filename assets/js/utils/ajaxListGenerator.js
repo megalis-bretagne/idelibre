@@ -11,7 +11,7 @@ function ajaxListGeneration(url, value, input) {
 
     function alterContents() {
         if (httpRequest.readyState === XMLHttpRequest.DONE && httpRequest.status === 200) {
-            console.log('plop : ' + httpRequest)
+            console.log(httpRequest.response)
             input.innerHTML += httpRequest.responseText.trim()
             return;
         }
