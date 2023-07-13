@@ -154,7 +154,8 @@ class EmailTemplateTest extends WebTestCase
     }
 
 
-    public function testInvalidFormat() {
+    public function testInvalidFormat()
+    {
         $this->expectException(EmailTemplateException::class);
         (new EmailTemplate())->setFormat('Do no exists');
     }

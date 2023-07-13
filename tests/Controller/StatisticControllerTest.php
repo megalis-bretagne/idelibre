@@ -44,7 +44,7 @@ class StatisticControllerTest extends WebTestCase
         UserStory::load();
         $this->loginAsSuperAdmin();
 
-        $crawler = $this->client->request(Request::METHOD_GET, '/statistic' );
+        $crawler = $this->client->request(Request::METHOD_GET, '/statistic');
         $this->assertResponseStatusCodeSame(200);
 
         $item = $crawler->filter('html:contains("Statistiques")');
@@ -77,9 +77,4 @@ class StatisticControllerTest extends WebTestCase
         $this->assertSame("attachment; filename=convocation_structure_rapport.csv", $response->headers->get('content-disposition'));
         $this->assertGreaterThan(100, intval($response->headers->get('content-length')));
     }
-
-
-
-
-
 }

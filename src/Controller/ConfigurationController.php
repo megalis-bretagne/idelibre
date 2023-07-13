@@ -8,11 +8,11 @@ use App\Service\Configuration\ConfigurationManager;
 use App\Service\Util\SuppressionDelayFormatter;
 use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Sidebar(active: ['configurations-nav', 'configuration-nav'])]
 #[Breadcrumb(title: 'Configuration de la structure')]

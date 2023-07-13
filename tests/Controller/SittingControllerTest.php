@@ -45,7 +45,6 @@ class SittingControllerTest extends WebTestCase
         SittingStory::load();
         EmailTemplateStory::load();
         LsvoteConnectorStory::load();
-
     }
 
     public function testIndex()

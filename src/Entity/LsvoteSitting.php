@@ -23,7 +23,7 @@ class LsvoteSitting
     #[Groups(groups: ['sitting'])]
     private ?string $lsvoteSittingId = null;
 
-    #[Column(type: 'json',  options: ['jsonb' => true])]
+    #[Column(type: 'json', options: ['jsonb' => true])]
     private array $results = [];
 
     #[ORM\Column]
