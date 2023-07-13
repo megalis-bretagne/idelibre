@@ -43,7 +43,4 @@ class LsvoteProject
         $this->rank = $rank;
         return $this;
     }
-
-
-
 }

@@ -15,18 +15,18 @@ use App\Service\User\UserManager;
 use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Sidebar(active: ['user-nav'])]
 #[Breadcrumb(title: 'Utilisateurs', routeName: 'user_index')]
 class UserController extends AbstractController
 {
     #[Route(path: '/user', name: 'user_index')]
-    #[IsGranted(data: 'ROLE_MANAGE_USERS')]
+    #[IsGranted('ROLE_MANAGE_USERS')]
     public function index(UserRepository $userRepository, PaginatorInterface $paginator, Request $request): Response
     {
         $formSearch = $this->createForm(SearchType::class);
@@ -48,7 +48,7 @@ class UserController extends AbstractController
     }
 
     #[Route(path: '/user/add', name: 'user_add')]
-    #[IsGranted(data: 'ROLE_MANAGE_USERS')]
+    #[IsGranted('ROLE_MANAGE_USERS')]
     #[Breadcrumb(title: 'Ajouter')]
     public function add(Request $request, UserManager $manageUser, EventLogManager $eventLog): Response
     {
@@ -83,7 +83,7 @@ class UserController extends AbstractController
     }
 
     #[Route(path: '/user/edit/{id}', name: 'user_edit')]
-    #[IsGranted(data: 'MANAGE_USERS', subject: 'user')]
+    #[IsGranted('MANAGE_USERS', subject: 'user')]
     #[Breadcrumb(title: 'Modifier {user.firstName} {user.lastName}')]
     public function edit(User $user, Request $request, UserManager $manageUser): Response
     {
@@ -119,7 +119,7 @@ class UserController extends AbstractController
     }
 
     #[Route(path: '/user/delete/{id}', name: 'user_delete', methods: ['DELETE'])]
-    #[IsGranted(data: 'MANAGE_USERS', subject: 'user')]
+    #[IsGranted('MANAGE_USERS', subject: 'user')]
     public function delete(User $user, UserManager $manageUser, Request $request): Response
     {
         if ($this->getUser()->getid() == $user->getId()) {
@@ -136,9 +136,9 @@ class UserController extends AbstractController
     }
 
     #[Route(path: '/user/deleteBatch', name: 'user_delete_batch')]
-    #[IsGranted(data: 'ROLE_MANAGE_USERS')]
+    #[IsGranted('ROLE_MANAGE_USERS')]
 
-//    #[Breadcrumb(title: 'Suppression par lot')]
+    //    #[Breadcrumb(title: 'Suppression par lot')]
     public function deleteBatch(UserRepository $userRepository, Request $request): Response
     {
         if ($request->isMethod('POST')) {
@@ -155,10 +155,10 @@ class UserController extends AbstractController
     }
 
     #[Route(path: '/user/preferences', name: 'user_preferences', methods: ['GET', 'POST'])]
-    #[IsGranted(data: 'ROLE_MANAGE_PREFERENCES')]
+    #[IsGranted('ROLE_MANAGE_PREFERENCES')]
     #[Breadcrumb(null)]
 
-//    #[Breadcrumb(title: 'Préférences utilisateur')]
+    //    #[Breadcrumb(title: 'Préférences utilisateur')]
     public function preferences(Request $request, UserManager $userManager, UserLoginEntropy $userLoginEntropy): Response
     {
         $user = $this->getUser();
@@ -189,7 +189,7 @@ class UserController extends AbstractController
     }
 
     #[Route(path: '/user/invalidatePassword', name: 'invalidate_users_password', methods: ['POST'])]
-    #[IsGranted(data: 'ROLE_MANAGE_USERS')]
+    #[IsGranted('ROLE_MANAGE_USERS')]
     public function invalidateUsersPassword(PasswordInvalidator $passwordInvalidator): Response
     {
         $passwordInvalidator->invalidatePassword($this->getUser()->getStructure());
@@ -199,7 +199,7 @@ class UserController extends AbstractController
     }
 
     #[Route(path: '/reload_password/{id}', name: 'user_reload_password', methods: ['POST'])]
-    #[IsGranted(data: 'ROLE_MANAGE_USERS')]
+    #[IsGranted('ROLE_MANAGE_USERS')]
     public function reloadPassword(User $user, Request $request, ResetPassword $resetPassword): Response
     {
         if ($this->getUser()->getId() === $user->getId()) {

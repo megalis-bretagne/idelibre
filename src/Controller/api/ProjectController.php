@@ -7,18 +7,18 @@ use App\Message\UpdatedSitting;
 use App\Service\ApiEntity\ProjectApi;
 use App\Service\Pdf\PdfValidator;
 use App\Service\Project\ProjectManager;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class ProjectController extends AbstractController
 {
     #[Route(path: '/api/projects/{id}', name: 'api_project_add', methods: ['POST'])]
-    #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
+    #[IsGranted('MANAGE_SITTINGS', subject: 'sitting')]
     public function edit(Sitting $sitting, Request $request, SerializerInterface $serializer, ProjectManager $projectManager, MessageBusInterface $messageBus, PdfValidator $pdfValidator): JsonResponse
     {
         $rawProjects = $request->request->get('projects');
@@ -39,8 +39,8 @@ class ProjectController extends AbstractController
     }
 
     #[Route(path: '/api/projects/{id}', name: 'api_project_get', methods: ['GET'])]
-    #[IsGranted(data: 'MANAGE_SITTINGS', subject: 'sitting')]
-    public function getProjectsFromSitting(Sitting $sitting, SerializerInterface $serializer, ProjectManager $projectManager): JsonResponse
+    #[IsGranted('MANAGE_SITTINGS', subject: 'sitting')]
+    public function getProjectsFromSitting(Sitting $sitting, ProjectManager $projectManager): JsonResponse
     {
         $projectsApi = $projectManager->getApiProjectsFromProjects($projectManager->getProjectsFromSitting($sitting));
 

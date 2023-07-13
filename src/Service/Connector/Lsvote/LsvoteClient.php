@@ -17,9 +17,8 @@ use Throwable;
 
 class LsvoteClient
 {
-
-    const CHECK = '/api/v1/me';
-    const API_SITTING_URI = '/api/v1/sittings';
+    public const CHECK = '/api/v1/me';
+    public const API_SITTING_URI = '/api/v1/sittings';
 
     public function __construct(private readonly HttpClientInterface $httpClient, private readonly SerializerInterface $serializer)
     {
@@ -41,7 +40,8 @@ class LsvoteClient
                     ],
                     "verify_peer" => false,
                     "verify_host" => false
-                ]);
+                ]
+            );
         } catch (TransportExceptionInterface $e) {
             throw new LsvoteException($e);
         }
@@ -77,7 +77,6 @@ class LsvoteClient
             $content = json_decode($response->getContent(), true);
 
             return $content['id'];
-
         } catch (Throwable $e) {
             throw new LsvoteException($e);
         }
@@ -94,7 +93,8 @@ class LsvoteClient
                 $url . "/" . self::API_SITTING_URI . "/" . $sittingId,
                 ["headers" => [
                     "Authorization" => $apiKey
-                ]]);
+                ]]
+            );
         } catch (TransportExceptionInterface $e) {
             throw new LsvoteException($e->getMessage());
         }
@@ -130,12 +130,10 @@ class LsvoteClient
 
             $content = json_decode($response->getContent(), true);
             return $content['id'];
-
         } catch (ClientException $e) {
-            if($e->getCode() === 404) {
+            if ($e->getCode() === 404) {
                 throw new LsvoteNotFoundException($e->getMessage());
             }
-
         } catch (Throwable $e) {
             throw new LsvoteException($e->getMessage());
         }
@@ -156,10 +154,10 @@ class LsvoteClient
                 ],
                     "verify_peer" => false,
                     "verify_host" => false,
-                ]);
+                ]
+            );
 
             return json_decode($response->getContent(), true);
-
         } catch (Throwable $e) {
             if ($response?->getContent(false)) {
                 throw new LsvoteException($response->getContent(false));
