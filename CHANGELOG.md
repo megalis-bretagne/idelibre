@@ -2,6 +2,26 @@
 All notable changes to this project will be documented in this file.
 
 
+## [4.2.10] - 2023-07-18
+### Correction
+￼- L'entropie du mot de passe des profils "Administrateur" était celui défini par la structure au lieu du niveau maximum (130).
+- Désormais, il n'est plus possible de définir le mot de passe pour les profils "Administrateur", qui ont donc par défaut un niveau d'entropie de 130.
+
+## [4.2.9] - 2023-07-06
+### Correction
+￼- Suite au passage en Symfony 6.3.1, le breadcrumb ne transformait plus les variables définies dans les controllers (données dans le fil d'ariane).
+
+## [4.2.8] - 2023-06-29
+### Evolution
+- Mise à jour symfony en 6.3.1
+- suppression de la lib sensioExtraFramework dépréciée
+- Mise à jour des lib npm
+
+
+### Correction
+￼- Le fuseau horaire contenu dans le fichier ics envoyé dans le mail de la séance présentait un décalage d'1 heure selon certain logiciel de gestion d'agenda
+￼
+
 ## [4.2.7] - 2023-06-28
 
 ### Correction
@@ -15,7 +35,7 @@ All notable changes to this project will be documented in this file.
 ## [4.2.5] - 2023-06-02
 
 ### Correction
-- Le téléchargement des autres documents n'était pas possible
+￼- Le téléchargement des autres documents n'était pas possible
 
 ## [4.2.4] - 2023-05-19
 
@@ -41,14 +61,14 @@ All notable changes to this project will be documented in this file.
 ## [4.2.1] - 2023-05-05
 
 ### Evolution
- - Mise à jour symfony en 6.2.10
- - Ajout des fonctionnalités manquantes dans l'api :
-   - Séance autorisée à distance
-   - Ajout de documents non numérotés
+- Mise à jour symfony en 6.2.10
+- Ajout des fonctionnalités manquantes dans l'api :
+    - Séance autorisée à distance
+    - Ajout de documents non numérotés
 
 ### Correction
-  - Script de mise à jour initBdd:subscription_user trop long.
-  - Correction docker-compose.yml au niveau du tag de node-idelibre
+- Script de mise à jour initBdd:subscription_user trop long.
+- Correction docker-compose.yml au niveau du tag de node-idelibre
 
 ## [4.2.0] - 2023-03-31
 
@@ -64,8 +84,8 @@ All notable changes to this project will be documented in this file.
 - Un mail d'initialisation du mot de passe est envoyé lors de la création d'un compte superadmin et admin de groupe.
 - Délai de purge de donnée configurable par entité (#256)
 - Lors de la création d'un utilisateur dans une structure, il existe deux possiblité concernant le mot de passe :
-  - soit un mail d'initialisation du mot de passe est envoyé
-  - soit il est possible de définir le mot de passe
+    - soit un mail d'initialisation du mot de passe est envoyé
+    - soit il est possible de définir le mot de passe
 - Mise en place d'envoi d'un mail de réinitialisation du mot de passe.
 - Mise en place de l'invalidation des mots de passe de tous les utilisateurs de la structure.
 - Empêcher IL de générer les pdfs complets s'il y a trop de volume (#290)
@@ -119,7 +139,7 @@ All notable changes to this project will be documented in this file.
 
 
 ### Correction
- - Envoi de sms par lot via lsmessage (#264) 
+- Envoi de sms par lot via lsmessage (#264)
 
 ## [4.1] - 2022-03-01
 ### Evolution
@@ -150,8 +170,8 @@ All notable changes to this project will be documented in this file.
 - Mot de passe oublié client web (#158)
 
 
-### Correction  
-- Format de la date lors de la création et modification d'une séance (#167)   
+### Correction
+- Format de la date lors de la création et modification d'une séance (#167)
 - mise à jour du nom complet des sous themes lors de la mise à jour du nom d'un theme (#159)
 - Docker : Creation des repertoires au demarage s'ils n'existent pas (#178)
 - supression de l'ancienne orthographe d'idelibre (#247)
@@ -177,7 +197,7 @@ All notable changes to this project will be documented in this file.
 ### Evolution
 - Connecteur legacy : accepte les array et les string pour la clé acteurs-convoqués
 - Connecteur legacy : Si un username généré existe déja on considère que c'est le même élu
-- Redirections des anciennes routes vers les nouvelles pour eviter les 404 en favoris (srvusers/login et idelibre_client3)  
+- Redirections des anciennes routes vers les nouvelles pour eviter les 404 en favoris (srvusers/login et idelibre_client3)
 
 
 
@@ -211,7 +231,7 @@ All notable changes to this project will be documented in this file.
 
 ### Corrections
 - impossibilité pour un gestionnaire de seance de creer une seance (erreur 500)
-- impossibilité de supprimer un utilisateur rapporteur d'un projet (erreur 500)   
+- impossibilité de supprimer un utilisateur rapporteur d'un projet (erreur 500)
 
 ### Evolutions
 - Mise à jour symfony 5.3.6
@@ -223,4 +243,3 @@ All notable changes to this project will be documented in this file.
 
 ### Corrections
 - Correction du calcul du hash du legacy password coté client (nodejs)
-
