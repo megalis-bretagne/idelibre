@@ -49,7 +49,10 @@ class RoleManager
     {
         return $this->roleRepository->findOneBy(['name' => 'Guest']);
     }
-
+    public function getAdminRole(): Role
+    {
+        return $this->roleRepository->findOneBy(['name' => 'Admin']);
+    }
     public function getApiStructureAdminRole(): ApiRole
     {
         return $this->apiRoleRepository->findOneBy(['name' => 'ApiStructureAdmin']);
