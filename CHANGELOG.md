@@ -1,9 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+
+## [4.2.10] - 2023-07-18
+### Correction
+￼- L'entropie du mot de passe des profils "Administrateur" était celui défini par la structure au lieu du niveau maximum (130). 
+    - Désormais, il n'est plus possible de définir le mot de passe pour les profils "Administrateur", qui ont donc par défaut un niveau d'entropie de 130.
+
 ## [4.2.9] - 2023-07-06
 ### Correction
-￼- Suite au passage en Symfony 6.3.1, le breadcrumb ne transformait plus les variables définies dnas les controller (données dans le fil d'ariane).
+￼- Suite au passage en Symfony 6.3.1, le breadcrumb ne transformait plus les variables définies dans les controllers (données dans le fil d'ariane).
 
 ## [4.2.8] - 2023-06-29
 ### Evolution
