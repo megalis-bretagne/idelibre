@@ -123,37 +123,38 @@ class UserType extends AbstractType
             ]);
         }
 
-        $builder
-            ->add('initPassword', ChoiceType::class, [
-                'mapped' => false,
-                'label' => 'Voulez vous définir le mot de passe de l\'utilisateur ?',
-                'choices' => [
-                    'Non' => false,
-                    'Oui' => true,
-                ],
-                'data' => false,
-                'required' => true,
-            ])
-            ->add('plainPassword', RepeatedType::class, [
-                'mapped' => false,
-                'required' => false,
-                'type' => PasswordType::class,
-                'invalid_message' => 'Les mots de passe ne sont pas identiques',
-                'options' => [
-                    'attr' => [
-                        'class' => 'password-field showValidationPasswordEntropy',
-                        'data-minimum-entropy' => $options['entropyForUser'],
-                        'autocomplete' => 'new-password',
+        if (!$this->IsAdmin($options)) {
+            $builder
+                ->add('initPassword', ChoiceType::class, [
+                    'mapped' => false,
+                    'label' => 'Voulez vous définir le mot de passe de l\'utilisateur ?',
+                    'choices' => [
+                        'Non' => false,
+                        'Oui' => true,
                     ],
-                ],
-                'first_options' => [
-                    'label' => 'Mot de passe',
-                ],
-                'second_options' => [
-                    'label' => 'Confirmer',
-                ],
-            ])
-        ;
+                    'data' => false,
+                    'required' => true,
+                ])
+                ->add('plainPassword', RepeatedType::class, [
+                    'mapped' => false,
+                    'required' => false,
+                    'type' => PasswordType::class,
+                    'invalid_message' => 'Les mots de passe ne sont pas identiques',
+                    'options' => [
+                        'attr' => [
+                            'class' => 'password-field showValidationPasswordEntropy',
+                            'data-minimum-entropy' => $options['entropyForUser'],
+                            'autocomplete' => 'new-password',
+                        ],
+                    ],
+                    'first_options' => [
+                        'label' => 'Mot de passe',
+                    ],
+                    'second_options' => [
+                        'label' => 'Confirmer',
+                    ],
+                ]);
+        }
 
         $builder->get('username')->addModelTransformer(new CallbackTransformer(
             fn ($username) => $username ? preg_replace('/@.*/', '', $username) : '',
@@ -208,5 +209,16 @@ class UserType extends AbstractType
     private function getStructureSuffix(Structure $structure): string
     {
         return $structure->getSuffix();
+    }
+
+    private function IsAdmin(array $options): bool
+    {
+        if ($this->isNew($options)) {
+            return false;
+        }
+        /** @var User $user */
+        $user = $options['data'];
+
+        return $user->getRole()->getId() === $this->roleManager->getAdminRole()->getId();
     }
 }
