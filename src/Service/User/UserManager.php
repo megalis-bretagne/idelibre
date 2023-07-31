@@ -60,12 +60,6 @@ class UserManager
         return true;
     }
 
-    private function hookDeputyToActor($user): void
-    {
-        if ($user->getRole()->getName() === "Deputy") {
-            $user->getAssociatedWith()->setAssociatedWith($user);
-        }
-    }
 
     public function editUser(User $user, string $plainPassword = null): bool
     {
@@ -187,7 +181,12 @@ class UserManager
         }
 
         return count($arrayAvailable) > 0;
+    }
 
-
+    private function hookDeputyToActor($user): void
+    {
+        if ($user->getRole()->getName() === "Deputy") {
+            $user->getAssociatedWith()->setAssociatedWith($user);
+        }
     }
 }
