@@ -195,12 +195,24 @@ let app = new Vue({
         },
 
         changeAttendance(status) {
+            let url = `/user/${getUserId()}list`
+            let input = document.querySelector("#changeAttendanceDeputy")
+
+            if ("deputy" === status.replacement) {
+               getList(url, "actors", input)
+            }
+            if ("poa" === status.replacement) {
+                getList(url, "deputies", input)
+            }
 
             this.changedAttendance.push({
                 convocationId: status.convocationId,
                 attendance: status.attendance,
+                replacement: status.replacement,
                 deputy: status.deputy
             })
+            console.log(this.changedAttendance)
+
         },
 
         saveAttendance() {

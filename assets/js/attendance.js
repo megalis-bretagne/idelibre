@@ -16,6 +16,31 @@ window.onload = () => {
         show(replacementTypeGroup)
         return;
     }
+    const value = replacementTypeInput.value;
+
+    if("deputy" === value ) {
+        listCleaner(deputyInput)
+        show(deputyGroup)
+
+        if(!deputy) {
+            deputyInput.innerHTML += getList(url, 'deputies', deputyInput)
+            deputyInput.removeAttribute('disabled')
+            return;
+        }
+
+        deputyInput.innerHTML += `<option value="${deputyId}">${deputy}</option>`
+        // deputyInput.value = deputy
+        deputyInput.setAttribute('disabled', 'disabled')
+        return;
+    }
+
+    if("poa" === value) {
+        listCleaner(deputyInput)
+        show(deputyGroup)
+        deputyInput.innerHTML += getList(url, "actors", deputyInput)
+        return;
+    }
+
     hide(replacementTypeGroup)
 }
 
