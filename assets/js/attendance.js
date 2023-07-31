@@ -4,39 +4,47 @@ const replacementTypeInput = document.querySelector("#attendance_status");
 const deputyGroup = document.querySelector('#deputyGroup');
 const deputyInput = document.querySelector('#attendance_deputy')
 const deputy = document.querySelector("h1").dataset.deputy
-const deputyId = document.querySelector("h1").dataset.deputyId
+const deputyId = document.querySelector("h1").dataset.deputy_id
+let url = `/attendance/${getToken()}list`
 
 window.onload = () => {
-    const value = attendanceInput.value ? attendanceInput.value : null;
+    let attendanceValue = attendanceInput.value ? attendanceInput.value : null;
+
     listCleaner(deputyInput)
+
+    if( "absent" === attendanceValue){
+        show(replacementTypeGroup)
+        return;
+    }
+    hide(replacementTypeGroup)
 }
 
 attendanceInput.onchange = () => {
-    const value = attendanceInput.value ? attendanceInput.value : null;
+    let value = attendanceInput.value ? attendanceInput.value : null;
     console.log(value)
 
     if(value === "absent"){
         show(replacementTypeGroup)
         return;
     }
-
-    hide(deputyGroup)
+    hide(replacementTypeGroup)
 }
 
 replacementTypeInput.onchange = () => {
     const value = replacementTypeInput.value;
-    let url = `/attendance/${getToken()}list`
 
     if("deputy" === value ) {
         listCleaner(deputyInput)
         show(deputyGroup)
-        deputyInput.innerHTML += `<option value="${deputyId}">${deputy}</option>`
+
         if(!deputy) {
             deputyInput.innerHTML += getList(url, 'deputies', deputyInput)
             deputyInput.removeAttribute('disabled')
             return;
         }
-        deputyInput.value = deputy
+
+        deputyInput.innerHTML += `<option value="${deputyId}">${deputy}</option>`
+        // deputyInput.value = deputy
         deputyInput.setAttribute('disabled', 'disabled')
         return;
     }

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\AttendanceToken;
 use App\Form\AttendanceType;
+use App\Repository\ConvocationRepository;
 use App\Repository\UserRepository;
 use App\Service\Convocation\ConvocationAttendance;
 use App\Service\Convocation\ConvocationManager;
@@ -16,7 +17,7 @@ class AttendanceController extends AbstractController
 {
     public function __construct(
         private readonly UserRepository $userRepository,
-        private readonly ConvocationManager $convocationManager
+        private readonly ConvocationManager $convocationManager,
     )
     {
     }
@@ -36,7 +37,7 @@ class AttendanceController extends AbstractController
 
             $convocationAttendance = (new ConvocationAttendance())
                 ->setAttendance($form->get('attendance')->getData())
-                ->setDeputy($form->get('deputy')->getData()->getFirstName() .  " " . $form->get('deputy')->getData()->getLastName())
+                ->setDeputy($form->get('deputy')->getData() !== null ? $form->get('deputy')->getData()->getFirstName() .  " " . $form->get('deputy')->getData()->getLastName() : null)
                 ->setConvocationId($attendanceToken->getConvocation()->getId());
 
             $this->convocationManager->updateConvocationAttendances([$convocationAttendance]);
@@ -48,10 +49,11 @@ class AttendanceController extends AbstractController
 
         return $this->render('confirm_attendance/confirm.html.twig', [
             'token' => $attendanceToken->getToken(),
+            'convocation' => $attendanceToken->getConvocation(),
             'user' => $attendanceToken->getConvocation()->getUser(),
             'sitting' => $attendanceToken->getConvocation()->getSitting(),
-            'timezone' => $attendanceToken->getConvocation()->getSitting()->getStructure()->getTimezone()->getName(),
             'attendance' => $attendanceToken->getConvocation()->getAttendance(),
+            'timezone' => $attendanceToken->getConvocation()->getSitting()->getStructure()->getTimezone()->getName(),
             'form' => $form->createView(),
         ]);
     }
@@ -93,6 +95,5 @@ class AttendanceController extends AbstractController
             "availables" => $deputies
         ]);
     }
-
 
 }

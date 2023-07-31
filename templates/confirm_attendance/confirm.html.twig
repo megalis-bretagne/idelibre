@@ -19,7 +19,7 @@
                 <div class="d-flex">
                     <h1 class="h3 mb-4"
                         data-deputy="{% if user.associatedWith is not null %}{{ user.associatedWith.firstname ~ " " ~ user.associatedWith.lastname}}{% endif %}"
-                        data-deputyId="{% if user.associatedWith is not null %}{{ user.associatedWith.id }}{% endif %}"
+                        data-deputy_id="{% if user.associatedWith is not null %}{{ user.associatedWith.id }}{% endif %}"
                         >
                         {{ user.firstName }} {{ user.lastName }}
                         {% if not attendance %} <div class="badge badge-secondary">Présence à définir</div> {% endif %}
@@ -32,7 +32,7 @@
                 </div>
                 <p><b>Séance : </b> {{ sitting.name }}</p>
                 <p><b>Date de la séance : </b> {{ sitting.date | date('d/m/y : H:i', timezone) }}</p>
-{#                {% if attendance == 'absent' and attendance.convocation.deputy is not null %} <p>Mandataire : {{ attendance.convocation.deputy.lastname ~ ' ' ~ attendance.convocation.deputy.lastname }} {% endif %}</p>#}
+                {% if convocation.deputy is not null %} <p><b>Mandataire :</b> {{ convocation.deputy }}</p>{% endif %}
 
                 <div class="mt-5">
                     {{ form_start(form)}}
