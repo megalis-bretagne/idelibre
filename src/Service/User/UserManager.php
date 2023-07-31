@@ -48,7 +48,7 @@ class UserManager
 
         $user->setSubscription($this->subscriptionManager->add($user));
 
-        $user->getRole() === Role::NAME_ROLE_DEPUTY ? $user->getAssociatedWith()->setAssociatedWith($user) : $user->getAssociatedWith()->setAssociatedWith(null);
+        $this->hookDeputyToActor($user);
 
         $this->em->persist($user);
         $this->em->flush();
@@ -58,6 +58,13 @@ class UserManager
         }
 
         return true;
+    }
+
+    private function hookDeputyToActor($user)
+    {
+        if ($user->getRole() === Role::NAME_ROLE_DEPUTY) {
+            $user->getAssociatedWith()->setAssociatedWith($user);
+        }
     }
 
     public function editUser(User $user, string $plainPassword = null): bool
