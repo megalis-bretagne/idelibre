@@ -48,7 +48,7 @@ class UserManager
 
         $user->setSubscription($this->subscriptionManager->add($user));
 
-        $user->getRole() === Role::NAME_ROLE_DEPUTY ?: $user->getAssociatedWith()->setAssociatedWith($user);
+        $user->getRole() === Role::NAME_ROLE_DEPUTY ? $user->getAssociatedWith()->setAssociatedWith($user) : $user->getAssociatedWith()->setAssociatedWith(null);
 
         $this->em->persist($user);
         $this->em->flush();
@@ -71,8 +71,6 @@ class UserManager
 
             $user->setPassword($this->passwordHasher->hashPassword($user, $plainPassword));
         }
-
-        $user->getRole() === Role::NAME_ROLE_DEPUTY ?: $user->getAssociatedWith()->setAssociatedWith($user);
 
         $this->em->persist($user);
         $this->em->flush();
