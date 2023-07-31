@@ -60,9 +60,9 @@ class UserManager
         return true;
     }
 
-    private function hookDeputyToActor($user)
+    private function hookDeputyToActor($user): void
     {
-        if ($user->getRole() === Role::NAME_ROLE_DEPUTY) {
+        if ($user->getRole()->getName() === "Deputy") {
             $user->getAssociatedWith()->setAssociatedWith($user);
         }
     }
