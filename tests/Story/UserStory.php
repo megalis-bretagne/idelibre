@@ -4,6 +4,7 @@ namespace App\Tests\Story;
 
 use App\Service\Util\GenderConverter;
 use App\Tests\Factory\UserFactory;
+use Couchbase\User;
 use Zenstruck\Foundry\Story;
 
 final class UserStory extends Story
