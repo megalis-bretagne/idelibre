@@ -366,4 +366,30 @@ class UserControllerTest extends WebTestCase
         $logEvent = $this->getOneEventLog(["targetId" => $users[0]->getId(), "action" => Action::USER_PASSWORD_UPDATED]);
         $this->assertNotEmpty($logEvent);
     }
+
+    public function testEditAdmin()
+    {
+        ConfigurationStory::load();
+        $user = UserStory::adminLibriciel();
+
+        $this->loginAsAdminLibriciel();
+
+        $crawler = $this->client->request(Request::METHOD_GET, '/user/edit/' . $user->getId());
+        $this->assertResponseStatusCodeSame(200);
+        $item = $crawler->filter('html:contains("Modifier un utilisateur")');
+        $this->assertCount(1, $item);
+
+        $form = $crawler->selectButton('Enregistrer')->form();
+
+        $this->client->submit($form);
+
+        $this->assertTrue($this->client->getResponse()->isRedirect());
+
+        $crawler = $this->client->followRedirect();
+        $this->assertResponseStatusCodeSame(200);
+        $successMsg = $crawler->filter('html:contains("Votre utilisateur a bien été modifié")');
+        $this->assertCount(1, $successMsg);
+
+        $user->refresh();
+    }
 }

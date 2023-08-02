@@ -95,7 +95,7 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $initPassword = $form->get('initPassword')->getData();
+            $initPassword = $form->has('initPassword') ? $form->get('initPassword')->getData() : false;
 
             $success = $manageUser->editUser(
                 $form->getData(),

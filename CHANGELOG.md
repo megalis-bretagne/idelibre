@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.2.11] - 2023-08-02
+### Evolution
+- Mise à jour symfony en 6.3.3
+
+### Correction
+- Les utilisateurs possédant un profil Administrateur ne pouvaient plus être modifiés
 
 ## [4.2.10] - 2023-07-18
 ### Correction
