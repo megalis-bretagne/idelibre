@@ -20,7 +20,7 @@ import './js/utils/ajaxListGenerator'
 import './js/utils/showHide'
 import './js/attendance'
 
-
+console.log("beach")
 
 $(document).ready(function () {
     let config = {
