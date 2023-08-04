@@ -1,7 +1,7 @@
 import './vue-app.css';
-
 import Vue from 'vue/dist/vue';
 import axios from 'axios';
+import {ref} from "vue";
 
 
 Vue.filter('formatDateString', function (value, timezone) {
@@ -49,7 +49,8 @@ let app = new Vue({
         },
         convocationIdCurrent: "",
         isInvitation: false,
-        timezone: ""
+        timezone: "",
+        options: ""
     },
 
     computed: {
@@ -194,15 +195,32 @@ let app = new Vue({
             this.showModalAttendance = true;
         },
 
-        changeAttendance(status) {
-            let url = `/user/${getUserId()}list`
-            let input = document.querySelector("#changeAttendanceDeputy")
+        getListing() {
+            let url = `/user/list`
+            let options = ""
+            const select = document.querySelector("#changeAttendanceDeputy")
 
+            this.$nextTick().then(() => {
+                axios.get(`${url}/actors`)
+                    .then( response => {
+                        this.options = response.data
+                        // this.$refs.deputy[ref].innerHTML += this.options
+                        console.log(this.$refs.deputy[ref])
+
+                    })
+                    .catch(error => {
+                        console.log('erreur : ' + error.message)
+                    })
+            })
+
+        },
+
+        changeAttendance(status) {
             if ("deputy" === status.replacement) {
-               getList(url, "actors", input)
+                this.getListing()
             }
             if ("poa" === status.replacement) {
-                getList(url, "deputies", input)
+                this.getListing()
             }
 
             this.changedAttendance.push({
@@ -211,7 +229,6 @@ let app = new Vue({
                 replacement: status.replacement,
                 deputy: status.deputy
             })
-            console.log(this.changedAttendance)
 
         },
 
@@ -256,6 +273,7 @@ let app = new Vue({
         this.getSittingTimezone();
         this.getConvocations();
         this.getSitting();
+        this.getListing();
     }
 });
 

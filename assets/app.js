@@ -18,7 +18,7 @@ import './js/utils/dropdownOptionCleaner'
 import './js/utils/retrieveFromUrl'
 import './js/utils/ajaxListGenerator'
 import './js/utils/showHide'
-import './js/attendance'
+// import './js/attendance'
 
 $(document).ready(function () {
     let config = {
