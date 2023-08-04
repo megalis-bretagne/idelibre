@@ -37,10 +37,4 @@ $(document).ready(function () {
     });
 })
 
-
-
-
-//const getMessage = require('./getMessage');
-//import getMessage from './getMessage'
-//console.log(getMessage(5));
 global.$ = $;

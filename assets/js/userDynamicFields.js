@@ -6,11 +6,8 @@ const isDeputyGroup = document.querySelector("#isDeputyGroup")
 const isDeputyInput = document.querySelector("#user_isDeputy");
 let isDeputyValue = isDeputyInput.value
 
-const mandatorTypeGroup = document.querySelector("#mandatorTypeGroup")
-const mandatorTypeInput = document.querySelector("#user_mandatorType")
-const mandatorTypeValue = mandatorTypeInput.value
-
 const mandatorNameGroup = document.querySelector("#mandatorGroup")
+const mandatorNameLabel = document.querySelector("#mandatorNameLabel")
 const mandatorNameInput = document.querySelector("#user_mandator")
 const mandatorNameValue = mandatorNameInput.value
 
@@ -22,48 +19,36 @@ window.onload = () => {
 
     if (roleActorId === hasRoleValue) {
         show(isDeputyGroup)
-        show(mandatorTypeGroup)
-        hide(mandatorNameGroup)
-        return false;
+        show(mandatorNameGroup)
+        if(isDeputyValue === "1") {
+            getList("actors")
+            return ;
+        }
+        getList("deputies")
+        return ;
     }
 
     if (roleActorId !== hasRoleValue) {
         hide(isDeputyGroup)
         isDeputyInput.removeAttribute("disabled")
         hide(mandatorNameGroup)
-        hide(mandatorTypeGroup)
         return false;
     }
 
-    if (roleActorId === hasRoleValue && '0' === isDeputyValue) {
-        show(mandatorTypeGroup)
-        hide(mandatorNameGroup)
-        return 0;
-    }
-    if(roleActorId === hasRoleValue && '1' === isDeputyValue) {
-        hide(mandatorTypeGroup)
-        show(mandatorNameGroup)
-        return 0;
-    }
 
-    if(roleActorId === hasRoleValue && '0' === isDeputyValue && "null" !== mandatorTypeValue ) {
-        show(mandatorNameGroup)
-        return 0;
-    }
 
 }
 hasRoleInput.onchange = () => {
     let value = hasRoleInput.value
     if(value === roleActorId) {
-        console.log('role actor => show isDeputy and show mandatorType')
+        console.log('role actor => show isDeputy')
         show(isDeputyGroup)
-        show(mandatorTypeGroup)
         show(mandatorNameGroup)
+        getList("deputies")
         return 0;
     }
-    console.log('role pas actor => hide isDeputy and hide mandatorType')
+    console.log('role pas actor => hide isDeputy')
     hide(isDeputyGroup)
-    hide(mandatorTypeGroup)
     isDeputyInput.value = false;
     return 0;
 }
@@ -71,44 +56,22 @@ hasRoleInput.onchange = () => {
 isDeputyInput.onchange = () => {
     let value = isDeputyInput.value;
 
-    if ("0" === value) {
-        console.log("pas suppleant => show mandatorType")
-        show(mandatorTypeGroup)
-        show(mandatorNameGroup)
-    }
-
-    if("1" === value) {
-        console.log('est suppleant => hide mandatorType  show mandatorName')
-        hide(mandatorTypeGroup)
-        show(mandatorNameGroup)
+    if ("1" === value) {
+        // console.log('est suppleant => hide mandatorType  show mandatorName')
+        console.log(mandatorNameLabel.innerHTML)
+        mandatorNameLabel.innerHTML = "<b>Associer un élu <span class='text-danger ml-1'>*</span></b>";
         getList('actors')
+        show(mandatorNameGroup)
+        mandatorNameInput.setAttribute("required", "required")
+        return false;
     }
 
+    console.log("pas suppleant => show mandatorType")
+    mandatorNameLabel.textContent = "Associer un suppléant";
+    getList("deputies")
+    show(mandatorNameGroup)
 }
 
-mandatorTypeInput.onchange = () => {
-    let value = mandatorTypeInput.value;
-    console.log(typeof (value))
-    isDeputyInput.value === "0" ? isDeputyInput.value = false: console.log("false");
-
-    if(null === value){
-        hide(mandatorNameGroup)
-        listCleaner(mandatorNameInput)
-        return 0;
-    }
-
-    if("1" === value) {
-        console.log("list des suppleants")
-        getList("deputies")
-        return 0;
-    }
-
-    if("2" === value) {
-        console.log("list des mandator")
-        getList("actors")
-        return 0;
-    }
-}
 
 
 
@@ -159,4 +122,12 @@ function hide(value) {
 function show(value) {
     value.classList.remove('d-none')
     value.children[1].removeAttribute('disabled')
+}
+
+function replace(input, value, string){
+    if(value === input) {
+        let group = input+'Group';
+        console.log(group)
+        group.child("label").innerHTML = " 000 Associé un " + string
+    }
 }

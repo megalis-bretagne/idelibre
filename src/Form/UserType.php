@@ -111,24 +111,14 @@ class UserType extends AbstractType
                     ],
                 ])
 
-                ->add("mandatorType", ChoiceType::class, [
-                    "label" => "Désigner un mandataire ?",
-                    "row_attr" => ['class' => "d-none", 'id' => 'mandatorTypeGroup'],
-                    "choices" => [
-                        "Non" => null,
-                        "Nomme un suppléant" => "deputy",
-                        "Donne procuration" => "mandator"
-                    ],
-                    "required" => false
-                ])
-
                 ->add('mandator', EntityType::class, [
-                    'label' => 'Nom du mandataire',
+                    'label' => 'Associer un suppléant',
+                    'label_attr' => ["id"=>"mandatorNameLabel"],
                     "row_attr" => ['class' => "d-none", 'id' => 'mandatorGroup'],
                     'required' => false,
                     'class' => User::class,
                     'choice_label' => 'lastname',
-                    'placeholder' => 'Selectionner un élu',
+                    'placeholder' => 'Liste d\'association possible',
                 ])
             ;
         }
@@ -223,6 +213,12 @@ class UserType extends AbstractType
         /** @var User $user */
         $user = $options['data'];
 
+        return $user->getRole()->getId() === $this->roleManager->getActorRole()->getId();
+    }
+
+    public function isActor(array $options): bool
+    {
+        $user = $options['data'];
         return $user->getRole()->getId() === $this->roleManager->getActorRole()->getId();
     }
 
