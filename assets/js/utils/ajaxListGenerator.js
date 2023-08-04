@@ -11,11 +11,11 @@ function ajaxListGeneration(url, value, input) {
 
     function alterContents() {
         if (httpRequest.readyState === XMLHttpRequest.DONE && httpRequest.status === 200) {
+            console.log('plop : ' + httpRequest)
             input.innerHTML += httpRequest.responseText.trim()
-            return false;
-        } else {
-            console.log('Impossible de charger la liste.');
+            return;
         }
+        console.log('Impossible de charger la liste.');
     }
 }
 

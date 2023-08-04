@@ -485,7 +485,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
                 ->setParameter('toExclude', $toExclude);
         }
 
-//        dd($qb);
+//        dd($qb->getQuery()->getResult());
         return $qb;
     }
 

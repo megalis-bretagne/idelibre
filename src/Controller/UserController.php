@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Sitting;
 use App\Entity\User;
+use App\Form\ChooseDeputyType;
 use App\Form\SearchType;
 use App\Form\UserPreferenceType;
 use App\Form\UserType;
@@ -25,6 +27,13 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Breadcrumb(title: 'Utilisateurs', routeName: 'user_index')]
 class UserController extends AbstractController
 {
+    public function __construct(
+        private readonly UserManager $userManager,
+        private readonly UserRepository $userRepository,
+    )
+    {
+    }
+
     #[Route(path: '/user', name: 'user_index')]
     #[IsGranted('ROLE_MANAGE_USERS')]
     public function index(UserRepository $userRepository, PaginatorInterface $paginator, Request $request): Response
@@ -44,6 +53,7 @@ class UserController extends AbstractController
             'users' => $users,
             'formSearch' => $formSearch->createView(),
             'searchTerm' => $request->query->get('search'),
+            'countDeputiesAvalaible' => $this->userManager->countAvailableDeputies($this->getUser()->getStructure())
         ]);
     }
 
@@ -229,4 +239,62 @@ class UserController extends AbstractController
             ]);
         }
     }
+
+
+
+
+    /**  Ajoute un suppléant depuis les icone de coté du user index     */
+    #[Route('/user/{id}/add/deputy/', name: 'user_add_deputy')]
+    #[IsGranted('ROLE_MANAGE_USERS', subject: 'user')]
+    public function addDeputy(User $user, Request $request): Response
+    {
+        $form = $this->createForm(ChooseDeputyType::class, $user, [
+            'structure' => $this->getUser()->getStructure(),
+            'toExcludes' => [$user],
+        ]);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->userManager->addDeputy($form->getData());
+            $this->addFlash('success', 'Le suppléant a été ajouté');
+
+            return $this->redirectToRoute('user_index');
+        }
+
+        return $this->render('user/add_deputy.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/user/{id}/delete/procuration-deputy/', name: 'sitting_procuration_deputy_delete')]
+    #[IsGranted('ROLE_MANAGE_USERS', subject: 'user')]
+    public function removeProcuration(User $user): Response
+    {
+        $this->userManager->removeProcurationOrDeputy($user);
+        $this->addFlash('success', "L'élu associé a été retiré");
+
+        return $this->redirectToRoute('user_index');
+    }
+
+    #[Route('/user/list/deputies', name: 'user_deputies_list', methods: ['GET'])]
+    #[Route('/user/{id}/list/deputies', name: 'user_id_deputies_list', methods: ['GET'])]
+    public function getDeputyList(?User $user): Response
+    {
+        $toExcludes = [];
+        $user ? $toExcludes[] = $user : $toExcludes[] = null;
+        return $this->render('include/user_lists/_available_actors.html.twig', [
+            "availables" => $this->userRepository->findAvailableDeputiesInStructure($this->getUser()->getStructure(), $toExcludes)->getQuery()->getResult(),
+        ]);
+    }
+
+    #[Route('/user/list/actors', name: 'user_actors_list', methods: ['GET'])]
+    #[Route('/user/{id}/list/actors', name: 'user_id_actors_list', methods: ['GET'])]
+    public function getActorsList(?User $user): Response
+    {
+        $toExcludes = [];
+        $user ? $toExcludes[] = $user : $toExcludes[] = null;
+        return $this->render('include/user_lists/_available_actors.html.twig', [
+            "availables" => $this->userRepository->findAvailableActorsInStructure($this->getUser()->getStructure(), $toExcludes)->getQuery()->getResult(),
+        ]);
+    }
+
 }
