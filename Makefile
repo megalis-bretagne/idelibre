@@ -34,3 +34,7 @@ dependency: composer-install npm-install npm-run
 fpm-bash:
 	$(DOCKER) exec -ti fpm-idelibre bash
 
+
+ecs:
+	$(DOCKER_COMPOSE) run --entrypoint="vendor/bin/ecs check --fix" fpm-idelibre
+	$(DOCKER_COMPOSE) run --entrypoint="chown -R 1000:1000 /app/src" fpm-idelibre
