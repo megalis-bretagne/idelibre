@@ -575,15 +575,16 @@
                                     <div class="modal-body">
                                         <table class="table table-striped">
                                             <tbody style="display: block;overflow-y: auto;max-height: 60vh;">
-                                            <tr class="d-flex" v-for="status in attendanceStatus">
+                                            <tr class="d-flex" v-for="(status, index) in attendanceStatus" :key='index'>
 
                                                 <td class="col-3">
-                                                    ${status.firstName} ${status.lastName}
+                                                    <span>${status.firstName} ${status.lastName}</span>
                                                 </td>
 
                                                 <td class="col-3" id="changeAttendancePresenceGroup">
-                                                    <select class="select form-control" id="changeAttendancePresence" v-model="status.attendance"
-                                                            @change="changeAttendance(status)">
+                                                    <select class="select form-control" v-model="status.attendance"
+                                                            @change="changeAttendance(status)"
+                                                    >
                                                         <option value="">Sans Réponse</option>
                                                         <option value="absent">Absent</option>
                                                         <option value="present">Présent</option>
@@ -593,10 +594,12 @@
                                                     </select>
                                                 </td>
 
-                                                <td class="col-3" id="changeAttendanceReplacementGroup">
+                                                <td class="col-3">
                                                     <select :disabled="status.attendance !== 'absent'"
                                                             class="select form-control" v-model="status.replacement"
-                                                            @change="changeAttendance(status)">
+                                                            :ref="status.replacement"
+                                                            @change="changeAttendance(status); getListing(status);"
+                                                    >
                                                         <option value="none">Aucun remplacement</option>
                                                         <option value="deputy">Suppléant</option>
                                                         <option value="poa">Procuration</option>
@@ -606,19 +609,14 @@
 
 
                                                 <td class="col-3">
-{# Steps :
-    - Si le user a un suppleant afficher le supp avec le select disabled
-    - Si le user n'a pas de suppleant afficher la liste des élu du sitting disponible
-#}
-
-
-
-
-                                                    <select :disabled="status.attendance !== 'absent'"
-{#                                                            ref="deputy"#}
-                                                            :ref="'deputy' + status.firstName"
-                                                           class="select form-control" v-model="status.deputy"
-                                                           @change="changeAttendance(status)">
+                                                    {# Steps :
+                                                        - Si le user a un suppleant afficher le supp avec le select disabled
+                                                        - Si le user n'a pas de suppleant afficher la liste des élu du sitting disponible
+                                                    #}
+                                                    <select :disabled="status.replacement === 'none'"
+                                                            class="select form-control" v-model="status.deputy"
+                                                            :ref="status.lastName"
+                                                            @change="changeAttendance(status)">
 
                                                     </select>
                                                 </td>

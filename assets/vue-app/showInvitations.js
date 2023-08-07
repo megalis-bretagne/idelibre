@@ -1,7 +1,6 @@
 import './vue-app.css';
 import Vue from 'vue/dist/vue';
 import axios from 'axios';
-import {ref} from "vue";
 
 
 Vue.filter('formatDateString', function (value, timezone) {
@@ -50,7 +49,8 @@ let app = new Vue({
         convocationIdCurrent: "",
         isInvitation: false,
         timezone: "",
-        options: ""
+        options: "",
+        index: ''
     },
 
     computed: {
@@ -195,40 +195,43 @@ let app = new Vue({
             this.showModalAttendance = true;
         },
 
-        getListing() {
-            let url = `/user/list`
-            let options = ""
-            const select = document.querySelector("#changeAttendanceDeputy")
 
-            this.$nextTick().then(() => {
+        getListing(status) {
+            let url = `/user/list`
+
+            this.$nextTick(() => {
+
+                let ref_replacement = this.$refs[status.replacement]
+                if (ref_replacement[0].value === "none"){
+                    console.log("valuer 1")
+                }
+
+
+
+
                 axios.get(`${url}/actors`)
                     .then( response => {
-                        this.options = response.data
-                        // this.$refs.deputy[ref].innerHTML += this.options
-                        console.log(this.$refs.deputy[ref])
-
+                        this.options = response.data.trim()
+                        let ref_deputy = this.$refs[status.lastName]
+                        if(ref_deputy[0].innerHTML = " ") {
+                            ref_deputy[0].innerHTML += this.options;
+                        }
                     })
                     .catch(error => {
                         console.log('erreur : ' + error.message)
                     })
             })
-
         },
 
         changeAttendance(status) {
-            if ("deputy" === status.replacement) {
-                this.getListing()
-            }
-            if ("poa" === status.replacement) {
-                this.getListing()
-            }
-
             this.changedAttendance.push({
                 convocationId: status.convocationId,
                 attendance: status.attendance,
                 replacement: status.replacement,
                 deputy: status.deputy
             })
+
+            console.log(status.deputy)
 
         },
 
@@ -273,7 +276,7 @@ let app = new Vue({
         this.getSittingTimezone();
         this.getConvocations();
         this.getSitting();
-        this.getListing();
+        this.saveAttendance()
     }
 });
 
