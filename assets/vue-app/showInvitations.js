@@ -243,8 +243,8 @@ let app = new Vue({
             this.showModalMailExample = true;
         },
 
-        getMandatorList(status, value) {
-            let url = `/user/list`
+        getList(status, value) {
+            let url = '/sitting/list'
 
             axios.get(`${url}/${value}`)
                 .then( response => {
@@ -255,23 +255,13 @@ let app = new Vue({
                     }
                 })
                 .catch(error => {
-                    console.log('erreur : ' + error.message)
+                    console.log(`error : ${error.message}`)
                 })
         },
 
-        // getPairActorDeputy()
-        // {
-        //     axios.get('/sitting/list/pair-actorDeputy')
-        //         .then(response => {
-        //             response.data
-        //             // this.pairs= response.data
-        //             console.log(response.data)
-        //         })
-        // },
-
         hydrateDropdowns(status) {
-            let ref_presence = this.$refs['presence-'+status.lastName]
-            let ref_replacement = this.$refs['replacement-'+status.lastName]
+            let ref_presence = this.$refs[`presence-${status.lastName}`]
+            let ref_replacement = this.$refs[`replacement-${status.lastName}`]
 
             if(ref_presence[0].value !== "absent" || ref_replacement === "none") {
                 status.deputy = "";
@@ -282,31 +272,19 @@ let app = new Vue({
         hydrateMandator(status) {
 
             this.$nextTick(() => {
-
-                let ref_presence = this.$refs['presence-'+status.lastName]
-                let ref_replacement = this.$refs['replacement-'+status.lastName]
-                let ref_deputy = this.$refs['deputy-' + status.lastName]
+                let ref_replacement = this.$refs[`replacement-${status.lastName}`]
+                let ref_deputy = this.$refs[`deputy-${status.lastName}`]
 
                 if (ref_replacement[0].value === "deputy") {
-
-                    // this.getPairActorDeputy()
-                    // this.getMandatorList(status, "actors")
-                    console.log("assigner le deputy ou envoyer la liste des elus")
+                    this.getList(status, 'deputies')
                     return;
                 }
 
                 if(ref_replacement[0].value === "poa"){
-                    const value = "all-actors"
-                    this.getMandatorList(status, value)
+                    this.getList(status, "actors")
                     return;
                 }
                 console.log("plop")
-
-               // if(ref_replacement[0].value === "none") {
-               //     console.log("present/sans reponse ou absent non remplacé ")
-               //
-               // }
-
             })
         },
 

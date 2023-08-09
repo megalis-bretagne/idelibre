@@ -519,20 +519,19 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ;
     }
 
-    public function getActiveActorsWithDeputy(Structure $structure): QueryBuilder
+    public function findAvailableDeputiesInStructurePairedWithActor(Structure $structure)
     {
-        $qb = $this->createQueryBuilder('u')
+        return $this->createQueryBuilder('u')
             ->andWhere('u.structure = :structure')
             ->setParameter('structure', $structure)
-            ->leftJoin('u.role', 'r')
-            ->andWhere(' r.name = :actor')
-            ->setParameter('actor', Role::NAME_ROLE_ACTOR)
             ->andWhere('u.isActive = true')
-            ->leftJoin('u.associatedWith', 'associatedWith')
-            ->addSelect('associatedWith')
-            ->andWhere('u.associatedWith IS NOT null')
+            ->join('u.role', 'r' )
+            ->andWhere(' r.name = :deputy')
+            ->setParameter('deputy', Role::NAME_ROLE_DEPUTY)
+            ->orderBy('u.lastName', 'ASC')
+            ->getQuery()
+            ->getResult()
         ;
-//        dd($qb->getQuery()->getResult());
-        return $qb;
     }
+
 }

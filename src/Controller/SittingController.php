@@ -352,12 +352,20 @@ class SittingController extends AbstractController
         return $response;
     }
 
-    #[Route('/sitting/list/pair-actorDeputy', name: 'user_actorDeputy_list', methods: ['GET'])]
-    public function getPairActorDeputy(UserRepository $userRepository): JsonResponse
+    #[Route('/sitting/list/actors', name: 'sitting_actors_list', methods: ['GET'])]
+    public function getAllActorsList(UserRepository $userRepository): Response
     {
-        return $this->json(["pairs" => $userRepository->getActiveActorsWithDeputy($this->getUser()->getStructure())->getQuery()->getResult()]);
-//        return $this->render('include/user_lists/_pair_actorsDeputy.html.twig', [
-//            "pairs" => $this->userRepository->getActiveActorsWithDeputy($this->getUser()->getStructure(), [])->getQuery()->getResult(),
-//        ]);
+        return $this->render('include/user_lists/_available.html.twig', [
+            "availables" => $userRepository->findAvailableActorsInStructure($this->getUser()->getStructure())->getQuery()->getResult(),
+        ]);
     }
+
+    #[Route('/sitting/list/deputies', name: 'sitting_deputies_list', methods: ['GET'])]
+    public function getPairActorDeputy(UserRepository $userRepository): Response
+    {
+        return $this->render('include/user_lists/_available.html.twig', [
+            "availables" => $userRepository->findAvailableDeputiesInStructurePairedWithActor($this->getUser()->getStructure()),
+        ]);
+    }
+
 }

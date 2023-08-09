@@ -292,13 +292,4 @@ class UserController extends AbstractController
             "availables" => $this->userRepository->findAvailableActorsInStructureWithNoAssociation($this->getUser()->getStructure(), [])->getQuery()->getResult(),
         ]);
     }
-
-    #[Route('/user/list/all-actors', name: 'user_allActors_list', methods: ['GET'])]
-    public function getAllActorsList(?User $user): Response
-    {
-        return $this->render('include/user_lists/_available_actors.html.twig', [
-            "availables" => $this->userRepository->findAvailableActorsInStructure($this->getUser()->getStructure(), [])->getQuery()->getResult(),
-        ]);
-    }
-
 }
