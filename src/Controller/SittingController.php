@@ -6,10 +6,9 @@ use App\Entity\Sitting;
 use App\Form\SearchType;
 use App\Form\SittingType;
 use App\Repository\EmailTemplateRepository;
-use App\Repository\LsvoteConnectorRepository;
 use App\Repository\OtherdocRepository;
 use App\Repository\ProjectRepository;
-use App\Service\Connector\Lsvote\LsvoteException;
+use App\Repository\UserRepository;
 use App\Service\Connector\LsvoteConnectorManager;
 use App\Service\Connector\LsvoteResultException;
 use App\Service\EmailTemplate\EmailGenerator;
@@ -17,16 +16,15 @@ use App\Service\File\Generator\FileGenerator;
 use App\Service\File\Generator\UnsupportedExtensionException;
 use App\Service\Pdf\PdfValidator;
 use App\Service\Seance\SittingManager;
-use App\Service\Util\FileUtil;
 use App\Sidebar\Annotation\Sidebar;
 use App\Sidebar\State\SidebarState;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
-use phpDocumentor\Reflection\Types\This;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpClient\Exception\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -352,5 +350,14 @@ class SittingController extends AbstractController
         $response->deleteFileAfterSend();
 
         return $response;
+    }
+
+    #[Route('/sitting/list/pair-actorDeputy', name: 'user_actorDeputy_list', methods: ['GET'])]
+    public function getPairActorDeputy(UserRepository $userRepository): JsonResponse
+    {
+        return $this->json(["pairs" => $userRepository->getActiveActorsWithDeputy($this->getUser()->getStructure())->getQuery()->getResult()]);
+//        return $this->render('include/user_lists/_pair_actorsDeputy.html.twig', [
+//            "pairs" => $this->userRepository->getActiveActorsWithDeputy($this->getUser()->getStructure(), [])->getQuery()->getResult(),
+//        ]);
     }
 }

@@ -485,12 +485,10 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             $qb->andWhere('u NOT IN (:toExclude)')
                 ->setParameter('toExclude', $toExclude);
         }
-
-//        dd($qb->getQuery()->getResult());
         return $qb;
     }
 
-    public function findAvailableActorsInStructure(Structure $structure, ?array $toExclude): QueryBuilder
+    public function findAvailableActorsInStructureWithNoAssociation(Structure $structure, ?array $toExclude): QueryBuilder
     {
         $qb = $this->createQueryBuilder('u')
             ->andWhere('u.structure = :structure')
@@ -505,8 +503,36 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             $qb->andWhere('u NOT IN (:toExclude)')
                 ->setParameter('toExclude', $toExclude);
         }
-//        dd($qb->getQuery()->getResult());
+        return $qb;
+    }
 
+    public function findAvailableActorsInStructure(Structure $structure): QueryBuilder
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.structure = :structure')
+            ->setParameter('structure', $structure)
+            ->leftJoin('u.role', 'r')
+            ->andWhere(' r.name = :actor')
+            ->setParameter('actor', Role::NAME_ROLE_ACTOR)
+            ->andWhere('u.isActive = true')
+            ->orderBy('u.lastName', 'ASC')
+            ;
+    }
+
+    public function getActiveActorsWithDeputy(Structure $structure): QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('u')
+            ->andWhere('u.structure = :structure')
+            ->setParameter('structure', $structure)
+            ->leftJoin('u.role', 'r')
+            ->andWhere(' r.name = :actor')
+            ->setParameter('actor', Role::NAME_ROLE_ACTOR)
+            ->andWhere('u.isActive = true')
+            ->leftJoin('u.associatedWith', 'associatedWith')
+            ->addSelect('associatedWith')
+            ->andWhere('u.associatedWith IS NOT null')
+        ;
+//        dd($qb->getQuery()->getResult());
         return $qb;
     }
 }

@@ -50,7 +50,7 @@ let app = new Vue({
         isInvitation: false,
         timezone: "",
         options: "",
-        index: ''
+        pairs: [],
     },
 
     computed: {
@@ -195,44 +195,16 @@ let app = new Vue({
             this.showModalAttendance = true;
         },
 
-
-        getListing(status) {
-            let url = `/user/list`
-
-            this.$nextTick(() => {
-
-                let ref_replacement = this.$refs[status.replacement]
-                if (ref_replacement[0].value === "none"){
-                    console.log("valuer 1")
-                }
-
-
-
-
-                axios.get(`${url}/actors`)
-                    .then( response => {
-                        this.options = response.data.trim()
-                        let ref_deputy = this.$refs[status.lastName]
-                        if(ref_deputy[0].innerHTML = " ") {
-                            ref_deputy[0].innerHTML += this.options;
-                        }
-                    })
-                    .catch(error => {
-                        console.log('erreur : ' + error.message)
-                    })
-            })
-        },
-
         changeAttendance(status) {
+
+            this.hydrateDropdowns(status)
+
             this.changedAttendance.push({
                 convocationId: status.convocationId,
                 attendance: status.attendance,
                 replacement: status.replacement,
                 deputy: status.deputy
             })
-
-            console.log(status.deputy)
-
         },
 
         saveAttendance() {
@@ -270,7 +242,77 @@ let app = new Vue({
             }
             this.showModalMailExample = true;
         },
+
+        getMandatorList(status, value) {
+            let url = `/user/list`
+
+            axios.get(`${url}/${value}`)
+                .then( response => {
+                    this.options = response.data.trim()
+                    let ref_deputy = this.$refs['deputy-' + status.lastName]
+                    if(ref_deputy[0].innerHTML = " ") {
+                        ref_deputy[0].innerHTML += this.options;
+                    }
+                })
+                .catch(error => {
+                    console.log('erreur : ' + error.message)
+                })
+        },
+
+        // getPairActorDeputy()
+        // {
+        //     axios.get('/sitting/list/pair-actorDeputy')
+        //         .then(response => {
+        //             response.data
+        //             // this.pairs= response.data
+        //             console.log(response.data)
+        //         })
+        // },
+
+        hydrateDropdowns(status) {
+            let ref_presence = this.$refs['presence-'+status.lastName]
+            let ref_replacement = this.$refs['replacement-'+status.lastName]
+
+            if(ref_presence[0].value !== "absent" || ref_replacement === "none") {
+                status.deputy = "";
+            }
+        },
+
+
+        hydrateMandator(status) {
+
+            this.$nextTick(() => {
+
+                let ref_presence = this.$refs['presence-'+status.lastName]
+                let ref_replacement = this.$refs['replacement-'+status.lastName]
+                let ref_deputy = this.$refs['deputy-' + status.lastName]
+
+                if (ref_replacement[0].value === "deputy") {
+
+                    // this.getPairActorDeputy()
+                    // this.getMandatorList(status, "actors")
+                    console.log("assigner le deputy ou envoyer la liste des elus")
+                    return;
+                }
+
+                if(ref_replacement[0].value === "poa"){
+                    const value = "all-actors"
+                    this.getMandatorList(status, value)
+                    return;
+                }
+                console.log("plop")
+
+               // if(ref_replacement[0].value === "none") {
+               //     console.log("present/sans reponse ou absent non remplacé ")
+               //
+               // }
+
+            })
+        },
+
     },
+
+
 
     mounted() {
         this.getSittingTimezone();

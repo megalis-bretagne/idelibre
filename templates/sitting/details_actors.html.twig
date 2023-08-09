@@ -578,12 +578,15 @@
                                             <tr class="d-flex" v-for="(status, index) in attendanceStatus" :key='index'>
 
                                                 <td class="col-3">
-                                                    <span>${status.firstName} ${status.lastName}</span>
+                                                    <span
+                                                    >
+                                                        ${status.firstName} ${status.lastName}</span>
                                                 </td>
 
                                                 <td class="col-3" id="changeAttendancePresenceGroup">
                                                     <select class="select form-control" v-model="status.attendance"
-                                                            @change="changeAttendance(status)"
+                                                            :ref="'presence-'+status.lastName"
+                                                            @change="changeAttendance(status);"
                                                     >
                                                         <option value="">Sans Réponse</option>
                                                         <option value="absent">Absent</option>
@@ -597,8 +600,8 @@
                                                 <td class="col-3">
                                                     <select :disabled="status.attendance !== 'absent'"
                                                             class="select form-control" v-model="status.replacement"
-                                                            :ref="status.replacement"
-                                                            @change="changeAttendance(status); getListing(status);"
+                                                            :ref="'replacement-'+status.lastName" placeholder="Type de remplacement"
+                                                            @change="changeAttendance(status); hydrateMandator(status);"
                                                     >
                                                         <option value="none">Aucun remplacement</option>
                                                         <option value="deputy">Suppléant</option>
@@ -613,10 +616,10 @@
                                                         - Si le user a un suppleant afficher le supp avec le select disabled
                                                         - Si le user n'a pas de suppleant afficher la liste des élu du sitting disponible
                                                     #}
-                                                    <select :disabled="status.replacement === 'none'"
+                                                    <select :disabled="status.attendance !== 'absent' || status.replacement === 'none' "
                                                             class="select form-control" v-model="status.deputy"
-                                                            :ref="status.lastName"
-                                                            @change="changeAttendance(status)">
+                                                            :ref="'deputy-'+status.lastName"
+                                                            @change="changeAttendance(status); hydrateMandator(status)">
 
                                                     </select>
                                                 </td>
@@ -769,5 +772,4 @@
 
 {% block javascripts %}
     {{ encore_entry_script_tags('vue-show-invitations') }}
-    {{ encore_entry_script_tags('editAttendance') }}
 {% endblock %}

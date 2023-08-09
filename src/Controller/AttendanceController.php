@@ -75,7 +75,7 @@ class AttendanceController extends AbstractController
         $user = $attendanceToken->getConvocation()->getUser();
 
         $user ? $toExclude[] = $user : $toExclude = [];
-        $actors = $this->userRepository->findAvailableActorsInStructure($structure, $toExclude)->getQuery()->getResult();
+        $actors = $this->userRepository->findAvailableActorsInStructureWithNoAssociation($structure, $toExclude)->getQuery()->getResult();
 
         return $this->render('include/user_lists/_available_actors.html.twig', [
             "availables" => $actors

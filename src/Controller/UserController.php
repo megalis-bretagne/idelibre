@@ -17,6 +17,7 @@ use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -287,6 +288,14 @@ class UserController extends AbstractController
     {
         $toExcludes = [];
         $user ? $toExcludes[] = $user : $toExcludes[] = null;
+        return $this->render('include/user_lists/_available_actors.html.twig', [
+            "availables" => $this->userRepository->findAvailableActorsInStructureWithNoAssociation($this->getUser()->getStructure(), [])->getQuery()->getResult(),
+        ]);
+    }
+
+    #[Route('/user/list/all-actors', name: 'user_allActors_list', methods: ['GET'])]
+    public function getAllActorsList(?User $user): Response
+    {
         return $this->render('include/user_lists/_available_actors.html.twig', [
             "availables" => $this->userRepository->findAvailableActorsInStructure($this->getUser()->getStructure(), [])->getQuery()->getResult(),
         ]);
