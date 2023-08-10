@@ -519,7 +519,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ;
     }
 
-    public function findAvailableDeputiesInStructurePairedWithActor(Structure $structure)
+    public function getAvailableActorDeputyPair(Structure $structure)
     {
         return $this->createQueryBuilder('u')
             ->andWhere('u.structure = :structure')

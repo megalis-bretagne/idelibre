@@ -361,11 +361,24 @@ class SittingController extends AbstractController
     }
 
     #[Route('/sitting/list/deputies', name: 'sitting_deputies_list', methods: ['GET'])]
-    public function getPairActorDeputy(UserRepository $userRepository): Response
+    public function getDeputiesList(UserRepository $userRepository): Response
     {
         return $this->render('include/user_lists/_available.html.twig', [
-            "availables" => $userRepository->findAvailableDeputiesInStructurePairedWithActor($this->getUser()->getStructure()),
+            "availables" => $userRepository->getAvailableDeputiesInStructurePairedWithActor($this->getUser()->getStructure()),
         ]);
+    }
+
+    #[Route('/sitting/list/pair-actor-deputy', name: 'sitting_actors_deputies_list', methods: ['GET'])]
+    public function getPairActorDeputy(UserRepository $userRepository): Response
+    {
+        $pairs = $userRepository->getAvailableActorDeputyPair($this->getUser()->getStructure());
+//        dd($pairs);
+        return $this->render('include/user_lists/pairs.html.twig', [
+            "pairs" => $pairs
+        ]);
+//        return $this->json([
+//            "pairs" => $userRepository->getAvailableActorDeputyPair($this->getUser()->getStructure())
+//        ]);
     }
 
 }

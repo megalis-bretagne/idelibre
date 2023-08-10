@@ -50,7 +50,7 @@ let app = new Vue({
         isInvitation: false,
         timezone: "",
         options: "",
-        pairs: [],
+        pairs: '',
     },
 
     computed: {
@@ -197,8 +197,6 @@ let app = new Vue({
 
         changeAttendance(status) {
 
-            this.hydrateDropdowns(status)
-
             this.changedAttendance.push({
                 convocationId: status.convocationId,
                 attendance: status.attendance,
@@ -259,24 +257,25 @@ let app = new Vue({
                 })
         },
 
-        hydrateDropdowns(status) {
-            let ref_presence = this.$refs[`presence-${status.lastName}`]
-            let ref_replacement = this.$refs[`replacement-${status.lastName}`]
-
-            if(ref_presence[0].value !== "absent" || ref_replacement === "none") {
-                status.deputy = "";
-            }
-        },
-
-
         hydrateMandator(status) {
 
             this.$nextTick(() => {
                 let ref_replacement = this.$refs[`replacement-${status.lastName}`]
-                let ref_deputy = this.$refs[`deputy-${status.lastName}`]
 
                 if (ref_replacement[0].value === "deputy") {
-                    this.getList(status, 'deputies')
+                    axios.get('https://localhost/sitting/list/pair-actor-deputy')
+                        .then(response => {
+                            let ref_deputy = this.$refs[`deputy-${status.lastName}`]
+                            this.pairs = response.data.trim()
+
+                            ref_deputy[0].innerHtml += this.pairs
+
+                            // if(this.pairs.firstName === status.firstName) {
+                            //     ref_deputy[0].innerHtml += this.pairs
+                            // }
+                            // console.log(this.pairs)
+                        })
+                    // this.getList(status, 'deputies')
                     return;
                 }
 
@@ -284,10 +283,24 @@ let app = new Vue({
                     this.getList(status, "actors")
                     return;
                 }
-                console.log("plop")
+                console.log("aucun remplacement")
             })
         },
 
+        resetDeputyIfNotAbsent(status) {
+            let ref_presence = this.$refs[`presence-${status.lastName}`]
+            if(ref_presence[0].value !== "absent") {
+                status.deputy = ""; // ne doit changet que la select de sa ligne mais change le select de la ligne precedente
+            }
+        },
+
+        resetDeputyNoReplacement(status) {
+            let ref_replacement = this.$refs[`replacement-${status.lastName}`]
+            if(ref_replacement[0].value === "none") {
+                status.deputy = "";
+
+            }
+        },
     },
 
 
