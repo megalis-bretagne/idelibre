@@ -364,7 +364,7 @@ class SittingController extends AbstractController
     public function getDeputiesList(UserRepository $userRepository): Response
     {
         return $this->render('include/user_lists/_actors.html.twig.twig', [
-            "actors" => $userRepository->getAvailableDeputiesInStructurePairedWithActor($this->getUser()->getStructure()),
+            "actors" => $userRepository->getAvailableActorDeputyPair($this->getUser()->getStructure()),
         ]);
     }
 

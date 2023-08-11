@@ -271,7 +271,7 @@ let app = new Vue({
                             console.log(ref_deputy[0])
                             console.log(this.pairs)
 
-                            ref_deputy[0].innerHtml += "bonjour"
+                            ref_deputy[0].insertAdjacentHTML("beforeend", this.pairs);
 
                             // if(this.pairs.firstName === status.firstName) {
                             //     ref_deputy[0].innerHtml += this.pairs
