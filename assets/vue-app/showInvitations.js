@@ -267,6 +267,7 @@ let app = new Vue({
                         .then(response => {
                             let ref_deputy = this.$refs[`deputy-${status.lastName}`]
                             this.pairs = response.data.trim()
+                            console.log("test runner")
 
                             ref_deputy[0].innerHtml += this.pairs
 
