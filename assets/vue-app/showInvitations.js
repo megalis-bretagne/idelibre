@@ -203,6 +203,7 @@ let app = new Vue({
                 replacement: status.replacement,
                 deputy: status.deputy
             })
+            console.log(status.deputy)
         },
 
         saveAttendance() {
@@ -249,7 +250,7 @@ let app = new Vue({
                     this.options = response.data.trim()
                     let ref_deputy = this.$refs['deputy-' + status.lastName]
                     if(ref_deputy[0].innerHTML = " ") {
-                        ref_deputy[0].innerHTML += this.options;
+                        ref_deputy[0].insertAdjacentHTML("beforeend", this.options);
                     }
                 })
                 .catch(error => {
@@ -267,16 +268,17 @@ let app = new Vue({
                         .then(response => {
                             let ref_deputy = this.$refs[`deputy-${status.lastName}`]
                             this.pairs = response.data.trim()
-                            console.log("test runner")
+                            console.log(ref_deputy[0])
+                            console.log(this.pairs)
 
-                            ref_deputy[0].innerHtml += this.pairs
+                            ref_deputy[0].innerHtml += "bonjour"
 
                             // if(this.pairs.firstName === status.firstName) {
                             //     ref_deputy[0].innerHtml += this.pairs
                             // }
                             // console.log(this.pairs)
                         })
-                    // this.getList(status, 'deputies')
+                    this.getList(status, 'deputies')
                     return;
                 }
 
@@ -291,6 +293,7 @@ let app = new Vue({
         resetDeputyIfNotAbsent(status) {
             let ref_presence = this.$refs[`presence-${status.lastName}`]
             if(ref_presence[0].value !== "absent") {
+                console.log("je bouge " + status.lastName )
                 status.deputy = ""; // ne doit changet que la select de sa ligne mais change le select de la ligne precedente
             }
         },
@@ -323,7 +326,7 @@ function formatAttendanceStatus(convocations) {
             firstName: convocation.user.firstName,
             lastName: convocation.user.lastName,
             attendance: convocation.attendance,
-            deputy: convocation.deputy,
+            deputy: convocation.deputy.firstName,
             category: convocation.category,
         })
     }

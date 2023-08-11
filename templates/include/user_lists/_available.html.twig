@@ -1,4 +1,5 @@
 {% block availables %}
+    <option disabled selected>choisir</option>
     {% for available in availables %}
         <option value="{{ available.id }}"> {{ available.firstName}} {{ available.lastName}} </option>
     {% endfor %}

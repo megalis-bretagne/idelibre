@@ -602,6 +602,7 @@
                                                             :ref="'replacement-'+status.lastName"
                                                             @change="resetDeputyNoReplacement(status); hydrateMandator(status);changeAttendance(status);"
                                                     >
+                                                        <option selected disabled>-- Choisir</option>
                                                         <option value="none">Aucun remplacement</option>
                                                         <option value="deputy">Suppléant</option>
                                                         <option value="poa">Procuration</option>

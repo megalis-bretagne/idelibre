@@ -8,6 +8,19 @@ class ConvocationAttendance
     private ?string $deputy;
     private string $convocationId;
 
+    private string $replacement;
+
+    public function getReplacement(): string
+    {
+        return $this->replacement;
+    }
+
+    public function setReplacement(string $replacement): ConvocationAttendance
+    {
+        $this->replacement = $replacement;
+        return $this;
+    }
+
     public function getAttendance(): string
     {
         return $this->attendance;

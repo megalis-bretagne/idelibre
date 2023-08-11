@@ -1,4 +1,7 @@
 {% block pairs %}
-    <option value="{{ pairs[0].id }}">{{ pairs[0].firstname ~ " " ~ pairs[0].lastName }}</option>
+    <option disabled selected> choisir suppléant </option>
+    {% foreach pairs as pair %}
+        <option value="{{ pairs.id }}">{{ pairs.firstname ~ " " ~ pairs.lastName }}</option>
+    {% endfor %}
 {% endblock %}
 
