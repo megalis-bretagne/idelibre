@@ -18,13 +18,13 @@
                 <div class="d-flex">
                     <h1 class="h3 mb-4"> {{ user.firstName }} {{ user.lastName }}
                         {% if not attendance %}
-                            <div class="badge badge-secondary">Présence à définir</div>
+                            <div class="badge bg-secondary">Présence à définir</div>
                         {% elseif attendance == 'absent' %}
-                            <div class="badge badge-danger" id=""> Absent</div>
+                            <div class="badge bg-danger" id=""> Absent</div>
                         {% elseif attendance == 'present' %}
-                            <div class="badge badge-info"> Présent</div>
+                            <div class="badge bg-info"> Présent</div>
                         {% elseif attendance == 'remote' %}
-                            <div class="badge badge-info"> Présent à distance</div>
+                            <div class="badge bg-info"> Présent à distance</div>
                         {% endif %}
                     </h1>
 

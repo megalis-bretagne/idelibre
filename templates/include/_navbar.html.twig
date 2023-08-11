@@ -3,18 +3,18 @@
         <img style="height: 22px; padding-bottom: 2px;" src="{{ asset('assets/img/id-color-white.svg') }}" alt="idelibre" class="img-fluid">
     </a>
 
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <div class="collapse navbar-collapse d-flex justify-content-end" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto"></ul>
         {% if app.user %}
             <ul class="navbar-nav">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                       data-toggle="dropdown"
+                       data-bs-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false">
                         {% if app.user.structure %}
                             {{ app.user.structure.name }} -
