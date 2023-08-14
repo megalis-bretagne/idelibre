@@ -278,7 +278,7 @@ class UserController extends AbstractController
     {
         $toExcludes = [];
         $user ? $toExcludes[] = $user : $toExcludes[] = null;
-        return $this->render('include/user_lists/_available_actors.html.twig', [
+        return $this->render('include/user_lists/_user_available_actors.html.twig', [
             "availables" => $this->userRepository->findAvailableDeputiesInStructure($this->getUser()->getStructure(), [])->getQuery()->getResult(),
         ]);
     }
@@ -288,7 +288,7 @@ class UserController extends AbstractController
     {
         $toExcludes = [];
         $user ? $toExcludes[] = $user : $toExcludes[] = null;
-        return $this->render('include/user_lists/_available_actors.html.twig', [
+        return $this->render('include/user_lists/_user_available_actors.html.twig', [
             "availables" => $this->userRepository->findAvailableActorsInStructureWithNoAssociation($this->getUser()->getStructure(), [])->getQuery()->getResult(),
         ]);
     }

@@ -293,8 +293,7 @@ let app = new Vue({
         resetDeputyIfNotAbsent(status) {
             let ref_presence = this.$refs[`presence-${status.lastName}`]
             if(ref_presence[0].value !== "absent") {
-                console.log("je bouge " + status.lastName )
-                status.deputy = ""; // ne doit changet que la select de sa ligne mais change le select de la ligne precedente
+                status.deputy = "";
             }
         },
 
@@ -302,7 +301,6 @@ let app = new Vue({
             let ref_replacement = this.$refs[`replacement-${status.lastName}`]
             if(ref_replacement[0].value === "none") {
                 status.deputy = "";
-
             }
         },
     },
@@ -326,9 +324,11 @@ function formatAttendanceStatus(convocations) {
             firstName: convocation.user.firstName,
             lastName: convocation.user.lastName,
             attendance: convocation.attendance,
-            deputy: convocation.deputy.firstName,
+            deputy: convocation.deputy,
             category: convocation.category,
         })
+        console.log(convocation);
+
     }
 
     return status;

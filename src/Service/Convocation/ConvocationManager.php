@@ -29,18 +29,18 @@ use Symfony\Component\Messenger\MessageBusInterface;
 class ConvocationManager
 {
     public function __construct(
-        private EntityManagerInterface $em,
-        private ConvocationRepository $convocationRepository,
-        private TimestampManager $timestampManager,
-        private LoggerInterface $logger,
-        private ParameterBagInterface $bag,
-        private EmailServiceInterface $emailService,
-        private EmailGenerator $emailGenerator,
-        private UserRepository $userRepository,
-        private ClientNotifierInterface $clientNotifier,
-        private MessageBusInterface $messageBus,
-        private CalGenerator $icalGenerator,
-        private AttendanceTokenUtil $attendanceTokenUtil,
+        private readonly EntityManagerInterface  $em,
+        private readonly ConvocationRepository   $convocationRepository,
+        private readonly TimestampManager        $timestampManager,
+        private readonly LoggerInterface         $logger,
+        private readonly ParameterBagInterface   $bag,
+        private readonly EmailServiceInterface   $emailService,
+        private readonly EmailGenerator          $emailGenerator,
+        private readonly UserRepository          $userRepository,
+        private readonly ClientNotifierInterface $clientNotifier,
+        private readonly MessageBusInterface     $messageBus,
+        private readonly CalGenerator            $icalGenerator,
+        private readonly AttendanceTokenUtil     $attendanceTokenUtil,
     ) {
     }
 
@@ -99,7 +99,9 @@ class ConvocationManager
             $convocation->setSitting($sitting)
                 ->setUser($user)
                 ->setAttendanceToken($this->attendanceTokenUtil->prepareToken($sitting->getDate()))
-                ->setCategory($this->getConvocationCategory($user));
+                ->setCategory($this->getConvocationCategory($user))
+                ->setDeputy($user->getAssociatedWith() ?: null )
+            ;
             $this->em->persist($convocation);
         }
         $this->em->flush();

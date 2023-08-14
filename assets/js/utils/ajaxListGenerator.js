@@ -10,6 +10,7 @@ function ajaxListGeneration(url, value, input) {
     httpRequest.send();
 
     function alterContents() {
+        console.log(httpRequest.readyState)
         if (httpRequest.readyState === XMLHttpRequest.DONE && httpRequest.status === 200) {
             input.innerHTML += httpRequest.responseText.trim()
             return;

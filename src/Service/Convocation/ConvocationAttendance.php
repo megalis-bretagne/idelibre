@@ -2,10 +2,12 @@
 
 namespace App\Service\Convocation;
 
+use App\Entity\User;
+
 class ConvocationAttendance
 {
     private string $attendance;
-    private ?string $deputy;
+    private ?User $deputy;
     private string $convocationId;
 
     private string $replacement;
@@ -33,12 +35,12 @@ class ConvocationAttendance
         return $this;
     }
 
-    public function getDeputy(): ?string
+    public function getDeputy(): ?User
     {
         return $this->deputy;
     }
 
-    public function setDeputy(?string $deputy): ConvocationAttendance
+    public function setDeputy(?User $deputy): ConvocationAttendance
     {
         $this->deputy = $deputy;
 

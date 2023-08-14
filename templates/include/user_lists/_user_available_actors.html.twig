@@ -1,0 +1,5 @@
+{% block availables %}
+    {% for available in availables %}
+        <option value="{{ available.id }}"> {{ available.firstName}} {{ available.lastName}} </option>
+    {% endfor %}
+{% endblock %}

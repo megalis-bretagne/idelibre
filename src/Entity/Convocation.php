@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToOne;
+use InvalidArgumentException;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -82,12 +83,14 @@ class Convocation
     #[Groups(groups: ['convocation', 'convocation:read'])]
     private $attendance;
 
-    #[Column(type: 'string', length: 255, nullable: true)]
-    #[Groups(groups: ['convocation', 'convocation:read'])]
-    private $deputy;
 
     #[ORM\OneToOne(mappedBy: 'convocation', cascade: ['persist', 'remove'])]
     private ?AttendanceToken $attendanceToken = null;
+
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[Groups(groups: ['convocation', 'convocation:read'])]
+    private ?User $deputy = null;
+
 
     public function __construct()
     {
@@ -215,18 +218,6 @@ class Convocation
         return $this;
     }
 
-    public function getDeputy(): ?string
-    {
-        return $this->deputy;
-    }
-
-    public function setDeputy(?string $deputy): self
-    {
-        $this->deputy = $deputy;
-
-        return $this;
-    }
-
     public function isConvocation(): bool
     {
         return self::CATEGORY_CONVOCATION === $this->category;
@@ -250,6 +241,18 @@ class Convocation
         }
 
         $this->attendanceToken = $attendanceToken;
+
+        return $this;
+    }
+
+    public function getDeputy(): ?User
+    {
+        return $this->deputy;
+    }
+
+    public function setDeputy(?User $deputy): static
+    {
+        $this->deputy = $deputy;
 
         return $this;
     }
