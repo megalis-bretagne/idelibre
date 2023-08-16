@@ -175,17 +175,12 @@ class UserManager
     public function countAvailableDeputies(Structure $structure): bool
     {
         $deputies = $this->userRepository->findAvailableDeputiesInStructure($structure, [])->getQuery()->getResult();
-        $arrayAvailable = [];
-        foreach ($deputies as $deputy) {
-            $deputy->getAssociatedWith() == null ?: $arrayAvailable[] = $deputy;
-        }
-
-        return count($arrayAvailable) > 0;
+        return count($deputies) > 0;
     }
 
     private function hookDeputyToActor($user): void
     {
-        if ($user->getRole()->getName() === "Deputy") {
+        if ($user->getRole()->getName() === "Deputy" && $user->getAssociatedWith() !== null) {
             $user->getAssociatedWith()->setAssociatedWith($user);
         }
     }

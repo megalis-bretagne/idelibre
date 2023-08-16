@@ -250,7 +250,7 @@ class Convocation
         return $this->deputy;
     }
 
-    public function setDeputy(?User $deputy): static
+    public function setDeputy(?User $deputy): self
     {
         $this->deputy = $deputy;
 

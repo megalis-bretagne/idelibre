@@ -113,7 +113,6 @@ class UserType extends AbstractType
                     'required' => false,
                     'class' => User::class,
                     'choice_label' => 'lastname',
-                    'placeholder' => 'Liste d\'association possible',
                 ])
             ;
         }

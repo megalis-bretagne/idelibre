@@ -50,7 +50,7 @@ let app = new Vue({
         isInvitation: false,
         timezone: "",
         options: "",
-        pairs: '',
+        pairs: "",
     },
 
     computed: {
@@ -105,6 +105,9 @@ let app = new Vue({
                 this.actorConvocations = convocations.data['actors'];
                 this.guestConvocations = convocations.data['guests'];
                 this.employeeConvocations = convocations.data['employees'];
+
+                console.log(convocations.data['actors']);
+                console.log(this.actorConvocations)
 
                 this.isAlreadySentActors = isAlreadySentSitting(this.actorConvocations);
                 this.isAlreadySentGuests = isAlreadySentSitting(this.guestConvocations);
@@ -203,7 +206,6 @@ let app = new Vue({
                 replacement: status.replacement,
                 deputy: status.deputy
             })
-            console.log(status.deputy)
         },
 
         saveAttendance() {
@@ -268,9 +270,6 @@ let app = new Vue({
                         .then(response => {
                             let ref_deputy = this.$refs[`deputy-${status.lastName}`]
                             this.pairs = response.data.trim()
-                            console.log(ref_deputy[0])
-                            console.log(this.pairs)
-
                             ref_deputy[0].insertAdjacentHTML("beforeend", this.pairs);
 
                             // if(this.pairs.firstName === status.firstName) {
@@ -315,10 +314,12 @@ let app = new Vue({
     }
 });
 
+
 function formatAttendanceStatus(convocations) {
     let status = []
     for (let i = 0; i < convocations.length; i++) {
         let convocation = convocations[i];
+        console.log(convocation)
         status.push({
             convocationId: convocation.id,
             firstName: convocation.user.firstName,
@@ -327,10 +328,7 @@ function formatAttendanceStatus(convocations) {
             deputy: convocation.deputy,
             category: convocation.category,
         })
-        console.log(convocation);
-
     }
-
     return status;
 }
 

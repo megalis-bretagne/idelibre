@@ -6,11 +6,10 @@ use App\Entity\User;
 
 class ConvocationAttendance
 {
-    private string $attendance;
-    private ?User $deputy;
     private string $convocationId;
-
+    private string $attendance;
     private string $replacement;
+    private ?User $deputy;
 
     public function getReplacement(): string
     {

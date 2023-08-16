@@ -64,6 +64,7 @@ class ConvocationManager
 
     /**
      * @param User[] $associatedUsers
+     * @throws Exception
      */
     private function createConvocations(Sitting $sitting, array $associatedUsers): void
     {
@@ -72,7 +73,9 @@ class ConvocationManager
             $convocation->setSitting($sitting)
                 ->setUser($user)
                 ->setCategory($this->getConvocationCategory($user))
-                ->setAttendanceToken($this->attendanceTokenUtil->prepareToken($sitting->getDate()));
+                ->setAttendanceToken($this->attendanceTokenUtil->prepareToken($sitting->getDate()))
+                ->setDeputy($user->getAssociatedWith() ?: null)
+            ;
             $this->em->persist($convocation);
         }
     }
@@ -330,7 +333,7 @@ class ConvocationManager
             }
             // TODO check si le remote est autorisé
             $convocation->setAttendance($convocationAttendance->getAttendance());
-            $convocation->setDeputy($convocationAttendance->getDeputy());
+            $convocation->setDeputy($convocationAttendance->getDeputy()?:null);
             $this->em->persist($convocation);
         }
         $this->em->flush();
