@@ -1,0 +1,16 @@
+{% block actors %}
+
+    <optgroup  label="Suppléant affectés">
+    {% for actorDeputy in actorsDeputies %}
+        <option title="Elu titulaire : {{ actorDeputy.firstName ~ ' ' ~ actorDeputy.lastName}}"
+                value="{{ actorDeputy.associatedWith.id }}"
+                data-user="titular-{{ actorDeputy.associatedWith.firstName ~ actorDeputy.associatedWith.lastName}}"> {{ actorDeputy.associatedWith.firstName ~ ' ' ~ actorDeputy.associatedWith.lastName}} </option>
+    {% endfor %}
+    </optgroup>
+
+    <optgroup label="Suppléants disponibles">
+    {% for deputy in deputies %}
+        <option value="{{ deputy.id }}" data-user="{{ deputy.firstName}} {{ deputy.lastName}}"> {{ deputy.firstName}} {{ deputy.lastName}} </option>
+    {% endfor %}
+    </optgroup>
+{% endblock %}

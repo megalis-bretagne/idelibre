@@ -1,6 +1,5 @@
 window.getUserId = () => {
     const voterId = window.location.pathname.split('/')[3];
-
     return voterId ? voterId + '/' : '';
 }
 

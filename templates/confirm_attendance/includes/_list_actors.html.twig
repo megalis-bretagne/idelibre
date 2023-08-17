@@ -1,5 +1,4 @@
 {% block availables %}
-    <option value="">Ne pas associer titulaire</option>
     {% for available in availables %}
         <option value="{{ available.id }}"> {{ available.firstName}} {{ available.lastName}} </option>
     {% endfor %}

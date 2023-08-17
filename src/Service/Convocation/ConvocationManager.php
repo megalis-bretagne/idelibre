@@ -74,7 +74,7 @@ class ConvocationManager
                 ->setUser($user)
                 ->setCategory($this->getConvocationCategory($user))
                 ->setAttendanceToken($this->attendanceTokenUtil->prepareToken($sitting->getDate()))
-                ->setDeputy($user->getAssociatedWith() ?: null)
+                ->setDeputy(null)
             ;
             $this->em->persist($convocation);
         }
@@ -328,6 +328,7 @@ class ConvocationManager
     {
         foreach ($convocationAttendances as $convocationAttendance) {
             $convocation = $this->convocationRepository->find($convocationAttendance->getConvocationId());
+
             if (!$convocation) {
                 throw new NotFoundHttpException("Convocation with id ${convocationAttendance['convocationId']} does not exists");
             }

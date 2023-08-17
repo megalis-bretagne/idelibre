@@ -50,7 +50,6 @@ let app = new Vue({
         isInvitation: false,
         timezone: "",
         options: "",
-        pairs: "",
     },
 
     computed: {
@@ -68,7 +67,6 @@ let app = new Vue({
     },
 
     methods: {
-
         sendConvocation(convocationId) {
 
             axios.post(`/api/convocations/${convocationId}/send`).then(response => {
@@ -105,9 +103,6 @@ let app = new Vue({
                 this.actorConvocations = convocations.data['actors'];
                 this.guestConvocations = convocations.data['guests'];
                 this.employeeConvocations = convocations.data['employees'];
-
-                console.log(convocations.data['actors']);
-                console.log(this.actorConvocations)
 
                 this.isAlreadySentActors = isAlreadySentSitting(this.actorConvocations);
                 this.isAlreadySentGuests = isAlreadySentSitting(this.guestConvocations);
@@ -199,22 +194,22 @@ let app = new Vue({
         },
 
         changeAttendance(status) {
-
             this.changedAttendance.push({
                 convocationId: status.convocationId,
                 attendance: status.attendance,
                 replacement: status.replacement,
-                deputy: status.deputy
+                deputy: status.deputy,
             })
         },
 
         saveAttendance() {
             axios.post(`/api/convocations/attendance`, this.changedAttendance).then(
                 (response) => {
+                    console.log("je passe dans le post")
                     this.getConvocations()
                 })
                 .catch((e) => {
-                    console.log(e);
+                    console.log("erreur : " + e);
                     this.setErrorMessage("Erreur lors de l'enregistrement des présences")
 
                 })
@@ -249,7 +244,7 @@ let app = new Vue({
 
             axios.get(`${url}/${value}`)
                 .then( response => {
-                    this.options = response.data.trim()
+                    this.options = response.data
                     let ref_deputy = this.$refs['deputy-' + status.lastName]
                     if(ref_deputy[0].innerHTML = " ") {
                         ref_deputy[0].insertAdjacentHTML("beforeend", this.options);
@@ -266,17 +261,6 @@ let app = new Vue({
                 let ref_replacement = this.$refs[`replacement-${status.lastName}`]
 
                 if (ref_replacement[0].value === "deputy") {
-                    axios.get('https://localhost/sitting/list/pair-actor-deputy')
-                        .then(response => {
-                            let ref_deputy = this.$refs[`deputy-${status.lastName}`]
-                            this.pairs = response.data.trim()
-                            ref_deputy[0].insertAdjacentHTML("beforeend", this.pairs);
-
-                            // if(this.pairs.firstName === status.firstName) {
-                            //     ref_deputy[0].innerHtml += this.pairs
-                            // }
-                            // console.log(this.pairs)
-                        })
                     this.getList(status, 'deputies')
                     return;
                 }
@@ -302,6 +286,7 @@ let app = new Vue({
                 status.deputy = "";
             }
         },
+
     },
 
 
@@ -310,7 +295,9 @@ let app = new Vue({
         this.getSittingTimezone();
         this.getConvocations();
         this.getSitting();
+        this.changeAttendance(this.status)
         this.saveAttendance()
+
     }
 });
 
@@ -319,7 +306,6 @@ function formatAttendanceStatus(convocations) {
     let status = []
     for (let i = 0; i < convocations.length; i++) {
         let convocation = convocations[i];
-        console.log(convocation)
         status.push({
             convocationId: convocation.id,
             firstName: convocation.user.firstName,
@@ -328,6 +314,7 @@ function formatAttendanceStatus(convocations) {
             deputy: convocation.deputy,
             category: convocation.category,
         })
+        console.log(status)
     }
     return status;
 }
@@ -373,3 +360,5 @@ function filter(convocations, search) {
         convocation.user.username.toLowerCase().includes(filterLowerCase)
     )
 }
+
+

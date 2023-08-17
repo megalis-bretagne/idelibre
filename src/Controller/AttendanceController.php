@@ -31,14 +31,18 @@ class AttendanceController extends AbstractController
             'convocation' => $attendanceToken->getConvocation(),
         ]);
 
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() ) {
 
             $convocationAttendance = (new ConvocationAttendance())
                 ->setAttendance($form->get('attendance')->getData())
-                ->setDeputy($form->get('deputy')->getData() !== null ? $form->get('deputy')->getData()->getFirstName() .  " " . $form->get('deputy')->getData()->getLastName() : null)
+                ->setReplacement($form->get('replacement')->getData())
+                ->setDeputy($form->get('deputy')->getData())
                 ->setConvocationId($attendanceToken->getConvocation()->getId());
+
+            dd($convocationAttendance);
 
             $this->convocationManager->updateConvocationAttendances([$convocationAttendance]);
 
@@ -77,7 +81,7 @@ class AttendanceController extends AbstractController
         $user ? $toExclude[] = $user : $toExclude = [];
         $actors = $this->userRepository->findAvailableActorsInStructureWithNoAssociation($structure, $toExclude)->getQuery()->getResult();
 
-        return $this->render('include/user_lists/_available_actors.html.twig', [
+        return $this->render('confirm_attendance/includes/_list_actors.html.twig', [
             "availables" => $actors
         ]);
     }
@@ -91,7 +95,7 @@ class AttendanceController extends AbstractController
         $user ? $toExclude[] = $user : $toExclude = [];
         $deputies = $this->userRepository->findAvailableDeputiesInStructure($structure, $toExclude)->getQuery()->getResult();
 
-        return $this->render('include/user_lists/_available_actors.html.twig', [
+        return $this->render('confirm_attendance/includes/_list_actors.html.twig', [
             "availables" => $deputies
         ]);
     }

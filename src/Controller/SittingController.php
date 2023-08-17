@@ -355,7 +355,7 @@ class SittingController extends AbstractController
     #[Route('/sitting/list/actors', name: 'sitting_actors_list', methods: ['GET'])]
     public function getAllActorsList(UserRepository $userRepository): Response
     {
-        return $this->render('include/user_lists/_actors.html.twig.twig', [
+        return $this->render('sitting/includes/_list_actors.html.twig', [
             "actors" => $userRepository->findAvailableActorsInStructure($this->getUser()->getStructure())->getQuery()->getResult(),
         ]);
     }
@@ -363,22 +363,19 @@ class SittingController extends AbstractController
     #[Route('/sitting/list/deputies', name: 'sitting_deputies_list', methods: ['GET'])]
     public function getDeputiesList(UserRepository $userRepository): Response
     {
-        return $this->render('include/user_lists/_actors.html.twig.twig', [
-            "actors" => $userRepository->getAvailableActorDeputyPair($this->getUser()->getStructure()),
+
+        return $this->render('sitting/includes/_list_deputies.html.twig', [
+            "deputies" => $userRepository->findAvailableDeputiesInStructureWithNoAssociation($this->getUser()->getStructure()),
+            "actorsDeputies" => $userRepository->findActorsAndTheirDeputiesInStructure($this->getUser()->getStructure()),
         ]);
     }
 
-    #[Route('/sitting/list/pair-actor-deputy', name: 'sitting_actors_deputies_list', methods: ['GET'])]
-    public function getPairActorDeputy(UserRepository $userRepository): Response
+    #[Route('/sitting/json/list/deputy', name: 'sitting_json_actors_list', methods: ['GET'])]
+    public function getJsonDeputyList(UserRepository $userRepository): Response
     {
-        $pairs = $userRepository->getAvailableActorDeputyPair($this->getUser()->getStructure());
-//        dd($pairs);
-        return $this->render('include/user_lists/pairs.html.twig', [
-            "pairs" => $pairs
-        ]);
-//        return $this->json([
-//            "pairs" => $userRepository->getAvailableActorDeputyPair($this->getUser()->getStructure())
-//        ]);
+        return $this->json(["actorDeputy" => $userRepository->findActorsAndTheirDeputiesInStructure($this->getUser()->getStructure())]);
     }
+
+
 
 }

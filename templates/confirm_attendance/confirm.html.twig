@@ -32,7 +32,7 @@
                 </div>
                 <p><b>Séance : </b> {{ sitting.name }}</p>
                 <p><b>Date de la séance : </b> {{ sitting.date | date('d/m/y : H:i', timezone) }}</p>
-                {% if convocation.deputy is not null %} <p><b>Mandataire :</b> {{ convocation.deputy }}</p>{% endif %}
+                {% if convocation.deputy is not null %} <p><b>Mandataire :</b> {{ convocation.deputy.firstName ~ " " ~ convocation.deputy.lastName }}</p>{% endif %}
 
                 <div class="mt-5">
                     {{ form_start(form)}}
@@ -53,5 +53,6 @@
     {% block javascripts %}
         {{ encore_entry_script_tags('attendance') }}
     {% endblock %}
+
 
 {% endblock %}

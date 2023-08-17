@@ -190,8 +190,7 @@
                         </td>
 
                         <td class="col-3 {{ classToChange }}">
-                            <pre>${ convocation.deputy.firstName }</pre>
-                            <span v-if="convocation.deputy"> ${convocation.deputy.firstName}</span>
+                            <span v-if="convocation.deputy"> ${convocation.deputy.firstName} ${convocation.deputy.lastName}</span>
                         </td>
                     </tr>
                     </tbody>
@@ -579,7 +578,7 @@
                                             <tr class="d-flex" v-for="status in attendanceStatus">
 
                                                 <td class="col-3">
-                                                    <span>
+                                                    <span :ref="status.firstName + ' ' + status.lastName">
                                                         ${status.firstName} ${status.lastName}</span>
                                                 </td>
 
@@ -603,7 +602,6 @@
                                                             :ref="'replacement-'+status.lastName"
                                                             @change="resetDeputyNoReplacement(status); hydrateMandator(status);changeAttendance(status);"
                                                     >
-                                                        <option selected disabled>-- Choisir</option>
                                                         <option value="none">Aucun remplacement</option>
                                                         <option value="deputy">Suppléant</option>
                                                         <option value="poa">Procuration</option>

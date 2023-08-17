@@ -54,6 +54,7 @@ class ConvocationController extends AbstractController
     {
         $convocationAttendances = $denormalizer->denormalize($request->toArray(), ConvocationAttendance::class . '[]');
         $convocationManager->updateConvocationAttendances($convocationAttendances);
+        dd("ici");
 
         return $this->json(['success' => 'true']);
     }

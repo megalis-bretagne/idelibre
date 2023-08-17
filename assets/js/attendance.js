@@ -5,7 +5,14 @@ const deputyGroup = document.querySelector('#deputyGroup');
 const deputyInput = document.querySelector('#attendance_deputy')
 const deputy = document.querySelector("h1").dataset.deputy
 const deputyId = document.querySelector("h1").dataset.deputy_id
+
+getToken = () => {
+    const token = window.location.pathname.split("/")[3]
+    return token ? token + '/' : '';
+}
 let url = `/attendance/${getToken()}list`
+
+
 
 window.onload = () => {
     let attendanceValue = attendanceInput.value ? attendanceInput.value : null;
@@ -39,6 +46,11 @@ window.onload = () => {
         show(deputyGroup)
         deputyInput.innerHTML += getList(url, "actors", deputyInput)
         return;
+    }
+
+    if ("present" === value) {
+        hide(replacementTypeGroup)
+        hide(deputyGroup)
     }
 
     hide(replacementTypeGroup)
@@ -83,6 +95,7 @@ replacementTypeInput.onchange = () => {
 
     hide(deputyGroup)
 }
+
 
 
 
