@@ -103,7 +103,7 @@ class ConvocationManager
                 ->setUser($user)
                 ->setAttendanceToken($this->attendanceTokenUtil->prepareToken($sitting->getDate()))
                 ->setCategory($this->getConvocationCategory($user))
-                ->setDeputy($user->getAssociatedWith() ?: null )
+                ->setDeputy(null )
             ;
             $this->em->persist($convocation);
         }
@@ -334,8 +334,9 @@ class ConvocationManager
             }
             // TODO check si le remote est autorisé
             $convocation->setAttendance($convocationAttendance->getAttendance());
-            $convocation->setDeputy($convocationAttendance->getDeputy()?:null);
+            $convocation->setDeputy($convocationAttendance->getDeputy());
             $this->em->persist($convocation);
+            dd($convocation->getUser()->getLastName(), $convocation->getDeputy()->getLastName());
         }
         $this->em->flush();
     }

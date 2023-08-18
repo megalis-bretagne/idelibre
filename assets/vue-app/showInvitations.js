@@ -104,6 +104,8 @@ let app = new Vue({
                 this.guestConvocations = convocations.data['guests'];
                 this.employeeConvocations = convocations.data['employees'];
 
+                console.log(this.actorConvocations[0]["deputy"]["lastName"]);
+
                 this.isAlreadySentActors = isAlreadySentSitting(this.actorConvocations);
                 this.isAlreadySentGuests = isAlreadySentSitting(this.guestConvocations);
                 this.isAlreadySentEmployees = isAlreadySentSitting(this.employeeConvocations);
@@ -205,7 +207,6 @@ let app = new Vue({
         saveAttendance() {
             axios.post(`/api/convocations/attendance`, this.changedAttendance).then(
                 (response) => {
-                    console.log("je passe dans le post")
                     this.getConvocations()
                 })
                 .catch((e) => {
@@ -240,14 +241,13 @@ let app = new Vue({
         },
 
         getList(status, value) {
-            let url = '/sitting/list'
 
-            axios.get(`${url}/${value}`)
+            axios.get(`/sitting/${getSittingId()}/list/${value}`)
                 .then( response => {
                     this.options = response.data
                     let ref_deputy = this.$refs['deputy-' + status.lastName]
                     if(ref_deputy[0].innerHTML = " ") {
-                        ref_deputy[0].insertAdjacentHTML("beforeend", this.options);
+                        ref_deputy[0].innerHTML += this.options;
                     }
                 })
                 .catch(error => {
@@ -295,7 +295,7 @@ let app = new Vue({
         this.getSittingTimezone();
         this.getConvocations();
         this.getSitting();
-        this.changeAttendance(this.status)
+        // this.changeAttendance(this.status)
         this.saveAttendance()
 
     }
@@ -314,7 +314,6 @@ function formatAttendanceStatus(convocations) {
             deputy: convocation.deputy,
             category: convocation.category,
         })
-        console.log(status)
     }
     return status;
 }

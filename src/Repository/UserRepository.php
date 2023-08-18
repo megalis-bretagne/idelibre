@@ -466,53 +466,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->execute();
     }
 
-    public function findAvailableActorsInStructureWithNoAssociation(Structure $structure, ?array $toExclude): QueryBuilder
-    {
-        $qb = $this->createQueryBuilder('u')
-            ->andWhere('u.structure = :structure')
-            ->setParameter('structure', $structure)
-            ->leftJoin('u.role', 'r')
-            ->andWhere(' r.name = :actor')
-            ->setParameter('actor', Role::NAME_ROLE_ACTOR)
-            ->andWhere('u.isActive = true')
-            ->andWhere('u.associatedWith IS null' )
-            ;
-        if($toExclude) {
-            $qb->andWhere('u NOT IN (:toExclude)')
-                ->setParameter('toExclude', $toExclude);
-        }
-        return $qb;
-    }
-
-    public function findAvailableDeputiesInStructureWithNoAssociation(Structure $structure)
-    {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.structure = :structure')
-            ->setParameter('structure', $structure)
-            ->leftJoin('u.role', 'r')
-            ->andWhere(' r.name = :actor')
-            ->setParameter('actor', Role::NAME_ROLE_DEPUTY)
-            ->andWhere('u.isActive = true')
-            ->andWhere('u.associatedWith IS null' )
-            ->getQuery()
-            ->getResult();
-    }
-
-    public function findActorsAndTheirDeputiesInStructure(Structure $structure)
-    {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.structure = :structure')
-            ->setParameter('structure', $structure)
-            ->leftJoin('u.role', 'r')
-            ->andWhere(' r.name = :actor')
-            ->setParameter('actor', Role::NAME_ROLE_ACTOR)
-            ->andWhere('u.isActive = true')
-            ->andWhere('u.associatedWith IS NOT null' )
-            ->getQuery()
-            ->getResult();
-    }
-
-    public function findAvailableActorsInStructure(Structure $structure): QueryBuilder
+    public function findActorsInStructure(Structure $structure): QueryBuilder
     {
         return $this->createQueryBuilder('u')
             ->andWhere('u.structure = :structure')
@@ -525,7 +479,25 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ;
     }
 
-    public function findAvailableDeputiesInStructure(Structure $structure, ?array $toExclude): QueryBuilder
+    public function findActorsWithNoAssociation(Structure $structure, ?array $toExclude): QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('u')
+            ->andWhere('u.structure = :structure')
+            ->setParameter('structure', $structure)
+            ->leftJoin('u.role', 'r')
+            ->andWhere(' r.name = :actor')
+            ->setParameter('actor', Role::NAME_ROLE_ACTOR)
+            ->andWhere('u.isActive = true')
+            ->andWhere('u.associatedWith IS null' )
+        ;
+        if($toExclude) {
+            $qb->andWhere('u NOT IN (:toExclude)')
+                ->setParameter('toExclude', $toExclude);
+        }
+        return $qb;
+    }
+
+    public function findDeputiesWithNoAssociation(Structure $structure, ?array $toExclude): QueryBuilder
     {
         $qb = $this->createQueryBuilder('u')
             ->andWhere('u.structure = :structure')
@@ -542,6 +514,22 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
                 ->setParameter('toExclude', $toExclude);
         }
         return $qb;
+    }
+
+    public function findDeputiesWithAssociation(Structure $structure): array
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.structure = :structure')
+            ->setParameter('structure', $structure)
+            ->andWhere('u.isActive = true')
+            ->join('u.role', 'r' )
+            ->andWhere(' r.name = :deputy')
+            ->setParameter('deputy', Role::NAME_ROLE_ACTOR)
+            ->andWhere('u.associatedWith IS NOT NULL')
+            ->orderBy('u.lastName', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
     }
 
 

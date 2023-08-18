@@ -174,7 +174,7 @@ class UserManager
 
     public function countAvailableDeputies(Structure $structure): bool
     {
-        $deputies = $this->userRepository->findAvailableDeputiesInStructure($structure, [])->getQuery()->getResult();
+        $deputies = $this->userRepository->findDeputiesWithNoAssociation($structure, [])->getQuery()->getResult();
         return count($deputies) > 0;
     }
 

@@ -79,7 +79,7 @@ class AttendanceController extends AbstractController
         $user = $attendanceToken->getConvocation()->getUser();
 
         $user ? $toExclude[] = $user : $toExclude = [];
-        $actors = $this->userRepository->findAvailableActorsInStructureWithNoAssociation($structure, $toExclude)->getQuery()->getResult();
+        $actors = $this->userRepository->findActorsWithNoAssociation($structure, $toExclude)->getQuery()->getResult();
 
         return $this->render('confirm_attendance/includes/_list_actors.html.twig', [
             "availables" => $actors
@@ -93,7 +93,7 @@ class AttendanceController extends AbstractController
         $user = $attendanceToken->getConvocation()->getUser();
 
         $user ? $toExclude[] = $user : $toExclude = [];
-        $deputies = $this->userRepository->findAvailableDeputiesInStructure($structure, $toExclude)->getQuery()->getResult();
+        $deputies = $this->userRepository->findDeputiesWithNoAssociation($structure, $toExclude)->getQuery()->getResult();
 
         return $this->render('confirm_attendance/includes/_list_actors.html.twig', [
             "availables" => $deputies

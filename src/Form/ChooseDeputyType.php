@@ -26,7 +26,7 @@ class ChooseDeputyType extends AbstractType
                 'label' => 'Suppléant',
                 'class' => User::class,
                 'choice_label' => 'lastname',
-                'query_builder' => $this->userRepository->findAvailableDeputiesInStructure(
+                'query_builder' => $this->userRepository->findDeputiesWithNoAssociation(
                     $options['structure'],
                     $options['toExcludes']
                 ),

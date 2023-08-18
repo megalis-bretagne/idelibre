@@ -352,30 +352,20 @@ class SittingController extends AbstractController
         return $response;
     }
 
-    #[Route('/sitting/list/actors', name: 'sitting_actors_list', methods: ['GET'])]
+    #[Route('/sitting/{id}/list/actors', name: 'sitting_actors_list', methods: ['GET'])]
     public function getAllActorsList(UserRepository $userRepository): Response
     {
         return $this->render('sitting/includes/_list_actors.html.twig', [
-            "actors" => $userRepository->findAvailableActorsInStructure($this->getUser()->getStructure())->getQuery()->getResult(),
+            "actors" => $userRepository->findActorsInStructure($this->getUser()->getStructure())->getQuery()->getResult(),
         ]);
     }
 
-    #[Route('/sitting/list/deputies', name: 'sitting_deputies_list', methods: ['GET'])]
+    #[Route('/sitting/{id}/list/deputies', name: 'sitting_deputies_list', methods: ['GET'])]
     public function getDeputiesList(UserRepository $userRepository): Response
     {
-
         return $this->render('sitting/includes/_list_deputies.html.twig', [
-            "deputies" => $userRepository->findAvailableDeputiesInStructureWithNoAssociation($this->getUser()->getStructure()),
-            "actorsDeputies" => $userRepository->findActorsAndTheirDeputiesInStructure($this->getUser()->getStructure()),
+            "deputies" => $userRepository->findDeputiesWithNoAssociation($this->getUser()->getStructure(), [])->getQuery()->getResult(),
+            "actorsDeputies" => $userRepository->findDeputiesWithAssociation($this->getUser()->getStructure()),
         ]);
     }
-
-    #[Route('/sitting/json/list/deputy', name: 'sitting_json_actors_list', methods: ['GET'])]
-    public function getJsonDeputyList(UserRepository $userRepository): Response
-    {
-        return $this->json(["actorDeputy" => $userRepository->findActorsAndTheirDeputiesInStructure($this->getUser()->getStructure())]);
-    }
-
-
-
 }

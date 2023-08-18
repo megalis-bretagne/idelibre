@@ -1,5 +1,5 @@
 {% block actors %}
-
+    <option disabled selected></option>
     <optgroup  label="Suppléant affectés">
     {% for actorDeputy in actorsDeputies %}
         <option title="Elu titulaire : {{ actorDeputy.firstName ~ ' ' ~ actorDeputy.lastName}}"
