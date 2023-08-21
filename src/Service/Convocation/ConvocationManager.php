@@ -103,7 +103,7 @@ class ConvocationManager
                 ->setUser($user)
                 ->setAttendanceToken($this->attendanceTokenUtil->prepareToken($sitting->getDate()))
                 ->setCategory($this->getConvocationCategory($user))
-                ->setDeputy(null )
+                ->setDeputy(null)
             ;
             $this->em->persist($convocation);
         }
@@ -336,7 +336,6 @@ class ConvocationManager
             $convocation->setAttendance($convocationAttendance->getAttendance());
             $convocation->setDeputy($convocationAttendance->getDeputy());
             $this->em->persist($convocation);
-            dd($convocation->getUser()->getLastName(), $convocation->getDeputy()->getLastName());
         }
         $this->em->flush();
     }

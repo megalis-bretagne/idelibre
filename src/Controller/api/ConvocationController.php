@@ -53,7 +53,7 @@ class ConvocationController extends AbstractController
     public function setAttendance(ConvocationManager $convocationManager, Request $request, DenormalizerInterface $denormalizer): JsonResponse
     {
         $convocationAttendances = $denormalizer->denormalize($request->toArray(), ConvocationAttendance::class . '[]');
-//        dd($convocationAttendances);
+        //        dd($convocationAttendances);
         $convocationManager->updateConvocationAttendances($convocationAttendances);
 
         return $this->json(['success' => 'true']);

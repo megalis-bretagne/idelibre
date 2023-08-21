@@ -108,7 +108,7 @@ class UserType extends AbstractType
             $builder
                 ->add('associatedWith', EntityType::class, [
                     'label' => 'Associer un suppléant',
-                    'label_attr' => ["id"=>"mandatorNameLabel"],
+                    'label_attr' => ["id" => "mandatorNameLabel"],
                     "row_attr" => ['class' => "d-none", 'id' => 'mandatorGroup'],
                     'required' => false,
                     'class' => User::class,

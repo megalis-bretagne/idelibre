@@ -3,20 +3,21 @@
 namespace App\Service\Convocation;
 
 use App\Entity\User;
+use Doctrine\ORM\Mapping\Column;
 
 class ConvocationAttendance
 {
     private string $convocationId;
-    private string $attendance;
-    private string $replacement;
+    private ?string $attendance;
+    private ?string $replacement = null;
     private ?User $deputy;
 
-    public function getReplacement(): string
+    public function getReplacement(): ?string
     {
         return $this->replacement;
     }
 
-    public function setReplacement(string $replacement): ConvocationAttendance
+    public function setReplacement(?string $replacement): ConvocationAttendance
     {
         $this->replacement = $replacement;
         return $this;
@@ -27,7 +28,7 @@ class ConvocationAttendance
         return $this->attendance;
     }
 
-    public function setAttendance(string $attendance): ConvocationAttendance
+    public function setAttendance(?string $attendance): ConvocationAttendance
     {
         $this->attendance = $attendance;
 

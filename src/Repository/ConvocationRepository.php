@@ -65,7 +65,7 @@ class ConvocationRepository extends ServiceEntityRepository
             ->orderBy('user.lastName')
             ->getQuery()
             ->getResult();
-//        dd($qb);
+        //        dd($qb);
         return $qb;
     }
 

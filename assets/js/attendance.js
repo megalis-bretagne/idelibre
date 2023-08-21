@@ -37,7 +37,7 @@ window.onload = () => {
 
         deputyInput.innerHTML += `<option value="${deputyId}">${deputy}</option>`
         // deputyInput.value = deputy
-        deputyInput.setAttribute('disabled', 'disabled')
+        deputyInput.setAttribute('readonly', 'readonly')
         return;
     }
 
@@ -79,10 +79,8 @@ replacementTypeInput.onchange = () => {
             deputyInput.removeAttribute('disabled')
             return;
         }
-
         deputyInput.innerHTML += `<option value="${deputyId}">${deputy}</option>`
-        // deputyInput.value = deputy
-        deputyInput.setAttribute('disabled', 'disabled')
+        deputyInput.setAttribute('readonly', 'readonly')
         return;
     }
 

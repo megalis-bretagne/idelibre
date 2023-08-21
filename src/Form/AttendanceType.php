@@ -15,11 +15,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class AttendanceType extends AbstractType
 {
-
     public function __construct(
         private readonly UserRepository $userRepository,
-    )
-    {
+    ) {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -49,7 +47,9 @@ class AttendanceType extends AbstractType
                 'row_attr' => ["id" => "deputyGroup", "class" => 'd-none'],
                 'required' => true,
                 'class' => User::class,
-                'choice_label' => "lastname"
+                'choice_label' => "lastname",
+                'disabled' => false,
+
             ])
         ;
     }

@@ -18,8 +18,7 @@ class AttendanceController extends AbstractController
     public function __construct(
         private readonly UserRepository $userRepository,
         private readonly ConvocationManager $convocationManager,
-    )
-    {
+    ) {
     }
 
     #[Route('/attendance/confirmation/{token}', name: 'app_attendance_confirmation')]
@@ -31,18 +30,15 @@ class AttendanceController extends AbstractController
             'convocation' => $attendanceToken->getConvocation(),
         ]);
 
-
         $form->handleRequest($request);
-
-        if ($form->isSubmitted() ) {
-
+        if ($form->isSubmitted()) {
             $convocationAttendance = (new ConvocationAttendance())
                 ->setAttendance($form->get('attendance')->getData())
-                ->setReplacement($form->get('replacement')->getData())
+                ->setReplacement($form->get('status')->getData() ? $form->get('status')->getData() : "aucun remplacement")
                 ->setDeputy($form->get('deputy')->getData())
                 ->setConvocationId($attendanceToken->getConvocation()->getId());
 
-            dd($convocationAttendance);
+            //            dd($convocationAttendance);
 
             $this->convocationManager->updateConvocationAttendances([$convocationAttendance]);
 
@@ -99,5 +95,4 @@ class AttendanceController extends AbstractController
             "availables" => $deputies
         ]);
     }
-
 }

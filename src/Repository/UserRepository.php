@@ -476,7 +476,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->setParameter('actor', Role::NAME_ROLE_ACTOR)
             ->andWhere('u.isActive = true')
             ->orderBy('u.lastName', 'ASC')
-            ;
+        ;
     }
 
     public function findActorsWithNoAssociation(Structure $structure, ?array $toExclude): QueryBuilder
@@ -488,9 +488,9 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->andWhere(' r.name = :actor')
             ->setParameter('actor', Role::NAME_ROLE_ACTOR)
             ->andWhere('u.isActive = true')
-            ->andWhere('u.associatedWith IS null' )
+            ->andWhere('u.associatedWith IS null')
         ;
-        if($toExclude) {
+        if ($toExclude) {
             $qb->andWhere('u NOT IN (:toExclude)')
                 ->setParameter('toExclude', $toExclude);
         }
@@ -503,13 +503,13 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->andWhere('u.structure = :structure')
             ->setParameter('structure', $structure)
             ->andWhere('u.isActive = true')
-            ->join('u.role', 'r' )
+            ->join('u.role', 'r')
             ->andWhere(' r.name = :deputy')
             ->setParameter('deputy', Role::NAME_ROLE_DEPUTY)
             ->andWhere('u.associatedWith IS NULL')
             ->orderBy('u.lastName', 'ASC')
         ;
-        if($toExclude) {
+        if ($toExclude) {
             $qb->andWhere('u NOT IN (:toExclude)')
                 ->setParameter('toExclude', $toExclude);
         }
@@ -522,15 +522,13 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->andWhere('u.structure = :structure')
             ->setParameter('structure', $structure)
             ->andWhere('u.isActive = true')
-            ->join('u.role', 'r' )
+            ->join('u.role', 'r')
             ->andWhere(' r.name = :deputy')
             ->setParameter('deputy', Role::NAME_ROLE_ACTOR)
             ->andWhere('u.associatedWith IS NOT NULL')
             ->orderBy('u.lastName', 'ASC')
             ->getQuery()
             ->getResult()
-            ;
+        ;
     }
-
-
 }

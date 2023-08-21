@@ -3,6 +3,7 @@
 namespace App\Controller\api;
 
 use App\Entity\Sitting;
+use App\Repository\UserRepository;
 use App\Requirements\Is;
 use App\Service\Connector\ComelusConnectorManager;
 use App\Service\Connector\LsvoteConnectorManager;
@@ -103,5 +104,13 @@ class SittingController extends AbstractController
     public function getCurrentStructureSittingTimezone(Sitting $sitting): jsonResponse
     {
         return $this->json(['timezone' => $sitting->getStructure()->getTimezone()->getName()]);
+    }
+
+    #[Route(path: '/api/sittings/{id}/association', name: 'api_sitting_association', methods: ['GET'])]
+    public function getDeputiesActorsAssociation(UserRepository $userRepository): JsonResponse
+    {
+        return $this->json([
+            "actorsDeputies" => $userRepository->findDeputiesWithAssociation($this->getUser()->getStructure())
+        ]);
     }
 }

@@ -30,8 +30,7 @@ class UserController extends AbstractController
     public function __construct(
         private readonly UserManager $userManager,
         private readonly UserRepository $userRepository,
-    )
-    {
+    ) {
     }
 
     #[Route(path: '/user', name: 'user_index')]
@@ -137,11 +136,10 @@ class UserController extends AbstractController
 
             return $this->redirectToRoute('user_index');
         }
-//        dd($user);
-        if($user->getAssociatedWith() !== null ) {
+        //        dd($user);
+        if ($user->getAssociatedWith() !== null) {
             $this->addFlash("error", "Veuillez retirer le suppléant avant de supprimer cet utilisateur");
             return $this->redirectToRoute('user_index');
-
         }
         $manageUser->delete($user);
         $this->addFlash('success', 'L\'utilisateur a bien été supprimé');

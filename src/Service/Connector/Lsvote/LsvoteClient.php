@@ -18,8 +18,7 @@ class LsvoteClient
     public function __construct(
         private readonly HttpClientInterface $httpClient,
         private readonly SerializerInterface $serializer
-    )
-    {
+    ) {
     }
 
 

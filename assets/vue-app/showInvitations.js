@@ -104,7 +104,7 @@ let app = new Vue({
                 this.guestConvocations = convocations.data['guests'];
                 this.employeeConvocations = convocations.data['employees'];
 
-                console.log(this.actorConvocations[0]["deputy"]["lastName"]);
+                console.log(this.actorConvocations);
 
                 this.isAlreadySentActors = isAlreadySentSitting(this.actorConvocations);
                 this.isAlreadySentGuests = isAlreadySentSitting(this.guestConvocations);
@@ -196,12 +196,14 @@ let app = new Vue({
         },
 
         changeAttendance(status) {
+            // console.log(status)
             this.changedAttendance.push({
                 convocationId: status.convocationId,
                 attendance: status.attendance,
                 replacement: status.replacement,
                 deputy: status.deputy,
             })
+            console.log(typeof (status.deputy))
         },
 
         saveAttendance() {
@@ -241,7 +243,6 @@ let app = new Vue({
         },
 
         getList(status, value) {
-
             axios.get(`/sitting/${getSittingId()}/list/${value}`)
                 .then( response => {
                     this.options = response.data
@@ -295,7 +296,6 @@ let app = new Vue({
         this.getSittingTimezone();
         this.getConvocations();
         this.getSitting();
-        // this.changeAttendance(this.status)
         this.saveAttendance()
 
     }
