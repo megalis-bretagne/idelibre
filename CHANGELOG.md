@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.2.12] - 2023-08-02
+### Correction
+- La purge des séances ne fonctionnait pas à cause d'une erreur dans la configuration de la durée par défaut
+
+
 ## [4.2.11] - 2023-08-02
 ### Evolution
 - Mise à jour symfony en 6.3.3
