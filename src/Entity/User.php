@@ -117,7 +117,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $attendanceOption = null;
 
     #[ORM\OneToOne(targetEntity: self::class, cascade: ['persist', 'remove'])]
-    #[Groups(['user:read', 'user:write', 'convocation:read'])]
+//    #[Groups(['user:read', 'user:write', 'convocation' ,'convocation:read'])]
     private ?self $associatedWith = null;
 
     public function __construct()

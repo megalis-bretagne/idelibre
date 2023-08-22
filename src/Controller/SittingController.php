@@ -365,7 +365,7 @@ class SittingController extends AbstractController
     {
         return $this->render('sitting/includes/_list_deputies.html.twig', [
             "deputies" => $userRepository->findDeputiesWithNoAssociation($this->getUser()->getStructure(), [])->getQuery()->getResult(),
-            "actorsDeputies" => $userRepository->findDeputiesWithAssociation($this->getUser()->getStructure()),
+            "actorsDeputies" => $userRepository->findActorsWithAssociation($this->getUser()->getStructure()),
         ]);
     }
 }

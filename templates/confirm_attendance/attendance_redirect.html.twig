@@ -19,8 +19,6 @@
                 <u> {% if attendance == 'absent' %}absent{% endif %}
                     {% if attendance == 'present' %}présent{% endif %}
                     {% if attendance == 'remote' %}présent à distance{% endif %}
-                    {% if attendance == 'suppleant' %}absent. Votre pouvoir a été transféré à votre suppléant : {{ convocation.deputy}} {% endif %}
-                    {% if attendance == 'procuration' %}absent. Vous avez donné procuration à  {{ convocation.deputy }} {% endif %}
                 </u>.
                 Merci pour votre retour.
             </div>

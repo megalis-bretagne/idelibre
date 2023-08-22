@@ -334,7 +334,7 @@ class ConvocationManager
             }
             // TODO check si le remote est autorisé
             $convocation->setAttendance($convocationAttendance->getAttendance());
-            $convocation->setDeputy($convocationAttendance->getDeputy());
+            $convocation->setDeputy($convocationAttendance->getDeputy() ?: null);
             $this->em->persist($convocation);
         }
         $this->em->flush();

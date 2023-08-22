@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20230811141434 extends AbstractMigration
+final class Version20230822070708 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -21,7 +21,6 @@ final class Version20230811141434 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('DROP SEQUENCE party_legacy_seq CASCADE');
-        $this->addSql('ALTER TABLE convocation DROP deputy');
     }
 
     public function down(Schema $schema): void
@@ -29,6 +28,5 @@ final class Version20230811141434 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE SCHEMA public');
         $this->addSql('CREATE SEQUENCE party_legacy_seq INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('ALTER TABLE convocation ADD deputy VARCHAR(255) DEFAULT NULL');
     }
 }

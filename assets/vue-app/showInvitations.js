@@ -203,7 +203,7 @@ let app = new Vue({
                 replacement: status.replacement,
                 deputy: status.deputy,
             })
-            console.log(typeof (status.deputy))
+            console.log(status)
         },
 
         saveAttendance() {
@@ -315,6 +315,7 @@ function formatAttendanceStatus(convocations) {
             category: convocation.category,
         })
     }
+    console.log(convocations)
     return status;
 }
 

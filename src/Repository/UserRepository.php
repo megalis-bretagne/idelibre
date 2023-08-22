@@ -516,7 +516,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         return $qb;
     }
 
-    public function findDeputiesWithAssociation(Structure $structure): array
+    public function findActorsWithAssociation(Structure $structure): array
     {
         return $this->createQueryBuilder('u')
             ->andWhere('u.structure = :structure')
