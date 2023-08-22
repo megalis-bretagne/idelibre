@@ -5,6 +5,7 @@ namespace App\Service\Connector;
 use App\Entity\Connector\Exception\LsvoteConnectorException;
 use App\Entity\Connector\LsvoteConnector;
 use App\Entity\LsvoteSitting;
+use App\Entity\Role;
 use App\Entity\Sitting;
 use App\Entity\Structure;
 use App\Entity\User;
@@ -124,17 +125,46 @@ class LsvoteConnectorManager
      */
     private function prepareLsvoteVoter(Sitting $sitting): array
     {
-        /** @var array<User> $users */
-        $users = $this->userRepository->findActorsInSitting($sitting)->getQuery()->getResult();
+//        $deputies = $this->userRepository->findAllDeputies($sitting->getStructure());
+//        $formatDeputiesArray = [];
+//        foreach ($deputies as $deputy) {
+//            $formatDeputiesArray[] = $deputy->getFirstName() . " " . $deputy->getLastName();
+//            return $formatDeputiesArray;
+//        }
 
+
+//        dd($deputies);
+//        dd($formatDeputiesArray);
+//
+//        dd('boo');
+
+
+
+        $convocations = $sitting->getConvocations();
         $lsvoteVoters = [];
-        foreach ($users as $user) {
-            $lsvoteVoter = new LsvoteVoter();
-            $lsvoteVoter->setIdentifier($user->getId())
-                ->setLastName($user->getLastName())
-                ->setFirstName($user->getFirstName());
+        foreach ($convocations as $convocation) {
+            $lsvoteVoter = (new LsvoteVoter())
+                ->setIdentifier($convocation->getUser()->getId())
+                ->setFirstName($convocation->getUser()->getFirstName())
+                ->setLastName($convocation->getUser()->getLastName())
+                ->setReplacement("poa")
+//                ->setReplacement(in_array($convocation->getDeputy(), $deputies) ? "deputy" : "poa")
+                ->setMandator($convocation->getDeputy())
+                ;
             $lsvoteVoters[] = $lsvoteVoter;
         }
+//        /** @var array<User> $users */
+//        $users = $this->userRepository->findActorsInSitting($sitting)->getQuery()->getResult();
+
+//        $lsvoteVoters = [];
+//        foreach ($users as $user) {
+//            $lsvoteVoter = new LsvoteVoter();
+//            $lsvoteVoter->setIdentifier($user->getId())
+//                ->setLastName($user->getLastName())
+//                ->setFirstName($user->getFirstName());
+//
+//            $lsvoteVoters[] = $lsvoteVoter;
+//        }
 
         return $lsvoteVoters;
     }

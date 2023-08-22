@@ -52,7 +52,7 @@ class UserController extends AbstractController
             'users' => $users,
             'formSearch' => $formSearch->createView(),
             'searchTerm' => $request->query->get('search'),
-            'countDeputiesAvalaible' => $this->userManager->countAvailableDeputies($this->getUser()->getStructure())
+//            'countDeputiesAvalaible' => $this->userManager->countAvailableDeputies($this->getUser()->getStructure())
         ]);
     }
 
@@ -119,6 +119,8 @@ class UserController extends AbstractController
 
             $this->addFlash('error', 'Votre mot de passe n\'est pas assez fort.');
         }
+
+
 
         return $this->render('user/edit.html.twig', [
             'form' => $form->createView(),

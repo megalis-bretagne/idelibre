@@ -24,6 +24,8 @@ class ConvocationController extends AbstractController
     #[IsGranted('MANAGE_SITTINGS', subject: 'sitting')]
     public function getConvocations(Sitting $sitting, ConvocationRepository $convocationRepository): JsonResponse
     {
+        dd($convocationRepository->getActorConvocationsBySitting($sitting));
+
         return $this->json(
             [
                 'actors' => $convocationRepository->getActorConvocationsBySitting($sitting),
@@ -32,7 +34,7 @@ class ConvocationController extends AbstractController
             ],
             200,
             [],
-            ['groups' => ['convocation', 'user', 'party:read']]
+            ['groups' => ['convocation', 'user', 'userAssociated', 'party:read']]
         );
     }
 
@@ -52,12 +54,8 @@ class ConvocationController extends AbstractController
     #[IsGranted('MANAGE_ATTENDANCE', subject: 'request')]
     public function setAttendance(ConvocationManager $convocationManager, Request $request, DenormalizerInterface $denormalizer): JsonResponse
     {
-//        dd($request->toArray());
-
         $convocationAttendances = $denormalizer->denormalize($request->toArray(), ConvocationAttendance::class . '[]');
-//                dd("ok",$convocationAttendances);
         $convocationManager->updateConvocationAttendances($convocationAttendances);
-//        dd($convocationAttendances);
 
         return $this->json(['success' => 'true']);
     }

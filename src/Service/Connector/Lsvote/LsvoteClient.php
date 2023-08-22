@@ -70,7 +70,6 @@ class LsvoteClient
                 ]
             );
 
-
             $content = json_decode($response->getContent(), true);
 
             return $content['id'];
@@ -124,9 +123,11 @@ class LsvoteClient
 
                 ]
             );
-
+//            dd( json_decode($response->getContent(), true));
             $content = json_decode($response->getContent(), true);
+
             return $content['id'];
+
         } catch (ClientException $e) {
             if ($e->getCode() === 404) {
                 throw new LsvoteNotFoundException($e->getMessage());

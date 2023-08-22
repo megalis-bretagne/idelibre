@@ -156,32 +156,32 @@ class UserManager
         return true;
     }
 
-    public function addDeputy(User $user): void
-    {
-        $user->getAssociatedWith()->setAssociatedWith($user);
-        $this->em->persist($user);
-        $this->em->flush();
-    }
-
-    public function removeProcurationOrDeputy(User $user): void
-    {
-        $user->getAssociatedWith()->setAssociatedWith(null);
-        $user->setAssociatedWith(null);
-        $this->em->persist($user);
-        $this->em->flush();
-    }
-
-
-    public function countAvailableDeputies(Structure $structure): bool
-    {
-        $deputies = $this->userRepository->findDeputiesWithNoAssociation($structure, [])->getQuery()->getResult();
-        return count($deputies) > 0;
-    }
-
-    private function hookDeputyToActor($user): void
-    {
-        if ($user->getRole()->getName() === "Deputy" && $user->getAssociatedWith() !== null) {
-            $user->getAssociatedWith()->setAssociatedWith($user);
-        }
-    }
+//    public function addDeputy(User $user): void
+//    {
+//        $user->getAssociatedWith()->setAssociatedWith($user);
+//        $this->em->persist($user);
+//        $this->em->flush();
+//    }
+//
+//    public function removeProcurationOrDeputy(User $user): void
+//    {
+//        $user->getAssociatedWith()->setAssociatedWith(null);
+//        $user->setAssociatedWith(null);
+//        $this->em->persist($user);
+//        $this->em->flush();
+//    }
+//
+//
+//    public function countAvailableDeputies(Structure $structure): bool
+//    {
+//        $deputies = $this->userRepository->findDeputiesWithNoAssociation($structure, [])->getQuery()->getResult();
+//        return count($deputies) > 0;
+//    }
+//
+//    private function hookDeputyToActor($user): void
+//    {
+//        if ($user->getRole()->getName() === "Deputy" && $user->getAssociatedWith() !== null) {
+//            $user->getAssociatedWith()->setAssociatedWith($user);
+//        }
+//    }
 }

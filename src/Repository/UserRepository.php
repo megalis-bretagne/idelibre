@@ -497,38 +497,54 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         return $qb;
     }
 
-    public function findDeputiesWithNoAssociation(Structure $structure, ?array $toExclude): QueryBuilder
+    public function findAllDeputies(Structure $structure): array
     {
-        $qb = $this->createQueryBuilder('u')
+        $qb =  $this->createQueryBuilder("u")
             ->andWhere('u.structure = :structure')
             ->setParameter('structure', $structure)
             ->andWhere('u.isActive = true')
             ->join('u.role', 'r')
             ->andWhere(' r.name = :deputy')
             ->setParameter('deputy', Role::NAME_ROLE_DEPUTY)
-            ->andWhere('u.associatedWith IS NULL')
-            ->orderBy('u.lastName', 'ASC')
-        ;
-        if ($toExclude) {
-            $qb->andWhere('u NOT IN (:toExclude)')
-                ->setParameter('toExclude', $toExclude);
-        }
-        return $qb;
-    }
-
-    public function findActorsWithAssociation(Structure $structure): array
-    {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.structure = :structure')
-            ->setParameter('structure', $structure)
-            ->andWhere('u.isActive = true')
-            ->join('u.role', 'r')
-            ->andWhere(' r.name = :deputy')
-            ->setParameter('deputy', Role::NAME_ROLE_ACTOR)
-            ->andWhere('u.associatedWith IS NOT NULL')
             ->orderBy('u.lastName', 'ASC')
             ->getQuery()
             ->getResult()
         ;
+        return $qb;
     }
+
+//    public function findDeputiesWithNoAssociation(Structure $structure, ?array $toExclude = null): QueryBuilder
+//    {
+//        $qb = $this->createQueryBuilder('u')
+//            ->andWhere('u.structure = :structure')
+//            ->setParameter('structure', $structure)
+//            ->andWhere('u.isActive = true')
+//            ->join('u.role', 'r')
+//            ->andWhere(' r.name = :deputy')
+//            ->setParameter('deputy', Role::NAME_ROLE_DEPUTY)
+//            ->andWhere('u.associatedWith IS NULL')
+//            ->orderBy('u.lastName', 'ASC')
+//        ;
+//        if ($toExclude) {
+//            $qb->andWhere('u NOT IN (:toExclude)')
+//                ->setParameter('toExclude', $toExclude);
+//        }
+//
+//    }
+//
+//    public function findActorsWithAssociation(Structure $structure): array
+//    {
+//        return $this->createQueryBuilder('u')
+//            ->andWhere('u.structure = :structure')
+//            ->setParameter('structure', $structure)
+//            ->andWhere('u.isActive = true')
+//            ->join('u.role', 'r')
+//            ->andWhere(' r.name = :deputy')
+//            ->setParameter('deputy', Role::NAME_ROLE_ACTOR)
+//            ->andWhere('u.associatedWith IS NOT NULL')
+//            ->orderBy('u.lastName', 'ASC')
+//            ->getQuery()
+//            ->getResult()
+//        ;
+//    }
 }

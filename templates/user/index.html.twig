@@ -70,8 +70,8 @@
                     <td class="col">
                         {{ user.party ?  ( user.party.name|length > 10 ? user.party.name|slice(0,20) ~ '...' : user.party.name)  : ''  }}
                     </td>
-                    <td class="col">{# dump(user)#} {% if user.associatedWith is not null and user.associatedWith.role.name == "Deputy" %}{{ user.associatedWith.firstName|first|upper }}. {{ user.associatedWith.lastName}} {% endif %}</td>
-                    <td class="col"> {% if user.associatedWith is not null and user.role.name != "Actor"%} {{ user.associatedWith.firstName|first|upper }}. {{ user.associatedWith.lastName}} {% endif %}</td>
+{#                    <td class="col">{% if user.associatedWith is not null and user.associatedWith.role.name == "Deputy" %}{{ user.associatedWith.firstName|first|upper }}. {{ user.associatedWith.lastName}} {% endif %}</td>#}
+{#                    <td class="col"> {% if user.associatedWith is not null and user.role.name != "Actor"%} {{ user.associatedWith.firstName|first|upper }}. {{ user.associatedWith.lastName}} {% endif %}</td>#}
 
                     <td class="active_column">{{ user.isActive }}</td>
                     <td class="col-2 actionButton">

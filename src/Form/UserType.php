@@ -10,6 +10,7 @@ use App\Entity\User;
 use App\Repository\PartyRepository;
 use App\Repository\RoleRepository;
 use App\Repository\TypeRepository;
+use App\Repository\UserRepository;
 use App\Service\role\RoleManager;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -29,12 +30,14 @@ use Symfony\Component\Validator\Constraints\Regex;
 class UserType extends AbstractType
 {
     public function __construct(
-        private readonly RoleRepository $roleRepository,
+        private readonly RoleRepository  $roleRepository,
         private readonly PartyRepository $partyRepository,
-        private readonly RoleManager $roleManager,
-        private readonly TypeRepository $typeRepository,
-        private readonly Security $security,
-    ) {
+        private readonly RoleManager     $roleManager,
+        private readonly TypeRepository  $typeRepository,
+        private readonly Security        $security,
+        private readonly UserRepository $userRepository
+    )
+    {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -74,8 +77,7 @@ class UserType extends AbstractType
             ->add('redirect_url', HiddenType::class, [
                 'mapped' => false,
                 'data' => $options['referer'],
-            ])
-        ;
+            ]);
 
         if ($this->isNew($options)) {
             $builder->add('role', EntityType::class, [
@@ -100,21 +102,17 @@ class UserType extends AbstractType
                     'class' => Party::class,
                     'query_builder' => $this->partyRepository->findByStructure($options['structure']),
                     'choice_label' => 'name',
-                ])
-            ;
+                ]);
         }
 
-        if ($this->isNewOrDeputy($options)) {
-            $builder
-                ->add('associatedWith', EntityType::class, [
-                    'label' => 'Associer un suppléant',
-                    'label_attr' => ["id" => "mandatorNameLabel"],
-                    "row_attr" => ['class' => "d-none", 'id' => 'mandatorGroup'],
-                    'required' => false,
-                    'class' => User::class,
-                    'choice_label' => 'lastname',
-                ])
-            ;
+        if ($this->isExistingActor($options)) {
+            $builder->add('associatedWith', EntityType::class, [
+                'label' => 'Suppléant',
+                'class' => User::class,
+                'choice_label' => 'lastName',
+                'query_builder' => $this->userRepository->findDeputiesWithNoAssociation($options['structure'])
+                //todo queryBuilder limitant aux deputy disponiblent de la structure.
+            ]);
         }
 
         if ($this->IsSecretary($options)) {
@@ -171,8 +169,8 @@ class UserType extends AbstractType
         }
 
         $builder->get('username')->addModelTransformer(new CallbackTransformer(
-            fn ($username) => $username ? preg_replace('/@.*/', '', $username) : '',
-            fn ($username) => $username . '@' . $this->getStructureSuffix($options['structure'])
+            fn($username) => $username ? preg_replace('/@.*/', '', $username) : '',
+            fn($username) => $username . '@' . $this->getStructureSuffix($options['structure'])
         ));
     }
 
@@ -210,6 +208,19 @@ class UserType extends AbstractType
         return $user->getRole()->getId() === $this->roleManager->getActorRole()->getId();
     }
 
+
+    private function isExistingActor(array $options): bool
+    {
+        if ($this->isNew($options)) {
+            return false;
+        }
+
+        /** @var User $user */
+        $user = $options['data'];
+
+        return $user->getRole()->getId() === $this->roleManager->getActorRole()->getId();
+    }
+
     private function isNewOrDeputy(array $options): bool
     {
         if ($this->isNew($options)) {
@@ -219,7 +230,7 @@ class UserType extends AbstractType
         /** @var User $user */
         $user = $options['data'];
 
-        return $user->getRole()->getId() === $this->roleManager->getActorRole()->getId();
+        return $user->getRole()->getId() === $this->roleManager->getDeputyRole()->getId();
     }
 
     private function IsSecretary(array $options): bool

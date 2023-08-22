@@ -116,9 +116,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $attendanceOption = null;
 
-    #[ORM\OneToOne(targetEntity: self::class, cascade: ['persist', 'remove'])]
-//    #[Groups(['user:read', 'user:write', 'convocation' ,'convocation:read'])]
-    private ?self $associatedWith = null;
+    #[ORM\OneToOne(inversedBy: 'titular', targetEntity: self::class, cascade: ['persist', 'remove'])]
+    private ?self $deputy = null;
+
+    #[ORM\OneToOne(mappedBy: 'deputy', targetEntity: self::class, cascade: ['persist', 'remove'])]
+    private ?self $titular = null;
+
 
     public function __construct()
     {
@@ -418,15 +421,38 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getAssociatedWith(): ?self
+    public function getDeputy(): ?self
     {
-        return $this->associatedWith;
+        return $this->deputy;
     }
 
-    public function setAssociatedWith(?self $associatedWith): self
+    public function setDeputy(?self $deputy): static
     {
-        $this->associatedWith = $associatedWith;
+        $this->deputy = $deputy;
 
         return $this;
     }
+
+    public function getTitular(): ?self
+    {
+        return $this->titular;
+    }
+
+    public function setTitular(?self $titular): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($titular === null && $this->titular !== null) {
+            $this->titular->setDeputy(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($titular !== null && $titular->getDeputy() !== $this) {
+            $titular->setDeputy($this);
+        }
+
+        $this->titular = $titular;
+
+        return $this;
+    }
+
 }

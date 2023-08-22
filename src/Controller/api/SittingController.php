@@ -106,12 +106,4 @@ class SittingController extends AbstractController
         return $this->json(['timezone' => $sitting->getStructure()->getTimezone()->getName()]);
     }
 
-//    #[Route(path: '/api/sittings/{id}/association', name: 'api_sitting_association', methods: ['GET'])]
-//    public function getDeputiesActorsAssociation(UserRepository $userRepository, Sitting $sitting): JsonResponse
-//    {
-//        return $this->json([
-//            "actors" => $userRepository->findActorsInStructure($this->getUser()->getStructure())->getQuery()->getResult(),
-////            "actorsDeputies" => $userRepository->findActorsWithAssociation($this->getUser()->getStructure())
-//        ]);
-//    }
 }

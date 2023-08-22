@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Sitting;
+use App\Entity\Structure;
+use App\Entity\User;
 use App\Form\SearchType;
 use App\Form\SittingType;
 use App\Repository\EmailTemplateRepository;
@@ -20,6 +22,7 @@ use App\Sidebar\Annotation\Sidebar;
 use App\Sidebar\State\SidebarState;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpClient\Exception\InvalidArgumentException;
@@ -317,7 +320,6 @@ class SittingController extends AbstractController
     }
 
 
-
     #[Route(path: '/sitting/{id}/lsvote-results', name: 'sitting_lsvote_results', methods: ['GET'])]
     #[IsGranted('ROLE_MANAGE_SITTINGS')]
     public function getLsvoteResults(Sitting $sitting, LsvoteConnectorManager $lsvoteConnectorManager, Request $request): Response
@@ -360,12 +362,15 @@ class SittingController extends AbstractController
         ]);
     }
 
-    #[Route('/sitting/{id}/list/deputies', name: 'sitting_deputies_list', methods: ['GET'])]
-    public function getDeputiesList(UserRepository $userRepository): Response
+    #[Route('/sitting/user/{id}/deputy', name: 'sitting_deputies_list', methods: ['GET'])]
+    public function getDeputy(User $user): Response
     {
-        return $this->render('sitting/includes/_list_deputies.html.twig', [
-            "deputies" => $userRepository->findDeputiesWithNoAssociation($this->getUser()->getStructure(), [])->getQuery()->getResult(),
-            "actorsDeputies" => $userRepository->findActorsWithAssociation($this->getUser()->getStructure()),
-        ]);
+dd('ok');
+        return $this->json($user->getAssociatedWith());
+
+//        return $this->render('sitting/includes/_list_deputies.html.twig', [
+//            "deputies" => $userRepository->findDeputiesWithNoAssociation($this->getUser()->getStructure(), [])->getQuery()->getResult(),
+//            "actorsDeputies" => $userRepository->findActorsWithAssociation($this->getUser()->getStructure()),
+//        ]);
     }
 }
