@@ -365,8 +365,8 @@ class SittingController extends AbstractController
     #[Route('/sitting/user/{id}/deputy', name: 'sitting_deputies_list', methods: ['GET'])]
     public function getDeputy(User $user): Response
     {
-dd('ok');
-        return $this->json($user->getAssociatedWith());
+//dd('ok');
+        return $this->json($user->getDeputy());
 
 //        return $this->render('sitting/includes/_list_deputies.html.twig', [
 //            "deputies" => $userRepository->findDeputiesWithNoAssociation($this->getUser()->getStructure(), [])->getQuery()->getResult(),

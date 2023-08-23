@@ -104,7 +104,7 @@ let app = new Vue({
                 this.guestConvocations = convocations.data['guests'];
                 this.employeeConvocations = convocations.data['employees'];
 
-                console.log(this.actorConvocations);
+                // console.log(this.actorConvocations);
 
                 this.isAlreadySentActors = isAlreadySentSitting(this.actorConvocations);
                 this.isAlreadySentGuests = isAlreadySentSitting(this.guestConvocations);
@@ -242,51 +242,51 @@ let app = new Vue({
             this.showModalMailExample = true;
         },
 
-        getList(status, value) {
-            axios.get(`/sitting/${getSittingId()}/list/${value}`)
-                .then( response => {
-                    this.options = response.data
-                    let ref_deputy = this.$refs['deputy-' + status.lastName]
-                    if(ref_deputy[0].innerHTML = " ") {
-                        ref_deputy[0].innerHTML += this.options;
-                    }
-                })
-                .catch(error => {
-                    console.log(`error : ${error.message}`)
-                })
-        },
-
-        hydrateMandator(status) {
-
-            this.$nextTick(() => {
-                let ref_replacement = this.$refs[`replacement-${status.lastName}`]
-
-                if (ref_replacement[0].value === "deputy") {
-                    this.getList(status, 'deputies')
-                    return;
-                }
-
-                if(ref_replacement[0].value === "poa"){
-                    this.getList(status, "actors")
-                    return;
-                }
-                console.log("aucun remplacement")
-            })
-        },
-
-        resetDeputyIfNotAbsent(status) {
-            let ref_presence = this.$refs[`presence-${status.lastName}`]
-            if(ref_presence[0].value !== "absent") {
-                status.deputy = "";
-            }
-        },
-
-        resetDeputyNoReplacement(status) {
-            let ref_replacement = this.$refs[`replacement-${status.lastName}`]
-            if(ref_replacement[0].value === "none") {
-                status.deputy = "";
-            }
-        },
+        // getList(status, value) {
+        //     axios.get(`/sitting/${getSittingId()}/list/${value}`)
+        //         .then( response => {
+        //             this.options = response.data
+        //             let ref_deputy = this.$refs['deputy-' + status.lastName]
+        //             if(ref_deputy[0].innerHTML = " ") {
+        //                 ref_deputy[0].innerHTML += this.options;
+        //             }
+        //         })
+        //         .catch(error => {
+        //             console.log(`error : ${error.message}`)
+        //         })
+        // },
+        //
+        // hydrateMandator(status) {
+        //
+        //     this.$nextTick(() => {
+        //         let ref_replacement = this.$refs[`replacement-${status.lastName}`]
+        //
+        //         if (ref_replacement[0].value === "deputy") {
+        //             this.getList(status, 'deputies')
+        //             return;
+        //         }
+        //
+        //         if(ref_replacement[0].value === "poa"){
+        //             this.getList(status, "actors")
+        //             return;
+        //         }
+        //         console.log("aucun remplacement")
+        //     })
+        // },
+        //
+        // resetDeputyIfNotAbsent(status) {
+        //     let ref_presence = this.$refs[`presence-${status.lastName}`]
+        //     if(ref_presence[0].value !== "absent") {
+        //         status.deputy = "";
+        //     }
+        // },
+        //
+        // resetDeputyNoReplacement(status) {
+        //     let ref_replacement = this.$refs[`replacement-${status.lastName}`]
+        //     if(ref_replacement[0].value === "none") {
+        //         status.deputy = "";
+        //     }
+        // },
 
     },
 

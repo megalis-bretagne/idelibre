@@ -4,22 +4,14 @@ namespace App\Form;
 
 use App\Entity\Convocation;
 use App\Entity\User;
-use App\Repository\UserRepository;
-use Doctrine\ORM\QueryBuilder;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Hoa\Compiler\Llk\Rule\Choice;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\ChoiceList\ChoiceList;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class AttendanceType extends AbstractType
 {
-    public function __construct(
-        private readonly UserRepository $userRepository,
-    ) {
-    }
-
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -42,14 +34,13 @@ class AttendanceType extends AbstractType
                 "row_attr" => ["id" => "attendanceStatusGroup", "class" => "d-none"],
             ])
 
-            ->add('deputy', EntityType::class, [
+            ->add('mandataire', ChoiceType::class, [
                 'label' => 'Élu qui reçoit le pouvoir',
-                'row_attr' => ["id" => "deputyGroup", "class" => 'd-none'],
+                'row_attr' => ["id" => "mandataireGroup", "class" => 'd-none'],
                 'required' => true,
-                'class' => User::class,
-                'choice_label' => "lastname",
+//                'class' => User::class,
+//                'choice_label' => "lastname",
                 'disabled' => false,
-
             ])
         ;
     }

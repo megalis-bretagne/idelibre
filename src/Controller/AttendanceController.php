@@ -35,12 +35,12 @@ class AttendanceController extends AbstractController
             $convocationAttendance = (new ConvocationAttendance())
                 ->setAttendance($form->get('attendance')->getData())
                 ->setReplacement($form->get('status')->getData() ? $form->get('status')->getData() : "aucun remplacement")
-                ->setDeputy($form->get('deputy')->getData())
+                ->setMandataire($form->get('mandataire')->getData())
                 ->setConvocationId($attendanceToken->getConvocation()->getId());
 
-            //            dd($convocationAttendance);
 
             $this->convocationManager->updateConvocationAttendances([$convocationAttendance]);
+//            dd($convocationAttendance);
 
             $this->addFlash('success', 'Présence enregistrée');
 
@@ -68,21 +68,19 @@ class AttendanceController extends AbstractController
         ]);
     }
 
-    #[Route('/attendance/{token}/list/actors', name: 'attendance_actors_list')]
+    #[Route('/attendance/{token}/actors', name: 'attendance_actors_list')]
     public function getActorsList(AttendanceToken $attendanceToken): Response
     {
-        $structure = $attendanceToken->getConvocation()->getSitting()->getStructure();
         $user = $attendanceToken->getConvocation()->getUser();
-
         $user ? $toExclude[] = $user : $toExclude = [];
-        $actors = $this->userRepository->findActorsWithNoAssociation($structure, $toExclude)->getQuery()->getResult();
+        $actors = $this->userRepository->findActorsInSittingWithExclusion($attendanceToken->getConvocation()->getSitting(), $toExclude)->getQuery()->getResult();
 
         return $this->render('confirm_attendance/includes/_list_actors.html.twig', [
             "availables" => $actors
         ]);
     }
 
-    #[Route('/attendance/{token}/list/deputies', name: 'attendance_deputies_list')]
+    #[Route('/attendance/{token}/deputy', name: 'attendance_deputies_list')]
     public function getDeputiesList(AttendanceToken $attendanceToken): Response
     {
         $structure = $attendanceToken->getConvocation()->getSitting()->getStructure();

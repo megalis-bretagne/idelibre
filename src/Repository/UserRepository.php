@@ -479,7 +479,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         ;
     }
 
-    public function findActorsWithNoAssociation(Structure $structure, ?array $toExclude): QueryBuilder
+    public function findActorsWithNoAssociation(Structure $structure, ?array $toExclude = null): QueryBuilder
     {
         $qb = $this->createQueryBuilder('u')
             ->andWhere('u.structure = :structure')
@@ -513,24 +513,44 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         return $qb;
     }
 
-//    public function findDeputiesWithNoAssociation(Structure $structure, ?array $toExclude = null): QueryBuilder
-//    {
-//        $qb = $this->createQueryBuilder('u')
-//            ->andWhere('u.structure = :structure')
-//            ->setParameter('structure', $structure)
-//            ->andWhere('u.isActive = true')
-//            ->join('u.role', 'r')
-//            ->andWhere(' r.name = :deputy')
-//            ->setParameter('deputy', Role::NAME_ROLE_DEPUTY)
-//            ->andWhere('u.associatedWith IS NULL')
-//            ->orderBy('u.lastName', 'ASC')
-//        ;
-//        if ($toExclude) {
-//            $qb->andWhere('u NOT IN (:toExclude)')
-//                ->setParameter('toExclude', $toExclude);
-//        }
-//
-//    }
+    public function findDeputiesWithNoAssociation(Structure $structure, ?array $toExclude = null): QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('u')
+            ->andWhere('u.structure = :structure')
+            ->setParameter('structure', $structure)
+            ->andWhere('u.isActive = true')
+            ->join('u.role', 'r')
+            ->andWhere(' r.name = :deputy')
+
+            ->setParameter('deputy', Role::NAME_ROLE_DEPUTY)
+            ->orderBy('u.lastName', 'ASC')
+        ;
+        if ($toExclude) {
+            $qb->andWhere('u NOT IN (:toExclude)')
+                ->setParameter('toExclude', $toExclude);
+        }
+        return $qb;
+    }
+
+    public function findActorsInSittingWithExclusion(Sitting $sitting, ?array $toExclude = null): QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('u')
+            ->innerJoin(Convocation::class, 'c', Join::WITH, 'c.user = u' )
+            ->andWhere('c.sitting = :sitting')
+            ->setParameter('sitting', $sitting)
+            ->andWhere('u.isActive = true')
+            ->join('u.role', 'r')
+            ->andWhere(' r.name = :actor')
+            ->setParameter('actor', Role::NAME_ROLE_ACTOR)
+            ->orderBy('u.lastName', 'ASC')
+        ;
+        if ($toExclude) {
+            $qb->andWhere('u NOT IN (:toExclude)')
+                ->setParameter('toExclude', $toExclude);
+        }
+
+        return $qb;
+    }
 //
 //    public function findActorsWithAssociation(Structure $structure): array
 //    {

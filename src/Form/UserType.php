@@ -102,11 +102,22 @@ class UserType extends AbstractType
                     'class' => Party::class,
                     'query_builder' => $this->partyRepository->findByStructure($options['structure']),
                     'choice_label' => 'name',
-                ]);
+                ])
+                ->add('deputy', EntityType::class, [
+                    'label' => 'Suppléant',
+                    'row_attr' => ["class" => "d-none", "id" => "deputyGroup"],
+                    'class' => User::class,
+                    'choice_label' => 'lastName',
+                    'query_builder' => $this->userRepository->findDeputiesWithNoAssociation($options['structure']),
+                    'placeholder' => "--"
+
+                ])
+            ;
         }
 
+
         if ($this->isExistingActor($options)) {
-            $builder->add('associatedWith', EntityType::class, [
+            $builder->add('deputy', EntityType::class, [
                 'label' => 'Suppléant',
                 'class' => User::class,
                 'choice_label' => 'lastName',
@@ -219,18 +230,6 @@ class UserType extends AbstractType
         $user = $options['data'];
 
         return $user->getRole()->getId() === $this->roleManager->getActorRole()->getId();
-    }
-
-    private function isNewOrDeputy(array $options): bool
-    {
-        if ($this->isNew($options)) {
-            return true;
-        }
-
-        /** @var User $user */
-        $user = $options['data'];
-
-        return $user->getRole()->getId() === $this->roleManager->getDeputyRole()->getId();
     }
 
     private function IsSecretary(array $options): bool

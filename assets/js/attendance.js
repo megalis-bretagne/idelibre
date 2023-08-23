@@ -1,23 +1,26 @@
 const attendanceInput = document.querySelector('#attendance_attendance');
 const replacementTypeGroup = document.querySelector("#attendanceStatusGroup");
 const replacementTypeInput = document.querySelector("#attendance_status");
-const deputyGroup = document.querySelector('#deputyGroup');
-const deputyInput = document.querySelector('#attendance_deputy')
+const mandataireGroup = document.querySelector('#mandataireGroup');
+const mandataireInput = document.querySelector('#attendance_mandataire')
 const deputy = document.querySelector("h1").dataset.deputy
+console.log(deputy)
 const deputyId = document.querySelector("h1").dataset.deputy_id
+const flashNoDeputy ='<div class="alert alert-danger" role="alert">Aucun suppléant ne vous est assigné </div>'
 
 getToken = () => {
     const token = window.location.pathname.split("/")[3]
-    return token ? token + '/' : '';
+    return token + ''
+
 }
-let url = `/attendance/${getToken()}list`
+let url = `/attendance/${getToken()}`
 
 
 
 window.onload = () => {
     let attendanceValue = attendanceInput.value ? attendanceInput.value : null;
 
-    listCleaner(deputyInput)
+    listCleaner(mandataireInput)
 
     if( "absent" === attendanceValue){
         show(replacementTypeGroup)
@@ -26,31 +29,31 @@ window.onload = () => {
     const value = replacementTypeInput.value;
 
     if("deputy" === value ) {
-        listCleaner(deputyInput)
-        show(deputyGroup)
+        listCleaner(mandataireInput)
+        show(mandataireGroup)
 
         if(!deputy) {
-            deputyInput.innerHTML += getList(url, 'deputies', deputyInput)
-            deputyInput.removeAttribute('disabled')
+            mandataireInput.innerHTML += getList(url, 'deputies', mandataireInput)
+            mandataireInput.removeAttribute('disabled')
             return;
         }
 
-        deputyInput.innerHTML += `<option value="${deputyId}">${deputy}</option>`
-        // deputyInput.value = deputy
-        deputyInput.setAttribute('readonly', 'readonly')
+        mandataireInput.innerHTML += `<option value="${deputyId}">${deputy}</option>`
+        // mandataireInput.value = deputy
+        mandataireInput.setAttribute('readonly', 'readonly')
         return;
     }
 
     if("poa" === value) {
-        listCleaner(deputyInput)
-        show(deputyGroup)
-        deputyInput.innerHTML += getList(url, "actors", deputyInput)
+        listCleaner(mandataireInput)
+        show(mandataireGroup)
+        mandataireInput.innerHTML += getList(url, "actors", mandataireInput)
         return;
     }
 
     if ("present" === value) {
         hide(replacementTypeGroup)
-        hide(deputyGroup)
+        hide(mandataireGroup)
     }
 
     hide(replacementTypeGroup)
@@ -71,27 +74,26 @@ replacementTypeInput.onchange = () => {
     const value = replacementTypeInput.value;
 
     if("deputy" === value ) {
-        listCleaner(deputyInput)
-        show(deputyGroup)
+        listCleaner(mandataireInput)
+        show(mandataireGroup)
 
         if(!deputy) {
-            deputyInput.innerHTML += getList(url, 'deputies', deputyInput)
-            deputyInput.removeAttribute('disabled')
+            mandataireInput.innerHTML += flashNoDeputy
             return;
         }
-        deputyInput.innerHTML += `<option value="${deputyId}">${deputy}</option>`
-        deputyInput.setAttribute('readonly', 'readonly')
+        mandataireInput.innerHTML += `<option value="${deputy}">${deputy}</option>`
+        mandataireInput.setAttribute('readonly', 'readonly')
         return;
     }
 
     if("poa" === value) {
-        listCleaner(deputyInput)
-        show(deputyGroup)
-        deputyInput.innerHTML += getList(url, "actors", deputyInput)
+        listCleaner(mandataireInput)
+        show(mandataireGroup)
+        mandataireInput.innerHTML += getList(url, "actors", mandataireInput)
         return;
     }
 
-    hide(deputyGroup)
+    hide(mandataireGroup)
 }
 
 

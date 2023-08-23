@@ -48,7 +48,7 @@ class UserManager
 
         $user->setSubscription($this->subscriptionManager->add($user));
 
-        $this->hookDeputyToActor($user);
+//        $this->hookDeputyToActor($user);
 
         $this->em->persist($user);
         $this->em->flush();

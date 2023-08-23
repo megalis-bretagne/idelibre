@@ -45,8 +45,7 @@
                 <th class="col-1">{{ knp_pagination_sortable(users, 'Profil', 'r.prettyName') }}</th>
                 <th class="col">{{ knp_pagination_sortable(users, 'Groupe politique', 'p.name') }}</th>
                 <th class="col">Suppléant</th>
-                <th class="col">Titulaire</th>
-                <th class="active_column">{{ knp_pagination_sortable(users, '', 'u.isActive') }}</th>
+                <th class="active_column d-none">{{ knp_pagination_sortable(users, '', 'u.isActive') }}</th>
                 <th class="col-2">Actions</th>
             </tr>
         </thead>
@@ -70,10 +69,12 @@
                     <td class="col">
                         {{ user.party ?  ( user.party.name|length > 10 ? user.party.name|slice(0,20) ~ '...' : user.party.name)  : ''  }}
                     </td>
-{#                    <td class="col">{% if user.associatedWith is not null and user.associatedWith.role.name == "Deputy" %}{{ user.associatedWith.firstName|first|upper }}. {{ user.associatedWith.lastName}} {% endif %}</td>#}
-{#                    <td class="col"> {% if user.associatedWith is not null and user.role.name != "Actor"%} {{ user.associatedWith.firstName|first|upper }}. {{ user.associatedWith.lastName}} {% endif %}</td>#}
 
-                    <td class="active_column">{{ user.isActive }}</td>
+                    <td class="col">
+                        {% if user.deputy is not null and user.deputy.role.name == "Deputy" %}{{ user.deputy.firstName|first|upper }}. {{ user.deputy.lastName}} {% endif %}
+                    </td>
+
+                    <td class="active_column d-none">{{ user.isActive }}</td>
                     <td class="col-2 actionButton">
                         {% if (app.user != user) %}
                             {{ macros.btnReloadPasswordWithModal(
@@ -83,18 +84,6 @@
                                 'Voulez-vous vraiment activer la procédure de réinitialisation du mot de passe de l\'utilisateur ?',
                                 users.currentPageNumber
                             ) }}
-                        {% endif %}
-
-                        {% if user.role.name == "Actor" and user.associatedWith == null %}
-                            {% if countDeputiesAvalaible %}
-                            <a href="{{ path('user_add_deputy', {"id" : user.id}) }}" class="btn btn-outline-primary borderless" title="Assigner un suppléant à cet élu"><i class="fa fa-user-plus"></i></a>
-                                {% else %}
-                                    <a href="#" class="btn btn-outline-secondary borderless" title="Aucun suppléant à assigner"><i class="fa fa-user-plus"></i></a>
-                                    {% endif %}
-                            {% endif %}
-
-                        {% if user.role.name == "Actor" and user.associatedWith != null %}
-                            <a href="{{ path('sitting_procuration_deputy_delete', {id : user.id}) }}" class="btn btn-outline-danger borderless" title="Retirer l'élu ou le suppléant"><i class="fa fa-user-slash"></i></a>
                         {% endif %}
 
                         {{ macros.editButton('user_edit', user.id) }}

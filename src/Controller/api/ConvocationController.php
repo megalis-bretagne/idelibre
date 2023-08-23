@@ -24,7 +24,7 @@ class ConvocationController extends AbstractController
     #[IsGranted('MANAGE_SITTINGS', subject: 'sitting')]
     public function getConvocations(Sitting $sitting, ConvocationRepository $convocationRepository): JsonResponse
     {
-        dd($convocationRepository->getActorConvocationsBySitting($sitting));
+//        dd($convocationRepository->getActorConvocationsBySitting($sitting));
 
         return $this->json(
             [
