@@ -11,6 +11,7 @@ use App\Service\Connector\LsvoteSittingCreationException;
 use App\Service\Convocation\ConvocationManager;
 use App\Service\Email\NotificationService;
 use App\Service\Util\Converter;
+use PHPUnit\Util\Json;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -19,8 +20,14 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+
 class SittingController extends AbstractController
 {
+
+    public function __construct(
+        private readonly UserRepository $userRepository,
+    ){}
+
     #[Route(path: '/api/sittings/{id}/sendConvocations', name: 'api_convocations_send', methods: ['POST'])]
     #[IsGranted('MANAGE_SITTINGS', subject: 'sitting')]
     public function sendConvocations(Sitting $sitting, ConvocationManager $convocationManager, Request $request): JsonResponse
@@ -104,6 +111,15 @@ class SittingController extends AbstractController
     public function getCurrentStructureSittingTimezone(Sitting $sitting): jsonResponse
     {
         return $this->json(['timezone' => $sitting->getStructure()->getTimezone()->getName()]);
+    }
+
+    #[Route(path: '/api/sittings/{id}/actors')]
+    public function getActor(Sitting $sitting): JsonResponse
+    {
+        return $this->json([
+            "actors" => $this->userRepository->findActorsInSittingWithExclusion($sitting, [])->getQuery()->getResult(),
+//            "deputy" => $this->userRepository->findDeputyById()
+        ], 200, [], ['groups' => ['user']]);
     }
 
 }

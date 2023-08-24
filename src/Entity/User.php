@@ -117,6 +117,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $attendanceOption = null;
 
     #[ORM\OneToOne(inversedBy: 'titular', targetEntity: self::class, cascade: ['persist', 'remove'])]
+    #[Groups(['user', 'user:read','user:write', 'convocation:read'])]
     private ?self $deputy = null;
 
     #[ORM\OneToOne(mappedBy: 'deputy', targetEntity: self::class, cascade: ['persist', 'remove'])]

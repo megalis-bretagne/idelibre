@@ -50,6 +50,7 @@ let app = new Vue({
         isInvitation: false,
         timezone: "",
         options: "",
+        actors : []
     },
 
     computed: {
@@ -103,8 +104,6 @@ let app = new Vue({
                 this.actorConvocations = convocations.data['actors'];
                 this.guestConvocations = convocations.data['guests'];
                 this.employeeConvocations = convocations.data['employees'];
-
-                // console.log(this.actorConvocations);
 
                 this.isAlreadySentActors = isAlreadySentSitting(this.actorConvocations);
                 this.isAlreadySentGuests = isAlreadySentSitting(this.guestConvocations);
@@ -196,14 +195,12 @@ let app = new Vue({
         },
 
         changeAttendance(status) {
-            // console.log(status)
             this.changedAttendance.push({
                 convocationId: status.convocationId,
                 attendance: status.attendance,
                 replacement: status.replacement,
                 deputy: status.deputy,
             })
-            console.log(status)
         },
 
         saveAttendance() {
@@ -242,51 +239,40 @@ let app = new Vue({
             this.showModalMailExample = true;
         },
 
-        // getList(status, value) {
-        //     axios.get(`/sitting/${getSittingId()}/list/${value}`)
-        //         .then( response => {
-        //             this.options = response.data
-        //             let ref_deputy = this.$refs['deputy-' + status.lastName]
-        //             if(ref_deputy[0].innerHTML = " ") {
-        //                 ref_deputy[0].innerHTML += this.options;
-        //             }
-        //         })
-        //         .catch(error => {
-        //             console.log(`error : ${error.message}`)
-        //         })
-        // },
-        //
-        // hydrateMandator(status) {
-        //
-        //     this.$nextTick(() => {
-        //         let ref_replacement = this.$refs[`replacement-${status.lastName}`]
-        //
-        //         if (ref_replacement[0].value === "deputy") {
-        //             this.getList(status, 'deputies')
-        //             return;
-        //         }
-        //
-        //         if(ref_replacement[0].value === "poa"){
-        //             this.getList(status, "actors")
-        //             return;
-        //         }
-        //         console.log("aucun remplacement")
-        //     })
-        // },
-        //
-        // resetDeputyIfNotAbsent(status) {
-        //     let ref_presence = this.$refs[`presence-${status.lastName}`]
-        //     if(ref_presence[0].value !== "absent") {
-        //         status.deputy = "";
-        //     }
-        // },
-        //
-        // resetDeputyNoReplacement(status) {
-        //     let ref_replacement = this.$refs[`replacement-${status.lastName}`]
-        //     if(ref_replacement[0].value === "none") {
-        //         status.deputy = "";
-        //     }
-        // },
+        getActorsInSitting() {
+           axios.get(`/api/sittings/${getSittingId()}/actors`)
+               .then((response) => {
+                   this.actors = response.data['actor']
+                   let actorsArray = JSON.parse(this.actors)
+                   console.log(actorsArray)
+               })
+        },
+
+
+
+        hydrateMandator(status) {
+
+            this.$nextTick(() => {
+                // let ref_replacement = this.$refs[`replacement-${status.convocationId}`]
+                let ref_deputy = this.$refs[`deputy-${status.convocationId}`]
+                this.getActorsInSitting()
+
+                // console.log(ref_deputy)
+
+                // if (ref_replacement[0].value === "deputy") {
+                //     this.getList(status, 'deputies')
+                //     return;
+                // }
+
+                // if(ref_replacement[0].value === "poa"){
+                //     // ref_deputy.innerHTML += this.getActorsInSitting()
+                //     return;
+                // }
+                console.log("aucun remplacement")
+            })
+        },
+
+
 
     },
 
@@ -315,7 +301,6 @@ function formatAttendanceStatus(convocations) {
             category: convocation.category,
         })
     }
-    console.log(convocations)
     return status;
 }
 
