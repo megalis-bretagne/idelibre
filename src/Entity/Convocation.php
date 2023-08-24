@@ -87,9 +87,10 @@ class Convocation
     #[ORM\OneToOne(mappedBy: 'convocation', cascade: ['persist', 'remove'])]
     private ?AttendanceToken $attendanceToken = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\ManyToOne]
     #[Groups(groups: ['convocation', 'convocation:read'])]
-    private ?string $deputy = null;
+    private ?User $deputy = null;
+
 
     public function __construct()
     {
@@ -244,12 +245,12 @@ class Convocation
         return $this;
     }
 
-    public function getDeputy(): ?string
+    public function getDeputy(): ?User
     {
         return $this->deputy;
     }
 
-    public function setDeputy(?string $deputy): static
+    public function setDeputy(?User $deputy): static
     {
         $this->deputy = $deputy;
 

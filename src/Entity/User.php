@@ -122,15 +122,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(mappedBy: 'deputy', targetEntity: self::class, cascade: ['persist', 'remove'])]
     private ?self $titular = null;
 
-//
-//    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Convocation::class)]
-//    private Collection $convocations;
+
 
     public function __construct()
     {
         $this->associatedTypes = new ArrayCollection();
         $this->authorizedTypes = new ArrayCollection();
-        $this->convocations = new ArrayCollection();
     }
 
     public function getId(): ?string
@@ -458,5 +455,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
 
 }

@@ -17,10 +17,7 @@
 
             <section class="mt-5">
                 <div class="d-flex">
-                    <h1 class="h3 mb-4"
-                        data-deputy="{{ user.deputy.firstName }} {{ user.deputy.lastName }}"
-                        data-deputy_id="{{ user.deputy.id }}"
-                    >
+                    <h1 class="h3 mb-4">
                         {{ user.firstName }} {{ user.lastName }}
                         {% if not attendance %} <div class="badge badge-secondary">Présence à définir</div> {% endif %}
                         {% if attendance == 'present' %} <div class="badge badge-info"> Présent</div> {% endif %}
@@ -32,7 +29,7 @@
                 </div>
                 <p><b>Séance : </b> {{ sitting.name }}</p>
                 <p><b>Date de la séance : </b> {{ sitting.date | date('d/m/y : H:i', timezone) }}</p>
-                {% if convocation.deputy is not null %} <p><b>Mandataire :</b> {{ convocation.deputy }}</p>{% endif %}
+                {% if convocation.deputy is not null %} <p><b>Remplacé par :</b> {{ convocation.deputy.firstName ~ " " ~ convocation.deputy.lastName }}</p>{% endif %}
 
                 <div class="mt-5">
                     {{ form_start(form)}}

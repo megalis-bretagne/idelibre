@@ -53,13 +53,18 @@ class ConvocationRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('c')
             ->andWhere('c.sitting = :sitting')
             ->setParameter('sitting', $sitting)
+
             ->leftJoin('c.user', 'user')
             ->addSelect('user')
+
             ->leftJoin('user.party', 'party')
             ->addSelect('party')
-            ->leftJoin('user.deputy', 'deputy')
+
+            ->leftJoin('c.deputy', 'deputy')
+//            ->leftJoin('user.c.deputy', 'c.deputy')
             ->addSelect('deputy')
             ->innerJoin('user.role', 'r')
+
             ->andWhere('r.name in (:roleNames)')
             ->setParameter('roleNames', $roleNames)
             ->orderBy('user.lastName')

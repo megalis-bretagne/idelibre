@@ -190,7 +190,7 @@
                         </td>
 
                         <td class="col-3 {{ classToChange }}">
-                            <span v-if="convocation.deputy"> ${convocation.deputy} </span>
+                            <span v-if="convocation.deputy"> ${convocation.deputy.firstName} ${convocation.deputy.lastName} </span>
                         </td>
                     </tr>
                     </tbody>
@@ -585,7 +585,7 @@
                                                 <td class="col-3" id="changeAttendancePresenceGroup">
                                                     <select class="select form-control" v-model="status.attendance"
                                                             :ref="'presence-'+status.lastName"
-                                                            @change="/*resetDeputyIfNotAbsent(status);*/changeAttendance(status);"
+                                                            @change="changeAttendance(status);"
                                                     >
                                                         <option value="">Sans Réponse</option>
                                                         <option value="absent">Absent</option>
@@ -600,7 +600,7 @@
                                                     <select :disabled="status.attendance !== 'absent'"
                                                             class="select form-control" v-model="status.replacement"
                                                             :ref="'replacement-'+status.lastName"
-                                                            @change="/*resetDeputyNoReplacement(status);*/ hydrateMandator(status);changeAttendance(status);"
+                                                            @change="hydrateMandator(status);changeAttendance(status);"
                                                     >
                                                         <option value="none">Aucun remplacement</option>
                                                         <option value="deputy">Suppléant</option>

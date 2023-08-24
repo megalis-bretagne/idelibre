@@ -9,16 +9,19 @@ class ConvocationAttendance
     private string $convocationId;
     private ?string $attendance;
     private ?string $replacement = null;
-    private ?string $mandataire = null;
+    private ?User $mandataire = null;
+    private ?User $deputy = null;
 
-    public function getReplacement(): ?string
+
+    public function getConvocationId(): string
     {
-        return $this->replacement;
+        return $this->convocationId;
     }
 
-    public function setReplacement(?string $replacement): ConvocationAttendance
+    public function setConvocationId(string $convocationId): ConvocationAttendance
     {
-        $this->replacement = $replacement;
+        $this->convocationId = $convocationId;
+
         return $this;
     }
 
@@ -34,27 +37,37 @@ class ConvocationAttendance
         return $this;
     }
 
-    public function getMandataire(): ?string
+    public function getReplacement(): ?string
+    {
+        return $this->replacement;
+    }
+
+    public function setReplacement(?string $replacement): ConvocationAttendance
+    {
+        $this->replacement = $replacement;
+        return $this;
+    }
+
+    public function getMandataire(): ?User
     {
         return $this->mandataire;
     }
 
-    public function setMandataire(?string $mandataire): ConvocationAttendance
+    public function setMandataire(?User $mandataire): ConvocationAttendance
     {
         $this->mandataire = $mandataire;
 
         return $this;
     }
 
-    public function getConvocationId(): string
+    public function getDeputy(): ?User
     {
-        return $this->convocationId;
+        return $this->deputy;
     }
 
-    public function setConvocationId(string $convocationId): ConvocationAttendance
+    public function setDeputy(?User $deputy): ConvocationAttendance
     {
-        $this->convocationId = $convocationId;
-
+        $this->deputy = $deputy;
         return $this;
     }
 }

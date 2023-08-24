@@ -548,23 +548,18 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             $qb->andWhere('u NOT IN (:toExclude)')
                 ->setParameter('toExclude', $toExclude);
         }
-
         return $qb;
     }
-//
-//    public function findActorsWithAssociation(Structure $structure): array
-//    {
-//        return $this->createQueryBuilder('u')
-//            ->andWhere('u.structure = :structure')
-//            ->setParameter('structure', $structure)
-//            ->andWhere('u.isActive = true')
-//            ->join('u.role', 'r')
-//            ->andWhere(' r.name = :deputy')
-//            ->setParameter('deputy', Role::NAME_ROLE_ACTOR)
-//            ->andWhere('u.associatedWith IS NOT NULL')
-//            ->orderBy('u.lastName', 'ASC')
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+
+    public function findDeputyById($deputyId): QueryBuilder
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.id = :actorId')
+            ->setParameter('actorId', $deputyId)
+            ->leftJoin('u.deputy', 'd')
+            ->addSelect('d')
+//            ->groupBy('deputy.lastName')
+            ;
+    }
+
 }

@@ -28,19 +28,25 @@ class AttendanceController extends AbstractController
         $form = $this->createForm(AttendanceType::class, null, [
             'isRemoteAllowed' => $sitting->getIsRemoteAllowed(),
             'convocation' => $attendanceToken->getConvocation(),
+            'sitting' => $attendanceToken->getConvocation()->getSitting(),
+            'toExclude' => [$attendanceToken->getConvocation()->getUser()],
+            'deputyId' => $attendanceToken->getConvocation()->getUser()->getId()
+
         ]);
 
         $form->handleRequest($request);
+
         if ($form->isSubmitted()) {
             $convocationAttendance = (new ConvocationAttendance())
                 ->setAttendance($form->get('attendance')->getData())
                 ->setReplacement($form->get('status')->getData() ? $form->get('status')->getData() : "aucun remplacement")
-                ->setMandataire($form->get('mandataire')->getData())
-                ->setConvocationId($attendanceToken->getConvocation()->getId());
-
+                ->setMandataire($form->get('mandataire')->getData() ?: null);
+                if (array_key_exists("deputy", $form->getNormData())) {
+                    $convocationAttendance->setDeputy($form->get('deputy') !== null ? $attendanceToken->getConvocation()->getUser()->getDeputy() : null);
+                }
+                $convocationAttendance->setConvocationId($attendanceToken->getConvocation()->getId());
 
             $this->convocationManager->updateConvocationAttendances([$convocationAttendance]);
-//            dd($convocationAttendance);
 
             $this->addFlash('success', 'Présence enregistrée');
 
