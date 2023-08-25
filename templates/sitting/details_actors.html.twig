@@ -610,21 +610,21 @@
 
 
                                                 <td class="col-3">
-                                                    <div class="d-none" :ref="'poa-'+status.convocationId">
-                                                        <select :disabled="status.attendance !== 'absent' || status.replacement === 'none' "
-                                                                class="select form-control d-none" v-model="status.deputy"
+                                                    <div class="d-none" :id=`poa-${status.convocationId}`>
+                                                        <select :disabled="status.attendance !== 'absent' "
+                                                                class="select form-control" v-model="status.mandataire"
                                                                 @change="changeAttendance(status);">
                                                             <option  v-for="actors in actorConvocations"
-                                                                    :value="actors.user.id">
+                                                                    :value="actors.user">
                                                                 ${actors.user.firstName} ${actors.user.lastName}
                                                             </option>
                                                         </select>
                                                     </div>
 
-                                                    <div v-if="status.deputy" class="d-none" :ref="`deputy-${status.convocationId}`">
-                                                        <select class="select form-control" v-model="status.deputy">
-                                                            <option readonly="readonly"
-                                                                    :value="status.deputy.id">
+                                                    <div v-if="status.deputy" class="d-none" :id="`deputy-${status.convocationId}`">
+                                                        <select class="select form-control" v-model="status.deputy"
+                                                                @change="changeAttendance(status);">
+                                                            <option :value="status.deputy">
                                                                 ${status.deputy.firstName} ${status.deputy.lastName}
                                                             </option>
                                                         </select>

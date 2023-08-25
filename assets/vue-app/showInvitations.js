@@ -201,6 +201,7 @@ let app = new Vue({
                 attendance: status.attendance,
                 replacement: status.replacement,
                 deputy: status.deputy,
+                mandataire: status.mandataire
 
             })
         },
@@ -242,23 +243,26 @@ let app = new Vue({
         },
 
         hideAndSeek(status) {
-            let ref_replacement = this.$refs[`replacement-${status.convocationId}`]
-            let ref_deputy = this.$refs[`deputy-${status.convocationId}`]
-            let ref_poa = this.$refs[`poa-${status.convocationId}`]
+            let ref_replacement =this.$refs[`replacement-${status.convocationId}`]
+            let ref_deputy = document.querySelector(`#deputy-${status.convocationId}`)
+            let ref_poa = document.querySelector(`#poa-${status.convocationId}`)
 
 
 
             if (ref_replacement[0].value === "poa") {
-                ref_poa[0].classList.remove('d-none')
+                ref_poa.classList.remove('d-none')
+                ref_deputy.classList.add('d-none')
                 return;
             }
 
             if (ref_replacement[0].value === "deputy") {
-                ref_deputy[0].classList.remove('d-none')
+                ref_deputy.classList.remove('d-none')
+                ref_poa.classList.add('d-none')
                 return;
             }
+            ref_poa.classList.add('d-none')
+            ref_deputy.classList.add('d-none')
 
-           console.log('bouh')
         },
     },
 
@@ -285,8 +289,6 @@ function formatAttendanceStatus(convocations) {
             deputy: convocation.deputy,
             category: convocation.category,
         })
-
-        console.log(convocations[0].user)
     }
     return status;
 }
