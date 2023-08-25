@@ -3,6 +3,8 @@
 namespace App\Controller\api;
 
 use App\Entity\Sitting;
+use App\Entity\Structure;
+use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Requirements\Is;
 use App\Service\Connector\ComelusConnectorManager;
@@ -12,6 +14,7 @@ use App\Service\Convocation\ConvocationManager;
 use App\Service\Email\NotificationService;
 use App\Service\Util\Converter;
 use PHPUnit\Util\Json;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -118,8 +121,6 @@ class SittingController extends AbstractController
     {
         return $this->json([
             "actors" => $this->userRepository->findActorsInSittingWithExclusion($sitting, [])->getQuery()->getResult(),
-//            "deputy" => $this->userRepository->findDeputyById()
         ], 200, [], ['groups' => ['user']]);
     }
-
 }

@@ -578,13 +578,12 @@
                                             <tr class="d-flex" v-for="status in attendanceStatus">
 
                                                 <td class="col-3">
-                                                    <span :ref="status.firstName + ' ' + status.lastName">
+                                                    <span>
                                                         ${status.firstName} ${status.lastName}</span>
                                                 </td>
 
                                                 <td class="col-3" id="changeAttendancePresenceGroup">
                                                     <select class="select form-control" v-model="status.attendance"
-                                                            :ref="'presence-'+status.lastName"
                                                             @change="changeAttendance(status);"
                                                     >
                                                         <option value="">Sans Réponse</option>
@@ -599,11 +598,11 @@
                                                 <td class="col-3">
                                                     <select :disabled="status.attendance !== 'absent'"
                                                             class="select form-control" v-model="status.replacement"
-                                                            :ref="'replacement-'+status.lastName"
-                                                            @change="hydrateMandator(status);changeAttendance(status);"
+                                                            :ref="'replacement-'+ status.convocationId"
+                                                            @change="hideAndSeek(status);changeAttendance(status)"
                                                     >
                                                         <option value="none">Aucun remplacement</option>
-                                                        <option value="deputy">Suppléant</option>
+                                                        <option v-if="status.deputy" value="deputy">Suppléant</option>
                                                         <option value="poa">Procuration</option>
 
                                                     </select>
@@ -611,16 +610,29 @@
 
 
                                                 <td class="col-3">
-                                                    {# Steps :
-                                                        - Si le user a un suppleant afficher le supp avec le select disabled
-                                                        - Si le user n'a pas de suppleant afficher la liste des élu du sitting disponible
-                                                    #}
-                                                    <select :disabled="status.attendance !== 'absent' || status.replacement === 'none' "
-                                                            class="select form-control" v-model="status.deputy"
-                                                            :ref="'deputy-'+status.lastName"
-                                                            @change="changeAttendance(status);">
-                                                    </select>
+                                                    <div class="d-none" :ref="'poa-'+status.convocationId">
+                                                        <select :disabled="status.attendance !== 'absent' || status.replacement === 'none' "
+                                                                class="select form-control d-none" v-model="status.deputy"
+                                                                @change="changeAttendance(status);">
+                                                            <option  v-for="actors in actorConvocations"
+                                                                    :value="actors.user.id">
+                                                                ${actors.user.firstName} ${actors.user.lastName}
+                                                            </option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div v-if="status.deputy" class="d-none" :ref="`deputy-${status.convocationId}`">
+                                                        <select class="select form-control" v-model="status.deputy">
+                                                            <option readonly="readonly"
+                                                                    :value="status.deputy.id">
+                                                                ${status.deputy.firstName} ${status.deputy.lastName}
+                                                            </option>
+                                                        </select>
+                                                    </div>
+
                                                 </td>
+
+
                                             </tr>
                                             </tbody>
                                         </table>

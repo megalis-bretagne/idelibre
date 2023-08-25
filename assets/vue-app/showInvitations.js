@@ -50,7 +50,7 @@ let app = new Vue({
         isInvitation: false,
         timezone: "",
         options: "",
-        actors : []
+        actorsInSitting : [],
     },
 
     computed: {
@@ -129,6 +129,7 @@ let app = new Vue({
                 });
         },
 
+
         resetFilters() {
             this.filter = {actor: "", guest: "", employees: ""};
         },
@@ -200,6 +201,7 @@ let app = new Vue({
                 attendance: status.attendance,
                 replacement: status.replacement,
                 deputy: status.deputy,
+
             })
         },
 
@@ -239,51 +241,34 @@ let app = new Vue({
             this.showModalMailExample = true;
         },
 
-        getActorsInSitting() {
-           axios.get(`/api/sittings/${getSittingId()}/actors`)
-               .then((response) => {
-                   this.actors = response.data['actor']
-                   let actorsArray = JSON.parse(this.actors)
-                   console.log(actorsArray)
-               })
+        hideAndSeek(status) {
+            let ref_replacement = this.$refs[`replacement-${status.convocationId}`]
+            let ref_deputy = this.$refs[`deputy-${status.convocationId}`]
+            let ref_poa = this.$refs[`poa-${status.convocationId}`]
+
+
+
+            if (ref_replacement[0].value === "poa") {
+                ref_poa[0].classList.remove('d-none')
+                return;
+            }
+
+            if (ref_replacement[0].value === "deputy") {
+                ref_deputy[0].classList.remove('d-none')
+                return;
+            }
+
+           console.log('bouh')
         },
-
-
-
-        hydrateMandator(status) {
-
-            this.$nextTick(() => {
-                // let ref_replacement = this.$refs[`replacement-${status.convocationId}`]
-                let ref_deputy = this.$refs[`deputy-${status.convocationId}`]
-                this.getActorsInSitting()
-
-                // console.log(ref_deputy)
-
-                // if (ref_replacement[0].value === "deputy") {
-                //     this.getList(status, 'deputies')
-                //     return;
-                // }
-
-                // if(ref_replacement[0].value === "poa"){
-                //     // ref_deputy.innerHTML += this.getActorsInSitting()
-                //     return;
-                // }
-                console.log("aucun remplacement")
-            })
-        },
-
-
-
     },
-
 
 
     mounted() {
         this.getSittingTimezone();
         this.getConvocations();
         this.getSitting();
-        this.saveAttendance()
-
+        this.saveAttendance();
+        this.hideAndSeek(this.status)
     }
 });
 
@@ -300,6 +285,8 @@ function formatAttendanceStatus(convocations) {
             deputy: convocation.deputy,
             category: convocation.category,
         })
+
+        console.log(convocations[0].user)
     }
     return status;
 }
@@ -307,6 +294,10 @@ function formatAttendanceStatus(convocations) {
 
 function getSittingId() {
     return window.location.pathname.split('/')[3];
+}
+
+function getActorId() {
+    return window.location.pathname.split('/')[4];
 }
 
 function getConvocationCurrentId(convocations) {
@@ -344,6 +335,7 @@ function filter(convocations, search) {
         convocation.user.firstName.toLowerCase().includes(filterLowerCase) ||
         convocation.user.username.toLowerCase().includes(filterLowerCase)
     )
+
 }
 
 
