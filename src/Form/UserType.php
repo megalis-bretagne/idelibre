@@ -121,7 +121,7 @@ class UserType extends AbstractType
                 'label' => 'Suppléant',
                 'class' => User::class,
                 'choice_label' => 'lastName',
-                'query_builder' => $this->userRepository->findDeputiesWithNoAssociation($options['structure'])
+                'query_builder' => $this->userRepository->findDeputiesWithNoAssociation($options['structure']),
                 //todo queryBuilder limitant aux deputy disponiblent de la structure.
             ]);
         }

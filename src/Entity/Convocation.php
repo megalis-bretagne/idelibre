@@ -22,13 +22,11 @@ class Convocation
 {
     public const CATEGORY_CONVOCATION = 'convocation';
     public const CATEGORY_INVITATION = 'invitation';
-
     public const PRESENT = 'present';
     public const REMOTE = 'remote';
     public const ABSENT = 'absent';
     public const ABSENT_GIVE_POA = 'procuration'; # POA est l'acronyme de "power of attorney" qui signifie procuration
     public const ABSENT_SEND_DEPUTY = 'suppleant';
-
     public const UNDEFINED = '';
 
     #[ORM\Id]
@@ -90,6 +88,9 @@ class Convocation
     #[ORM\ManyToOne( cascade: ['persist', 'remove'])]
     #[Groups(groups: ['user', 'convocation', 'convocation:read'])]
     private ?User $deputy = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $replacement = null;
 
 
     public function __construct()
@@ -253,6 +254,18 @@ class Convocation
     public function setDeputy(?User $deputy): static
     {
         $this->deputy = $deputy;
+
+        return $this;
+    }
+
+    public function getReplacement(): ?string
+    {
+        return $this->replacement;
+    }
+
+    public function setReplacement(?string $replacement): static
+    {
+        $this->replacement = $replacement;
 
         return $this;
     }

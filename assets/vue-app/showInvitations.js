@@ -200,10 +200,9 @@ let app = new Vue({
                 convocationId: status.convocationId,
                 attendance: status.attendance,
                 replacement: status.replacement,
-                deputy: status.deputy,
-                mandataire: status.mandataire
-
+                deputy: status.deputy
             })
+            console.log(status)
         },
 
         saveAttendance() {
@@ -241,29 +240,6 @@ let app = new Vue({
             }
             this.showModalMailExample = true;
         },
-
-        hideAndSeek(status) {
-            let ref_replacement =this.$refs[`replacement-${status.convocationId}`]
-            let ref_deputy = document.querySelector(`#deputy-${status.convocationId}`)
-            let ref_poa = document.querySelector(`#poa-${status.convocationId}`)
-
-
-
-            if (ref_replacement[0].value === "poa") {
-                ref_poa.classList.remove('d-none')
-                ref_deputy.classList.add('d-none')
-                return;
-            }
-
-            if (ref_replacement[0].value === "deputy") {
-                ref_deputy.classList.remove('d-none')
-                ref_poa.classList.add('d-none')
-                return;
-            }
-            ref_poa.classList.add('d-none')
-            ref_deputy.classList.add('d-none')
-
-        },
     },
 
 
@@ -286,6 +262,7 @@ function formatAttendanceStatus(convocations) {
             firstName: convocation.user.firstName,
             lastName: convocation.user.lastName,
             attendance: convocation.attendance,
+            replacement: convocation.replacement,
             deputy: convocation.deputy,
             category: convocation.category,
         })
