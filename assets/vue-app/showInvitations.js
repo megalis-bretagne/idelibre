@@ -248,7 +248,6 @@ let app = new Vue({
         this.getConvocations();
         this.getSitting();
         this.saveAttendance();
-        this.hideAndSeek(this.status)
     }
 });
 
