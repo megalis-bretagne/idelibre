@@ -622,14 +622,14 @@
                                                             </option>
                                                         </optgroup>
 
-                                                        <optgroup label="Suppléant" v-else-if="status.replacement==='deputy'">
+{#                                                        <optgroup label="Suppléant" v-else-if="status.replacement==='deputy'">#}
                                                             <option :value="status.deputy" readonly="readonly"
                                                                     v-for="actors in actorConvocations"
                                                                     v-if="actors.user.deputy !== null && status.convocationId === actors.id"
                                                             >
                                                                ${actors.user.deputy.lastName}
                                                             </option>
-                                                        </optgroup>
+{#                                                        </optgroup>#}
 
 
                                                     </select>

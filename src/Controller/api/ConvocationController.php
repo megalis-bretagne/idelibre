@@ -4,6 +4,7 @@ namespace App\Controller\api;
 
 use App\Entity\Convocation;
 use App\Entity\Sitting;
+use App\Entity\User;
 use App\Repository\ConvocationRepository;
 use App\Service\Convocation\ConvocationAttendance;
 use App\Service\Convocation\ConvocationManager;

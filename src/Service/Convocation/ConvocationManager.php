@@ -335,28 +335,13 @@ class ConvocationManager
             // TODO check si le remote est autorisé
             $convocation->setAttendance($convocationAttendance->getAttendance());
             $convocation->setReplacement($convocationAttendance->getReplacement());
-            $convocation->setDeputy($convocationAttendance->getDeputy());
+
+            $convocation->setDeputy($this->userRepository->find($convocationAttendance->deputyId));
 
             $this->em->persist($convocation);
         }
         $this->em->flush();
     }
-
-//    private function obtainMandator($convocationAttendance)
-//    {
-//        dump($convocationAttendance);
-//        $mandator = null;
-//        if ($convocationAttendance->getDeputy()) {
-//            dump("deputy : " . $convocationAttendance->getDeputy()->getLastName());
-//            return $mandator = $convocationAttendance->getDeputy();
-//        }
-//        if ($convocationAttendance->getMandataire()) {
-//            dump("mandataire : " . $convocationAttendance->getDeputy()->getLastName());
-//            return $mandator = $convocationAttendance->getMandataire();
-//        }
-//
-//        return null;
-//    }
 
     private function getConvocationAttachment(Convocation $convocation, Sitting $sitting): Attachment
     {

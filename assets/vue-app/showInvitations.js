@@ -200,9 +200,9 @@ let app = new Vue({
                 convocationId: status.convocationId,
                 attendance: status.attendance,
                 replacement: status.replacement,
-                deputy: status.deputy
+                deputyId: status.deputy.id
             })
-            console.log(status)
+            console.log(status.deputy.lastName)
         },
 
         saveAttendance() {
