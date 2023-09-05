@@ -25,8 +25,8 @@ class Convocation
     public const PRESENT = 'present';
     public const REMOTE = 'remote';
     public const ABSENT = 'absent';
-    public const ABSENT_GIVE_POA = 'procuration'; # POA est l'acronyme de "power of attorney" qui signifie procuration
-    public const ABSENT_SEND_DEPUTY = 'suppleant';
+    public const ABSENT_GIVE_POA = 'poa'; # POA est l'acronyme de "power of attorney" qui signifie procuration
+    public const ABSENT_SEND_DEPUTY = 'deputy';
     public const UNDEFINED = '';
 
     #[ORM\Id]
@@ -89,9 +89,9 @@ class Convocation
     #[Groups(groups: ['user', 'convocation', 'convocation:read'])]
     private ?User $deputy = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $replacement = null;
-
+    #[ORM\ManyToOne( cascade: ['persist', 'remove'])]
+    #[Groups(groups: ['user', 'convocation', 'convocation:read'])]
+    private ?User $mandator = null;
 
     public function __construct()
     {
@@ -258,14 +258,14 @@ class Convocation
         return $this;
     }
 
-    public function getReplacement(): ?string
+    public function getMandator(): ?User
     {
-        return $this->replacement;
+        return $this->mandator;
     }
 
-    public function setReplacement(?string $replacement): static
+    public function setMandator(?User $mandator): static
     {
-        $this->replacement = $replacement;
+        $this->mandator = $mandator;
 
         return $this;
     }

@@ -8,9 +8,8 @@ class ConvocationAttendance
 {
     private string $convocationId;
     private ?string $attendance;
-    private ?string $replacement = null;
     public ?string $deputyId = null;
-
+    public ?string $mandataire = null;
 
     public function getConvocationId(): string
     {
@@ -36,26 +35,26 @@ class ConvocationAttendance
         return $this;
     }
 
-    public function getReplacement(): ?string
+    public function getDeputyId(): ?string
     {
-        return $this->replacement;
+        return $this->deputyId;
     }
 
-    public function setReplacement(?string $replacement): ConvocationAttendance
+    public function setDeputyId(?string $deputyId): ConvocationAttendance
     {
-        $this->replacement = $replacement;
+        $this->deputyId = $deputyId;
         return $this;
     }
 
-    public function getDeputy(): ?User
+    public function getMandataire(): ?string
     {
-//        dd($this->deputy);
-        return $this->deputy;
+        return $this->mandataire;
     }
 
-    /*public function setDeputy(?User $deputy): ConvocationAttendance
+    public function setMandataire(?string $mandataire): ConvocationAttendance
     {
-        $this->deputy = $deputy;
+        $this->mandataire = $mandataire;
         return $this;
-    }*/
+    }
+
 }

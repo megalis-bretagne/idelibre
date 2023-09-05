@@ -19,6 +19,8 @@
                 <u> {% if attendance == 'absent' %}absent{% endif %}
                     {% if attendance == 'present' %}présent{% endif %}
                     {% if attendance == 'remote' %}présent à distance{% endif %}
+                    {% if attendance == 'deputy' %} remplacé par votre suppléant {% endif %}
+                    {% if attendance == 'poa' %} absent mais donne pouvoir via une procuration {% endif %}
                 </u>.
                 Merci pour votre retour.
             </div>

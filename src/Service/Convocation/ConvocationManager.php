@@ -329,15 +329,15 @@ class ConvocationManager
         foreach ($convocationAttendances as $convocationAttendance) {
             $convocation = $this->convocationRepository->find($convocationAttendance->getConvocationId());
 
+//            dd($convocationAttendances);
+
             if (!$convocation) {
                 throw new NotFoundHttpException("Convocation with id ${convocationAttendance['convocationId']} does not exists");
             }
             // TODO check si le remote est autorisé
             $convocation->setAttendance($convocationAttendance->getAttendance());
-            $convocation->setReplacement($convocationAttendance->getReplacement());
-
-            $convocation->setDeputy($this->userRepository->find($convocationAttendance->deputyId));
-
+            $convocation->setDeputy( $convocationAttendance->getDeputyId() ? $convocationAttendance->getDeputyId(): null);
+            $convocation->setMandator($convocationAttendance->getMandataire() ? $this->userRepository->find($convocationAttendance->getMandataire()) : null);
             $this->em->persist($convocation);
         }
         $this->em->flush();

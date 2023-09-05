@@ -30,6 +30,7 @@
                 <p><b>Séance : </b> {{ sitting.name }}</p>
                 <p><b>Date de la séance : </b> {{ sitting.date | date('d/m/y : H:i', timezone) }}</p>
                 {% if convocation.deputy is not null %} <p><b>Remplacé par :</b> {{ convocation.deputy.firstName ~ " " ~ convocation.deputy.lastName }}</p>{% endif %}
+                {% if convocation.mandator is not null %} <p><b>Remplacé par :</b> {{ convocation.mandator.firstName ~ " " ~ convocation.mandator.lastName }}</p>{% endif %}
 
                 <div class="mt-5">
                     {{ form_start(form)}}

@@ -5,7 +5,6 @@ namespace App\Form;
 use App\Entity\Convocation;
 use App\Entity\User;
 use App\Repository\UserRepository;
-use Hoa\Compiler\Llk\Rule\Choice;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -29,12 +28,6 @@ class AttendanceType extends AbstractType
                 'empty_data' => Convocation::PRESENT,
             ])
 
-            ->add('status', ChoiceType::class, [
-                "label" => 'Remplacement',
-                'choices' => $this->getChoices($options) ,
-                "row_attr" => ["id" => "attendanceStatusGroup", "class" => "d-none"],
-            ])
-
             ->add('mandataire', EntityType::class, [
                 'label' => 'Mandataire',
                 'row_attr' => ["id" => "attendance_mandataire_group", "class" => 'd-none'],
@@ -55,12 +48,6 @@ class AttendanceType extends AbstractType
                     'class' => User::class,
                     'query_builder' => $this->userRepository->findDeputyById($options['deputyId']),
                     'choice_label' => 'deputy.lastName',
-//                    'choice_label' => function($user) {
-//                        return $user->getDeputy()->getFirstName() . " " . $user->getDeputy()->getLastName() ;
-//                    },
-//                    'choice_value' => function (?User $user): string {
-//                        return $user ? $user->getDeputy()->getId() : '';
-//                        },
                     'disabled' => false,
                 ]);
             }
@@ -71,6 +58,8 @@ class AttendanceType extends AbstractType
         $values = [
             'Présent' => Convocation::PRESENT,
             'Absent' => Convocation::ABSENT,
+            'Remplacé par son suppléant' => Convocation::ABSENT_SEND_DEPUTY,
+            'Donne pouvoir via procuration' => Convocation::ABSENT_GIVE_POA
         ];
 
         if ($isRemoteAllowed && Convocation::CATEGORY_CONVOCATION === $convocation->getCategory()) {
@@ -78,6 +67,8 @@ class AttendanceType extends AbstractType
                 'Présent' => Convocation::PRESENT,
                 'Présent à distance' => Convocation::REMOTE,
                 'Absent' => Convocation::ABSENT,
+                'Donne pouvoir via procuration' => Convocation::ABSENT_GIVE_POA,
+                'Remplacé par son suppléant' => Convocation::ABSENT_SEND_DEPUTY,
             ];
         }
 
@@ -103,18 +94,18 @@ class AttendanceType extends AbstractType
        return true;
     }
 
-    private function getChoices($options): array
-    {
-        if ($this->hasDeputy($options)) {
-            return [
-                "Non remplacé" => "none",
-                "Envoyer votre suppléant" => "deputy",
-                "Donner procuration" => "poa"
-            ];
-        }
-        return [
-            "Non remplacé" => "none",
-            "Donner procuration" => "poa"
-        ];
-    }
+//    private function getChoices($options): array
+//    {
+//        if ($this->hasDeputy($options)) {
+//            return [
+//                "Non remplacé" => "none",
+//                "Envoyer votre suppléant" => "deputy",
+//                "Donner procuration" => "poa"
+//            ];
+//        }
+//        return [
+//            "Non remplacé" => "none",
+//            "Donner procuration" => "poa"
+//        ];
+//    }
 }
