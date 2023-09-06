@@ -174,6 +174,7 @@ let app = new Vue({
                 this.showModalComelus = false;
             });
         },
+
         sendLsvote() {
             axios.post(`/api/sittings/${getSittingId()}/sendLsvote`)
                 .then((response) => {
@@ -202,6 +203,12 @@ let app = new Vue({
             const attendanceRemote = status.attendance === "remote"
             const attendanceAbsent = status.attendance === "absent"
 
+
+            if( isPoaOrDeputyWithoutDeputy(status) ){
+                return;
+            }
+
+
             if ( attendanceNull || attendancePresence|| attendanceRemote || attendanceAbsent ) {
                 this.changedAttendance.push({
                     convocationId: status.convocationId,
@@ -212,11 +219,12 @@ let app = new Vue({
                 return;
             }
 
+
             this.changedAttendance.push({
                 convocationId: status.convocationId,
                 attendance: status.attendance,
-                deputyId: status.deputy,
-                mandataire: status.mandataire,
+                deputyId: status?.deputy?.id,
+                mandataire: status?.mandator?.id,
             })
 
         },
@@ -330,6 +338,15 @@ function filter(convocations, search) {
         convocation.user.username.toLowerCase().includes(filterLowerCase)
     )
 
+}
+
+function isPoaOrDeputyWithoutDeputy(status) {
+    let isPoaOrDeputy = status.attendance === "poa" || status.attendance === "deputy";
+    if(! isPoaOrDeputy) {
+        return false;
+    }
+
+    return !status.deputy && !status.mandator
 }
 
 
