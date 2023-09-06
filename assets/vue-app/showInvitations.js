@@ -1,6 +1,7 @@
 import './vue-app.css';
 import Vue from 'vue/dist/vue';
 import axios from 'axios';
+import {nextTick} from "vue";
 
 
 Vue.filter('formatDateString', function (value, timezone) {
@@ -196,13 +197,28 @@ let app = new Vue({
         },
 
         changeAttendance(status) {
+            const attendanceNull = status.attendance === ""
+            const attendancePresence = status.attendance === "present"
+            const attendanceRemote = status.attendance === "remote"
+            const attendanceAbsent = status.attendance === "absent"
+
+            if ( attendanceNull || attendancePresence|| attendanceRemote || attendanceAbsent ) {
+                this.changedAttendance.push({
+                    convocationId: status.convocationId,
+                    attendance: status.attendance,
+                    deputyId: null,
+                    mandataire: null,
+                })
+                return;
+            }
+
             this.changedAttendance.push({
                 convocationId: status.convocationId,
                 attendance: status.attendance,
                 deputyId: status.deputy,
                 mandataire: status.mandataire,
             })
-            console.log(status)
+
         },
 
         saveAttendance() {
