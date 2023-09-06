@@ -26,7 +26,10 @@ class ConvocationTest extends WebTestCase
         $convocation = (new Convocation())
             ->setUser(new User())
             ->setSitting(new Sitting())
-            ->setCategory(Convocation::CATEGORY_CONVOCATION);
+            ->setCategory(Convocation::CATEGORY_CONVOCATION)
+            ->setDeputy(new User())
+            ->setMandator(new User())
+        ;
         $this->assertHasValidationErrors($convocation, 0);
     }
 
@@ -54,4 +57,5 @@ class ConvocationTest extends WebTestCase
 
         $this->assertHasValidationErrors($convocation, 1);
     }
+
 }

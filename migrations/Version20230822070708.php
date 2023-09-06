@@ -20,7 +20,7 @@ final class Version20230822070708 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('DROP SEQUENCE party_legacy_seq CASCADE');
+//        $this->addSql('DROP SEQUENCE party_legacy_seq CASCADE');
     }
 
     public function down(Schema $schema): void

@@ -45,7 +45,7 @@ class UserRepositoryTest extends WebTestCase
     public function testFindByStructure()
     {
         $structure = StructureStory::libriciel();
-        $this->assertCount(5, $this->userRepository->findByStructure($structure->object())->getQuery()->getResult());
+        $this->assertCount(6, $this->userRepository->findByStructure($structure->object())->getQuery()->getResult());
     }
 
     public function testFindSuperAdminAndGroupAdmin()
@@ -84,7 +84,7 @@ class UserRepositoryTest extends WebTestCase
     {
         $structure = StructureStory::libriciel();
         $actorQB = $this->userRepository->findActorsByStructure($structure->object());
-        $this->assertCount(3, $actorQB->getQuery()->getResult());
+        $this->assertCount(4, $actorQB->getQuery()->getResult());
     }
 
     public function testCountByRole()

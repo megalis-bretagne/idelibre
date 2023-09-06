@@ -2,7 +2,9 @@
 
 namespace App\Tests\Controller\api;
 
+use App\Entity\Convocation;
 use App\Service\Convocation\ConvocationManager;
+use App\Tests\Factory\ConvocationFactory;
 use App\Tests\FileTrait;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
@@ -104,7 +106,7 @@ class ConvocationControllerTest extends WebTestCase
     {
         $convocation = ConvocationStory::convocationActor1()->object();
 
-        $data = [['convocationId' => $convocation->getId(), 'attendance' => 'absent', 'deputy' => 'John Doe', 'isRemote' => false]];
+        $data = [['convocationId' => $convocation->getId(), 'attendance' => 'absent', 'isRemote' => false]];
 
         $this->loginAsAdminLibriciel();
 
@@ -119,8 +121,9 @@ class ConvocationControllerTest extends WebTestCase
 
         $this->assertResponseStatusCodeSame(200);
         $this->assertEquals('absent', $convocation->getAttendance());
-        $this->assertEquals('John Doe', $convocation->getDeputy());
+        $this->assertEquals(null, $convocation->getDeputy());
     }
+
 
     public function testSetAttendanceConvocationNotExists()
     {

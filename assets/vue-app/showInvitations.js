@@ -203,11 +203,9 @@ let app = new Vue({
             const attendanceRemote = status.attendance === "remote"
             const attendanceAbsent = status.attendance === "absent"
 
-
             if( isPoaOrDeputyWithoutDeputy(status) ){
                 return;
             }
-
 
             if ( attendanceNull || attendancePresence|| attendanceRemote || attendanceAbsent ) {
                 this.changedAttendance.push({
@@ -219,14 +217,13 @@ let app = new Vue({
                 return;
             }
 
-
             this.changedAttendance.push({
                 convocationId: status.convocationId,
                 attendance: status.attendance,
                 deputyId: status?.deputy?.id,
                 mandataire: status?.mandator?.id,
             })
-
+            console.log(status)
         },
 
         saveAttendance() {
@@ -348,5 +345,6 @@ function isPoaOrDeputyWithoutDeputy(status) {
 
     return !status.deputy && !status.mandator
 }
+
 
 

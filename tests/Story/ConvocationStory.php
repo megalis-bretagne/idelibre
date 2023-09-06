@@ -30,5 +30,12 @@ final class ConvocationStory extends Story
             'category' => Convocation::CATEGORY_CONVOCATION,
             'sentTimestamp' => null,
         ]));
+
+        $this->addState('convocationActor3SentWithToken', ConvocationFactory::new([
+            'sitting' => SittingStory::sittingConseilWithTokenSent(),
+            'user' => UserStory::actorWithDeputy(),
+            'category' => Convocation::CATEGORY_CONVOCATION,
+            'sentTimestamp' => null,
+        ]));
     }
 }

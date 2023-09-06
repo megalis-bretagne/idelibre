@@ -3,11 +3,13 @@
 namespace App\Tests\Controller;
 
 use App\Entity\Convocation;
+use App\Entity\User;
 use App\Tests\Factory\AttendanceTokenFactory;
 use App\Tests\Factory\UserFactory;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
 use App\Tests\Story\ConvocationStory;
+use App\Tests\Story\UserStory;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -70,10 +72,12 @@ class AttendanceControllerTest extends WebTestCase
         $this->assertNotEmpty($this->getOneEntityBy(Convocation::class, ['attendance' => 'present']));
     }
 
-    public function testAttendanceIsAbsent()
+    public function testAttendanceIsAbsentReplacedByDeputy()
     {
-        $convocation = ConvocationStory::convocationActor2SentWithToken();
-        $deputy = UserFactory::createOne()->getId();
+        $convocation = ConvocationStory::convocationActor3SentWithToken();
+        $user = UserStory::actorWithDeputy()->object();
+        $deputy = $user->getDeputy();
+
         AttendanceTokenFactory::createOne([
             'token' => 'mytoken',
             'convocation' => $convocation,
@@ -91,9 +95,7 @@ class AttendanceControllerTest extends WebTestCase
         $this->assertCount(1, $item);
 
         $form = $crawler->selectButton('Enregistrer')->form();
-        $form['attendance[attendance]'] = 'absent';
-        $form['attendance[status]'] = 'deputy';
-        $form['attendance[deputy]'] = $deputy;
+        $form['attendance[attendance]'] = 'deputy';
 
         $this->client->submit($form);
 
@@ -104,7 +106,7 @@ class AttendanceControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(200);
         $crawler->filter('section')->children('div.alert')->count(1);
 
-        $this->assertNotEmpty($this->getOneEntityBy(Convocation::class, ['attendance' => 'absent']));
+        $this->assertNotEmpty($this->getOneEntityBy(Convocation::class, ['attendance' => 'deputy']));
     }
 
     public function testAttendanceRedirect()

@@ -92,6 +92,17 @@ final class UserStory extends Story
             'structure' => StructureStory::libriciel(),
         ]));
 
+         $this->addState('actorWithDeputy', UserFactory::new([
+             'role' => RoleStory::actor(),
+             'username' => 'actorWithDeputy@libriciel',
+             'firstName' => 'actorWithDeputy',
+             'lastName' => 'libriciel',
+             'email' => 'actorWithDeputy@example.org',
+             'password' => self::PASSWORD,
+             'structure' => StructureStory::libriciel(),
+             'deputy' => UserFactory::new()
+         ]));
+
 
         // Secrétaires
         $this->addState('secretaryLibriciel1', UserFactory::new([
