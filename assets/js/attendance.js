@@ -10,8 +10,7 @@ getToken = () => {
 }
 let url = `/attendance/${getToken()}`
 
-attendanceInput.onchange = () => {
-
+window.onload = () => {
     let attendanceValue = attendanceInput.value;
 
     if(attendanceValue === "poa"){
@@ -20,7 +19,25 @@ attendanceInput.onchange = () => {
         return;
     }
 
-    if( deputy && attendanceValue === "deputy"){
+    if( attendanceValue === "deputy" && deputy !== null){
+        show(deputyGroup)
+        hide(mandataireGroup)
+        return;
+    }
+    hide(mandataireGroup)
+    hide(deputyGroup)
+}
+
+attendanceInput.onchange = () => {
+
+
+    if(attendanceValue === "poa"){
+        show(mandataireGroup)
+        deputy ? hide(deputyGroup) : console.log('')
+        return;
+    }
+
+    if( attendanceValue === "deputy" && deputy !== null){
         show(deputyGroup)
         hide(mandataireGroup)
         return;

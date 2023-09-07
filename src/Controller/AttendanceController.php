@@ -37,7 +37,6 @@ class AttendanceController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
-//            dd($form->getData());
             $convocationAttendance = (new ConvocationAttendance())
                 ->setAttendance($form->get('attendance')->getData());
                 !$form->get('mandataire')->getData() ? $convocationAttendance->setMandataire(null) : $convocationAttendance->setMandataire($form->get('mandataire')->getData()->getId());
