@@ -85,7 +85,8 @@ class Convocation
     #[ORM\OneToOne(mappedBy: 'convocation', cascade: ['persist', 'remove'])]
     private ?AttendanceToken $attendanceToken = null;
 
-    #[ORM\ManyToOne( cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne()]
+//    #[ORM\ManyToOne( cascade: ['persist', 'remove'])]
     #[Groups(groups: ['user', 'convocation', 'convocation:read'])]
     private ?User $deputy = null;
 
