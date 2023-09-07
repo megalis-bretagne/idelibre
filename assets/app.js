@@ -16,7 +16,6 @@ import './js/refreshApiKey'
 import './js/showPassword'
 import './js/utils/retrieveFromUrl'
 import './js/utils/showHide'
-import './js/attendance'
 
 $(document).ready(function () {
     let config = {

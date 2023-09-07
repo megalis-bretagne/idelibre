@@ -11,7 +11,7 @@ getToken = () => {
 let url = `/attendance/${getToken()}`
 
 window.onload = () => {
-    let attendanceValue = attendanceInput.value;
+    let attendanceValue = attendanceInput?.value;
 
     if(attendanceValue === "poa"){
         show(mandataireGroup)
@@ -29,6 +29,7 @@ window.onload = () => {
 }
 
 attendanceInput.onchange = () => {
+    let attendanceValue = attendanceInput?.value;
 
 
     if(attendanceValue === "poa"){
