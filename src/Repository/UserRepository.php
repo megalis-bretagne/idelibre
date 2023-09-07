@@ -521,6 +521,8 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->andWhere('u.isActive = true')
             ->join('u.role', 'r')
             ->andWhere(' r.name = :deputy')
+            ->join('u.titular', 'titular')
+            ->andWhere('titular IS NULL')
 
             ->setParameter('deputy', Role::NAME_ROLE_DEPUTY)
             ->orderBy('u.lastName', 'ASC')
