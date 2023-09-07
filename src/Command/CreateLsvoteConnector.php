@@ -42,7 +42,7 @@ class CreateLsvoteConnector extends Command
             $this->entityManager->getConnection()->getNativeConnection();
             $io->text('Chargement du connecteur lsvote');
             $this->lsvoteConnectorManager->createConnector($structure);
-            $io->success("Le connecteur s'est installé avec succès");
+            $io->success("Le connecteur lsvote s'est installé avec succès");
         }
         return 0;
     }
