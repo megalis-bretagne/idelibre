@@ -113,11 +113,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $jwtInvalidBefore = null;
 
-    #[Column(type: 'boolean', options: ['default' => false])]
-    private bool $isDeputy = false;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $attendanceOption = null;
 
-    #[ORM\OneToOne(targetEntity: self::class, cascade: ['persist', 'remove'])]
-    private ?self $mandator = null;
+    #[ORM\OneToOne(inversedBy: 'titular', targetEntity: self::class, cascade: ['persist', 'remove'])]
+    #[Groups(['user', 'user:read', 'user:write', 'convocation:read'])]
+    private ?self $deputy = null;
+
+    #[ORM\OneToOne(mappedBy: 'deputy', targetEntity: self::class, cascade: ['persist', 'remove'])]
+    private ?self $titular = null;
+
+
 
     public function __construct()
     {
@@ -405,26 +411,48 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function isDeputy(): bool
+    public function getAttendanceOption(): ?string
     {
-        return $this->isDeputy;
+        return $this->attendanceOption;
     }
 
-    public function setIsDeputy(bool $isDeputy): self
+    public function setAttendanceOption(?string $attendanceOption): self
     {
-        $this->isDeputy = $isDeputy;
+        $this->attendanceOption = $attendanceOption;
 
         return $this;
     }
 
-    public function getMandator(): ?self
+    public function getDeputy(): ?self
     {
-        return $this->mandator;
+        return $this->deputy;
     }
 
-    public function setMandator(?self $mandator): self
+    public function setDeputy(?self $deputy): static
     {
-        $this->mandator = $mandator;
+        $this->deputy = $deputy;
+
+        return $this;
+    }
+
+    public function getTitular(): ?self
+    {
+        return $this->titular;
+    }
+
+    public function setTitular(?self $titular): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($titular === null && $this->titular !== null) {
+            $this->titular->setDeputy(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($titular !== null && $titular->getDeputy() !== $this) {
+            $titular->setDeputy($this);
+        }
+
+        $this->titular = $titular;
 
         return $this;
     }

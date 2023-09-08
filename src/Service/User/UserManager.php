@@ -6,6 +6,7 @@ use App\Entity\Group;
 use App\Entity\Role;
 use App\Entity\Structure;
 use App\Entity\User;
+use App\Repository\UserRepository;
 use App\Security\Password\PasswordStrengthMeter;
 use App\Security\Password\ResetPassword;
 use App\Service\role\RoleManager;
@@ -25,6 +26,7 @@ class UserManager
         private readonly PasswordStrengthMeter $passwordStrengthMeter,
         private readonly ResetPassword $resetPassword,
         private readonly SubscriptionManager $subscriptionManager,
+        private readonly UserRepository $userRepository
     ) {
     }
 
@@ -46,6 +48,7 @@ class UserManager
 
         $user->setSubscription($this->subscriptionManager->add($user));
 
+
         $this->em->persist($user);
         $this->em->flush();
 
@@ -55,6 +58,7 @@ class UserManager
 
         return true;
     }
+
 
     public function editUser(User $user, string $plainPassword = null): bool
     {
@@ -116,8 +120,6 @@ class UserManager
 
     public function setFirstPassword(User $user): User
     {
-        //        $password = $this->passwordStrengthMeter->generatePassword();
-        //        $user->setPassword($this->passwordHasher->hashPassword($user, $password));
         $user->setPassword('CHANGEZ-MOI');
 
         return $user;

@@ -24,7 +24,6 @@ final class ConvocationStory extends Story
             'category' => Convocation::CATEGORY_CONVOCATION,
         ]));
 
-        // PF
         $this->addState('convocationActor2SentWithToken', ConvocationFactory::new([
             'sitting' => SittingStory::sittingConseilWithTokenSent(),
             'user' => UserStory::actorLibriciel1(),
@@ -32,6 +31,11 @@ final class ConvocationStory extends Story
             'sentTimestamp' => null,
         ]));
 
-        // TODO build your story here (https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#stories)
+        $this->addState('convocationActor3SentWithToken', ConvocationFactory::new([
+            'sitting' => SittingStory::sittingConseilWithTokenSent(),
+            'user' => UserStory::actorWithDeputy(),
+            'category' => Convocation::CATEGORY_CONVOCATION,
+            'sentTimestamp' => null,
+        ]));
     }
 }

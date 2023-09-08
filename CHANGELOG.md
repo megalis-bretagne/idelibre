@@ -1,6 +1,56 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.2.9] - 2023-07-06
+### Correction
+￼- Suite au passage en Symfony 6.3.1, le breadcrumb ne transformait plus les variables définies dnas les controller (données dans le fil d'ariane).
+
+## [4.2.8] - 2023-06-29
+### Evolution
+- Mise à jour symfony en 6.3.1
+- suppression de la lib sensioExtraFramework dépréciée
+- Mise à jour des lib npm
+
+
+### Correction
+￼- Le fuseau horaire contenu dans le fichier ics envoyé dans le mail de la séance présentait un décalage d'1 heure selon certain logiciel de gestion d'agenda
+￼	
+
+## [4.2.7] - 2023-06-28
+
+### Correction
+￼- Le fuseau horaire contenu dans le fichier ics envoyé dans le mail de la séance présentait un décalage d'1 heure selon certain logiciel de gestion d'agenda 
+
+## [4.2.6] - 2023-06-02
+
+### Correction
+￼- Le chargement de certains PDFs posent soucis si leur contenu ne finit pas par un EOF
+
+## [4.2.7] - 2023-06-28
+
+### Correction
+￼- Le fuseau horaire contenu dans le fichier ics envoyé dans le mail de la séance présentait un décalage d'1 heure selon certain logiciel de gestion d'agenda
+
+## [4.2.6] - 2023-06-02
+
+### Correction
+￼- Le chargement de certains PDFs posent soucis si leur contenu ne finit pas par un EOF
+
+## [4.2.7] - 2023-06-28
+
+### Correction
+￼- Le fuseau horaire contenu dans le fichier ics envoyé dans le mail de la séance présentait un décalage d'1 heure selon certain logiciel de gestion d'agenda
+
+## [4.2.6] - 2023-06-02
+
+### Correction
+￼- Le chargement de certains PDFs posent soucis si leur contenu ne finit pas par un EOF
+
+## [4.2.5] - 2023-06-02
+
+### Correction
+￼- Le téléchargement des autres documents n'était pas possible
+
 ## [4.2.11] - 2023-08-02
 ### Evolution
 - Mise à jour symfony en 6.3.3

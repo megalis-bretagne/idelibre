@@ -39,12 +39,13 @@
     <table class="table table-striped mt-3 bg-white">
         <thead>
             <tr class="d-flex">
-                <th class="col-3">{{ knp_pagination_sortable(users, 'Nom', 'u.lastName') }}</th>
+                <th class="col-1">{{ knp_pagination_sortable(users, 'Nom', 'u.lastName') }}</th>
                 <th class="col-2">{{ knp_pagination_sortable(users, 'Prénom', 'u.firstName') }}</th>
                 <th class="col-2">{{ knp_pagination_sortable(users, 'Nom d\'utilisateur', 'u.username') }}</th>
                 <th class="col-1">{{ knp_pagination_sortable(users, 'Profil', 'r.prettyName') }}</th>
-                <th class="col-2">{{ knp_pagination_sortable(users, 'Groupe politique', 'p.name') }}</th>
-                <th class="active_column">{{ knp_pagination_sortable(users, '', 'u.isActive') }}</th>
+                <th class="col">{{ knp_pagination_sortable(users, 'Groupe politique', 'p.name') }}</th>
+                <th class="col">Suppléant</th>
+                <th class="active_column d-none">{{ knp_pagination_sortable(users, '', 'u.isActive') }}</th>
                 <th class="col-2">Actions</th>
             </tr>
         </thead>
@@ -53,7 +54,7 @@
 
             {% for user in users %}
                 <tr class="d-flex">
-                    <td class="col-3">
+                    <td class="col-1">
                         {{ user.lastName }}
                     </td>
                     <td class="col-2">
@@ -62,13 +63,18 @@
                     <td class="col-2">
                         {{ user.username | noSuffix }}
                     </td>
-                    <td class="col-1">
+                    <td class="col">
                         {{ user.role ? user.role.prettyName : '' }}
                     </td>
-                    <td class="col-2">
+                    <td class="col">
                         {{ user.party ?  ( user.party.name|length > 10 ? user.party.name|slice(0,20) ~ '...' : user.party.name)  : ''  }}
                     </td>
-                    <td class="active_column">{{ user.isActive }}</td>
+
+                    <td class="col">
+                        {% if user.deputy is not null and user.deputy.role.name == "Deputy" %}{{ user.deputy.firstName|first|upper }}. {{ user.deputy.lastName}} {% endif %}
+                    </td>
+
+                    <td class="active_column d-none">{{ user.isActive }}</td>
                     <td class="col-2 actionButton">
                         {% if (app.user != user) %}
                             {{ macros.btnReloadPasswordWithModal(
