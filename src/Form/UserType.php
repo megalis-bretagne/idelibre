@@ -10,6 +10,7 @@ use App\Entity\User;
 use App\Repository\PartyRepository;
 use App\Repository\RoleRepository;
 use App\Repository\TypeRepository;
+use App\Repository\UserRepository;
 use App\Service\role\RoleManager;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -29,11 +30,12 @@ use Symfony\Component\Validator\Constraints\Regex;
 class UserType extends AbstractType
 {
     public function __construct(
-        private readonly RoleRepository $roleRepository,
+        private readonly RoleRepository  $roleRepository,
         private readonly PartyRepository $partyRepository,
-        private readonly RoleManager $roleManager,
-        private readonly TypeRepository $typeRepository,
-        private readonly Security $security
+        private readonly RoleManager     $roleManager,
+        private readonly TypeRepository  $typeRepository,
+        private readonly Security        $security,
+        private readonly UserRepository $userRepository
     ) {
     }
 
@@ -100,7 +102,27 @@ class UserType extends AbstractType
                     'query_builder' => $this->partyRepository->findByStructure($options['structure']),
                     'choice_label' => 'name',
                 ])
+                ->add('deputy', EntityType::class, [
+                    'label' => 'Suppléant',
+                    'row_attr' => ["class" => "d-none", "id" => "deputyGroup"],
+                    'class' => User::class,
+                    'choice_label' => 'lastName',
+                    'query_builder' => $this->userRepository->findDeputiesWithNoAssociation($options['structure']),
+                    'placeholder' => "--"
+
+                ])
             ;
+        }
+
+
+        if ($this->isExistingActor($options)) {
+            $builder->add('deputy', EntityType::class, [
+                'label' => 'Suppléant',
+                'class' => User::class,
+                'choice_label' => 'lastName',
+                'query_builder' => $this->userRepository->findDeputiesWithNoAssociation($options['structure']),
+                //todo queryBuilder limitant aux deputy disponiblent de la structure.
+            ]);
         }
 
         if ($this->IsSecretary($options)) {
@@ -169,6 +191,7 @@ class UserType extends AbstractType
             'structure' => null,
             'entropyForUser' => null,
             'referer' => null,
+            'sitting' => null,
         ]);
     }
 
@@ -187,6 +210,19 @@ class UserType extends AbstractType
     {
         if ($this->isNew($options)) {
             return true;
+        }
+
+        /** @var User $user */
+        $user = $options['data'];
+
+        return $user->getRole()->getId() === $this->roleManager->getActorRole()->getId();
+    }
+
+
+    private function isExistingActor(array $options): bool
+    {
+        if ($this->isNew($options)) {
+            return false;
         }
 
         /** @var User $user */

@@ -1,7 +1,7 @@
 import './vue-app.css';
-
 import Vue from 'vue/dist/vue';
 import axios from 'axios';
+import {nextTick} from "vue";
 
 
 Vue.filter('formatDateString', function (value, timezone) {
@@ -49,7 +49,9 @@ let app = new Vue({
         },
         convocationIdCurrent: "",
         isInvitation: false,
-        timezone: ""
+        timezone: "",
+        options: "",
+        actorsInSitting : [],
     },
 
     computed: {
@@ -67,7 +69,6 @@ let app = new Vue({
     },
 
     methods: {
-
         sendConvocation(convocationId) {
 
             axios.post(`/api/convocations/${convocationId}/send`).then(response => {
@@ -129,6 +130,7 @@ let app = new Vue({
                 });
         },
 
+
         resetFilters() {
             this.filter = {actor: "", guest: "", employees: ""};
         },
@@ -172,6 +174,7 @@ let app = new Vue({
                 this.showModalComelus = false;
             });
         },
+
         sendLsvote() {
             axios.post(`/api/sittings/${getSittingId()}/sendLsvote`)
                 .then((response) => {
@@ -195,12 +198,32 @@ let app = new Vue({
         },
 
         changeAttendance(status) {
+            const attendanceNull = status.attendance === ""
+            const attendancePresence = status.attendance === "present"
+            const attendanceRemote = status.attendance === "remote"
+            const attendanceAbsent = status.attendance === "absent"
+
+            if( isPoaOrDeputyWithoutDeputy(status) ){
+                return;
+            }
+
+            if ( attendanceNull || attendancePresence|| attendanceRemote || attendanceAbsent ) {
+                this.changedAttendance.push({
+                    convocationId: status.convocationId,
+                    attendance: status.attendance,
+                    deputyId: null,
+                    mandataire: null,
+                })
+                return;
+            }
 
             this.changedAttendance.push({
                 convocationId: status.convocationId,
                 attendance: status.attendance,
-                deputy: status.deputy
+                deputyId: status?.deputy?.id,
+                mandataire: status?.mandator?.id,
             })
+            console.log(status)
         },
 
         saveAttendance() {
@@ -209,7 +232,7 @@ let app = new Vue({
                     this.getConvocations()
                 })
                 .catch((e) => {
-                    console.log(e);
+                    console.log("erreur : " + e);
                     this.setErrorMessage("Erreur lors de l'enregistrement des présences")
 
                 })
@@ -240,12 +263,15 @@ let app = new Vue({
         },
     },
 
+
     mounted() {
         this.getSittingTimezone();
         this.getConvocations();
         this.getSitting();
+        this.saveAttendance();
     }
 });
+
 
 function formatAttendanceStatus(convocations) {
     let status = []
@@ -257,16 +283,20 @@ function formatAttendanceStatus(convocations) {
             lastName: convocation.user.lastName,
             attendance: convocation.attendance,
             deputy: convocation.deputy,
+            mandator: convocation.mandator,
             category: convocation.category,
         })
     }
-
     return status;
 }
 
 
 function getSittingId() {
     return window.location.pathname.split('/')[3];
+}
+
+function getActorId() {
+    return window.location.pathname.split('/')[4];
 }
 
 function getConvocationCurrentId(convocations) {
@@ -304,4 +334,17 @@ function filter(convocations, search) {
         convocation.user.firstName.toLowerCase().includes(filterLowerCase) ||
         convocation.user.username.toLowerCase().includes(filterLowerCase)
     )
+
 }
+
+function isPoaOrDeputyWithoutDeputy(status) {
+    let isPoaOrDeputy = status.attendance === "poa" || status.attendance === "deputy";
+    if(! isPoaOrDeputy) {
+        return false;
+    }
+
+    return !status.deputy && !status.mandator
+}
+
+
+

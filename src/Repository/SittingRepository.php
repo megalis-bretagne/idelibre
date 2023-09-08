@@ -174,6 +174,7 @@ class SittingRepository extends ServiceEntityRepository
             ->andWhere('s.date < :before')
             ->setParameter('structure', $structure)
             ->setParameter('before', $before)
-            ->getQuery()->getResult();
+            ->getQuery()
+            ->getResult();
     }
 }

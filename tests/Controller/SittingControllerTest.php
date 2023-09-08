@@ -4,15 +4,18 @@ namespace App\Tests\Controller;
 
 use App\Entity\EventLog\Action;
 use App\Entity\Sitting;
-use App\Tests\Factory\LsvoteSittingFactory;
+use App\Tests\Factory\FileFactory;
 use App\Tests\Factory\SittingFactory;
-use App\Tests\Factory\StructureFactory;
+use App\Tests\Factory\TypeFactory;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
 use App\Tests\Story\EmailTemplateStory;
 use App\Tests\Story\LsvoteConnectorStory;
 use App\Tests\Story\SittingStory;
+use App\Tests\Story\StructureStory;
 use App\Tests\Story\TypeStory;
+use App\Tests\Story\UserStory;
+use DateTime;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -141,6 +144,48 @@ class SittingControllerTest extends WebTestCase
         $this->assertCount(1, $successMsg);
 
         $this->assertEmpty($this->getOneSittingBy(['name' => 'Conseil Libriciel']));
+
+        $logEvent = $this->getOneEventLog(["targetId" => $sittingId]);
+        $this->assertNotEmpty($logEvent);
+        $this->assertEquals(Action::SITTING_DELETE, $logEvent->getAction());
+    }
+
+    public function testDeleteSittingWithDeputy()
+    {
+        $this->loginAsAdminLibriciel();
+
+        $structure = StructureStory::libriciel()->object();
+
+        $type = TypeFactory::createOne([
+            'structure' => $structure,
+                'associatedUsers' => [
+                    'associatedUser1' => UserStory::actorLibriciel1(),
+                    'associatedUser2' => UserStory::actorWithDeputy(),
+                ],
+                'authorizedSecretaries' => [UserStory::secretaryLibriciel1()],
+            ]);
+
+
+        $sitting = SittingFactory::createOne([
+            'name' => 'Urbanisme',
+            'date' => new DateTime('2020-11-22'),
+            'structure' => $structure,
+            'convocationFile' => FileFactory::createOne(),
+            'place' => 'Salle du conseil',
+            'type' => $type,
+        ]);
+
+        $sittingId = $sitting->getId();
+
+        $this->client->request(Request::METHOD_DELETE, '/sitting/delete/' . $sitting->getId());
+        $this->assertTrue($this->client->getResponse()->isRedirect());
+
+        $crawler = $this->client->followRedirect();
+        $this->assertResponseStatusCodeSame(200);
+        $successMsg = $crawler->filter('html:contains("Séances")');
+        $this->assertCount(1, $successMsg);
+
+        $this->assertEmpty($this->getOneSittingBy(['name' => 'Urbanisme']));
 
         $logEvent = $this->getOneEventLog(["targetId" => $sittingId]);
         $this->assertNotEmpty($logEvent);

@@ -25,7 +25,7 @@
                 <th class="col-3">{{ knp_pagination_sortable(structures, 'Nom', 's.name') }}</th>
                 <th class="col-3">{{ knp_pagination_sortable(structures, 'Suffixe', 's.suffix') }}</th>
                 <th class="col-3">{{ knp_pagination_sortable(structures, 'Groupe', 'g.name') }}</th>
-                <th class="active_column">{{ knp_pagination_sortable(structures, '', 's.isActive') }}</th>
+                <th class="active_column d-none">{{ knp_pagination_sortable(structures, '', 's.isActive') }}</th>
                 <th class="col-2">Actions</th>
             </tr>
         </thead>
@@ -62,7 +62,7 @@
                     <td class="col-3">
                         {{ (structure.group ? structure.group.name : "") | slice(0,25) }}
                     </td>
-                    <td class="active_column">{{ structure.isActive }}</td>
+                    <td class="active_column d-none">{{ structure.isActive }}</td>
                     <td class="col-2 actionButton">
                         {{ macros.editButton('structure_edit', structure.id) }}
 

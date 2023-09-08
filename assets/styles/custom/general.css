@@ -359,3 +359,18 @@ input[type="file"].project-file-btn {
 button .small{
     font-size: 75%;
 }
+
+.isDeputy {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #1e88e5;
+    margin-left: 1rem;
+}
+.hasProcuration {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: darkorange;
+    margin-left: 1rem;
+}

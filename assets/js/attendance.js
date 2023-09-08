@@ -1,22 +1,56 @@
-import $ from "jquery";
+const attendanceInput = document.querySelector('#attendance_attendance');
+const mandataireGroup = document.querySelector('#attendance_mandataire_group');
+const deputyGroup = document.querySelector('#attendance_deputy_group')
+const deputy = document.querySelector("h1").dataset.deputy
 
-$('document').ready(() => {
+getToken = () => {
+    const token = window.location.pathname.split("/")[3]
+    return token + ''
+
+}
+let url = `/attendance/${getToken()}`
+
+window.onload = () => {
+    let attendanceValue = attendanceInput?.value;
+
+    if(attendanceValue === "poa"){
+        show(mandataireGroup)
+        deputy ? hide(deputyGroup) : console.log('')
+        return;
+    }
+
+    if( attendanceValue === "deputy" && deputy !== null){
+        show(deputyGroup)
+        hide(mandataireGroup)
+        return;
+    }
+    hide(mandataireGroup)
+    hide(deputyGroup)
+}
+
+attendanceInput.onchange = () => {
+    let attendanceValue = attendanceInput?.value;
 
 
-    let $selectAttendance= $("#attendance_attendance");
-    let $deputyDiv = $('#deputy-div');
-    let $deputyInput= $('#attendance_deputy');
+    if(attendanceValue === "poa"){
+        show(mandataireGroup)
+        deputy ? hide(deputyGroup) : console.log('')
+        return;
+    }
 
-    $selectAttendance.change(() => {
-        const status = $selectAttendance.val();
-        if(status === 'absent') {
-            $deputyDiv.removeClass('d-none');
-            $deputyInput.attr('disabled', false)
-            return;
-        }
+    if( attendanceValue === "deputy" && deputy !== null){
+        show(deputyGroup)
+        hide(mandataireGroup)
+        return;
+    }
+    hide(mandataireGroup)
+    hide(deputyGroup)
+}
 
-        $deputyDiv.addClass('d-none');
-        $deputyInput.attr('disabled', true)
-    })
 
-})
+
+
+
+
+
+

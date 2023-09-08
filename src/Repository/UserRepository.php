@@ -61,6 +61,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             (r.name is null)')
             ->setParameter('superAdmin', 'SuperAdmin')
             ->setParameter('groupAdmin', 'GroupAdmin')
+            ->addSelect('p')
             ->addSelect('r');
 
         if (!empty($search)) {
@@ -463,5 +464,103 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->setParameter('structure', $structure)
             ->getQuery()
             ->execute();
+    }
+
+    public function findActorsInStructure(Structure $structure): QueryBuilder
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.structure = :structure')
+            ->setParameter('structure', $structure)
+            ->leftJoin('u.role', 'r')
+            ->andWhere(' r.name = :actor')
+            ->setParameter('actor', Role::NAME_ROLE_ACTOR)
+            ->andWhere('u.isActive = true')
+            ->orderBy('u.lastName', 'ASC')
+        ;
+    }
+
+    public function findActorsWithNoAssociation(Structure $structure, ?array $toExclude = null): QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('u')
+            ->andWhere('u.structure = :structure')
+            ->setParameter('structure', $structure)
+            ->leftJoin('u.role', 'r')
+            ->andWhere(' r.name = :actor')
+            ->setParameter('actor', Role::NAME_ROLE_ACTOR)
+            ->andWhere('u.isActive = true')
+            ->andWhere('u.associatedWith IS null')
+        ;
+        if ($toExclude) {
+            $qb->andWhere('u NOT IN (:toExclude)')
+                ->setParameter('toExclude', $toExclude);
+        }
+        return $qb;
+    }
+
+    public function findAllDeputies(Structure $structure): array
+    {
+        $qb = $this->createQueryBuilder("u")
+            ->andWhere('u.structure = :structure')
+            ->setParameter('structure', $structure)
+            ->andWhere('u.isActive = true')
+            ->join('u.role', 'r')
+            ->andWhere(' r.name = :deputy')
+            ->setParameter('deputy', Role::NAME_ROLE_DEPUTY)
+            ->orderBy('u.lastName', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+        return $qb;
+    }
+
+    public function findDeputiesWithNoAssociation(Structure $structure, ?array $toExclude = null): QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('u')
+            ->andWhere('u.structure = :structure')
+            ->setParameter('structure', $structure)
+            ->andWhere('u.isActive = true')
+            ->join('u.role', 'r')
+            ->andWhere(' r.name = :deputy')
+            ->join('u.titular', 'titular')
+            ->andWhere('titular IS NULL')
+
+            ->setParameter('deputy', Role::NAME_ROLE_DEPUTY)
+            ->orderBy('u.lastName', 'ASC')
+        ;
+        if ($toExclude) {
+            $qb->andWhere('u NOT IN (:toExclude)')
+                ->setParameter('toExclude', $toExclude);
+        }
+        return $qb;
+    }
+
+    public function findActorsInSittingWithExclusion(Sitting $sitting, ?array $toExclude = null): QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('u')
+            ->innerJoin(Convocation::class, 'c', Join::WITH, 'c.user = u')
+            ->andWhere('c.sitting = :sitting')
+            ->setParameter('sitting', $sitting)
+            ->andWhere('u.isActive = true')
+            ->join('u.role', 'r')
+            ->andWhere(' r.name = :actor')
+            ->setParameter('actor', Role::NAME_ROLE_ACTOR)
+            ->orderBy('u.lastName', 'ASC')
+        ;
+        if ($toExclude) {
+            $qb->andWhere('u NOT IN (:toExclude)')
+                ->setParameter('toExclude', $toExclude);
+        }
+        return $qb;
+    }
+
+    public function findDeputyById($deputyId): QueryBuilder
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.id = :actorId')
+            ->setParameter('actorId', $deputyId)
+            ->leftJoin('u.deputy', 'd')
+            ->addSelect('d')
+//            ->groupBy('deputy.lastName')
+        ;
     }
 }

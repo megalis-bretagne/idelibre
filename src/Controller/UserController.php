@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\ChooseDeputyType;
 use App\Form\SearchType;
 use App\Form\UserPreferenceType;
 use App\Form\UserType;
@@ -16,6 +17,7 @@ use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -25,6 +27,12 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Breadcrumb(title: 'Utilisateurs', routeName: 'user_index')]
 class UserController extends AbstractController
 {
+    public function __construct(
+        private readonly UserManager $userManager,
+        private readonly UserRepository $userRepository,
+    ) {
+    }
+
     #[Route(path: '/user', name: 'user_index')]
     #[IsGranted('ROLE_MANAGE_USERS')]
     public function index(UserRepository $userRepository, PaginatorInterface $paginator, Request $request): Response
@@ -44,13 +52,14 @@ class UserController extends AbstractController
             'users' => $users,
             'formSearch' => $formSearch->createView(),
             'searchTerm' => $request->query->get('search'),
+//            'countDeputiesAvalaible' => $this->userManager->countAvailableDeputies($this->getUser()->getStructure())
         ]);
     }
 
     #[Route(path: '/user/add', name: 'user_add')]
     #[IsGranted('ROLE_MANAGE_USERS')]
     #[Breadcrumb(title: 'Ajouter')]
-    public function add(Request $request, UserManager $manageUser, EventLogManager $eventLog): Response
+    public function add(Request $request, UserManager $userManager, EventLogManager $eventLog): Response
     {
         $form = $this->createForm(UserType::class, new User(), [
             'structure' => $this->getUser()->getStructure(),
@@ -61,7 +70,7 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $initPassword = $form->get('initPassword')->getData();
 
-            $success = $manageUser->save(
+            $success = $userManager->save(
                 $form->getData(),
                 $initPassword ? $form->get('plainPassword')->getData() : null,
                 $this->getUser()->getStructure()
@@ -111,6 +120,8 @@ class UserController extends AbstractController
             $this->addFlash('error', 'Votre mot de passe n\'est pas assez fort.');
         }
 
+
+
         return $this->render('user/edit.html.twig', [
             'form' => $form->createView(),
             'suffix' => $this->getUser()->getStructure()->getSuffix(),
@@ -127,6 +138,11 @@ class UserController extends AbstractController
 
             return $this->redirectToRoute('user_index');
         }
+        //        dd($user);
+        if ($user->getDeputy() !== null) {
+            $this->addFlash("error", "Veuillez retirer le suppléant avant de supprimer cet utilisateur");
+            return $this->redirectToRoute('user_index');
+        }
         $manageUser->delete($user);
         $this->addFlash('success', 'L\'utilisateur a bien été supprimé');
 
@@ -137,8 +153,6 @@ class UserController extends AbstractController
 
     #[Route(path: '/user/deleteBatch', name: 'user_delete_batch')]
     #[IsGranted('ROLE_MANAGE_USERS')]
-
-    //    #[Breadcrumb(title: 'Suppression par lot')]
     public function deleteBatch(UserRepository $userRepository, Request $request): Response
     {
         if ($request->isMethod('POST')) {
@@ -157,8 +171,6 @@ class UserController extends AbstractController
     #[Route(path: '/user/preferences', name: 'user_preferences', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_MANAGE_PREFERENCES')]
     #[Breadcrumb(null)]
-
-    //    #[Breadcrumb(title: 'Préférences utilisateur')]
     public function preferences(Request $request, UserManager $userManager, UserLoginEntropy $userLoginEntropy): Response
     {
         $user = $this->getUser();
@@ -222,5 +234,60 @@ class UserController extends AbstractController
                 'page' => $request->get('page'),
             ]);
         }
+    }
+
+
+
+
+    /**  Ajoute un suppléant depuis les icone de coté du user index     */
+    #[Route('/user/{id}/add/deputy/', name: 'user_add_deputy')]
+    #[IsGranted('ROLE_MANAGE_USERS', subject: 'user')]
+    public function addDeputy(User $user, Request $request): Response
+    {
+        $form = $this->createForm(ChooseDeputyType::class, $user, [
+            'structure' => $this->getUser()->getStructure(),
+            'toExcludes' => [$user],
+        ]);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->userManager->addDeputy($form->getData());
+            $this->addFlash('success', 'Le suppléant a été ajouté');
+
+            return $this->redirectToRoute('user_index');
+        }
+
+        return $this->render('user/add_deputy.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/user/{id}/delete/procuration-deputy/', name: 'sitting_procuration_deputy_delete')]
+    #[IsGranted('ROLE_MANAGE_USERS', subject: 'user')]
+    public function removeProcuration(User $user): Response
+    {
+        $this->userManager->removeProcurationOrDeputy($user);
+        $this->addFlash('success', "L'élu associé a été retiré");
+
+        return $this->redirectToRoute('user_index');
+    }
+
+    #[Route('/user/list/deputies', name: 'user_deputies_list', methods: ['GET'])]
+    public function getDeputyList(?User $user): Response
+    {
+        $toExcludes = [];
+        $user ? $toExcludes[] = $user : $toExcludes[] = null;
+        return $this->render('include/user_lists/_user_available_actors.html.twig', [
+            "availables" => $this->userRepository->findDeputiesWithNoAssociation($this->getUser()->getStructure(), [])->getQuery()->getResult(),
+        ]);
+    }
+
+    #[Route('/user/list/actors', name: 'user_actors_list', methods: ['GET'])]
+    public function getActorsList(?User $user): Response
+    {
+        $toExcludes = [];
+        $user ? $toExcludes[] = $user : $toExcludes[] = null;
+        return $this->render('include/user_lists/_user_available_actors.html.twig', [
+            "availables" => $this->userRepository->findActorsWithNoAssociation($this->getUser()->getStructure(), [])->getQuery()->getResult(),
+        ]);
     }
 }

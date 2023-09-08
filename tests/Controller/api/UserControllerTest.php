@@ -47,7 +47,7 @@ class UserControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(200);
 
         $actors = json_decode($this->client->getResponse()->getContent(), true);
-        $this->assertCount(3, $actors);
+        $this->assertCount(4, $actors);
     }
 
     public function testGetUsersInSitting()
@@ -72,7 +72,7 @@ class UserControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(200);
 
         $usersNotInSitting = json_decode($this->client->getResponse()->getContent(), true);
-        $this->assertCount(1, $usersNotInSitting['actors']);
+        $this->assertCount(2, $usersNotInSitting['actors']);
         $this->assertCount(2, $usersNotInSitting['employees']);
         $this->assertCount(0, $usersNotInSitting['guests']);
     }

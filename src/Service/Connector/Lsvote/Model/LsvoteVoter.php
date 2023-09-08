@@ -7,6 +7,8 @@ class LsvoteVoter
     private string $firstName;
     private string $lastName;
     private string $identifier;
+    private ?string $replacement;
+    private ?string $mandator;
 
     public function getFirstName(): string
     {
@@ -38,6 +40,28 @@ class LsvoteVoter
     public function setIdentifier(string $identifier): LsvoteVoter
     {
         $this->identifier = $identifier;
+        return $this;
+    }
+
+    public function getReplacement(): ?string
+    {
+        return $this->replacement;
+    }
+
+    public function setReplacement(?string $replacement): LsvoteVoter
+    {
+        $this->replacement = $replacement;
+        return $this;
+    }
+
+    public function getMandator(): ?string
+    {
+        return $this->mandator;
+    }
+
+    public function setMandator(?string $mandator): LsvoteVoter
+    {
+        $this->mandator = $mandator;
         return $this;
     }
 }

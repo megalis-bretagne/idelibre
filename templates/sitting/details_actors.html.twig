@@ -184,13 +184,25 @@
                                     <i class="fas fa-laptop-house"></i>
                                 </span>
 
+                            <span v-else-if="convocation.attendance==='deputy'" class="text-success d-flex flex-column" title="Remplacé par son suppléant">
+                                <i class="fas fa-arrow-right"></i>
+                                <i class="fas fa-arrow-left"></i>
+                            </span>
+
+                            <span v-else-if="convocation.attendance==='poa'" class="text-success d-flex flex-column" title="Donne pouvoir par procuration">
+                                <i class="fas fa-arrow-right text-success"></i>
+                                <i class="fas fa-arrow-left text-success"></i>
+                            </span>
+
                             <span v-else class="text-danger" title="Absent">
                                     <i class="fas fa-times"></i>
                                 </span>
                         </td>
 
+
                         <td class="col-3 {{ classToChange }}">
-                            <span v-if="convocation.deputy"> ${convocation.deputy}</span>
+                            <span v-if="convocation.deputy"> ${convocation.deputy.firstName} ${convocation.deputy.lastName} </span>
+                            <span v-else-if="convocation.mandator">${convocation.mandator.firstName} ${convocation.mandator.lastName}</span>
                         </td>
                     </tr>
                     </tbody>
@@ -576,27 +588,61 @@
                                         <table class="table table-striped">
                                             <tbody style="display: block;overflow-y: auto;max-height: 60vh;">
                                             <tr class="d-flex" v-for="status in attendanceStatus">
-                                                <td class="col-5">
+
+                                                <td class="col-4">
                                                     ${status.firstName} ${status.lastName}
                                                 </td>
 
-                                                <td class="col-3">
+                                                <td class="col-4" id="changeAttendancePresenceGroup">
                                                     <select class="select form-control" v-model="status.attendance"
-                                                            @change="changeAttendance(status)">
+                                                            @change="changeAttendance(status);" >
                                                         <option value="">Sans Réponse</option>
-                                                        <option value="absent">Absent</option>
                                                         <option value="present">Présent</option>
                                                         {% if sitting.isRemoteAllowed %}
-                                                        <option value="remote">À distance</option>
+                                                            <option value="remote">À distance</option>
                                                         {% endif %}
+                                                        <option value="absent">Absent</option>
+                                                        <option value="poa">Donne procuration</option>
+                                                        <option v-for="actors in actorConvocations"
+                                                                v-if="status.convocationId === actors.id && actors.user.deputy !== null"
+                                                                value="deputy">Envoi son suppléant
+                                                        </option>
                                                     </select>
                                                 </td>
 
-                                                <td class="col-4" v-if="status.category === 'convocation'">
-                                                    <input :disabled="status.attendance !== 'absent'"
-                                                           class="select form-control" v-model="status.deputy"
-                                                           @change="changeAttendance(status)" placeholder="Mandataire">
+                                                <td class="col-4">
+
+                                                    <div v-if="status.attendance==='poa'">
+                                                        <select class="select form-control" @change="changeAttendance(status);" v-model="status.mandator" :disabled="status.attendance !== 'poa'">
+
+                                                            <option :value="actors.user"
+                                                                    v-for="actors in actorConvocations"
+                                                                    v-if="status.lastName !== actors.user.lastName">
+                                                                ${actors.user.firstName} ${actors.user.lastName}
+                                                            </option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div v-else-if="status.attendance==='deputy'">
+                                                        <div v-for="actors in actorConvocations"
+                                                             v-if="status.convocationId === actors.id && actors.user.deputy !== null">
+                                                            <select class="select form-control"
+                                                                    @change="changeAttendance(status);"
+                                                                    v-model="status.deputy"
+                                                                    :disabled="status.attendance !== 'deputy'">
+                                                                <option :value="actors.user.deputy"
+                                                                        v-for="actors in actorConvocations"
+                                                                        v-if="status.convocationId === actors.id && actors.user.deputy !== null">
+                                                                    ${actors.user.deputy.firstName} ${actors.user.deputy.lastName}
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
                                                 </td>
+
+
+
                                             </tr>
                                             </tbody>
                                         </table>

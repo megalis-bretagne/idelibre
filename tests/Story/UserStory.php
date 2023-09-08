@@ -4,6 +4,7 @@ namespace App\Tests\Story;
 
 use App\Service\Util\GenderConverter;
 use App\Tests\Factory\UserFactory;
+use Couchbase\User;
 use Zenstruck\Foundry\Story;
 
 final class UserStory extends Story
@@ -89,6 +90,17 @@ final class UserStory extends Story
             'email' => 'actor3@example.org',
             'password' => self::PASSWORD,
             'structure' => StructureStory::libriciel(),
+        ]));
+
+        $this->addState('actorWithDeputy', UserFactory::new([
+            'role' => RoleStory::actor(),
+            'username' => 'actorWithDeputy@libriciel',
+            'firstName' => 'actorWithDeputy',
+            'lastName' => 'libriciel',
+            'email' => 'actorWithDeputy@example.org',
+            'password' => self::PASSWORD,
+            'structure' => StructureStory::libriciel(),
+            'deputy' => UserFactory::new()
         ]));
 
 

@@ -213,4 +213,17 @@ class UserTest extends WebTestCase
 
         $this->assertHasValidationErrors($user, 1);
     }
+
+    public function testAddDeputy()
+    {
+        $user = (new User())
+            ->setRole($this->getOneRoleBy(['name' => 'Secretary']))
+            ->setFirstName('new firstName')
+            ->setLastName('new lastName')
+            ->setUsername('new username')
+            ->setEmail('email@example.org')
+            ->setDeputy(new User())
+        ;
+        $this->assertHasValidationErrors($user, 0);
+    }
 }

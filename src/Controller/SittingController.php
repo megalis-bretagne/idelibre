@@ -3,13 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Sitting;
+use App\Entity\Structure;
+use App\Entity\User;
 use App\Form\SearchType;
 use App\Form\SittingType;
 use App\Repository\EmailTemplateRepository;
-use App\Repository\LsvoteConnectorRepository;
 use App\Repository\OtherdocRepository;
 use App\Repository\ProjectRepository;
-use App\Service\Connector\Lsvote\LsvoteException;
+use App\Repository\UserRepository;
 use App\Service\Connector\LsvoteConnectorManager;
 use App\Service\Connector\LsvoteResultException;
 use App\Service\EmailTemplate\EmailGenerator;
@@ -17,16 +18,16 @@ use App\Service\File\Generator\FileGenerator;
 use App\Service\File\Generator\UnsupportedExtensionException;
 use App\Service\Pdf\PdfValidator;
 use App\Service\Seance\SittingManager;
-use App\Service\Util\FileUtil;
 use App\Sidebar\Annotation\Sidebar;
 use App\Sidebar\State\SidebarState;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
-use phpDocumentor\Reflection\Types\This;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpClient\Exception\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -319,7 +320,6 @@ class SittingController extends AbstractController
     }
 
 
-
     #[Route(path: '/sitting/{id}/lsvote-results', name: 'sitting_lsvote_results', methods: ['GET'])]
     #[IsGranted('ROLE_MANAGE_SITTINGS')]
     public function getLsvoteResults(Sitting $sitting, LsvoteConnectorManager $lsvoteConnectorManager, Request $request): Response
@@ -352,5 +352,13 @@ class SittingController extends AbstractController
         $response->deleteFileAfterSend();
 
         return $response;
+    }
+
+    #[Route('/sitting/{id}/list/actors', name: 'sitting_actors_list', methods: ['GET'])]
+    public function getAllActorsList(UserRepository $userRepository): Response
+    {
+        return $this->render('sitting/includes/_list_actors.html.twig', [
+            "actors" => $userRepository->findActorsInStructure($this->getUser()->getStructure())->getQuery()->getResult(),
+        ]);
     }
 }

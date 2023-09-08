@@ -50,19 +50,28 @@ class ConvocationRepository extends ServiceEntityRepository
      */
     private function getWithRolesConvocationsBySitting(Sitting $sitting, array $roleNames): array
     {
-        return $this->createQueryBuilder('c')
+        $qb = $this->createQueryBuilder('c')
             ->andWhere('c.sitting = :sitting')
             ->setParameter('sitting', $sitting)
+
             ->leftJoin('c.user', 'user')
             ->addSelect('user')
+
             ->leftJoin('user.party', 'party')
             ->addSelect('party')
+
+            ->leftJoin('c.deputy', 'deputy')
+//            ->leftJoin('user.c.deputy', 'c.deputy')
+            ->addSelect('deputy')
             ->innerJoin('user.role', 'r')
+
             ->andWhere('r.name in (:roleNames)')
             ->setParameter('roleNames', $roleNames)
             ->orderBy('user.lastName')
             ->getQuery()
             ->getResult();
+        //        dd($qb);
+        return $qb;
     }
 
     /**

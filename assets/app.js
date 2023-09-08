@@ -14,7 +14,8 @@ import './js/lsvote'
 import './js/expandable'
 import './js/refreshApiKey'
 import './js/showPassword'
-import './js/attendance'
+import './js/utils/retrieveFromUrl'
+import './js/utils/showHide'
 
 $(document).ready(function () {
     let config = {
@@ -37,10 +38,5 @@ $(document).ready(function () {
     });
 })
 
-
-
-
-//const getMessage = require('./getMessage');
-//import getMessage from './getMessage'
-//console.log(getMessage(5));
 global.$ = $;
+

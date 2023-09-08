@@ -22,12 +22,16 @@ class Role
     public const CODE_ROLE_ACTOR = 3;
     public const CODE_ROLE_EMPLOYEE = 4;
     public const CODE_ROLE_GUEST = 5;
+    public const CODE_ROLE_DEPUTY = 6;
     public const NAME_ROLE_SECRETARY = 'Secretary';
     public const NAME_ROLE_STRUCTURE_ADMINISTRATOR = 'Admin';
     public const NAME_ROLE_ACTOR = 'Actor';
     public const NAME_ROLE_EMPLOYEE = 'Employee';
     public const NAME_ROLE_GUEST = 'Guest';
+    public const NAME_ROLE_DEPUTY = "Deputy";
     public const INVITABLE_EMPLOYEE = [self::NAME_ROLE_EMPLOYEE, self:: NAME_ROLE_SECRETARY, self::NAME_ROLE_STRUCTURE_ADMINISTRATOR];
+
+
 
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]

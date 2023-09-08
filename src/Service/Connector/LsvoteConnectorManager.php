@@ -5,6 +5,7 @@ namespace App\Service\Connector;
 use App\Entity\Connector\Exception\LsvoteConnectorException;
 use App\Entity\Connector\LsvoteConnector;
 use App\Entity\LsvoteSitting;
+use App\Entity\Role;
 use App\Entity\Sitting;
 use App\Entity\Structure;
 use App\Entity\User;
@@ -133,6 +134,7 @@ class LsvoteConnectorManager
             $lsvoteVoter->setIdentifier($user->getId())
                 ->setLastName($user->getLastName())
                 ->setFirstName($user->getFirstName());
+
             $lsvoteVoters[] = $lsvoteVoter;
         }
 

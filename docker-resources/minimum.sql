@@ -23,10 +23,13 @@ VALUES ('e581587e-1694-4b83-9ed7-4994bc792e5b', 'Guest', '["ROLE_GUEST"]', true,
 INSERT INTO role (id, name, composites, is_in_structure_role, pretty_name)
 VALUES ('811a1329-0cd0-49e8-b59b-5394219c50dd', 'Employee', '["ROLE_EMPLOYEE"]', true, 'Personnel administratif');
 
+INSERT INTO role (id, name, composites, is_in_structure_role, pretty_name)
+VALUES ('eb74e130-b142-476c-9439-f06b58472a17', 'Deputy', '["ROLE_DEPUTY"]', true, 'Suppléant');
+
 
 INSERT INTO "user" (id, structure_id, email, username, role_id, password, first_name, last_name, is_active)
 values (UUID_GENERATE_V4(), NULL, 'superadmin@exemple.org', 'superadminInstall', '94663bed-16e9-4990-8493-323c3d5e5565',
-        '$argon2id$v=19$m=65536,t=4,p=1$jCNjXFnpctIdKy2XKJ3d9w$B2THO9hICaf20D73R6PB0FDiR1+2RpJCZlpG6RExTlg', 'super ',
+        '$argon2i$v=19$m=65536,t=4,p=1$YXA2eHMzR0g5MnB0TkxHQQ$k5BCa74SurXTKNHGVGLLzyVscs8wyI72STYdNdkR9/Q', 'super ',
         'admin ', true);
 
 
