@@ -130,20 +130,22 @@ class LsvoteConnectorManager
         /** @var array<Convocation> $convocation */
         $convocations = $this->convocationRepository->getActorConvocationsBySitting($sitting);
 
+
         $lsvoteVoters = [];
         foreach ($convocations as $convocation) {
 
             $user = $convocation->getUser();
 
-            $lsvoteVoter =( new LsvoteVoter())
+            $lsvoteVoter = (new LsvoteVoter())
                 ->setIdentifier($user->getId())
                 ->setFirstName($user->getFirstName())
                 ->setLastName($user->getLastName());
+
             if ($convocation->getUser()->getRoles() === Role::NAME_ROLE_DEPUTY) {
                 $lsvoteVoter->setIsDeputy(true);
             }
             if($convocation->getDeputy()){
-                $lsvoteVoter->setDeputy($convocation->getDeputy());
+                $lsvoteVoter->setDeputy($this->createUserFromUser($convocation->getUser()->getDeputy()));
             }
             if ($convocation->getMandator()) {
                 $lsvoteVoter->setMandatorId($convocation->getMandator()->getId());
@@ -153,6 +155,16 @@ class LsvoteConnectorManager
         }
 
         return $lsvoteVoters;
+    }
+
+    function createUserFromUser($user): LsvoteVoter
+    {
+        return (new LsvoteVoter())
+                ->setIdentifier($user->getId())
+                ->setFirstName($user->getFirstName())
+                ->setLastName($user->getLastName())
+                ->setIsDeputy(true)
+            ;
     }
 
     private function prepareLsvoteSitting(Sitting $sitting): \App\Service\Connector\Lsvote\Model\LsvoteSitting
