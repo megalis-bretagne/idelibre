@@ -86,11 +86,11 @@ class Convocation
     private ?AttendanceToken $attendanceToken = null;
 
     #[ORM\ManyToOne()]
-//    #[ORM\ManyToOne( cascade: ['persist', 'remove'])]
+    //    #[ORM\ManyToOne( cascade: ['persist', 'remove'])]
     #[Groups(groups: ['user', 'convocation', 'convocation:read'])]
     private ?User $deputy = null;
 
-    #[ORM\ManyToOne( cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(cascade: ['persist', 'remove'])]
     #[Groups(groups: ['user', 'convocation', 'convocation:read'])]
     private ?User $mandator = null;
 
@@ -270,5 +270,4 @@ class Convocation
 
         return $this;
     }
-
 }

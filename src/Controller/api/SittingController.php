@@ -23,13 +23,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-
 class SittingController extends AbstractController
 {
-
     public function __construct(
         private readonly UserRepository $userRepository,
-    ){}
+    ) {
+    }
 
     #[Route(path: '/api/sittings/{id}/sendConvocations', name: 'api_convocations_send', methods: ['POST'])]
     #[IsGranted('MANAGE_SITTINGS', subject: 'sitting')]

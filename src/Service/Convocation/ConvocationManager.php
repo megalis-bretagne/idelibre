@@ -333,7 +333,7 @@ class ConvocationManager
             }
             // TODO check si le remote est autorisé
             $convocation->setAttendance($convocationAttendance->getAttendance());
-            $convocation->setDeputy( $convocationAttendance->getDeputyId() ? $this->userRepository->find($convocationAttendance->getDeputyId()): null);
+            $convocation->setDeputy($convocationAttendance->getDeputyId() ? $this->userRepository->find($convocationAttendance->getDeputyId()) : null);
             $convocation->setMandator($convocationAttendance->getMandataire() ? $this->userRepository->find($convocationAttendance->getMandataire()) : null);
             $this->em->persist($convocation);
         }

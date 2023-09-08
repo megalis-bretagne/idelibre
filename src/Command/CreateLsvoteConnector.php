@@ -2,13 +2,13 @@
 
 namespace App\Command;
 
-use App\Service\Connector\LsvoteConnectorManager;
-use Doctrine\ORM\Query\ResultSetMapping;
-use Symfony\Component\Console\Command\Command;
 use App\Repository\StructureRepository;
+use App\Service\Connector\LsvoteConnectorManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\ResultSetMapping;
 use Exception;
 use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -21,8 +21,7 @@ class CreateLsvoteConnector extends Command
         private readonly StructureRepository    $structureRepository,
         private readonly LsvoteConnectorManager $lsvoteConnectorManager,
         string                                  $name = null,
-    )
-    {
+    ) {
         parent::__construct($name);
     }
 
@@ -55,5 +54,4 @@ class CreateLsvoteConnector extends Command
 
         return $statement->rowCount() > 0;
     }
-
 }

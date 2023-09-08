@@ -177,6 +177,4 @@ class SittingRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-
-
 }

@@ -57,5 +57,4 @@ class ConvocationTest extends WebTestCase
 
         $this->assertHasValidationErrors($convocation, 1);
     }
-
 }

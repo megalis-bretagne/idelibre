@@ -31,8 +31,8 @@ class InitLsvoteConnectorTest extends WebTestCase
             ->get('doctrine')
             ->getManager();
 
-       $this->structureRepository = self::getContainer()->get(StructureRepository::class);
-       $this->connectorRepository = self::getContainer()->get(LsvoteConnectorRepository::class);
+        $this->structureRepository = self::getContainer()->get(StructureRepository::class);
+        $this->connectorRepository = self::getContainer()->get(LsvoteConnectorRepository::class);
 
         self::ensureKernelShutdown();
         $this->client = static::createClient();
@@ -47,5 +47,4 @@ class InitLsvoteConnectorTest extends WebTestCase
         $cmdTester->assertCommandIsSuccessful();
         $this->connectorRepository->findOneBy(['name' => 'lsvote']);
     }
-
 }

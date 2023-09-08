@@ -39,11 +39,11 @@ class AttendanceController extends AbstractController
         if ($form->isSubmitted()) {
             $convocationAttendance = (new ConvocationAttendance())
                 ->setAttendance($form->get('attendance')->getData());
-                !$form->get('mandataire')->getData() ? $convocationAttendance->setMandataire(null) : $convocationAttendance->setMandataire($form->get('mandataire')->getData()->getId());
-                if (array_key_exists("deputy", $form->getNormData())) {
-                    $convocationAttendance->setDeputyId($form->get('deputy') !== null ? $attendanceToken->getConvocation()->getUser()->getDeputy()->getId() : null);
-                }
-                $convocationAttendance->setConvocationId($attendanceToken->getConvocation()->getId());
+            !$form->get('mandataire')->getData() ? $convocationAttendance->setMandataire(null) : $convocationAttendance->setMandataire($form->get('mandataire')->getData()->getId());
+            if (array_key_exists("deputy", $form->getNormData())) {
+                $convocationAttendance->setDeputyId($form->get('deputy') !== null ? $attendanceToken->getConvocation()->getUser()->getDeputy()->getId() : null);
+            }
+            $convocationAttendance->setConvocationId($attendanceToken->getConvocation()->getId());
 
             $this->convocationManager->updateConvocationAttendances([$convocationAttendance]);
 

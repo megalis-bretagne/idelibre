@@ -152,5 +152,4 @@ class UserManager
 
         return true;
     }
-
 }

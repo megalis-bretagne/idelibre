@@ -39,18 +39,18 @@ class AttendanceType extends AbstractType
                 'placeholder' => '--'
             ]);
 
-            if($this->hasDeputy($options)) {
-                $builder->add('deputy', EntityType::class, [
-                    'label' => 'Suppléant',
-                    'attr' => ['readonly' => true],
-                    'row_attr' => ["id" => "attendance_deputy_group", "class" => 'd-none'],
-                    'required' => true,
-                    'class' => User::class,
-                    'query_builder' => $this->userRepository->findDeputyById($options['deputyId']),
-                    'choice_label' => 'deputy.lastName',
-                    'disabled' => false,
-                ]);
-            }
+        if ($this->hasDeputy($options)) {
+            $builder->add('deputy', EntityType::class, [
+                'label' => 'Suppléant',
+                'attr' => ['readonly' => true],
+                'row_attr' => ["id" => "attendance_deputy_group", "class" => 'd-none'],
+                'required' => true,
+                'class' => User::class,
+                'query_builder' => $this->userRepository->findDeputyById($options['deputyId']),
+                'choice_label' => 'deputy.lastName',
+                'disabled' => false,
+            ]);
+        }
     }
 
     private function getAttendanceValues(Convocation $convocation, ?bool $isRemoteAllowed): array
@@ -88,24 +88,9 @@ class AttendanceType extends AbstractType
 
     private function hasDeputy(array $options): bool
     {
-        if(!$options['toExclude'][0]->getDeputy()) {
+        if (!$options['toExclude'][0]->getDeputy()) {
             return false;
         }
-       return true;
+        return true;
     }
-
-//    private function getChoices($options): array
-//    {
-//        if ($this->hasDeputy($options)) {
-//            return [
-//                "Non remplacé" => "none",
-//                "Envoyer votre suppléant" => "deputy",
-//                "Donner procuration" => "poa"
-//            ];
-//        }
-//        return [
-//            "Non remplacé" => "none",
-//            "Donner procuration" => "poa"
-//        ];
-//    }
 }

@@ -361,5 +361,4 @@ class SittingController extends AbstractController
             "actors" => $userRepository->findActorsInStructure($this->getUser()->getStructure())->getQuery()->getResult(),
         ]);
     }
-
 }

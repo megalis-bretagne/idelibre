@@ -52,7 +52,7 @@ class UserControllerTest extends WebTestCase
         $this->loginAsAdminLibriciel();
         $userId = $user->getId();
 
-//        dd($user);
+        //        dd($user);
 
         $this->client->request(Request::METHOD_DELETE, '/user/delete/' . $user->getId());
         $this->assertTrue($this->client->getResponse()->isRedirect());

@@ -499,7 +499,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
     public function findAllDeputies(Structure $structure): array
     {
-        $qb =  $this->createQueryBuilder("u")
+        $qb = $this->createQueryBuilder("u")
             ->andWhere('u.structure = :structure')
             ->setParameter('structure', $structure)
             ->andWhere('u.isActive = true')
@@ -537,7 +537,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     public function findActorsInSittingWithExclusion(Sitting $sitting, ?array $toExclude = null): QueryBuilder
     {
         $qb = $this->createQueryBuilder('u')
-            ->innerJoin(Convocation::class, 'c', Join::WITH, 'c.user = u' )
+            ->innerJoin(Convocation::class, 'c', Join::WITH, 'c.user = u')
             ->andWhere('c.sitting = :sitting')
             ->setParameter('sitting', $sitting)
             ->andWhere('u.isActive = true')
@@ -561,7 +561,6 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->leftJoin('u.deputy', 'd')
             ->addSelect('d')
 //            ->groupBy('deputy.lastName')
-            ;
+        ;
     }
-
 }

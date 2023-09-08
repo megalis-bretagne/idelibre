@@ -36,8 +36,7 @@ class UserType extends AbstractType
         private readonly TypeRepository  $typeRepository,
         private readonly Security        $security,
         private readonly UserRepository $userRepository
-    )
-    {
+    ) {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -180,8 +179,8 @@ class UserType extends AbstractType
         }
 
         $builder->get('username')->addModelTransformer(new CallbackTransformer(
-            fn($username) => $username ? preg_replace('/@.*/', '', $username) : '',
-            fn($username) => $username . '@' . $this->getStructureSuffix($options['structure'])
+            fn ($username) => $username ? preg_replace('/@.*/', '', $username) : '',
+            fn ($username) => $username . '@' . $this->getStructureSuffix($options['structure'])
         ));
     }
 

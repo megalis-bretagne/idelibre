@@ -56,5 +56,4 @@ class ConvocationAttendance
         $this->mandataire = $mandataire;
         return $this;
     }
-
 }
