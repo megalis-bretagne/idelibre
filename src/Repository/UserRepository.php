@@ -499,7 +499,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
     public function findAllDeputies(Structure $structure): array
     {
-        $qb = $this->createQueryBuilder("u")
+        return $this->createQueryBuilder("u")
             ->andWhere('u.structure = :structure')
             ->setParameter('structure', $structure)
             ->andWhere('u.isActive = true')
@@ -508,9 +508,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->setParameter('deputy', Role::NAME_ROLE_DEPUTY)
             ->orderBy('u.lastName', 'ASC')
             ->getQuery()
-            ->getResult()
-        ;
-        return $qb;
+            ->getResult();
     }
 
     public function findDeputiesWithNoAssociation(Structure $structure, ?array $toExclude = null): QueryBuilder
