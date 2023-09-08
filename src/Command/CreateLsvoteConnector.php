@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\Service\Connector\LsvoteConnectorManager;
+use Doctrine\ORM\Query\ResultSetMapping;
 use Symfony\Component\Console\Command\Command;
 use App\Repository\StructureRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -35,23 +36,24 @@ class CreateLsvoteConnector extends Command
 
         if ($this->alreadyExistLsvoteConnector()) {
             $io->text('Le connecteur lsvote est déjà présent sur votre application');
-            return 0;
+            return Command::SUCCESS;
         }
 
         foreach ($structures as $structure) {
-            $this->entityManager->getConnection()->getNativeConnection();
             $io->text('Chargement du connecteur lsvote');
             $this->lsvoteConnectorManager->createConnector($structure);
             $io->success("Le connecteur lsvote s'est installé avec succès");
         }
-        return 0;
+        return Command::SUCCESS;
     }
 
     private function alreadyExistLsvoteConnector(): bool
     {
         $pdo = $this->entityManager->getConnection()->getNativeConnection();
-        $connector = $pdo->exec("select * from connector where name='lsvote' ");
-        return $connector > 0;
+        $statement = $pdo->prepare("select * from connector where name='lsvote'");
+        $statement->execute();
+
+        return $statement->rowCount() > 0;
     }
 
 }
