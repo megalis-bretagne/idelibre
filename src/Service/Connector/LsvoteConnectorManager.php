@@ -125,46 +125,18 @@ class LsvoteConnectorManager
      */
     private function prepareLsvoteVoter(Sitting $sitting): array
     {
-//        $deputies = $this->userRepository->findAllDeputies($sitting->getStructure());
-//        $formatDeputiesArray = [];
-//        foreach ($deputies as $deputy) {
-//            $formatDeputiesArray[] = $deputy->getFirstName() . " " . $deputy->getLastName();
-//            return $formatDeputiesArray;
-//        }
+        /** @var array<User> $users */
+        $users = $this->userRepository->findActorsInSitting($sitting)->getQuery()->getResult();
 
-
-//        dd($deputies);
-//        dd($formatDeputiesArray);
-//
-//        dd('boo');
-
-
-
-        $convocations = $sitting->getConvocations();
         $lsvoteVoters = [];
-        foreach ($convocations as $convocation) {
-            $lsvoteVoter = (new LsvoteVoter())
-                ->setIdentifier($convocation->getUser()->getId())
-                ->setFirstName($convocation->getUser()->getFirstName())
-                ->setLastName($convocation->getUser()->getLastName())
-                ->setReplacement("poa")
-//                ->setReplacement(in_array($convocation->getDeputy(), $deputies) ? "deputy" : "poa")
-                ->setMandator($convocation->getDeputy())
-                ;
+        foreach ($users as $user) {
+            $lsvoteVoter = new LsvoteVoter();
+            $lsvoteVoter->setIdentifier($user->getId())
+                ->setLastName($user->getLastName())
+                ->setFirstName($user->getFirstName());
+
             $lsvoteVoters[] = $lsvoteVoter;
         }
-//        /** @var array<User> $users */
-//        $users = $this->userRepository->findActorsInSitting($sitting)->getQuery()->getResult();
-
-//        $lsvoteVoters = [];
-//        foreach ($users as $user) {
-//            $lsvoteVoter = new LsvoteVoter();
-//            $lsvoteVoter->setIdentifier($user->getId())
-//                ->setLastName($user->getLastName())
-//                ->setFirstName($user->getFirstName());
-//
-//            $lsvoteVoters[] = $lsvoteVoter;
-//        }
 
         return $lsvoteVoters;
     }
