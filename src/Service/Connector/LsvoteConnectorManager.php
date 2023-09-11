@@ -91,7 +91,6 @@ class LsvoteConnectorManager
 
         try {
             $id = $this->lsvoteClient->sendSitting($connector->getUrl(), $connector->getApiKey(), $lsvoteSitting);
-
             $this->createLsvotesitting($id, $sitting);
 
             return $id;
