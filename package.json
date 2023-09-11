@@ -1,33 +1,23 @@
 {
     "devDependencies": {
-        "@fortawesome/fontawesome-free": "^5.15.1",
-        "@fortawesome/fontawesome-svg-core": "^1.2.32",
-<<<<<<< HEAD
-        "@symfony/stimulus-bridge": "^3.2.2",
-        "@symfony/webpack-encore": "^4.3.0",
-        "axios": "^1.4.0",
-        "bootstrap": "^4.6.2",
-=======
-        "@libriciel/ls-bootstrap-5": "^1.0.0-0",
+        "@babel/core": "^7.22.10",
+        "@babel/plugin-proposal-class-properties": "^7.18.6",
+        "@babel/preset-env": "^7.22.10",
         "@symfony/stimulus-bridge": "^3.2.1",
         "@symfony/webpack-encore": "^4.2.0",
         "axios": "^0.21.1",
-        "boostrap": "^2.0.0",
->>>>>>> 1dea91bf (Bs5 from libriciel installed and bs4 version removed)
         "bs-custom-file-input": "^1.3.4",
-        "core-js": "^3.31.0",
-        "dayjs": "^1.11.8",
-        "flatpickr": "^4.6.13",
-        "jquery": "^3.7.0",
-        "popper.js": "^1.16.1",
-        "regenerator-runtime": "^0.13.11",
+        "core-js": "^3.0.0",
+        "dayjs": "^1.10.3",
+        "flatpickr": "^4.6.9",
+        "regenerator-runtime": "^0.13.2",
         "select2": "^4.0.13",
-        "sortablejs": "^1.15.0",
+        "sortablejs": "^1.13.0",
         "stimulus": "^3.2.1",
-        "vue": "^2.7.14",
-        "vue-select": "^3.20.2",
-        "vuedraggable": "^2.24.3 ",
-        "webpack-notifier": "^1.15.0"
+        "vue": "^2.6.12",
+        "vue-select": "^3.11.2",
+        "vuedraggable": "^2.24.3",
+        "webpack-notifier": "^1.6.0"
     },
     "license": "UNLICENSED",
     "private": true,
@@ -38,8 +28,13 @@
         "build": "encore production --progress"
     },
     "dependencies": {
-        "@babel/plugin-proposal-class-properties": "^7.18.6",
+        "@fortawesome/fontawesome-free": "^6.4.2",
+        "@fortawesome/fontawesome-svg-core": "^6.4.2",
+        "@libriciel/ls-bootstrap-5": "^1.0.0-31",
         "@libriciel/ls-jquery-password": "^1.2.3",
-        "dotenv": "^16.3.1"
+        "@popperjs/core": "^2.11.8",
+        "bootstrap": "^5.3.1",
+        "dotenv": "^16.0.3",
+        "jquery": "^3.7.0"
     }
 }

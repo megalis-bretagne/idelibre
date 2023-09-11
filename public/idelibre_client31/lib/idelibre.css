@@ -3,7 +3,7 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 */
-/* 
+/*
     Created on : 8 déc. 2014, 15:23:09
     Author     : rdubourget
 */
@@ -28,7 +28,7 @@ and open the template in the editor.
 }
 
 .menuButton{
-    display: block; 
+    display: block;
     width: 85%;
 }
 
@@ -67,28 +67,28 @@ span.glyphicon-envelope {
 }
 
 .greenFash_color {
-    color: rgb(0, 255, 42) !important; 
+    color: rgb(0, 255, 42) !important;
 }
 
 .red_color {
-    color:#d9534f !important; 
+    color:#d9534f !important;
 }
 
 
 
 .download_color {
-    color: #69FF82 !important; 
+    color: #69FF82 !important;
 }
 
 .upload_color {
-    color: #F35E5E !important; 
+    color: #F35E5E !important;
 }
 
 
 
 
 .current_bg {
-    background: #5F9A37 !important; 
+    background: #5F9A37 !important;
 }
 
 .perso_button {
@@ -180,7 +180,7 @@ span.glyphicon-envelope {
     width:350px;
     background:#ddd;
     overflow-y: auto;
-    overflow-x: hidden; 
+    overflow-x: hidden;
 
 }
 
@@ -356,12 +356,12 @@ ul{
 .perso-label {
     padding: 2px 4px 2px;
     font-weight: bold;
-    line-height: 10px;    
+    line-height: 10px;
     vertical-align: baseline;
     white-space: nowrap;
     margin-top: 4px;
     border: 1px solid #676767;
-    color: #FFF; 
+    color: #FFF;
     font-size: 12px;
     border-radius: 5px;
 }
@@ -402,7 +402,7 @@ ul{
 
 .perso-grey-light{
     opacity: .65;
-    background: #E9E9E9; 
+    background: #E9E9E9;
     color: black;
 }
 
@@ -432,5 +432,5 @@ ul{
     right: 10px;
     top: 10px;
     z-index: 10;
-    color: var(--ls-grey-500);
+    color: var(--bs-ls-grey-500);
 }

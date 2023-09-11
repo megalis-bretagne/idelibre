@@ -18,7 +18,7 @@
     {{ form.subject is defined ? form_row(form.subject) : '' }}
     {{ form_label(form.content) }}
     <button type="button"
-            class="btn btn-outline-info borderless float-right"
+            class="btn btn-outline-info borderless float-end"
             data-toggle="popover"
              title="Liste des variables"
             data-html="true"
@@ -37,7 +37,7 @@
             {{ include('include/_attachment_warning.html.twig', { 'invitation_category' : ' de convocation'}) }}
         {% endif %}
     {% endif %}
-    <div class="float-right">
+    <div class="float-end">
         {% block pageSaveReturn %}{{ macro.save('email_template_index') }}{% endblock %}
     </div>
     {{ form_end(form) }}

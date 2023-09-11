@@ -21,7 +21,7 @@
 
     {{ form_label(form.description) }}
     <button type="button"
-         class="btn btn-outline-info borderless float-right"
+         class="btn btn-outline-info borderless float-end"
          data-toggle="popover"
          title="Liste des variables"
          data-html="true"
@@ -33,7 +33,7 @@
 
     {{ form_widget(form) }}
 
-    <div class="float-right">
+    <div class="float-end">
      {% block pageSaveReturn %}{{ macro.save('connector_index') }}{% endblock %}
     </div>
     {{ form_end(form) }}

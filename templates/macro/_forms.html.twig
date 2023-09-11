@@ -12,7 +12,7 @@
 
 {% macro emptyList(elements, text) %}
     {% if elements |length == 0 %}
-        <tr class="d-flex">
+        <tr>
             <td class="col-12 text-center">
                 {{ text }}
             </td>
@@ -42,16 +42,16 @@
 {% macro searchForm(formSearch, searchTerm, resetPath) %}
     {{ form_start(formSearch, {'method': 'GET'}) }}
 
-    <div class="input-group col-8 float-right pr-0">
+    <div class="input-group col-8 float-end pr-0">
         {{ form_widget(formSearch.search, {'value': searchTerm}) }}
         <div class="input-group-append">
             <a href="{{ path(resetPath) }}" class="btn btn-warning" title="Effacer">
                 <span class="fas fa-times"></span>
             </a>
-            <button class="btn btn-primary" title="Filtrer">
-                <span class="fas fa-search"></span>
-            </button>
         </div>
+        <button class="btn btn-primary" title="Filtrer">
+            <span class="fas fa-search"></span>
+        </button>
     </div>
     {{ form_end(formSearch) }}
 {% endmacro %}
@@ -77,38 +77,40 @@
 {% endmacro %}
 
 {% macro button_open_modal_delete(id, title, pathAction, content, page = 1) %}
-    <button type="button" class="btn btn-outline-danger borderless" title="Supprimer"
-            data-target="#delete{{ id }}" data-toggle="modal">
-        <span class="fa fa-trash-alt"></span>
-    </button>
+        <button type="button" class="btn btn-outline-danger borderless" title="Supprimer"
+                data-bs-toggle="modal" data-bs-target="#modalDelete{{ id }}">
+            <span class="fa fa-trash-alt"></span>
+        </button>
 
-    <div id="delete{{ id }}" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">
-                        {{ title }}
-                    </h4>
-                    <button class="close" data-dismiss="modal" type="button">&times;</button>
-                </div>
-                <div class="modal-body">
-                    {{ content | nl2br | raw }}
-                </div>
-                <div class="modal-footer">
-                    {{ _self.cancelBtnModal() }}
+        <div class="modal fade" id="modalDelete{{ id }}" tabindex="-1" aria-labelledby="modalDelete" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">
+                            {{ title }}
+                        </h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        {{ content | nl2br | raw }}
+                    </div>
 
-                    <form method="post" action="{{ path(pathAction, {id: id, page: page}) }}" style="display: inline-block">
-                        <input type="hidden" name="_method" value="DELETE">
-                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ id) }}">
-                        <button type="submit" class="btn btn-danger">
-                            <span class="fa fa-trash-alt"></span>
-                            Supprimer
-                        </button>
-                    </form>
+                    <div class="modal-footer">
+                        {{ _self.cancelBtnModal() }}
+
+                        <form method="post" action="{{ path(pathAction, {id: id, page: page}) }}"
+                              style="display: inline-block">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ id) }}">
+                            <button type="submit" class="btn btn-danger">
+                                <span class="fa fa-trash-alt"></span>
+                                Supprimer
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 {%- endmacro -%}
 
 {% macro button_open_modal_post(id, title, content, pathAction, icon = "fa fa-paper-plane", btn_title = "Envoyer",
@@ -125,7 +127,7 @@
                     <h4 class="modal-title">
                         {{ title }}
                     </h4>
-                    <button class="close" data-dismiss="modal" type="button">&times;</button>
+                    <button class="close" data-bs-dismiss="modal" type="button">&times;</button>
                 </div>
                 <div class="modal-body">
                     {{ content }}
@@ -160,7 +162,7 @@
                     <h4 class="modal-title">
                         {{ title }}
                     </h4>
-                    <button class="close" data-dismiss="modal" type="button">&times;</button>
+                    <button class="close" data-bs-dismiss="modal" type="button">&times;</button>
                 </div>
                 <div class="modal-body">
                     {{ content }}
@@ -201,7 +203,7 @@
                     <h4 class="modal-title">
                         {{ title }}
                     </h4>
-                    <button class="close" data-dismiss="modal" type="button">&times;</button>
+                    <button class="close" data-bs-dismiss="modal" type="button">&times;</button>
                 </div>
                 <div class="modal-body">
                     {{ content }}
@@ -241,7 +243,7 @@
                     <h4 class="modal-title">
                         {{ title }}
                     </h4>
-                    <button class="close" data-dismiss="modal" type="button">&times;</button>
+                    <button class="close" data-bs-dismiss="modal" type="button">&times;</button>
                 </div>
                 <div class="modal-body">
                     {{ content }}
@@ -305,8 +307,8 @@
 {#        {{ cancelName }}#}
 {#    </button>#}
 
-    <button type="button" class="btn btn-outline-primary" data-dismiss="modal">
+    <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">
         <span class="fa fa-times"></span>
-        Annuler
+        {{ cancelName }}
     </button>
 {% endmacro %}
