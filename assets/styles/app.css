@@ -1,4 +1,5 @@
-@import "../bootstrap-il/il-bootstrap-4.css";
+@import "../bootstrap-il/il-bootstrap-5.css";
+
 @import "~select2";
 @import "~@fortawesome/fontawesome-free/css/all.min.css";
 @import "~flatpickr/dist/flatpickr.css";
