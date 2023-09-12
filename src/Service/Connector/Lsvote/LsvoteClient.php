@@ -70,7 +70,7 @@ class LsvoteClient
                 ]
             );
 
-//            dd($response->getStatusCode(), $response->getInfo());
+            //            dd($response->getStatusCode(), $response->getInfo());
 
             $content = json_decode($response->getContent(), true);
 

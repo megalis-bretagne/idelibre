@@ -27,7 +27,7 @@ class CreateNewRoleDeputy extends WebTestCase
             ->get('doctrine')
             ->getManager();
 
-    $this->roleRepository = self::getContainer()->get(RoleRepository::class);
+        $this->roleRepository = self::getContainer()->get(RoleRepository::class);
 
         self::ensureKernelShutdown();
         $this->client = static::createClient();
@@ -45,4 +45,3 @@ class CreateNewRoleDeputy extends WebTestCase
         $this->assertSame("Deputy", $role->getName());
     }
 }
-

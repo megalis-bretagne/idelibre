@@ -75,14 +75,14 @@ class RoleManager
         ]);
     }
 
-    public function createNotAdminRole(string $roleName, string $prettyName, $inStructureRole):void
+    public function createNotAdminRole(string $roleName, string $prettyName, $inStructureRole): void
     {
         $role = (new Role())
             ->setIsInStructureRole(true)
             ->setName($roleName)
             ->setPrettyName($prettyName)
             ->setIsInStructureRole($inStructureRole)
-            ->setComposites([strtoupper("ROLE_".$roleName)])
+            ->setComposites([strtoupper("ROLE_" . $roleName)])
         ;
         $this->entityManager->persist($role);
         $this->entityManager->flush();

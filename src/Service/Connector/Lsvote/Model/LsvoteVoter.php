@@ -76,5 +76,4 @@ class LsvoteVoter
         $this->mandatorId = $mandatorId;
         return $this;
     }
-
 }

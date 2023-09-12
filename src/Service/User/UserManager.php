@@ -158,7 +158,7 @@ class UserManager
         $users = $this->userRepository->findActorsByStructure($structure)->getQuery()->getResult();
         $takenDeputies = [];
         foreach ($users as $user) {
-            if ($user->getDeputy() !== null ) {
+            if ($user->getDeputy() !== null) {
                 $takenDeputies[] = $user->getDeputy();
             }
         }
