@@ -5,3 +5,5 @@ framework:
       emailtemplate_content:
         allow_safe_elements: true
         allow_relative_links: true
+        allow_attributes:
+          style: '*'
