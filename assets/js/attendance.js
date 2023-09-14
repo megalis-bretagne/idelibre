@@ -15,7 +15,7 @@ window.onload = () => {
 
     if(attendanceValue === "poa"){
         show(mandataireGroup)
-        deputy ? hide(deputyGroup) : console.log('')
+        hide(deputyGroup)
         return;
     }
 
@@ -34,7 +34,7 @@ attendanceInput.onchange = () => {
 
     if(attendanceValue === "poa"){
         show(mandataireGroup)
-        deputy ? hide(deputyGroup) : console.log('')
+        hide(deputyGroup)
         return;
     }
 

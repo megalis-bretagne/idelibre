@@ -6,6 +6,7 @@ echo "init databases with symfony"
 ./bin/console initBdd:subscription_user
 ./bin/console initBdd:email_template_recap
 ./bin/console initBdd:connector_lsvote
+./bin/console initBdd:add_role
 ./bin/console initBdd docker-resources/minimum.sql
 ./bin/console cache:clear --no-interaction
 

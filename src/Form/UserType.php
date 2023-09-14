@@ -107,7 +107,7 @@ class UserType extends AbstractType
                     'row_attr' => ["class" => "d-none", "id" => "deputyGroup"],
                     'class' => User::class,
                     'choice_label' => 'lastName',
-                    'query_builder' => $this->userRepository->findDeputiesWithNoAssociation($options['structure']),
+                    'query_builder' => $this->userRepository->findDeputiesWithNoAssociation($options['structure'], $options['toExclude']),
                     'placeholder' => "--"
 
                 ])
@@ -120,7 +120,7 @@ class UserType extends AbstractType
                 'label' => 'Suppléant',
                 'class' => User::class,
                 'choice_label' => 'lastName',
-                'query_builder' => $this->userRepository->findDeputiesWithNoAssociation($options['structure']),
+                'query_builder' => $this->userRepository->findDeputiesWithNoAssociation($options['structure'], $options['toExclude']),
                 //todo queryBuilder limitant aux deputy disponiblent de la structure.
             ]);
         }
@@ -192,6 +192,7 @@ class UserType extends AbstractType
             'entropyForUser' => null,
             'referer' => null,
             'sitting' => null,
+            'toExclude' => null
         ]);
     }
 

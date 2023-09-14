@@ -64,6 +64,8 @@ class UserController extends AbstractController
         $form = $this->createForm(UserType::class, new User(), [
             'structure' => $this->getUser()->getStructure(),
             'entropyForUser' => $this->getUser()->getStructure()->getConfiguration()->getMinimumEntropy(),
+            'toExclude' => $userManager->AlreadyTakenDeputies($this->getUser()->getStructure())
+
         ]);
         $form->handleRequest($request);
 
@@ -94,19 +96,23 @@ class UserController extends AbstractController
     #[Route(path: '/user/edit/{id}', name: 'user_edit')]
     #[IsGranted('MANAGE_USERS', subject: 'user')]
     #[Breadcrumb(title: 'Modifier {user.firstName} {user.lastName}')]
-    public function edit(User $user, Request $request, UserManager $manageUser): Response
+    public function edit(User $user, Request $request, UserManager $userManager): Response
     {
+        //        dd($this->userManager->AlreadyTakenDeputies($user));
+
+
         $form = $this->createForm(UserType::class, $user, [
             'structure' => $this->getUser()->getStructure(),
             'entropyForUser' => $this->getUser()->getStructure()->getConfiguration()->getMinimumEntropy(),
             'referer' => $request->headers->get('referer'),
+            'toExclude' => $userManager->AlreadyTakenDeputies($user->getStructure())
         ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $initPassword = $form->has('initPassword') ? $form->get('initPassword')->getData() : false;
 
-            $success = $manageUser->editUser(
+            $success = $userManager->editUser(
                 $form->getData(),
                 $initPassword ? $form->get('plainPassword')->getData() : null,
             );
@@ -131,7 +137,7 @@ class UserController extends AbstractController
 
     #[Route(path: '/user/delete/{id}', name: 'user_delete', methods: ['DELETE'])]
     #[IsGranted('MANAGE_USERS', subject: 'user')]
-    public function delete(User $user, UserManager $manageUser, Request $request): Response
+    public function delete(User $user, UserManager $userManager, Request $request): Response
     {
         if ($this->getUser()->getid() == $user->getId()) {
             $this->addFlash('error', 'Impossible de supprimer son propre utilisateur');
@@ -143,7 +149,7 @@ class UserController extends AbstractController
             $this->addFlash("error", "Veuillez retirer le suppléant avant de supprimer cet utilisateur");
             return $this->redirectToRoute('user_index');
         }
-        $manageUser->delete($user);
+        $userManager->delete($user);
         $this->addFlash('success', 'L\'utilisateur a bien été supprimé');
 
         return $this->redirectToRoute('user_index', [
@@ -237,30 +243,6 @@ class UserController extends AbstractController
     }
 
 
-
-
-    /**  Ajoute un suppléant depuis les icone de coté du user index     */
-    #[Route('/user/{id}/add/deputy/', name: 'user_add_deputy')]
-    #[IsGranted('ROLE_MANAGE_USERS', subject: 'user')]
-    public function addDeputy(User $user, Request $request): Response
-    {
-        $form = $this->createForm(ChooseDeputyType::class, $user, [
-            'structure' => $this->getUser()->getStructure(),
-            'toExcludes' => [$user],
-        ]);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->userManager->addDeputy($form->getData());
-            $this->addFlash('success', 'Le suppléant a été ajouté');
-
-            return $this->redirectToRoute('user_index');
-        }
-
-        return $this->render('user/add_deputy.html.twig', [
-            'form' => $form->createView(),
-        ]);
-    }
-
     #[Route('/user/{id}/delete/procuration-deputy/', name: 'sitting_procuration_deputy_delete')]
     #[IsGranted('ROLE_MANAGE_USERS', subject: 'user')]
     public function removeProcuration(User $user): Response
@@ -275,17 +257,20 @@ class UserController extends AbstractController
     public function getDeputyList(?User $user): Response
     {
         $toExcludes = [];
-        $user ? $toExcludes[] = $user : $toExcludes[] = null;
+
+        $toExcludes = [...$this->userManager->AlreadyTakenDeputies($user)];
+        //        dd($toExcludes);
         return $this->render('include/user_lists/_user_available_actors.html.twig', [
-            "availables" => $this->userRepository->findDeputiesWithNoAssociation($this->getUser()->getStructure(), [])->getQuery()->getResult(),
+            "availables" => $this->userRepository->findDeputiesWithNoAssociation($this->getUser()->getStructure(), $toExcludes)->getQuery()->getResult(),
         ]);
     }
 
     #[Route('/user/list/actors', name: 'user_actors_list', methods: ['GET'])]
-    public function getActorsList(?User $user): Response
+    public function getActorsList(?User $user, UserManager $userManager): Response
     {
         $toExcludes = [];
         $user ? $toExcludes[] = $user : $toExcludes[] = null;
+
         return $this->render('include/user_lists/_user_available_actors.html.twig', [
             "availables" => $this->userRepository->findActorsWithNoAssociation($this->getUser()->getStructure(), [])->getQuery()->getResult(),
         ]);

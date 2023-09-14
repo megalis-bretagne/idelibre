@@ -2,19 +2,32 @@
 
 namespace App\Service\Connector\Lsvote\Model;
 
+use App\Entity\User;
+
 class LsvoteVoter
 {
+    private string $identifier;
     private string $firstName;
     private string $lastName;
-    private string $identifier;
-    private ?string $replacement;
-    private ?string $mandator;
+    private bool $isDeputy = false;
+    private ?LsvoteVoter $deputy;
+    private ?string $mandatorId;
+
+
+    public function getIdentifier(): string
+    {
+        return $this->identifier;
+    }
+    public function setIdentifier(string $identifier): LsvoteVoter
+    {
+        $this->identifier = $identifier;
+        return $this;
+    }
 
     public function getFirstName(): string
     {
         return $this->firstName;
     }
-
     public function setFirstName(string $firstName): LsvoteVoter
     {
         $this->firstName = $firstName;
@@ -25,43 +38,42 @@ class LsvoteVoter
     {
         return $this->lastName;
     }
-
     public function setLastName(string $lastName): LsvoteVoter
     {
         $this->lastName = $lastName;
         return $this;
     }
 
-    public function getIdentifier(): string
+    public function isDeputy(): bool
     {
-        return $this->identifier;
+        return $this->isDeputy;
     }
 
-    public function setIdentifier(string $identifier): LsvoteVoter
+    public function setIsDeputy(bool $isDeputy): LsvoteVoter
     {
-        $this->identifier = $identifier;
+        $this->isDeputy = $isDeputy;
         return $this;
     }
 
-    public function getReplacement(): ?string
+    public function getDeputy(): ?LsvoteVoter
     {
-        return $this->replacement;
+        return $this->deputy;
     }
 
-    public function setReplacement(?string $replacement): LsvoteVoter
+    public function setDeputy(?LsvoteVoter $deputy): LsvoteVoter
     {
-        $this->replacement = $replacement;
+        $this->deputy = $deputy;
         return $this;
     }
 
-    public function getMandator(): ?string
+    public function getMandatorId(): ?string
     {
-        return $this->mandator;
+        return $this->mandatorId;
     }
 
-    public function setMandator(?string $mandator): LsvoteVoter
+    public function setMandatorId(?string $mandatorId): LsvoteVoter
     {
-        $this->mandator = $mandator;
+        $this->mandatorId = $mandatorId;
         return $this;
     }
 }

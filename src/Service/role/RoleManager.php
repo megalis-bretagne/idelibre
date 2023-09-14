@@ -6,12 +6,14 @@ use App\Entity\ApiRole;
 use App\Entity\Role;
 use App\Repository\ApiRoleRepository;
 use App\Repository\RoleRepository;
+use Doctrine\ORM\EntityManagerInterface;
 
 class RoleManager
 {
     public function __construct(
-        private RoleRepository $roleRepository,
-        private ApiRoleRepository $apiRoleRepository
+        private readonly RoleRepository $roleRepository,
+        private readonly ApiRoleRepository $apiRoleRepository,
+        private readonly EntityManagerInterface $entityManager
     ) {
     }
 
@@ -71,5 +73,18 @@ class RoleManager
                 'Admin',
             ],
         ]);
+    }
+
+    public function createNotAdminRole(string $roleName, string $prettyName, $inStructureRole): void
+    {
+        $role = (new Role())
+            ->setIsInStructureRole(true)
+            ->setName($roleName)
+            ->setPrettyName($prettyName)
+            ->setIsInStructureRole($inStructureRole)
+            ->setComposites([strtoupper("ROLE_" . $roleName)])
+        ;
+        $this->entityManager->persist($role);
+        $this->entityManager->flush();
     }
 }
