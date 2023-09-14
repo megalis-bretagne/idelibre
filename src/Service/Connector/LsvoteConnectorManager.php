@@ -207,8 +207,8 @@ class LsvoteConnectorManager
     private function formatError(string $message): string
     {
         return match ($message) {
-            '"sitting.not.over"' => "la séance n'est pas terminée sur lsvote",
-            default => 'Une erreur est survenue',
+            '"sitting.not.over"' => "La séance n'est pas terminée sur lsvote",
+            default => 'Une erreur est survenue. Veuillez vérifier que la séance sur lsvote soit terminée et n\'ait pas été effacée.',
         };
     }
 
