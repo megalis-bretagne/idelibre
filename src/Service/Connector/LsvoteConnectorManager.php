@@ -4,11 +4,13 @@ namespace App\Service\Connector;
 
 use App\Entity\Connector\Exception\LsvoteConnectorException;
 use App\Entity\Connector\LsvoteConnector;
+use App\Entity\Convocation;
 use App\Entity\LsvoteSitting;
 use App\Entity\Role;
 use App\Entity\Sitting;
 use App\Entity\Structure;
 use App\Entity\User;
+use App\Repository\ConvocationRepository;
 use App\Repository\LsvoteConnectorRepository;
 use App\Repository\UserRepository;
 use App\Service\Connector\Lsvote\LsvoteClient;
@@ -28,8 +30,8 @@ class LsvoteConnectorManager
         private readonly LsvoteConnectorRepository $lsvoteConnectorRepository,
         private readonly LsvoteClient              $lsvoteClient,
         private readonly EntityManagerInterface    $entityManager,
-        private readonly UserRepository            $userRepository,
         private readonly LoggerInterface           $logger,
+        private readonly ConvocationRepository $convocationRepository
     ) {
     }
 
@@ -86,10 +88,10 @@ class LsvoteConnectorManager
             ->setSitting($this->prepareLsvoteSitting($sitting))
             ->setProjects($this->prepareLsvoteProjects($sitting))
             ->setVoters($this->prepareLsvoteVoter($sitting));
+        //        dd($lsvoteSitting);
 
         try {
             $id = $this->lsvoteClient->sendSitting($connector->getUrl(), $connector->getApiKey(), $lsvoteSitting);
-
             $this->createLsvotesitting($id, $sitting);
 
             return $id;
@@ -125,20 +127,43 @@ class LsvoteConnectorManager
      */
     private function prepareLsvoteVoter(Sitting $sitting): array
     {
-        /** @var array<User> $users */
-        $users = $this->userRepository->findActorsInSitting($sitting)->getQuery()->getResult();
+        /** @var array<Convocation> $convocation */
+        $convocations = $this->convocationRepository->getActorConvocationsBySitting($sitting);
+
 
         $lsvoteVoters = [];
-        foreach ($users as $user) {
-            $lsvoteVoter = new LsvoteVoter();
-            $lsvoteVoter->setIdentifier($user->getId())
-                ->setLastName($user->getLastName())
-                ->setFirstName($user->getFirstName());
+        foreach ($convocations as $convocation) {
+            $user = $convocation->getUser();
+
+            $lsvoteVoter = (new LsvoteVoter())
+                ->setIdentifier($user->getId())
+                ->setFirstName($user->getFirstName())
+                ->setLastName($user->getLastName());
+
+            if ($convocation->getUser()->getRoles() === Role::NAME_ROLE_DEPUTY) {
+                $lsvoteVoter->setIsDeputy(true);
+            }
+            if ($convocation->getDeputy()) {
+                $lsvoteVoter->setDeputy($this->createUserFromUser($convocation->getUser()->getDeputy()));
+            }
+            if ($convocation->getMandator()) {
+                $lsvoteVoter->setMandatorId($convocation->getMandator()->getId());
+            }
 
             $lsvoteVoters[] = $lsvoteVoter;
         }
 
         return $lsvoteVoters;
+    }
+
+    public function createUserFromUser($user): LsvoteVoter
+    {
+        return (new LsvoteVoter())
+                ->setIdentifier($user->getId())
+                ->setFirstName($user->getFirstName())
+                ->setLastName($user->getLastName())
+                ->setIsDeputy(true)
+        ;
     }
 
     private function prepareLsvoteSitting(Sitting $sitting): \App\Service\Connector\Lsvote\Model\LsvoteSitting

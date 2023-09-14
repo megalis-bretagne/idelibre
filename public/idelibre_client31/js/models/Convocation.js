@@ -1,6 +1,6 @@
 
 /**
- * 
+ *
  * @param {uuid} id
  * @param {boolean} isRead
  * @param {Document_text} document_text
@@ -28,17 +28,17 @@ Convocation.prototype.setDocument_text = function (document_text) {
 
 
 Convocation.prototype.countAnnotations = function () {
-    var sharred = 0;
-    var private = 0;
+    let sharred = 0;
+    let privated = 0;
     _.each(this.getAnnotations(), function (annotation) {
         if (_.isEmpty(annotation.sharedUserIdList)) {
-            private++;
+            privated++;
         } else {
             sharred++;
         }
     });
 
-    return({private: private, sharred: sharred});
+    return({private: privated, sharred: sharred});
 };
 
 
@@ -50,16 +50,16 @@ Convocation.prototype.addAnnotation = function (annotation) {
     var index = _.findIndex(this.annotations, function (annots) {
         return annots.id === annotation.id;
     });
-    
+
     if (index === -1) {
-        //it's a new annotation : 
+        //it's a new annotation :
         this.annotations.push(annotation)
     }else{
         //it's an updated annotation
         this.annotations[index] = annotation;
     }
 
-    
+
 };
 
 Convocation.prototype.getAnnotations = function (annotation) {
