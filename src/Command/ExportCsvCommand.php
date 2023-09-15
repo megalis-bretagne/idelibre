@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use Exception;
+use App\Service\Csv\CsvException;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -23,13 +23,16 @@ class ExportCsvCommand extends Command
         ;
     }
 
+    /**
+     * @throws CsvException
+     */
     private function runQuery(string $query)
     {
         $psqlCmd = 'psql --dbname=' . getenv('DATABASE_URL') . ' -c ' . '"' . $query . '"';
         exec($psqlCmd, $out, $resultCode);
 
         if (0 != $resultCode) {
-            throw new Exception('erreur dans le sql : ' . $query);
+            throw new CsvException('erreur dans le sql : ' . $query);
         }
         dump($out);
     }
