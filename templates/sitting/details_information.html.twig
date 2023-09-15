@@ -108,12 +108,16 @@
                     <b>Zip de la séance :</b>
                 </div>
                 <div class="col-8">
-                    {{ sitting.name }}.zip
-                    <a class="btn btn-outline-secondary borderless"
-                       href="{{ path('sitting_zip', {'id': sitting.id}) }}"
-                       title="Télécharger le zip">
-                        <span class="fas fa-download"></span>
-                    </a>
+                    {% if isProjectsSizeTooBig %}
+                        <div class="text-danger mt-1">Le PDF complet ainsi que le ZIP de la séance n'ont pas été générés  -  Poids total: {{ totalSize|sizeFormatter }} </div>
+                    {% else %}
+                        {{ sitting.name }}.zip
+                        <a class="btn btn-outline-secondary borderless"
+                           href="{{ path('sitting_zip', {'id': sitting.id}) }}"
+                           title="Télécharger le zip">
+                            <span class="fas fa-download"></span>
+                        </a>
+                    {% endif %}
                 </div>
             </div>
 
@@ -122,12 +126,16 @@
                     <b>Pdf complet de la séance :</b>
                 </div>
                 <div class="col-8">
-                    {{ sitting.name }}.pdf
-                    <a class="btn btn-outline-secondary borderless"
-                       href="{{ path('sitting_full_pdf', {'id': sitting.id}) }}"
-                       title="Télécharger le pdf">
-                        <span class="fas fa-download"></span>
-                    </a>
+                    {% if isProjectsSizeTooBig %}
+                        <div class="text-danger mt-1">Le PDF complet ainsi que le ZIP de la séance n'ont pas été générés  -  Poids total: {{ totalSize|sizeFormatter }} </div>
+                    {% else %}
+                        {{ sitting.name }}.pdf
+                        <a class="btn btn-outline-secondary borderless"
+                           href="{{ path('sitting_full_pdf', {'id': sitting.id}) }}"
+                           title="Télécharger le pdf">
+                            <span class="fas fa-download"></span>
+                        </a>
+                    {% endif %}
                 </div>
             </div>
 

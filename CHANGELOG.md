@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.2.13] - 2023-09-??
+### Correction
+- Dans le cas où le poids de l'ensemble des projets dépasse la limite fixée, le PDF complet et le ZIP de la séance ne sont pas générés mais les liens permettant de les télécharger restés actifs.
+- Au moment où on définit un modèle d'email au format HTML, le sanitizer faisait disparaître les balises style
+
 ## [4.2.12] - 2023-08-02
 ### Correction
 - La purge des séances ne fonctionnait pas à cause d'une erreur dans la configuration de la durée par défaut

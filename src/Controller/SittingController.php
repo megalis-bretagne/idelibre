@@ -186,7 +186,7 @@ class SittingController extends AbstractController
     #[Route(path: '/sitting/show/{id}/information', name: 'sitting_show_information', methods: ['GET'])]
     #[IsGranted('MANAGE_SITTINGS', subject: 'sitting')]
     #[Breadcrumb(title: 'Détail {sitting.nameWithDate}')]
-    public function showInformation(Sitting $sitting, SittingManager $sittingManager, SidebarState $sidebarState): Response
+    public function showInformation(Sitting $sitting, SittingManager $sittingManager, SidebarState $sidebarState, ParameterBagInterface $bag): Response
     {
         $sidebarState->setActiveNavs(['sitting-nav', $this->activeSidebarNav($sitting->getIsArchived())]);
 
@@ -194,6 +194,8 @@ class SittingController extends AbstractController
             'isAlreadySent' => $sittingManager->isAlreadySent($sitting),
             'sitting' => $sitting,
             'timezone' => $sitting->getStructure()->getTimezone()->getName(),
+            'isProjectsSizeTooBig' => $sittingManager->getProjectsAndAnnexesTotalSize($sitting) > intval($bag->get('maximum_size_pdf_zip_generation')),
+            'totalSize' => $sittingManager->getProjectsAndAnnexesTotalSize($sitting),
         ]);
     }
 
