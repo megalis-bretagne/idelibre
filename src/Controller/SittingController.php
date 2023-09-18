@@ -3,8 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Sitting;
-use App\Entity\Structure;
-use App\Entity\User;
 use App\Form\SearchType;
 use App\Form\SittingType;
 use App\Repository\EmailTemplateRepository;
@@ -22,12 +20,10 @@ use App\Sidebar\Annotation\Sidebar;
 use App\Sidebar\State\SidebarState;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
-use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpClient\Exception\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -193,7 +189,7 @@ class SittingController extends AbstractController
     #[Route(path: '/sitting/show/{id}/information', name: 'sitting_show_information', methods: ['GET'])]
     #[IsGranted('MANAGE_SITTINGS', subject: 'sitting')]
     #[Breadcrumb(title: 'Détail {sitting.nameWithDate}')]
-    public function showInformation(Sitting $sitting, SittingManager $sittingManager, SidebarState $sidebarState, LsvoteConnectorManager $lsvoteConnectorManager): Response
+    public function showInformation(Sitting $sitting, SittingManager $sittingManager, SidebarState $sidebarState, ParameterBagInterface $bag, LsvoteConnectorManager $lsvoteConnectorManager): Response
     {
         $sidebarState->setActiveNavs(['sitting-nav', $this->activeSidebarNav($sitting->getIsArchived())]);
 
@@ -204,6 +200,8 @@ class SittingController extends AbstractController
             'isLsvoteResults' => !empty($sitting->getLsvoteSitting()?->getResults()),
             'isSentLsvote' => !empty($sitting->getLsvoteSitting()),
             'timezone' => $sitting->getStructure()->getTimezone()->getName(),
+            'isProjectsSizeTooBig' => $sittingManager->getProjectsAndAnnexesTotalSize($sitting) > intval($bag->get('maximum_size_pdf_zip_generation')),
+            'totalSize' => $sittingManager->getProjectsAndAnnexesTotalSize($sitting),
         ]);
     }
 
