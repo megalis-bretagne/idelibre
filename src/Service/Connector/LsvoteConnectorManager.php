@@ -138,7 +138,9 @@ class LsvoteConnectorManager
             $lsvoteVoter = (new LsvoteVoter())
                 ->setIdentifier($user->getId())
                 ->setFirstName($user->getFirstName())
-                ->setLastName($user->getLastName());
+                ->setLastName($user->getLastName())
+                ->setAttendance($convocation->getAttendance())
+            ;
 
             if ($convocation->getUser()->getRoles() === Role::NAME_ROLE_DEPUTY) {
                 $lsvoteVoter->setIsDeputy(true);
