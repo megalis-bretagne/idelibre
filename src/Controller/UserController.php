@@ -223,7 +223,7 @@ class UserController extends AbstractController
             return $this->redirectToRoute('user_index');
         }
 
-        $passwordInvalidator->invalidatePassword($user);
+        $passwordInvalidator->invalidateSingleUserPassword($user);
 
         $this->addFlash(
             'success',
