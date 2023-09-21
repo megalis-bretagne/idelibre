@@ -98,6 +98,9 @@ class UserController extends AbstractController
     #[Breadcrumb(title: 'Modifier {user.firstName} {user.lastName}')]
     public function edit(User $user, Request $request, UserManager $userManager): Response
     {
+        //        dd($this->userManager->AlreadyTakenDeputies($user));
+
+
         $form = $this->createForm(UserType::class, $user, [
             'structure' => $this->getUser()->getStructure(),
             'entropyForUser' => $this->getUser()->getStructure()->getConfiguration()->getMinimumEntropy(),
@@ -256,6 +259,7 @@ class UserController extends AbstractController
         $toExcludes = [];
 
         $toExcludes = [...$this->userManager->AlreadyTakenDeputies($user)];
+        //        dd($toExcludes);
         return $this->render('include/user_lists/_user_available_actors.html.twig', [
             "availables" => $this->userRepository->findDeputiesWithNoAssociation($this->getUser()->getStructure(), $toExcludes)->getQuery()->getResult(),
         ]);
