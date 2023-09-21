@@ -44,7 +44,4 @@ class PasswordInvalidatorTest extends WebTestCase
         }
     }
 
-    public function prepareAndSendEmail()
-    {
-    }
 }
