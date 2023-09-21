@@ -6,10 +6,7 @@ use App\Entity\User;
 use App\Form\SearchType;
 use App\Form\SuperUserType;
 use App\Repository\UserRepository;
-use App\Security\Password\ResetPassword;
-use App\Service\Email\EmailNotSendException;
 use App\Service\role\RoleManager;
-use App\Service\User\PasswordInvalidator;
 use App\Service\User\UserManager;
 use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
@@ -167,28 +164,5 @@ class AdminController extends AbstractController
         return $this->redirectToRoute('admin_index', [
             'page' => $request->get('page'),
         ]);
-    }
-
-    /**
-     * @throws EmailNotSendException
-     */
-    #[Route(path: '/invalidate_password/{id}', name: 'admin_invalidate_password', methods: ['POST'])]
-    #[IsGranted(attribute: 'MY_GROUP', subject: 'user')]
-    public function reloadPassword(User $user, Request $request, PasswordInvalidator $passwordInvalidator): Response
-    {
-        if ($this->getUser()->getId() === $user->getId()) {
-            $this->addFlash('error', 'Impossible de modifier son propre utilisateur');
-
-            return $this->redirectToRoute('admin_index');
-        }
-
-        $passwordInvalidator->invalidateSingleUserPassword($user);
-
-        $this->addFlash('success','Un e-mail de réinitialisation du mot de passe a été envoyé');
-
-        return $this->redirectToRoute('admin_index', [
-            'page' => $request->get('page'),
-        ]);
-
     }
 }
