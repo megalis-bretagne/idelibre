@@ -24,6 +24,17 @@ class PasswordInvalidator
     ) {
     }
 
+    /**
+     * @throws EmailNotSendException
+     */
+    public function invalidateSingleUserPassword(User $user): void
+    {
+        $user->setPassword(self::INVALID_PASSWORD);
+        $this->em->persist($user);
+        $this->em->flush();
+        $this->prepareAndSendMail([$user], $user->getStructure()?->getReplyTo() ?? $this->bag->get('email_from') );
+    }
+
     public function invalidatePassword(Structure $structure): void
     {
         $users = $this->userRepository->findByStructure($structure)->getQuery()->getResult();
