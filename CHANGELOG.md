@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.2.14] - 2023-09-22
+### Evolution
+- Mise à jour symfony en 6.3.4
+- Mise à jour composer et npm
+
+### Correction
+
+
 ## [4.2.13] - 2023-09-18
 ### Correction
 - Dans le cas où le poids de l'ensemble des projets dépasse la limite fixée, le PDF complet et le ZIP de la séance ne sont pas générés, mais les liens permettant de les télécharger restent actifs.
