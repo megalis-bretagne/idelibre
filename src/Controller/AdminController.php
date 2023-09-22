@@ -181,7 +181,7 @@ class AdminController extends AbstractController
             return $this->redirectToRoute('user_index');
         }
 
-        $passwordInvalidator->invalidateSingleUserPassword($user);
+        $passwordInvalidator->invalidatePassword([$user]);
 
         $this->addFlash(
             'success',

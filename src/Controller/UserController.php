@@ -207,7 +207,7 @@ class UserController extends AbstractController
     #[IsGranted('ROLE_MANAGE_USERS')]
     public function invalidateUsersPassword(PasswordInvalidator $passwordInvalidator): Response
     {
-        $passwordInvalidator->invalidatePassword($this->getUser()->getStructure());
+        $passwordInvalidator->invalidateStructurePassword($this->getUser()->getStructure());
         $this->addFlash('success', 'Tous les mots de passe ont été invalidés');
 
         return $this->redirectToRoute('user_index');
@@ -217,13 +217,15 @@ class UserController extends AbstractController
     #[IsGranted('MANAGE_USERS', subject: 'user')]
     public function invalidateUserPassword(User $user, Request $request, PasswordInvalidator $passwordInvalidator): Response
     {
-        if ($this->getUser()->getId() === $user->getId()) {
-            $this->addFlash('error', 'Impossible de modifier son propre utilisateur');
+
+        if(! $passwordInvalidator->isAuthorizeInvalidate($user, $this->getUser())) {
+            $this->addFlash('error', 'Impossible de desactiver cet utilisateur');
 
             return $this->redirectToRoute('user_index');
         }
 
-        $passwordInvalidator->invalidateSingleUserPassword($user);
+
+        $passwordInvalidator->invalidatePassword([$user], $user->getStructure()->getReplyTo());
 
         $this->addFlash(
             'success',

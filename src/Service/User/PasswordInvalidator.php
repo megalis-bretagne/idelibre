@@ -9,6 +9,7 @@ use App\Service\Email\EmailData;
 use App\Service\Email\EmailNotSendException;
 use App\Service\Email\EmailServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class PasswordInvalidator
@@ -21,31 +22,45 @@ class PasswordInvalidator
         private UserRepository $userRepository,
         private EmailServiceInterface $emailService,
         private readonly ParameterBagInterface $bag,
+        private readonly Security $security
     ) {
     }
 
-    /**
-     * @throws EmailNotSendException
-     */
-    public function invalidateSingleUserPassword(User $user): void
-    {
-        $user->setPassword(self::INVALID_PASSWORD);
-        $this->em->persist($user);
-        $this->em->flush();
-        $this->prepareAndSendMail([$user], $user->getStructure()?->getReplyTo() ?? $this->bag->get('email_from') );
+
+    public function isAuthorizeInvalidate(User $userToDeactivate, User $loggedInUser):bool {
+        if ($userToDeactivate->getId() === $loggedInUser->getId()) {
+            return false;
+        }
+
+        return !($this->security->isGranted('ROLE_SUPERADMIN') || $this->security->isGranted('ROLE_GROUP_ADMIN'));
+
     }
 
-    public function invalidatePassword(Structure $structure): void
-    {
-        $users = $this->userRepository->findByStructure($structure)->getQuery()->getResult();
 
+    /**
+     * @param array<User> $users
+     * @throws EmailNotSendException
+     */
+    public function invalidatePassword(array $users, ?string $replyTo= null): void
+    {
         foreach ($users as $user) {
             $user->setPassword(self::INVALID_PASSWORD);
             $this->em->persist($user);
         }
         $this->em->flush();
 
-        $this->prepareAndSendMail($users, $structure->getReplyTo());
+        $this->prepareAndSendMail($users, $replyTo ?? $this->bag->get('email_from'));
+    }
+
+
+    /**
+     * @throws EmailNotSendException
+     */
+    public function invalidateStructurePassword(Structure $structure): void
+    {
+        $users = $this->userRepository->findByStructure($structure)->getQuery()->getResult();
+        $this->invalidatePassword($users, $structure->getReplyTo());
+
     }
 
     /**
