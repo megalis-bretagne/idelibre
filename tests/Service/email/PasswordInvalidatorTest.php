@@ -36,7 +36,7 @@ class PasswordInvalidatorTest extends WebTestCase
         $password = self::getContainer()->get(PasswordInvalidator::class);
         $structure = StructureStory::libriciel()->object();
 
-        $password->invalidatePassword($structure);
+        $password->invalidateStructurePassword($structure);
 
         $users = $this->userRepository->findBy(['structure' => $structure]);
         foreach ($users as $user) {
@@ -44,7 +44,4 @@ class PasswordInvalidatorTest extends WebTestCase
         }
     }
 
-    public function prepareAndSendEmail()
-    {
-    }
 }
