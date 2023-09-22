@@ -6,7 +6,9 @@ use App\Entity\User;
 use App\Form\SearchType;
 use App\Form\SuperUserType;
 use App\Repository\UserRepository;
+use App\Service\Email\EmailNotSendException;
 use App\Service\role\RoleManager;
+use App\Service\User\PasswordInvalidator;
 use App\Service\User\UserManager;
 use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
@@ -160,6 +162,31 @@ class AdminController extends AbstractController
         }
         $userManager->delete($user);
         $this->addFlash('success', 'L\'utilisateur a bien été supprimé');
+
+        return $this->redirectToRoute('admin_index', [
+            'page' => $request->get('page'),
+        ]);
+    }
+
+    /**
+     * @throws EmailNotSendException
+     */
+    #[Route(path: '/admin_invalidate_password/{id}', name: 'invalidate_admin_password', methods: ['POST'])]
+    #[IsGranted('MY_GROUP', subject: 'user')]
+    public function invalidateAdminPassword(User $user, Request $request, PasswordInvalidator $passwordInvalidator): Response
+    {
+        if ($this->getUser()->getId() === $user->getId()) {
+            $this->addFlash('error', 'Impossible de modifier son propre utilisateur');
+
+            return $this->redirectToRoute('user_index');
+        }
+
+        $passwordInvalidator->invalidatePassword([$user]);
+
+        $this->addFlash(
+            'success',
+            'Un e-mail de réinitialisation du mot de passe a été envoyé'
+        );
 
         return $this->redirectToRoute('admin_index', [
             'page' => $request->get('page'),
