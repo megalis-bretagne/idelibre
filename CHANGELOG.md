@@ -1,13 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+
 ## [4.2.14] - 2023-09-22
 ### Evolution
 - Mise à jour symfony en 6.3.4
 - Mise à jour composer et npm
 
 ### Correction
-
+- Correction des droits d'accès à l'invalidation des mots de passe (#462)
+- Correction du delai de purge des données pour la durée jamais
 
 ## [4.2.13] - 2023-09-18
 ### Correction
