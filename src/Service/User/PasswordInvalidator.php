@@ -27,13 +27,13 @@ class PasswordInvalidator
     }
 
 
-    public function isAuthorizeInvalidate(User $userToDeactivate, User $loggedInUser):bool {
+    public function isAuthorizeInvalidate(User $userToDeactivate, User $loggedInUser): bool
+    {
         if ($userToDeactivate->getId() === $loggedInUser->getId()) {
             return false;
         }
 
         return !($this->security->isGranted('ROLE_SUPERADMIN') || $this->security->isGranted('ROLE_GROUP_ADMIN'));
-
     }
 
 
@@ -41,7 +41,7 @@ class PasswordInvalidator
      * @param array<User> $users
      * @throws EmailNotSendException
      */
-    public function invalidatePassword(array $users, ?string $replyTo= null): void
+    public function invalidatePassword(array $users, ?string $replyTo = null): void
     {
         foreach ($users as $user) {
             $user->setPassword(self::INVALID_PASSWORD);
@@ -60,7 +60,6 @@ class PasswordInvalidator
     {
         $users = $this->userRepository->findByStructure($structure)->getQuery()->getResult();
         $this->invalidatePassword($users, $structure->getReplyTo());
-
     }
 
     /**

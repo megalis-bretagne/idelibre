@@ -198,8 +198,7 @@ class UserController extends AbstractController
     #[IsGranted('MANAGE_USERS', subject: 'user')]
     public function invalidateUserPassword(User $user, Request $request, PasswordInvalidator $passwordInvalidator): Response
     {
-
-        if(! $passwordInvalidator->isAuthorizeInvalidate($user, $this->getUser())) {
+        if (!$passwordInvalidator->isAuthorizeInvalidate($user, $this->getUser())) {
             $this->addFlash('error', 'Impossible de desactiver cet utilisateur');
 
             return $this->redirectToRoute('user_index');
