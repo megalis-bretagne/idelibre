@@ -3,11 +3,14 @@
 namespace App\Tests\Controller;
 
 use App\Entity\User;
+use App\Service\User\PasswordInvalidator;
 use App\Tests\Factory\UserFactory;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
+use App\Tests\Story\ConfigurationStory;
 use App\Tests\Story\GroupStory;
 use App\Tests\Story\RoleStory;
+use App\Tests\Story\StructureStory;
 use App\Tests\Story\UserStory;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -184,5 +187,38 @@ class AdminControllerTest extends WebTestCase
 
         $this->client->request(Request::METHOD_GET, '/admin');
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
+    }
+
+    public function testInvalidateAdminPassword() {
+
+        $admin = UserFactory::createOne([
+            'role' => RoleStory::groupadmin(),
+        ])->object();
+
+        $this->loginAsSuperAdmin();
+
+        $this->client->request(Request::METHOD_POST, '/admin_invalidate_password/' . $admin->getId() );
+        $this->assertSame(PasswordInvalidator::INVALID_PASSWORD, $admin->getPassword());
+
+    }
+
+    public function testInvalidateUserPassword() {
+
+        ConfigurationStory::load();
+        UserStory::load();
+        $groupAdmin = UserFactory::createOne(['structure' => StructureStory::libriciel(), 'role' => RoleStory::groupadmin()]);
+        $this->loginAsSuperAdmin();
+
+        $this->client->request(Request::METHOD_POST, '/admin_invalidate_password/' . $groupAdmin->getId());
+        $this->assertTrue($this->client->getResponse()->isRedirect());
+
+        $crawler = $this->client->followRedirect();
+
+        $this->assertResponseStatusCodeSame(200);
+
+        $successMsg = $crawler->filter('html:contains("Un e-mail de réinitialisation du mot de passe a été envoyé")');
+        $this->assertCount(1, $successMsg);
+        $this->assertSame(PasswordInvalidator::INVALID_PASSWORD, $groupAdmin->getPassword());
+
     }
 }

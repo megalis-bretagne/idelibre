@@ -98,9 +98,6 @@ class UserController extends AbstractController
     #[Breadcrumb(title: 'Modifier {user.firstName} {user.lastName}')]
     public function edit(User $user, Request $request, UserManager $userManager): Response
     {
-        //        dd($this->userManager->AlreadyTakenDeputies($user));
-
-
         $form = $this->createForm(UserType::class, $user, [
             'structure' => $this->getUser()->getStructure(),
             'entropyForUser' => $this->getUser()->getStructure()->getConfiguration()->getMinimumEntropy(),
@@ -210,36 +207,34 @@ class UserController extends AbstractController
     #[IsGranted('ROLE_MANAGE_USERS')]
     public function invalidateUsersPassword(PasswordInvalidator $passwordInvalidator): Response
     {
-        $passwordInvalidator->invalidatePassword($this->getUser()->getStructure());
+        $passwordInvalidator->invalidateStructurePassword($this->getUser()->getStructure());
         $this->addFlash('success', 'Tous les mots de passe ont été invalidés');
 
         return $this->redirectToRoute('user_index');
     }
 
-    #[Route(path: '/reload_password/{id}', name: 'user_reload_password', methods: ['POST'])]
-    #[IsGranted('ROLE_MANAGE_USERS')]
-    public function reloadPassword(User $user, Request $request, ResetPassword $resetPassword): Response
+    #[Route(path: '/user_invalidate_password/{id}', name: 'invalidate_user_password', methods: ['POST'])]
+    #[IsGranted('MANAGE_USERS', subject: 'user')]
+    public function invalidateUserPassword(User $user, Request $request, PasswordInvalidator $passwordInvalidator): Response
     {
-        if ($this->getUser()->getId() === $user->getId()) {
-            $this->addFlash('error', 'Impossible de modifier son propre utilisateur');
+
+        if(! $passwordInvalidator->isAuthorizeInvalidate($user, $this->getUser())) {
+            $this->addFlash('error', 'Impossible de desactiver cet utilisateur');
 
             return $this->redirectToRoute('user_index');
         }
 
-        $resetPassword->reloadPassword($user);
+
+        $passwordInvalidator->invalidatePassword([$user], $user->getStructure()->getReplyTo());
 
         $this->addFlash(
             'success',
             'Un e-mail de réinitialisation du mot de passe a été envoyé'
         );
 
-        if (empty($this->getUser()->getStructure())) {
-            return $this->redirectToRoute('admin_index');
-        } else {
-            return $this->redirectToRoute('user_index', [
-                'page' => $request->get('page'),
-            ]);
-        }
+        return $this->redirectToRoute('user_index', [
+            'page' => $request->get('page'),
+        ]);
     }
 
 
@@ -254,6 +249,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/user/list/deputies', name: 'user_deputies_list', methods: ['GET'])]
+    #[isGranted('ROLE_MANAGE_SITTINGS')]
     public function getDeputyList(?User $user): Response
     {
         $toExcludes = [];
@@ -266,6 +262,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/user/list/actors', name: 'user_actors_list', methods: ['GET'])]
+    #[isGranted('ROLE_MANAGE_SITTINGS')]
     public function getActorsList(?User $user, UserManager $userManager): Response
     {
         $toExcludes = [];
