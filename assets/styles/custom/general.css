@@ -34,6 +34,11 @@ a { text-decoration: none; }
     border-top-right-radius: 0;
 }
 
+.select-readonly {
+    background: var(--bs-ls-grey-100);
+    pointer-events: none;
+}
+
 
 /*surcharge du bootstrap ls*/
 .custom-file-label::after {

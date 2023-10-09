@@ -1,4 +1,6 @@
 {% extends 'base_login.html.twig' %}
+{% import 'macro/_forms.html.twig' as macro %}
+
 
 {% block title %}Confirmation de présence à la séance{% endblock %}
 
@@ -25,6 +27,10 @@
                             <div class="badge bg-info"> Présent</div>
                         {% elseif attendance == 'remote' %}
                             <div class="badge bg-info"> Présent à distance</div>
+                        {% elseif attendance == 'poa' %}
+                            <div class="badge bg-warning"> Donne pouvoir</div>
+                        {% elseif attendance == 'deputy' %}
+                            <div class="badge bg-soft-warning"> Remplacé</div>
                         {% endif %}
                     </h1>
 
@@ -33,12 +39,13 @@
                 <p><b>Date de la séance : </b> {{ sitting.date | date('d/m/y : H:i', timezone) }}</p>
 
                 <div class="mt-5">
+
+
                     {{ form_start(form) }}
                     {{ form_row(form.attendance) }}
-                    <div id="deputy-div" class="d-none">
-                        {{ form_row(form.deputy, {attr:{"disabled": true}}) }}
-                    </div>
-                    <input type="submit" class="btn btn-primary float-end" value="Enregistrer">
+                    {{ form_row(form.mandataire) }}
+                    {% if deputyId != null %} {{ form_row(form.deputyId) }} {% endif %}
+                    <input type="submit" class="btn btn-primary float-end mt-2" value="Enregistrer">
                     {{ form_end(form) }}
                 </div>
 

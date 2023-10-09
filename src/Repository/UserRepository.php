@@ -548,14 +548,12 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         return $qb;
     }
 
-    public function findDeputyById($deputyId): QueryBuilder
+    public function findDeputyByUserId($deputyId): QueryBuilder
     {
         return $this->createQueryBuilder('u')
             ->andWhere('u.id = :actorId')
             ->setParameter('actorId', $deputyId)
             ->leftJoin('u.deputy', 'd')
-            ->addSelect('d')
-//            ->groupBy('deputy.lastName')
-        ;
+            ->addSelect('d');
     }
 }

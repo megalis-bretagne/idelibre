@@ -48,10 +48,7 @@ class AttendanceControllerTest extends WebTestCase
         $token = $convocation->getAttendancetoken()->getToken();
 
         $this->loginAsAdminLibriciel();
-        $crawler = $this->client->request(
-            Request::METHOD_GET,
-            '/attendance/confirmation/' . $token
-        );
+        $crawler = $this->client->request(Request::METHOD_GET,'/attendance/confirmation/' . $token);
         $this->assertResponseStatusCodeSame(200);
 
         $item = $crawler->filter('html:contains("Confirmation de présence à la séance")');
@@ -62,11 +59,10 @@ class AttendanceControllerTest extends WebTestCase
 
         $this->client->submit($form);
 
-        $crawler->filter('h1')->children('div.badge-info')->count(1);
-
         $this->assertTrue($this->client->getResponse()->isRedirect());
         $crawler = $this->client->followRedirect();
         $this->assertResponseStatusCodeSame(200);
+
         $crawler->filter('section')->children('div.alert')->count(1);
 
         $this->assertNotEmpty($this->getOneEntityBy(Convocation::class, ['attendance' => 'present']));
