@@ -1,6 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [5.0.0] - 2023-08-10
 ## [4.2.13] - 2023-09-18
 ### Correction
 - Dans le cas où le poids de l'ensemble des projets dépasse la limite fixée, le PDF complet et le ZIP de la séance ne sont pas générés, mais les liens permettant de les télécharger restent actifs.
