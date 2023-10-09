@@ -12,6 +12,7 @@ use App\Service\Structure\StructureCreator;
 use App\Service\Structure\StructureManager;
 use App\Service\ValidationTrait;
 use App\Sidebar\Annotation\Sidebar;
+use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -21,6 +22,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Sidebar(active: ['platform-nav', 'structure-nav'])]
+#[Breadcrumb(title: 'Plateforme', routeName: 'structure_index')]
+#[Breadcrumb(title: 'Structure', routeName: 'structure_index')]
 class StructureController extends AbstractController
 {
     use ValidationTrait;

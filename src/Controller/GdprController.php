@@ -17,6 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Sidebar(active: ['platform-nav', 'gdpr-nav'])]
+#[Breadcrumb(title: 'Plateforme', routeName: 'structure_index')]
 #[Breadcrumb(title: 'Notice RGPD')]
 class GdprController extends AbstractController
 {

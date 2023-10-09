@@ -19,6 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Sidebar(active: ['platform-nav', 'group-nav'])]
+#[Breadcrumb(title: 'Plateforme', routeName: 'structure_index')]
 #[Breadcrumb(title: 'Groupes', routeName: 'group_index')]
 class GroupController extends AbstractController
 {
