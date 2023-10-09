@@ -1,6 +1,4 @@
-a {
-    text-decoration: none;
-}
+a { text-decoration: none; }
 .form-signin {
     width: 100%;
     max-width: 330px;
@@ -365,3 +363,5 @@ input[type="file"].project-file-btn {
 button .small{
     font-size: 75%;
 }
+
+.form-select:focus{border-color:#4cabdf;box-shadow:0 0 5px #4cabdf;outline:0}

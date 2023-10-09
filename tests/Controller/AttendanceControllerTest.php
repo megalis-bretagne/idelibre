@@ -54,7 +54,7 @@ class AttendanceControllerTest extends WebTestCase
         );
         $this->assertResponseStatusCodeSame(200);
 
-        $item = $crawler->filter('html:contains("Merci de confirmer votre présence")');
+        $item = $crawler->filter('html:contains("Confirmation de présence à la séance")');
         $this->assertCount(1, $item);
 
         $form = $crawler->selectButton('Enregistrer')->form();

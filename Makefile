@@ -22,6 +22,9 @@ composer-update:
 npm-install:
 	$(DOCKER_COMPOSE) run --entrypoint="npm install" fpm-idelibre
 
+npm-watch:
+	$(DOCKER_COMPOSE) run --entrypoint="npm run watch" fpm-idelibre
+
 npm-update:
 	$(DOCKER_COMPOSE) run --entrypoint="npm update" fpm-idelibre
 
