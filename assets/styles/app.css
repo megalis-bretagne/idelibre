@@ -1,7 +1,4 @@
-
-/*@import "../bootstrap-il/il-bootstrap-5.css";*/
-@import "@libriciel/ls-bootstrap-5/dist/il-bootstrap.css";
-
+@import "@libriciel/ls-bootstrap-5/il-bootstrap.css";
 @import "~@fortawesome/fontawesome-free/css/all.min.css";
 @import "~flatpickr/dist/flatpickr.css";
 @import "../ls-sidebar/ls-sidebar.css";

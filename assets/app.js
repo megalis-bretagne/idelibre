@@ -3,7 +3,7 @@ import './styles/app.css';
 import $ from 'jquery'
 
 import '@popperjs/core'
-import "@libriciel/ls-bootstrap-5/dist/il-bootstrap"
+import '@libriciel/ls-bootstrap-5/il-bootstrap'
 import "bootstrap"
 
 import 'bs-custom-file-input'
