@@ -1,5 +1,5 @@
 {% macro save(cancelPath, param = {} ,saveName = 'Enregistrer') %}
-    <a href="{{ path( cancelPath, param ) }}" class="btn btn-outline-primary">
+    <a href="{{ path( cancelPath, param ) }}" class="btn btn-link">
         <span class="fa fa-times"></span>
         Annuler
     </a>
@@ -120,7 +120,7 @@
         <span class="{{ icon }}"></span>
     </button>
 
-    <div id="post{{ id }}" class="modal fade" role="dialog" data-backdrop="static">
+    <div id="post{{ id }}" class="modal fade" role="dialog" data-bs-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -302,12 +302,7 @@
 {% endmacro %}
 
 {% macro cancelBtnModal(cancelName = 'Annuler') %}
-{#    <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">#}
-{#        <span class="fa fa-times"></span>#}
-{#        {{ cancelName }}#}
-{#    </button>#}
-
-    <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">
+    <button type="button" class="btn btn-link" data-bs-dismiss="modal">
         <span class="fa fa-times"></span>
         {{ cancelName }}
     </button>
