@@ -2,13 +2,15 @@ import $ from 'jquery'
 import 'select2'
 
 
-$('document').ready(function () {
+$(document).ready(function () {
+
     let condition = true;
-    if( $('select').attr('multiple') == 'multiple' ) {
+    if( $('.form-select').attr('multiple') === 'multiple' ) {
         condition = false;
     }
 
-    $('select').select2({
+    $('.form-select').select2({
+        theme: "bootstrap-5",
         'closeOnSelect': condition,
         'allowClear': true,
          width: '100%',

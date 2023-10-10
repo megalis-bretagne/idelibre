@@ -1,3 +1,7 @@
+body {
+    background-color: var(--bs-ls-grey-50);
+}
+
 a { text-decoration: none; }
 .form-signin {
     width: 100%;
@@ -76,10 +80,6 @@ tr:hover {
 
 .borderless {
     border-color: transparent !important;
-}
-
-body {
-    background-color: var(--bs-white-rgb);
 }
 
 .custom-file-input ~ .custom-file-label::after {
@@ -370,3 +370,27 @@ button .small{
 }
 
 .form-select:focus{border-color:#4cabdf;box-shadow:0 0 5px #4cabdf;outline:0}
+
+/* Modal */
+.modal-content {
+    background-color: var(--bs-white);
+    border: 1px solid rgba(0,0,0,.2);
+    border-radius: .3rem;
+}
+.modal-header {
+    padding: 1rem;
+    border-bottom: 1px solid #dee2e6;
+}
+.modal-body {
+    padding: 1rem;
+}
+.modal-footer {
+    border-top: 1px solid #dee2e6;
+    padding: 1rem;
+}
+.modal-footer .btn-outline-primary {
+    margin-right: .25rem;
+}
+.modal-footer .btn-primary {
+    margin-left: .25rem;
+}

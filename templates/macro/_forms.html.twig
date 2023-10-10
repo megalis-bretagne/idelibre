@@ -116,7 +116,7 @@
 {% macro button_open_modal_post(id, title, content, pathAction, icon = "fa fa-paper-plane", btn_title = "Envoyer",
     confirmMessage = '<span class="fas fa-exclamation-circle"></span> Confirmer' ) %}
     <button type="button" class="btn btn-outline-warning borderless" title="{{ btn_title }}"
-            data-target="#post{{ id }}" data-bs-toggle="modal">
+            data-bs-target="#post{{ id }}" data-bs-toggle="modal">
         <span class="{{ icon }}"></span>
     </button>
 
@@ -151,11 +151,11 @@
 {% macro button_open_modal_post(id, title, content, pathAction, icon = "fa fa-paper-plane", btn_title = "Envoyer",
     confirmMessage = '<span class="fas fa-exclamation-circle"></span> Confirmer' ) %}
     <button type="button" class="btn btn-outline-warning borderless" title="{{ btn_title }}"
-            data-target="#post{{ id }}" data-bs-toggle="modal">
+            data-bs-target="#post{{ id }}" data-bs-toggle="modal">
         <span class="{{ icon }}"></span>
     </button>
 
-    <div id="post{{ id }}" class="modal fade" role="dialog" data-backdrop="static">
+    <div id="post{{ id }}" class="modal fade" role="dialog" data-bs-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -191,12 +191,12 @@
     {% set htmlId = random() %}
 
     <button type="button" class="btn btn-outline-primary" title="{{ btn_description }}"
-            data-target="#post{{ htmlId }}" data-bs-toggle="modal">
+            data-bs-target="#post{{ htmlId }}" data-bs-toggle="modal">
         <span class="{{ icon }}"></span>
         {{ btn_description }}
     </button>
 
-    <div id="post{{ htmlId }}" class="modal fade" role="dialog" data-backdrop="static">
+    <div id="post{{ htmlId }}" class="modal fade" role="dialog" data-bs-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -228,7 +228,7 @@
     {% set htmlId = random() %}
 
     <button type="button" class="btn btn-outline-primary" title="{{ btn_description }}"
-            data-target="#post{{ htmlId }}" data-bs-toggle="modal">
+            data-bs-target="#post{{ htmlId }}" data-bs-toggle="modal">
         <span class="fa-passwd-reset fa-stack small">
             <i class="fa fa-sync-alt fa-stack-2x"></i>
             <i class="fa fa-lock fa-stack-1x small font-weight-bold"></i>
@@ -236,7 +236,7 @@
         {{ btn_description }}
     </button>
 
-    <div id="post{{ htmlId }}" class="modal fade" role="dialog" data-backdrop="static">
+    <div id="post{{ htmlId }}" class="modal fade" role="dialog" data-bs-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -266,7 +266,7 @@
 
 {% macro btnReloadPasswordWithModal(id, title, pathAction, content, page = 1) %}
     <button type="button" class="btn btn-outline-primary borderless stacked" title="Réinitialisation du mot de passe utilisateur"
-            data-target="#modalReload{{ id }}" data-bs-toggle="modal">
+            data-bs-target="#modalReload{{ id }}" data-bs-toggle="modal">
         <span class="fa-passwd-reset fa-stack small">
             <i class="fa fa-sync-alt fa-stack-2x"></i>
             <i class="fa fa-lock fa-stack-1x small font-weight-bold"></i>

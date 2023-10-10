@@ -16,11 +16,9 @@
 
     {{ form_label(form.username) }}
 
-    <div class="row mb-3">
-        <div class="col-7">
-            {{ form_widget(form.username) }}
-        </div>
-        <div class="col-5 form-control borderless">
+    <div class="d-flex mb-3 justify-content-start">
+        {{ form_widget(form.username) }}
+        <div class="form-control borderless">
             <b class="text-ls-dark">@{{ suffix }}</b>
         </div>
     </div>

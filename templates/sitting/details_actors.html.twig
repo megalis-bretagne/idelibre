@@ -648,7 +648,7 @@
                                         </table>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-outline-primary"
+                                        <button type="button" class="btn btn-link"
                                                 @click="showModalAttendance = false">
                                             <span class="fa fa-times"></span>
                                             Annuler
@@ -702,7 +702,7 @@
                                         </div>
 
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-outline-primary"
+                                            <button type="button" class="btn btn-link"
                                                     @click="showModalMailExample = false">
                                                 <span class="fa fa-times"></span>
                                                 Annuler
@@ -724,15 +724,14 @@
 
             <div v-if="showModalNotifyAgain">
                 <transition name="modal">
-                    <div class="modal-mask">
+                    <div class="modal-mask" >
                         <div class="modal-wrapper">
                             <div class="modal-dialog modal-lg" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title">Notifier les convoqués et invités</h5>
-                                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true"
-                                                  @click="showModalNotifyAgain = false">&times;</span>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true"  @click="showModalNotifyAgain = false"></span>
                                         </button>
                                     </div>
                                     <div class="modal-body">
@@ -751,7 +750,7 @@
 
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-outline-primary"
+                                        <button type="button" class="btn btn-link"
                                                 @click="showModalNotifyAgain = false">
                                             <span class="fa fa-times"></span>
                                             Annuler
