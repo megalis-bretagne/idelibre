@@ -88,7 +88,7 @@ class AttendanceControllerTest extends WebTestCase
 
         $this->client->submit($form);
 
-        dd($this->client->getResponse());
+//        dd($this->client->getResponse());
 
         $this->assertTrue($this->client->getResponse()->isRedirect());
         $crawler = $this->client->followRedirect();

@@ -25,7 +25,7 @@
         </div>
 
         <div v-cloak id="app">
-            <div class="col-11 offset-1 form-white mt-4 p-3">
+            <div class="col-11 offset-1 form-white mt-4 px-3">
                 {{ macroTab.showTabs('actors', sitting) }}
 
                 <div class="alert alert-danger" v-if="errorMessage">
@@ -87,15 +87,13 @@
                                 <span class="fa fa-paper-plane"></span>
                                 <span v-if="!lsvoteId">Envoyer à lsvote </span>
                                 <span v-if="lsvoteId">Renvoyer à lsvote </span>
-
                             </button>
-
 
                         </div>
                     </div>
                 </div>
 
-                <div class="input-group col-3 float-end pr-0">
+                <div class="input-group col-3 float-end pr-0 w-25">
                     <input type="text" class="form-control" placeholder="Rechercher" v-model="filter.actor">
                     <div class="input-group-append">
                         <button class="btn btn-primary" title="Effacer" @click="resetFilters()">
