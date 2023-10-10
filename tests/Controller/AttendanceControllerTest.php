@@ -67,14 +67,11 @@ class AttendanceControllerTest extends WebTestCase
             'sentTimestamp' => null,
         ]);
 
-//        $convocation = ConvocationStory::convocationActor2SentWithToken();
         AttendanceTokenFactory::createOne([
             'token' => 'mytoken',
             'convocation' => $convocation,
         ]);
         $token = $convocation->getAttendancetoken()->getToken();
-
-//        dd($convocation->getAttendanceToken());
 
         $this->loginAsUserMontpellier();
         $crawler = $this->client->request(Request::METHOD_GET,'/attendance/confirmation/' . $token);
@@ -88,13 +85,12 @@ class AttendanceControllerTest extends WebTestCase
 
         $this->client->submit($form);
 
-//        dd($this->client->getResponse());
-
         $this->assertTrue($this->client->getResponse()->isRedirect());
         $crawler = $this->client->followRedirect();
         $this->assertResponseStatusCodeSame(200);
 
-        $crawler->filter('section')->children('div.alert')->count(1);
+        $alert = $crawler->filter('section')->children('div.alert')->count();
+        $this->assertSame(1, $alert);
 
         $this->assertNotEmpty($this->getOneEntityBy(Convocation::class, ['attendance' => 'present']));
     }
@@ -131,9 +127,10 @@ class AttendanceControllerTest extends WebTestCase
         $this->assertTrue($this->client->getResponse()->isRedirect());
         $crawler = $this->client->followRedirect();
         $this->assertResponseStatusCodeSame(200);
-        $crawler->filter('section')->children('div.alert')->count(1);
+        $alert = $crawler->filter('section')->children('div.alert')->count();
+        $this->assertSame(1, $alert);
 
-        $this->assertNotEmpty($this->getOneEntityBy(Convocation::class, ['attendance' => 'deputy']));
+        $this->assertNotEmpty($this->getOneEntityBy(Convocation::class, ['attendance' => 'deputy', "deputy" => $user->getDeputy()->getId()]));
     }
 
     public function testAttendanceRedirect()

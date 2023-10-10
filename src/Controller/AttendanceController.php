@@ -45,9 +45,11 @@ class AttendanceController extends AbstractController
             !$form->get('mandataire')->getData() ?
                 $convocationAttendance->setMandataire(null) :
                 $convocationAttendance->setMandataire($form->get('mandataire')->getData()->getId());
-            !$form->get('deputyId')->getData() ?
-                $convocationAttendance->setDeputyId(null) :
-                $convocationAttendance->setDeputyId($form->get('deputyId')->getData()->getId());
+
+            array_key_exists('deputyId', $form->createView()->children) && $form->get('attendance')->getData() === "deputy" ?
+                $convocationAttendance->setDeputyId($form->get('deputyId')->getData()->getId()) :
+                dump('pas la'); # la condition null ?? empeche l'enregistrmenet du suppléant d'ou le dump... A effacer apres la vérif.
+
             $convocationAttendance->setConvocationId($attendanceToken->getConvocation()->getId());
 
             $this->convocationManager->updateConvocationAttendances([$convocationAttendance]);
