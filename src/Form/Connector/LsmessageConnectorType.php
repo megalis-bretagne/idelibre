@@ -46,7 +46,7 @@ class LsmessageConnectorType extends AbstractType
             ])
             ->add('active', CheckboxType::class, [
                 'required' => false,
-                'label_attr' => ['class' => 'switch-custom'],
+                'label_attr' => ['class' => 'checkbox-inline checkbox-switch'],
                 'label' => 'Activer',
             ]);
     }

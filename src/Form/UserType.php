@@ -140,7 +140,7 @@ class UserType extends AbstractType
         if (false === $isMySelf) {
             $builder->add('isActive', CheckboxType::class, [
                 'required' => false,
-                'label_attr' => ['class' => 'switch-custom'],
+                'label_attr' => ['class' => 'checkbox-inline checkbox-switch'],
                 'label' => 'Actif',
             ]);
         }

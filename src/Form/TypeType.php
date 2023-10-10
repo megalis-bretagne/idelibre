@@ -76,22 +76,22 @@ class TypeType extends AbstractType
             ])
             ->add('isComelus', CheckboxType::class, [
                 'required' => false,
-                'label_attr' => ['class' => 'switch-custom'],
+                'label_attr' => ['class' => 'checkbox-inline checkbox-switch'],
                 'label' => 'Envoyer le dossier via comelus',
             ])
             ->add('isSms', CheckboxType::class, [
                 'required' => false,
-                'label_attr' => ['class' => 'switch-custom'],
+                'label_attr' => ['class' => 'checkbox-inline checkbox-switch'],
                 'label' => 'Notifier les élus via sms',
             ])
             ->add('isSmsEmployees', CheckboxType::class, [
                 'required' => false,
-                'label_attr' => ['class' => 'switch-custom'],
+                'label_attr' => ['class' => 'checkbox-inline checkbox-switch'],
                 'label' => 'Notifier les personnels administratifs via sms',
             ])
             ->add('isSmsGuests', CheckboxType::class, [
                 'required' => false,
-                'label_attr' => ['class' => 'switch-custom'],
+                'label_attr' => ['class' => 'checkbox-inline checkbox-switch'],
                 'label' => 'Notifier les invités via sms',
             ])
             ->add('authorizedSecretaries', EntityType::class, [

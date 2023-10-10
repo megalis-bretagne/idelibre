@@ -7,7 +7,7 @@
 
 .ls-sidebar {
     width: 12.5rem;
-    background-color: var(--white);
+    background-color: var(--bs-white);
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, .25);
     color: #222;
     display: flex;
@@ -73,7 +73,7 @@
 .ls-sidebar div.pop {
     max-height: 100%;
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, .25);
-    background-color: var(--white);
+    background-color: var(--bs-white);
 }
 
 

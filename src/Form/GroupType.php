@@ -19,7 +19,7 @@ class GroupType extends AbstractType
             ])
             ->add('isStructureCreator', CheckboxType::class, [
                 'required' => false,
-                'label_attr' => ['class' => 'switch-custom'],
+                'label_attr' => ['class' => 'checkbox-inline checkbox-switch'],
                 'label' => 'Autoriser la création de structures',
             ])
         ;

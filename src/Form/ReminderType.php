@@ -15,7 +15,7 @@ class ReminderType extends AbstractType
     {
         $builder->add('isActive', CheckboxType::class, [
             'required' => false,
-            'label_attr' => ['class' => 'switch-custom'],
+            'label_attr' => ['class' => 'checkbox-inline checkbox-switch'],
             'label' => 'Ajouter au calendrier',
         ])
             ->add('duration', ChoiceType::class, [

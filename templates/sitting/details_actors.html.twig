@@ -40,7 +40,7 @@
                     <div class="col-12 mb-3" v-if="!isArchived">
                         <button :disabled="isAlreadySentActors && isAlreadySentEmployees && isAlreadySentGuests"
                                 class="btn btn-primary" title="Envoyer à tous les destinataires"
-                                data-target="#confirmSendAll"
+                                data-bs-target="#confirmSendAll"
                                 data-bs-toggle="modal">
                             <span class="fa fa-paper-plane"></span>
                             Envoyer à tous les destinataires
@@ -62,7 +62,7 @@
 
                             <button :disabled="isAlreadySentActors" class="btn btn-primary"
                                     title="Envoyer les convocations"
-                                    data-target="#confirm"
+                                    data-bs-target="#confirm"
                                     data-bs-toggle="modal">
                                 <span class="fa fa-paper-plane"></span>
                                 Envoyer les convocations
@@ -70,7 +70,7 @@
 
                             <button :disabled="comelusId || !isComelus || isComelusSending" class="btn btn-primary"
                                     title="Envoyer à comelus"
-                                    data-target="#confirmComelus"
+                                    data-bs-target="#confirmComelus"
                                     data-bs-toggle="modal">
                                 <span class="fa fa-paper-plane"></span>
                                 Envoyer via comelus
@@ -82,7 +82,7 @@
                                     {% if isActiveLsvote == false %} disabled="disabled" {% endif %}
                                     class="btn btn-primary"
                                     title="Envoyer à lsvote"
-                                    data-target="#confirmLsvote"
+                                    data-bs-target="#confirmLsvote"
                                     data-bs-toggle="modal">
                                 <span class="fa fa-paper-plane"></span>
                                 <span v-if="!lsvoteId">Envoyer à lsvote </span>
@@ -218,7 +218,7 @@
                         <div class="col-6">
                             <button :disabled="isAlreadySentEmployees" class="btn btn-primary float-end"
                                     title="Envoyer"
-                                    data-target="#confirm_employee"
+                                    data-bs-target="#confirm_employee"
                                     data-bs-toggle="modal">
                                 <span class="fa fa-paper-plane"></span>
                                 Envoyer les invitations
@@ -313,7 +313,7 @@
                         </div>
                         <div class="col-6">
                             <button :disabled="isAlreadySentGuests" class="btn btn-primary float-end" title="Envoyer"
-                                    data-target="#confirm_guest"
+                                    data-bs-target="#confirm_guest"
                                     data-bs-toggle="modal">
                                 <span class="fa fa-paper-plane"></span>
                                 Envoyer les invitations
@@ -401,12 +401,12 @@
                 </div>
             {% endif %}
 
-            <div id="confirmSendAll" ref="confirmSendAll" class="modal fade" role="dialog" data-backdrop="static">
+            <div id="confirmSendAll" ref="confirmSendAll" class="modal fade" role="dialog" data-bs-backdrop="static">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h4 class="modal-title">Attention</h4>
-                            <button class="close" data-bs-dismiss="modal" type="button">&times;</button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             Veuillez valider l'envoi à tous les destinataires (élus, personnels administratifs, invités)
@@ -424,12 +424,12 @@
                 </div>
             </div>
 
-            <div id="confirm" ref="confirm" class="modal fade" role="dialog" data-backdrop="static">
+            <div id="confirm" ref="confirm" class="modal fade" role="dialog" data-bs-backdrop="static">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title">Aperçu des mails qui seront envoyés</h5>
-                            <button class="close" data-bs-dismiss="modal" type="button">&times;</button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             Chaque élu recevra un mail sous le format suivant :
@@ -459,12 +459,12 @@
                 </div>
             </div>
 
-            <div id="confirm_employee" ref="confirm_employee" class="modal fade" role="dialog" data-backdrop="static">
+            <div id="confirm_employee" ref="confirm_employee" class="modal fade" role="dialog" data-bs-backdrop="static">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title">Aperçu des mails qui seront envoyés</h5>
-                            <button class="close" data-bs-dismiss="modal" type="button">&times;</button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             Chaque personnel administratif recevra un mail sous le format suivant :
@@ -489,12 +489,12 @@
                 </div>
             </div>
 
-            <div id="confirm_guest" ref="confirm_guest" class="modal fade" role="dialog" data-backdrop="static">
+            <div id="confirm_guest" ref="confirm_guest" class="modal fade" role="dialog" data-bs-backdrop="static">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title">Aperçu des mails qui seront envoyés</h5>
-                            <button class="close" data-bs-dismiss="modal" type="button">&times;</button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             Chaque invité recevra un mail sous le format suivant :
@@ -519,12 +519,12 @@
                 </div>
             </div>
 
-            <div id="confirmComelus" ref="confirmComelus" class="modal fade" role="dialog" data-backdrop="static">
+            <div id="confirmComelus" ref="confirmComelus" class="modal fade" role="dialog" data-bs-backdrop="static">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h4 class="modal-title">Attention</h4>
-                            <button class="close" data-bs-dismiss="modal" type="button">&times;</button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             Veuillez valider l'envoi de tous les documents via comelus
@@ -544,12 +544,12 @@
 
 
 
-            <div id="confirmLsvote" ref="confirmLsvote" class="modal fade" role="dialog" data-backdrop="static">
+            <div id="confirmLsvote" ref="confirmLsvote" class="modal fade" role="dialog" data-bs-backdrop="static">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h4 class="modal-title">Attention</h4>
-                            <button class="close" data-bs-dismiss="modal" type="button">&times;</button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <span v-if="!lsvoteId">Veuillez valider l'envoi de la séance vers lsvote</span>

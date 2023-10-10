@@ -105,7 +105,7 @@ class SittingType extends AbstractType
             ])
             ->add('isRemoteAllowed', CheckboxType::class, [
                 'required' => false,
-                'label_attr' => ['class' => 'switch-custom'],
+                'label_attr' => ['class' => 'checkbox-inline checkbox-switch'],
                 'label' => ($isNew || $isAlreadySentConvocation) ? 'Participation à distance' : 'Autoriser la participation à distance',
                 'disabled' => $isAlreadySentConvocation,
             ])

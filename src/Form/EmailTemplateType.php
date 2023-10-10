@@ -72,7 +72,7 @@ class EmailTemplateType extends AbstractType
         if (!$this->IsEmailRecapitulatif($options['data'] ?? null)) {
             $builder->add('isAttachment', CheckboxType::class, [
                 'required' => false,
-                'label_attr' => ['class' => 'switch-custom'],
+                'label_attr' => ['class' => 'checkbox-inline checkbox-switch'],
                 'label' => $this->isConvocation($options['data'] ?? null) ? 'Joindre le fichier de convocation' : 'Joindre le fichier d\'invitation',
             ]);
         }
