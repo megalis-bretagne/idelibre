@@ -1,6 +1,7 @@
 @import "@libriciel/ls-bootstrap-5/il-bootstrap.css";
 @import "~@fortawesome/fontawesome-free/css/all.min.css";
 @import "~flatpickr/dist/flatpickr.css";
+@import "~select2";
 @import "../ls-sidebar/ls-sidebar.css";
 @import "../ls-font/Libriciel-font.css";
 @import "./custom/login_ls.css";

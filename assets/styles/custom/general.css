@@ -379,13 +379,13 @@ button .small{
 }
 .modal-header {
     padding: 1rem;
-    border-bottom: 1px solid #dee2e6;
+    border-bottom: 1px solid var(--bs-gray-300);
 }
 .modal-body {
     padding: 1rem;
 }
 .modal-footer {
-    border-top: 1px solid #dee2e6;
+    border-top: 1px solid var(--bs-gray-300);
     padding: 1rem;
 }
 .modal-footer .btn-outline-primary {

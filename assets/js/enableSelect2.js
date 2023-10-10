@@ -5,12 +5,11 @@ import 'select2'
 $(document).ready(function () {
 
     let condition = true;
-    if( $('.form-select').attr('multiple') === 'multiple' ) {
+    if( $('select').attr('multiple') === 'multiple' ) {
         condition = false;
     }
 
-    $('.form-select').select2({
-        theme: "bootstrap-5",
+    $('select').select2({
         'closeOnSelect': condition,
         'allowClear': true,
          width: '100%',
