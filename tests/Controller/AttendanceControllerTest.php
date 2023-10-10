@@ -4,11 +4,17 @@ namespace App\Tests\Controller;
 
 use App\Entity\Convocation;
 use App\Entity\User;
+use App\Service\Util\GenderConverter;
 use App\Tests\Factory\AttendanceTokenFactory;
+use App\Tests\Factory\ConvocationFactory;
 use App\Tests\Factory\UserFactory;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
 use App\Tests\Story\ConvocationStory;
+use App\Tests\Story\PartyStory;
+use App\Tests\Story\RoleStory;
+use App\Tests\Story\SittingStory;
+use App\Tests\Story\StructureStory;
 use App\Tests\Story\UserStory;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -40,24 +46,49 @@ class AttendanceControllerTest extends WebTestCase
 
     public function testAttendanceIsPresent()
     {
-        $convocation = ConvocationStory::convocationActor2SentWithToken();
+        $userNoDeputy = UserFactory::createOne([
+            'username' => 'actorNoDeputy@libriciel',
+            'email' => 'actorNoDeputy@example.org',
+            'password' => UserStory::PASSWORD,
+            'firstName' => 'John',
+            'lastName' => 'Doe',
+            'gender' => GenderConverter::MALE,
+            'title' => 'Mr le maire',
+            'structure' => StructureStory::libriciel(),
+            'role' => RoleStory::actor(),
+            'party' => PartyStory::majorite(),
+            'deputy' => null
+        ]);
+
+        $convocation = ConvocationFactory::createOne([
+            'sitting' => SittingStory::sittingConseilWithTokenSent(),
+            'user' => $userNoDeputy,
+            'category' => Convocation::CATEGORY_CONVOCATION,
+            'sentTimestamp' => null,
+        ]);
+
+//        $convocation = ConvocationStory::convocationActor2SentWithToken();
         AttendanceTokenFactory::createOne([
             'token' => 'mytoken',
             'convocation' => $convocation,
         ]);
         $token = $convocation->getAttendancetoken()->getToken();
 
-        $this->loginAsAdminLibriciel();
+//        dd($convocation->getAttendanceToken());
+
+        $this->loginAsUserMontpellier();
         $crawler = $this->client->request(Request::METHOD_GET,'/attendance/confirmation/' . $token);
         $this->assertResponseStatusCodeSame(200);
 
-        $item = $crawler->filter('html:contains("Confirmation de présence à la séance")');
-        $this->assertCount(1, $item);
+        $item = $crawler->filter('title')->text("Confirmation de présence à la séance");
+        $this->assertSame("Confirmation de présence à la séance" , $item);
 
         $form = $crawler->selectButton('Enregistrer')->form();
         $form['attendance[attendance]'] = 'present';
 
         $this->client->submit($form);
+
+        dd($this->client->getResponse());
 
         $this->assertTrue($this->client->getResponse()->isRedirect());
         $crawler = $this->client->followRedirect();
@@ -80,7 +111,7 @@ class AttendanceControllerTest extends WebTestCase
         ]);
         $token = $convocation->getAttendancetoken()->getToken();
 
-        $this->loginAsAdminLibriciel();
+        $this->loginAsUserMontpellier();
         $crawler = $this->client->request(
             Request::METHOD_GET,
             '/attendance/confirmation/' . $token

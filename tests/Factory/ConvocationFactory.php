@@ -52,6 +52,7 @@ final class ConvocationFactory extends ModelFactory
             'isRead' => false,
             'sitting' => SittingFactory::new(),
             'user' => UserFactory::new(),
+            'deputy' => null
         ];
     }
 
