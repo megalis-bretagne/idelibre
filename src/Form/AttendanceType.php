@@ -39,7 +39,7 @@ class AttendanceType extends AbstractType
                 'placeholder' => '--'
             ]);
 
-        if ( $options['deputyId'] !== null ) {
+        if ($options['deputyId'] !== null) {
             $builder->add('deputyId', EntityType::class, [
                 'label' => 'Suppléant',
                 'attr' => ['readonly' => true, 'class' => "select-readonly" ],
@@ -64,7 +64,7 @@ class AttendanceType extends AbstractType
                     'Donne pouvoir via procuration' => Convocation::ABSENT_GIVE_POA,
                     'Remplacé par son suppléant' => Convocation::ABSENT_SEND_DEPUTY,
                 ];
-            }else {
+            } else {
                 $values = [
                     'Présent' => Convocation::PRESENT,
                     'Présent à distance' => Convocation::REMOTE,
@@ -82,7 +82,7 @@ class AttendanceType extends AbstractType
                     'Donne pouvoir via procuration' => Convocation::ABSENT_GIVE_POA,
                     'Remplacé par son suppléant' => Convocation::ABSENT_SEND_DEPUTY,
                 ];
-            }else {
+            } else {
                 $values = [
                     'Présent' => Convocation::PRESENT,
                     'Absent' => Convocation::ABSENT,
