@@ -11,32 +11,35 @@
 
 
 {% block pageTable %}
-    <table class="table table-striped bg-white mt-5 col-8 offset-2">
-        <tbody>
-        <tr class="d-flex">
-            <td class="col-11">Autoriser le partage d'annotation</td>
-            <td class="col-1">
-                {% if configuration.isSharedAnnotation %}
-                    <span class="fas fa-check text-success"></span>
-                {% else %}
-                    <span class="fa fa-times text-danger"></span>
-                {% endif %}
-            </td>
-        </tr>
-        <tr class="d-flex">
-            <td class="col-11">Temps après lequel une séance est supprimée</td>
-            <td class="col-1">
-                <small>{{ formattedSuppressionDelay }}</small>
-            </td>
-        </tr>
-        <tr class="d-flex">
-            <td class="col-11">Force du mot de passe minimum pour les utilisateurs de la structure (hors administrateur de groupe)</td>
-            <td class="col-1">
-                <small>{{ configuration.minimumEntropy }}</small>
-            </td>
-        </tr>
-    </table>
+    <div class="d-flex justify-content-center">
 
+
+        <table class="table table-striped bg-white mt-5" style="width: 60vw">
+            <tbody>
+            <tr class="d-flex" style="height: 60px">
+                <td class="col-11">Autoriser le partage d'annotation</td>
+                <td class="col-1">
+                    {% if configuration.isSharedAnnotation %}
+                        <span class="fas fa-check text-success"></span>
+                    {% else %}
+                        <span class="fa fa-times text-danger"></span>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr class="d-flex" style="height: 60px">
+                <td class="col-11">Temps après lequel une séance est supprimée</td>
+                <td class="col-1">
+                    <small>{{ formattedSuppressionDelay }}</small>
+                </td>
+            </tr>
+            <tr class="d-flex" style="height: 60px">
+                <td class="col-11">Force du mot de passe minimum pour les utilisateurs de la structure (hors administrateur de groupe)</td>
+                <td class="col-1">
+                    <small>{{ configuration.minimumEntropy }}</small>
+                </td>
+            </tr>
+        </table>
+    </div>
 {% endblock %}
 
 

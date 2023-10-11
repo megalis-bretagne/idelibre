@@ -15,7 +15,7 @@ class SubscriptionType extends AbstractType
         $builder
             ->add('acceptMailRecap', CheckboxType::class, [
                 'required' => false,
-                'label_attr' => ['class' => 'switch-custom'],
+                'label_attr' => ['class' => 'checkbox-inline checkbox-switch'],
                 'label' => 'Voulez-vous recevoir des mails récaptulatifs des présences/absences des élus ?',
             ])
         ;

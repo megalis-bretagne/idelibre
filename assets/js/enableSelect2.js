@@ -2,9 +2,10 @@ import $ from 'jquery'
 import 'select2'
 
 
-$('document').ready(function () {
+$(document).ready(function () {
+
     let condition = true;
-    if( $('select').attr('multiple') == 'multiple' ) {
+    if( $('select').attr('multiple') === 'multiple' ) {
         condition = false;
     }
 

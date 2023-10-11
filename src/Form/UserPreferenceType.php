@@ -47,6 +47,9 @@ class UserPreferenceType extends AbstractType
                 'type' => PasswordType::class,
                 'invalid_message' => 'Les mots de passe ne sont pas identiques',
                 'options' => [
+                    'row_attr' => [
+                        'class' => 'form-group',
+                    ],
                     'attr' => [
                         'class' => 'password-field showValidationPasswordEntropy',
                         'data-minimum-entropy' => $options['entropyForUser'],

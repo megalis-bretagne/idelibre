@@ -1,10 +1,13 @@
+body {
+    background-color: var(--bs-ls-grey-50);
+}
 
+a { text-decoration: none; }
 .form-signin {
     width: 100%;
     max-width: 330px;
     padding: 15px;
-    margin: auto;
-    margin-top: 50px;
+    margin: 50px auto auto;
 }
 
 .form-signin .checkbox {
@@ -33,6 +36,11 @@
     margin-bottom: 10px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
+}
+
+.select-readonly {
+    background: var(--bs-ls-grey-100);
+    pointer-events: none;
 }
 
 
@@ -74,20 +82,16 @@ tr:hover {
     border-color: transparent !important;
 }
 
-body {
-    background-color: var(--ls-grey-50);
-}
-
 .custom-file-input ~ .custom-file-label::after {
     content: "Parcourir";
 }
 
 .dropdown-item:hover {
-    background-color: var(--ls-primary-50);
+    background-color: var(--bs-ls-primary-50);
 }
 
 .nav-link:hover {
-    color: var(--ls-primary-500);
+    color: var(--bs-ls-primary-500);
 }
 
 .top-right {
@@ -157,17 +161,17 @@ body {
 
 .nav-tabs .nav-link {
     border: 1px solid transparent;
-    color: var(--ls-grey-400);
+    color: var(--bs-ls-grey-400);
 }
 
 .nav-tabs .nav-link:hover {
     border-color: transparent transparent;
     border-bottom: 3px solid !important;
-    color: var(--ls-grey-500);
+    color: var(--bs-ls-grey-500);
 }
 
 .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
-    color: var(--ls-dark);
+    color: var(--bs-ls-dark);
     background-color: transparent;
     border-color: transparent transparent;
     border-bottom: 3px solid !important;
@@ -180,10 +184,15 @@ input[type="file"].project-file-btn {
 }
 
 .project-file-btn {
-    border: 1px solid #ccc;
-    display: inline-block;
+    border: transparent;
     padding: 6px 12px;
     cursor: pointer;
+    display:flex;
+    align-items: center;
+}
+.project-file-btn span {
+    margin-right: .3rem;
+
 }
 
 
@@ -192,12 +201,12 @@ input[type="file"].project-file-btn {
     border: 1px solid transparent;
     border-radius: .25rem;
     padding: 10px;
-    background-color: var(--ls-grey-100);
+    background-color: var(--bs-ls-grey-100);
     display: flex;
 }
 
 .il-project .il-border-right {
-    border-right: 2px solid var(--ls-grey-200);
+    border-right: 2px solid var(--bs-ls-grey-200);
 }
 
 .il-project .il-border-right:hover {
@@ -207,7 +216,7 @@ input[type="file"].project-file-btn {
 
 /*  v-select placeholder color */
 .v-select input {
-    color: var(--ls-grey-500);
+    color: var(--bs-ls-grey-500);
 }
 
 
@@ -225,7 +234,7 @@ input[type="file"].project-file-btn {
 
 
 .annexes .annex:nth-child(2n + 1){
-    background-color: var(--ls-grey-200);
+    background-color: var(--bs-ls-grey-200);
 }
 
 
@@ -236,7 +245,7 @@ input[type="file"].project-file-btn {
 }
 
 .project-left {
-    border-right: 2px solid var(--ls-grey-200);
+    border-right: 2px solid var(--bs-ls-grey-200);
     flex: 0 0 10px;
     padding-right: 10px;
     padding-top: 5px;
@@ -248,12 +257,12 @@ input[type="file"].project-file-btn {
     border: 1px solid transparent;
     border-radius: .25rem;
     padding: 0px;
-    background-color: var(--ls-grey-100);
+    background-color: var(--bs-ls-grey-100);
     display: flex;
 }
 
 .il-otherdoc .il-border-right {
-    border-right: 2px solid var(--ls-grey-200);
+    border-right: 2px solid var(--bs-ls-grey-200);
 }
 
 .il-otherdoc .il-border-right:hover {
@@ -261,7 +270,7 @@ input[type="file"].project-file-btn {
 }
 
 .otherdoc-left {
-    border-right: 2px solid var(--ls-grey-200);
+    border-right: 2px solid var(--bs-ls-grey-200);
     flex: 0 0 10px;
     padding-right: 10px;
     padding-top: 5px;
@@ -310,7 +319,7 @@ input[type="file"].project-file-btn {
 
 
 .annex-list .annex:nth-child(2n +1) {
-    background: var(--ls-grey-200);
+    background: var(--bs-ls-grey-200);
 }
 
 .annex-list {
@@ -360,17 +369,28 @@ button .small{
     font-size: 75%;
 }
 
-.isDeputy {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background-color: #1e88e5;
-    margin-left: 1rem;
+.form-select:focus{border-color:#4cabdf;box-shadow:0 0 5px #4cabdf;outline:0}
+
+/* Modal */
+.modal-content {
+    background-color: var(--bs-white);
+    border: 1px solid rgba(0,0,0,.2);
+    border-radius: .3rem;
 }
-.hasProcuration {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background-color: darkorange;
-    margin-left: 1rem;
+.modal-header {
+    padding: 1rem;
+    border-bottom: 1px solid var(--bs-gray-300);
+}
+.modal-body {
+    padding: 1rem;
+}
+.modal-footer {
+    border-top: 1px solid var(--bs-gray-300);
+    padding: 1rem;
+}
+.modal-footer .btn-outline-primary {
+    margin-right: .25rem;
+}
+.modal-footer .btn-primary {
+    margin-left: .25rem;
 }

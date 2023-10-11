@@ -38,7 +38,7 @@ class StructureType extends AbstractType
         ])
             ->add('can_edit_reply_to', CheckboxType::class, [
                 'label' => 'Autorisation pour les administrateurs de modifier l\'email de réponse ?',
-                'label_attr' => ['class' => 'switch-custom'],
+                'label_attr' => ['class' => 'checkbox-inline checkbox-switch'],
                 'required' => false,
             ])
             ->add('siren', TextType::class, [
@@ -63,7 +63,7 @@ class StructureType extends AbstractType
                 ])
             ->add('isActive', CheckboxType::class, [
                 'label' => 'Actif',
-                'label_attr' => ['class' => 'switch-custom'],
+                'label_attr' => ['class' => 'checkbox-inline checkbox-switch'],
                 'required' => false,
             ]);
         }

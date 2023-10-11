@@ -11,5 +11,5 @@ input[type="file"].ls-file {
 
 .div-info {
     border-radius: 5px;
-    background: var(--ls-grey-100);
+    background: var(--bs-ls-grey-100);
 }

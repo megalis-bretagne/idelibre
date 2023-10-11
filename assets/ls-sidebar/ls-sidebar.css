@@ -7,7 +7,7 @@
 
 .ls-sidebar {
     width: 12.5rem;
-    background-color: var(--white);
+    background-color: var(--bs-white);
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, .25);
     color: #222;
     display: flex;
@@ -41,7 +41,7 @@
 }
 
 .ls-sidebar .main-menu .over-menu {
-    background-color: var(--ls-primary-100);
+    background-color: var(--bs-ls-primary-100);
 }
 
 .ls-sidebar .main-menu {
@@ -73,7 +73,7 @@
 .ls-sidebar div.pop {
     max-height: 100%;
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, .25);
-    background-color: var(--white);
+    background-color: var(--bs-white);
 }
 
 
@@ -97,22 +97,22 @@
 }
 
 .ls-sidebar .main-menu > li.active {
-    box-shadow: inset 4px 0 0 var(--ls-primary-600);
-    background-color: var(--ls-primary-50);
+    box-shadow: inset 4px 0 0 var(--bs-ls-primary-600);
+    background-color: var(--bs-ls-primary-50);
 
 }
 
 .ls-sidebar .sub-menu li :hover {
-    background-color: var(--ls-primary-100);
+    background-color: var(--bs-ls-primary-100);
 }
 
 .ls-sidebar li.active .sub-menu li  :hover {
-    box-shadow: inset 4px 0 0 var(--ls-primary-600);
-    background-color: var(--ls-primary-100);
+    box-shadow: inset 4px 0 0 var(--bs-ls-primary-600);
+    background-color: var(--bs-ls-primary-100);
 }
 
 .ls-sidebar .main-menu > li.active > a, .ls-sidebar .main-menu > li.active .sub-menu > .active {
-    color: var(--ls-primary-600);
+    color: var(--bs-ls-primary-600);
     font-weight: 700;
 }
 
@@ -158,17 +158,17 @@
 
 
 .ls-sidebar .main-menu > li.active {
-    -webkit-box-shadow: inset 4px 0 0 var(--ls-primary-600);
-    box-shadow: inset 4px 0 0 var(--ls-primary-600);
-    background-color: var(--ls-primary-50);
+    -webkit-box-shadow: inset 4px 0 0 var(--bs-ls-primary-600);
+    box-shadow: inset 4px 0 0 var(--bs-ls-primary-600);
+    background-color: var(--bs-ls-primary-50);
 
 }
 
 
 .ls-sidebar .main-menu li.active .sub-menu .active {
-    -webkit-box-shadow: inset 4px 0 0 var(--ls-primary-600);
-    box-shadow: inset 4px 0 0 var(--ls-primary-600);
-    background-color: var(--ls-primary-200);
+    -webkit-box-shadow: inset 4px 0 0 var(--bs-ls-primary-600);
+    box-shadow: inset 4px 0 0 var(--bs-ls-primary-600);
+    background-color: var(--bs-ls-primary-200);
     color: #222;
 }
 
