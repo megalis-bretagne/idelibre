@@ -19,6 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Sidebar(active: ['platform-nav', 'check-nav'])]
+#[Breadcrumb(title: 'Plateforme', routeName: 'structure_index')]
 class CheckController extends AbstractController
 {
     #[Route(path: '/check', name: 'check_index')]

@@ -20,7 +20,7 @@ class ConfigurationType extends AbstractType
         $builder
             ->add('isSharedAnnotation', CheckboxType::class, [
                 'required' => false,
-                'label_attr' => ['class' => 'switch-custom'],
+                'label_attr' => ['class' => 'checkbox-inline checkbox-switch'],
                 'label' => 'Autoriser le partage d\'annotation entre élus',
             ])
             ->add('structure', HiddenEntityType::class, [

@@ -1,31 +1,29 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>{% block title %} {{ product_name}} {% endblock %}</title>
-    {{ encore_entry_link_tags('app') }}
-    {% block stylesheets %}{% endblock %}
-    <link rel="stylesheet" href="{{ asset('assets/override.css') }}">
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %} {{ product_name}} {% endblock %}</title>
+        {{ encore_entry_link_tags('app') }}
+        {% block stylesheets %}{% endblock %}
+    </head>
+    <body>
 
-</head>
-<body>
+    {% block navigation %}
+        {{ include('include/_navbar.html.twig') }}
+    {% endblock %}
 
-{% block navigation %}
-    {{ include('include/_navbar.html.twig') }}
-{% endblock %}
+    {{ ls_sidebar() }}
 
-{{ ls_sidebar() }}
-
-<div class="main-content">
-    <div class="container-fluid main-margin">
-        {% block body %}{% endblock %}
+    <div class="main-content">
+        <div class="container-fluid main-margin">
+            {% block body %}{% endblock %}
+        </div>
     </div>
-</div>
 
-{{ include('include/_footer.html.twig') }}
+    {{ include('include/_footer.html.twig') }}
 
-{{ encore_entry_script_tags('app') }}
-{% block javascripts %}{% endblock %}
+    {{ encore_entry_script_tags('app') }}
+    {% block javascripts %}{% endblock %}
 
-</body>
+    </body>
 </html>

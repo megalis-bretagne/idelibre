@@ -24,14 +24,17 @@ class AttendanceController extends AbstractController
     #[Route('/attendance/confirmation/{token}', name: 'app_attendance_confirmation')]
     public function confirmAttendanceFromEmail(AttendanceToken $attendanceToken, Request $request): Response
     {
+        $convocation = $attendanceToken->getConvocation();
+        $user = $attendanceToken->getConvocation()->getUser();
         $sitting = $attendanceToken->getConvocation()->getSitting();
+        $deputyId = $user->getDeputy() ? $user->getDeputy()->getId() : null;
+
         $form = $this->createForm(AttendanceType::class, null, [
             'isRemoteAllowed' => $sitting->getIsRemoteAllowed(),
-            'convocation' => $attendanceToken->getConvocation(),
-            'sitting' => $attendanceToken->getConvocation()->getSitting(),
-            'toExclude' => [$attendanceToken->getConvocation()->getUser()],
-            'deputyId' => $attendanceToken->getConvocation()->getUser()->getId()
-
+            'convocation' => $convocation,
+            'sitting' => $sitting,
+            'toExclude' => [$user],
+            'deputyId' => $deputyId
         ]);
 
         $form->handleRequest($request);
@@ -39,10 +42,14 @@ class AttendanceController extends AbstractController
         if ($form->isSubmitted()) {
             $convocationAttendance = (new ConvocationAttendance())
                 ->setAttendance($form->get('attendance')->getData());
-            !$form->get('mandataire')->getData() ? $convocationAttendance->setMandataire(null) : $convocationAttendance->setMandataire($form->get('mandataire')->getData()->getId());
-            if (array_key_exists("deputy", $form->getNormData())) {
-                $convocationAttendance->setDeputyId($form->get('deputy') !== null ? $attendanceToken->getConvocation()->getUser()->getDeputy()->getId() : null);
-            }
+            !$form->get('mandataire')->getData() ?
+                $convocationAttendance->setMandataire(null) :
+                $convocationAttendance->setMandataire($form->get('mandataire')->getData()->getId());
+
+            array_key_exists('deputyId', $form->createView()->children) && $form->get('attendance')->getData() === "deputy" ?
+                $convocationAttendance->setDeputyId($form->get('deputyId')->getData()->getId()) :
+                dump('pas la'); # la condition null ?? empeche l'enregistrmenet du suppléant d'ou le dump... A effacer apres la vérif.
+
             $convocationAttendance->setConvocationId($attendanceToken->getConvocation()->getId());
 
             $this->convocationManager->updateConvocationAttendances([$convocationAttendance]);
@@ -53,10 +60,11 @@ class AttendanceController extends AbstractController
         }
 
         return $this->render('confirm_attendance/confirm.html.twig', [
+            'user' => $user,
+            'sitting' => $sitting,
+            'deputyId' => $deputyId,
+            'convocation' => $convocation,
             'token' => $attendanceToken->getToken(),
-            'convocation' => $attendanceToken->getConvocation(),
-            'user' => $attendanceToken->getConvocation()->getUser(),
-            'sitting' => $attendanceToken->getConvocation()->getSitting(),
             'attendance' => $attendanceToken->getConvocation()->getAttendance(),
             'timezone' => $attendanceToken->getConvocation()->getSitting()->getStructure()->getTimezone()->getName(),
             'form' => $form->createView(),

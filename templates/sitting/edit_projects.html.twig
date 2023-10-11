@@ -72,7 +72,7 @@
                                 </div>
 
                                 <div class="otherdoc-item action">
-                                    <button class="btn btn-outline-danger borderless float-right"
+                                    <button class="btn btn-outline-danger borderless float-end"
                                             v-on:click="removeOtherdoc(index)">
                                         <span class="fa fa-trash-alt" title="Supprimer"></span>
                                     </button>
@@ -113,7 +113,7 @@
                     <div class="il-project">
                         <div class="project-left cursor-grab handle">
                             <div class="dropdown">
-                                <span class="badge badge-primary rank">${index + 1}</span>
+                                <span class="badge bg-primary rank">${index + 1}</span>
                                 <div class="dropdown-content">
                                     <div v-for="rank in projects.length" class="newRank" v-on:click="move(index, rank -1)"> ${rank}</div>
                                 </div>
@@ -133,7 +133,7 @@
                                 </div>
 
                                 <div class="project-item action">
-                                    <button class="btn btn-outline-danger borderless float-right"
+                                    <button class="btn btn-outline-danger borderless float-end"
                                             v-on:click="removeProject(index)">
                                         <span class="fa fa-trash-alt" title="Supprimer"></span>
                                     </button>
@@ -206,7 +206,7 @@
                                     </div>
 
                                     <div class="project-item action">
-                                        <button class="btn btn-outline-danger borderless float-right"
+                                        <button class="btn btn-outline-danger borderless float-end"
                                                 @click="deleteAnnex(project.annexes, index)">
                                             <span class="fa fa-trash-alt" title="Supprimer"></span>
                                         </button>
@@ -221,8 +221,8 @@
             </draggable>
         </div>
 
-        <div class="float-right mt-5">
-            <button class="btn btn-outline-dark" @click="cancel()">
+        <div class="float-end mt-5">
+            <button class="btn btn-link" @click="cancel()">
                 <span class="fa fa-times"></span> Annuler Les modifications
             </button>
 

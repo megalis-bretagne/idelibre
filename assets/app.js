@@ -1,11 +1,16 @@
 import './styles/app.css';
 
 import $ from 'jquery'
-import 'bootstrap'
+
+import '@popperjs/core'
+import '@libriciel/ls-bootstrap-5/il-bootstrap'
+import "bootstrap"
+
 import 'bs-custom-file-input'
 import bsCustomFileInput from 'bs-custom-file-input'
 import flatpickr from "flatpickr";
 import {French} from "flatpickr/dist/l10n/fr"
+
 import './ls-sidebar/ls-sidebar'
 import './js/ls-file'
 import './js/comelus'

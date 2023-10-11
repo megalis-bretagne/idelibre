@@ -39,15 +39,15 @@ class AttendanceType extends AbstractType
                 'placeholder' => '--'
             ]);
 
-        if ($this->hasDeputy($options)) {
-            $builder->add('deputy', EntityType::class, [
+        if ($options['deputyId'] !== null) {
+            $builder->add('deputyId', EntityType::class, [
                 'label' => 'Suppléant',
-                'attr' => ['readonly' => true],
+                'attr' => ['readonly' => true, 'class' => "select-readonly" ],
                 'row_attr' => ["id" => "attendance_deputy_group", "class" => 'd-none'],
                 'required' => true,
                 'class' => User::class,
-                'query_builder' => $this->userRepository->findDeputyById($options['deputyId']),
-                'choice_label' => 'deputy.lastName',
+                'query_builder' => $this->userRepository->findDeputyByUserId($options['deputyId']),
+                'choice_label' => 'lastName',
                 'disabled' => false,
             ]);
         }
@@ -55,21 +55,40 @@ class AttendanceType extends AbstractType
 
     private function getAttendanceValues(Convocation $convocation, ?bool $isRemoteAllowed): array
     {
-        $values = [
-            'Présent' => Convocation::PRESENT,
-            'Absent' => Convocation::ABSENT,
-            'Remplacé par son suppléant' => Convocation::ABSENT_SEND_DEPUTY,
-            'Donne pouvoir via procuration' => Convocation::ABSENT_GIVE_POA
-        ];
-
         if ($isRemoteAllowed && Convocation::CATEGORY_CONVOCATION === $convocation->getCategory()) {
-            $values = [
-                'Présent' => Convocation::PRESENT,
-                'Présent à distance' => Convocation::REMOTE,
-                'Absent' => Convocation::ABSENT,
-                'Donne pouvoir via procuration' => Convocation::ABSENT_GIVE_POA,
-                'Remplacé par son suppléant' => Convocation::ABSENT_SEND_DEPUTY,
-            ];
+            if ($convocation->getUser()->getDeputy() !== null) {
+                $values = [
+                    'Présent' => Convocation::PRESENT,
+                    'Présent à distance' => Convocation::REMOTE,
+                    'Absent' => Convocation::ABSENT,
+                    'Donne pouvoir via procuration' => Convocation::ABSENT_GIVE_POA,
+                    'Remplacé par son suppléant' => Convocation::ABSENT_SEND_DEPUTY,
+                ];
+            } else {
+                $values = [
+                    'Présent' => Convocation::PRESENT,
+                    'Présent à distance' => Convocation::REMOTE,
+                    'Absent' => Convocation::ABSENT,
+                    'Donne pouvoir via procuration' => Convocation::ABSENT_GIVE_POA,
+                ];
+            }
+        }
+
+        if (!$isRemoteAllowed && Convocation::CATEGORY_CONVOCATION === $convocation->getCategory()) {
+            if ($convocation->getUser()->getDeputy() !== null) {
+                $values = [
+                    'Présent' => Convocation::PRESENT,
+                    'Absent' => Convocation::ABSENT,
+                    'Donne pouvoir via procuration' => Convocation::ABSENT_GIVE_POA,
+                    'Remplacé par son suppléant' => Convocation::ABSENT_SEND_DEPUTY,
+                ];
+            } else {
+                $values = [
+                    'Présent' => Convocation::PRESENT,
+                    'Absent' => Convocation::ABSENT,
+                    'Donne pouvoir via procuration' => Convocation::ABSENT_GIVE_POA,
+                ];
+            }
         }
 
         return $values;

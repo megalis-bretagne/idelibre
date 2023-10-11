@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Service\Statistic\RoleByStructureStatisticCsvGenerator;
 use App\Service\Statistic\SittingByStructureStatisticCsvGenerator;
 use App\Sidebar\Annotation\Sidebar;
+use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,9 +15,11 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Sidebar(active: ['platform-nav', 'statistic-nav'])]
+#[Breadcrumb(title: 'Plateforme', routeName: 'structure_index')]
 class StatisticController extends AbstractController
 {
     #[Route(path: '/statistic', name: 'statistic_index')]
+    #[Breadcrumb(title: 'Statistiques')]
     #[IsGranted('ROLE_SUPERADMIN')]
     public function index(): Response
     {

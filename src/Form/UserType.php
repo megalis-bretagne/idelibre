@@ -140,7 +140,7 @@ class UserType extends AbstractType
         if (false === $isMySelf) {
             $builder->add('isActive', CheckboxType::class, [
                 'required' => false,
-                'label_attr' => ['class' => 'switch-custom'],
+                'label_attr' => ['class' => 'checkbox-inline checkbox-switch'],
                 'label' => 'Actif',
             ]);
         }
@@ -163,6 +163,9 @@ class UserType extends AbstractType
                     'type' => PasswordType::class,
                     'invalid_message' => 'Les mots de passe ne sont pas identiques',
                     'options' => [
+                        'row_attr' => [
+                            'class' => 'form-group',
+                        ],
                         'attr' => [
                             'class' => 'password-field showValidationPasswordEntropy',
                             'data-minimum-entropy' => $options['entropyForUser'],

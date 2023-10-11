@@ -32,30 +32,30 @@
                         <td class="col-4">{{ convocation.user.lastname }} {{ convocation.user.firstname }}</td>
                         <td class="col-3">
                             {% if convocation.sentTimestamp is not null %}
-                                <span class="badge badge-success fas fa-check d-block mr-2"></span>
+                                <span class="badge bg-success fas fa-check d-block mr-2"></span>
                                 {{ convocation.sentTimestamp.createdAt |  date('d/m/Y : H:i', timezone) }}
 
                             {% else %}
-                                <span class="badge badge-danger fa fa-times"> </span>
+                                <span class="badge bg-danger fa fa-times"> </span>
                             {% endif %}
                         </td>
                         <td class="col-3">
                             {% if convocation.receivedTimestamp is not null %}
-                                <span class="badge badge-success fas fa-check"></span>
+                                <span class="badge bg-success fas fa-check"></span>
                                 {{ convocation.receivedTimestamp.createdAt |  date('d/m/Y : H:i', timezone) }}
                             {% else %}
-                                <span class="badge badge-danger fa fa-times "> </span>
+                                <span class="badge bg-danger fa fa-times "> </span>
                             {% endif %}
                         </td>
                         <td class="col-2">
                             {% if convocation.attendance is null %}
-                                <span class="badge badge-warning fas fa-question"> </span>
+                                <span class="badge bg-warning fas fa-question"> </span>
                             {% elseif convocation.attendance == 'present' %}
-                                <span class="badge badge-success fas fa-check"> </span>
+                                <span class="badge bg-success fas fa-check"> </span>
                             {% elseif convocation.attendance == 'remote' %}
                                 <span class="text-success" title="En distanciel"><i class="fas fa-laptop-house "></i> </span>
                             {% else %}
-                                <span class="badge badge-danger fa fa-times "> </span>
+                                <span class="badge bg-danger fa fa-times "> </span>
                             {% endif %}
                         </td>
                     </tr>

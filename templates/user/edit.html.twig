@@ -16,11 +16,9 @@
 
     {{ form_label(form.username) }}
 
-    <div class="row mb-3">
-        <div class="col-7">
-            {{ form_widget(form.username) }}
-        </div>
-        <div class="col-5 form-control borderless">
+    <div class="d-flex justify-content-start mb-3">
+        {{ form_widget(form.username) }}
+        <div class="form-control borderless">
             <b class="text-ls-dark">@{{ suffix }}</b>
         </div>
     </div>
@@ -29,7 +27,7 @@
 
 
 
-    <div class="float-right">
+    <div class="float-end">
         {% block pageSaveReturn %}
             {{ macro.save('user_index') }}
         {% endblock %}
@@ -55,5 +53,4 @@
     {{ encore_entry_script_tags('enable-select2') }}
     {{ encore_entry_script_tags('showPasswordEntropy') }}
     {{ encore_entry_script_tags('setPasswordUser') }}
-{#    {{ encore_entry_script_tags('userDynamicFields') }}#}
 {% endblock %}
