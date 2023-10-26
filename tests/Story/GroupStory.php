@@ -18,5 +18,11 @@ final class GroupStory extends Story
             'name' => 'notStructureCreator',
             'isStructureCreator' => false,
         ]));
+
+        $this->addState('organisation', GroupFactory::new([
+            'name' => 'organisation',
+            'isStructureCreator' => true,
+        ]));
     }
+
 }

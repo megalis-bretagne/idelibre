@@ -33,4 +33,9 @@ trait LoginTrait
     {
         $this->login('superadmin');
     }
+
+    public function loginAsGroupAdmin()
+    {
+        $this->login('groupAdmin');
+    }
 }
