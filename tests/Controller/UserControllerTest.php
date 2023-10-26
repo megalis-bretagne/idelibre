@@ -7,13 +7,16 @@ use App\Entity\Subscription;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Service\User\PasswordInvalidator;
+use App\Tests\Factory\StructureFactory;
 use App\Tests\Factory\UserFactory;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
 use App\Tests\Story\ConfigurationStory;
+use App\Tests\Story\GroupStory;
 use App\Tests\Story\RoleStory;
 use App\Tests\Story\StructureStory;
 use App\Tests\Story\SubscriptionStory;
+use App\Tests\Story\TimezoneStory;
 use App\Tests\Story\TypeStory;
 use App\Tests\Story\UserStory;
 use Doctrine\Persistence\ObjectManager;
@@ -395,21 +398,56 @@ class UserControllerTest extends WebTestCase
 
     public function testInvalidateUserPassword() {
 
-        ConfigurationStory::load();
-        UserStory::load();
-        $actor = UserFactory::createOne(['structure' => StructureStory::libriciel()]);
-        $this->loginAsAdminLibriciel();
+        GroupStory::organisation();
+
+        $structure =  StructureFactory::new([
+            'name' => 'Lib',
+            'suffix' => 'lib',
+            'legacyConnectionName' => 'lib',
+            'replyTo' => 'lib@exemple.org',
+            'timezone' => TimezoneStory::paris(),
+            'group' => GroupStory::organisation(),
+            'canEditReplyTo' => true,
+        ])->create()->object();
+
+        UserFactory::new([
+            'username' => 'groupAdmin',
+            'email' => 'groupAdmin@example.org',
+            'firstName' => 'group',
+            'lastName' => 'admin',
+            'group' => GroupStory::organisation(),
+            'role' => RoleStory::groupadmin(),
+            'structure' => $structure
+        ])->create()->object();
+
+        $actor = UserFactory::createOne(['structure' => $structure]);
+
+        $this->loginAsGroupAdmin();
 
         $this->client->request(Request::METHOD_POST, '/user_invalidate_password/' . $actor->getId());
         $this->assertTrue($this->client->getResponse()->isRedirect());
-
         $crawler = $this->client->followRedirect();
-
         $this->assertResponseStatusCodeSame(200);
 
         $successMsg = $crawler->filter('html:contains("Un e-mail de réinitialisation du mot de passe a été envoyé")');
         $this->assertCount(1, $successMsg);
         $this->assertSame(PasswordInvalidator::INVALID_PASSWORD, $actor->getPassword());
-
     }
+
+    public function testInvalidateUserPasswordWrongRole() {
+
+        UserStory::adminLibriciel();
+        $actor = UserFactory::createOne(['structure' => StructureStory::libriciel()]);
+
+        $this->loginAsAdminLibriciel();
+
+        $this->client->request(Request::METHOD_POST, '/user_invalidate_password/' . $actor->getId());
+        $this->assertTrue($this->client->getResponse()->isRedirect());
+        $crawler = $this->client->followRedirect();
+        $this->assertResponseStatusCodeSame(200);
+
+        $successMsg = $crawler->filter('html:contains("Impossible de desactiver cet utilisateur")');
+        $this->assertCount(1, $successMsg);
+    }
+
 }
