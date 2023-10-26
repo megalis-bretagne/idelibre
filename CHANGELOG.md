@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.2.15] - 2023-10-26
+### Evolution
+- Mise à jour symfony en 6.3.6
+- Mise à jour composer et npm
+
+### Correction
+- L'invalidation des mots de passe retournait une erreur (#475)
+- L'administrateur peut désormais invalider des mots de passe (#476)
 
 ## [4.2.14] - 2023-09-22
 ### Evolution
