@@ -223,7 +223,6 @@ class UserController extends AbstractController
             return $this->redirectToRoute('user_index');
         }
 
-
         $passwordInvalidator->invalidatePassword([$user], $user->getStructure()->getReplyTo());
 
         $this->addFlash(
