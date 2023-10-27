@@ -396,7 +396,7 @@ class UserControllerTest extends WebTestCase
         $user->refresh();
     }
 
-    public function testInvalidateUserPassword() {
+    public function testInvalidateUserPasswordAsGroupAdmin() {
 
         GroupStory::organisation();
 
@@ -434,7 +434,26 @@ class UserControllerTest extends WebTestCase
         $this->assertSame(PasswordInvalidator::INVALID_PASSWORD, $actor->getPassword());
     }
 
-    public function testInvalidateUserPasswordWrongRole() {
+    public function testInvalidateUserPasswordAsStructureAdmin() {
+
+        $structure = StructureStory::libriciel();
+        UserStory::adminLibriciel();
+
+        $actor = UserFactory::createOne(['structure' => $structure]);
+
+        $this->loginAsAdminLibriciel();
+
+        $this->client->request(Request::METHOD_POST, '/user_invalidate_password/' . $actor->getId());
+        $this->assertTrue($this->client->getResponse()->isRedirect());
+        $crawler = $this->client->followRedirect();
+        $this->assertResponseStatusCodeSame(200);
+
+        $successMsg = $crawler->filter('html:contains("Un e-mail de réinitialisation du mot de passe a été envoyé")');
+        $this->assertCount(1, $successMsg);
+        $this->assertSame(PasswordInvalidator::INVALID_PASSWORD, $actor->getPassword());
+    }
+
+    public function testInvalidateUserPasswordNotAdminRole() {
 
         UserStory::secretaryLibriciel1();
         $actor = UserFactory::createOne(['structure' => StructureStory::libriciel()]);
@@ -442,12 +461,7 @@ class UserControllerTest extends WebTestCase
         $this->loginAsSecretaryLibriciel();
 
         $this->client->request(Request::METHOD_POST, '/user_invalidate_password/' . $actor->getId());
-        $this->assertTrue($this->client->getResponse()->isRedirect());
-        $crawler = $this->client->followRedirect();
-        $this->assertResponseStatusCodeSame(200);
-
-        $successMsg = $crawler->filter('html:contains("Impossible de desactiver cet utilisateur")');
-        $this->assertCount(1, $successMsg);
+        $this->assertResponseStatusCodeSame(403);
     }
 
 }
