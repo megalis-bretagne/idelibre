@@ -8,9 +8,8 @@ class LsvoteSitting
 
     private string $date;
 
-    /**
-     * @return mixed
-     */
+    private bool $remote;
+
 
     public function getName(): string
     {
@@ -33,4 +32,17 @@ class LsvoteSitting
         $this->date = $date;
         return $this;
     }
+
+    public function isRemote(): bool
+    {
+        return $this->remote;
+    }
+
+    public function setRemote(bool $remote): LsvoteSitting
+    {
+        $this->remote = $remote;
+
+        return $this;
+    }
+
 }
