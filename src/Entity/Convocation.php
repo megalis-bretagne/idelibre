@@ -77,7 +77,7 @@ class Convocation
     #[NotBlank]
     private $category;
 
-    #[Column(type: 'string', length: 255, nullable: true)]
+    #[Column(type: 'string', length: 255, nullable: true, options: ['default' => self::UNDEFINED])]
     #[Groups(groups: ['convocation', 'convocation:read'])]
     private $attendance;
 

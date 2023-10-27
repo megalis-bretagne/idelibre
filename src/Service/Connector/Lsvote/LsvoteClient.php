@@ -70,8 +70,6 @@ class LsvoteClient
                 ]
             );
 
-            //            dd($response->getStatusCode(), $response->getInfo());
-
             $content = json_decode($response->getContent(), true);
 
             return $content['id'];

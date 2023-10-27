@@ -355,4 +355,15 @@ class ConvocationManager
 
         return $sitting->getInvitationFile();
     }
+
+    public function countConvocationNotanswered(iterable $convocations): int
+    {
+        $count = 0;
+        foreach ($convocations as $convocation) {
+            if ($convocation->getAttendance() === "" || $convocation->getAttendance() === null) {
+                $count ++;
+            }
+        }
+        return $count;
+    }
 }

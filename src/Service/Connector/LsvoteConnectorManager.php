@@ -88,7 +88,6 @@ class LsvoteConnectorManager
             ->setSitting($this->prepareLsvoteSitting($sitting))
             ->setProjects($this->prepareLsvoteProjects($sitting))
             ->setVoters($this->prepareLsvoteVoter($sitting));
-        //        dd($lsvoteSitting);
 
         try {
             $id = $this->lsvoteClient->sendSitting($connector->getUrl(), $connector->getApiKey(), $lsvoteSitting);
@@ -139,7 +138,7 @@ class LsvoteConnectorManager
                 ->setIdentifier($user->getId())
                 ->setFirstName($user->getFirstName())
                 ->setLastName($user->getLastName())
-                ->setAttendance($convocation->getAttendance())
+                ->setAttendance($convocation->getAttendance() ? $convocation->getAttendance() : "" )
             ;
 
             if ($convocation->getUser()->getRoles() === Role::NAME_ROLE_DEPUTY) {

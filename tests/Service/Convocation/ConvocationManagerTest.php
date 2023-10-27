@@ -2,8 +2,10 @@
 
 namespace App\Tests\Service\Convocation;
 
+use App\Entity\Convocation;
 use App\Service\Convocation\ConvocationManager;
 use App\Tests\Factory\ConvocationFactory;
+use App\Tests\Factory\SittingFactory;
 use App\Tests\Factory\TimestampFactory;
 use App\Tests\Story\SittingStory;
 use Doctrine\Persistence\ObjectManager;
@@ -53,5 +55,19 @@ class ConvocationManagerTest extends WebTestCase
         $convocations = $this->convocationManager->keepOnlyNotSent($all_convocations);
 
         $this->assertCount(2, $convocations);
+    }
+
+    public function testCountConvocationNotAnswered()
+    {
+
+        $sitting = SittingStory::sittingConseilLibriciel();
+        $convocation1 = ConvocationFactory::createOne(["sitting" => $sitting , "attendance" => ""]);
+        $convocation2 = ConvocationFactory::createOne(["sitting" => $sitting , "attendance" => Convocation::PRESENT]);
+
+        $convocations = [$convocation1, $convocation2];
+
+        $countConvocationNotAnswered = $this->convocationManager->countConvocationNotanswered($convocations);
+        $this->assertIsInt($countConvocationNotAnswered);
+        $this->assertEquals(1, $countConvocationNotAnswered);
     }
 }

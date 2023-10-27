@@ -11,6 +11,7 @@ use App\Repository\ProjectRepository;
 use App\Repository\UserRepository;
 use App\Service\Connector\LsvoteConnectorManager;
 use App\Service\Connector\LsvoteResultException;
+use App\Service\Convocation\ConvocationManager;
 use App\Service\EmailTemplate\EmailGenerator;
 use App\Service\File\Generator\FileGenerator;
 use App\Service\File\Generator\UnsupportedExtensionException;
@@ -34,13 +35,25 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Breadcrumb(title: 'Séances', routeName: 'sitting_index')]
 class SittingController extends AbstractController
 {
+
+    public function __construct(
+        private readonly ConvocationManager $convocationManager,
+        private readonly SittingManager $sittingManager,
+        private readonly PdfValidator $pdfValidator,
+        private LsvoteConnectorManager $lsvoteConnectorManager,
+        private SidebarState $sidebarState,
+        private readonly FileGenerator $fileGenerator,
+    )
+    {
+    }
+
     #[Route(path: '/sitting', name: 'sitting_index')]
     #[IsGranted('ROLE_MANAGE_SITTINGS')]
-    public function index(PaginatorInterface $paginator, Request $request, SittingManager $sittingManager, SidebarState $sidebarState): Response
+    public function index(PaginatorInterface $paginator, Request $request): Response
     {
         $formSearch = $this->createForm(SearchType::class);
         $sittings = $paginator->paginate(
-            $sittingManager->getListSittingByStructureQuery($this->getUser(), $request->query->get('search'), $request->query->get('status')),
+            $this->sittingManager->getListSittingByStructureQuery($this->getUser(), $request->query->get('search'), $request->query->get('status')),
             $request->query->getInt('page', 1),
             $this->getParameter('limit_line_table'),
             [
@@ -49,7 +62,7 @@ class SittingController extends AbstractController
             ]
         );
         if ($status = $request->query->get('status')) {
-            $sidebarState->setActiveNavs(['sitting-nav', "sitting-$status-nav"]);
+            $this->sidebarState->setActiveNavs(['sitting-nav', "sitting-$status-nav"]);
         }
 
         return $this->render('sitting/index.html.twig', [
@@ -64,12 +77,12 @@ class SittingController extends AbstractController
     #[IsGranted('ROLE_MANAGE_SITTINGS')]
     #[Sidebar(active: ['sitting-active-nav'])]
     #[Breadcrumb(title: 'Ajouter')]
-    public function createSitting(Request $request, SittingManager $sittingManager, PdfValidator $pdfValidator): Response
+    public function createSitting(Request $request): Response
     {
         $form = $this->createForm(SittingType::class, null, ['structure' => $this->getUser()->getStructure(), 'user' => $this->getUser()]);
         $form->handleRequest($request);
 
-        $unreadablePdf = $pdfValidator->getListOfUnreadablePdf([
+        $unreadablePdf = $this->pdfValidator->getListOfUnreadablePdf([
             $form->get('convocationFile')->getData(),
             $form->get('invitationFile')->getData(),
         ]);
@@ -81,7 +94,7 @@ class SittingController extends AbstractController
         }
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $sittingId = $sittingManager->save(
+            $sittingId = $this->sittingManager->save(
                 $form->getData(),
                 $form->get('convocationFile')->getData(),
                 $form->get('invitationFile')->getData(),
@@ -130,7 +143,7 @@ class SittingController extends AbstractController
     #[IsGranted('MANAGE_SITTINGS', subject: 'sitting')]
     #[Sidebar(active: ['sitting-active-nav'])]
     #[Breadcrumb(title: 'Modifier {sitting.nameWithDate}')]
-    public function editInformation(Sitting $sitting, Request $request, SittingManager $sittingManager, PdfValidator $pdfValidator): Response
+    public function editInformation(Sitting $sitting, Request $request): Response
     {
         if ($sitting->getIsArchived()) {
             throw new InvalidArgumentException('Impossible de modifier une séance archivée');
@@ -138,7 +151,7 @@ class SittingController extends AbstractController
         $form = $this->createForm(SittingType::class, $sitting, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
 
-        $unreadablePdf = $pdfValidator->getListOfUnreadablePdf([
+        $unreadablePdf = $this->pdfValidator->getListOfUnreadablePdf([
             $form->get('convocationFile')->getData(),
             $form->get('invitationFile')->getData(),
         ]);
@@ -150,7 +163,7 @@ class SittingController extends AbstractController
         }
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $sittingManager->update(
+            $this->sittingManager->update(
                 $form->getData(),
                 $form->get('convocationFile')->getData(),
                 $form->get('invitationFile')->getData(),
@@ -177,9 +190,9 @@ class SittingController extends AbstractController
 
     #[Route(path: '/sitting/delete/{id}', name: 'sitting_delete', methods: ['DELETE'])]
     #[IsGranted('MANAGE_SITTINGS', subject: 'sitting')]
-    public function delete(Sitting $sitting, SittingManager $sittingManager, Request $request): Response
+    public function delete(Sitting $sitting, Request $request): Response
     {
-        $sittingManager->delete($sitting);
+        $this->sittingManager->delete($sitting);
         $this->addFlash('success', 'La séance a bien été supprimée');
         $referer = $request->headers->get('referer');
 
@@ -189,28 +202,28 @@ class SittingController extends AbstractController
     #[Route(path: '/sitting/show/{id}/information', name: 'sitting_show_information', methods: ['GET'])]
     #[IsGranted('MANAGE_SITTINGS', subject: 'sitting')]
     #[Breadcrumb(title: 'Détail {sitting.nameWithDate}')]
-    public function showInformation(Sitting $sitting, SittingManager $sittingManager, SidebarState $sidebarState, ParameterBagInterface $bag, LsvoteConnectorManager $lsvoteConnectorManager): Response
+    public function showInformation(Sitting $sitting, ParameterBagInterface $bag): Response
     {
-        $sidebarState->setActiveNavs(['sitting-nav', $this->activeSidebarNav($sitting->getIsArchived())]);
+        $this->sidebarState->setActiveNavs(['sitting-nav', $this->activeSidebarNav($sitting->getIsArchived())]);
 
         return $this->render('sitting/details_information.html.twig', [
-            'isAlreadySent' => $sittingManager->isAlreadySent($sitting),
+            'isAlreadySent' => $this->sittingManager->isAlreadySent($sitting),
             'sitting' => $sitting,
-            'isActiveLsvote' => $lsvoteConnectorManager->getLsvoteConnector($sitting->getStructure())->getActive(),
+            'isActiveLsvote' => $this->lsvoteConnectorManager->getLsvoteConnector($sitting->getStructure())->getActive(),
             'isLsvoteResults' => !empty($sitting->getLsvoteSitting()?->getResults()),
             'isSentLsvote' => !empty($sitting->getLsvoteSitting()),
             'timezone' => $sitting->getStructure()->getTimezone()->getName(),
-            'isProjectsSizeTooBig' => $sittingManager->getProjectsAndAnnexesTotalSize($sitting) > intval($bag->get('maximum_size_pdf_zip_generation')),
-            'totalSize' => $sittingManager->getProjectsAndAnnexesTotalSize($sitting),
+            'isProjectsSizeTooBig' => $this->sittingManager->getProjectsAndAnnexesTotalSize($sitting) > intval($bag->get('maximum_size_pdf_zip_generation')),
+            'totalSize' => $this->sittingManager->getProjectsAndAnnexesTotalSize($sitting),
         ]);
     }
 
     #[Route(path: '/sitting/show/{id}/actors', name: 'sitting_show_actors', methods: ['GET'])]
     #[IsGranted('MANAGE_SITTINGS', subject: 'sitting')]
     #[Breadcrumb(title: 'Détail {sitting.nameWithDate}')]
-    public function showActors(Sitting $sitting, EmailTemplateRepository $emailTemplateRepository, SidebarState $sidebarState, EmailGenerator $emailGenerator, LsvoteConnectorManager $lsvoteConnectorManager): Response
+    public function showActors(Sitting $sitting, EmailTemplateRepository $emailTemplateRepository, EmailGenerator $emailGenerator): Response
     {
-        $sidebarState->setActiveNavs(['sitting-nav', $this->activeSidebarNav($sitting->getIsArchived())]);
+        $this->sidebarState->setActiveNavs(['sitting-nav', $this->activeSidebarNav($sitting->getIsArchived())]);
 
         $emailTemplate = $emailTemplateRepository->findOneByStructureAndCategory($sitting->getStructure(), 'convocation');
         $emailTemplateBySittingType = $emailTemplateRepository->findOneByStructureAndCategoryAndType($sitting->getStructure(), $sitting->getType(), 'convocation');
@@ -232,24 +245,25 @@ class SittingController extends AbstractController
             'subjectGenerated' => $subjectGenerated,
             'subjectBySittingTypeGenerated' => $subjectBySittingTypeGenerated,
             'subjectInvitation' => $subjectInvitation,
-            'isActiveLsvote' => $lsvoteConnectorManager->getLsvoteConnector($sitting->getStructure())->getActive()
+            'isActiveLsvote' => $this->lsvoteConnectorManager->getLsvoteConnector($sitting->getStructure())->getActive(),
+            'convocationNotAnswered' => $this->convocationManager->countConvocationNotanswered($sitting->getConvocations())
         ]);
     }
 
     #[Route(path: '/sitting/show/{id}/projects', name: 'sitting_show_projects', methods: ['GET'])]
     #[IsGranted('MANAGE_SITTINGS', subject: 'sitting')]
     #[Breadcrumb(title: 'Détail {sitting.nameWithDate}')]
-    public function showProjects(Sitting $sitting, ProjectRepository $projectRepository, OtherdocRepository $otherdocRepository, SidebarState $sidebarState, SittingManager $sittingManager, ParameterBagInterface $bag): Response
+    public function showProjects(Sitting $sitting, ProjectRepository $projectRepository, OtherdocRepository $otherdocRepository, ParameterBagInterface $bag): Response
     {
-        $sidebarState->setActiveNavs(['sitting-nav', $this->activeSidebarNav($sitting->getIsArchived())]);
+        $this->sidebarState->setActiveNavs(['sitting-nav', $this->activeSidebarNav($sitting->getIsArchived())]);
 
         return $this->render('sitting/details_projects.html.twig', [
             'sitting' => $sitting,
             'projects' => $projectRepository->getProjectsWithAssociatedEntities($sitting),
-            'totalSize' => $sittingManager->getProjectsAndAnnexesTotalSize($sitting),
+            'totalSize' => $this->sittingManager->getProjectsAndAnnexesTotalSize($sitting),
             'otherdocs' => $otherdocRepository->getOtherdocsWithAssociatedEntities($sitting),
-            'otherdocsTotalSize' => $sittingManager->getOtherDocsTotalSize($sitting),
-            'isProjectsSizeTooBig' => $sittingManager->getProjectsAndAnnexesTotalSize($sitting) > intval($bag->get('maximum_size_pdf_zip_generation')),
+            'otherdocsTotalSize' => $this->sittingManager->getOtherDocsTotalSize($sitting),
+            'isProjectsSizeTooBig' => $this->sittingManager->getProjectsAndAnnexesTotalSize($sitting) > intval($bag->get('maximum_size_pdf_zip_generation')),
         ]);
     }
 
@@ -258,13 +272,13 @@ class SittingController extends AbstractController
      */
     #[Route(path: '/sitting/zip/{id}', name: 'sitting_zip', methods: ['GET'])]
     #[IsGranted('MANAGE_SITTINGS', subject: 'sitting')]
-    public function getZipSitting(Sitting $sitting, FileGenerator $fileGenerator): Response
+    public function getZipSitting(Sitting $sitting): Response
     {
-        $zipPath = $fileGenerator->genFullSittingDirPath($sitting, 'zip');
+        $zipPath = $this->fileGenerator->genFullSittingDirPath($sitting, 'zip');
         $response = new BinaryFileResponse($zipPath);
         $response->setContentDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            $fileGenerator->createPrettyName($sitting, 'zip')
+            $this->fileGenerator->createPrettyName($sitting, 'zip')
         );
         $response->headers->set('X-Accel-Redirect', $zipPath);
 
@@ -273,13 +287,13 @@ class SittingController extends AbstractController
 
     #[Route(path: '/sitting/pdf/{id}', name: 'sitting_full_pdf', methods: ['GET'])]
     #[IsGranted('MANAGE_SITTINGS', subject: 'sitting')]
-    public function getFullPdfSitting(Sitting $sitting, FileGenerator $fileGenerator): Response
+    public function getFullPdfSitting(Sitting $sitting): Response
     {
-        $pdfPath = $fileGenerator->genFullSittingDirPath($sitting, 'pdf');
+        $pdfPath = $this->fileGenerator->genFullSittingDirPath($sitting, 'pdf');
         $response = new BinaryFileResponse($pdfPath);
         $response->setContentDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            $fileGenerator->createPrettyName($sitting, 'pdf')
+            $this->fileGenerator->createPrettyName($sitting, 'pdf')
         );
         $response->headers->set('X-Accel-Redirect', $pdfPath);
 
@@ -288,9 +302,9 @@ class SittingController extends AbstractController
 
     #[Route(path: '/sitting/archive/{id}', name: 'sitting_archive', methods: ['POST'])]
     #[IsGranted('MANAGE_SITTINGS', subject: 'sitting')]
-    public function archiveSitting(Sitting $sitting, SittingManager $sittingManager, Request $request): Response
+    public function archiveSitting(Sitting $sitting, Request $request): Response
     {
-        $sittingManager->archive($sitting);
+        $this->sittingManager->archive($sitting);
         $this->addFlash('success', 'La séance a été classée');
         $referer = $request->headers->get('referer');
 
@@ -299,9 +313,9 @@ class SittingController extends AbstractController
 
     #[Route(path: '/sitting/unarchive/{id}', name: 'sitting_unarchive', methods: ['POST'])]
     #[IsGranted('ROLE_SUPERADMIN')]
-    public function unArchiveSitting(Sitting $sitting, SittingManager $sittingManager, Request $request): Response
+    public function unArchiveSitting(Sitting $sitting, Request $request): Response
     {
-        $sittingManager->unArchive($sitting);
+        $this->sittingManager->unArchive($sitting);
         $this->addFlash('success', 'La séance a été déclassée');
         $referer = $request->headers->get('referer');
 
@@ -320,10 +334,10 @@ class SittingController extends AbstractController
 
     #[Route(path: '/sitting/{id}/lsvote-results', name: 'sitting_lsvote_results', methods: ['GET'])]
     #[IsGranted('ROLE_MANAGE_SITTINGS')]
-    public function getLsvoteResults(Sitting $sitting, LsvoteConnectorManager $lsvoteConnectorManager, Request $request): Response
+    public function getLsvoteResults(Sitting $sitting, Request $request): Response
     {
         try {
-            $lsvoteConnectorManager->getLsvoteSittingResults($sitting);
+            $this->lsvoteConnectorManager->getLsvoteSittingResults($sitting);
         } catch (LsvoteResultException $e) {
             $this->addFlash('error', $e->getMessage());
 
@@ -337,14 +351,14 @@ class SittingController extends AbstractController
 
     #[Route(path: '/sitting/{id}/lsvote-results/json', name: 'sitting_lsvote_results_json', methods: ['GET'])]
     #[IsGranted('ROLE_MANAGE_SITTINGS')]
-    public function downloadLsvoteResultsCsv(Sitting $sitting, LsvoteConnectorManager $lsvoteConnectorManager, FileGenerator $fileGenerator): Response
+    public function downloadLsvoteResultsCsv(Sitting $sitting): Response
     {
-        $jsonPath = $lsvoteConnectorManager->createJsonFile($sitting);
+        $jsonPath = $this->lsvoteConnectorManager->createJsonFile($sitting);
 
         $response = new BinaryFileResponse($jsonPath);
         $response->setContentDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            $fileGenerator->createPrettyName($sitting, "json")
+            $this->fileGenerator->createPrettyName($sitting, "json")
         );
 
         $response->deleteFileAfterSend();

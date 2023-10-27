@@ -546,12 +546,24 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h4 class="modal-title">Attention</h4>
+                            <h4 class="modal-title">
+                                <span v-if="!lsvoteId">Envoi de la séance à Lsvote</span>
+                                <span v-if="lsvoteId">Renvoi de la séance à Lsvote</span>
+                            </h4>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <span v-if="!lsvoteId">Veuillez valider l'envoi de la séance vers lsvote</span>
-                            <span v-if="lsvoteId">La séance a déjà été envoyée à lsvote. Effectuer un renvoi effacera la séance actuellement présente sur lsvote. <br>
+                            <span v-if="!lsvoteId">
+                                {% if convocationNotAnswered > 0  %}
+                                    A ce jour {{ convocationNotAnswered }} convocation(s) n'ont pas reçu de réponse.
+                                    <br>
+                                {% endif %}
+                                Voulez-vous vraiment envoyer la séance vers lsvote ?
+
+                            </span>
+                            <span v-if="lsvoteId">
+                                <i class="fa fa-warning mr-2 text-warning"></i> Attention. <br>
+                                La séance a déjà été envoyée à lsvote. Effectuer un renvoi effacera la séance précèdement envoyée sur lsvote pour la remplacer par celle-ci. <br>
                                 Cette action est impossible si la séance est a déjà été démarrée.
                             </span>
                         </div>
