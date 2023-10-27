@@ -38,10 +38,9 @@ class PasswordInvalidator
 
     private function isAdminRole(): bool
     {
-        $this->security->isGranted('ROLE_SUPERADMIN');
-        $this->security->isGranted('ROLE_GROUP_ADMIN');
-        $this->security->isGranted('ROLE_SUPERADMIN');
-        return true;
+        return $this->security->isGranted('ROLE_SUPERADMIN') ||
+                $this->security->isGranted('ROLE_GROUP_ADMIN') ||
+                $this->security->isGranted('ROLE_SUPERADMIN') ;
     }
 
 

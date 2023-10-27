@@ -436,10 +436,10 @@ class UserControllerTest extends WebTestCase
 
     public function testInvalidateUserPasswordWrongRole() {
 
-        UserStory::adminLibriciel();
+        UserStory::secretaryLibriciel1();
         $actor = UserFactory::createOne(['structure' => StructureStory::libriciel()]);
 
-        $this->loginAsAdminLibriciel();
+        $this->loginAsSecretaryLibriciel();
 
         $this->client->request(Request::METHOD_POST, '/user_invalidate_password/' . $actor->getId());
         $this->assertTrue($this->client->getResponse()->isRedirect());
