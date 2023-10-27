@@ -199,7 +199,7 @@ class UserController extends AbstractController
     public function invalidateUserPassword(User $user, Request $request, PasswordInvalidator $passwordInvalidator): Response
     {
         if (!$passwordInvalidator->isAuthorizeInvalidate($user, $this->getUser())) {
-            $this->addFlash('error', 'Impossible de desactiver cet utilisateur');
+            $this->addFlash('error', 'Impossible d\'invalider le mot de passe de cet utilisateur');
 
             return $this->redirectToRoute('user_index');
         }
