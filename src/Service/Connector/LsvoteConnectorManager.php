@@ -171,9 +171,11 @@ class LsvoteConnectorManager
     {
         $lsvoteSitting = new \App\Service\Connector\Lsvote\Model\LsvoteSitting();
 
-        $lsvoteSitting->setName($sitting->getName())
-            ->setDate($sitting->getDate()->format('y-m-d H:i'));
-
+        $lsvoteSitting
+            ->setName($sitting->getName())
+            ->setDate($sitting->getDate()->format('y-m-d H:i'))
+            ->setRemote($sitting->getIsRemoteAllowed())
+        ;
 
         return $lsvoteSitting;
     }
