@@ -33,7 +33,14 @@ class PasswordInvalidator
             return false;
         }
 
-        return $this->security->isGranted('ROLE_SUPERADMIN') || $this->security->isGranted('ROLE_GROUP_ADMIN');
+        return $this->isAdminRole();
+    }
+
+    private  function isAdminRole()
+    {
+        return $this->security->isGranted('ROLE_SUPERADMIN') ||
+                $this->security->isGranted('ROLE_GROUP_ADMIN') ||
+                $this->security->isGranted('ROLE_STRUCTURE_ADMIN');
     }
 
 
