@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [4.2.15] - 2023-10-26
+## [4.2.15] - 2023-10-30
 ### Evolution
 - Mise à jour symfony en 6.3.7
 - Mise à jour composer et npm
