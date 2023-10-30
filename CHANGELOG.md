@@ -2,6 +2,25 @@
 All notable changes to this project will be documented in this file.
 
 ## [5.0.0] - 2023-08-10
+
+## [4.2.15] - 2023-10-30
+### Evolution
+- Mise à jour symfony en 6.3.7
+- Mise à jour composer et npm
+
+### Correction
+- L'invalidation des mots de passe retournait une erreur (#475)
+- L'administrateur peut désormais invalider des mots de passe (tout comme le superadministrateur et l'administrateur de groupe)(#476)
+
+## [4.2.14] - 2023-09-22
+### Evolution
+- Mise à jour symfony en 6.3.4
+- Mise à jour composer et npm
+
+### Correction
+- Correction des droits d'accès à l'invalidation des mots de passe (#462)
+- Correction du delai de purge des données pour la durée jamais
+
 ## [4.2.13] - 2023-09-18
 ### Correction
 - Dans le cas où le poids de l'ensemble des projets dépasse la limite fixée, le PDF complet et le ZIP de la séance ne sont pas générés, mais les liens permettant de les télécharger restent actifs.
