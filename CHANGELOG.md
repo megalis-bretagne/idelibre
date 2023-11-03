@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+
+## [NEXT_RELEASE] - 2023-XX-XX
+
+### Correction
+- InitializeCertificate utilse maintenant docker compose et plus docker-compose
+
 ## [4.2.15] - 2023-10-30
 ### Evolution
 - Mise à jour symfony en 6.3.7
