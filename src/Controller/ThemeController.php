@@ -55,7 +55,7 @@ class ThemeController extends AbstractController
 
     #[Route(path: '/theme/edit/{id}', name: 'theme_edit')]
     #[IsGranted('MANAGE_THEMES', subject: 'theme')]
-    #[Breadcrumb(title: 'Modifier {theme.name}')]
+    #[Breadcrumb(title: 'Modification du thème {theme.name}')]
     public function edit(Theme $theme, ThemeManager $themeManager, Request $request): Response
     {
         $form = $this->createForm(ThemeType::class, $theme);

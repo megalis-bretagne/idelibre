@@ -15,12 +15,13 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Sidebar(active: ['configurations-nav'])]
+#[Breadcrumb(title: 'Configurations', routeName: 'configuration_index')]
 #[Breadcrumb(title: 'Configuration des connecteurs', routeName: 'connector_index')]
 class LsmessageConnectorController extends AbstractController
 {
     #[Route(path: '/connector/lsmessage', name: 'lsmessage_connector')]
     #[IsGranted('ROLE_MANAGE_CONNECTORS')]
-    #[Breadcrumb(title: 'Lsmessage')]
+    #[Breadcrumb(title: 'Modification du connecteur Lsmessage')]
     public function edit(LsmessageConnectorRepository $lsmessageConnectorRepository, LsmessageConnectorManager $lsmessageConnectorManager, Request $request): Response
     {
         $connector = $lsmessageConnectorRepository->findOneBy(['structure' => $this->getUser()->getStructure()]);

@@ -15,7 +15,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Sidebar(active: ['configurations-nav', 'configuration-nav'])]
-#[Breadcrumb(title: 'Configuration de la structure')]
+#[Breadcrumb(title: 'Configurations', routeName: 'configuration_index')]
+#[Breadcrumb(title: 'Configuration de la structure', routeName: 'configuration_index')]
 class ConfigurationController extends AbstractController
 {
     #[Route('/configuration', name: 'configuration_index')]
@@ -33,6 +34,7 @@ class ConfigurationController extends AbstractController
 
     #[Route('/configuration/edit', name: 'configuration_edit')]
     #[IsGranted('ROLE_MANAGE_CONFIGURATION')]
+    #[Breadcrumb(title: 'Modification de la configuration')]
     public function edit(ConfigurationManager $configurationManager, Request $request): Response
     {
         /** @var Structure $structure */

@@ -18,6 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Sidebar(active: ['configurations-nav', 'connector-api-key-nav'])]
+#[Breadcrumb(title: 'Configurations', routeName: 'configuration_index')]
 #[Breadcrumb(title: "Clés d'api", routeName: 'apiUser_index')]
 class ApiUserController extends AbstractController
 {
@@ -62,7 +63,7 @@ class ApiUserController extends AbstractController
 
     #[Route(path: '/apikey/edit/{id}', name: 'apiUser_edit', methods: ['PUT', 'GET', 'POST'])]
     #[IsGranted('MANAGE_API_USERS', subject: 'apiUser')]
-    #[Breadcrumb(title: 'Modifier {apiUser.name}')]
+    #[Breadcrumb(title: 'Modification de la clé d\'api {apiUser.name}')]
     public function edit(ApiUser $apiUser, Request $request, EntityManagerInterface $em): Response
     {
         $form = $this->createForm(ApiUserType::class, $apiUser, ['structure' => $this->getUser()->getStructure()]);

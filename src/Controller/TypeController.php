@@ -79,7 +79,7 @@ class TypeController extends AbstractController
 
     #[Route(path: '/type/edit/{id}', name: 'type_edit')]
     #[IsGranted('MANAGE_TYPES', subject: 'type')]
-    #[Breadcrumb(title: 'Modifier {type.name}')]
+    #[Breadcrumb(title: 'Modification du type {type.name}')]
     public function edit(Type $type, Request $request, TypeManager $typeManager, UserRepository $userRepository): Response
     {
         $form = $this->createForm(

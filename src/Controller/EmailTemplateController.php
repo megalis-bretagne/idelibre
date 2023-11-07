@@ -61,7 +61,7 @@ class EmailTemplateController extends AbstractController
 
     #[Route(path: '/emailTemplate/edit/{id}', name: 'email_template_edit', methods: ['GET', 'POST'])]
     #[IsGranted('MANAGE_EMAIL_TEMPLATES', subject: 'emailTemplate')]
-    #[Breadcrumb(title: 'Modifier {emailTemplate.name}')]
+    #[Breadcrumb(title: 'Modification du modèle d\'email {emailTemplate.name}')]
     public function edit(Request $request, EmailTemplate $emailTemplate, EmailTemplateManager $templateManager): Response
     {
         $form = $this->createForm(EmailTemplateType::class, $emailTemplate, ['structure' => $this->getUser()->getStructure()]);
@@ -93,7 +93,7 @@ class EmailTemplateController extends AbstractController
 
     #[Route(path: '/emailTemplate/preview/{id}', name: 'email_template_preview', methods: ['GET'])]
     #[IsGranted('MANAGE_EMAIL_TEMPLATES', subject: 'emailTemplate')]
-    #[Breadcrumb(title: 'Visualiser {emailTemplate.name}')]
+    #[Breadcrumb(title: 'Visualisation le modèle d\'email {emailTemplate.name}')]
     public function preview(EmailTemplate $emailTemplate, EmailGenerator $generator): Response
     {
         $emailData = $generator->generateFromTemplate($emailTemplate, [

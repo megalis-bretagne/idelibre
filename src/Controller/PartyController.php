@@ -59,7 +59,7 @@ class PartyController extends AbstractController
 
     #[Route(path: '/party/edit/{id}', name: 'party_edit')]
     #[IsGranted('MANAGE_PARTIES', subject: 'party')]
-    #[Breadcrumb(title: 'Modifier {party.name}')]
+    #[Breadcrumb(title: 'Modification du groupe politique {party.name}')]
     public function edit(Party $party, Request $request, PartyManager $partyManager): Response
     {
         $form = $this->createForm(PartyType::class, $party, ['structure' => $this->getUser()->getStructure()]);
