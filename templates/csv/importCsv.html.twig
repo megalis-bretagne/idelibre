@@ -48,7 +48,7 @@
     </div>
 
     <div class="float-end">
-        {% block pageSaveReturn %}{{ macro.save('user_index') }}{% endblock %}
+        {% block pageSaveReturn %}{{ macro.save('user_index', {}, 'Importer le csv', 'fa fa-plus-circle') }}{% endblock %}
     </div>
 
     {{ form_end(form) }}

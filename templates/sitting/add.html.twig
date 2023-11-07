@@ -13,7 +13,7 @@
     {{ form_widget(form) }}
 
     <div class="float-end">
-        {% block pageSaveReturn %}{{ macro.save('sitting_index') }}{% endblock %}
+        {% block pageSaveReturn %}{{ macro.save('sitting_index', {}, 'Ajouter la séance', 'fa fa-plus-circle') }}{% endblock %}
     </div>
 
     {{ form_end(form) }}

@@ -62,7 +62,7 @@
 
     {{ form_widget(form) }}
     <div class="float-end">
-        {% block pageSaveReturn %}{{ macro.save('type_index') }}{% endblock %}
+        {% block pageSaveReturn %}{{ macro.save('type_index', {}, 'Ajouter le type', 'fa fa-plus-circle') }}{% endblock %}
     </div>
     {{ form_end(form) }}
 
