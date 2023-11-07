@@ -6,7 +6,7 @@
 {% block pageActions %}
     <div class="row">
         <div class="col-8 pull-left">
-            {{ macros.addButton('user_add', 'Ajouter un utilisateur') }}
+            {{ macros.addButton('user_add', 'Ajouter un utilisateur', 'Ajouter un utilisateur') }}
 
             {{ macros.addButton(
                 'csv_add_users',
@@ -23,7 +23,7 @@
             ) }}
 
             {{ macros.btnInvalidePasswordWithModal(
-                'Invalidation des mots de passe',
+                'Invalidation des mots de passe de tous les utilisateurs de la structure',
                 'Invalider tous les mots de passe',
                 'invalidate_users_password',
             ) }}
@@ -79,14 +79,14 @@
                         {% if (app.user != user) %}
                             {{ macros.btnReloadPasswordWithModal(
                                 user.id,
-                                'Réinitialisation du mot de passe de l\'utilisateur',
+                                "Réinitialisation du mot de passe de l'utilisateur",
                                 'invalidate_user_password',
                                 'Voulez-vous vraiment activer la procédure de réinitialisation du mot de passe de l\'utilisateur ?',
                                 users.currentPageNumber
                             ) }}
                         {% endif %}
 
-                        {{ macros.editButton('user_edit', user.id) }}
+                        {{ macros.editButton('user_edit', user.id, 'modifier l\'utilisateur') }}
 
                         {{ macros.button_open_modal_delete(
                             user.id,
@@ -96,7 +96,8 @@
 
                             Attention : la suppression d\'un utilisateur entraînera également la suppression de ses données présentes dans les éléments
                             passés auxquels il était lié (anciennes séances, rapports pdf, etc.)",
-                            users.currentPageNumber
+                            users.currentPageNumber,
+                            'supprimer l\'utilisateur'
                         ) }}
                     </td>
                 </tr>
