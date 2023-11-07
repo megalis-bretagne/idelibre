@@ -1,5 +1,5 @@
 {% macro save(cancelPath, param = {} ,saveName = 'Enregistrer', icon = 'fa fa-save') %}
-    <a href="{{ path( cancelPath, param ) }}" class="btn btn-outline-primary">
+    <a href="{{ path( cancelPath, param ) }}" class="btn btn-link">
         <span class="fa fa-times"></span>
         Annuler
     </a>
@@ -299,7 +299,7 @@
 {#        {{ cancelName }}#}
 {#    </button>#}
 
-    <button type="button" class="btn btn-outline-primary" data-dismiss="modal">
+    <button type="button" class="btn btn-link" data-dismiss="modal">
         <span class="fa fa-times"></span>
         Annuler
     </button>
