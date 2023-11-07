@@ -92,6 +92,7 @@ class GroupController extends AbstractController
 
         return $this->render('group/manage.html.twig', [
             'form' => $form->createView(),
+            'title' => $group->getName(),
         ]);
     }
 

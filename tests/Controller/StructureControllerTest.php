@@ -69,9 +69,9 @@ class StructureControllerTest extends WebTestCase
         $crawler = $this->client->request(Request::METHOD_GET, '/structure/add');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
-        $this->assertSelectorTextSame('h1', 'Ajouter une structure');
+        $this->assertSelectorTextSame('h1', 'Ajout d\'une structure');
 
-        $form = $crawler->selectButton('Enregistrer')->form();
+        $form = $crawler->selectButton('Ajouter la structure')->form();
 
         $form['structure[name]'] = 'New structure';
         $form['structure[timezone]'] = $timezone->getId();
@@ -107,7 +107,7 @@ class StructureControllerTest extends WebTestCase
         $this->client->request(Request::METHOD_GET, '/structure/add');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
-        $this->assertSelectorTextSame('h1', 'Ajouter une structure');
+        $this->assertSelectorTextSame('h1', 'Ajout d\'une structure');
     }
 
     public function testAddGroupAdminNotStructureCreator()
@@ -181,7 +181,7 @@ class StructureControllerTest extends WebTestCase
 
         $this->assertSelectorTextSame('h1', 'Informations de la structure');
 
-        $form = $crawler->selectButton('Enregistrer')->form();
+        $form = $crawler->selectButton('Modifier')->form();
 
         $form['structure_information[name]'] = 'New structure name';
 

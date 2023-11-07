@@ -59,10 +59,10 @@ class EmailTemplateControllerTest extends WebTestCase
 
         $crawler = $this->client->request(Request::METHOD_GET, '/emailTemplate/add');
         $this->assertResponseStatusCodeSame(200);
-        $item = $crawler->filter('html:contains("Ajouter un modèle d\'email")');
+        $item = $crawler->filter('html:contains("Ajout d\'un modèle d\'email")');
         $this->assertCount(1, $item);
 
-        $form = $crawler->selectButton('Enregistrer')->form();
+        $form = $crawler->selectButton('Ajouter le modèle d\'email')->form();
         $form['email_template[name]'] = 'New template';
         $form['email_template[subject]'] = 'New subject';
         $form['email_template[content]'] = 'Content';
@@ -96,7 +96,7 @@ class EmailTemplateControllerTest extends WebTestCase
         $this->loginAsAdminLibriciel();
         $crawler = $this->client->request(Request::METHOD_GET, '/emailTemplate/add');
         $this->assertResponseStatusCodeSame(200);
-        $item = $crawler->filter('html:contains("Ajouter un modèle d\'email")');
+        $item = $crawler->filter('html:contains("Ajout d\'un modèle d\'email")');
         $this->assertCount(1, $item);
 
         $form = $crawler->selectButton('Enregistrer')->form();

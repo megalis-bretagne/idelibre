@@ -134,10 +134,10 @@ class UserControllerTest extends WebTestCase
         $this->loginAsAdminLibriciel();
         $crawler = $this->client->request(Request::METHOD_GET, '/user/add');
         $this->assertResponseStatusCodeSame(200);
-        $item = $crawler->filter('html:contains("Ajouter un utilisateur")');
+        $item = $crawler->filter('html:contains("Ajout d\'un utilisateur")');
         $this->assertCount(1, $item);
 
-        $form = $crawler->selectButton('Enregistrer')->form();
+        $form = $crawler->selectButton('Ajouter l\'utilisateur')->form();
 
         $form['user[firstName]'] = 'new';
         $form['user[lastName]'] = 'user';

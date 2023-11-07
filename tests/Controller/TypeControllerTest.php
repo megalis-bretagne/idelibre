@@ -79,10 +79,10 @@ class TypeControllerTest extends WebTestCase
         $this->loginAsAdminLibriciel();
         $crawler = $this->client->request(Request::METHOD_GET, '/type/add');
         $this->assertResponseStatusCodeSame(200);
-        $item = $crawler->filter('html:contains("Ajouter un Type de séance")');
+        $item = $crawler->filter('html:contains("Ajout d\'un Type de séance")');
         $this->assertCount(1, $item);
 
-        $form = $crawler->selectButton('Enregistrer')->form();
+        $form = $crawler->selectButton('Ajouter le type')->form();
 
         $form['type[name]'] = 'New type';
 
@@ -117,10 +117,10 @@ class TypeControllerTest extends WebTestCase
         $this->loginAsAdminLibriciel();
         $crawler = $this->client->request(Request::METHOD_GET, '/type/add');
         $this->assertResponseStatusCodeSame(200);
-        $item = $crawler->filter('html:contains("Ajouter un Type de séance")');
+        $item = $crawler->filter('html:contains("Ajout d\'un Type de séance")');
         $this->assertCount(1, $item);
 
-        $form = $crawler->selectButton('Enregistrer')->form();
+        $form = $crawler->selectButton('Ajouter le type')->form();
 
         $form['type[name]'] = 'New type';
         $form['type[associatedActors]'] = $actorLs->getId();

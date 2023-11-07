@@ -70,10 +70,11 @@ class GdprControllerTest extends WebTestCase
         $this->loginAsAdminLibriciel();
         $crawler = $this->client->request(Request::METHOD_GET, '/gdpr/editController');
         $this->assertResponseStatusCodeSame(200);
+
         $item = $crawler->filter('html:contains("Modifier les informations RGPD du responsable des traitements")');
         $this->assertCount(1, $item);
 
-        $form = $crawler->selectButton('Enregistrer')->form();
+        $form = $crawler->selectButton('Enregister les informations')->form();
 
         $form['data_controller_gdpr[name]'] = 'Ville de Montpellier';
         $form['data_controller_gdpr[address]'] = '836 rue du mas de verchant';

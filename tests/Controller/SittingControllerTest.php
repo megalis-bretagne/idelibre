@@ -77,7 +77,7 @@ class SittingControllerTest extends WebTestCase
         $this->loginAsAdminLibriciel();
         $crawler = $this->client->request(Request::METHOD_GET, '/sitting/add');
         $this->assertResponseStatusCodeSame(200);
-        $item = $crawler->filter('html:contains("Ajouter une séance")');
+        $item = $crawler->filter('html:contains("Ajouter la séance")');
         $this->assertCount(1, $item);
 
         $filesystem = new FileSystem();
@@ -85,7 +85,7 @@ class SittingControllerTest extends WebTestCase
 
         $fileConvocation = new UploadedFile(__DIR__ . '/../resources/convocation.pdf', 'convocation.pdf', 'application/pdf');
 
-        $form = $crawler->selectButton('Enregistrer')->form();
+        $form = $crawler->selectButton('Ajouter la séance')->form();
 
         $form['sitting[type]'] = $type->getId();
         $form['sitting[date]'] = (new \DateTimeImmutable())->format('Y-m-d H:i');

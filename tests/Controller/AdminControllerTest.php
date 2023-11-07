@@ -91,9 +91,9 @@ class AdminControllerTest extends WebTestCase
         $crawler = $this->client->request(Request::METHOD_GET, '/admin/add');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
-        $this->assertSelectorTextSame('h1', 'Ajouter un administrateur');
+        $this->assertSelectorTextSame('h1', 'Ajout d\'un administrateur');
 
-        $form = $crawler->selectButton('Enregistrer')->form();
+        $form = $crawler->selectButton('Ajouter l\'administrateur')->form();
 
         $form['super_user[firstName]'] = 'new';
         $form['super_user[lastName]'] = 'admin';
@@ -150,9 +150,9 @@ class AdminControllerTest extends WebTestCase
         $crawler = $this->client->request(Request::METHOD_GET, '/admin/group/add');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
-        $this->assertSelectorTextSame('h1', 'Ajouter un administrateur');
+        $this->assertSelectorTextSame('h1', 'Ajout d\'un administrateur');
 
-        $form = $crawler->selectButton('Enregistrer')->form();
+        $form = $crawler->selectButton('Ajouter l\'administrateur')->form();
 
         $form['super_user[firstName]'] = 'new';
         $form['super_user[lastName]'] = 'admin';

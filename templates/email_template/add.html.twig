@@ -32,7 +32,7 @@
         {{ include('include/_attachment_warning.html.twig', { 'invitation_category' : ' de convocation' }) }}
     </div>
     <div class="float-end">
-        {% block pageSaveReturn %}{{ macro.save('email_template_index', {}, 'Ajouter le model d\'email', 'fa fa-plus-circle') }}{% endblock %}
+        {% block pageSaveReturn %}{{ macro.save('email_template_index', {}, 'Ajouter le modèle d\'email', 'fa fa-plus-circle') }}{% endblock %}
     </div>
     {{ form_end(form) }}
 {% endblock %}

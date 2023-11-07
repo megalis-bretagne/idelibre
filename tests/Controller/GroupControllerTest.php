@@ -56,9 +56,9 @@ class GroupControllerTest extends WebTestCase
         $crawler = $this->client->request(Request::METHOD_GET, '/group/add');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
-        $this->assertSelectorTextSame('h1', 'Ajouter un groupe');
+        $this->assertSelectorTextSame('h1', 'Ajout d\'un groupe');
 
-        $form = $crawler->selectButton('Enregistrer')->form();
+        $form = $crawler->selectButton('Ajouter le groupe')->form();
 
         $form['group[name]'] = 'new group';
         $form['group[user][firstName]'] = 'new firstname';
@@ -115,7 +115,7 @@ class GroupControllerTest extends WebTestCase
         $this->client->request(Request::METHOD_GET, '/group/manage/' . $group->getId());
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
-        $this->assertSelectorTextSame('h1', 'Associer des structures');
+        $this->assertSelectorTextSame('h1', 'Gestion des structures du groupe ' . $group->getName());
     }
 
     public function testDelete()
