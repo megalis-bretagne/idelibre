@@ -24,14 +24,15 @@
                     <td class="col-6">{{ apiUser.name }}</td>
                     <td class="col-4">{{ apiUser.apiRole.prettyName }}</td>
                     <td class="col-2">
-                        {{ macros.editButton('apiUser_edit', apiUser.id) }}
+                        {{ macros.editButton('apiUser_edit', apiUser.id, 'modifier la clé d\'api') }}
 
                         {{ macros.button_open_modal_delete(
                             apiUser.id,
                             'Suppression de la clé d\'api',
                             'apiUser_delete',
                             'Voulez-vous vraiment supprimer cette clé d\'api ?',
-                            apiUsers.currentPageNumber
+                            apiUsers.currentPageNumber,
+                            'supprimer la clé d\'api'
                         ) }}
                     </td>
                 </tr>

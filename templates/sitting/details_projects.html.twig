@@ -11,7 +11,7 @@
 
 
     <div class="d-flex align-items-center col-11 mt-3">
-        <h1 class="flex-grow-1">Détail de la séance</h1>
+        <h1 class="flex-grow-1">Détail de la séance {{ sitting.name ~ " " ~ sitting.date|date('d/m/Y') }}</h1>
         {% if  not sitting.isArchived %}
             {{ macroNav.toogleView( path('edit_sitting_project', {'id': sitting.id}) , 'show') }}
         {% endif %}

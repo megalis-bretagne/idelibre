@@ -6,7 +6,7 @@
 {% block pageActions %}
     <div class="row">
         <div class="col-6 pull-left">
-            {{ macros.addButton('sitting_add', 'Ajouter une séance') }}
+            {{ macros.addButton('sitting_add', 'Ajouter une séance', 'Ajouter une séance') }}
         </div>
 
         <div class="col-6 -pull-right">
@@ -41,7 +41,7 @@
                                 'Voulez-vous classer cette séance ?',
                                 'sitting_archive',
                                 'fas fa-book',
-                                'Classer'
+                                'Classer la séance'
                             ) }}
                         {% endif %}
 
@@ -50,7 +50,8 @@
                             'Suppression de la séance',
                             'sitting_delete',
                             'Voulez-vous vraiment supprimer cette séance ?',
-                            sittings.currentPageNumber
+                            sittings.currentPageNumber,
+                            'supprimer la séance'
                         ) }}
 
                         {% if sitting.isArchived and is_granted('ROLE_SUPERADMIN') %}
@@ -60,7 +61,7 @@
                                 'Voulez-vous déclasser cette séance ?',
                                 'sitting_unarchive',
                                 'fas fa-chart-line',
-                                'Déclasser'
+                                'Déclasser la séance'
                             ) }}
                         {% endif %}
                     </td>

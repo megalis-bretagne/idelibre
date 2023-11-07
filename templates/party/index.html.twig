@@ -24,14 +24,15 @@
                     <td class="col-8">{{ party.name }}</td>
                     <td class="col-2">{{ party.initials }}</td>
                     <td class="col-2">
-                        {{ macros.editButton('party_edit', party.id) }}
+                        {{ macros.editButton('party_edit', party.id, 'modifier le groupe politique') }}
 
                         {{ macros.button_open_modal_delete(
                             party.id,
                             'Suppression du groupe politique',
                             'party_delete',
                             'Voulez-vous vraiment supprimer ce groupe politique ?',
-                            parties.currentPageNumber
+                            parties.currentPageNumber,
+                            'supprimer le groupe politique'
                         ) }}
                     </td>
                 </tr>

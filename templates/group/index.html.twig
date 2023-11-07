@@ -22,7 +22,7 @@
                 <tr class="d-flex">
                     <td class="col-9">{{ group.name }}</td>
                     <td class="col-3">
-                        {{ macros.editButton('group_edit', group.id) }}
+                        {{ macros.editButton('group_edit', group.id, 'editer le groupe') }}
                         <a href="{{ path('group_manage', {'id': group.id}) }}" class="btn btn-outline-primary borderless"
                            title="Configurer">
                             <span class="fa fa-cog"></span>
@@ -33,7 +33,8 @@
                             'Suppression de groupe',
                             'group_delete',
                             'Voulez-vous vraiment supprimer ce groupe ?',
-                            groups.currentPageNumber
+                            groups.currentPageNumber,
+                            'supprimer le groupe'
                         ) }}
                     </td>
                 </tr>

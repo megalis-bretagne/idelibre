@@ -39,13 +39,15 @@
 
                     </td>
                     <td class="col-2">
-                        {{ macros.editButton('theme_edit', theme.id) }}
+                        {{ macros.editButton('theme_edit', theme.id, 'modifier le thème') }}
                         {{ macros.button_open_modal_delete(
                             theme.id,
                             'Suppression de thème',
                             'theme_delete',
                             'Voulez-vous vraiment supprimer ce thème ? ' ~
-                            'Attention s\'il possède des sous-thèmes ils seront eux aussi supprimés'
+                            'Attention s\'il possède des sous-thèmes ils seront eux aussi supprimés',
+                            {},
+                            'supprimer le thème'
                         ) }}
                     </td>
                 </tr>
