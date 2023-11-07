@@ -70,9 +70,9 @@
                         {% if (app.user != user) %}
                             {{ macros.button_open_modal_delete(
                                 user.id,
-                                'Suppression d\'administrateur',
+                                'Suppression de l\'administrateur ' ~ user.lastName ~ ' ' ~ user.firstName,
                                 'admin_delete',
-                                'Voulez-vous vraiment supprimer cet administrateur ?',
+                                'Voulez-vous vraiment supprimer l\'administrateur ' ~ user.lastName ~ ' '~ user.firsName ~ ' ?',
                                 users.currentPageNumber,
                                 'supprimer l\'administrateur'
                             ) }}

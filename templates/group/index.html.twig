@@ -30,9 +30,9 @@
 
                         {{ macros.button_open_modal_delete(
                             group.id,
-                            'Suppression de groupe',
+                            'Suppression du groupe ' ~ group.name,
                             'group_delete',
-                            'Voulez-vous vraiment supprimer ce groupe ?',
+                            'Voulez-vous vraiment supprimer le groupe ' ~ group.name ~ ' ?',
                             groups.currentPageNumber,
                             'supprimer le groupe'
                         ) }}

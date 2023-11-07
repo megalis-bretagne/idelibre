@@ -35,9 +35,9 @@
                         {{ macros.editButton('type_edit', type.id, 'modifier le type') }}
                         {{ macros.button_open_modal_delete(
                             type.id,
-                            'Suppression de type',
+                            'Suppression du type ' ~ type.name,
                             'type_delete',
-                            'Voulez-vous vraiment supprimer ce type ?',
+                            'Voulez-vous vraiment supprimer le type ' ~ type.name ~ ' ?',
                             types.currentPageNumber
                         ) }}
                     </td>

@@ -28,9 +28,9 @@
 
                         {{ macros.button_open_modal_delete(
                             party.id,
-                            'Suppression du groupe politique',
+                            'Suppression du groupe politique ' ~ party.name,
                             'party_delete',
-                            'Voulez-vous vraiment supprimer ce groupe politique ?',
+                            'Voulez-vous vraiment supprimer le groupe politique ' ~ party.name ~ ' ?'
                             parties.currentPageNumber,
                             'supprimer le groupe politique'
                         ) }}

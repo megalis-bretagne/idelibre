@@ -28,9 +28,9 @@
 
                         {{ macros.button_open_modal_delete(
                             apiUser.id,
-                            'Suppression de la clé d\'api',
+                            'Suppression de la clé d\'api ' ~ apiUser.name,
                             'apiUser_delete',
-                            'Voulez-vous vraiment supprimer cette clé d\'api ?',
+                            'Voulez-vous vraiment supprimer la clé d\'api ' ~ apiUser.name ~ ' ?',
                             apiUsers.currentPageNumber,
                             'supprimer la clé d\'api'
                         ) }}
