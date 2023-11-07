@@ -7,7 +7,7 @@
     <div class="row">
         <div class="col-6 pull-left">
             {% if is_granted('ROLE_SUPERADMIN') %}
-                {{ macros.addButton('admin_add', 'Ajouter un administrateur', 'fa fa-plus-circle') }}
+                {{ macros.addButton('admin_add', 'Ajouter un administrateur', 'Ajouter un administrateur') }}
             {% endif %}
 
             {{ macros.addButton(

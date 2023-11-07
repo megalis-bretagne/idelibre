@@ -4,7 +4,7 @@
 {% block pageTitle 'Groupes' %}
 
 {% block pageActions %}
-    {{ macros.addButton('group_add', 'Ajouter un groupe') }}
+    {{ macros.addButton('group_add', 'Ajouter un groupe', 'Ajouter un groupe') }}
 {% endblock %}
 
 {% block pageTable %}
@@ -24,7 +24,7 @@
                     <td class="col-3">
                         {{ macros.editButton('group_edit', group.id, 'editer le groupe') }}
                         <a href="{{ path('group_manage', {'id': group.id}) }}" class="btn btn-outline-primary borderless"
-                           title="Configurer">
+                           title="Gérer les structures associées">
                             <span class="fa fa-cog"></span>
                         </a>
 
