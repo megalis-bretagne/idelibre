@@ -26,7 +26,7 @@
 
     <div class="float-end">
         {% block pageSaveReturn %}
-            {{ macro.save('apiUser_index') }}
+            {{ macro.save('apiUser_index', {}, 'Ajouter la clé d\'api', 'fa fa-plus-circle') }}
         {% endblock %}
     </div>
     {{ form_end(form) }}

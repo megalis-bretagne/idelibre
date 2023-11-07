@@ -23,7 +23,7 @@
         {{ form_widget(form) }}
 
         <div class="float-right">
-            {% block pageSaveReturn %}{{ macro.save("user_index") }}{% endblock %}
+            {% block pageSaveReturn %}{{ macro.save("user_index", {}, 'Ajouter le suppléant') }}{% endblock %}
         </div>
 
         {{ form_end(form) }}

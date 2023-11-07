@@ -5,13 +5,13 @@
 
 {% block pageActions %}
     <div class="row">
-        <div class="col-7 pull-left">
-            {{ macros.addButton('user_add') }}
+        <div class="col-8 pull-left">
+            {{ macros.addButton('user_add', 'Ajouter un utilisateur') }}
 
             {{ macros.addButton(
                 'csv_add_users',
-                'Ajouter via csv',
-                'Ajouter via csv',
+                'Ajouter des utilisateurs via csv',
+                'Ajouter des utilisateurs via csv',
                 'btn-outline-primary'
             ) }}
 
@@ -29,7 +29,7 @@
             ) }}
         </div>
 
-        <div class="col-5">
+        <div class="col-4">
             {{ macros.searchForm(formSearch, searchTerm, 'user_index') }}
         </div>
     </div>
