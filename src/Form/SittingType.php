@@ -7,6 +7,7 @@ use App\Entity\Structure;
 use App\Entity\Type;
 use App\Entity\User;
 use App\Form\Type\HiddenEntityType;
+use App\Form\Type\LsChoiceType;
 use App\Form\Type\LsFileType;
 use App\Repository\TypeRepository;
 use App\Service\role\RoleManager;
@@ -103,11 +104,14 @@ class SittingType extends AbstractType
             ->add('reminder', ReminderSittingType::class, [
                 'label' => false,
             ])
-            ->add('isRemoteAllowed', CheckboxType::class, [
-                'required' => false,
-                'label_attr' => ['class' => 'checkbox-inline checkbox-switch'],
+            ->add('isRemoteAllowed', LsChoiceType::class, [
                 'label' => ($isNew || $isAlreadySentConvocation) ? 'Participation à distance' : 'Autoriser la participation à distance',
-                'disabled' => $isAlreadySentConvocation,
+                'disabled' => $isAlreadySentConvocation, # add js to disabled the btn if convocation were sent;
+                'data' => $this->isRemoteAllowed($options['sitting']),
+                'choices' => [
+                    'Oui' => true,
+                    'Non' => false,
+                ],
             ])
             ->add('structure', HiddenEntityType::class, [
                 'data' => $options['structure'],
@@ -121,6 +125,7 @@ class SittingType extends AbstractType
             'data_class' => Sitting::class,
             'structure' => null,
             'user' => null,
+            'sitting' => null
         ]);
     }
 
@@ -160,5 +165,10 @@ class SittingType extends AbstractType
     private function getTimeZone(Structure $structure): string
     {
         return $structure->getTimezone()->getName();
+    }
+
+    public function isRemoteAllowed($sitting): bool
+    {
+        return !$sitting ? false : $sitting->getIsRemoteAllowed();
     }
 }

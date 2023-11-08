@@ -6,6 +6,7 @@ use App\Entity\EmailTemplate;
 use App\Entity\Structure;
 use App\Entity\Type;
 use App\Form\Type\HiddenEntityType;
+use App\Form\Type\LsChoiceType;
 use App\Repository\TypeRepository;
 use App\Service\Email\EmailData;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -51,12 +52,15 @@ class EmailTemplateType extends AbstractType
                 ]);
         }
 
-        $builder->add('format', ChoiceType::class, [
+
+
+        $builder->add('format', LsChoiceType::class, [
             'label' => "Format de l'email",
             'choices' => [
                 'Html' => EmailData::FORMAT_HTML,
                 'Texte' => EmailData::FORMAT_TEXT,
             ],
+            'data' => $this->emailTemplateFormat($options['emailTemplate']),
         ]);
 
         $builder->add('subject', TextType::class, [
@@ -70,10 +74,14 @@ class EmailTemplateType extends AbstractType
             ]);
 
         if (!$this->IsEmailRecapitulatif($options['data'] ?? null)) {
-            $builder->add('isAttachment', CheckboxType::class, [
+            $builder->add('isAttachment', LsChoiceType::class, [
                 'required' => false,
-                'label_attr' => ['class' => 'checkbox-inline checkbox-switch'],
                 'label' => $this->isConvocation($options['data'] ?? null) ? 'Joindre le fichier de convocation' : 'Joindre le fichier d\'invitation',
+                'choices' => [
+                    'Oui' => true,
+                    'Non' => false,
+                ],
+                'data' => $this->isAttachment($options['emailTemplate']),
             ]);
         }
 
@@ -88,6 +96,7 @@ class EmailTemplateType extends AbstractType
         $resolver->setDefaults([
             'data_class' => EmailTemplate::class,
             'structure' => null,
+            'emailTemplate' => null,
         ]);
     }
 
@@ -108,5 +117,15 @@ class EmailTemplateType extends AbstractType
     private function IsEmailRecapitulatif(?EmailTemplate $emailTemplate): bool
     {
         return $emailTemplate && EmailTemplate::CATEGORY_RECAPITULATIF === $emailTemplate->getCategory();
+    }
+
+    public function isAttachment(?EmailTemplate $emailTemplate): bool
+    {
+        return $emailTemplate && $emailTemplate->getIsAttachment();
+    }
+
+    public function emailTemplateFormat(?EmailTemplate $emailTemplate): string
+    {
+        return !$emailTemplate ? EmailData::FORMAT_HTML : $emailTemplate->getFormat();
     }
 }

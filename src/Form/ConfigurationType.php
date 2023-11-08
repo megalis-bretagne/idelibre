@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Configuration;
 use App\Entity\Structure;
 use App\Form\Type\HiddenEntityType;
+use App\Form\Type\LsChoiceType;
 use App\Service\Util\SuppressionDelayFormatter;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -18,10 +19,12 @@ class ConfigurationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('isSharedAnnotation', CheckboxType::class, [
-                'required' => false,
-                'label_attr' => ['class' => 'checkbox-inline checkbox-switch'],
+            ->add('isSharedAnnotation', LsChoiceType::class, [
                 'label' => 'Autoriser le partage d\'annotation entre élus',
+                'choices' => [
+                    'Oui' => true,
+                    'Non' => false,
+                ],
             ])
             ->add('structure', HiddenEntityType::class, [
                 'data' => $options['structure'],

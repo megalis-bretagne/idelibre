@@ -101,7 +101,9 @@ class GroupController extends AbstractController
     #[Breadcrumb(title: 'Modification du groupe {group.name}')]
     public function edit(Group $group, Request $request, GroupManager $groupManager): Response
     {
-        $form = $this->createForm(GroupType::class, $group);
+        $form = $this->createForm(GroupType::class, $group, [
+            'group' => $group,
+        ]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $groupManager->save($form->getData());

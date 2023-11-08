@@ -150,7 +150,10 @@ class SittingController extends AbstractController
         if ($sitting->getIsArchived()) {
             throw new InvalidArgumentException('Impossible de modifier une séance archivée');
         }
-        $form = $this->createForm(SittingType::class, $sitting, ['structure' => $this->getUser()->getStructure()]);
+        $form = $this->createForm(SittingType::class, $sitting, [
+            'structure' => $this->getUser()->getStructure(),
+            'sitting' => $sitting,
+        ]);
         $form->handleRequest($request);
 
         $unreadablePdf = $this->pdfValidator->getListOfUnreadablePdf([

@@ -64,7 +64,10 @@ class EmailTemplateController extends AbstractController
     #[Breadcrumb(title: 'Modification du modèle d\'email {emailTemplate.name}')]
     public function edit(Request $request, EmailTemplate $emailTemplate, EmailTemplateManager $templateManager): Response
     {
-        $form = $this->createForm(EmailTemplateType::class, $emailTemplate, ['structure' => $this->getUser()->getStructure()]);
+        $form = $this->createForm(EmailTemplateType::class, $emailTemplate, [
+            'structure' => $this->getUser()->getStructure(),
+            'emailTemplate' => $emailTemplate,
+        ]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $templateManager->save($form->getData());

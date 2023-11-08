@@ -1,6 +1,10 @@
 twig:
   default_path: '%kernel.project_dir%/templates'
-  form_themes: ['bootstrap_5_layout.html.twig', 'others/ls-file.html.twig']
+  form_themes: [
+    'bootstrap_5_layout.html.twig',
+    'others/ls-file.html.twig',
+    'others/ls-choice.html.twig'
+  ]
   globals:
     version: '%version%'
     product_name: '%product_name%'

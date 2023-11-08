@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Group;
+use App\Form\Type\LsChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -17,10 +18,13 @@ class GroupType extends AbstractType
             ->add('name', TextType::class, [
                 'label' => 'Intitulé',
             ])
-            ->add('isStructureCreator', CheckboxType::class, [
-                'required' => false,
-                'label_attr' => ['class' => 'checkbox-inline checkbox-switch'],
+            ->add('isStructureCreator', LsChoiceType::class, [
                 'label' => 'Autoriser la création de structures',
+                'choices' => [
+                    'Oui' => true,
+                    'Non' => false,
+                ],
+                'data' => $this->isAutorized($options['group']),
             ])
         ;
 
@@ -39,6 +43,12 @@ class GroupType extends AbstractType
             'data_class' => Group::class,
             'isNew' => false,
             'entropyForUser' => null,
+            'group' => null,
         ]);
+    }
+
+    public function isAutorized(Group $group): ?bool
+    {
+        return !$group ? false : $group->getIsStructureCreator();
     }
 }
