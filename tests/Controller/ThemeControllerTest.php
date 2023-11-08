@@ -91,7 +91,7 @@ class ThemeControllerTest extends WebTestCase
         $themeFinance = $this->getOneEntityBy(Theme::class, ['name' => 'Finance']);
         $crawler = $this->client->request(Request::METHOD_GET, '/theme/edit/' . $themeFinance->getId());
         $this->assertResponseStatusCodeSame(200);
-        $item = $crawler->filter('html:contains("Modifier un thème")');
+        $item = $crawler->filter('html:contains("Modification du thème")');
         $this->assertCount(1, $item);
 
         $form = $crawler->selectButton('Enregistrer')->form();

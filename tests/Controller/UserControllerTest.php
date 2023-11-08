@@ -176,7 +176,7 @@ class UserControllerTest extends WebTestCase
 
         $crawler = $this->client->request(Request::METHOD_GET, '/user/edit/' . $user->getId());
         $this->assertResponseStatusCodeSame(200);
-        $item = $crawler->filter('html:contains("Modifier un utilisateur")');
+        $item = $crawler->filter('html:contains("Modification de l\'utilisateur")');
         $this->assertCount(1, $item);
 
         $form = $crawler->selectButton('Enregistrer')->form();
@@ -208,7 +208,7 @@ class UserControllerTest extends WebTestCase
 
         $crawler = $this->client->request(Request::METHOD_GET, '/user/edit/' . $user->getId());
         $this->assertResponseStatusCodeSame(200);
-        $item = $crawler->filter('html:contains("Modifier un utilisateur")');
+        $item = $crawler->filter('html:contains("Modification de l\'utilisateur")');
         $this->assertCount(1, $item);
 
         $form = $crawler->selectButton('Enregistrer')->form();
@@ -238,7 +238,7 @@ class UserControllerTest extends WebTestCase
 
         $crawler = $this->client->request(Request::METHOD_GET, '/user/edit/' . $user->getId());
         $this->assertResponseStatusCodeSame(200);
-        $item = $crawler->filter('html:contains("Modifier un utilisateur")');
+        $item = $crawler->filter('html:contains("Modification de l\'utilisateur")');
         $this->assertCount(1, $item);
 
         $form = $crawler->selectButton('Enregistrer')->form();
@@ -266,7 +266,7 @@ class UserControllerTest extends WebTestCase
 
         $crawler = $this->client->request(Request::METHOD_GET, '/user/edit/' . $user->getId());
         $this->assertResponseStatusCodeSame(200);
-        $item = $crawler->filter('html:contains("Modifier un utilisateur")');
+        $item = $crawler->filter('html:contains("Modification de l\'utilisateur")');
         $this->assertCount(1, $item);
 
         $form = $crawler->selectButton('Enregistrer')->form();
@@ -381,7 +381,7 @@ class UserControllerTest extends WebTestCase
         $crawler = $this->client->request(Request::METHOD_GET, '/user/edit/' . $user->getId());
 
         $this->assertResponseStatusCodeSame(200);
-        $item = $crawler->filter('html:contains("Modifier un utilisateur")');
+        $item = $crawler->filter('html:contains("Modification de l\'utilisateur")');
         $this->assertCount(1, $item);
 
         $form = $crawler->selectButton('Enregistrer')->form();

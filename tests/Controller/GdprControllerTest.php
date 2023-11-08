@@ -40,7 +40,7 @@ class GdprControllerTest extends WebTestCase
         $this->loginAsSuperAdmin();
         $crawler = $this->client->request(Request::METHOD_GET, '/gdpr/editHosting');
         $this->assertResponseStatusCodeSame(200);
-        $item = $crawler->filter('html:contains("Modifier les informations RGPD de la plateforme")');
+        $item = $crawler->filter('html:contains("Modification des informations RGPD de la plateforme")');
         $this->assertCount(1, $item);
 
         $form = $crawler->selectButton('Enregistrer')->form();
@@ -71,7 +71,7 @@ class GdprControllerTest extends WebTestCase
         $crawler = $this->client->request(Request::METHOD_GET, '/gdpr/editController');
         $this->assertResponseStatusCodeSame(200);
 
-        $item = $crawler->filter('html:contains("Modifier les informations RGPD du responsable des traitements")');
+        $item = $crawler->filter('html:contains("Modification des informations RGPD du responsable des traitements")');
         $this->assertCount(1, $item);
 
         $form = $crawler->selectButton('Enregister les informations')->form();

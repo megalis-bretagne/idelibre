@@ -151,7 +151,7 @@ class TypeControllerTest extends WebTestCase
 
         $crawler = $this->client->request(Request::METHOD_GET, '/type/edit/' . $type->getId());
         $this->assertResponseStatusCodeSame(200);
-        $item = $crawler->filter('html:contains("Modifier un type de séance")');
+        $item = $crawler->filter('html:contains("Modification du type")');
         $this->assertCount(1, $item);
 
         $form = $crawler->selectButton('Enregistrer')->form();

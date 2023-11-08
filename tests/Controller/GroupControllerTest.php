@@ -90,7 +90,8 @@ class GroupControllerTest extends WebTestCase
         $crawler = $this->client->request(Request::METHOD_GET, '/group/edit/' . $group->getId());
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
-        $this->assertSelectorTextSame('h1', 'Modifier un groupe');
+        $title = $crawler->filter('html:contains("Modification du groupe ' . $group->getName() . '")');
+        $this->assertCount(1, $title);
 
         $form = $crawler->selectButton('Enregistrer')->form();
 

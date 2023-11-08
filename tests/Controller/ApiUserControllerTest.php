@@ -94,7 +94,7 @@ class ApiUserControllerTest extends WebTestCase
         $userApi = ApiUserStory::apiAdminLibriciel();
         $crawler = $this->client->request(Request::METHOD_GET, '/apikey/edit/' . $userApi->getId());
         $this->assertResponseStatusCodeSame(200);
-        $item = $crawler->filter('html:contains("Modifier une clé d\'api")');
+        $item = $crawler->filter('html:contains("Modification de la clé d\'api ")');
         $this->assertCount(1, $item);
 
         $form = $crawler->selectButton('Enregistrer')->form();

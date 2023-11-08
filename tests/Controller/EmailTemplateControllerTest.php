@@ -114,7 +114,7 @@ class EmailTemplateControllerTest extends WebTestCase
 
         $crawler = $this->client->request(Request::METHOD_GET, '/emailTemplate/edit/' . $emailTemplate->getId());
         $this->assertResponseStatusCodeSame(200);
-        $item = $crawler->filter('html:contains("Modifier un modèle d\'email")');
+        $item = $crawler->filter('html:contains("Modification du modèle d\'email")');
         $this->assertCount(1, $item);
 
         $form = $crawler->selectButton('Enregistrer')->form();

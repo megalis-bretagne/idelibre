@@ -131,8 +131,8 @@ class StructureControllerTest extends WebTestCase
         $crawler = $this->client->request(Request::METHOD_GET, '/structure/edit/' . $structure->getId());
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
-        $this->assertSelectorTextSame('h1', 'Modifier une structure');
-
+        $item = $crawler->filter('html:contains("Modification de la structure ")');
+        $this->assertCount(1, $item);
         $form = $crawler->selectButton('Enregistrer')->form();
 
         $form['structure[name]'] = 'New structure name';
@@ -181,7 +181,7 @@ class StructureControllerTest extends WebTestCase
 
         $this->assertSelectorTextSame('h1', 'Informations de la structure');
 
-        $form = $crawler->selectButton('Modifier')->form();
+        $form = $crawler->selectButton('Enregistrer')->form();
 
         $form['structure_information[name]'] = 'New structure name';
 

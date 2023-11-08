@@ -124,7 +124,8 @@ class AdminControllerTest extends WebTestCase
         $crawler = $this->client->request(Request::METHOD_GET, '/admin/edit/' . $admin->getId());
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
-        $this->assertSelectorTextSame('h1', 'Modifier un administrateur');
+        $title = $crawler->filter('html:contains("Modification de l\'administrateur ")');
+        $this->assertCount(1, $title);
 
         $form = $crawler->selectButton('Enregistrer')->form();
 

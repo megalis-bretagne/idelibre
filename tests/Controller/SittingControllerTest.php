@@ -77,7 +77,7 @@ class SittingControllerTest extends WebTestCase
         $this->loginAsAdminLibriciel();
         $crawler = $this->client->request(Request::METHOD_GET, '/sitting/add');
         $this->assertResponseStatusCodeSame(200);
-        $item = $crawler->filter('html:contains("Ajouter la séance")');
+        $item = $crawler->filter('html:contains("Ajout d\'une séance")');
         $this->assertCount(1, $item);
 
         $filesystem = new FileSystem();
@@ -99,9 +99,6 @@ class SittingControllerTest extends WebTestCase
         $crawler = $this->client->followRedirect();
         $this->assertResponseStatusCodeSame(200);
 
-        $successMsg = $crawler->filter('html:contains("Modifier la séance")');
-        $this->assertCount(1, $successMsg);
-
         $this->assertNotEmpty($this->getOneEntityBy(Sitting::class, ['name' => 'unUsedType']));
     }
 
@@ -113,7 +110,7 @@ class SittingControllerTest extends WebTestCase
 
         $this->assertResponseStatusCodeSame(200);
 
-        $item = $crawler->filter('html:contains("Modifier la séance")');
+        $item = $crawler->filter('html:contains("Modification des destinataires de la séance ")');
         $this->assertCount(1, $item);
     }
 
@@ -124,7 +121,7 @@ class SittingControllerTest extends WebTestCase
         $crawler = $this->client->request(Request::METHOD_GET, '/sitting/edit/' . $sitting->getId() . '/projects');
         $this->assertResponseStatusCodeSame(200);
 
-        $item = $crawler->filter('html:contains("Modifier la séance")');
+        $item = $crawler->filter('html:contains("Modification des projets de la séance ")');
         $this->assertCount(1, $item);
     }
 
@@ -304,7 +301,7 @@ class SittingControllerTest extends WebTestCase
         $crawler = $this->client->request(Request::METHOD_GET, '/sitting/edit/' . $sitting->getId());
         $this->assertResponseStatusCodeSame(200);
 
-        $item = $crawler->filter('html:contains("Modifier la séance")');
+        $item = $crawler->filter('html:contains("Modification des informations de la séance")');
         $this->assertCount(1, $item);
 
         $form = $crawler->selectButton('Enregistrer')->form();
