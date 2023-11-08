@@ -64,7 +64,7 @@
                     </td>
                     <td class="active_column d-none">{{ structure.isActive }}</td>
                     <td class="col-2 actionButton">
-                        {{ macros.editButton('structure_edit', structure.id, 'modifier la structure') }}
+                        {{ macros.editButton('structure_edit', structure.id, 'Modifier la structure') }}
 
                         {% if is_granted('ROLE_SUPERADMIN') %}
                             {{ macros.button_open_modal_delete(

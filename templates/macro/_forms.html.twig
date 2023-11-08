@@ -1,10 +1,10 @@
-{% macro save(cancelPath, param = {} ,saveName = 'Enregistrer', icon = 'fa fa-save') %}
-    <a href="{{ path( cancelPath, param ) }}" class="btn btn-link">
+{% macro save(cancelPath, param = {} ,saveName = 'Enregistrer', icon = 'fa fa-save', cancelTitle='Annuler', saveTitle='Ajouter') %}
+    <a href="{{ path( cancelPath, param ) }}" class="btn btn-link" title="{{ cancelTitle }}">
         <span class="fa fa-times"></span>
         Annuler
     </a>
 
-    <button class="btn btn-primary" type="submit">
+    <button class="btn btn-primary" type="submit" title="{{ saveName }}">
         <span class="{{ icon }}"></span>
         {{ saveName }}
     </button>
@@ -20,7 +20,7 @@
     {% endif %}
 {% endmacro %}
 
-{% macro editButton(editPath, id = null, title = 'modifier') %}
+{% macro editButton(editPath, id = null, title = 'Modifier') %}
     {% if id ==null %}
         <a href="{{ path(editPath) }}" class="btn btn-outline-primary borderless" title="{{ title }}">
             <span class="fas fa-pen"></span>
@@ -33,7 +33,7 @@
 {% endmacro %}
 
 {% macro backButton(backPath, params = {}) %}
-    <a href="{{ path(backPath, params) }}" class="btn btn-outline-primary">
+    <a href="{{ path(backPath, params) }}" class="btn btn-outline-primary" title="Retour">
         <span class="fa fa-arrow-left"></span>
         Retour
     </a>
@@ -56,8 +56,8 @@
     {{ form_end(formSearch) }}
 {% endmacro %}
 
-{% macro showButton(showPath, id) %}
-    <a href="{{ path(showPath, {'id': id}) }}" class="btn btn-outline-primary borderless" title="Visualiser">
+{% macro showButton(showPath, id, title="Visualiser") %}
+    <a href="{{ path(showPath, {'id': id}) }}" class="btn btn-outline-primary borderless" title="{{ title }}">
         <span class="fa fa-eye"></span>
     </a>
 {% endmacro %}
@@ -294,11 +294,6 @@
 {% endmacro %}
 
 {% macro cancelBtnModal(cancelName = 'Annuler') %}
-{#    <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">#}
-{#        <span class="fa fa-times"></span>#}
-{#        {{ cancelName }}#}
-{#    </button>#}
-
     <button type="button" class="btn btn-link" data-dismiss="modal">
         <span class="fa fa-times"></span>
         Annuler

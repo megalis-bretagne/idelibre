@@ -65,7 +65,7 @@
                             ) }}
                         {% endif %}
 
-                        {{ macros.editButton('admin_edit', user.id) }}
+                        {{ macros.editButton('admin_edit', user.id, 'Modifier l\'administrateur') }}
 
                         {% if (app.user != user) %}
                             {{ macros.button_open_modal_delete(
@@ -74,7 +74,7 @@
                                 'admin_delete',
                                 'Voulez-vous vraiment supprimer l\'administrateur ' ~ user.lastName ~ ' '~ user.firstName ~ ' ?',
                                 users.currentPageNumber,
-                                'supprimer l\'administrateur'
+                                'Supprimer l\'administrateur'
                             ) }}
                         {% endif %}
                     </td>

@@ -32,7 +32,7 @@
                     <td class="col-7">{{ sitting.name }}</td>
                     <td class="col-3">{{ sitting.date | date('d/m/Y : H:i' , timezone) }}</td>
                     <td class="col-2">
-                        {{ macros.showButton('sitting_show_information', sitting.id) }}
+                        {{ macros.showButton('sitting_show_information', sitting.id, 'Visualiser la séance') }}
 
                         {% if sitting.isArchived == false %}
                             {{ macros.button_open_modal_post(
@@ -51,7 +51,7 @@
                             'sitting_delete',
                             'Voulez-vous vraiment supprimer cette séance ?',
                             sittings.currentPageNumber,
-                            'supprimer la séance'
+                            'Supprimer la séance'
                         ) }}
 
                         {% if sitting.isArchived and is_granted('ROLE_SUPERADMIN') %}

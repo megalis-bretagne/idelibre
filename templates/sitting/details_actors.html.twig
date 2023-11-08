@@ -53,10 +53,10 @@
 
                     <div class="col-9">
                         <div class="float-end" v-if="!isArchived">
-                            <button class="btn btn-outline-primary " @click="openShowModalNotifyAgain()">
+                            <button class="btn btn-outline-primary" title="Notifier à nouveau" @click="openShowModalNotifyAgain()">
                                 Notifier à nouveau
                             </button>
-                            <button class="btn btn-outline-primary " @click="openShowModalAttendance()">
+                            <button class="btn btn-outline-primary" title="Gérer les présences" @click="openShowModalAttendance()">
                                 Gérer les présences
                             </button>
 
@@ -69,11 +69,11 @@
                             </button>
 
                             <button :disabled="comelusId || !isComelus || isComelusSending" class="btn btn-primary"
-                                    title="Envoyer à comelus"
+                                    title="Envoyer via Comelus"
                                     data-bs-target="#confirmComelus"
                                     data-bs-toggle="modal">
                                 <span class="fa fa-paper-plane"></span>
-                                Envoyer via comelus
+                                Envoyer via Comélus
                             </button>
 
 
@@ -81,12 +81,12 @@
                             <button
                                     {% if isActiveLsvote == false %} disabled="disabled" {% endif %}
                                     class="btn btn-primary"
-                                    title="Envoyer à lsvote"
+                                    title="Envoyer à Lsvote"
                                     data-bs-target="#confirmLsvote"
                                     data-bs-toggle="modal">
                                 <span class="fa fa-paper-plane"></span>
-                                <span v-if="!lsvoteId">Envoyer à lsvote </span>
-                                <span v-if="lsvoteId">Renvoyer à lsvote </span>
+                                <span v-if="!lsvoteId">Envoyer à Lsvote </span>
+                                <span v-if="lsvoteId">Renvoyer à Lsvote </span>
                             </button>
 
                         </div>
@@ -215,7 +215,7 @@
                         </div>
                         <div class="col-6">
                             <button :disabled="isAlreadySentEmployees" class="btn btn-primary float-end"
-                                    title="Envoyer"
+                                    title="Envoyer les invitations"
                                     data-bs-target="#confirm_employee"
                                     data-bs-toggle="modal">
                                 <span class="fa fa-paper-plane"></span>
@@ -310,7 +310,7 @@
                             <h2>Invités</h2>
                         </div>
                         <div class="col-6">
-                            <button :disabled="isAlreadySentGuests" class="btn btn-primary float-end" title="Envoyer"
+                            <button :disabled="isAlreadySentGuests" class="btn btn-primary float-end" title="Envoyer les invitations"
                                     data-bs-target="#confirm_guest"
                                     data-bs-toggle="modal">
                                 <span class="fa fa-paper-plane"></span>
@@ -404,7 +404,8 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h4 class="modal-title">Attention</h4>
-    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                        </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" title="Fermer"></button>
+                        </div>
                         <div class="modal-body">
                             Veuillez valider l'envoi à tous les destinataires (élus, personnels administratifs, invités)
                         </div>
@@ -412,7 +413,7 @@
                         <div class="modal-footer">
                             {{ macro.cancelBtnModal() }}
 
-                            <button class="btn btn-primary" data-bs-dismiss="modal" type="button"
+                            <button class="btn btn-primary" data-bs-dismiss="modal" type="button" title="Envoyer"
                                     v-on:click="sendConvocations()">
                                 Envoyer
                             </button>
@@ -426,7 +427,8 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title">Aperçu des mails qui seront envoyés</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                        </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" title="Fermer"></button>
+                        </div>
                         <div class="modal-body">
                             Chaque élu recevra un mail sous le format suivant :
                             <div class="form-group mt-4">
@@ -446,7 +448,7 @@
                         <div class="modal-footer">
                             {{ macro.cancelBtnModal() }}
 
-                            <button class="btn btn-primary" data-bs-dismiss="modal" type="button"
+                            <button class="btn btn-primary" data-bs-dismiss="modal" type="button" title="Envoyer les convocations aux élus"
                                     v-on:click="sendConvocations('Actor')">
                                 Envoyer
                             </button>
@@ -460,7 +462,8 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title">Aperçu des mails qui seront envoyés</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                        </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" title="Fermer"></button>
+                        </div>
                         <div class="modal-body">
                             Chaque personnel administratif recevra un mail sous le format suivant :
                             <div class="form-group mt-4">
@@ -475,7 +478,7 @@
                         <div class="modal-footer">
                             {{ macro.cancelBtnModal() }}
 
-                            <button class="btn btn-primary" data-bs-dismiss="modal" type="button"
+                            <button class="btn btn-primary" data-bs-dismiss="modal" type="button" title="Envoyer les convocations aux employés"
                                     v-on:click="sendConvocations('Employee')">
                                 Envoyer
                             </button>
@@ -489,7 +492,8 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title">Aperçu des mails qui seront envoyés</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                        </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" title="Fermer"></button>
+                        </div>
                         <div class="modal-body">
                             Chaque invité recevra un mail sous le format suivant :
                             <div class="form-group mt-4">
@@ -504,7 +508,7 @@
                         <div class="modal-footer">
                             {{ macro.cancelBtnModal() }}
 
-                            <button class="btn btn-primary" data-bs-dismiss="modal" type="button"
+                            <button class="btn btn-primary" data-bs-dismiss="modal" type="button" title="Envoyer les convocations aux invités"
                                     v-on:click="sendConvocations('Guest')">
                                 Envoyer
                             </button>
@@ -518,7 +522,8 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h4 class="modal-title">Attention</h4>
-    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                        </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" title="Fermer"></button>
+                        </div>
                         <div class="modal-body">
                             Veuillez valider l'envoi de tous les documents via comelus
                         </div>
@@ -526,7 +531,7 @@
                         <div class="modal-footer">
                             {{ macro.cancelBtnModal() }}
 
-                            <button class="btn btn-primary" data-bs-dismiss="modal" type="button"
+                            <button class="btn btn-primary" data-bs-dismiss="modal" type="button" title="Envoyer à Comélus"
                                     v-on:click="sendComelus()">
                                 Envoyer
                             </button>
@@ -545,7 +550,8 @@
                                 <span v-if="!lsvoteId">Envoi de la séance à Lsvote</span>
                                 <span v-if="lsvoteId">Renvoi de la séance à Lsvote</span>
                             </h4>
-    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                        </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" title="Fermer"></button>
+                        </div>
                         <div class="modal-body">
                             <span v-if="!lsvoteId">
                                 {% if convocationNotAnswered > 0  %}
@@ -565,7 +571,7 @@
                         <div class="modal-footer">
                             {{ macro.cancelBtnModal() }}
 
-                            <button class="btn btn-primary" data-bs-dismiss="modal" type="button"
+                            <button class="btn btn-primary" data-bs-dismiss="modal" type="button" title="Envoyer à Lsvote"
                                     v-on:click="sendLsvote()">
                                 Envoyer
                             </button>
@@ -652,13 +658,13 @@
                                         </table>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-link"
+                                        <button type="button" class="btn btn-link" title="Annuler"
                                                 @click="showModalAttendance = false">
                                             <span class="fa fa-times"></span>
                                             Annuler
                                         </button>
 
-                                        <button type="button" class="btn btn-primary" @click="saveAttendance()">
+                                        <button type="button" class="btn btn-primary" @click="saveAttendance()" title="Enregistrer">
                                             <span class="fa fa-save"></span>
                                             Enregistrer
                                         </button>
@@ -678,7 +684,8 @@
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title">Aperçu du mail qui sera envoyé</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                                    </div>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" title="Fermer"></button>
+                                    </div>
                                     <div class="modal-body">
 
                                         <div class="form-group mt-4">
@@ -702,12 +709,12 @@
                                         </div>
 
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-link"
+                                            <button type="button" class="btn btn-link" title="Annuler"
                                                     @click="showModalMailExample = false">
                                                 <span class="fa fa-times"></span>
                                                 Annuler
                                             </button>
-                                            <button type="button" class="btn btn-primary"
+                                            <button type="button" class="btn btn-primary" title="Envoyer la convocation"
                                                     v-on:click="sendConvocation(convocationId)"
                                                     @click="showModalMailExample = false">
                                                 <span class="fa fa-paper-plane"></span>
@@ -730,7 +737,7 @@
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title">Notifier les convoqués et invités</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" title="Notifier à nouveau">
                                             <span aria-hidden="true"  @click="showModalNotifyAgain = false"></span>
                                         </button>
                                     </div>
@@ -750,12 +757,12 @@
 
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-link"
+                                        <button type="button" class="btn btn-link" title="Notifier à nouveau"
                                                 @click="showModalNotifyAgain = false">
                                             <span class="fa fa-times"></span>
                                             Annuler
                                         </button>
-                                        <button type="button" class="btn btn-primary" @click="sendNotifyAgain()">
+                                        <button type="button" class="btn btn-primary" @click="sendNotifyAgain()" title="Envoyer">
                                             <span class="fa fa-paper-plane"></span>
                                             Envoyer
                                         </button>

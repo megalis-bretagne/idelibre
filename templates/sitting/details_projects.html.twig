@@ -29,7 +29,7 @@
 
 
             {#  Other Docs #}
-            <div class="col-12 px-0 mt-4 form-white">
+            <div class="col-12 px-3 here mt-4 form-white">
                 <div class="d-flex justify-content-between">
                     <h2>Autres documents</h2>
                     <span><small>Poids total: <span class="text-success"> {{ otherdocsTotalSize|sizeFormatter }} </span> </small></span>
@@ -75,94 +75,95 @@
             </div>
 
 
-            <div class="d-flex justify-content-between">
-                <h2>Projets</h2>
-                {% if isProjectsSizeTooBig %}
-                    <span class="text-danger"><small>Le PDF complet ainsi que le ZIP de la séance n'ont pas été générés  -  Poids total: <span
-                                    class={{ isProjectsSizeTooBig ? "text-danger" : "text-success"  }}> {{ totalSize|sizeFormatter }} </span> </small></span>
-                {% else %}
-                    <span><small> Poids total: <span
-                                    class="text-success">{{ totalSize|sizeFormatter }} </span> </small></span>
-                {% endif %}
-            </div>
-
-
-            <div class="mt-4"></div>
-
-            {% if projects | length == 0 %}
-                <div class="text-center">
-                    Aucun projet associé
+            <div class="col-12 px-3 mt-4 form-white">
+                <div class="d-flex justify-content-between">
+                    <h2>Projets</h2>
+                    {% if isProjectsSizeTooBig %}
+                        <span class="text-danger"><small>Le PDF complet ainsi que le ZIP de la séance n'ont pas été générés  -  Poids total: <span
+                                        class={{ isProjectsSizeTooBig ? "text-danger" : "text-success"  }}> {{ totalSize|sizeFormatter }} </span> </small></span>
+                    {% else %}
+                        <span><small> Poids total: <span
+                                        class="text-success">{{ totalSize|sizeFormatter }} </span> </small></span>
+                    {% endif %}
                 </div>
-            {% endif %}
 
 
-            {% for project in projects %}
+                <div class="mt-4"></div>
 
-                <div class="il-project">
-                    <div class="project-left">
-                        <span class="badge bg-primary rank">{{ project.rank + 1 }}</span>
+                {% if projects | length == 0 %}
+                    <div class="text-center">
+                        Aucun projet associé
                     </div>
+                {% endif %}
 
-                    <div class="project-right">
 
-                        <div class="project-line">
-                            <div class="project-item">
-                                <b>{{ project.name }}</b>
-                            </div>
-                            <div class="project-item">
-                                {{ project.file.name }}
-                            </div>
-                            <div class="projectSize">
-                                <small>{{ project.file.size|sizeFormatter }}</small>
-                            </div>
-                            <div class="project-item action">
-                                <a class="btn btn-outline-secondary borderless"
-                                   href="{{ path('file_download', {'id': project.file.id}) }}"
-                                   title="Télécharger le projet">
-                                    <span class="fas fa-download"></span>
-                                </a>
-                            </div>
+                {% for project in projects %}
 
+                    <div class="il-project">
+                        <div class="project-left">
+                            <span class="badge bg-primary rank">{{ project.rank + 1 }}</span>
                         </div>
 
-                        <div class="project-line">
-                            <div class="project-item">
-                                {% if project.reporter %}
-                                    Rapporteur : {{ project.reporter.firstName }} {{ project.reporter.lastName }}
-                                {% endif %}
-                            </div>
-                            <div class="project-item">
-                                {% if project.theme.fullName is defined %}
-                                    Thème : {{ project.theme.fullName }}
-                                {% endif %}
-                            </div>
-                            <div class="project-item action"></div>
+                        <div class="project-right">
 
-                        </div>
-
-                        <div class="annex-list">
-                            {% for annex in project.annexes %}
-
-                                <div class="project-line annex">
-                                    <div class="project-item">
-                                        {{ annex.rank + 1 }} - {{ annex.file.name }}
-                                    </div>
-                                    <div class="annexeSize"><small> {{ annex.file.size|sizeFormatter }} </small></div>
-                                    <div class="project-item action">
-                                        <a class="btn btn-outline-secondary borderless"
-                                           href="{{ path('file_download', {'id': annex.file.id}) }}"
-                                           title="Télécharger l'annexe">
-                                            <span class="fas fa-download"></span>
-                                        </a>
-                                    </div>
+                            <div class="project-line">
+                                <div class="project-item">
+                                    <b>{{ project.name }}</b>
+                                </div>
+                                <div class="project-item">
+                                    {{ project.file.name }}
+                                </div>
+                                <div class="projectSize">
+                                    <small>{{ project.file.size|sizeFormatter }}</small>
+                                </div>
+                                <div class="project-item action">
+                                    <a class="btn btn-outline-secondary borderless"
+                                       href="{{ path('file_download', {'id': project.file.id}) }}"
+                                       title="Télécharger le projet">
+                                        <span class="fas fa-download"></span>
+                                    </a>
                                 </div>
 
-                            {% endfor %}
+                            </div>
+
+                            <div class="project-line">
+                                <div class="project-item">
+                                    {% if project.reporter %}
+                                        Rapporteur : {{ project.reporter.firstName }} {{ project.reporter.lastName }}
+                                    {% endif %}
+                                </div>
+                                <div class="project-item">
+                                    {% if project.theme.fullName is defined %}
+                                        Thème : {{ project.theme.fullName }}
+                                    {% endif %}
+                                </div>
+                                <div class="project-item action"></div>
+
+                            </div>
+
+                            <div class="annex-list">
+                                {% for annex in project.annexes %}
+
+                                    <div class="project-line annex">
+                                        <div class="project-item">
+                                            {{ annex.rank + 1 }} - {{ annex.file.name }}
+                                        </div>
+                                        <div class="annexeSize"><small> {{ annex.file.size|sizeFormatter }} </small></div>
+                                        <div class="project-item action">
+                                            <a class="btn btn-outline-secondary borderless"
+                                               href="{{ path('file_download', {'id': annex.file.id}) }}"
+                                               title="Télécharger l'annexe">
+                                                <span class="fas fa-download"></span>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                {% endfor %}
+                            </div>
                         </div>
                     </div>
-                </div>
-            {% endfor %}
-
+                {% endfor %}
+            </div>
         </div>
 
     </div>

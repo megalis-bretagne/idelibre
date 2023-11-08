@@ -19,7 +19,7 @@
 
     {{ form_widget(form) }}
     <div class="float-end">
-        {% block pageSaveReturn %}{{ macro.save('connector_index') }}{% endblock %}
+        {% block pageSaveReturn %}{{ macro.save('connector_index', {}, 'Ajouter le connecteur', 'fa fa-plus-circle') }}{% endblock %}
     </div>
     {{ form_end(form) }}
 {% endblock %}
