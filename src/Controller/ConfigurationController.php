@@ -52,6 +52,7 @@ class ConfigurationController extends AbstractController
 
         return $this->render('configuration/edit.html.twig', [
             'form' => $form->createView(),
+            'title' => "Modification de la configuration de la structure " . $structure->getName(),
         ]);
     }
 }

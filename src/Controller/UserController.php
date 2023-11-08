@@ -129,6 +129,7 @@ class UserController extends AbstractController
             'form' => $form->createView(),
             'suffix' => $this->getUser()->getStructure()->getSuffix(),
             'user' => $user,
+            'title' => 'Modification de l\'utilisateur ' . $user->getFirstName() . ' ' . $user->getLastName(),
         ]);
     }
 

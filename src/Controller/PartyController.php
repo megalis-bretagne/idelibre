@@ -73,6 +73,7 @@ class PartyController extends AbstractController
 
         return $this->render('party/edit.html.twig', [
             'form' => $form->createView(),
+            'title' => 'Modification du groupe politique '.$party->getName(),
         ]);
     }
 

@@ -15,7 +15,7 @@
     <div class="mt-3 col-11">
         {{ include('include/flash.html.twig') }}
         <div class="d-flex align-items-center">
-            <h1 class="flex-grow-1">Modifier la séance</h1>
+            <h1 class="flex-grow-1">{{ title }}</h1>
             {{ macroNav.toogleView( path('sitting_show_information', {'id': sitting.id}) , 'edit') }}
         </div>
 
@@ -27,10 +27,8 @@
 
     <div class="col-12">
         <div class="mt-4">
-            <div class="col-11 px-3 offset-1 form-white">
+            <div class="col-8 px-3 offset-1 form-white">
                 {{ macroTab.editTabs('information', sitting) }}
-
-
 
                 {{ form_start(form) }}
                 {{ form_widget(form) }}
@@ -46,6 +44,8 @@
 
                 </div>
                 {{ form_end(form) }}
+
+
             </div>
         </div>
 

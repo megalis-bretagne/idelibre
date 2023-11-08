@@ -1,7 +1,7 @@
 {% extends 'form.html.twig' %}
 {% import 'macro/_forms.html.twig' as macro %}
 
-{% block pageTitle 'Paramétrer le connecteur Comélus' %}
+{% block pageTitle 'Modification du connecteur Comélus' %}
 
 {% block pageActions %}
     {{ macro.backButton('connector_index') }}
@@ -34,7 +34,7 @@
     {{ form_widget(form) }}
 
     <div class="float-end">
-     {% block pageSaveReturn %}{{ macro.save('connector_index', {}, 'Ajouter le connecteur', 'fa fa-plus-circle') }}{% endblock %}
+     {% block pageSaveReturn %}{{ macro.save('connector_index', {}, 'Enregistrer', 'fa fa-save') }}{% endblock %}
     </div>
     {{ form_end(form) }}
 {% endblock %}

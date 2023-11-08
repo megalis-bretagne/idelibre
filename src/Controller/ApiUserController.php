@@ -78,6 +78,7 @@ class ApiUserController extends AbstractController
 
         return $this->render('apiUser/edit.html.twig', [
             'form' => $form->createView(),
+            'title' => 'Modification de la clé d\'api '. $apiUser->getName(),
         ]);
     }
 
