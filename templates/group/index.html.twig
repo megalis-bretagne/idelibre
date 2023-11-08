@@ -22,7 +22,7 @@
                 <tr class="d-flex">
                     <td class="col-9">{{ group.name }}</td>
                     <td class="col-3">
-                        {{ macros.editButton('group_edit', group.id, 'editer le groupe') }}
+                        {{ macros.editButton('group_edit', group.id, 'Modifier le groupe') }}
                         <a href="{{ path('group_manage', {'id': group.id}) }}" class="btn btn-outline-primary borderless"
                            title="Gérer les structures associées">
                             <span class="fa fa-cog"></span>
@@ -34,7 +34,7 @@
                             'group_delete',
                             'Voulez-vous vraiment supprimer le groupe ' ~ group.name ~ ' ?',
                             groups.currentPageNumber,
-                            'supprimer le groupe'
+                            'Supprimer le groupe'
                         ) }}
                     </td>
                 </tr>

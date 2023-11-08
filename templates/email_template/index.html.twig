@@ -50,8 +50,8 @@
                         {% endif %}
                     </td>
                     <td class="col-2">
-                        {{ macros.editButton('email_template_edit', template.id, 'editer le modèle') }}
-                        {{ macros.showButton('email_template_preview', template.id) }}
+                        {{ macros.editButton('email_template_edit', template.id, 'Modifier le modèle') }}
+                        {{ macros.showButton('email_template_preview', template.id, 'Visualiser le modèle') }}
 
                         {% if not template.isDefault %}
                             {{ macros.button_open_modal_delete(
@@ -60,7 +60,7 @@
                                 "email_template_delete",
                                 "Voulez-vous vraiment supprimer le modèle " ~ template.name ~ " ?",
                                 templates.currentPageNumber,
-                                "supprimer le modèle"
+                                "Supprimer le modèle"
                             ) }}
                         {% endif %}
                     </td>
