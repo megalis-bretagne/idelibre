@@ -78,14 +78,14 @@
 
 {% macro button_open_modal_delete(id, title, pathAction, content, page = 1, titleAttribut = 'Supprimer') %}
     <button type="button" class="btn btn-outline-danger borderless" title="{{ titleAttribut }}"
-            data-target="#delete{{ id }}" data-toggle="modal">
+            data-bs-target="#delete{{ id }}" data-bs-toggle="modal">
         <span class="fa fa-trash-alt"></span>
     </button>
 
     <div id="delete{{ id }}" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header d-flex align-items-start">
                     <h4 class="modal-title">
                         {{ title }}
                     </h4>
@@ -113,14 +113,14 @@
 {% macro button_open_modal_post(id, title, content, pathAction, icon = "fa fa-paper-plane", btn_title = "Envoyer",
     confirmMessage = '<span class="fas fa-exclamation-circle"></span> Confirmer' ) %}
     <button type="button" class="btn btn-outline-warning borderless" title="{{ btn_title }}"
-            data-target="#post{{ id }}" data-toggle="modal">
+            data-bs-target="#post{{ id }}" data-bs-toggle="modal">
         <span class="{{ icon }}"></span>
     </button>
 
-    <div id="post{{ id }}" class="modal fade" role="dialog" data-backdrop="static">
+    <div id="post{{ id }}" class="modal fade" role="dialog" data-bs-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header d-flex align-items-start">
                     <h4 class="modal-title">
                         {{ title }}
                     </h4>
@@ -147,14 +147,14 @@
 {% macro button_open_modal_post(id, title, content, pathAction, icon = "fa fa-paper-plane", btn_title = "Envoyer",
     confirmMessage = '<span class="fas fa-exclamation-circle"></span> Confirmer' ) %}
     <button type="button" class="btn btn-outline-warning borderless" title="{{ btn_title }}"
-            data-target="#post{{ id }}" data-toggle="modal">
+            data-bs-target="#post{{ id }}" data-bs-toggle="modal">
         <span class="{{ icon }}"></span>
     </button>
 
-    <div id="post{{ id }}" class="modal fade" role="dialog" data-backdrop="static">
+    <div id="post{{ id }}" class="modal fade" role="dialog" data-bs-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header align-items-start">
                     <h4 class="modal-title">
                         {{ title }}
                     </h4>
@@ -186,15 +186,15 @@
     {% set htmlId = random() %}
 
     <button type="button" class="btn btn-outline-primary" title="{{ btn_description }}"
-            data-target="#post{{ htmlId }}" data-toggle="modal">
+            data-bs-target="#post{{ htmlId }}" data-bs-toggle="modal">
         <span class="{{ icon }}"></span>
         {{ btn_description }}
     </button>
 
-    <div id="post{{ htmlId }}" class="modal fade" role="dialog" data-backdrop="static">
+    <div id="post{{ htmlId }}" class="modal fade" role="dialog" data-bs-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header align-items-start">
                     <h4 class="modal-title">
                         {{ title }}
                     </h4>
@@ -222,7 +222,7 @@
     {% set htmlId = random() %}
 
     <button type="button" class="btn btn-outline-primary" title="{{ btn_description }}"
-            data-target="#post{{ htmlId }}" data-toggle="modal">
+            data-bs-target="#post{{ htmlId }}" data-bs-toggle="modal">
         <span class="fa-passwd-reset fa-stack small">
             <i class="fa fa-sync-alt fa-stack-2x"></i>
             <i class="fa fa-lock fa-stack-1x small font-weight-bold"></i>
@@ -230,10 +230,10 @@
         {{ btn_description }}
     </button>
 
-    <div id="post{{ htmlId }}" class="modal fade" role="dialog" data-backdrop="static">
+    <div id="post{{ htmlId }}" class="modal fade" role="dialog" data-bs-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header align-items-start">
                     <h4 class="modal-title">
                         {{ title }}
                     </h4>
@@ -259,7 +259,7 @@
 
 {% macro btnReloadPasswordWithModal(id, title, pathAction, content, page = 1) %}
     <button type="button" class="btn btn-outline-primary borderless stacked" title="Réinitialisation du mot de passe de l'utilisateur"
-            data-target="#modalReload{{ id }}" data-toggle="modal">
+            data-bs-target="#modalReload{{ id }}" data-bs-toggle="modal">
         <span class="fa-passwd-reset fa-stack small">
             <i class="fa fa-sync-alt fa-stack-2x"></i>
             <i class="fa fa-lock fa-stack-1x small font-weight-bold"></i>
@@ -269,7 +269,7 @@
     <div id="modalReload{{ id }}" tabindex="-1" class="modal fade" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header align-items-start">
                     <h4 class="modal-title">{{ title }}</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                </div>
                 <div class="modal-body">
@@ -294,7 +294,7 @@
 {% endmacro %}
 
 {% macro cancelBtnModal(cancelName = 'Annuler') %}
-    <button type="button" class="btn btn-link" data-dismiss="modal">
+    <button type="button" class="btn btn-link" data-bs-dismiss="modal">
         <span class="fa fa-times"></span>
         Annuler
     </button>

@@ -128,7 +128,7 @@ class SittingController extends AbstractController
 
     #[Route(path: '/sitting/edit/{id}/projects', name: 'edit_sitting_project')]
     #[Sidebar(active: ['sitting-active-nav'])]
-    #[Breadcrumb(title: 'Modification des projets de la {sitting.nameWithDate}')]
+    #[Breadcrumb(title: 'Modification des projets de la séance {sitting.nameWithDate}')]
     public function editProjects(Sitting $sitting): Response
     {
         if ($sitting->getIsArchived()) {
