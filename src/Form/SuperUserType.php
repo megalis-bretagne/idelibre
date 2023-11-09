@@ -6,6 +6,7 @@ use App\Entity\Group;
 use App\Entity\Role;
 use App\Entity\User;
 use App\Form\Type\HiddenEntityType;
+use App\Form\Type\LsChoiceType;
 use App\Service\role\RoleManager;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -69,10 +70,13 @@ class SuperUserType extends AbstractType
         }
 
         if (false === $isMySelf) {
-            $builder->add('isActive', CheckboxType::class, [
-                'required' => false,
-                'label_attr' => ['class' => 'checkbox-inline checkbox-switch'],
+            $builder->add('isActive', LsChoiceType::class, [
                 'label' => 'Actif',
+                'choices' => [
+                    'Oui' => true,
+                    'Non' => false,
+                ],
+                'data'=> !$user || $user->getIsActive()
             ]);
         }
     }

@@ -31,6 +31,7 @@ class EmailTemplateType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $isDefaultTemplate = $this->isDefaultTemplate($options['data'] ?? null);
+        $emailTemplate = $builder->getData();
 
         if (!$isDefaultTemplate) {
             $builder->add('category', HiddenType::class, [
@@ -52,15 +53,13 @@ class EmailTemplateType extends AbstractType
                 ]);
         }
 
-
-
         $builder->add('format', LsChoiceType::class, [
             'label' => "Format de l'email",
             'choices' => [
                 'Html' => EmailData::FORMAT_HTML,
                 'Texte' => EmailData::FORMAT_TEXT,
             ],
-            'data' => $this->emailTemplateFormat($options['emailTemplate']),
+            'data' => !$emailTemplate ? EmailData::FORMAT_HTML : $emailTemplate->getFormat(),
         ]);
 
         $builder->add('subject', TextType::class, [
@@ -81,7 +80,7 @@ class EmailTemplateType extends AbstractType
                     'Oui' => true,
                     'Non' => false,
                 ],
-                'data' => $this->isAttachment($options['emailTemplate']),
+                'data' => !$emailTemplate ? false : $emailTemplate->getIsAttachment(),
             ]);
         }
 
@@ -96,7 +95,6 @@ class EmailTemplateType extends AbstractType
         $resolver->setDefaults([
             'data_class' => EmailTemplate::class,
             'structure' => null,
-            'emailTemplate' => null,
         ]);
     }
 
@@ -119,13 +117,4 @@ class EmailTemplateType extends AbstractType
         return $emailTemplate && EmailTemplate::CATEGORY_RECAPITULATIF === $emailTemplate->getCategory();
     }
 
-    public function isAttachment(?EmailTemplate $emailTemplate): bool
-    {
-        return $emailTemplate && $emailTemplate->getIsAttachment();
-    }
-
-    public function emailTemplateFormat(?EmailTemplate $emailTemplate): string
-    {
-        return !$emailTemplate ? EmailData::FORMAT_HTML : $emailTemplate->getFormat();
-    }
 }

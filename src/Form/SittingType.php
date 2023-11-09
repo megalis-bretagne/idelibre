@@ -36,6 +36,9 @@ class SittingType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        /** @var Sitting|null $sitting */
+        $sitting = $builder->getData();
+
         $isNew = !isset($options['data']);
         $isAlreadySentConvocation = !$isNew && $this->sittingManager->isAlreadySentConvocation($options['data']);
         $isAlreadySentInvitation = !$isNew && $this->sittingManager->isAlreadySentInvitation($options['data']);
@@ -106,8 +109,8 @@ class SittingType extends AbstractType
             ])
             ->add('isRemoteAllowed', LsChoiceType::class, [
                 'label' => ($isNew || $isAlreadySentConvocation) ? 'Participation à distance' : 'Autoriser la participation à distance',
-                'disabled' => $isAlreadySentConvocation, # add js to disabled the btn if convocation were sent;
-                'data' => $this->isRemoteAllowed($options['sitting']),
+                'disabled' => $isAlreadySentConvocation, # add js to disabled the btn if convocation are sent;
+                'data' => !$sitting || $sitting->getIsRemoteAllowed(),
                 'choices' => [
                     'Oui' => true,
                     'Non' => false,

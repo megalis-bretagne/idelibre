@@ -14,6 +14,8 @@ class GroupType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $group = $builder->getData();
+
         $builder
             ->add('name', TextType::class, [
                 'label' => 'Intitulé',
@@ -24,7 +26,7 @@ class GroupType extends AbstractType
                     'Oui' => true,
                     'Non' => false,
                 ],
-                'data' => $this->isAutorized($options['group']),
+                'data' => !$group || $group->getIsStructureCreator(),
             ])
         ;
 
@@ -45,10 +47,5 @@ class GroupType extends AbstractType
             'entropyForUser' => null,
             'group' => null,
         ]);
-    }
-
-    public function isAutorized(Group $group): ?bool
-    {
-        return !$group ? false : $group->getIsStructureCreator();
     }
 }

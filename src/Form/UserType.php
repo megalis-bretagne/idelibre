@@ -7,6 +7,7 @@ use App\Entity\Role;
 use App\Entity\Structure;
 use App\Entity\Type;
 use App\Entity\User;
+use App\Form\Type\LsChoiceType;
 use App\Repository\PartyRepository;
 use App\Repository\RoleRepository;
 use App\Repository\TypeRepository;
@@ -46,7 +47,7 @@ class UserType extends AbstractType
         $isMySelf = ($this->security->getUser() === $user);
 
         $builder
-            ->add('gender', ChoiceType::class, [
+            ->add('gender', LsChoiceType::class, [
                 'label' => 'Civilité',
                 'choices' => [
                     'Madame' => 1,
@@ -138,16 +139,19 @@ class UserType extends AbstractType
         }
 
         if (false === $isMySelf) {
-            $builder->add('isActive', CheckboxType::class, [
-                'required' => false,
-                'label_attr' => ['class' => 'checkbox-inline checkbox-switch'],
+            $builder->add('isActive', LsChoiceType::class, [
                 'label' => 'Actif',
+                'choices' => [
+                    'Oui' => true,
+                    'Non' => false,
+                ],
+                'data' => !$user || $user->getIsActive(),
             ]);
         }
 
         if (!$this->IsAdmin($options)) {
             $builder
-                ->add('initPassword', ChoiceType::class, [
+                ->add('initPassword', LsChoiceType::class, [
                     'mapped' => false,
                     'label' => 'Voulez vous définir le mot de passe de l\'utilisateur ?',
                     'choices' => [

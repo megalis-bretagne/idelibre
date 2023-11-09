@@ -66,7 +66,6 @@ class EmailTemplateController extends AbstractController
     {
         $form = $this->createForm(EmailTemplateType::class, $emailTemplate, [
             'structure' => $this->getUser()->getStructure(),
-            'emailTemplate' => $emailTemplate,
         ]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

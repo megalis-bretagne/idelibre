@@ -18,6 +18,7 @@ class ConfigurationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+
         $builder
             ->add('isSharedAnnotation', LsChoiceType::class, [
                 'label' => 'Autoriser le partage d\'annotation entre élus',

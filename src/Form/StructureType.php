@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Structure;
 use App\Entity\Timezone;
+use App\Form\Type\LsChoiceType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -36,10 +37,13 @@ class StructureType extends AbstractType
         $builder->add('replyTo', TextType::class, [
             'label' => 'Email de réponse',
         ])
-            ->add('can_edit_reply_to', CheckboxType::class, [
+            ->add('can_edit_reply_to', LsChoiceType::class, [
                 'label' => 'Autorisation pour les administrateurs de modifier l\'email de réponse ?',
-                'label_attr' => ['class' => 'checkbox-inline checkbox-switch'],
-                'required' => false,
+                'choices' => [
+                    'Oui' => true,
+                    'Non' => false,
+                ],
+                'data' => !$entity || $entity->getReplyTo(),
             ])
             ->add('siren', TextType::class, [
                 'label' => 'Numéro de siren',
@@ -61,10 +65,13 @@ class StructureType extends AbstractType
                     'label' => 'Connexion',
                     'disabled' => true,
                 ])
-            ->add('isActive', CheckboxType::class, [
+            ->add('isActive', LsChoiceType::class, [
                 'label' => 'Actif',
-                'label_attr' => ['class' => 'checkbox-inline checkbox-switch'],
-                'required' => false,
+                'choices' => [
+                    'Oui' => true,
+                    'Non' => false,
+                ],
+                'data' => !$entity || $entity->getIsActive(),
             ]);
         }
 
