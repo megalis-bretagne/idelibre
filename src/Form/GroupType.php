@@ -14,6 +14,7 @@ class GroupType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        /** @var Group|null $group */
         $group = $builder->getData();
 
         $builder

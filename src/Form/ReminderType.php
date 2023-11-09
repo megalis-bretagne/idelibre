@@ -13,10 +13,16 @@ class ReminderType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        /** @var Reminder|null $reminder */
+        $reminder = $builder->getData();
+
         $builder->add('isActive', CheckboxType::class, [
-            'required' => false,
-            'label_attr' => ['class' => 'checkbox-inline checkbox-switch'],
             'label' => 'Ajouter au calendrier',
+            'choices' => [
+                'Oui' => true,
+                'Non' => false,
+            ],
+            'data' => !$reminder || $reminder->getIsActive(),
         ])
             ->add('duration', ChoiceType::class, [
                 'label' => 'Durée',

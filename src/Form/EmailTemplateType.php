@@ -30,8 +30,10 @@ class EmailTemplateType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $isDefaultTemplate = $this->isDefaultTemplate($options['data'] ?? null);
+        /** @var EmailTemplate|null $emailTemplate */
         $emailTemplate = $builder->getData();
+
+        $isDefaultTemplate = $this->isDefaultTemplate($options['data'] ?? null);
 
         if (!$isDefaultTemplate) {
             $builder->add('category', HiddenType::class, [
