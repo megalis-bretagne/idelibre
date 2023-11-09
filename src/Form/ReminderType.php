@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Reminder;
+use App\Form\Type\LsChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -16,7 +17,7 @@ class ReminderType extends AbstractType
         /** @var Reminder|null $reminder */
         $reminder = $builder->getData();
 
-        $builder->add('isActive', CheckboxType::class, [
+        $builder->add('isActive', LsChoiceType::class, [
             'label' => 'Ajouter au calendrier',
             'choices' => [
                 'Oui' => true,
