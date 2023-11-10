@@ -15,31 +15,39 @@
     {{ form_row(form.lastName) }}
 
     {{ form_row(form.email) }}
+    {{ form_row(form.phone) }}
 
-    <div class="d-flex justify-content-start mb-3">
-        {{ form_widget(form.username) }}
-        <div class="form-control borderless">
-            <b class="text-ls-dark">@{{ suffix }}</b>
+
+    <div class="d-flex flex-column mb-3">
+        <span>{{ form_label(form.username) }}</span>
+        <div class="form-control d-flex align-items-center ps-0 borderless">
+            <span class="w-50">{{ form_widget(form.username) }}</span>
+            <b class="text-ls-dark ms-2">@{{ suffix }}</b>
         </div>
     </div>
 
-    <div id="actor-info" style="display: none">
-        {{ form_row(form.party) }}
-        {{ form_row(form.title) }}
-    </div>
+    {% if user.role.prettyName is same as "Gestionnaire de séance" %}
+        {{ form_row(form.authorizedTypes) }}
+        {{ form_row(form.isActive) }}
+        {{ form_row(form.initPassword) }}
+        <div class="password-group d-none">
+            {{ form_row(form.plainPassword) }}
+        </div>
 
+        {% elseif user.role.prettyName is same as"Administrateur" %}
+            {{ form_row(form.isActive) }}
 
-    {{ form_row(form.phone) }}
-    {{ form_row(form.deputy) }}
-    {{ form_row(form.isActive) }}
-    {{ form_row(form.initPassword) }}
+        {% elseif user.role.prettyName is same as "Elu" %}
+            {{ form_row(form.party) }}
+            {{ form_row(form.title) }}
+            {{ form_row(form.deputy) }}
+            {{ form_row(form.isActive) }}
 
-    <div class="password-group d-none">
-        {{ form_row(form.plainPassword) }}
-    </div>
-
-    {{ form_widget(form) }}
-
+            {{ form_row(form.initPassword) }}
+            <div class="password-group d-none">
+                {{ form_row(form.plainPassword) }}
+            </div>
+    {% endif %}
 
 
     <div class="float-end">
