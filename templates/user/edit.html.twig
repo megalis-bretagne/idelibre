@@ -14,13 +14,28 @@
     {{ form_row(form.firstName) }}
     {{ form_row(form.lastName) }}
 
-    {{ form_label(form.username) }}
+    {{ form_row(form.email) }}
 
     <div class="d-flex justify-content-start mb-3">
         {{ form_widget(form.username) }}
         <div class="form-control borderless">
             <b class="text-ls-dark">@{{ suffix }}</b>
         </div>
+    </div>
+
+    <div id="actor-info" style="display: none">
+        {{ form_row(form.party) }}
+        {{ form_row(form.title) }}
+    </div>
+
+
+    {{ form_row(form.phone) }}
+    {{ form_row(form.deputy) }}
+    {{ form_row(form.isActive) }}
+    {{ form_row(form.initPassword) }}
+
+    <div class="password-group d-none">
+        {{ form_row(form.plainPassword) }}
     </div>
 
     {{ form_widget(form) }}

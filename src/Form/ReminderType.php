@@ -17,18 +17,21 @@ class ReminderType extends AbstractType
         /** @var Reminder|null $reminder */
         $reminder = $builder->getData();
 
-        $builder->add('isActive', LsChoiceType::class, [
+        $builder
+            ->add('isActive', LsChoiceType::class, [
             'label' => 'Ajouter au calendrier',
             'choices' => [
                 'Oui' => true,
                 'Non' => false,
             ],
-            'data' => !$reminder || $reminder->getIsActive(),
+            'data' => false,
         ])
+
             ->add('duration', ChoiceType::class, [
                 'label' => 'Durée',
                 'choices' => Reminder::VALUES,
-            ]);
+                'disabled' => true
+        ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -43,7 +46,6 @@ class ReminderType extends AbstractType
         if (!$reminder) {
             return false;
         }
-
         return $reminder->getIsActive();
     }
 }

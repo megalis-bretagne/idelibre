@@ -1,14 +1,33 @@
 import $ from 'jquery';
 
 
-$("#sitting_reminder_isActive").change(function (event) {
-    let $reminderDuration = $('#sitting_reminder_duration');
-    if (event.currentTarget.checked) {
-        $reminderDuration.attr('disabled', false);
+const reminderIsActiveTrue = document.querySelector('#sitting_reminder_isActive_0');
+const reminderIsActiveFalse = document.querySelector('#sitting_reminder_isActive_1');
+const reminderDuration = document.querySelector('#sitting_reminder_duration');
+const sittingReminder = document.querySelector('#sitting_reminder');
 
-        return;
+window.addEventListener('load', function (event) {
+    if (reminderIsActiveFalse.checked) {
+        reminderDuration.setAttribute('disabled', 'disabled');
     }
-    $reminderDuration.attr('disabled', true);
+
+    if (sittingReminder !== null && sittingReminder.parentNode.contains(document.querySelector('.isDisabled'))) {
+        if (!reminderIsActiveTrue.checked) {
+            reminderIsActiveTrue.setAttribute('disabled', 'disabled');
+        }
+    }
+});
+
+reminderIsActiveTrue.addEventListener('change', function (event) {
+    if (reminderIsActiveTrue.checked) {
+        reminderDuration.removeAttribute('disabled');
+    }
+});
+
+reminderIsActiveFalse.addEventListener('change', function (event) {
+    if (reminderIsActiveFalse.checked) {
+        reminderDuration.setAttribute('disabled', 'disabled');
+    }
 });
 
 

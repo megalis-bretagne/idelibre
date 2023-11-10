@@ -1,33 +1,30 @@
-import $ from 'jquery';
+const reminderIsActiveTrue = document.querySelector('#type_reminder_isActive_0');
+const reminderIsActiveFalse = document.querySelector('#type_reminder_isActive_1');
+const reminderDuration = document.querySelector('#type_reminder_duration');
+const typeReminder = document.querySelector('#type_reminder');
 
-$("document").ready(function () {
-    if(!$("#sitting_reminder_isActive").attr('checked')) {
-        $('#sitting_reminder_duration').attr('disabled', true);
+window.addEventListener('load', function () {
+    if (reminderIsActiveFalse.checked) {
+        reminderDuration.setAttribute('disabled', 'disabled');
     }
 
-    if(!$("#type_reminder_isActive").attr('checked')) {
-        $('#type_reminder_duration').attr('disabled', true);
+    if (typeReminder !== null && typeReminder.parentNode.contains(document.querySelector('.isDisabled'))) {
+        if (!reminderIsActiveTrue.checked) {
+            reminderIsActiveTrue.setAttribute('disabled', 'disabled');
+        }
     }
-})
+});
 
-
-$("#sitting_reminder_isActive").change(function (event) {
-    let $reminderDuration = $('#sitting_reminder_duration');
-    if (event.currentTarget.checked) {
-        $reminderDuration.attr('disabled', false);
-
-        return;
+reminderIsActiveTrue.addEventListener('change', function (event) {
+    if (reminderIsActiveTrue.checked) {
+        reminderDuration.removeAttribute('disabled');
     }
-    $reminderDuration.attr('disabled', true);
+});
+
+reminderIsActiveFalse.addEventListener('change', function (event) {
+    if (reminderIsActiveFalse.checked) {
+        reminderDuration.setAttribute('disabled', 'disabled');
+    }
 });
 
 
-$("#type_reminder_isActive").change(function (event) {
-    let $reminderDuration = $('#type_reminder_duration');
-    if (event.currentTarget.checked) {
-        $reminderDuration.attr('disabled', false);
-
-        return;
-    }
-    $reminderDuration.attr('disabled', true);
-});

@@ -85,6 +85,7 @@ class TypeControllerTest extends WebTestCase
         $form = $crawler->selectButton('Ajouter le type')->form();
 
         $form['type[name]'] = 'New type';
+        $form['type[reminder][isActive]'] = "1";
 
         $this->client->submit($form);
 
@@ -126,6 +127,7 @@ class TypeControllerTest extends WebTestCase
         $form['type[associatedActors]'] = $actorLs->getId();
         $form['type[associatedEmployees]'] = $employeeLs->getId();
         $form['type[associatedGuests]'] = $guestLs->getId();
+        $form['type[reminder][isActive]'] = "1";
 
         $this->client->submit($form);
 
@@ -158,6 +160,7 @@ class TypeControllerTest extends WebTestCase
 
         $form['type[name]'] = 'new name';
         $form['type[associatedActors]'] = $notAssociatedActor->getId();
+
 
         $this->client->submit($form);
 

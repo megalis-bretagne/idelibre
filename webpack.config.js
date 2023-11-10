@@ -36,6 +36,7 @@ Encore
     .addEntry('setPasswordUser', './assets/js/password/setPasswordUser.js')
     .addEntry('userDynamicFields', './assets/js/userDynamicFields.js')
     .addEntry('attendance', './assets/js/attendance.js')
+    .addEntry('lockChoice', './assets/js/lockChoice.js')
 
 
         // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)

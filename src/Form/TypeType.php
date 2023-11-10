@@ -28,6 +28,7 @@ class TypeType extends AbstractType
     {
         /** @var Type|null $type */
         $type = $builder->getData();
+//        dd($type->getReminder());
 
         $eluAssocie = 'Elus associés';
         $employeeAssocie = 'Personnels administratifs, Administrateurs, Gestionnaires de séance associés';
@@ -122,6 +123,9 @@ class TypeType extends AbstractType
             ])
             ->add('reminder', ReminderType::class, [
                 'label' => false,
+                'row_attr' => [
+                    'class' => $type ? "isDisabled" : "",
+                ],
             ])
             ->add('structure', HiddenEntityType::class, [
                 'data' => $options['structure'],

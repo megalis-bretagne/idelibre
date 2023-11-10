@@ -104,18 +104,27 @@ class SittingType extends AbstractType
                     'mimeTypesMessage' => 'Le fichier doit être un pdf',
                 ])],
             ])
-            ->add('reminder', ReminderSittingType::class, [
+
+            ->add('reminder', ReminderSittingType::class,[
                 'label' => false,
-            ])
+                'row_attr' => ["class" => $sitting ? "isDisabled" : ""],
+
+          ])
+
             ->add('isRemoteAllowed', LsChoiceType::class, [
                 'label' => ($isNew || $isAlreadySentConvocation) ? 'Participation à distance' : 'Autoriser la participation à distance',
-                'disabled' => $isAlreadySentConvocation, # add js to disabled the btn if convocation are sent;
                 'data' => !$sitting || $sitting->getIsRemoteAllowed(),
+                'attr' => [
+                    'class' => $isAlreadySentConvocation || $isAlreadySentInvitation ? 'isDisabled' : '',
+                    'data-infos' => $sitting ? $sitting->getId() : '',
+                ],
                 'choices' => [
                     'Oui' => true,
                     'Non' => false,
                 ],
+
             ])
+
             ->add('structure', HiddenEntityType::class, [
                 'data' => $options['structure'],
                 'class_name' => Structure::class,

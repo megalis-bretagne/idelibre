@@ -1,30 +1,29 @@
 import $ from 'jquery';
 
-$(document).ready(function () {
+const initPasswordTrue = document.querySelector('#user_initPassword_1');
+const initPasswordFalse = document.querySelector('#user_initPassword_0');
+const passwordGroup = document.querySelector('.password-group');
 
-    if (0 == $('#user_initPassword').val()) {
-        hidePlainPassword();
+
+initPasswordTrue.addEventListener('change', function () {
+    if (initPasswordTrue.checked) {
+        passwordGroup.classList.remove('d-none');
     }
-
-    $('#user_initPassword').change(function() {
-        if (1 == $(this).val()) {
-            resetPlainPassword();
-
-            $('#user_plainPassword_first').parent().parent().show();
-            $('#user_plainPassword_second').parent().parent().show();
-        } else {
-            hidePlainPassword();
-        }
-    });
 });
 
-function hidePlainPassword()
-{
-    resetPlainPassword();
+initPasswordFalse.addEventListener('change', function () {
+    if (initPasswordFalse.checked) {
+        passwordGroup.classList.add('d-none');
+    }
+});
 
-    $('#user_plainPassword_first').parent().parent().hide();
-    $('#user_plainPassword_second').parent().parent().hide();
-}
+document.addEventListener('load', function () {
+    if (initPasswordTrue.checked) {
+        passwordGroup.classList.remove('d-none');
+    }
+    passwordGroup.classList.add('d-none');
+});
+
 
 function resetPlainPassword()
 {

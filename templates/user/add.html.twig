@@ -33,6 +33,14 @@
         {{ form_row(form.title) }}
     </div>
 
+    {{ form_row(form.phone) }}
+    {{ form_row(form.isActive) }}
+    {{ form_row(form.initPassword) }}
+
+    <div class="password-group d-none">
+        {{ form_row(form.plainPassword) }}
+    </div>
+
     {{ form_widget(form) }}
     <div class="float-end">
         {% block pageSaveReturn %}
