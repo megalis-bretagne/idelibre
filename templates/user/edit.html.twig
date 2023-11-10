@@ -35,7 +35,9 @@
         </div>
 
         {% elseif user.role.prettyName is same as"Administrateur" %}
-            {{ form_row(form.isActive) }}
+            {% if app.user != user %}
+                {{ form_row(form.isActive) }}
+            {% endif %}
 
         {% elseif user.role.prettyName is same as "Elu" %}
             {{ form_row(form.party) }}
