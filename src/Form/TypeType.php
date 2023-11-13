@@ -28,7 +28,6 @@ class TypeType extends AbstractType
     {
         /** @var Type|null $type */
         $type = $builder->getData();
-//        dd($type->getReminder());
 
         $eluAssocie = 'Elus associés';
         $employeeAssocie = 'Personnels administratifs, Administrateurs, Gestionnaires de séance associés';
@@ -53,7 +52,7 @@ class TypeType extends AbstractType
                 'choice_label' => fn (User $user) => $this->formatUserString($user),
                 'multiple' => true,
                 'mapped' => false,
-                'data' => $this->userRepository->getAssociatedActorsWithType($options['data'] ?? null),
+                'data' => $this->userRepository->getAssociatedActorsWithType($type->getId() ? $type : null),
             ])
             ->add('associatedEmployees', EntityType::class, [
                 'placeholder' => 'Sélectionner les personnels administratifs',
@@ -62,7 +61,7 @@ class TypeType extends AbstractType
                 'class' => User::class,
                 'query_builder' => $this->userRepository
                     ->findInvitableEmployeesByStructure($options['structure']),
-                'data' => $this->userRepository->getAssociatedInvitableEmployeesWithType($options['data'] ?? null),
+                'data' => $this->userRepository->getAssociatedInvitableEmployeesWithType($type->getId() ? $type : null),
                 'choice_label' => fn (User $user) => $this->formatUserString($user),
                 'multiple' => true,
                 'mapped' => false,
@@ -74,7 +73,7 @@ class TypeType extends AbstractType
                 'class' => User::class,
                 'query_builder' => $this->userRepository
                     ->findGuestsByStructure($options['structure']),
-                'data' => $this->userRepository->getAssociatedGuestWithType($options['data'] ?? null),
+                'data' => $this->userRepository->getAssociatedGuestWithType($type->getId() ? $type : null),
                 'choice_label' => fn (User $user) => $this->formatUserString($user),
                 'multiple' => true,
                 'mapped' => false,
@@ -85,7 +84,6 @@ class TypeType extends AbstractType
                     'Oui' => true,
                     'Non' => false,
                 ],
-                'data' => !$type || $type->getIsComelus(),
             ])
             ->add('isSms', LsChoiceType::class, [
                 'label' => 'Notifier les élus via sms',
@@ -93,7 +91,6 @@ class TypeType extends AbstractType
                     'Oui' => true,
                     'Non' => false,
                 ],
-                'data' => !$type || $type->getIsSms(),
             ])
             ->add('isSmsEmployees', LsChoiceType::class, [
                 'label' => 'Notifier les personnels administratifs via sms',
@@ -101,7 +98,6 @@ class TypeType extends AbstractType
                     'Oui' => true,
                     'Non' => false,
                 ],
-                'data' => !$type || $type->getIsSmsEmployees(),
             ])
             ->add('isSmsGuests', LsChoiceType::class, [
                 'label' => 'Notifier les invités via sms',
@@ -109,7 +105,6 @@ class TypeType extends AbstractType
                     'Oui' => true,
                     'Non' => false,
                 ],
-                'data' => !$type || $type->getIsSmsGuests(),
             ])
             ->add('authorizedSecretaries', EntityType::class, [
                 'placeholder' => 'Sélectionner les gestionnaires de séance autorisés',
@@ -123,9 +118,7 @@ class TypeType extends AbstractType
             ])
             ->add('reminder', ReminderType::class, [
                 'label' => false,
-                'row_attr' => [
-                    'class' => $type ? "isDisabled" : "",
-                ],
+
             ])
             ->add('structure', HiddenEntityType::class, [
                 'data' => $options['structure'],

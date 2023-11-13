@@ -24,13 +24,11 @@ class ReminderType extends AbstractType
                 'Oui' => true,
                 'Non' => false,
             ],
-            'data' => false,
         ])
 
             ->add('duration', ChoiceType::class, [
                 'label' => 'Durée',
                 'choices' => Reminder::VALUES,
-                'disabled' => true
         ]);
     }
 

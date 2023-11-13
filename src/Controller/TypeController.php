@@ -51,7 +51,7 @@ class TypeController extends AbstractController
     {
         $form = $this->createForm(
             TypeType::class,
-            null,
+            new Type(),
             [
                 'structure' => $this->getUser()->getStructure(),
                 'isNew' => true,
@@ -95,6 +95,7 @@ class TypeController extends AbstractController
         );
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+
             $typeManager->save(
                 $form->getData(),
                 $form->get('associatedActors')->getData(),
