@@ -7,6 +7,7 @@ const reminderDuration = document.querySelector('#sitting_reminder_duration');
 const sittingReminder = document.querySelector('#sitting_reminder');
 
 window.addEventListener('load', function (event) {
+
     if (reminderIsActiveFalse.checked) {
         reminderDuration.setAttribute('disabled', 'disabled');
     }
@@ -16,9 +17,16 @@ window.addEventListener('load', function (event) {
             reminderIsActiveTrue.setAttribute('disabled', 'disabled');
         }
     }
+
+    if (window.location.href.split("/").pop() === 'add') {
+        updateReminder();
+    }
+
+
 });
 
 reminderIsActiveTrue.addEventListener('change', function (event) {
+    console.log('ok');
     if (reminderIsActiveTrue.checked) {
         reminderDuration.removeAttribute('disabled');
     }
@@ -31,23 +39,21 @@ reminderIsActiveFalse.addEventListener('change', function (event) {
 });
 
 
-$("document").ready(function () {
-    let typeId = $('#sitting_type').val();
-    if (!typeId) return;
-    updateReminder(typeId);
-})
-
-
-$('#sitting_type').change(function(event) {
+$('#sitting_type').change(function (event) {
     updateReminder(event.target.value)
 })
 
-function updateReminder(typeId) {
+function updateReminder() {
+    const typeId = $('#sitting_type').val();
     $.get('/type/reminder/' + typeId, function (res) {
-        console.log(res);
-        let $reminderDuration = $('#sitting_reminder_duration');
-        $('#sitting_reminder_isActive').attr('checked', res.isActive);
-        $reminderDuration.attr('disabled', !res.isActive)
-        $reminderDuration.val(res.duration ?? 120);
+        if (res.isActive) {
+            reminderIsActiveTrue.checked = true;
+            reminderDuration.removeAttribute('disabled');
+        } else {
+            reminderIsActiveFalse.checked = true;
+            reminderDuration.setAttribute('disabled', 'disabled');
+        }
+
+        reminderDuration.value = res.duration ?? 120;
     });
 }

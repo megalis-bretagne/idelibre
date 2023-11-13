@@ -20,6 +20,7 @@
                                    id="{{ id ~ '_' ~ loop.index0 }}"
                                    autocomplete="off"
                                    name="{{ full_name }}" value="{{ choice.value }}"
+                                    {% if form.vars['disabled'] %}disabled{% endif %}
                                     {% if choice.attr %}{{ choice.attr }}{% endif %}
                                     {% if choice.value == value %}checked="checked"{% endif %}
                             >
