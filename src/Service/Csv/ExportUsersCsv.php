@@ -22,14 +22,12 @@ class ExportUsersCsv
         $csvPath = '/tmp/' . uniqid('csv_users');
         $writer = Writer::createFromPath($csvPath, 'w+');
 
-        $writer->insertOne($structure->getName()) . " " . date('now', 'd/m/Y');
-
         try {
             $writer->insertOne($this->getHeaders());
         } catch (CannotInsertRecord|Exception $e) {
         }
 
-        $users = $this->userRepository->findByStructure($structure);
+        $users = $this->userRepository->findUsersByStructure($structure);
         foreach ($users as $user) {
             try {
                 $writer->insertOne($this->getUserData($user));
@@ -52,13 +50,20 @@ class ExportUsersCsv
             $user->getFirstName(),
             $user->getUsername(),
             $user->getEmail(),
-            $user->getRoles()->getPrettyName(), # role id => findrolebyId => getPrettyName
-            $user->getParty() ? $user->getParty()->getname() :  "" , # partyId => findPartyById => getName
-            $user->getGroup() ? $user->getGroup()->getName() : "", # groupId => findGroupById => getName
-            $user->getDeputy() ? $user->getDeputy()->getFirstName() . " " . $user->getDeputy()->getLastName() : "",
+            "Admin",
+            "Groupe Politique",
+            "Party",
+            "Deputy",
+//            $user->getRoles()->getPrettyName(),
+//            $user->getParty() ? $user->getParty()->getname() :  "" , # partyId => findPartyById => getName
+//            $user->getGroup() ? $user->getGroup()->getName() : "", # groupId => findGroupById => getName
+//            $user->getDeputy() ? $user->getDeputy()->getFirstName() . " " . $user->getDeputy()->getLastName() : "",
         ];
     }
 
-//    private function findUserRole($user)
+//    private function formatUserRoles($user): string
+//    {
+//        return
+//    }
 
 }

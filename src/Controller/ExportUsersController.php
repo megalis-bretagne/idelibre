@@ -14,16 +14,22 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class ExportUsersController extends AbstractController
 {
-
-    #[Route('/export/pdf/users', name: 'export_pdf_users')]
-    #[IsGranted('ROLE_MANAGE_USERS')]
-    public function export_users(Structure $structure, ExportUsersCsv $exportUsersCsv, FileUtil $fileUtil): Response
+    public function __construct(
+        private readonly ExportUsersCsv $exportUsersCsv,
+        private readonly FileUtil $fileUtil,
+    )
     {
-        dd($structure);
-        $response = new BinaryFileResponse($exportUsersCsv->generate($structure));
+    }
+
+    #[Route('/export/csv/structure/{id}/users', name: 'export_csv_users')]
+    #[IsGranted('ROLE_MANAGE_USERS')]
+    public function exportCsvUsers(Structure $structure): Response
+    {
+        $response = new BinaryFileResponse($this->exportUsersCsv->generate($structure));
         $response->setContentDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            $fileUtil->sanitizeName($structure->getName()) . '_users.csv'
+            'user.csv'
+//            $this->fileUtil->sanitizeName($structure->getName()) . '_users.csv'
         );
         $response->deleteFileAfterSend();
 

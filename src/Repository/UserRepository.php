@@ -556,4 +556,25 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->leftJoin('u.deputy', 'd')
             ->addSelect('d');
     }
+
+    public function findUsersByStructure(Structure $structure): array
+    {
+        $qb = $this->createQueryBuilder('u')
+            ->andWhere('u.structure = :structure')
+            ->setParameter('structure', $structure)
+            ->andWhere('u.isActive = true')
+            ->join('u.role', 'r')
+            ->addSelect('r')
+//            ->join('u.party', 'p')
+//            ->addSelect('p')
+//            ->join('u.group', 'g')
+//            ->addSelect('g')
+            ->orderBy('u.lastName', 'ASC')
+            ->getQuery()
+            ->getResult();
+
+//        dd($qb);
+
+        return $qb;
+    }
 }

@@ -52,7 +52,6 @@ class UserController extends AbstractController
             'users' => $users,
             'formSearch' => $formSearch->createView(),
             'searchTerm' => $request->query->get('search'),
-//            'countDeputiesAvalaible' => $this->userManager->countAvailableDeputies($this->getUser()->getStructure())
         ]);
     }
 
