@@ -15,7 +15,6 @@ class ReminderSittingType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-
         $builder
             ->add('isActive', LsChoiceType::class, [
                 'label' => 'Ajouter au calendrier',
