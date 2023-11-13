@@ -47,9 +47,9 @@
 
                         {{ macros.button_open_modal_delete(
                             sitting.id,
-                            'Suppression de la séance',
+                            'Suppression de la séance ' ~ sitting.name,
                             'sitting_delete',
-                            'Voulez-vous vraiment supprimer cette séance ?',
+                            'Voulez-vous vraiment supprimer la séance ' ~ sitting.name ~ ' ?',
                             sittings.currentPageNumber,
                             'Supprimer la séance'
                         ) }}

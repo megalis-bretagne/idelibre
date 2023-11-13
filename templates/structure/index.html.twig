@@ -69,9 +69,9 @@
                         {% if is_granted('ROLE_SUPERADMIN') %}
                             {{ macros.button_open_modal_delete(
                                 structure.id,
-                                "Suppression de la structure" ~ structure.name,
+                                "Suppression de la structure " ~ structure.name,
                                 "structure_delete",
-                                "Voulez-vous vraiment supprimer la " ~ structure.name ~ " ?
+                                "Voulez-vous vraiment supprimer la structure " ~ structure.name ~ " ?
                                 Cela supprimera la structure et l'ensemble de ce qui lui est lié.",
                                 structures.currentPageNumber,
                                 'Supprimer la structure'
