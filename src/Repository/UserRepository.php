@@ -564,7 +564,10 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->setParameter('structure', $structure)
             ->andWhere('u.isActive = true')
             ->join('u.role', 'r')
-            ->addSelect('r')
+            ->andWhere('r.name !=:superAdmin AND r.name !=:groupAdmin ')
+            ->setParameter('superAdmin', 'SuperAdmin')
+            ->setParameter('groupAdmin', 'GroupAdmin')
+
 //            ->join('u.party', 'p')
 //            ->addSelect('p')
 //            ->join('u.group', 'g')
@@ -574,7 +577,6 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getResult();
 
 //        dd($qb);
-
         return $qb;
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Service\Csv;
 
 
+use App\Repository\RoleRepository;
 use App\Repository\UserRepository;
 use League\Csv\CannotInsertRecord;
 use League\Csv\Exception;
@@ -13,6 +14,7 @@ class ExportUsersCsv
 
     public function __construct(
         private readonly UserRepository $userRepository,
+        private readonly RoleRepository $roleRepository
     )
     {
     }
@@ -27,8 +29,9 @@ class ExportUsersCsv
         } catch (CannotInsertRecord|Exception $e) {
         }
 
-        $users = $this->userRepository->findUsersByStructure($structure);
+        $users = $this->userRepository->findByStructure($structure)->getQuery()->getResult();
         foreach ($users as $user) {
+
             try {
                 $writer->insertOne($this->getUserData($user));
             } catch (CannotInsertRecord|Exception $e) {
@@ -45,25 +48,28 @@ class ExportUsersCsv
 
     private function getUserData($user)
     {
+
+
+
         return [
             $user->getLastName(),
             $user->getFirstName(),
             $user->getUsername(),
             $user->getEmail(),
-            "Admin",
+            $this->formatUserRoles($user),
             "Groupe Politique",
             "Party",
             "Deputy",
-//            $user->getRoles()->getPrettyName(),
+//            $this->formatUserRoles($user->getRoles()),
 //            $user->getParty() ? $user->getParty()->getname() :  "" , # partyId => findPartyById => getName
 //            $user->getGroup() ? $user->getGroup()->getName() : "", # groupId => findGroupById => getName
 //            $user->getDeputy() ? $user->getDeputy()->getFirstName() . " " . $user->getDeputy()->getLastName() : "",
         ];
     }
 
-//    private function formatUserRoles($user): string
-//    {
-//        return
-//    }
+    private function formatUserRoles($user): string
+    {
+
+    }
 
 }
