@@ -105,7 +105,7 @@ class SittingType extends AbstractType
                 ])],
             ])
 
-            ->add('reminder', ReminderSittingType::class,[
+            ->add('reminder', ReminderSittingType::class, [
                 'label' => false,
                 'row_attr' => ["class" => $sitting ? "isDisabled" : ""],
 

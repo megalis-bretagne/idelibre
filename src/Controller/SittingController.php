@@ -35,7 +35,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Breadcrumb(title: 'Séances', routeName: 'sitting_index')]
 class SittingController extends AbstractController
 {
-
     public function __construct(
         private readonly ConvocationManager $convocationManager,
         private readonly SittingManager $sittingManager,
@@ -43,8 +42,7 @@ class SittingController extends AbstractController
         private LsvoteConnectorManager $lsvoteConnectorManager,
         private SidebarState $sidebarState,
         private readonly FileGenerator $fileGenerator,
-    )
-    {
+    ) {
     }
 
     #[Route(path: '/sitting', name: 'sitting_index')]

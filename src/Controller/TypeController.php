@@ -95,7 +95,6 @@ class TypeController extends AbstractController
         );
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
             $typeManager->save(
                 $form->getData(),
                 $form->get('associatedActors')->getData(),
@@ -111,7 +110,7 @@ class TypeController extends AbstractController
 
         return $this->render('type/edit.html.twig', [
             'form' => $form->createView(),
-            'title' => 'Modification du type '.$type->getName(),
+            'title' => 'Modification du type ' . $type->getName(),
         ]);
     }
 

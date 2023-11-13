@@ -20,7 +20,7 @@ class LsChoiceType extends AbstractType
         $resolver->setDefaults([
             'multiple' => false,
             'expended' => false,
-            'placeholder'=> false,
+            'placeholder' => false,
         ]);
     }
 

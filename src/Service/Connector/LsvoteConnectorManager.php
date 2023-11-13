@@ -138,7 +138,7 @@ class LsvoteConnectorManager
                 ->setIdentifier($user->getId())
                 ->setFirstName($user->getFirstName())
                 ->setLastName($user->getLastName())
-                ->setAttendance($convocation->getAttendance() ? $convocation->getAttendance() : "" )
+                ->setAttendance($convocation->getAttendance() ? $convocation->getAttendance() : "")
             ;
 
             if ($convocation->getUser()->getRoles() === Role::NAME_ROLE_DEPUTY) {

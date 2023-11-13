@@ -118,5 +118,4 @@ class EmailTemplateType extends AbstractType
     {
         return $emailTemplate && EmailTemplate::CATEGORY_RECAPITULATIF === $emailTemplate->getCategory();
     }
-
 }

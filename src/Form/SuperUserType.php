@@ -76,7 +76,7 @@ class SuperUserType extends AbstractType
                     'Oui' => true,
                     'Non' => false,
                 ],
-                'data'=> !$user || $user->getIsActive()
+                'data' => !$user || $user->getIsActive()
             ]);
         }
     }

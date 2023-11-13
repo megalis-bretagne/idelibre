@@ -13,7 +13,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ReminderSittingType extends AbstractType
 {
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -29,7 +28,6 @@ class ReminderSittingType extends AbstractType
             'label' => 'Durée',
             'choices' => Reminder::VALUES,
         ]);
-
     }
 
     public function configureOptions(OptionsResolver $resolver)

@@ -78,7 +78,7 @@ class EmailTemplateController extends AbstractController
         return $this->render('email_template/edit.html.twig', [
             'email_template' => $emailTemplate,
             'form' => $form->createView(),
-            'title' => 'Modification du modèle d\'email '.$emailTemplate->getName(),
+            'title' => 'Modification du modèle d\'email ' . $emailTemplate->getName(),
         ]);
     }
 

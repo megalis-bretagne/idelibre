@@ -18,7 +18,6 @@ class ConfigurationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-
         /** @var Structure $structure */
         $structure = $options['structure'];
 

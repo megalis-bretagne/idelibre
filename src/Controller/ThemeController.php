@@ -70,7 +70,7 @@ class ThemeController extends AbstractController
 
         return $this->render('theme/edit.html.twig', [
             'form' => $form->createView(),
-            'title' => 'Modification du thème '.$theme->getName(),
+            'title' => 'Modification du thème ' . $theme->getName(),
         ]);
     }
 
