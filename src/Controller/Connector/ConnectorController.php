@@ -13,7 +13,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Sidebar(active: ['configurations-nav', 'connector-configuration-nav'])]
-#[Breadcrumb(title: 'Configuration des connecteurs')]
+#[Breadcrumb(title: 'Configurations', routeName: 'configuration_index')]
+#[Breadcrumb(title: 'Configuration des connecteurs', routeName: 'connector_index')]
 class ConnectorController extends AbstractController
 {
     #[Route(path: '/connector', name: 'connector_index')]

@@ -35,7 +35,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Breadcrumb(title: 'Séances', routeName: 'sitting_index')]
 class SittingController extends AbstractController
 {
-
     public function __construct(
         private readonly ConvocationManager $convocationManager,
         private readonly SittingManager $sittingManager,
@@ -43,8 +42,7 @@ class SittingController extends AbstractController
         private LsvoteConnectorManager $lsvoteConnectorManager,
         private SidebarState $sidebarState,
         private readonly FileGenerator $fileGenerator,
-    )
-    {
+    ) {
     }
 
     #[Route(path: '/sitting', name: 'sitting_index')]
@@ -113,7 +111,7 @@ class SittingController extends AbstractController
     #[Route(path: '/sitting/edit/{id}/actors', name: 'edit_sitting_actor', methods: ['GET'])]
     #[IsGranted('ROLE_MANAGE_SITTINGS')]
     #[Sidebar(active: ['sitting-active-nav'])]
-    #[Breadcrumb(title: 'Modifier {sitting.nameWithDate}')]
+    #[Breadcrumb(title: 'Modification des destinataires de la séance {sitting.nameWithDate}')]
     public function editUsers(Sitting $sitting): Response
     {
         if ($sitting->getIsArchived()) {
@@ -122,12 +120,13 @@ class SittingController extends AbstractController
 
         return $this->render('sitting/edit_actors.html.twig', [
             'sitting' => $sitting,
+            'title' => 'Modification des destinataires de la séance ' . $sitting->getNameWithDate(),
         ]);
     }
 
     #[Route(path: '/sitting/edit/{id}/projects', name: 'edit_sitting_project')]
     #[Sidebar(active: ['sitting-active-nav'])]
-    #[Breadcrumb(title: 'Modifier {sitting.nameWithDate}')]
+    #[Breadcrumb(title: 'Modification des projets de la séance {sitting.nameWithDate}')]
     public function editProjects(Sitting $sitting): Response
     {
         if ($sitting->getIsArchived()) {
@@ -136,19 +135,22 @@ class SittingController extends AbstractController
 
         return $this->render('sitting/edit_projects.html.twig', [
             'sitting' => $sitting,
+            'title' => 'Modification des projets de la séance ' . $sitting->getNameWithDate(),
         ]);
     }
 
     #[Route(path: '/sitting/edit/{id}', name: 'edit_sitting_information')]
     #[IsGranted('MANAGE_SITTINGS', subject: 'sitting')]
     #[Sidebar(active: ['sitting-active-nav'])]
-    #[Breadcrumb(title: 'Modifier {sitting.nameWithDate}')]
+    #[Breadcrumb(title: 'Modification des informations de la séance {sitting.nameWithDate}')]
     public function editInformation(Sitting $sitting, Request $request): Response
     {
         if ($sitting->getIsArchived()) {
             throw new InvalidArgumentException('Impossible de modifier une séance archivée');
         }
-        $form = $this->createForm(SittingType::class, $sitting, ['structure' => $this->getUser()->getStructure()]);
+        $form = $this->createForm(SittingType::class, $sitting, [
+            'structure' => $this->getUser()->getStructure(),
+        ]);
         $form->handleRequest($request);
 
         $unreadablePdf = $this->pdfValidator->getListOfUnreadablePdf([
@@ -176,6 +178,7 @@ class SittingController extends AbstractController
         return $this->render('sitting/edit_information.html.twig', [
             'form' => $form->createView(),
             'sitting' => $sitting,
+            'title' => 'Modification des informations de la séance ' . $sitting->getNameWithDate(),
         ]);
     }
 

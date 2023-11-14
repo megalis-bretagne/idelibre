@@ -6,7 +6,7 @@
 {% block pageActions %}
     <div class="row">
         <div class="col-6 pull-left">
-            {{ macros.addButton('sitting_add') }}
+            {{ macros.addButton('sitting_add', 'Ajouter une séance', 'Ajouter une séance') }}
         </div>
 
         <div class="col-6 -pull-right">
@@ -32,7 +32,7 @@
                     <td class="col-7">{{ sitting.name }}</td>
                     <td class="col-3">{{ sitting.date | date('d/m/Y : H:i' , timezone) }}</td>
                     <td class="col-2">
-                        {{ macros.showButton('sitting_show_information', sitting.id) }}
+                        {{ macros.showButton('sitting_show_information', sitting.id, 'Visualiser la séance') }}
 
                         {% if sitting.isArchived == false %}
                             {{ macros.button_open_modal_post(
@@ -41,26 +41,27 @@
                                 'Voulez-vous classer cette séance ?',
                                 'sitting_archive',
                                 'fas fa-book',
-                                'Classer'
+                                'Classer la séance'
                             ) }}
                         {% endif %}
 
                         {{ macros.button_open_modal_delete(
                             sitting.id,
-                            'Suppression de la séance',
+                            'Suppression de la séance ' ~ sitting.name,
                             'sitting_delete',
-                            'Voulez-vous vraiment supprimer cette séance ?',
-                            sittings.currentPageNumber
+                            'Voulez-vous vraiment supprimer la séance ' ~ sitting.name ~ ' ?',
+                            sittings.currentPageNumber,
+                            'Supprimer la séance'
                         ) }}
 
                         {% if sitting.isArchived and is_granted('ROLE_SUPERADMIN') %}
                             {{ macros.button_open_modal_post(
                                 sitting.id,
-                                'Déclassement de la séance',
-                                'Voulez-vous déclasser cette séance ?',
+                                'Déclassement de la séance ' ~ sitting.name,
+                                'Voulez-vous déclasser la séance ' ~ sitting.name ~ ' ?',
                                 'sitting_unarchive',
                                 'fas fa-chart-line',
-                                'Déclasser'
+                                'Déclasser la séance'
                             ) }}
                         {% endif %}
                     </td>

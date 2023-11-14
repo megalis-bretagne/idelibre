@@ -15,6 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Sidebar(active: ['configurations-nav'])]
+#[Breadcrumb(title: 'Configurations', routeName: 'configuration_index')]
 #[Breadcrumb(title: 'Configuration des connecteurs', routeName: 'connector_index')]
 class LsvoteConnectorController extends AbstractController
 {
@@ -25,7 +26,7 @@ class LsvoteConnectorController extends AbstractController
 
     #[Route('/lsvote/connector', name: 'lsvote_connector', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_MANAGE_CONNECTORS')]
-    #[Breadcrumb(title: 'Lsvote')]
+    #[Breadcrumb(title: 'Modification du connecteur Lsvote')]
     public function edit(LsvoteConnectorRepository $lsvoteConnectorRepository, Request $request): Response
     {
         $connector = $lsvoteConnectorRepository->findOneBy(["structure" => $this->getUser()->getStructure()]);

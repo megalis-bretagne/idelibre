@@ -92,6 +92,7 @@ class StructureController extends AbstractController
 
     #[Route(path: '/structure/edit/{id}', name: 'structure_edit')]
     #[IsGranted('MY_GROUP', subject: 'structure')]
+    #[Breadcrumb('Modification de la structure {structure.name}')]
     public function edit(Structure $structure, Request $request, StructureManager $structureManager): Response
     {
         $form = $this->createForm(StructureType::class, $structure);
@@ -106,6 +107,7 @@ class StructureController extends AbstractController
 
         return $this->render('structure/edit.html.twig', [
             'form' => $form->createView(),
+            'title' => 'Modification de la structure ' . $structure->getName(),
         ]);
     }
 

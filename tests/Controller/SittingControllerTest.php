@@ -77,7 +77,7 @@ class SittingControllerTest extends WebTestCase
         $this->loginAsAdminLibriciel();
         $crawler = $this->client->request(Request::METHOD_GET, '/sitting/add');
         $this->assertResponseStatusCodeSame(200);
-        $item = $crawler->filter('html:contains("Ajouter une séance")');
+        $item = $crawler->filter('html:contains("Ajout d\'une séance")');
         $this->assertCount(1, $item);
 
         $filesystem = new FileSystem();
@@ -85,12 +85,13 @@ class SittingControllerTest extends WebTestCase
 
         $fileConvocation = new UploadedFile(__DIR__ . '/../resources/convocation.pdf', 'convocation.pdf', 'application/pdf');
 
-        $form = $crawler->selectButton('Enregistrer')->form();
+        $form = $crawler->selectButton('Ajouter la séance')->form();
 
         $form['sitting[type]'] = $type->getId();
         $form['sitting[date]'] = (new \DateTimeImmutable())->format('Y-m-d H:i');
         $form['sitting[place]'] = 'place';
         $form['sitting[convocationFile]'] = $fileConvocation;
+        $form['sitting[reminder][isActive]'] = 0;
 
         $this->client->submit($form);
 
@@ -98,9 +99,6 @@ class SittingControllerTest extends WebTestCase
 
         $crawler = $this->client->followRedirect();
         $this->assertResponseStatusCodeSame(200);
-
-        $successMsg = $crawler->filter('html:contains("Modifier la séance")');
-        $this->assertCount(1, $successMsg);
 
         $this->assertNotEmpty($this->getOneEntityBy(Sitting::class, ['name' => 'unUsedType']));
     }
@@ -113,7 +111,7 @@ class SittingControllerTest extends WebTestCase
 
         $this->assertResponseStatusCodeSame(200);
 
-        $item = $crawler->filter('html:contains("Modifier la séance")');
+        $item = $crawler->filter('html:contains("Modification des destinataires de la séance ")');
         $this->assertCount(1, $item);
     }
 
@@ -124,7 +122,7 @@ class SittingControllerTest extends WebTestCase
         $crawler = $this->client->request(Request::METHOD_GET, '/sitting/edit/' . $sitting->getId() . '/projects');
         $this->assertResponseStatusCodeSame(200);
 
-        $item = $crawler->filter('html:contains("Modifier la séance")');
+        $item = $crawler->filter('html:contains("Modification des projets de la séance ")');
         $this->assertCount(1, $item);
     }
 
@@ -304,12 +302,14 @@ class SittingControllerTest extends WebTestCase
         $crawler = $this->client->request(Request::METHOD_GET, '/sitting/edit/' . $sitting->getId());
         $this->assertResponseStatusCodeSame(200);
 
-        $item = $crawler->filter('html:contains("Modifier la séance")');
+        $item = $crawler->filter('html:contains("Modification des informations de la séance")');
         $this->assertCount(1, $item);
 
         $form = $crawler->selectButton('Enregistrer')->form();
 
         $form['sitting[place]'] = 'MyUniquePlace';
+        $form['sitting[reminder][isActive]'] = 0;
+
 
         $this->client->submit($form);
 

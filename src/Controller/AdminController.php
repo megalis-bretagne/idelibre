@@ -114,7 +114,7 @@ class AdminController extends AbstractController
 
     #[Route(path: '/admin/edit/{id}', name: 'admin_edit')]
     #[IsGranted('MY_GROUP', subject: 'user')]
-    #[Breadcrumb(title: 'Modifier {user.firstName} {user.lastName}')]
+    #[Breadcrumb(title: 'Modification de l\'administrateur {user.firstName} {user.lastName}')]
     public function edit(User $user, Request $request, UserManager $userManager, RoleManager $roleManager, ParameterBagInterface $bag): Response
     {
         $isAdminGroup = in_array('ROLE_GROUP_ADMIN', $user->getRoles());
@@ -149,6 +149,7 @@ class AdminController extends AbstractController
         return $this->render('admin/edit.html.twig', [
             'form' => $form->createView(),
             'user' => $user,
+            'title' => 'Modification de l\'administrateur ' . $user->getFirstName() . ' ' . $user->getLastName()
         ]);
     }
 

@@ -79,12 +79,13 @@ class TypeControllerTest extends WebTestCase
         $this->loginAsAdminLibriciel();
         $crawler = $this->client->request(Request::METHOD_GET, '/type/add');
         $this->assertResponseStatusCodeSame(200);
-        $item = $crawler->filter('html:contains("Ajouter un Type de séance")');
+        $item = $crawler->filter('html:contains("Ajout d\'un Type de séance")');
         $this->assertCount(1, $item);
 
-        $form = $crawler->selectButton('Enregistrer')->form();
+        $form = $crawler->selectButton('Ajouter le type')->form();
 
         $form['type[name]'] = 'New type';
+        $form['type[reminder][isActive]'] = "1";
 
         $this->client->submit($form);
 
@@ -117,15 +118,16 @@ class TypeControllerTest extends WebTestCase
         $this->loginAsAdminLibriciel();
         $crawler = $this->client->request(Request::METHOD_GET, '/type/add');
         $this->assertResponseStatusCodeSame(200);
-        $item = $crawler->filter('html:contains("Ajouter un Type de séance")');
+        $item = $crawler->filter('html:contains("Ajout d\'un Type de séance")');
         $this->assertCount(1, $item);
 
-        $form = $crawler->selectButton('Enregistrer')->form();
+        $form = $crawler->selectButton('Ajouter le type')->form();
 
         $form['type[name]'] = 'New type';
         $form['type[associatedActors]'] = $actorLs->getId();
         $form['type[associatedEmployees]'] = $employeeLs->getId();
         $form['type[associatedGuests]'] = $guestLs->getId();
+        $form['type[reminder][isActive]'] = "1";
 
         $this->client->submit($form);
 
@@ -151,13 +153,14 @@ class TypeControllerTest extends WebTestCase
 
         $crawler = $this->client->request(Request::METHOD_GET, '/type/edit/' . $type->getId());
         $this->assertResponseStatusCodeSame(200);
-        $item = $crawler->filter('html:contains("Modifier un type de séance")');
+        $item = $crawler->filter('html:contains("Modification du type")');
         $this->assertCount(1, $item);
 
         $form = $crawler->selectButton('Enregistrer')->form();
 
         $form['type[name]'] = 'new name';
         $form['type[associatedActors]'] = $notAssociatedActor->getId();
+        $form['type[reminder][isActive]'] = 0;
 
         $this->client->submit($form);
 

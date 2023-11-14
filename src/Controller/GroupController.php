@@ -92,15 +92,16 @@ class GroupController extends AbstractController
 
         return $this->render('group/manage.html.twig', [
             'form' => $form->createView(),
+            'title' => $group->getName(),
         ]);
     }
 
     #[Route(path: '/group/edit/{id}', name: 'group_edit')]
     #[IsGranted('ROLE_SUPERADMIN')]
-    #[Breadcrumb(title: 'Modifier {group.name}')]
+    #[Breadcrumb(title: 'Modification du groupe {group.name}')]
     public function edit(Group $group, Request $request, GroupManager $groupManager): Response
     {
-        $form = $this->createForm(GroupType::class, $group);
+        $form = $this->createForm(GroupType::class, $group, []);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $groupManager->save($form->getData());
@@ -111,6 +112,7 @@ class GroupController extends AbstractController
 
         return $this->render('group/edit.html.twig', [
             'form' => $form->createView(),
+            'title' => 'Modification du groupe ' . $group->getName(),
         ]);
     }
 

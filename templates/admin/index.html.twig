@@ -7,13 +7,13 @@
     <div class="row">
         <div class="col-6 pull-left">
             {% if is_granted('ROLE_SUPERADMIN') %}
-                {{ macros.addButton('admin_add') }}
+                {{ macros.addButton('admin_add', 'Ajouter un administrateur', 'Ajouter un administrateur') }}
             {% endif %}
 
             {{ macros.addButton(
                 'admin_goup_add',
-                'Ajouter un admin de groupe',
-                'Ajouter un admin de groupe',
+                'Ajouter un administrateur de groupe',
+                'Ajouter un administrateur de groupe',
                 'btn-outline-primary'
             ) }}
         </div>
@@ -65,15 +65,16 @@
                             ) }}
                         {% endif %}
 
-                        {{ macros.editButton('admin_edit', user.id) }}
+                        {{ macros.editButton('admin_edit', user.id, 'Modifier l\'administrateur') }}
 
                         {% if (app.user != user) %}
                             {{ macros.button_open_modal_delete(
                                 user.id,
-                                'Suppression d\'administrateur',
+                                'Suppression de l\'administrateur ' ~ user.lastName ~ ' ' ~ user.firstName,
                                 'admin_delete',
-                                'Voulez-vous vraiment supprimer cet administrateur ?',
-                                users.currentPageNumber
+                                'Voulez-vous vraiment supprimer l\'administrateur ' ~ user.lastName ~ ' '~ user.firstName ~ ' ?',
+                                users.currentPageNumber,
+                                'Supprimer l\'administrateur'
                             ) }}
                         {% endif %}
                     </td>

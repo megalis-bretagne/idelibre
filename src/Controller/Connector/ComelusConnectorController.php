@@ -16,12 +16,13 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Sidebar(active: ['configurations-nav'])]
+#[Breadcrumb(title: 'Configurations', routeName: 'configuration_index')]
 #[Breadcrumb(title: 'Configuration des connecteurs', routeName: 'connector_index')]
 class ComelusConnectorController extends AbstractController
 {
     #[Route(path: '/connector/comelus', name: 'comelus_connector')]
     #[IsGranted('ROLE_MANAGE_CONNECTORS')]
-    #[Breadcrumb(title: 'Comelus')]
+    #[Breadcrumb(title: 'Modification du connecteur Comelus')]
     public function edit(ComelusConnectorRepository $comelusConnectorRepository, ComelusConnectorManager $comelusConnectorManager, Request $request): Response
     {
         $connector = $comelusConnectorRepository->findOneBy(['structure' => $this->getUser()->getStructure()]);

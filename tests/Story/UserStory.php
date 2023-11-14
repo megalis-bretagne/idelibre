@@ -34,6 +34,7 @@ final class UserStory extends Story
             'lastName' => 'libriciel',
             'structure' => StructureStory::libriciel(),
             'role' => RoleStory::admin(),
+
         ]));
 
         $this->addState('userMontpellier', UserFactory::new([

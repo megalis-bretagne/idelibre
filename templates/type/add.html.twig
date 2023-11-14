@@ -1,7 +1,7 @@
 {% extends 'form.html.twig' %}
 {% import 'macro/_forms.html.twig' as macro %}
 
-{% block pageTitle 'Ajouter un Type de séance' %}
+{% block pageTitle 'Ajout d\'un Type de séance' %}
 
 
 {% block pageActions %}
@@ -62,7 +62,7 @@
 
     {{ form_widget(form) }}
     <div class="float-end">
-        {% block pageSaveReturn %}{{ macro.save('type_index') }}{% endblock %}
+        {% block pageSaveReturn %}{{ macro.save('type_index', {}, 'Ajouter le type', 'fa fa-plus-circle') }}{% endblock %}
     </div>
     {{ form_end(form) }}
 

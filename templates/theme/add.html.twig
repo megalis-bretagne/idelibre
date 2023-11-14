@@ -1,12 +1,12 @@
 {% extends 'form.html.twig' %}
 {% import 'macro/_forms.html.twig' as macro %}
 
-{% block pageTitle 'Ajouter un thème' %}
+{% block pageTitle 'Ajout d\'un thème' %}
 
 {% block pageActions %}
     {{ macro.backButton('theme_index') }}
 {% endblock %}
 
 {% block pageSaveReturn %}
-    {{ macro.save('theme_index') }}
+    {{ macro.save('theme_index', {}, 'Ajouter le thème', 'fa fa-plus-circle') }}
 {% endblock %}

@@ -1,14 +1,14 @@
 {% extends 'form.html.twig' %}
 {% import 'macro/_forms.html.twig' as macro %}
 
-{% block pageTitle 'Ajouter une structure' %}
+{% block pageTitle 'Ajout  d\'une structure' %}
 
 {% block pageActions %}
     {{ macro.backButton('structure_index') }}
 {% endblock %}
 
 {% block pageSaveReturn %}
-    {{ macro.save('structure_index') }}
+    {{ macro.save('structure_index', {}, 'Ajouter la structure', 'fa fa-plus circle') }}
 {% endblock %}
 
 {% block javascripts %}

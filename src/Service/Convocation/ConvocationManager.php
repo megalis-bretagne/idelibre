@@ -361,7 +361,7 @@ class ConvocationManager
         $count = 0;
         foreach ($convocations as $convocation) {
             if ($convocation->getAttendance() === "" || $convocation->getAttendance() === null) {
-                $count ++;
+                $count++;
             }
         }
         return $count;

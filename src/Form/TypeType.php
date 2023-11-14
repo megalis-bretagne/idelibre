@@ -6,6 +6,7 @@ use App\Entity\Structure;
 use App\Entity\Type;
 use App\Entity\User;
 use App\Form\Type\HiddenEntityType;
+use App\Form\Type\LsChoiceType;
 use App\Repository\UserRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -25,6 +26,9 @@ class TypeType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        /** @var Type|null $type */
+        $type = $builder->getData();
+
         $eluAssocie = 'Elus associés';
         $employeeAssocie = 'Personnels administratifs, Administrateurs, Gestionnaires de séance associés';
         $guestAssocie = 'Invités associés';
@@ -48,7 +52,7 @@ class TypeType extends AbstractType
                 'choice_label' => fn (User $user) => $this->formatUserString($user),
                 'multiple' => true,
                 'mapped' => false,
-                'data' => $this->userRepository->getAssociatedActorsWithType($options['data'] ?? null),
+                'data' => $this->userRepository->getAssociatedActorsWithType($type->getId() ? $type : null),
             ])
             ->add('associatedEmployees', EntityType::class, [
                 'placeholder' => 'Sélectionner les personnels administratifs',
@@ -57,7 +61,7 @@ class TypeType extends AbstractType
                 'class' => User::class,
                 'query_builder' => $this->userRepository
                     ->findInvitableEmployeesByStructure($options['structure']),
-                'data' => $this->userRepository->getAssociatedInvitableEmployeesWithType($options['data'] ?? null),
+                'data' => $this->userRepository->getAssociatedInvitableEmployeesWithType($type->getId() ? $type : null),
                 'choice_label' => fn (User $user) => $this->formatUserString($user),
                 'multiple' => true,
                 'mapped' => false,
@@ -69,30 +73,38 @@ class TypeType extends AbstractType
                 'class' => User::class,
                 'query_builder' => $this->userRepository
                     ->findGuestsByStructure($options['structure']),
-                'data' => $this->userRepository->getAssociatedGuestWithType($options['data'] ?? null),
+                'data' => $this->userRepository->getAssociatedGuestWithType($type->getId() ? $type : null),
                 'choice_label' => fn (User $user) => $this->formatUserString($user),
                 'multiple' => true,
                 'mapped' => false,
             ])
-            ->add('isComelus', CheckboxType::class, [
-                'required' => false,
-                'label_attr' => ['class' => 'checkbox-inline checkbox-switch'],
+            ->add('isComelus', LsChoiceType::class, [
                 'label' => 'Envoyer le dossier via comelus',
+                'choices' => [
+                    'Oui' => true,
+                    'Non' => false,
+                ],
             ])
-            ->add('isSms', CheckboxType::class, [
-                'required' => false,
-                'label_attr' => ['class' => 'checkbox-inline checkbox-switch'],
+            ->add('isSms', LsChoiceType::class, [
                 'label' => 'Notifier les élus via sms',
+                'choices' => [
+                    'Oui' => true,
+                    'Non' => false,
+                ],
             ])
-            ->add('isSmsEmployees', CheckboxType::class, [
-                'required' => false,
-                'label_attr' => ['class' => 'checkbox-inline checkbox-switch'],
+            ->add('isSmsEmployees', LsChoiceType::class, [
                 'label' => 'Notifier les personnels administratifs via sms',
+                'choices' => [
+                    'Oui' => true,
+                    'Non' => false,
+                ],
             ])
-            ->add('isSmsGuests', CheckboxType::class, [
-                'required' => false,
-                'label_attr' => ['class' => 'checkbox-inline checkbox-switch'],
+            ->add('isSmsGuests', LsChoiceType::class, [
                 'label' => 'Notifier les invités via sms',
+                'choices' => [
+                    'Oui' => true,
+                    'Non' => false,
+                ],
             ])
             ->add('authorizedSecretaries', EntityType::class, [
                 'placeholder' => 'Sélectionner les gestionnaires de séance autorisés',
@@ -106,6 +118,7 @@ class TypeType extends AbstractType
             ])
             ->add('reminder', ReminderType::class, [
                 'label' => false,
+
             ])
             ->add('structure', HiddenEntityType::class, [
                 'data' => $options['structure'],

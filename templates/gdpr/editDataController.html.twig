@@ -1,12 +1,12 @@
 {% extends 'form.html.twig' %}
 {% import 'macro/_forms.html.twig' as macro %}
 
-{% block pageTitle 'Modifier les informations RGPD du responsable des traitements' %}
+{% block pageTitle 'Modification des informations RGPD du responsable des traitements' %}
 
 {% block pageActions %}
     {{ macro.backButton('sitting_index') }}
 {% endblock %}
 
 {% block pageSaveReturn %}
-    {{ macro.save('sitting_index') }}
+    {{ macro.save('sitting_index', {}, 'Enregister les informations') }}
 {% endblock %}

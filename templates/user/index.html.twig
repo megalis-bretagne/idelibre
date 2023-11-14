@@ -5,13 +5,13 @@
 
 {% block pageActions %}
     <div class="row">
-        <div class="col-7 pull-left">
-            {{ macros.addButton('user_add') }}
+        <div class="col-8 pull-left">
+            {{ macros.addButton('user_add', 'Ajouter un utilisateur', 'Ajouter un utilisateur') }}
 
             {{ macros.addButton(
                 'csv_add_users',
-                'Ajouter via csv',
-                'Ajouter via csv',
+                'Ajouter des utilisateurs via csv',
+                'Ajouter des utilisateurs via csv',
                 'btn-outline-primary'
             ) }}
 
@@ -23,13 +23,13 @@
             ) }}
 
             {{ macros.btnInvalidePasswordWithModal(
-                'Invalidation des mots de passe',
+                'Invalidation des mots de passe de tous les utilisateurs de la structure',
                 'Invalider tous les mots de passe',
                 'invalidate_users_password',
             ) }}
         </div>
 
-        <div class="col-5">
+        <div class="col-4">
             {{ macros.searchForm(formSearch, searchTerm, 'user_index') }}
         </div>
     </div>
@@ -79,24 +79,26 @@
                         {% if (app.user != user) %}
                             {{ macros.btnReloadPasswordWithModal(
                                 user.id,
-                                'Réinitialisation du mot de passe de l\'utilisateur',
+                                "Réinitialisation du mot de passe de l'utilisateur",
                                 'invalidate_user_password',
                                 'Voulez-vous vraiment activer la procédure de réinitialisation du mot de passe de l\'utilisateur ?',
-                                users.currentPageNumber
+                                users.currentPageNumber,
+
                             ) }}
                         {% endif %}
 
-                        {{ macros.editButton('user_edit', user.id) }}
+                        {{ macros.editButton('user_edit', user.id, 'Modifier l\'utilisateur') }}
 
                         {{ macros.button_open_modal_delete(
                             user.id,
-                            'Suppression d\'utilisateur',
+                            'Suppression de l\'utilisateur ' ~ user.lastName ~ ' ' ~ user.firstName,
                             'user_delete',
-                            "Voulez-vous vraiment supprimer cet utilisateur ?
+                            "Voulez-vous vraiment supprimer l\'utilisateur " ~ user.lastName ~ ' ' ~ user.firstName ~ " ?
 
-                            Attention : la suppression d\'un utilisateur entraînera également la suppression de ses données présentes dans les éléments
+                            Attention : la suppression d'un utilisateur entraînera également la suppression de ses données présentes dans les éléments
                             passés auxquels il était lié (anciennes séances, rapports pdf, etc.)",
-                            users.currentPageNumber
+                            users.currentPageNumber,
+                            'Supprimer l\'utilisateur',
                         ) }}
                     </td>
                 </tr>

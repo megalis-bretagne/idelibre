@@ -5,12 +5,12 @@
 
 {% block pageActions %}
     <div class=" pull-left">
-        {{ macros.addButton('theme_add') }}
+        {{ macros.addButton('theme_add', 'Ajouter un thème',  'Ajouter un thème') }}
 
         {{ macros.addButton(
             'csv_add_themes',
-            'Ajouter via csv',
-            'Ajouter via csv',
+            'Ajouter un thème via csv',
+            'Ajouter un thème via csv',
             'btn-outline-primary'
         ) }}
     </div>
@@ -39,13 +39,15 @@
 
                     </td>
                     <td class="col-2">
-                        {{ macros.editButton('theme_edit', theme.id) }}
+                        {{ macros.editButton('theme_edit', theme.id, 'Modifier le thème') }}
                         {{ macros.button_open_modal_delete(
                             theme.id,
-                            'Suppression de thème',
+                            'Suppression du thème ' ~ theme.name,
                             'theme_delete',
-                            'Voulez-vous vraiment supprimer ce thème ? ' ~
-                            'Attention s\'il possède des sous-thèmes ils seront eux aussi supprimés'
+                            'Voulez-vous vraiment supprimer le thème ' ~ theme.name ~ ' ?
+                            Attention s\'il possède des sous-thèmes ils seront eux aussi supprimés',
+                            {},
+                            'Supprimer le thème'
                         ) }}
                     </td>
                 </tr>

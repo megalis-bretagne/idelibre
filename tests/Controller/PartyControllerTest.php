@@ -57,10 +57,10 @@ class PartyControllerTest extends WebTestCase
         $this->loginAsAdminLibriciel();
         $crawler = $this->client->request(Request::METHOD_GET, '/party/add');
         $this->assertResponseStatusCodeSame(200);
-        $item = $crawler->filter('html:contains("Ajouter un groupe politique")');
+        $item = $crawler->filter('html:contains("Ajout d\'un groupe politique")');
         $this->assertCount(1, $item);
 
-        $form = $crawler->selectButton('Enregistrer')->form();
+        $form = $crawler->selectButton('Ajouter le groupe politique')->form();
 
         $form['party[name]'] = 'New party';
         $form['party[actors]'] = [$actor2->getId()];

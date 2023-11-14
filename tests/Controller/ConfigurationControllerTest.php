@@ -40,12 +40,12 @@ class ConfigurationControllerTest extends WebTestCase
         $this->loginAsAdminLibriciel();
         $crawler = $this->client->request(Request::METHOD_GET, '/configuration/edit');
         $this->assertResponseStatusCodeSame(200);
-        $item = $crawler->filter('html:contains("Modifier la configuration de la structure")');
+        $item = $crawler->filter('html:contains("Modification de la configuration de la structure")');
         $this->assertCount(1, $item);
 
         $form = $crawler->selectButton('Enregistrer')->form();
 
-        $form['configuration[isSharedAnnotation]'] = false;
+        $form['configuration[isSharedAnnotation]'] = "0";
         $form['configuration[sittingSuppressionDelay]'] = '6 months';
         $form['configuration[minimumEntropy]'] = '80';
 

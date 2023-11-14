@@ -21,7 +21,7 @@
 
         <div class="mt-3 col-11">
             <div class="d-flex align-items-center">
-                <h1 class="flex-grow-1">Modifier la séance</h1>
+                <h1 class="flex-grow-1">{{ title }}</h1>
                 {{ macroNav.toogleView( path('sitting_show_projects', {'id': sitting.id}) , 'edit') }}
             </div>
 
@@ -32,7 +32,7 @@
         </div>
 
 
-        <div class="col-11 offset-1 mt-4 form-white">
+        <div class="col-11 offset-1 mt-4 px-3 form-white">
             {{ macroTab.editTabs('projects', sitting) }}
 
             <div class="d-flex justify-content-between">
@@ -84,7 +84,7 @@
             </draggable>
 
         </div>
-        <div class="col-11 offset-1 mt-4 form-white">
+        <div class="col-11 offset-1 mt-4 px-3 form-white">
 
             <div class="d-flex justify-content-between">
                 <label class="project-file-btn btn btn-primary" title="Ajouter des projets">
@@ -238,10 +238,10 @@
 
         {# Modale #}
         <div v-if="showModal">
-            <transition name="modal">
+            <div name="modal">
                 <div class="modal-mask">
                     <div class="modal-wrapper">
-                        <div class="modal-dialog" role="document">
+                        <div class="modal-dialog w-50" role="document">
                             <div class="modal-content">
                                 <div class="modal-body text-center">
                                     <div class=" display-2">
@@ -254,7 +254,7 @@
                         </div>
                     </div>
                 </div>
-            </transition>
+            </div>
         </div>
     </div>
 
