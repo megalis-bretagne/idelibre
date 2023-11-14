@@ -7,7 +7,7 @@
     <div class="row">
         <div class="col-6 pull-left">
             {% if isStructureCreator %}
-                {{ macros.addButton('structure_add') }}
+                {{ macros.addButton('structure_add', 'Ajouter une structure', 'Ajouter une structure') }}
             {% endif %}
         </div>
 
@@ -64,16 +64,17 @@
                     </td>
                     <td class="active_column d-none">{{ structure.isActive }}</td>
                     <td class="col-2 actionButton">
-                        {{ macros.editButton('structure_edit', structure.id) }}
+                        {{ macros.editButton('structure_edit', structure.id, 'Modifier la structure') }}
 
                         {% if is_granted('ROLE_SUPERADMIN') %}
                             {{ macros.button_open_modal_delete(
                                 structure.id,
-                                "Confirmer suppression de la structure.",
+                                "Suppression de la structure " ~ structure.name,
                                 "structure_delete",
-                                "Confirmer la suppression de " ~ structure.name ~
-                                ". Cela supprimera la structure et l'ensemble de ce qui lui est lié.",
-                                structures.currentPageNumber
+                                "Voulez-vous vraiment supprimer la structure " ~ structure.name ~ " ?
+                                Cela supprimera la structure et l'ensemble de ce qui lui est lié.",
+                                structures.currentPageNumber,
+                                'Supprimer la structure'
                             ) }}
                         {% endif %}
                     </td>

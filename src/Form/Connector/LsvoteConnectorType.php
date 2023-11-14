@@ -5,6 +5,7 @@ namespace App\Form\Connector;
 use App\Entity\Connector\LsvoteConnector;
 use App\Entity\Structure;
 use App\Form\Type\HiddenEntityType;
+use App\Form\Type\LsChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -25,10 +26,12 @@ class LsvoteConnectorType extends AbstractType
                 "label" => "Clé d'api",
                 "required" => true
             ])
-            ->add('active', CheckboxType::class, [
-                'required' => false,
-                'label_attr' => ['class' => 'checkbox-inline checkbox-switch'],
-                'label' => 'Activer',
+            ->add('active', LsChoiceType::class, [
+                'label' => 'Actif',
+                'choices' => [
+                    "Oui" => true,
+                    "Non" => false,
+                ]
             ])
             ->add("structure", HiddenEntityType::class, [
                 "data" => $options['structure'],

@@ -1,7 +1,7 @@
 {% extends 'form.html.twig' %}
 {% import 'macro/_forms.html.twig' as macro %}
 
-{% block pageTitle 'Ajouter une clé d\'api' %}
+{% block pageTitle 'Ajout d\'une clé d\'api' %}
 
 {% block pageActions %}
     {{ macro.backButton('apiUser_index') }}
@@ -26,7 +26,7 @@
 
     <div class="float-end">
         {% block pageSaveReturn %}
-            {{ macro.save('apiUser_index') }}
+            {{ macro.save('apiUser_index', {}, 'Ajouter la clé d\'api', 'fa fa-plus-circle') }}
         {% endblock %}
     </div>
     {{ form_end(form) }}

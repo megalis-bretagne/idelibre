@@ -44,5 +44,4 @@ class LsvoteSitting
 
         return $this;
     }
-
 }

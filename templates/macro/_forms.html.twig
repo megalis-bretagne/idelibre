@@ -1,18 +1,18 @@
-{% macro save(cancelPath, param = {} ,saveName = 'Enregistrer') %}
-    <a href="{{ path( cancelPath, param ) }}" class="btn btn-link">
+{% macro save(cancelPath, param = {} ,saveName = 'Enregistrer', icon = 'fa fa-save', cancelTitle='Annuler', saveTitle='Ajouter') %}
+    <a href="{{ path( cancelPath, param ) }}" class="btn btn-link" title="{{ cancelTitle }}">
         <span class="fa fa-times"></span>
         Annuler
     </a>
 
-    <button class="btn btn-primary" type="submit">
-        <span class="fa fa-save"></span>
+    <button class="btn btn-primary" type="submit" title="{{ saveName }}">
+        <span class="{{ icon }}"></span>
         {{ saveName }}
     </button>
 {% endmacro %}
 
 {% macro emptyList(elements, text) %}
     {% if elements |length == 0 %}
-        <tr>
+        <tr class="d-flex">
             <td class="col-12 text-center">
                 {{ text }}
             </td>
@@ -20,20 +20,20 @@
     {% endif %}
 {% endmacro %}
 
-{% macro editButton(editPath, id = null) %}
+{% macro editButton(editPath, id = null, title = 'Modifier') %}
     {% if id ==null %}
-        <a href="{{ path(editPath) }}" class="btn btn-outline-primary borderless" title="Modifier">
+        <a href="{{ path(editPath) }}" class="btn btn-outline-primary borderless" title="{{ title }}">
             <span class="fas fa-pen"></span>
         </a>
     {% else %}
-        <a href="{{ path(editPath, {'id': id}) }}" class="btn btn-outline-primary borderless" title="Modifier">
+        <a href="{{ path(editPath, {'id': id}) }}" class="btn btn-outline-primary borderless" title="{{ title }}">
             <span class="fas fa-pen"></span>
         </a>
     {% endif %}
 {% endmacro %}
 
 {% macro backButton(backPath, params = {}) %}
-    <a href="{{ path(backPath, params) }}" class="btn btn-outline-primary">
+    <a href="{{ path(backPath, params) }}" class="btn btn-outline-primary" title="Retour">
         <span class="fa fa-arrow-left"></span>
         Retour
     </a>
@@ -42,22 +42,22 @@
 {% macro searchForm(formSearch, searchTerm, resetPath) %}
     {{ form_start(formSearch, {'method': 'GET'}) }}
 
-    <div class="input-group col-8 float-end pr-0">
+    <div class="input-group col-8 float-right pr-0">
         {{ form_widget(formSearch.search, {'value': searchTerm}) }}
         <div class="input-group-append">
             <a href="{{ path(resetPath) }}" class="btn btn-warning" title="Effacer">
                 <span class="fas fa-times"></span>
             </a>
+            <button class="btn btn-primary" title="Filtrer">
+                <span class="fas fa-search"></span>
+            </button>
         </div>
-        <button class="btn btn-primary" title="Filtrer">
-            <span class="fas fa-search"></span>
-        </button>
     </div>
     {{ form_end(formSearch) }}
 {% endmacro %}
 
-{% macro showButton(showPath, id) %}
-    <a href="{{ path(showPath, {'id': id}) }}" class="btn btn-outline-primary borderless" title="Visualiser">
+{% macro showButton(showPath, id, title="Visualiser") %}
+    <a href="{{ path(showPath, {'id': id}) }}" class="btn btn-outline-primary borderless" title="{{ title }}">
         <span class="fa fa-eye"></span>
     </a>
 {% endmacro %}
@@ -76,41 +76,38 @@
     </a>
 {% endmacro %}
 
-{% macro button_open_modal_delete(id, title, pathAction, content, page = 1) %}
-        <button type="button" class="btn btn-outline-danger borderless" title="Supprimer"
-                data-bs-toggle="modal" data-bs-target="#modalDelete{{ id }}">
-            <span class="fa fa-trash-alt"></span>
-        </button>
+{% macro button_open_modal_delete(id, title, pathAction, content, page = 1, titleAttribut = 'Supprimer') %}
+    <button type="button" class="btn btn-outline-danger borderless" title="{{ titleAttribut }}"
+            data-bs-target="#delete{{ id }}" data-bs-toggle="modal">
+        <span class="fa fa-trash-alt"></span>
+    </button>
 
-        <div class="modal fade" id="modalDelete{{ id }}" tabindex="-1" aria-labelledby="modalDelete" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">
-                            {{ title }}
-                        </h4>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        {{ content | nl2br | raw }}
-                    </div>
+    <div id="delete{{ id }}" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header d-flex align-items-start">
+                    <h4 class="modal-title">
+                        {{ title }}
+                    </h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                </div>
+                <div class="modal-body">
+                    {{ content | nl2br | raw }}
+                </div>
+                <div class="modal-footer">
+                    {{ _self.cancelBtnModal() }}
 
-                    <div class="modal-footer">
-                        {{ _self.cancelBtnModal() }}
-
-                        <form method="post" action="{{ path(pathAction, {id: id, page: page}) }}"
-                              style="display: inline-block">
-                            <input type="hidden" name="_method" value="DELETE">
-                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ id) }}">
-                            <button type="submit" class="btn btn-danger">
-                                <span class="fa fa-trash-alt"></span>
-                                Supprimer
-                            </button>
-                        </form>
-                    </div>
+                    <form method="post" action="{{ path(pathAction, {id: id, page: page}) }}" style="display: inline-block">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ id) }}">
+                        <button type="submit" class="btn btn-danger">
+                            <span class="fa fa-trash-alt"></span>
+                            Supprimer
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
+    </div>
 {%- endmacro -%}
 
 {% macro button_open_modal_post(id, title, content, pathAction, icon = "fa fa-paper-plane", btn_title = "Envoyer",
@@ -123,12 +120,11 @@
     <div id="post{{ id }}" class="modal fade" role="dialog" data-bs-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header d-flex align-items-start">
                     <h4 class="modal-title">
                         {{ title }}
                     </h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                </div>
                 <div class="modal-body">
                     {{ content }}
                 </div>
@@ -158,12 +154,11 @@
     <div id="post{{ id }}" class="modal fade" role="dialog" data-bs-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header align-items-start">
                     <h4 class="modal-title">
                         {{ title }}
                     </h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                </div>
                 <div class="modal-body">
                     {{ content }}
                 </div>
@@ -199,12 +194,11 @@
     <div id="post{{ htmlId }}" class="modal fade" role="dialog" data-bs-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header align-items-start">
                     <h4 class="modal-title">
                         {{ title }}
                     </h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                </div>
                 <div class="modal-body">
                     {{ content }}
                 </div>
@@ -239,12 +233,11 @@
     <div id="post{{ htmlId }}" class="modal fade" role="dialog" data-bs-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header align-items-start">
                     <h4 class="modal-title">
                         {{ title }}
                     </h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                </div>
                 <div class="modal-body">
                     {{ content }}
                 </div>
@@ -265,7 +258,7 @@
 {% endmacro %}
 
 {% macro btnReloadPasswordWithModal(id, title, pathAction, content, page = 1) %}
-    <button type="button" class="btn btn-outline-primary borderless stacked" title="Réinitialisation du mot de passe utilisateur"
+    <button type="button" class="btn btn-outline-primary borderless stacked" title="Réinitialisation du mot de passe de l'utilisateur"
             data-bs-target="#modalReload{{ id }}" data-bs-toggle="modal">
         <span class="fa-passwd-reset fa-stack small">
             <i class="fa fa-sync-alt fa-stack-2x"></i>
@@ -276,10 +269,9 @@
     <div id="modalReload{{ id }}" tabindex="-1" class="modal fade" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header align-items-start">
                     <h4 class="modal-title">{{ title }}</h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                </div>
                 <div class="modal-body">
                     {{ content }}
                 </div>
@@ -304,6 +296,6 @@
 {% macro cancelBtnModal(cancelName = 'Annuler') %}
     <button type="button" class="btn btn-link" data-bs-dismiss="modal">
         <span class="fa fa-times"></span>
-        {{ cancelName }}
+        Annuler
     </button>
 {% endmacro %}

@@ -51,7 +51,7 @@ class LsmessageConnectorControllerTest extends WebTestCase
         $crawler = $this->client->request(Request::METHOD_GET, '/connector/lsmessage');
         $this->assertResponseStatusCodeSame(200);
 
-        $item = $crawler->filter('html:contains("Paramétrer le connecteur Lsmessage")');
+        $item = $crawler->filter('html:contains("Modification du connecteur Lsmessage")');
         $this->assertCount(1, $item);
 
         $form = $crawler->selectButton('Enregistrer')->form();

@@ -67,10 +67,10 @@ class ApiUserControllerTest extends WebTestCase
         $this->loginAsAdminLibriciel();
         $crawler = $this->client->request(Request::METHOD_GET, '/apikey/add');
         $this->assertResponseStatusCodeSame(200);
-        $item = $crawler->filter('html:contains("Ajouter une clé d\'api")');
+        $item = $crawler->filter('html:contains("Ajout d\'une clé d\'api")');
         $this->assertCount(1, $item);
 
-        $form = $crawler->selectButton('Enregistrer')->form();
+        $form = $crawler->selectButton('Ajouter la clé d\'api')->form();
 
         $form['api_user[name]'] = 'New api key';
         $form['api_user[token]'] = 'azerty';
@@ -94,7 +94,7 @@ class ApiUserControllerTest extends WebTestCase
         $userApi = ApiUserStory::apiAdminLibriciel();
         $crawler = $this->client->request(Request::METHOD_GET, '/apikey/edit/' . $userApi->getId());
         $this->assertResponseStatusCodeSame(200);
-        $item = $crawler->filter('html:contains("Modifier une clé d\'api")');
+        $item = $crawler->filter('html:contains("Modification de la clé d\'api ")');
         $this->assertCount(1, $item);
 
         $form = $crawler->selectButton('Enregistrer')->form();

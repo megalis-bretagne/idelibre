@@ -1,7 +1,7 @@
 {% extends 'form.html.twig' %}
 {% import 'macro/_forms.html.twig' as macro %}
 
-{% block pageTitle 'Ajouter un modèle d\'email' %}
+{% block pageTitle 'Ajout d\'un modèle d\'email' %}
 
 {% block pageActions %}
     {{ macro.backButton('email_template_index') }}
@@ -32,7 +32,7 @@
         {{ include('include/_attachment_warning.html.twig', { 'invitation_category' : ' de convocation' }) }}
     </div>
     <div class="float-end">
-        {% block pageSaveReturn %}{{ macro.save('email_template_index') }}{% endblock %}
+        {% block pageSaveReturn %}{{ macro.save('email_template_index', {}, 'Ajouter le modèle d\'email', 'fa fa-plus-circle') }}{% endblock %}
     </div>
     {{ form_end(form) }}
 {% endblock %}

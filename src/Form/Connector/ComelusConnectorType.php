@@ -3,6 +3,7 @@
 namespace App\Form\Connector;
 
 use App\Entity\Connector\ComelusConnector;
+use App\Form\Type\LsChoiceType;
 use App\Service\Connector\ComelusConnectorManager;
 use Libriciel\ComelusApiWrapper\ComelusException;
 use Symfony\Component\Form\AbstractType;
@@ -47,10 +48,12 @@ class ComelusConnectorType extends AbstractType
                     'rows' => 5,
                 ],
             ])
-            ->add('active', CheckboxType::class, [
-                'required' => false,
-                'label_attr' => ['class' => 'checkbox-inline checkbox-switch'],
-                'label' => 'Activer',
+            ->add('active', LsChoiceType::class, [
+                'label' => 'Actif',
+                'choices' => [
+                    "Oui" => true,
+                    "Non" => false,
+                ]
             ])
             ->add('mailingListId', ChoiceType::class, [
                 'required' => true,

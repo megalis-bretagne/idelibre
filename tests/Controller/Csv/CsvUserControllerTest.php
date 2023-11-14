@@ -53,7 +53,7 @@ class CsvUserControllerTest extends WebTestCase
         $item = $crawler->filter('html:contains("Importer des utilisateurs via csv")');
         $this->assertCount(1, $item);
 
-        $form = $crawler->selectButton('Enregistrer')->form();
+        $form = $crawler->selectButton('Importer le csv')->form();
 
         $form['csv[csv]'] = $csvFile;
 
@@ -93,7 +93,7 @@ class CsvUserControllerTest extends WebTestCase
         $item = $crawler->filter('html:contains("Importer des utilisateurs via csv")');
         $this->assertCount(1, $item);
 
-        $form = $crawler->selectButton('Enregistrer')->form();
+        $form = $crawler->selectButton('Importer le csv')->form();
 
         $form['csv[csv]'] = $csvFile;
 
@@ -124,7 +124,7 @@ class CsvUserControllerTest extends WebTestCase
         $item = $crawler->filter('html:contains("Importer des utilisateurs via csv")');
         $this->assertCount(1, $item);
 
-        $form = $crawler->selectButton('Enregistrer')->form();
+        $form = $crawler->selectButton('Importer le csv')->form();
 
         $form['csv[csv]'] = $csvFile;
 
@@ -154,7 +154,7 @@ class CsvUserControllerTest extends WebTestCase
         $item = $crawler->filter('html:contains("Importer des utilisateurs via csv")');
         $this->assertCount(1, $item);
 
-        $form = $crawler->selectButton('Enregistrer')->form();
+        $form = $crawler->selectButton('Importer le csv')->form();
 
         $form['csv[csv]'] = $csvFile;
 
@@ -183,7 +183,7 @@ class CsvUserControllerTest extends WebTestCase
         $item = $crawler->filter('html:contains("Importer des utilisateurs via csv")');
         $this->assertCount(1, $item);
 
-        $form = $crawler->selectButton('Enregistrer')->form();
+        $form = $crawler->selectButton('Importer le csv')->form();
 
         $form['csv[csv]'] = $csvFile;
 

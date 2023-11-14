@@ -19,7 +19,7 @@
     <div class="alert alert-success mt-2 col-11" v-if="messageInfo"> ${messageInfo}</div>
 
     <div class="d-flex align-items-center col-11 mt-3">
-        <h1 class="flex-grow-1">Modifier la séance</h1>
+        <h1 class="flex-grow-1">{{ title }}</h1>
         {{ macroNav.toogleView( path('sitting_show_actors', {'id': sitting.id}) , 'edit') }}
     </div>
 
@@ -33,7 +33,7 @@
 
 
             <div class="row mt-4">
-                <div class="col-11 offset-1 form-white">
+                <div class="col-11 px-3 offset-1 form-white">
                     {{ macroTab.editTabs('actors', sitting) }}
 
                     <h2 class="mt-4">Elus</h2>
@@ -52,7 +52,7 @@
 
 
             <div class="row mt-4">
-                <div class="col-11 offset-1 form-white">
+                <div class="col-11 px-3 offset-1 form-white">
                     <div class="form-group">
                         <label for="actors">Ajouter des élus</label>
                         <v-select
@@ -82,7 +82,7 @@
 
             {% if sitting.invitationFile %}
                 <div class="row mt-4">
-                    <div class="col-11 offset-1 form-white">
+                    <div class="col-11 px-3 offset-1 form-white">
                         <h2 class="mt-4">Personnels administratifs</h2>
                         <div class="row">
                             <div v-for="user in inSittingEmployees" class="col-4">
@@ -184,15 +184,15 @@
                 </div>
             {% endif %}
 
-            <div class="row mt-4">
-                <div class="col-10 offset-1">
+            <div class="row mt-4 justify-content-end">
+                <div class="col-10 offset-1 px-0">
                     <div class="float-end">
 
-                        <button class="btn btn-link" @click="cancel()">
+                        <button class="btn btn-link" @click="cancel()" title="Annuler les modifications">
                             <span class="fa fa-times"></span> Annuler les modifications
                         </button>
 
-                        <button class="btn btn-primary" @click="save()">
+                        <button class="btn btn-primary" @click="save()" title="Enregistrer les modifications">
                             <span class="fa fa-save"></span>
                             Enregistrer les modifications
                         </button>

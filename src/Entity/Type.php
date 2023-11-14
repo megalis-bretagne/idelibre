@@ -59,23 +59,23 @@ class Type
 
     #[Column(type: 'boolean', nullable: true)]
     #[Groups(['sitting', 'type:read', 'type:write'])]
-    private $isSms;
+    private $isSms = false;
 
     #[Column(type: 'boolean', nullable: true)]
     #[Groups(['sitting', 'type:read', 'type:write'])]
-    private $isComelus;
+    private $isComelus = false;
 
     #[Groups(['type:detail', 'type:write'])]
     #[OneToOne(targetEntity: Reminder::class, mappedBy: 'type', cascade: ['persist', 'remove'])]
-    private $reminder;
+    private $reminder = null;
 
     #[Column(type: 'boolean', nullable: true)]
     #[Groups(['sitting', 'type:read', 'type:write'])]
-    private ?bool $isSmsGuests = null;
+    private ?bool $isSmsGuests = false;
 
     #[Column(type: 'boolean', nullable: true)]
     #[Groups(['sitting', 'type:read', 'type:write'])]
-    private ?bool $isSmsEmployees = null;
+    private ?bool $isSmsEmployees = false;
 
     public function __construct()
     {

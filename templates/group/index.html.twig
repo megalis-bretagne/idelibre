@@ -4,7 +4,7 @@
 {% block pageTitle 'Groupes' %}
 
 {% block pageActions %}
-    {{ macros.addButton('group_add') }}
+    {{ macros.addButton('group_add', 'Ajouter un groupe', 'Ajouter un groupe') }}
 {% endblock %}
 
 {% block pageTable %}
@@ -22,18 +22,19 @@
                 <tr class="d-flex">
                     <td class="col-9">{{ group.name }}</td>
                     <td class="col-3">
-                        {{ macros.editButton('group_edit', group.id) }}
+                        {{ macros.editButton('group_edit', group.id, 'Modifier le groupe') }}
                         <a href="{{ path('group_manage', {'id': group.id}) }}" class="btn btn-outline-primary borderless"
-                           title="Configurer">
+                           title="Gérer les structures associées">
                             <span class="fa fa-cog"></span>
                         </a>
 
                         {{ macros.button_open_modal_delete(
                             group.id,
-                            'Suppression de groupe',
+                            'Suppression du groupe ' ~ group.name,
                             'group_delete',
-                            'Voulez-vous vraiment supprimer ce groupe ?',
-                            groups.currentPageNumber
+                            'Voulez-vous vraiment supprimer le groupe ' ~ group.name ~ ' ?',
+                            groups.currentPageNumber,
+                            'Supprimer le groupe'
                         ) }}
                     </td>
                 </tr>

@@ -4,7 +4,7 @@
 {% block pageTitle 'Groupes politiques' %}
 
 {% block pageActions %}
-    {{ macros.addButton('party_add') }}
+    {{ macros.addButton('party_add', 'Ajouter un groupe politique', 'Ajouter un groupe politique') }}
 {% endblock %}
 
 {% block pageTable %}
@@ -24,14 +24,15 @@
                     <td class="col-8">{{ party.name }}</td>
                     <td class="col-2">{{ party.initials }}</td>
                     <td class="col-2">
-                        {{ macros.editButton('party_edit', party.id) }}
+                        {{ macros.editButton('party_edit', party.id, 'Modifier le groupe politique') }}
 
                         {{ macros.button_open_modal_delete(
                             party.id,
-                            'Suppression du groupe politique',
+                            'Suppression du groupe politique ' ~ party.name,
                             'party_delete',
-                            'Voulez-vous vraiment supprimer ce groupe politique ?',
-                            parties.currentPageNumber
+                            'Voulez-vous vraiment supprimer le groupe politique ' ~ party.name ~ ' ?' ,
+                            parties.currentPageNumber,
+                            'supprimer le groupe politique'
                         ) }}
                     </td>
                 </tr>

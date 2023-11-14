@@ -3,6 +3,7 @@
 namespace App\Form\Connector;
 
 use App\Entity\Connector\LsmessageConnector;
+use App\Form\Type\LsChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -44,10 +45,12 @@ class LsmessageConnectorType extends AbstractType
                 ],
                 'constraints' => [new Length(['max' => LsmessageConnector::MAX_CONTENT_LENGTH])],
             ])
-            ->add('active', CheckboxType::class, [
-                'required' => false,
-                'label_attr' => ['class' => 'checkbox-inline checkbox-switch'],
-                'label' => 'Activer',
+            ->add('active', LsChoiceType::class, [
+                'label' => 'Actif',
+                'choices' => [
+                    "Oui" => true,
+                    "Non" => false,
+                ]
             ]);
     }
 

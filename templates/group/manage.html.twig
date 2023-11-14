@@ -1,22 +1,23 @@
 {% extends 'form.html.twig' %}
 {% import 'macro/_forms.html.twig' as macro %}
 
-{% block pageTitle 'Associer des structures' %}
+{% block pageTitle 'Gestion des structures du groupe ' ~ title %}
 
 {% block pageActions %}
     {{ macro.backButton('group_index') }}
 {% endblock %}
 
 {% block pageSaveReturn %}
-    {{ macro.save('group_index') }}
+    {{ macro.save('group_index', {}, 'Ajouter les structures', 'fa fa-plus-circle') }}
 {% endblock %}
 
-{% block bottomPage %}
-    <div class="alert alert-warning">
-        Si la structure est déja associée à un autre groupe elle en sera dissociée.
-    </div>
-{% endblock %}
 
 {% block javascripts %}
+    <script>
+        const structure_textarea = document.getElementById('group_structure_structures');
+        const warning = '<div class="mt-2 alert alert-warning d-flex justify-content-start align-items-md-center"> <i class="mr-2 fa fa-exclamation-triangle"></i> Si la structure est déja associée à un autre groupe elle en sera dissociée.</div>';
+        structure_textarea.insertAdjacentHTML('afterend', warning)
+    </script>
+
     {{ encore_entry_script_tags('enable-select2') }}
 {% endblock %}

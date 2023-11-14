@@ -4,11 +4,11 @@
 {% block pageTitle 'Vérification de la plateforme' %}
 
 {% block pageTable %}
-    <table class="table table-striped bg-white mt-5 col-8 offset-2">
+    <table class="table table-striped bg-white mt-5 col-8 offset-0">
         <tbody>
             <tr class="d-flex">
-                <td class="col-11">Nodejs</td>
-                <td class="col-1">
+                <td class="col-10">Nodejs</td>
+                <td class="col-2 justify-content-center">
                     {% if isNodejs %}
                         <span class="fas fa-check text-success"></span>
                     {% else %}
@@ -18,8 +18,8 @@
             </tr>
 
             <tr class="d-flex">
-                <td class="col-11">Lshorodatage</td>
-                <td class="col-1">
+                <td class="col-10">Lshorodatage</td>
+                <td class="col-2 justify-content-center">
                     {% if isLshorodatage %}
                         <span class="fas fa-check text-success"></span>
                     {% else %}
@@ -37,7 +37,7 @@
                         <input type="email" name="email" id="email" class="form-control" placeholder="email@exemple.org" required>
                     </td>
                     <td class="col-2">
-                        <button class="btn btn-primary" title="Envoyer">
+                        <button class="btn btn-primary" title="Envoyer le mail de vérification">
                             <span class="fa fa-paper-plane"></span>
                             Envoyer
                         </button>
@@ -51,16 +51,16 @@
 
             {% for configKey, configValue in phpConfig %}
                 <tr class="d-flex">
-                    <td class="col-8">{{ configKey }}</td>
-                    <td class="col-4">{{ configValue }}</td>
+                    <td class="col-10">{{ configKey }}</td>
+                    <td class="col-2 justify-content-center">{{ configValue }}</td>
                 </tr>
             {% endfor %}
 
             <tr class="d-flex">
-                <td class="col-8">
+                <td class="col-10">
                     Entropie du mot de passe pour les profils: <br /> Superadmin et Administrateur de groupe
                 </td>
-                <td class="col-4">
+                <td class="col-2 justify-content-center">
                     {% if entropyForUser|default(null) %}
                         {{ entropyForUser }}
                     {% else %}

@@ -69,9 +69,9 @@ class StructureControllerTest extends WebTestCase
         $crawler = $this->client->request(Request::METHOD_GET, '/structure/add');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
-        $this->assertSelectorTextSame('h1', 'Ajouter une structure');
+        $this->assertSelectorTextSame('h1', 'Ajout d\'une structure');
 
-        $form = $crawler->selectButton('Enregistrer')->form();
+        $form = $crawler->selectButton('Ajouter la structure')->form();
 
         $form['structure[name]'] = 'New structure';
         $form['structure[timezone]'] = $timezone->getId();
@@ -107,7 +107,7 @@ class StructureControllerTest extends WebTestCase
         $this->client->request(Request::METHOD_GET, '/structure/add');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
-        $this->assertSelectorTextSame('h1', 'Ajouter une structure');
+        $this->assertSelectorTextSame('h1', 'Ajout d\'une structure');
     }
 
     public function testAddGroupAdminNotStructureCreator()
@@ -131,8 +131,8 @@ class StructureControllerTest extends WebTestCase
         $crawler = $this->client->request(Request::METHOD_GET, '/structure/edit/' . $structure->getId());
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
-        $this->assertSelectorTextSame('h1', 'Modifier une structure');
-
+        $item = $crawler->filter('html:contains("Modification de la structure ")');
+        $this->assertCount(1, $item);
         $form = $crawler->selectButton('Enregistrer')->form();
 
         $form['structure[name]'] = 'New structure name';

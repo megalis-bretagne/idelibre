@@ -7,6 +7,7 @@ use App\Entity\Structure;
 use App\Entity\Type;
 use App\Entity\User;
 use App\Form\Type\HiddenEntityType;
+use App\Form\Type\LsChoiceType;
 use App\Form\Type\LsFileType;
 use App\Repository\TypeRepository;
 use App\Service\role\RoleManager;
@@ -35,6 +36,9 @@ class SittingType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        /** @var Sitting|null $sitting */
+        $sitting = $builder->getData();
+
         $isNew = !isset($options['data']);
         $isAlreadySentConvocation = !$isNew && $this->sittingManager->isAlreadySentConvocation($options['data']);
         $isAlreadySentInvitation = !$isNew && $this->sittingManager->isAlreadySentInvitation($options['data']);
@@ -100,15 +104,26 @@ class SittingType extends AbstractType
                     'mimeTypesMessage' => 'Le fichier doit être un pdf',
                 ])],
             ])
+
             ->add('reminder', ReminderSittingType::class, [
                 'label' => false,
-            ])
-            ->add('isRemoteAllowed', CheckboxType::class, [
-                'required' => false,
-                'label_attr' => ['class' => 'checkbox-inline checkbox-switch'],
+                'disabled' => $isAlreadySentConvocation
+          ])
+
+            ->add('isRemoteAllowed', LsChoiceType::class, [
                 'label' => ($isNew || $isAlreadySentConvocation) ? 'Participation à distance' : 'Autoriser la participation à distance',
-                'disabled' => $isAlreadySentConvocation,
+                'data' => !$sitting || $sitting->getIsRemoteAllowed(),
+                'attr' => [
+                    'class' => $isAlreadySentConvocation || $isAlreadySentInvitation ? 'isDisabled' : '',
+                    'data-infos' => $sitting ? $sitting->getId() : '',
+                ],
+                'choices' => [
+                    'Oui' => true,
+                    'Non' => false,
+                ],
+
             ])
+
             ->add('structure', HiddenEntityType::class, [
                 'data' => $options['structure'],
                 'class_name' => Structure::class,
@@ -121,6 +136,7 @@ class SittingType extends AbstractType
             'data_class' => Sitting::class,
             'structure' => null,
             'user' => null,
+            'sitting' => null
         ]);
     }
 
@@ -160,5 +176,10 @@ class SittingType extends AbstractType
     private function getTimeZone(Structure $structure): string
     {
         return $structure->getTimezone()->getName();
+    }
+
+    public function isRemoteAllowed($sitting): bool
+    {
+        return !$sitting ? false : $sitting->getIsRemoteAllowed();
     }
 }
