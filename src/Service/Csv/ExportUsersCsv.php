@@ -3,73 +3,44 @@
 namespace App\Service\Csv;
 
 
-use App\Repository\RoleRepository;
-use App\Repository\UserRepository;
-use League\Csv\CannotInsertRecord;
-use League\Csv\Exception;
-use League\Csv\Writer;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Filesystem\Filesystem;
 
 class ExportUsersCsv
 {
 
-    public function __construct(
-        private readonly UserRepository $userRepository,
-        private readonly RoleRepository $roleRepository
-    )
+    private function runQuery(string $query)
     {
-    }
+        $psqlCmd = 'psql --dbname=' . getenv('DATABASE_URL') . ' -c ' . '"' . $query . '"';
 
-    public function generate($structure): string
-    {
-        $csvPath = '/tmp/' . uniqid('csv_users');
-        $writer = Writer::createFromPath($csvPath, 'w+');
+        exec($psqlCmd, $out, $resultCode);
 
-        try {
-            $writer->insertOne($this->getHeaders());
-        } catch (CannotInsertRecord|Exception $e) {
+        if (0 != $resultCode) {
+            throw new CsvException('erreur dans le sql : ' . $query);
         }
-
-        $users = $this->userRepository->findByStructure($structure)->getQuery()->getResult();
-        foreach ($users as $user) {
-
-            try {
-                $writer->insertOne($this->getUserData($user));
-            } catch (CannotInsertRecord|Exception $e) {
-            }
-        }
-
-        return $csvPath;
     }
 
-    public function getHeaders(): array
+    public function exportUsers(string $structureId, string $pathDir): void
     {
-        return ['Nom', 'Prénom', 'Username', 'Email', 'Profil', 'Groupe Politique', 'Groupe' ,'Suppléant'];
+        $path = $pathDir . '/user.csv';
+        $query = '\copy (select * from ' . '\"user\"' . " where structure_id ='$structureId') to '$path' delimiter ',' csv HEADER ENCODING 'UTF8';";
+
+        $this->runQuery($query);
     }
 
-    private function getUserData($user)
+    public function execute($structureId): int
     {
+        $fileSystem = new Filesystem();
+
+        $pathDir = '/data/files/export/' . $structureId;
+
+        $fileSystem->remove($pathDir);
+        $fileSystem->mkdir($pathDir);
 
 
+        $this->exportUsers($structureId, $pathDir);
 
-        return [
-            $user->getLastName(),
-            $user->getFirstName(),
-            $user->getUsername(),
-            $user->getEmail(),
-            $this->formatUserRoles($user),
-            "Groupe Politique",
-            "Party",
-            "Deputy",
-//            $this->formatUserRoles($user->getRoles()),
-//            $user->getParty() ? $user->getParty()->getname() :  "" , # partyId => findPartyById => getName
-//            $user->getGroup() ? $user->getGroup()->getName() : "", # groupId => findGroupById => getName
-//            $user->getDeputy() ? $user->getDeputy()->getFirstName() . " " . $user->getDeputy()->getLastName() : "",
-        ];
-    }
-
-    private function formatUserRoles($user): string
-    {
-
+        return Command::SUCCESS;
     }
 
 }
