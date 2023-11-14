@@ -6,6 +6,7 @@ use App\Entity\Type;
 use App\Tests\Factory\UserFactory;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
+use App\Tests\Story\ReminderStory;
 use App\Tests\Story\RoleStory;
 use App\Tests\Story\StructureStory;
 use App\Tests\Story\TypeStory;
@@ -150,6 +151,7 @@ class TypeControllerTest extends WebTestCase
         $this->loginAsAdminLibriciel();
         $type = TypeStory::typeConseilLibriciel();
         $notAssociatedActor = UserStory::actorLibriciel3();
+        ReminderStory::load();
 
         $crawler = $this->client->request(Request::METHOD_GET, '/type/edit/' . $type->getId());
         $this->assertResponseStatusCodeSame(200);
@@ -160,6 +162,7 @@ class TypeControllerTest extends WebTestCase
 
         $form['type[name]'] = 'new name';
         $form['type[associatedActors]'] = $notAssociatedActor->getId();
+
 
 
         $this->client->submit($form);

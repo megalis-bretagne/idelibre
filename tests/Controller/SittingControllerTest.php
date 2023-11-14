@@ -91,6 +91,7 @@ class SittingControllerTest extends WebTestCase
         $form['sitting[date]'] = (new \DateTimeImmutable())->format('Y-m-d H:i');
         $form['sitting[place]'] = 'place';
         $form['sitting[convocationFile]'] = $fileConvocation;
+        $form['sitting[reminder][isActive]'] = "0";
 
         $this->client->submit($form);
 
@@ -295,7 +296,6 @@ class SittingControllerTest extends WebTestCase
         $filesystem = new Filesystem();
         $filesystem->copy(__DIR__ . '/../resources/fichier.pdf', '/tmp/convocation');
         $sitting = SittingStory::sittingConseilLibriciel();
-
 
         $this->loginAsAdminLibriciel();
         $crawler = $this->client->request(Request::METHOD_GET, '/sitting/edit/' . $sitting->getId());

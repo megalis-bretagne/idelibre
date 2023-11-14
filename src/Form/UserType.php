@@ -47,7 +47,7 @@ class UserType extends AbstractType
         $isMySelf = ($this->security->getUser() === $user);
 
         $builder
-            ->add('gender', LsChoiceType::class, [
+            ->add('gender', ChoiceType::class, [
                 'label' => 'Civilité',
                 'choices' => [
                     'Madame' => 1,

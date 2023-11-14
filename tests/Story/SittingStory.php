@@ -17,6 +17,7 @@ final class SittingStory extends Story
             'convocationFile' => FileStory::fileConvocation(),
             'place' => 'Salle du conseil',
             'type' => TypeStory::typeConseilLibriciel(),
+            'reminder' => ReminderStory::reminderConseil(),
         ]));
 
         $this->addState('sittingBureauLibriciel', SittingFactory::new([
