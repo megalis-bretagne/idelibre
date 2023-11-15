@@ -164,6 +164,10 @@ class SittingController extends AbstractController
             return $this->redirectToRoute('sitting_add');
         }
 
+        if (empty($form->get('invitationFile')->getData())) {
+            $sitting->setInvitationFile(null);
+        }
+
         if ($form->isSubmitted() && $form->isValid()) {
             $this->sittingManager->update(
                 $form->getData(),
