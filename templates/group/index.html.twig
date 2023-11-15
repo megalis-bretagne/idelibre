@@ -22,7 +22,15 @@
                 <tr class="d-flex">
                     <td class="col-9">{{ group.name }}</td>
                     <td class="col-3">
-                        {{ macros.editButton('group_edit', group.id, 'Modifier le groupe') }}
+
+                        {% if is_granted('ROLE_SUPERADMIN') %}
+                            <a href="{{ path('export_csv_users_group', {'id': group.id}) }}" title="Exporter les utilisateurs de tout le groupe" class="me-2">
+                                <span class="fa fa-download"></span>
+                            </a>
+                        {% endif %}
+
+
+                        {{ macros.editButton('group_edit', group.id), 'Modifier le groupe' }}
                         <a href="{{ path('group_manage', {'id': group.id}) }}" class="btn btn-outline-primary borderless"
                            title="Gérer les structures associées">
                             <span class="fa fa-cog"></span>

@@ -2,10 +2,15 @@
 
 namespace App\Controller\Csv;
 
+use App\Entity\Group;
 use App\Entity\Structure;
-use App\Service\Csv\CsvException;
+use App\Entity\User;
 use App\Service\Csv\ExportUsersCsv;
+use League\Csv\CannotInsertRecord;
+use League\Csv\Exception;
+use League\Csv\UnavailableStream;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -20,26 +25,39 @@ class ExportUsersController extends AbstractController
     {
     }
 
-    /**
-     * @throws CsvException
-     */
-    #[Route('/export/csv/structure/{id}/users', name: 'export_csv_users', methods: ['GET'])]
-    #[IsGranted('ROLE_MANAGE_USERS')]
-    public function exportCsvUsers(Structure $structure): Response
-    {
 
-        $response = new BinaryFileResponse($this->exportUsersCsv->generate($structure->getId()));
+    /**
+     * @throws UnavailableStream
+     * @throws CannotInsertRecord
+     * @throws Exception
+     */
+    #[Route('/export/csv/structure/users', name: 'export_csv_users', methods: ['GET'])]
+    #[IsGranted('ROLE_MANAGE_USERS')]
+    public function exportCsvUsers(): Response
+    {
+        $structure = $this->getUser()->getStructure();
+        $response = new BinaryFileResponse($this->exportUsersCsv->exportStructureUsers($structure));
         $response->setContentDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            $structure->getName() . '_utilisateurs.csv'
+            $structure->getName() . '.csv'
         );
+
+        $response->deleteFileAfterSend();
+
         return $response;
     }
 
     #[Route('/export/csv/group/{id}/users', name: 'export_csv_users_group', methods: ['GET'])]
-    #[isGranted('ROLE_GROUP_ADMIN')]
-    public function exportCsvUsersFromGroup(): Response
+    #[isGranted('MANAGE_GROUPS', subject: 'group' )]
+    public function exportCsvUsersFromGroup(Group $group): Response
     {
+        $response = new BinaryFileResponse($this->exportUsersCsv->exportGroupUsers($group));
+        $response->setContentDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            $group->getName() . '.zip'
+        );
+
+        $response->deleteFileAfterSend();
 
         return $response;
     }

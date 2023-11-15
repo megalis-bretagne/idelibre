@@ -3,75 +3,108 @@
 namespace App\Service\Csv;
 
 
+use App\Entity\Group;
+use App\Entity\Structure;
 use App\Repository\GroupRepository;
 use App\Repository\StructureRepository;
+use App\Repository\UserRepository;
+use League\Csv\CannotInsertRecord;
+use League\Csv\Exception;
+use League\Csv\UnavailableStream;
+use League\Csv\Writer;
 use Symfony\Component\Filesystem\Filesystem;
+use ZipArchive;
 
 class ExportUsersCsv
 {
 
     public function __construct(
-        private readonly GroupRepository $groupRepository,
-        private readonly StructureRepository $structureRepository,
+        private readonly UserRepository $userRepository,
+        private readonly FileSystem $fileSystem,
     )
     {
     }
 
+
+
     /**
-     * @throws CsvException
+     * @throws UnavailableStream
+     * @throws CannotInsertRecord
+     * @throws Exception
      */
-    public function generate($id): string
+    public function exportStructureUsers(Structure $structure): string
     {
-        $structure = $this->structureRepository->find($id);
-        $group = $this->groupRepository->find($id);
-        if($structure){
-            $this->exportUsers($id);
-            return $this->csvPath($id) . '/user.csv';
+
+        $users = $this->userRepository->findByStructure($structure)->getQuery()->getResult();
+
+        $pathDir = $this->csvPath();
+
+        $csvWriter = Writer::createFromPath($pathDir . '/' . $structure->getName() . '.csv', 'w+');
+
+        $csvWriter->insertOne($this->getHeaders());
+
+        foreach ($users as $user) {
+
+            $csvWriter->insertOne(
+                [
+                    $user->getId(),
+                    $user->getFirstName(),
+                    $user->getLastName(),
+                    $user->getIsActive() ? 'oui' : 'non',
+                    $user->getRole()->getPrettyName(),
+                    $user->getParty()?->getName() ? $user->getParty()->getName() : '',
+                    ]
+            );
         }
-        if($group){
-            $this->exportUsersFromGroup($id);
-            return $this->csvPath($id) . '/user.csv';
-        }
-        throw new CsvException('Aucune information trouvée à exporter');
+
+
+        return $pathDir . '/' .$structure->getName()  . '.csv';
     }
 
-    private function exportUsers(string $structureId): void
+    private function getHeaders(): array
     {
-        $pathDir = $this->csvPath($structureId);
-        $path = $pathDir . '/user.csv';
-        $query = '\copy (SELECT * FROM ' . '\"user\"' . " WHERE structure_id ='$structureId') to '$path' delimiter ',' csv HEADER ENCODING 'UTF8';";
-        $psqlCmd = 'psql --dbname=' . getenv('DATABASE_URL') . ' -c ' . '"' . $query . '"';
-
-        exec($psqlCmd, $out, $resultCode);
-
-        if (0 != $resultCode) {
-            throw new CsvException('erreur dans le sql : ' . $query);
-        }
+        return ['id', 'Prénom', 'Nom', 'est actif' , 'Profil', 'Groupe_Politique'];
     }
 
-    private function exportUsersFromGroup(string $groupId): void
+    public function exportGroupUsers(Group $group): string
     {
-        $pathDir = $this->csvPath($groupId);
-        $path = $pathDir . '/user.csv';
-        #  $query = '\copy (SELECT * FROM ' . '\"user\"' . " WHERE group_id ='$groupId') to '$path' delimiter ',' csv HEADER ENCODING 'UTF8';";
-        #$psqlCmd = 'psql --dbname=' . getenv('DATABASE_URL') . ' -c ' . '"' . $query . '"';
+        $structuresPath = [];
+        foreach ($group->getStructures() as $structure) {
+            $structuresPath[] = $this->exportStructureUsers($structure);
+        }
 
-       # exec($psqlCmd, $out, $resultCode);
+        return $this->genZipAndGetPath($structuresPath);
+    }
 
-//        if (0 != $resultCode) {
-//            throw new CsvException('erreur dans le sql : ' . $query);
-//        }
+    private function genZipAndGetPath(array $structuresPath): string
+    {
+        $zip = new ZipArchive();
+        $zipPath = '/tmp/' . uniqid('zip_report') . '.zip';
+        $zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+
+        foreach ($structuresPath as $structurePath) {
+            $zip->addFile($structurePath);
+        }
+
+        $zip->close();
+
+        foreach ($structuresPath as $structurePath) {
+            $this->fileSystem->remove($structurePath);
+        }
+
+        return $zipPath;
     }
 
 
 
-    public function csvPath($id): string
+    public function csvPath(): string
     {
-        $fileSystem = new Filesystem();
-        if (!$fileSystem->exists('/data/files/files/export/' . $id)){
-            $fileSystem->mkdir('/data/files/files/export/' . $id);
+        $pathFile = '/tmp/export';
+
+        if (!$this->fileSystem->exists($pathFile)){
+            $this->fileSystem->mkdir($pathFile, 0755);
         }
-        return '/data/files/files/export/' . $id;
+        return $pathFile;
     }
 
 }
