@@ -112,6 +112,8 @@ class SittingManager
             $this->createOrReplaceInvitation($uploadedInvitationFile, $sitting);
         }
 
+
+
         $this->em->persist($sitting);
         $this->em->flush();
         $this->messageBus->dispatch(new UpdatedSitting($sitting->getId()));
@@ -234,5 +236,12 @@ class SittingManager
         }
 
         return $total;
+    }
+
+    public function resetInvitationFile(Sitting $sitting): void
+    {
+        $sitting->setInvitationFile(null);
+        $this->em->persist($sitting);
+        $this->em->flush();
     }
 }

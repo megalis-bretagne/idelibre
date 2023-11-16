@@ -24,4 +24,19 @@ $(document).ready(function () {
 
     });
 
+    const invitationGroup = $("label[for='sitting_invitationFile']").parent();
+    const convocationInput = $('#sitting_convocationFile')
+    const trash = $(invitationGroup).children().eq(3).children().eq(0);
+    let sittingId = window.location.pathname.split('/')[3]
+    async function resetInvitation() {
+        const reponse = await fetch(`/sitting/${sittingId}/information/resetInvitation`);
+    }
+    $(trash).click(function () {
+        resetInvitation();
+    })
+
+    if ($(convocationInput).attr('disabled') === 'disabled') {
+        $(trash).remove()
+    }
+
 })

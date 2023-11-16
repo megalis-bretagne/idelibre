@@ -25,11 +25,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpClient\Exception\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use function Composer\Autoload\includeFile;
 
 #[Sidebar(active: ['sitting-nav'])]
 #[Breadcrumb(title: 'Séances', routeName: 'sitting_index')]
@@ -139,6 +141,16 @@ class SittingController extends AbstractController
         ]);
     }
 
+
+
+
+
+
+
+    #################################################################
+    #################################################################
+    ##########                                        ###############
+    #################################################################
     #[Route(path: '/sitting/edit/{id}', name: 'edit_sitting_information')]
     #[IsGranted('MANAGE_SITTINGS', subject: 'sitting')]
     #[Sidebar(active: ['sitting-active-nav'])]
@@ -164,16 +176,13 @@ class SittingController extends AbstractController
             return $this->redirectToRoute('sitting_add');
         }
 
-        if (empty($form->get('invitationFile')->getData())) {
-            $sitting->setInvitationFile(null);
-        }
-
         if ($form->isSubmitted() && $form->isValid()) {
             $this->sittingManager->update(
                 $form->getData(),
                 $form->get('convocationFile')->getData(),
                 $form->get('invitationFile')->getData(),
             );
+
             $this->addFlash('success', 'Modifications enregistrées');
 
             return $this->redirectToRoute('sitting_show_information', ['id' => $sitting->getId()]);
@@ -379,5 +388,14 @@ class SittingController extends AbstractController
         return $this->render('sitting/includes/_list_actors.html.twig', [
             "actors" => $userRepository->findActorsInStructure($this->getUser()->getStructure())->getQuery()->getResult(),
         ]);
+    }
+
+    #[Route('sitting/{id}/information/resetInvitation')]
+    #[IsGranted('MANAGE_SITTINGS', subject: 'sitting')]
+    public function resetInviationFile(Sitting $sitting, Request $request): RedirectResponse
+    {
+        $this->sittingManager->resetInvitationFile($sitting);
+        $referer = $request->headers->get('referer');
+        return $this->redirect($referer);
     }
 }
