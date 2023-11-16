@@ -4,6 +4,11 @@ const reminderDuration = document.querySelector('#type_reminder_duration');
 const typeReminder = document.querySelector('#type_reminder');
 
 window.addEventListener('load', function () {
+
+    if (!reminderIsActiveTrue.checked && !reminderIsActiveFalse.checked) {
+        reminderIsActiveFalse.checked = true;
+    }
+
     if (reminderIsActiveFalse.checked) {
         reminderDuration.setAttribute('disabled', 'disabled');
     }
