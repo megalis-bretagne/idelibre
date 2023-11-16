@@ -5,12 +5,13 @@ namespace App\Tests\Service\Csv;
 use App\Service\Csv\ExportUsersCsv;
 use App\Tests\Story\GroupStory;
 use App\Tests\Story\StructureStory;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
 use function _PHPStan_d5c599c96\RingCentral\Psr7\str;
 
-class ExportUserTest extends WebTestCase
+class ExportUserTest extends KernelTestCase
 {
 
     use ResetDatabase;

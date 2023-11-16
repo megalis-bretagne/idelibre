@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
 
-class ExportCsvUserTest extends WebTestCase
+class ExportCsvUserControllerTest extends WebTestCase
 {
     use ResetDatabase;
     use Factories;
