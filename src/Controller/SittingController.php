@@ -31,7 +31,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use function Composer\Autoload\includeFile;
 
 #[Sidebar(active: ['sitting-nav'])]
 #[Breadcrumb(title: 'Séances', routeName: 'sitting_index')]
@@ -141,16 +140,6 @@ class SittingController extends AbstractController
         ]);
     }
 
-
-
-
-
-
-
-    #################################################################
-    #################################################################
-    ##########                                        ###############
-    #################################################################
     #[Route(path: '/sitting/edit/{id}', name: 'edit_sitting_information')]
     #[IsGranted('MANAGE_SITTINGS', subject: 'sitting')]
     #[Sidebar(active: ['sitting-active-nav'])]
