@@ -25,6 +25,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpClient\Exception\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -381,10 +383,12 @@ class SittingController extends AbstractController
 
     #[Route('sitting/{id}/information/resetInvitation')]
     #[IsGranted('MANAGE_SITTINGS', subject: 'sitting')]
-    public function resetInviationFile(Sitting $sitting, Request $request): RedirectResponse
+    public function resetInviationFile(Sitting $sitting): JsonResponse
     {
+        if ($this->sittingManager->isAlreadySent($sitting)) {
+            throw new BadRequestException();
+        }
         $this->sittingManager->resetInvitationFile($sitting);
-        $referer = $request->headers->get('referer');
-        return $this->redirect($referer);
+        return $this->json(['success' => true]);
     }
 }
