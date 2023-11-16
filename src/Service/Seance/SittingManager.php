@@ -236,7 +236,7 @@ class SittingManager
         return $total;
     }
 
-    public function resetInvitationFile(Sitting $sitting): void
+    public function removeInvitationFile(Sitting $sitting): void
     {
         $sitting->setInvitationFile(null);
         $this->em->persist($sitting);

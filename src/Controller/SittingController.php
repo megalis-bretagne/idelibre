@@ -383,12 +383,12 @@ class SittingController extends AbstractController
 
     #[Route('sitting/{id}/information/resetInvitation')]
     #[IsGranted('MANAGE_SITTINGS', subject: 'sitting')]
-    public function resetInviationFile(Sitting $sitting): JsonResponse
+    public function removeInvitationFile(Sitting $sitting): JsonResponse
     {
         if ($this->sittingManager->isAlreadySent($sitting)) {
             throw new BadRequestException();
         }
-        $this->sittingManager->resetInvitationFile($sitting);
+        $this->sittingManager->removeInvitationFile($sitting);
         return $this->json(['success' => true]);
     }
 }
