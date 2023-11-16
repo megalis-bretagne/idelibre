@@ -5,7 +5,7 @@
 
 {% block pageActions %}
     <div class="row">
-        <div class="col-8 pull-left">
+        <div class="col-12 pull-left">
             {{ macros.addButton('user_add', 'Ajouter un utilisateur', 'Ajouter un utilisateur') }}
 
             {{ macros.addButton(
@@ -27,9 +27,15 @@
                 'Invalider tous les mots de passe',
                 'invalidate_users_password',
             ) }}
+
+
+            <a href="{{ path('export_csv_users') }}" type="button" class="btn btn-outline-primary">
+                <i class="fa fa-download"></i> Exporter les utilisateurs
+            </a>
+
         </div>
 
-        <div class="col-4">
+        <div class="d-flex justify-content-end">
             {{ macros.searchForm(formSearch, searchTerm, 'user_index') }}
         </div>
     </div>

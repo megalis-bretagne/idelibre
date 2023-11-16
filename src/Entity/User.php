@@ -113,8 +113,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $jwtInvalidBefore = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $attendanceOption = null;
 
     #[ORM\OneToOne(inversedBy: 'titular', targetEntity: self::class, cascade: ['persist', 'remove'])]
     #[Groups(['user', 'user:read', 'user:write', 'convocation:read'])]
@@ -411,17 +409,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getAttendanceOption(): ?string
-    {
-        return $this->attendanceOption;
-    }
-
-    public function setAttendanceOption(?string $attendanceOption): self
-    {
-        $this->attendanceOption = $attendanceOption;
-
-        return $this;
-    }
 
     public function getDeputy(): ?self
     {
