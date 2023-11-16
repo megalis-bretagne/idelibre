@@ -5,9 +5,11 @@ namespace App\Controller;
 use App\Entity\Sitting;
 use App\Form\SearchType;
 use App\Form\SittingType;
+use App\Repository\AnnotationRepository;
 use App\Repository\EmailTemplateRepository;
 use App\Repository\OtherdocRepository;
 use App\Repository\ProjectRepository;
+use App\Repository\SittingRepository;
 use App\Repository\UserRepository;
 use App\Service\Connector\LsvoteConnectorManager;
 use App\Service\Connector\LsvoteResultException;
@@ -35,6 +37,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Breadcrumb(title: 'Séances', routeName: 'sitting_index')]
 class SittingController extends AbstractController
 {
+
     public function __construct(
         private readonly ConvocationManager $convocationManager,
         private readonly SittingManager $sittingManager,
@@ -42,6 +45,8 @@ class SittingController extends AbstractController
         private LsvoteConnectorManager $lsvoteConnectorManager,
         private SidebarState $sidebarState,
         private readonly FileGenerator $fileGenerator,
+        private readonly AnnotationRepository $annotationRepository
+
     ) {
     }
 
@@ -307,7 +312,10 @@ class SittingController extends AbstractController
     #[IsGranted('MANAGE_SITTINGS', subject: 'sitting')]
     public function archiveSitting(Sitting $sitting, Request $request): Response
     {
+        $annotations = $this->annotationRepository->findAnnotationBySitting($sitting);
+        dd($annotations);
         $this->sittingManager->archive($sitting);
+
         $this->addFlash('success', 'La séance a été classée');
         $referer = $request->headers->get('referer');
 

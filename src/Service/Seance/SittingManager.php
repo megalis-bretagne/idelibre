@@ -131,6 +131,7 @@ class SittingManager
 
     public function archive(Sitting $sitting): void
     {
+        $this->cleanAnnotations($sitting);
         $sitting->setIsArchived(true);
         $this->convocationManager->deactivate($sitting->getConvocations());
         $this->em->persist($sitting);
@@ -234,5 +235,12 @@ class SittingManager
         }
 
         return $total;
+    }
+
+    private function cleanAnnotations($sitting): void
+    {
+        foreach ($sitting->getAnnotations() as $annotation) {
+            $this->em->remove($annotation);
+        }
     }
 }

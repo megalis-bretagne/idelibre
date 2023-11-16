@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Annotation;
 use App\Entity\Sitting;
 use App\Entity\Structure;
 use App\Entity\Type;
