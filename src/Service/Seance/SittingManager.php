@@ -7,6 +7,7 @@ use App\Entity\Sitting;
 use App\Entity\Structure;
 use App\Entity\User;
 use App\Message\UpdatedSitting;
+use App\Repository\AnnotationRepository;
 use App\Repository\OtherdocRepository;
 use App\Repository\ProjectRepository;
 use App\Repository\SittingRepository;
@@ -32,7 +33,8 @@ class SittingManager
         private SittingRepository $sittingRepository,
         private FileGenerator $fileGenerator,
         private ProjectRepository $projectRepository,
-        private OtherdocRepository $otherdocRepository
+        private OtherdocRepository $otherdocRepository,
+        private AnnotationRepository $annotationRepository,
     ) {
     }
 
@@ -131,6 +133,7 @@ class SittingManager
 
     public function archive(Sitting $sitting): void
     {
+        ;
         $this->cleanAnnotations($sitting);
         $sitting->setIsArchived(true);
         $this->convocationManager->deactivate($sitting->getConvocations());
@@ -239,7 +242,8 @@ class SittingManager
 
     private function cleanAnnotations($sitting): void
     {
-        foreach ($sitting->getAnnotations() as $annotation) {
+        $annotations = $this->annotationRepository->findAnnotationBySitting($sitting);
+        foreach ($annotations as $annotation) {
             $this->em->remove($annotation);
         }
     }

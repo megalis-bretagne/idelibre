@@ -312,8 +312,6 @@ class SittingController extends AbstractController
     #[IsGranted('MANAGE_SITTINGS', subject: 'sitting')]
     public function archiveSitting(Sitting $sitting, Request $request): Response
     {
-        $annotations = $this->annotationRepository->findAnnotationBySitting($sitting);
-        dd($annotations);
         $this->sittingManager->archive($sitting);
 
         $this->addFlash('success', 'La séance a été classée');
