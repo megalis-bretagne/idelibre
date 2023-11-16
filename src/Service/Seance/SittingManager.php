@@ -112,8 +112,6 @@ class SittingManager
             $this->createOrReplaceInvitation($uploadedInvitationFile, $sitting);
         }
 
-
-
         $this->em->persist($sitting);
         $this->em->flush();
         $this->messageBus->dispatch(new UpdatedSitting($sitting->getId()));
