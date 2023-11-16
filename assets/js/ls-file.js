@@ -29,7 +29,7 @@ $(document).ready(function () {
     const trash = $(invitationGroup).children().eq(3).children().eq(0);
     let sittingId = window.location.pathname.split('/')[3]
     async function removeInvitationFile() {
-        await fetch(`/sitting/${sittingId}/information/resetInvitation`);
+        await fetch(`/sitting/${sittingId}/information/removeInvitation`);
     }
     $(trash).click(function () {
         removeInvitationFile();

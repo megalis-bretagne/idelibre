@@ -381,7 +381,7 @@ class SittingController extends AbstractController
         ]);
     }
 
-    #[Route('sitting/{id}/information/resetInvitation')]
+    #[Route('sitting/{id}/information/removeInvitation')]
     #[IsGranted('MANAGE_SITTINGS', subject: 'sitting')]
     public function removeInvitationFile(Sitting $sitting): JsonResponse
     {
