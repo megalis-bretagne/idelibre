@@ -2,7 +2,6 @@
 
 namespace App\Service\Csv;
 
-
 use App\Entity\Group;
 use App\Entity\Structure;
 use App\Repository\GroupRepository;
@@ -17,12 +16,10 @@ use ZipArchive;
 
 class ExportUsersCsv
 {
-
     public function __construct(
         private readonly UserRepository $userRepository,
         private readonly FileSystem $fileSystem,
-    )
-    {
+    ) {
     }
 
 
@@ -34,7 +31,6 @@ class ExportUsersCsv
      */
     public function exportStructureUsers(Structure $structure): string
     {
-
         $users = $this->userRepository->findByStructure($structure)->getQuery()->getResult();
 
         $pathDir = $this->csvPath();
@@ -44,7 +40,6 @@ class ExportUsersCsv
         $csvWriter->insertOne($this->getHeaders());
 
         foreach ($users as $user) {
-
             $csvWriter->insertOne(
                 [
                     $user->getId(),
@@ -58,12 +53,12 @@ class ExportUsersCsv
         }
 
 
-        return $pathDir . '/' .$structure->getName()  . '.csv';
+        return $pathDir . '/' . $structure->getName() . '.csv';
     }
 
     private function getHeaders(): array
     {
-        return ['id', 'Prénom', 'Nom', 'est actif' , 'Profil', 'Groupe_Politique'];
+        return ['id', 'Prénom', 'Nom', 'est actif', 'Profil', 'Groupe_Politique'];
     }
 
     public function exportGroupUsers(Group $group): string
@@ -101,10 +96,9 @@ class ExportUsersCsv
     {
         $pathFile = '/tmp/export';
 
-        if (!$this->fileSystem->exists($pathFile)){
+        if (!$this->fileSystem->exists($pathFile)) {
             $this->fileSystem->mkdir($pathFile, 0755);
         }
         return $pathFile;
     }
-
 }
