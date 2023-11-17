@@ -254,6 +254,5 @@ class SittingManager
         $sitting->setInvitationFile(null);
         $this->em->persist($sitting);
         $this->em->flush();
-
     }
 }

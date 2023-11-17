@@ -21,8 +21,7 @@ class ExportUsersController extends AbstractController
 {
     public function __construct(
         private readonly ExportUsersCsv $exportUsersCsv,
-    )
-    {
+    ) {
     }
 
 
@@ -48,7 +47,7 @@ class ExportUsersController extends AbstractController
     }
 
     #[Route('/export/csv/group/{id}/users', name: 'export_csv_users_group', methods: ['GET'])]
-    #[isGranted('MANAGE_GROUPS', subject: 'group' )]
+    #[isGranted('MANAGE_GROUPS', subject: 'group')]
     public function exportCsvUsersFromGroup(Group $group): Response
     {
         $response = new BinaryFileResponse($this->exportUsersCsv->exportGroupUsers($group));

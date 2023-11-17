@@ -14,11 +14,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class ManageGroupVoter extends Voter
 {
-
-
     public function __construct(private readonly Security $security)
     {
-
     }
 
     protected function supports($attribute, $subject): bool
@@ -36,7 +33,7 @@ class ManageGroupVoter extends Voter
             return false;
         }
 
-        if ($this->security->isGranted('ROLE_SUPERADMIN')){
+        if ($this->security->isGranted('ROLE_SUPERADMIN')) {
             return true;
         }
 
@@ -47,5 +44,4 @@ class ManageGroupVoter extends Voter
     {
         return $loggedInUser->getGroup()->getId() === $group->getId();
     }
-
 }
