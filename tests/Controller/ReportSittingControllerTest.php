@@ -40,26 +40,6 @@ class ReportSittingControllerTest extends WebTestCase
         ConvocationStory::load();
     }
 
-    /**
-     * Problem absolute_url with webpack. Can't access to localhost/build/app.xxx.css
-     * works well in real life.
-     * todo authorize interal conf in snappy for tests cf lsvote
-     */
-    /*
-      public function testPdfReport()
-      {
-          $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);
-          $this->loginAsAdminLibriciel();
-          $this->client->request(Request::METHOD_GET, '/reportSitting/pdf/' . $sitting->getId());
-          $this->assertResponseStatusCodeSame(200);
-
-          $response = $this->client->getResponse();
-          $this->assertTrue($response->headers->has('content-disposition'));
-          $this->assertSame('attachment; filename="Conseil Libriciel_rapport.pdf"', $response->headers->get('content-disposition'));
-          $this->assertSame('application/pdf', $response->headers->get('content-type'));
-          $this->assertGreaterThan(5000, intval($response->headers->get('content-length')));
-      }
-*/
     public function testCsvReport()
     {
         $sitting = $this->getOneSittingBy(['name' => 'Conseil Libriciel']);

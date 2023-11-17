@@ -240,11 +240,19 @@ class SittingManager
         return $total;
     }
 
+
     private function removeAnnotations($sitting): void
     {
         $annotations = $this->annotationRepository->findAnnotationBySitting($sitting);
         foreach ($annotations as $annotation) {
             $this->em->remove($annotation);
         }
+
+    public function removeInvitationFile(Sitting $sitting): void
+    {
+        $sitting->setInvitationFile(null);
+        $this->em->persist($sitting);
+        $this->em->flush();
+
     }
 }
