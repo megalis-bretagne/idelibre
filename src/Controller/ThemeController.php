@@ -20,6 +20,7 @@ class ThemeController extends AbstractController
 {
     public function __construct(
         private readonly ThemeManager $themeManager,
+        private readonly ThemeRepository $themeRepository
     )
     {
     }
@@ -63,7 +64,6 @@ class ThemeController extends AbstractController
     #[Breadcrumb(title: 'Modification du thème {theme.name}')]
     public function edit(Theme $theme, Request $request): Response
     {
-        $this->themeManager->getThemeWithParentAndChild($theme);
 
         $form = $this->createForm(ThemeWithParentType::class, $theme, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);

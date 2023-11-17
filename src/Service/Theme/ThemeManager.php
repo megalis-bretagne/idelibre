@@ -30,18 +30,8 @@ class ThemeManager
         return $theme;
     }
 
-
-    #################################################################################################################
-    #################################################################################################################
-
-
     public function update(Theme $theme): void
     {
-
-        $this->getThemeWithParentAndChild($theme);
-
-
-
         $this->em->persist($theme);
         $this->em->flush();
 
@@ -52,23 +42,6 @@ class ThemeManager
             $this->addFullNameToTheme($subTheme, $this->generateFullName($subTheme));
         }
     }
-
-
-    public function getThemeWithParentAndChild(Theme $theme): void
-    {
-        dd($this->themeRepository->getPossibleTreePositionTheme($theme, $theme->getParent()));
-
-    }
-
-
-
-
-
-
-    #################################################################################################################
-    #################################################################################################################
-
-
 
     public function delete(Theme $theme): void
     {

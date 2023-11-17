@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\QueryBuilder;
 use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
+use Symfony\Bundle\MakerBundle\Str;
 
 /**
  * @method Theme|null find($id, $lockMode = null, $lockVersion = null)
@@ -41,13 +42,17 @@ class ThemeRepository extends NestedTreeRepository
     {
         return $this->findOneBy(['name' => 'ROOT', 'structure' => $structure]);
     }
+     public function getNotChildrenNode(Theme $theme): QueryBuilder
+     {
+         return $this->createQueryBuilder('t')
+             ->andWhere('t.structure =:structure')
+             ->andWhere('t.lft <:rootNodeLft or t.rgt >:rootNodeRgt')
+             ->andWhere('t != :rootNode')
+             ->setParameter('structure', $theme->getStructure())
+             ->setParameter('rootNodeLft', $theme->getLft())
+             ->setParameter('rootNodeRgt', $theme->getRgt())
+             ->setParameter('rootNode', $theme->getRoot())
+             ;
+     }
 
-    public function getPossibleTreePositionTheme(Theme $theme, Theme $parentTheme): array
-    {
-        return $this->createQueryBuilder('theme')
-            ->andWhere('theme.lft = :themeLeft')
-            ->setParameter('themeLvl', $theme->getLvl())
-            ->getQuery()
-            ->getResult();
-    }
 }
