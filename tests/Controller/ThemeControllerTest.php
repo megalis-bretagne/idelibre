@@ -84,19 +84,19 @@ class ThemeControllerTest extends WebTestCase
         $this->assertNotEmpty($this->getOneEntityBy(Theme::class, ['fullName' => 'New Theme']));
     }
 
-    public function testEdit()
+    public function testEditWithParent()
     {
         $this->loginAsAdminLibriciel();
         /** @var $themeFinance Theme */
         $themeFinance = $this->getOneEntityBy(Theme::class, ['name' => 'Finance']);
-        ThemeStory::rootTheme()->object();
+        ThemeStory::rootTheme();
         $crawler = $this->client->request(Request::METHOD_GET, '/theme/edit/' . $themeFinance->getId());
         $this->assertResponseStatusCodeSame(200);
         $item = $crawler->filter('html:contains("Modification du thème")');
         $this->assertCount(1, $item);
 
         $form = $crawler->selectButton('Enregistrer')->form();
-        $form['theme_with_parent[name]'] = 'New Theme';
+        $form['theme_with_parent[name]'] = 'Modified Theme';
         $form['theme_with_parent[parentTheme]'] = ThemeStory::ecoleTheme()->getId();
         $this->client->submit($form);
 
@@ -107,10 +107,12 @@ class ThemeControllerTest extends WebTestCase
         $successMsg = $crawler->filter('html:contains("Votre thème a bien été modifié")');
         $this->assertCount(1, $successMsg);
 
-        $this->assertNotEmpty($this->getOneEntityBy(Theme::class, ['name' => 'New Theme']));
+        $modified = $this->getOneEntityBy(Theme::class, ['name' => 'Modified Theme']);
+        $this->assertNotEmpty($modified);
+        $this->assertSame(ThemeStory::ecoleTheme()->getId(), $modified->getParent()->getId());
     }
 
-    public function testEditWithParentName()
+    public function testEditNoParent()
     {
         $this->loginAsAdminLibriciel();
         /** @var $themeFinance Theme */
@@ -121,7 +123,7 @@ class ThemeControllerTest extends WebTestCase
         $this->assertCount(1, $item);
 
         $form = $crawler->selectButton('Enregistrer')->form();
-        $form['theme_with_parent[name]'] = 'New Theme';
+        $form['theme_with_parent[name]'] = 'Modified theme';
         $this->client->submit($form);
 
         $this->assertTrue($this->client->getResponse()->isRedirect());
@@ -131,7 +133,8 @@ class ThemeControllerTest extends WebTestCase
         $successMsg = $crawler->filter('html:contains("Votre thème a bien été modifié")');
         $this->assertCount(1, $successMsg);
 
-        $this->assertNotEmpty($this->getOneEntityBy(Theme::class, ['name' => 'New Theme']));
+        $modifiedTheme = $this->getOneEntityBy(Theme::class, ['name' => 'Modified theme']);
+        $this->assertNotEmpty($modifiedTheme);
     }
 
     public function testDelete()
