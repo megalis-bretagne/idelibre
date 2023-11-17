@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Theme;
-use App\Form\ThemeType;
 use App\Form\ThemeWithParentType;
 use App\Repository\ThemeRepository;
 use App\Service\Theme\ThemeManager;
