@@ -25,6 +25,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpClient\Exception\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -170,6 +173,7 @@ class SittingController extends AbstractController
                 $form->get('convocationFile')->getData(),
                 $form->get('invitationFile')->getData(),
             );
+
             $this->addFlash('success', 'Modifications enregistrées');
 
             return $this->redirectToRoute('sitting_show_information', ['id' => $sitting->getId()]);
@@ -375,5 +379,16 @@ class SittingController extends AbstractController
         return $this->render('sitting/includes/_list_actors.html.twig', [
             "actors" => $userRepository->findActorsInStructure($this->getUser()->getStructure())->getQuery()->getResult(),
         ]);
+    }
+
+    #[Route('sitting/{id}/information/removeInvitation')]
+    #[IsGranted('MANAGE_SITTINGS', subject: 'sitting')]
+    public function removeInvitationFile(Sitting $sitting): JsonResponse
+    {
+        if ($this->sittingManager->isAlreadySent($sitting)) {
+            throw new BadRequestException();
+        }
+        $this->sittingManager->removeInvitationFile($sitting);
+        return $this->json(['success' => true]);
     }
 }
