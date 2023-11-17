@@ -247,6 +247,7 @@ class SittingManager
         foreach ($annotations as $annotation) {
             $this->em->remove($annotation);
         }
+    }
 
     public function removeInvitationFile(Sitting $sitting): void
     {
