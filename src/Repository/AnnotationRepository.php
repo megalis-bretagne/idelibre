@@ -31,4 +31,3 @@ class AnnotationRepository extends ServiceEntityRepository
             ->getResult();
     }
 }
-
