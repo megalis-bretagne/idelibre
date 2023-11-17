@@ -270,5 +270,4 @@ class UserController extends AbstractController
             "availables" => $this->userRepository->findActorsWithNoAssociation($this->getUser()->getStructure(), [])->getQuery()->getResult(),
         ]);
     }
-
 }

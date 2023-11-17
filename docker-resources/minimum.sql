@@ -50,4 +50,3 @@ values (UUID_GENERATE_V4(), 'Pacific/Noumea');
 INSERT INTO timezone (id, name)
 values (UUID_GENERATE_V4(), 'Indian/Mayotte');
 
-

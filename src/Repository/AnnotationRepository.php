@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Annotation;
+use App\Entity\Sitting;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -17,5 +18,16 @@ class AnnotationRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Annotation::class);
+    }
+
+
+    public function findAnnotationBySitting(Sitting $sitting)
+    {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.sitting =:sitting')
+            ->setParameter('sitting', $sitting)
+            ->orderBy('a.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
     }
 }
