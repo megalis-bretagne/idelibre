@@ -64,7 +64,6 @@ class ThemeController extends AbstractController
     #[Breadcrumb(title: 'Modification du thème {theme.name}')]
     public function edit(Theme $theme, Request $request): Response
     {
-
         $form = $this->createForm(ThemeWithParentType::class, $theme, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
