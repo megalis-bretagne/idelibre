@@ -56,7 +56,7 @@ class ThemeManager
 
     public function getThemeWithParentAndChild(Theme $theme): void
     {
-        dd($this->themeRepository->getParent($theme, $theme->getParent()));
+        dd($this->themeRepository->getPossibleTreePositionTheme($theme, $theme->getParent()));
 
     }
 

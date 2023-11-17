@@ -45,7 +45,7 @@ class ThemeRepository extends NestedTreeRepository
     public function getPossibleTreePositionTheme(Theme $theme, Theme $parentTheme): array
     {
         return $this->createQueryBuilder('theme')
-            ->andWhere('theme.lvl = :themeLvl')
+            ->andWhere('theme.lft = :themeLeft')
             ->setParameter('themeLvl', $theme->getLvl())
             ->getQuery()
             ->getResult();
