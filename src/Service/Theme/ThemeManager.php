@@ -4,22 +4,23 @@ namespace App\Service\Theme;
 
 use App\Entity\Structure;
 use App\Entity\Theme;
+use App\Entity\User;
 use App\Repository\ThemeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 class ThemeManager
 {
     public function __construct(
-        private ThemeRepository $themeRepository,
-        private EntityManagerInterface $em
+        private readonly ThemeRepository $themeRepository,
+        private readonly EntityManagerInterface $em,
     ) {
     }
 
-    public function save(Theme $theme, Structure $structure, ?Theme $parentTheme = null): Theme
+    public function save(Theme $theme, Structure $structure): Theme
     {
         $theme->setStructure($structure);
 
-        $parent = $parentTheme ?? $this->themeRepository->findRootNodeByStructure($structure);
+        $parent = $theme->getParent() ?? $this->themeRepository->findRootNodeByStructure($structure);
 
         $theme->setParent($parent);
         $this->em->persist($theme);
@@ -32,6 +33,9 @@ class ThemeManager
 
     public function update(Theme $theme): void
     {
+
+        $parent = $theme->getParent() ?? $this->themeRepository->findRootNodeByStructure($theme->getStructure());
+        $theme->setParent($parent);
         $this->em->persist($theme);
         $this->em->flush();
 
@@ -81,7 +85,7 @@ class ThemeManager
         return $path;
     }
 
-    private function addFullNameToTheme(Theme $theme, string $fullName)
+    private function addFullNameToTheme(Theme $theme, string $fullName): void
     {
         $theme->setFullName($fullName);
         $this->em->persist($theme);
@@ -113,14 +117,16 @@ class ThemeManager
         return $parentTheme;
     }
 
-    private function findOrCreateTheme(string $themeName, int $level, ?Theme $parentTheme, Structure $structure): Theme
+    private function findOrCreateTheme(string $themeName, int $level, ?Theme $parentTheme,  Structure $structure): Theme
     {
         $theme = $this->themeRepository->findOneBy(['structure' => $structure, 'name' => $themeName, 'lvl' => $level]);
         if ($theme) {
             return $theme;
         }
         $newTheme = (new Theme())->setName($themeName);
+        $newTheme->setParent($parentTheme);
 
-        return $this->save($newTheme, $structure, $parentTheme);
+        return $this->save($newTheme, $structure);
     }
+
 }

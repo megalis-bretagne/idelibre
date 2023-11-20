@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Theme;
-use App\Form\ThemeType;
 use App\Form\ThemeWithParentType;
 use App\Repository\ThemeRepository;
 use App\Service\Theme\ThemeManager;
@@ -19,6 +18,13 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Breadcrumb(title: 'Thèmes', routeName: 'theme_index')]
 class ThemeController extends AbstractController
 {
+    public function __construct(
+        private readonly ThemeManager $themeManager,
+        private readonly ThemeRepository $themeRepository
+    )
+    {
+    }
+
     #[Route(path: '/theme/index', name: 'theme_index')]
     #[IsGranted('ROLE_MANAGE_THEMES')]
     public function index(ThemeRepository $themeRepository): Response
@@ -36,12 +42,12 @@ class ThemeController extends AbstractController
     #[Route(path: '/theme/add', name: 'theme_add')]
     #[IsGranted('ROLE_MANAGE_THEMES')]
     #[Breadcrumb(title: 'Ajouter')]
-    public function add(ThemeManager $themeManager, Request $request): Response
+    public function add(Request $request): Response
     {
         $form = $this->createForm(ThemeWithParentType::class, null, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $themeManager->save($form->getData(), $this->getUser()->getStructure(), $form->get('parentTheme')->getData());
+            $this->themeManager->save($form->getData(), $this->getUser()->getStructure());
 
             $this->addFlash('success', 'Votre thème a bien été ajouté');
 
@@ -56,12 +62,13 @@ class ThemeController extends AbstractController
     #[Route(path: '/theme/edit/{id}', name: 'theme_edit')]
     #[IsGranted('MANAGE_THEMES', subject: 'theme')]
     #[Breadcrumb(title: 'Modification du thème {theme.name}')]
-    public function edit(Theme $theme, ThemeManager $themeManager, Request $request): Response
+    public function edit(Theme $theme, Request $request): Response
     {
-        $form = $this->createForm(ThemeType::class, $theme);
+        $form = $this->createForm(ThemeWithParentType::class, $theme, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $themeManager->update($form->getData());
+
+            $this->themeManager->update($form->getData());
 
             $this->addFlash('success', 'Votre thème a bien été modifié');
 
@@ -76,9 +83,9 @@ class ThemeController extends AbstractController
 
     #[Route(path: '/theme/delete/{id}', name: 'theme_delete', methods: ['DELETE'])]
     #[IsGranted('MANAGE_THEMES', subject: 'theme')]
-    public function delete(Theme $theme, ThemeManager $themeManager): Response
+    public function delete(Theme $theme): Response
     {
-        $themeManager->delete($theme);
+        $this->themeManager->delete($theme);
         $this->addFlash('success', 'Le thème a bien été supprimé');
 
         return $this->redirectToRoute('theme_index');

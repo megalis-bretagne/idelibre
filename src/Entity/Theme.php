@@ -103,7 +103,7 @@ class Theme
         return $this->parent;
     }
 
-    public function setParent(Theme $parent): self
+    public function setParent(?Theme $parent): self
     {
         $this->parent = $parent;
 
