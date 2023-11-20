@@ -64,7 +64,8 @@ class ThemeApiController extends AbstractController
         $theme = $this->denormalizer->denormalize($data, Theme::class, context: $context);
         $theme->setStructure($structure);
         $this->persistenceHelper->validate($theme);
-        $this->themeManager->save($theme, $structure, $theme->getParent());
+
+        $this->themeManager->save($theme, $structure);
 
         return $this->json($theme, status: 201, context: ['groups' => ['theme:read', 'theme:detail']]);
     }

@@ -23,12 +23,12 @@ class ThemeWithParentType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $theme = $builder->getData();
         $builder
             ->add('name', TextType::class, [
                 'label' => 'Intitulé',
             ])
-            ->add('parentTheme', EntityType::class, [
-                'mapped' => false,
+            ->add('parent', EntityType::class, [
                 'label' => 'Sous-thème de',
                 'required' => false,
                 'class' => Theme::class,
@@ -42,7 +42,7 @@ class ThemeWithParentType extends AbstractType
                 },
 
                 'multiple' => false,
-                'query_builder' => $this->themeRepository->findChildrenFromStructure($options['structure']),
+                'query_builder' => $theme ? $this->themeRepository->getNotChildrenNode($theme) :  $this->themeRepository->findChildrenFromStructure($options['structure']),
             ])
             ->add('structure', HiddenEntityType::class, [
                 'data' => $options['structure'],

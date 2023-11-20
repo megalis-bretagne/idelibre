@@ -45,4 +45,10 @@ class ThemeRepositoryTest extends WebTestCase
         $structure = StructureStory::libriciel();
         $this->assertCount(4, $this->themeRepository->findChildrenFromStructure($structure->object())->getQuery()->getResult());
     }
+
+    public function testGetNotChildrenNode()
+    {
+        $theme = ThemeStory::budgetTheme();
+        $this->assertCount(3, $this->themeRepository->getNotChildrenNode($theme->object())->getQuery()->getResult());
+    }
 }
