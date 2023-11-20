@@ -4,14 +4,15 @@ namespace App\Service\Theme;
 
 use App\Entity\Structure;
 use App\Entity\Theme;
+use App\Entity\User;
 use App\Repository\ThemeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 class ThemeManager
 {
     public function __construct(
-        private ThemeRepository $themeRepository,
-        private EntityManagerInterface $em
+        private readonly ThemeRepository $themeRepository,
+        private readonly EntityManagerInterface $em,
     ) {
     }
 
@@ -81,7 +82,7 @@ class ThemeManager
         return $path;
     }
 
-    private function addFullNameToTheme(Theme $theme, string $fullName)
+    private function addFullNameToTheme(Theme $theme, string $fullName): void
     {
         $theme->setFullName($fullName);
         $this->em->persist($theme);
