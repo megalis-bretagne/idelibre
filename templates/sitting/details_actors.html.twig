@@ -182,14 +182,12 @@
                                     <i class="fas fa-laptop-house"></i>
                                 </span>
 
-                            <span v-else-if="convocation.attendance==='deputy'" class="text-success d-flex flex-column" title="Remplacé par son suppléant">
-                                <i class="fas fa-arrow-right"></i>
-                                <i class="fas fa-arrow-left"></i>
+                            <span v-else-if="convocation.attendance==='deputy'" class="text-info d-flex flex-column" title="Remplacé par son suppléant">
+                                <i class="fa fa-arrow-right-arrow-left"></i>
                             </span>
 
-                            <span v-else-if="convocation.attendance==='poa'" class="text-success d-flex flex-column" title="Donne pouvoir par procuration">
-                                <i class="fas fa-arrow-right text-success"></i>
-                                <i class="fas fa-arrow-left text-success"></i>
+                            <span v-else-if="convocation.attendance==='poa'" class="text-info d-flex flex-column" title="Donne pouvoir par procuration">
+                                <i class="fa fa-arrows-left-right"></i>
                             </span>
 
                             <span v-else class="text-danger" title="Absent">
@@ -603,7 +601,7 @@
                                                     ${status.firstName} ${status.lastName}
                                                 </td>
 
-                                                <td class="col-4" id="changeAttendancePresenceGroup">
+                                                <td class="col-5" id="changeAttendancePresenceGroup">
                                                     <select class="select form-control" v-model="status.attendance"
                                                             @change="changeAttendance(status);" >
                                                         <option value="">Sans Réponse</option>
@@ -612,15 +610,15 @@
                                                             <option value="remote">À distance</option>
                                                         {% endif %}
                                                         <option value="absent">Absent</option>
-                                                        <option value="poa">Donne procuration</option>
+                                                        <option value="poa">Donne pouvoir par procuration</option>
                                                         <option v-for="actors in actorConvocations"
                                                                 v-if="status.convocationId === actors.id && actors.user.deputy !== null"
-                                                                value="deputy">Envoi son suppléant
+                                                                value="deputy">Remplacé par son suppléant
                                                         </option>
                                                     </select>
                                                 </td>
 
-                                                <td class="col-4">
+                                                <td class="col-3">
 
                                                     <div v-if="status.attendance==='poa'">
                                                         <select class="select form-control" @change="changeAttendance(status);" v-model="status.mandator" :disabled="status.attendance !== 'poa'">
