@@ -89,7 +89,9 @@ class ThemeControllerTest extends WebTestCase
         $this->loginAsAdminLibriciel();
         /** @var $themeFinance Theme */
         $themeFinance = $this->getOneEntityBy(Theme::class, ['name' => 'Finance']);
-        ThemeStory::rootTheme();
+
+
+
         $crawler = $this->client->request(Request::METHOD_GET, '/theme/edit/' . $themeFinance->getId());
         $this->assertResponseStatusCodeSame(200);
         $item = $crawler->filter('html:contains("Modification du thème")');
@@ -100,6 +102,8 @@ class ThemeControllerTest extends WebTestCase
         $form['theme_with_parent[parentTheme]'] = ThemeStory::ecoleTheme()->getId();
         $this->client->submit($form);
 
+
+
         $this->assertTrue($this->client->getResponse()->isRedirect());
 
         $crawler = $this->client->followRedirect();
@@ -109,6 +113,7 @@ class ThemeControllerTest extends WebTestCase
 
         $modified = $this->getOneEntityBy(Theme::class, ['name' => 'Modified Theme']);
         $this->assertNotEmpty($modified);
+        dd($modified);
         $this->assertSame(ThemeStory::ecoleTheme()->getId(), $modified->getParent()->getId());
     }
 

@@ -33,6 +33,9 @@ class ThemeManager
 
     public function update(Theme $theme): void
     {
+
+        $parent = $theme->getParent() ?? $this->themeRepository->findRootNodeByStructure($theme->getStructure());
+        $theme->setParent($parent);
         $this->em->persist($theme);
         $this->em->flush();
 
