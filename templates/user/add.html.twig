@@ -24,8 +24,8 @@
     </div>
 
     {{ form_help(form.username) }}
-
     {{ form_row(form.email) }}
+    {{ form_row(form.phone) }}
     {{ form_row(form.role) }}
 
     <div id="actor-info" class="d-none">
@@ -34,14 +34,13 @@
         {{ form_row(form.deputy) }}
     </div>
 
-    {{ form_row(form.phone) }}
     {{ form_row(form.isActive) }}
 
     <div id="passwordInitGroup">
         {{ form_row(form.initPassword) }}
     </div>
 
-    <div class="password-group d-none">
+    <div id="passwordGroup" class="d-none">
         {{ form_row(form.plainPassword) }}
     </div>
 

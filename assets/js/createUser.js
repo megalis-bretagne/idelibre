@@ -1,23 +1,37 @@
-const adminRoleId = '17f4b8ba-7a34-4463-9901-88b619a64be3';
-const actorRoleId = '230a1c1d-eaec-4fb7-9ba7-d7ac47dc97bb';
+const adminRoleId = document.querySelector('#user_role').getAttribute('data-roleAdmin');
+const actorRoleId = document.querySelector('#user_role').getAttribute('data-roleActor');
 const roleInput = document.querySelector('#user_role');
-const passwordInitGroup = document.querySelector('#passwordInitGroup');
 const actorInfo = document.querySelector('#actor-info');
+const passwordInitGroup = document.querySelector('#passwordInitGroup');
+const passwordGroup = document.querySelector('#passwordGroup');
+const initPasswordTrue = document.querySelector('#user_initPassword_0');
+const initPasswordFalse = document.querySelector('#user_initPassword_1');
 
-window.onload = () => {
+
+window.addEventListener('load', function () {
+
     if (roleInput.value === adminRoleId) {
+        console.log('admin')
         hidePasswordForAdmin()
         return;
     }
 
     if (roleInput.value === actorRoleId) {
+        console.log('actor')
         showDataForActor()
         return;
     }
 
+    if (!initPasswordFalse.checked && !initPasswordTrue.checked) {
+        initPasswordFalse.checked = true;
+        return;
+    }
+
+    console.log('autre')
     passwordInitGroup.classList.remove('d-none');
     actorInfo.classList.add('d-none');
-}
+});
+
 
 roleInput.addEventListener('change', function () {
 
@@ -37,13 +51,25 @@ roleInput.addEventListener('change', function () {
 
 function hidePasswordForAdmin() {
     passwordInitGroup.classList.add('d-none');
+    passwordGroup.classList.add('d-none');
     actorInfo.classList.add('d-none');
+    initPasswordFalse.checked = true;
+
 }
 
 function showDataForActor() {
     actorInfo.classList.remove('d-none');
     passwordInitGroup.classList.remove('d-none');
+    initPasswordTrue.checked = true;
+    passwordGroup.classList.remove('d-none');
 }
+
+initPasswordTrue.addEventListener('change', function () {
+    passwordGroup.classList.remove('d-none');
+});
+initPasswordFalse.addEventListener('change', function () {
+    passwordGroup.classList.add('d-none');
+} );
 
 
 

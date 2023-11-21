@@ -47,7 +47,7 @@ class UserType extends AbstractType
         $isMySelf = ($this->security->getUser() === $user);
 
         $builder
-            ->add('gender', LsChoiceType::class, [
+            ->add('gender', ChoiceType::class, [
                 'label' => 'Civilité',
                 'choices' => [
                     'Madame' => 1,
@@ -87,6 +87,10 @@ class UserType extends AbstractType
                 'choice_label' => 'prettyName',
                 'query_builder' => $this->roleRepository->findInStructureQueryBuilder(),
                 'placeholder' => 'Sélectionnez une valeur',
+                'attr' =>[
+                    'data-roleAdmin' => $this->roleManager->getAdminRole()->getId(),
+                    'data-roleActor' => $this->roleManager->getActorRole()->getId(),
+                ]
             ]);
         }
 
@@ -108,7 +112,6 @@ class UserType extends AbstractType
                     'row_attr' => ["class" => "d-none", "id" => "deputyGroup"],
                     'class' => User::class,
                     'choice_label' => fn(User $user) => $this->formatName($user),
-//                    'choice_label' => 'lastName',
                     'query_builder' => $this->userRepository->findDeputiesWithNoAssociation($options['structure'], $options['toExclude']),
                     'placeholder' => "--",
                     'required' => false,
@@ -159,8 +162,8 @@ class UserType extends AbstractType
                     'mapped' => false,
                     'label' => 'Voulez vous définir le mot de passe de l\'utilisateur ?',
                     'choices' => [
-                        'Non' => false,
                         'Oui' => true,
+                        'Non' => false,
                     ],
                     'required' => true,
                 ])
