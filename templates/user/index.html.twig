@@ -85,9 +85,9 @@
                         {% if (app.user != user) %}
                             {{ macros.btnReloadPasswordWithModal(
                                 user.id,
-                                "Réinitialisation du mot de passe de l'utilisateur",
+                                "Invalidation du mot de passe de l'utilisateur",
                                 'invalidate_user_password',
-                                'Voulez-vous vraiment activer la procédure de réinitialisation du mot de passe de l\'utilisateur ?',
+                                'En invalidant le mot de passe de l\'utilisateur, cela entrainera la réinitialisation de son mot de passe.',
                                 users.currentPageNumber,
 
                             ) }}

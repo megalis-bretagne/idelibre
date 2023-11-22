@@ -1,28 +1,39 @@
 import $ from 'jquery';
 
-const invalidatePassword = document.querySelector('#invalidatePassword');
-const dataInvalidate = invalidatePassword.dataset.invalidate;
-const cancelBtn = $('#invalidateCancelBtn').children('button.btn-link');
-console.log(cancelBtn);
+const invalidatePassword =$('#invalidatePassword');
+const invalidateSinglePassword = $('#invalidateSinglePassword');
+const dataInvalidate = invalidatePassword.data('invalidate');
+const dataInvalidateSingle = invalidateSinglePassword.data('invalidate');
+const invalidateConfirmBtn = $('#invalidateConfirmBtn');
+const invalidateSingleConfirmBtn = $('#invalidateSingleConfirmBtn');
+const cancelBtn = $('#invalidateCancelBtn');
+const cancelSingleBtn = $('#invalidateSingleCancelBtn');
 
-$("#invalidatePassword").bind("input changes", function() {
-    const value =  $(this).val();
-    console.log(value , dataInvalidate);
 
-    if(value === dataInvalidate) {
-        console.log('ok')
-        $('#invalidateConfirmBtn').removeAttr('disabled');
-        return;
-    }
-    $('#invalidateConfirmBtn').attr('disabled', true);
-});
+confirmInvalidation(invalidatePassword, invalidateConfirmBtn, dataInvalidate);
+confirmInvalidation(invalidateSinglePassword, invalidateSingleConfirmBtn, dataInvalidateSingle);
+clearInput(invalidateConfirmBtn, invalidatePassword);
+clearInput(cancelBtn, invalidatePassword);
+clearInput(invalidateSingleConfirmBtn, invalidateSinglePassword);
+clearInput(cancelSingleBtn, invalidateSinglePassword);
 
-$('#invalidateConfirmBtn').on('click', function () {
-    invalidatePassword.value ="";
-});
+function confirmInvalidation(target, confirmBtn, data) {
+    target.bind("input changes", function() {
+        const value =  $(this).val();
 
-$("#invalidataCancelBtn").on('click', function () {
-    invalidatePassword.value ="";
-});
+        if(value === data) {
+            confirmBtn.removeAttr('disabled');
+            return;
+        }
+        confirmBtn.attr('disabled', true);
+    });
+}
+
+function clearInput(btn, target ) {
+    btn.on('click', function (e) {
+        target.val("");
+    });
+}
+
 
 
