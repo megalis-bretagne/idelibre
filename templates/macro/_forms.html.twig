@@ -237,18 +237,34 @@
                     <h4 class="modal-title">
                         {{ title }}
                     </h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
                 <div class="modal-body">
                     {{ content }}
+
+                    <div class="mt-3  alert alert-soft-warning">
+                        <label for="invalidatePassword" class="form-label">
+                            <i class="fa fa-exclamation-triangle"></i>
+                            Merci de taper le mot INVALIDER afin de confirmer l'invalidation des mots de passe
+                        </label>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" id="invalidatePassword" aria-describedby="basic-addon3" data-invalidate="INVALIDER">
+                        </div>
+                    </div>
+
+
                 </div>
                 <div class="modal-footer">
-                    {{ _self.cancelBtnModal() }}
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal" id="invalidataCancelBtn">
+                        <span class="fa fa-times"></span>
+                        Annuler
+                    </button>
 
                     <form method="post" action="{{ path(pathAction) }}" style="display: inline-block">
                         <input type="hidden" name="_token" value="{{ csrf_token('postForm') }}">
-                        <button type="submit" class="btn btn-danger submit_post">
-                            <span class="fas fa-exclamation-circle"></span>
-                            Invalider
+                        <button type="submit" class="btn btn-danger submit_post" id="invalidateConfirmBtn" disabled>
+                            <span class="fas fa-exclamation-triangle"></span>
+                            Invalider tous les mots de passe
                         </button>
                     </form>
                 </div>
@@ -294,7 +310,7 @@
 {% endmacro %}
 
 {% macro cancelBtnModal(cancelName = 'Annuler') %}
-    <button type="button" class="btn btn-link" data-bs-dismiss="modal">
+    <button type="button" class="btn btn-link" data-bs-dismiss="modal" title="">
         <span class="fa fa-times"></span>
         Annuler
     </button>
