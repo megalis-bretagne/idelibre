@@ -126,9 +126,9 @@ class UserType extends AbstractType
             $builder->add('deputy', EntityType::class, [
                 'label' => 'Suppléant',
                 'class' => User::class,
-                'choice_label' => 'lastName',
+                'choice_label' => fn(User $user) => $this->formatName($user),
                 'query_builder' => $this->userRepository->findDeputiesWithNoAssociation($options['structure'], $options['toExclude']),
-                'data' => $user->getDeputy() ,
+                'data' => $options['data']->getDeputy() ? $options['data']->getDeputy() : null,
 
                 'required' => false,
                 //todo queryBuilder limitant aux deputy disponiblent de la structure.

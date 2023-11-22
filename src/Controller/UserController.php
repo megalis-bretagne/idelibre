@@ -63,7 +63,7 @@ class UserController extends AbstractController
         $form = $this->createForm(UserType::class, new User(), [
             'structure' => $this->getUser()->getStructure(),
             'entropyForUser' => $this->getUser()->getStructure()->getConfiguration()->getMinimumEntropy(),
-            'toExclude' => $userManager->AlreadyTakenDeputies($this->getUser()->getStructure())
+            'toExclude' => $userManager->AlreadyTakenDeputies($this->getUser()->getStructure(), null)
 
         ]);
         $form->handleRequest($request);
@@ -101,7 +101,7 @@ class UserController extends AbstractController
             'structure' => $this->getUser()->getStructure(),
             'entropyForUser' => $this->getUser()->getStructure()->getConfiguration()->getMinimumEntropy(),
             'referer' => $request->headers->get('referer'),
-            'toExclude' => $userManager->AlreadyTakenDeputies($user->getStructure())
+            'toExclude' => $userManager->AlreadyTakenDeputies($user->getStructure(), $user)
         ]);
         $form->handleRequest($request);
 
@@ -235,29 +235,6 @@ class UserController extends AbstractController
         ]);
     }
 
-
-    #[Route('/user/{id}/delete/procuration-deputy/', name: 'sitting_procuration_deputy_delete')]
-    #[IsGranted('ROLE_MANAGE_USERS', subject: 'user')]
-    public function removeProcuration(User $user): Response
-    {
-        $this->userManager->removeProcurationOrDeputy($user);
-        $this->addFlash('success', "L'élu associé a été retiré");
-
-        return $this->redirectToRoute('user_index');
-    }
-
-    #[Route('/user/list/deputies', name: 'user_deputies_list', methods: ['GET'])]
-    #[isGranted('ROLE_MANAGE_SITTINGS')]
-    public function getDeputyList(?User $user): Response
-    {
-        $toExcludes = [];
-
-        $toExcludes = [...$this->userManager->AlreadyTakenDeputies($user)];
-        //        dd($toExcludes);
-        return $this->render('include/user_lists/_user_available_actors.html.twig', [
-            "availables" => $this->userRepository->findDeputiesWithNoAssociation($this->getUser()->getStructure(), $toExcludes)->getQuery()->getResult(),
-        ]);
-    }
 
     #[Route('/user/list/actors', name: 'user_actors_list', methods: ['GET'])]
     #[isGranted('ROLE_MANAGE_SITTINGS')]
