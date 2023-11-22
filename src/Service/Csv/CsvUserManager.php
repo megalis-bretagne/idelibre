@@ -145,7 +145,7 @@ class CsvUserManager
     private function missingRoleViolation($record): ConstraintViolationList
     {
         $violation = new ConstraintViolation(
-            'Il est obligatoire de définir un role parmi les valeurs 1, 2, 3, 4 ou 5.',
+            'Il est obligatoire de définir un role parmi les valeurs 1, 2, 3, 4, 5 ou 6.',
             null,
             $record,
             null,
@@ -184,6 +184,7 @@ class CsvUserManager
             Role::CODE_ROLE_ACTOR => $this->roleManager->getActorRole(),
             Role::CODE_ROLE_EMPLOYEE => $this->roleManager->getEmployeeRole(),
             Role::CODE_ROLE_GUEST => $this->roleManager->getGuestRole(),
+            Role::CODE_ROLE_DEPUTY => $this->roleManager->getDeputyRole(),
             default => null,
         };
     }
