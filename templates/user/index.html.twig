@@ -23,8 +23,8 @@
             ) }}
 
             {{ macros.btnInvalidePasswordWithModal(
-                'Invalidation des mots de passe de tous les utilisateurs de la structure',
-                'Invalider tous les mots de passe',
+                'Invalidation de tout les mots de passe utilisateurs',
+                'En invalidant les mots de passe de tous les utilisateurs, cela entrainera la réinitialisation du mot de passe de chacun d\'entre eux.',
                 'invalidate_users_password',
             ) }}
 
@@ -85,9 +85,9 @@
                         {% if (app.user != user) %}
                             {{ macros.btnReloadPasswordWithModal(
                                 user.id,
-                                "Réinitialisation du mot de passe de l'utilisateur",
+                                "Invalidation du mot de passe de l'utilisateur",
                                 'invalidate_user_password',
-                                'Voulez-vous vraiment activer la procédure de réinitialisation du mot de passe de l\'utilisateur ?',
+                                'En invalidant le mot de passe de l\'utilisateur, cela entrainera la réinitialisation de son mot de passe.',
                                 users.currentPageNumber,
 
                             ) }}
@@ -114,3 +114,7 @@
 {% endblock %}
 
 {% block pagePagination knp_pagination_render(users) %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('invalidatePassword') }}
+{% endblock %}
