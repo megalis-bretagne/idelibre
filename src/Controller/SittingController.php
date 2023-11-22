@@ -5,11 +5,9 @@ namespace App\Controller;
 use App\Entity\Sitting;
 use App\Form\SearchType;
 use App\Form\SittingType;
-use App\Repository\AnnotationRepository;
 use App\Repository\EmailTemplateRepository;
 use App\Repository\OtherdocRepository;
 use App\Repository\ProjectRepository;
-use App\Repository\SittingRepository;
 use App\Repository\UserRepository;
 use App\Service\Connector\LsvoteConnectorManager;
 use App\Service\Connector\LsvoteResultException;
@@ -29,7 +27,6 @@ use Symfony\Component\HttpClient\Exception\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -47,7 +44,6 @@ class SittingController extends AbstractController
         private LsvoteConnectorManager $lsvoteConnectorManager,
         private SidebarState $sidebarState,
         private readonly FileGenerator $fileGenerator,
-        private readonly AnnotationRepository $annotationRepository
     ) {
     }
 
