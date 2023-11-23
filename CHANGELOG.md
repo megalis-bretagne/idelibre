@@ -1,11 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.2.16] - 2023-11-23
 
-## [NEXT_RELEASE] - 2023-XX-XX
+### Evolution
+- Mise à jour symfony 6.3.8
+- Mise à jour des dépendances composer
 
 ### Correction
-- InitializeCertificate utilse maintenant docker compose et plus docker-compose
+- InitializeCertificate utilise maintenant docker compose et plus docker-compose
+- Envoi à comélus ne se fait pas si le zip généré fait plus de 200 mo
 
 ## [4.2.15] - 2023-10-30
 ### Evolution

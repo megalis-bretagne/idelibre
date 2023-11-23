@@ -17,6 +17,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Libriciel\ComelusApiWrapper\ComelusException;
 use Libriciel\ComelusApiWrapper\ComelusWrapper;
 use Nyholm\Psr7\UploadedFile;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class ComelusConnectorManager
@@ -30,7 +31,8 @@ class ComelusConnectorManager
         private readonly ProjectRepository $projectRepository,
         private readonly OtherdocRepository $otherdocRepository,
         private readonly Sanitizer $sanitizer,
-        private readonly FileGenerator $fileGenerator
+        private readonly FileGenerator $fileGenerator,
+        private readonly Filesystem $filesystem
     ) {
     }
 
@@ -125,6 +127,7 @@ class ComelusConnectorManager
 
     /**
      * @return UploadedFile[]
+     * @throws UnsupportedExtensionException
      */
     private function prepareFiles(Sitting $sitting): array
     {
@@ -144,7 +147,9 @@ class ComelusConnectorManager
             }
         }
 
-        $uploadedFiles[] = $this->uploadZipHelper($sitting);
+        if($this->getZipHelper($sitting)) {
+            $uploadedFiles[] = $this->getZipHelper($sitting);
+        }
 
         return $uploadedFiles;
     }
@@ -167,8 +172,14 @@ class ComelusConnectorManager
     /**
      * @throws UnsupportedExtensionException
      */
-    private function uploadZipHelper(Sitting $sitting): UploadedFile
+    private function getZipHelper(Sitting $sitting): ?UploadedFile
     {
-        return new UploadedFile($this->fileGenerator->genFullSittingZip($sitting), 0, 0, 'seance-complete.zip');
+        $zipPath = $this->fileGenerator->genFullSittingDirPath($sitting, 'zip');
+
+        if(!$this-> filesystem->exists($zipPath)) {
+            return null;
+        }
+
+        return new UploadedFile($zipPath, 0, 0, 'seance-complete.zip');
     }
 }
