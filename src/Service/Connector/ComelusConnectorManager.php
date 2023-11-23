@@ -147,7 +147,7 @@ class ComelusConnectorManager
             }
         }
 
-        if($this->getZipHelper($sitting)) {
+        if ($this->getZipHelper($sitting)) {
             $uploadedFiles[] = $this->getZipHelper($sitting);
         }
 
@@ -176,7 +176,7 @@ class ComelusConnectorManager
     {
         $zipPath = $this->fileGenerator->genFullSittingDirPath($sitting, 'zip');
 
-        if(!$this-> filesystem->exists($zipPath)) {
+        if (!$this-> filesystem->exists($zipPath)) {
             return null;
         }
 
