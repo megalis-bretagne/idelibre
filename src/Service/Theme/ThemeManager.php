@@ -31,10 +31,10 @@ class ThemeManager
         return $theme;
     }
 
-    public function update(Theme $theme): void
+    public function update(Theme $theme, ?Theme $parentTheme): void
     {
 
-        $parent = $theme->getParent() ?? $this->themeRepository->findRootNodeByStructure($theme->getStructure());
+        $parent = $parentTheme ?? $this->themeRepository->findRootNodeByStructure($theme->getStructure());
         $theme->setParent($parent);
         $this->em->persist($theme);
         $this->em->flush();
@@ -45,6 +45,7 @@ class ThemeManager
         foreach ($subThemes as $subTheme) {
             $this->addFullNameToTheme($subTheme, $this->generateFullName($subTheme));
         }
+
     }
 
     public function delete(Theme $theme): void

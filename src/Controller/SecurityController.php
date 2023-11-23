@@ -16,6 +16,8 @@ use Doctrine\ORM\EntityNotFoundException;
 use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,12 +27,30 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Contracts\Cache\ItemInterface;
 
 class SecurityController extends AbstractController
 {
     #[Route(path: '/', name: 'app_entrypoint')]
-    public function entryPoint(): Response
+    public function entryPoint(ParameterBagInterface $bag): Response
     {
+//        $cache =   new FilesystemAdapter();
+//
+//
+//
+//        $element = $cache->get('toto', function (ItemInterface $item):string {
+//            $item->expiresAfter(10);
+//            $computedValue = 'foobar';
+//            dump("into the closure");
+//            return $computedValue;
+//        });
+//
+//
+//
+//        dd($element);
+
+        dd($bag->get('vault.test'));
+
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }

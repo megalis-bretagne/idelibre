@@ -1,9 +1,9 @@
 services:
   fpm-idelibre:
     container_name: fpm-idelibre
-#    image: registry.libriciel.fr:443/public/citoyens/idelibre:canary
-#    image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/idelibre/idelibre:4.1
-#    image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/idelibre/idelibre:latest
+    #    image: registry.libriciel.fr:443/public/citoyens/idelibre:canary
+    #    image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/idelibre/idelibre:4.1
+    #    image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/idelibre/idelibre:latest
     build: .
     restart: always
     depends_on:
@@ -28,7 +28,7 @@ services:
       - ./tests:/app/tests
       - ./package-lock.json:/app/package-lock.json
       - ./package.json:/app/package.json
-    command: ["/app/docker-resources/initApp.sh"]
+    command: [ "/app/docker-resources/initApp.sh" ]
     networks:
       - network_idelibre_dev
     labels:
@@ -46,7 +46,7 @@ services:
     image: registry.libriciel.fr:443/public/citoyens/idelibre-node/idelibre-node:4.2.0-rc4
     volumes:
       - /data/files:/data
-#      - ../idelibre4-nodejs:/app:ro
+    #      - ../idelibre4-nodejs:/app:ro
     environment:
       - TYPEORM_CONNECTION=postgres
       - TYPEORM_HOST=${POSTGRES_HOST:-172.17.0.1}
@@ -65,7 +65,7 @@ services:
       - JWT_TIMEOUT=${JWT_TIMEOUT:-86400}
 
     command: [ "/app/docker-resources/init.sh" ]
-#    command: "sleep 3000"
+    #    command: "sleep 3000"
     networks:
       - network_idelibre_dev
 
@@ -116,7 +116,7 @@ services:
       - POSTGRES_PASSWORD=idelibre
       - POSTGRES_PORT=${POSTGRES_PORT:-5432}
       - SITE_HOSTNAME=${URL:-lshorodatage.libriciel.fr}
-    command: ["/app/docker-resources/init.sh"]
+    command: [ "/app/docker-resources/init.sh" ]
     networks:
       - network_idelibre_dev
 
@@ -132,16 +132,56 @@ services:
       - network_idelibre_dev
 
 
-#  ofelia:
-#    image: mcuadros/ofelia:latest
-#    depends_on:
-#      - fpm-idelibre
-#    command: daemon --docker
-#    volumes:
-#      - /var/run/docker.sock:/var/run/docker.sock:ro
+    #  ofelia:
+    #    image: mcuadros/ofelia:latest
+    #    depends_on:
+    #      - fpm-idelibre
+    #    command: daemon --docker
+    #    volumes:
+    #      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+  vault-server:
+   # image: hashicorp/vault
+    build:
+        context: ./docker-resources/vault
+        dockerfile: Dockerfile
+    container_name: vault-server
+    environment:
+      - VAULT_ADDR=http://127.0.0.1:8200
+    ports:
+      - "8200:8200"
+    #restart: always
+    volumes:
+      - /data/docker/vault/logs:/vault/logs
+      - /data/docker/vault/file:/vault/file
+#      - /data/docker/vault/config:/vault/config
+    cap_add:
+      - IPC_LOCK
+    #entrypoint: vault server -config=/vault/config/vault.json
+    #entrypoint: sleep 3000
+
+    networks:
+      - network_idelibre_dev
+
+
+## Initial root token hvs.fFrLukTXVJ6Ae4LdTTREF0jY
+## Key 1  A/h3KH04BryVyBhgSJHd66rSWX9at5zijbOxND3OEgQ=
+
+#export VAULT_ADDR='http://127.0.0.1:8200'
+#vault operator unseal A/h3KH04BryVyBhgSJHd66rSWX9at5zijbOxND3OEgQ=
 
 networks:
   network_idelibre_dev:
 
 volumes:
   data-public:
+
+
+#
+#  docker exec -it vault-server vault operator init -key-shares=1 -key-threshold=1
+#  # Unseal Key 1:       <unseal_key>
+#  # Initial Root Token: <token>
+#  docker exec -it vault-server vault  operator unseal <unseal_key>  // plus besoin
+#  docker exec -it vault-server vault login token=<token>                                     //  à faire a l'init du serveur
+
+#  docker exec -it vault-server vault secrets enable -version=2 -path=secret kv               //

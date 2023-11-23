@@ -4,6 +4,9 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+
+  vault.test: "%env(vault:DATABASE_PASSWORD)%"
+
   version: '%env(VERSION)%'
   product_name: '%env(PRODUCT_NAME)%'
   product_editor: '%env(PRODUCT_EDITOR)%'
@@ -48,6 +51,7 @@ parameters:
   login_rate_interval: '3 minutes'
   login_rate_amount: 1
 
+  testsecret: '%env(DATABASE_PASSWORD)%'
 
 services:
   # default configuration for services in *this* file
@@ -71,6 +75,11 @@ services:
   App\Sidebar\Listener\SidebarListener:
     tags:
       - { name: kernel.event_listener, event: kernel.controller, method: onKernelRequest }
+
+#  App\ArgumentResolver\VaultEnvResolver:
+#    tags:
+#      - { name: container.env_var_processor, priority: 5000 }
+
 
   Mailjet\Client:
     arguments:

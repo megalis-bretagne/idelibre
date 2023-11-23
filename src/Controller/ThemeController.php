@@ -68,7 +68,7 @@ class ThemeController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $this->themeManager->update($form->getData());
+            $this->themeManager->update($form->getData(), $form->get('parentTheme')->getData());
 
             $this->addFlash('success', 'Votre thème a bien été modifié');
 
