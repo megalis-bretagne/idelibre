@@ -8,8 +8,8 @@ All notable changes to this project will be documented in this file.
 - Mise à jour des dépendances composer
 
 ### Correction
-- InitializeCertificate utilse maintenant docker compose et plus docker-compose
-- Envoi à comelus ne se fait pas si le zip généré fait plus de 200 mo
+- InitializeCertificate utilise maintenant docker compose et plus docker-compose
+- Envoi à comélus ne se fait pas si le zip généré fait plus de 200 mo
 
 ## [4.2.15] - 2023-10-30
 ### Evolution
