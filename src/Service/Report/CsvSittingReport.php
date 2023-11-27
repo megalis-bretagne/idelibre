@@ -28,7 +28,7 @@ class CsvSittingReport
         $writer = Writer::createFromPath($csvPath, 'w+');
         $writer->insertOne($this->getHeaders());
 
-        $convocations = $this->convocationRepository->getActorConvocationsBySitting($sitting);
+        $convocations = $this->convocationRepository->getEveryoneInSitting($sitting);
         foreach ($convocations as $convocation) {
             $writer->insertOne($this->getConvocationData($convocation));
         }
@@ -38,7 +38,7 @@ class CsvSittingReport
 
     private function getHeaders(): array
     {
-        return ['Prénom', 'Nom', 'Envoi', 'Réception', 'Présence', 'Mandataire'];
+        return ['Prénom', 'Nom', 'Envoi', 'Réception', 'Présence', 'Mandataire', 'role'];
     }
 
     private function getConvocationData(Convocation $convocation): array
@@ -52,6 +52,7 @@ class CsvSittingReport
             $this->getDateFormattedTimeStamp($convocation->getReceivedTimestamp(), $structure),
             $this->formatConvocationAttendance($convocation->getAttendance()),
             $this->setMandatorDeputy($convocation),
+            $convocation->getUser()->getRole()->getPrettyName(),
         ];
     }
 
