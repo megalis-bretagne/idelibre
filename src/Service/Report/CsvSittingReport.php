@@ -38,7 +38,7 @@ class CsvSittingReport
 
     private function getHeaders(): array
     {
-        return ['Prénom', 'Nom', 'Envoi', 'Réception', 'Présence', 'Mandataire', 'role'];
+        return ['Prénom', 'Nom', 'Envoi', 'Réception', 'Présence', 'Mandataire', 'Role'];
     }
 
     private function getConvocationData(Convocation $convocation): array
