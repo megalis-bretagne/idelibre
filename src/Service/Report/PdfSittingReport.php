@@ -19,7 +19,7 @@ class PdfSittingReport
     public function generate(Sitting $sitting): string
     {
         $html = $this->twig->render('generate/sitting_report_pdf.html.twig', [
-            'convocations' => $this->convocationRepository->getActorConvocationsBySitting($sitting),
+            'convocations' => $this->convocationRepository->getEveryoneInSitting($sitting),
             'sitting' => $sitting,
             'timezone' => $sitting->getStructure()->getTimezone()->getName(),
             'attendance' => [

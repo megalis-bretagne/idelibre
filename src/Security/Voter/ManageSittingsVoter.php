@@ -47,6 +47,7 @@ class ManageSittingsVoter extends Voter
 
     private function isSameStructure(User $loggedInUser, Sitting $sitting): bool
     {
+//        dd($loggedInUser);
         return $loggedInUser->getStructure()->getId() === $sitting->getStructure()->getId();
     }
 

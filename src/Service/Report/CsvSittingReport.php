@@ -51,7 +51,7 @@ class CsvSittingReport
             $this->getDateFormattedTimeStamp($convocation->getSentTimestamp(), $structure),
             $this->getDateFormattedTimeStamp($convocation->getReceivedTimestamp(), $structure),
             $this->formatConvocationAttendance($convocation->getAttendance()),
-            $convocation->getDeputy() ?? '',
+            $this->setMandatorDeputy($convocation),
         ];
     }
 
@@ -67,10 +67,25 @@ class CsvSittingReport
     private function formatConvocationAttendance($convocation): string
     {
         return match ($convocation) {
-            'remote' => 'Distanciel',
+            'remote' => 'A distance',
             'absent' => 'Absent',
             'present' => 'Présent',
+            'poa' => 'Donne pouvoir',
+            'deputy' => 'Remplacé',
             default => '',
         };
+    }
+
+    private function setMandatorDeputy($convocation):string
+    {
+        if ($convocation->getDeputy()) {
+            return $convocation->getDeputy()->getFirstName() . ' ' . $convocation->getDeputy()->getLastName();
+        }
+
+        if ($convocation->getMandator()) {
+            return $convocation->getMandator()->getFirstName() . ' ' . $convocation->getMandator()->getLastName();
+        }
+
+        return '';
     }
 }
