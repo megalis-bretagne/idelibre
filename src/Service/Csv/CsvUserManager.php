@@ -16,6 +16,7 @@ use App\Service\Subscription\SubscriptionManager;
 use App\Service\User\PasswordInvalidator;
 use App\Service\Util\GenderConverter;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use ForceUTF8\Encoding;
 use League\Csv\Reader;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -24,6 +25,7 @@ use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use function PHPUnit\Framework\stringContains;
+use function PHPUnit\Framework\throwException;
 
 class CsvUserManager
 {
@@ -51,6 +53,10 @@ class CsvUserManager
         $csv = Reader::createFromPath($file->getRealPath(), 'r');
         $records = $csv->getRecords();
 
+        $this->saveDeputyFirst($records, $structure);
+
+
+
         foreach ($records as $record) {
 
             if ($this->isMissingFields($record)) {
@@ -65,6 +71,7 @@ class CsvUserManager
 
             $username = $this->sanitize($record[Csv_Records::USERNAME->value] ?? '') . '@' . $structure->getSuffix();
             if (!$this->isExistUsername($username, $structure)) {
+
                 $user = $this->createUserFromRecord($structure, $record);
 
                 if ($this->isSecretaryOrAdmin($user)) {
@@ -92,6 +99,10 @@ class CsvUserManager
 
                 $this->em->persist($user);
                 $this->em->flush();
+
+                if ($record[Csv_Records::DEPUTY->value]){
+                    $this->assignDeputy($record[Csv_Records::DEPUTY->value], $user);
+                }
             }
         }
 
@@ -244,7 +255,7 @@ class CsvUserManager
             ->setEmail($this->sanitize($record[Csv_Records::EMAIL->value] ?? ''))
             ->setRole($this->getRoleFromCode(intval($record[Csv_Records::ROLE->value] ?? 0)))
             ->setPhone($this->sanitizePhoneNumber($record[Csv_Records::PHONE->value]) ?? '' )
-            ->setTitle($record[5] === '3' ? $this->sanitize( $record[Csv_Records::TITLE->value]) : '' )
+            ->setTitle($record[Csv_Records::ROLE->value] === '3' ? $this->sanitize( $record[Csv_Records::TITLE->value]) : '' )
             ->setPassword(self::INVALID_PASSWORD)
             ->setStructure($structure);
 
@@ -275,7 +286,30 @@ class CsvUserManager
         if (str_contains($phone, '-')) {
             return str_replace('-', '', $phone);
         }
-
         return $phone;
+    }
+
+    private function saveDeputyFirst(iterable $records, Structure $structure):void
+    {
+        foreach ($records as $record){
+            if ($record[Csv_Records::ROLE->value] === '6'){
+                $user = $this->createUserFromRecord($structure, $record);
+                $this->em->persist($user);
+                $this->em->flush();
+            }
+        }
+
+    }
+
+    private function assignDeputy(string $deputy, $user):void
+    {
+        $deputyUsername = $this->sanitize($deputy . '@' . $user->getStructure()->getSuffix());
+
+        $deputy = $this->userRepository->findOneBy(['username' => $deputyUsername, 'structure' => $user->getStructure()]);
+        if($deputy !== null){
+            $user->setDeputy($deputy);
+            $this->em->persist($user);
+            $this->em->flush();
+        }
     }
 }
