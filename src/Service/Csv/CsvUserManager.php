@@ -10,6 +10,7 @@ use App\Entity\User;
 use App\Repository\TypeRepository;
 use App\Repository\UserRepository;
 use App\Service\Email\EmailNotSendException;
+use App\Service\Enum\Csv_Records;
 use App\Service\role\RoleManager;
 use App\Service\Subscription\SubscriptionManager;
 use App\Service\User\PasswordInvalidator;
@@ -52,8 +53,6 @@ class CsvUserManager
 
         foreach ($records as $record) {
 
-//            dd($this->sanitizePhoneNumber($record[6]) );
-
             if ($this->isMissingFields($record)) {
                 $errors[] = $this->missingFieldViolation($record);
                 continue;
@@ -64,7 +63,7 @@ class CsvUserManager
                 continue;
             }
 
-            $username = $this->sanitize($record[1] ?? '') . '@' . $structure->getSuffix();
+            $username = $this->sanitize($record[Csv_Records::USERNAME->value] ?? '') . '@' . $structure->getSuffix();
             if (!$this->isExistUsername($username, $structure)) {
                 $user = $this->createUserFromRecord($structure, $record);
 
@@ -89,11 +88,7 @@ class CsvUserManager
                 }
 
                 $csvEmails[] = $username;
-                $this->associateActorToTypeSeances($user, $record[5] ?? null, $structure);
-
-//                if (preg_match('/[0-9]/', $record[6]) ) {
-//                    throw new \Exception('Le numéro de téléphone n\'est pas au bon format');
-//                }
+                $this->associateActorToTypeSeances($user, $record[Csv_Records::TYPE_SEANCE->value] ?? null, $structure);
 
                 $this->em->persist($user);
                 $this->em->flush();
@@ -242,17 +237,15 @@ class CsvUserManager
     {
         $user = new User();
         $user
-            ->setGender($this->getGenderCode(intval($record[0] ?? 0)))
-            ->setUsername($this->sanitize($record[1] ?? '') . '@' . $structure->getSuffix())
-            ->setFirstName($this->sanitize($record[2] ?? ''))
-            ->setLastName($this->sanitize($record[3] ?? ''))
-            ->setEmail($this->sanitize($record[4] ?? ''))
-            ->setRole($this->getRoleFromCode(intval($record[5] ?? 0)))
-
-            ->setPhone($this->sanitizePhoneNumber($record[6]) ?? '' )
-
-            ->setTitle($record[5] === '3' ? $this->sanitize( $record[7]) : null )
-            ->setPassword("CHANGEZ-MOI")
+            ->setGender($this->getGenderCode(intval($record[Csv_Records::GENDER->value] ?? 0)))
+            ->setUsername($this->sanitize($record[Csv_Records::USERNAME->value] ?? '') . '@' . $structure->getSuffix())
+            ->setFirstName($this->sanitize($record[Csv_Records::FIRST_NAME->value] ?? ''))
+            ->setLastName($this->sanitize($record[Csv_Records::LAST_NAME->value] ?? ''))
+            ->setEmail($this->sanitize($record[Csv_Records::EMAIL->value] ?? ''))
+            ->setRole($this->getRoleFromCode(intval($record[Csv_Records::ROLE->value] ?? 0)))
+            ->setPhone($this->sanitizePhoneNumber($record[Csv_Records::PHONE->value]) ?? '' )
+            ->setTitle($record[5] === '3' ? $this->sanitize( $record[Csv_Records::TITLE->value]) : '' )
+            ->setPassword(self::INVALID_PASSWORD)
             ->setStructure($structure);
 
         return $user;
@@ -271,16 +264,8 @@ class CsvUserManager
         return null;
     }
 
-    /**
-     * @throws \Exception
-     */
     private function sanitizePhoneNumber(string $phone): string
     {
-        if (str_contains($phone, '+')) {
-            $phone = "0" . substr($phone, 3);
-            return str_contains($phone, ' ') ? str_replace(' ', '', $phone): $phone;
-        }
-
         if (str_contains($phone, '.')) {
             return str_replace('.', '', $phone) ;
         }

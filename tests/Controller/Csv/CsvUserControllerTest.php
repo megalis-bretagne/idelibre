@@ -70,15 +70,19 @@ class CsvUserControllerTest extends WebTestCase
         $user = $this->getOneUserBy(['username' => 't.martin@libriciel']);
         $this->assertNotEmpty($user);
         $this->assertSame(1, $user->getGender());
+        $this->assertSame(10, strlen($user->getPhone()));
+
         $this->assertCount(4, $user->getAssociatedTypes()->toArray());
         $this->assertNotEmpty($this->getOneEntityBy(Type::class, ['name' => 'New type']));
 
         $user2 = $this->getOneUserBy(['username' => 'e.dupont@libriciel']);
         $this->assertNotEmpty($user2);
+        $this->assertSame(10, strlen($user->getPhone()));
         $this->assertCount(1, $user2->getAssociatedTypes()->toArray());
 
         $employee = $this->getOneUserBy(['username' => 'a.poulain@libriciel']);
         $this->assertNotEmpty($employee);
+        $this->assertSame(10, strlen($user->getPhone()));
         $this->assertSame(2, $employee->getGender());
     }
 
