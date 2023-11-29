@@ -109,8 +109,8 @@ class UserType extends AbstractType
                     'class' => User::class,
                     'choice_label' => 'lastName',
                     'query_builder' => $this->userRepository->findDeputiesWithNoAssociation($options['structure'], $options['toExclude']),
-                    'placeholder' => "--"
-
+                    'placeholder' => "--",
+                    'required' => false,
                 ])
             ;
         }
@@ -122,6 +122,7 @@ class UserType extends AbstractType
                 'class' => User::class,
                 'choice_label' => 'lastName',
                 'query_builder' => $this->userRepository->findDeputiesWithNoAssociation($options['structure'], $options['toExclude']),
+                'required' => false,
                 //todo queryBuilder limitant aux deputy disponiblent de la structure.
             ]);
         }

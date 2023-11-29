@@ -22,6 +22,7 @@ use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use function PHPUnit\Framework\stringContains;
 
 class CsvUserManager
 {
@@ -29,12 +30,12 @@ class CsvUserManager
     public const INVALID_PASSWORD = 'CHANGEZMOI';
 
     public function __construct(
-        private EntityManagerInterface $em,
-        private ValidatorInterface $validator,
-        private UserRepository $userRepository,
-        private TypeRepository $typeRepository,
-        private RoleManager $roleManager,
-        private SubscriptionManager $subscriptionManager,
+        private readonly EntityManagerInterface $em,
+        private readonly ValidatorInterface $validator,
+        private readonly UserRepository $userRepository,
+        private readonly TypeRepository $typeRepository,
+        private readonly RoleManager $roleManager,
+        private readonly SubscriptionManager $subscriptionManager,
     ) {
     }
 
@@ -50,6 +51,9 @@ class CsvUserManager
         $records = $csv->getRecords();
 
         foreach ($records as $record) {
+
+//            dd($this->sanitizePhoneNumber($record[6]) );
+
             if ($this->isMissingFields($record)) {
                 $errors[] = $this->missingFieldViolation($record);
                 continue;
@@ -85,7 +89,12 @@ class CsvUserManager
                 }
 
                 $csvEmails[] = $username;
-                $this->associateActorToTypeSeances($user, $record[6] ?? null, $structure);
+                $this->associateActorToTypeSeances($user, $record[5] ?? null, $structure);
+
+//                if (preg_match('/[0-9]/', $record[6]) ) {
+//                    throw new \Exception('Le numéro de téléphone n\'est pas au bon format');
+//                }
+
                 $this->em->persist($user);
                 $this->em->flush();
             }
@@ -98,7 +107,7 @@ class CsvUserManager
 
     private function isMissingFields(array $record): bool
     {
-        return 6 > count($record);
+        return  7 > count($record);
     }
 
     private function isSecretaryOrAdmin(User $user): bool
@@ -232,13 +241,18 @@ class CsvUserManager
     private function createUserFromRecord(Structure $structure, array $record): User
     {
         $user = new User();
-        $user->setUsername($this->sanitize($record[1] ?? '') . '@' . $structure->getSuffix())
+        $user
+            ->setGender($this->getGenderCode(intval($record[0] ?? 0)))
+            ->setUsername($this->sanitize($record[1] ?? '') . '@' . $structure->getSuffix())
             ->setFirstName($this->sanitize($record[2] ?? ''))
             ->setLastName($this->sanitize($record[3] ?? ''))
             ->setEmail($this->sanitize($record[4] ?? ''))
-            ->setPassword("CHANGEZ-MOI")
             ->setRole($this->getRoleFromCode(intval($record[5] ?? 0)))
-            ->setGender($this->getGenderCode(intval($record[0] ?? 0)))
+
+            ->setPhone($this->sanitizePhoneNumber($record[6]) ?? '' )
+
+            ->setTitle($record[5] === '3' ? $this->sanitize( $record[7]) : null )
+            ->setPassword("CHANGEZ-MOI")
             ->setStructure($structure);
 
         return $user;
@@ -255,5 +269,28 @@ class CsvUserManager
         }
 
         return null;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function sanitizePhoneNumber(string $phone): string
+    {
+        if (str_contains($phone, '+')) {
+            $phone = "0" . substr($phone, 3);
+            return str_contains($phone, ' ') ? str_replace(' ', '', $phone): $phone;
+        }
+
+        if (str_contains($phone, '.')) {
+            return str_replace('.', '', $phone) ;
+        }
+        if (str_contains($phone, ' ')) {
+            return str_replace(' ', '', $phone);
+        }
+        if (str_contains($phone, '-')) {
+            return str_replace('-', '', $phone);
+        }
+
+        return $phone;
     }
 }
