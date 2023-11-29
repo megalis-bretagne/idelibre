@@ -67,20 +67,20 @@ class CsvUserControllerTest extends WebTestCase
         $successMsg = $crawler->filter('html:contains("Fichier csv importé avec succès")');
         $this->assertCount(1, $successMsg);
 
-        $user = $this->getOneUserBy(['username' => 't.martin@libriciel']);
+        $user = $this->getOneUserBy(['username' => 'p.dumontet@libriciel']);
         $this->assertNotEmpty($user);
-        $this->assertSame(1, $user->getGender());
+        $this->assertSame(2, $user->getGender());
         $this->assertSame(10, strlen($user->getPhone()));
 
         $this->assertCount(4, $user->getAssociatedTypes()->toArray());
         $this->assertNotEmpty($this->getOneEntityBy(Type::class, ['name' => 'New type']));
 
-        $user2 = $this->getOneUserBy(['username' => 'e.dupont@libriciel']);
+        $user2 = $this->getOneUserBy(['username' => 'P.JUSSEAU@libriciel']);
         $this->assertNotEmpty($user2);
         $this->assertSame(10, strlen($user->getPhone()));
-        $this->assertCount(1, $user2->getAssociatedTypes()->toArray());
+        $this->assertCount(0, $user2->getAssociatedTypes()->toArray());
 
-        $employee = $this->getOneUserBy(['username' => 'a.poulain@libriciel']);
+        $employee = $this->getOneUserBy(['username' => 'T.AUCLAIR@libriciel']);
         $this->assertNotEmpty($employee);
         $this->assertSame(10, strlen($user->getPhone()));
         $this->assertSame(2, $employee->getGender());
