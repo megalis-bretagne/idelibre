@@ -1,9 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [4.2.17] - 2023-12-??
+
+## [4.2.17] - 2023-12-01
+
 ### Evolution
 - Procédure d'installation normalisée pour la compatibilité avec le script libriciel-update.sh
+- Mise à jour SF 6.4.0 et des dépendances composer
+
+
 
 ## [4.2.16] - 2023-11-23
 
