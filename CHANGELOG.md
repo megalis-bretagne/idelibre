@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.2.17] - 2023-12-??
+### Evolution
+- Procédure d'installation normalisée pour la compatibilité avec le script libriciel-update.sh
+
 ## [4.2.16] - 2023-11-23
 
 ### Evolution

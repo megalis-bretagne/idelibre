@@ -1,10 +1,17 @@
 #!/bin/bash
 
-## -f to force eveything !
+il_path="/opt/idelibre/dist"
+
+#check from where the script is executed
+if [[ ! "$(pwd)" = "${il_path}/docker-resources" ]]; then
+    echo -e "The script must be executed in ${il_path}/docker-resources \nStopping."
+    exit 0
+fi
 
 ## set the environement file you want to use
 source .env
 
+## -f to force eveything !
 force=false
 #get the options
 while getopts "f" option; do
@@ -16,14 +23,13 @@ while getopts "f" option; do
 done
 
 #check if file exists
-FILE=./docker-resources/nginx.vhost
-if [ ! -f "$FILE" ] || [ $force = true ]; then
-  echo "### Generate vhost nginx "
-  cp ./docker-resources/nginx_template.vhost ./docker-resources/nginx.vhost
-  sed -i -e"s|URL|$URL|" ./docker-resources/nginx.vhost
+nginx_file="${il_path}/docker-resources/nginx.vhost"
+nginx_tpl_file="${il_path}/docker-resources/nginx_template.vhost"
+if [ ! -f "${nginx_file}" ] || [ $force = true ]; then
+  echo "### Generate vhost nginx"
+  cp -a ${nginx_tpl_file} ${nginx_file}
+  sed -i -e"s|URL|$URL|" ${nginx_file}
 fi
-
-
 
 domains=($URL)
 rsa_key_size=4096
@@ -45,8 +51,8 @@ fi
 if [ ! -e "$data_path/conf/options-ssl-nginx.conf" ] || [ ! -e "$data_path/conf/ssl-dhparams.pem" ]; then
   echo "### COPY TLS parameters ..."
   mkdir -p "$data_path/conf"
-  cat ./docker-resources/options-ssl-nginx.conf > "$data_path/conf/options-ssl-nginx.conf"
-  cat  ./docker-resources/ssl-dhparams.pem > "$data_path/conf/ssl-dhparams.pem"
+  cat "${il_path}/docker-resources/options-ssl-nginx.conf" > "$data_path/conf/options-ssl-nginx.conf"
+  cat "${il_path}/docker-resources/ssl-dhparams.pem" > "$data_path/conf/ssl-dhparams.pem"
   echo
 fi
 
@@ -61,13 +67,11 @@ docker compose run --rm --entrypoint "\
     -subj '/CN=localhost'" certbot
 echo
 
-
 if [ $SELF_SIGNED = 1 ]; then
   echo "### WORKING WITH SELF SIGNED CERTIFICATE"
   docker compose down
   docker compose up -d
-
-exit 0
+  exit 1
 fi
 
 
@@ -111,7 +115,6 @@ docker compose run --rm --entrypoint "\
     --rsa-key-size $rsa_key_size \
     --agree-tos --non-interactive \
     --force-renewal" certbot
-echo
 
-echo "### Reloading nginx ..."
+echo -e "\n### Reloading nginx ..."
 docker compose exec nginx-idelibre nginx -s reload
