@@ -53,7 +53,7 @@ class CsvUserManager
         $csv = Reader::createFromPath($file->getRealPath(), 'r');
         $records = $csv->getRecords();
 
-        $this->saveDeputyFirst($records, $structure);
+        $this->saveDeputyFirst($records, $structure, $csvEmails, $errors);
 
 
 
@@ -82,7 +82,6 @@ class CsvUserManager
                     $errors[] = $this->validator->validate($user);
                     continue;
                 }
-
 
                 if (!$user->getRole()) {
                     $errors[] = $this->missingRoleViolation($record);
@@ -289,13 +288,46 @@ class CsvUserManager
         return $phone;
     }
 
-    private function saveDeputyFirst(iterable $records, Structure $structure):void
+    private function saveDeputyFirst(iterable $records, Structure $structure, $csvEmails, $errors):void
     {
         foreach ($records as $record){
             if ($record[Csv_Records::ROLE->value] === '6'){
-                $user = $this->createUserFromRecord($structure, $record);
-                $this->em->persist($user);
-                $this->em->flush();
+                if ($this->isMissingFields($record)) {
+                    $errors[] = $this->missingFieldViolation($record);
+                    continue;
+                }
+
+                if ($record[1] === "") {
+                    $errors[] = $this->missingUsernameViolation($record);
+                    continue;
+                }
+                $username = $this->sanitize($record[Csv_Records::USERNAME->value] ?? '') . '@' . $structure->getSuffix();
+                if (!$this->isExistUsername($username, $structure)) {
+
+
+                    $user = $this->createUserFromRecord($structure, $record);
+
+                    if (0 !== $this->validator->validate($user)->count()) {
+                        $errors[] = $this->validator->validate($user);
+                        continue;
+                    }
+
+                    if (!$user->getRole()) {
+                        $errors[] = $this->missingRoleViolation($record);
+                        continue;
+                    }
+
+                    if ($errorCsv = $this->isUsernameTwiceInCsv($csvEmails, $username, $user)) {
+                        $errors[] = $errorCsv;
+                        continue;
+                    }
+
+                    $csvEmails[] = $username;
+                    $this->em->persist($user);
+                    $this->em->flush();
+                    continue;
+
+                }
             }
         }
 
@@ -306,7 +338,10 @@ class CsvUserManager
         $deputyUsername = $this->sanitize($deputy . '@' . $user->getStructure()->getSuffix());
 
         $deputy = $this->userRepository->findOneBy(['username' => $deputyUsername, 'structure' => $user->getStructure()]);
+
         if($deputy !== null){
+//            dd($deputy, $user);
+
             $user->setDeputy($deputy);
             $this->em->persist($user);
             $this->em->flush();
