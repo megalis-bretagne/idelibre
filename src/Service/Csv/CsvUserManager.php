@@ -99,7 +99,7 @@ class CsvUserManager
                 $this->em->persist($user);
                 $this->em->flush();
 
-                if ($record[Csv_Records::DEPUTY->value]){
+                if ($record[Csv_Records::ROLE->value] === '3' && $record[Csv_Records::DEPUTY->value]){
                     $this->assignDeputy($record[Csv_Records::DEPUTY->value], $user);
                 }
             }

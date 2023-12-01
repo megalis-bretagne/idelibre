@@ -249,7 +249,7 @@ class CsvUserControllerTest extends WebTestCase
         $this->assertNotEmpty($user);
         $this->assertSame(2, $user->getGender());
         $this->assertSame(10, strlen($user->getPhone()));
-        $this->assertSame('depute', $user->getTitle());
+        $this->assertSame('Depute', $user->getTitle());
 
         $deputy = $this->getOneUserBy(['username' => 's.goodman@libriciel']);
         $this->assertNotEmpty($deputy);
@@ -260,6 +260,29 @@ class CsvUserControllerTest extends WebTestCase
 
     }
 
-    public function testDeputyCsvErrorWithErrors(){}
+    public function testDeputyCsvErrorWithErrors()
+    {
+        $csvFile = new UploadedFile(__DIR__ . '/../../resources/user_error_role_deputy.csv', 'user.csv');
+        $this->assertNotEmpty($csvFile);
+
+        $this->loginAsAdminLibriciel();
+        $this->client->request(Request::METHOD_GET, '/csv/userErrors');
+
+        $crawler = $this->client->request(Request::METHOD_GET, '/csv/importUsers');
+        $this->assertResponseStatusCodeSame(200);
+        $item = $crawler->filter('html:contains("Importer des utilisateurs via csv")');
+        $this->assertCount(1, $item);
+
+        $form = $crawler->selectButton('Importer le csv')->form();
+
+        $form['csv[csv]'] = $csvFile;
+
+        $this->client->submit($form);
+
+        $title = $crawler->filter('html:contains("Erreurs lors de l\'import")');
+        $this->assertCount(1, $title);
+
+
+    }
 
 }
