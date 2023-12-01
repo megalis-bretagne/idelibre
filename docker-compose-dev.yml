@@ -11,23 +11,7 @@ services:
     env_file:
       - .env.docker.local
     volumes:
-      - ./public:/app/public
-      - /data/files:/data
-      - ./docker-resources/initApp.sh:/app/docker-resources/initApp.sh
-      - ./src:/app/src
-      - ./templates:/app/templates
-      - ./config:/app/config
-      - ./vendor:/app/vendor
-      - ./migrations:/app/migrations
-      - ./composer.json:/app/composer.json
-      - ./composer.lock:/app/composer.lock
-      - ./docker-resources/minimum.sql:/app/docker-resources/minimum.sql
-      - ./webpack.config.js:/app/webpack.config.js
-      - ./assets:/app/assets
-      - ./node_modules:/app/node_modules
-      - ./tests:/app/tests
-      - ./package-lock.json:/app/package-lock.json
-      - ./package.json:/app/package.json
+      - .:/app
     command: ["/app/docker-resources/initApp.sh"]
     networks:
       - network_idelibre_dev

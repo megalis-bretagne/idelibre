@@ -20,7 +20,6 @@ class ThemeController extends AbstractController
 {
     public function __construct(
         private readonly ThemeManager $themeManager,
-        private readonly ThemeRepository $themeRepository
     )
     {
     }
