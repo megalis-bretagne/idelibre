@@ -39,6 +39,7 @@ class CsvUserManager
         private readonly TypeRepository $typeRepository,
         private readonly RoleManager $roleManager,
         private readonly SubscriptionManager $subscriptionManager,
+        private readonly CsvViolationUserManager $csvViolationUserManager,
     ) {
     }
 
@@ -60,12 +61,12 @@ class CsvUserManager
         foreach ($records as $record) {
 
             if ($this->isMissingFields($record)) {
-                $errors[] = $this->missingFieldViolation($record);
+                $errors[] = $this->csvViolationUserManager->missingFieldViolation($record);
                 continue;
             }
 
             if ($record[1] === "") {
-                $errors[] = $this->missingUsernameViolation($record);
+                $errors[] = $this->csvViolationUserManager->missingUsernameViolation($record);
                 continue;
             }
 
@@ -84,7 +85,7 @@ class CsvUserManager
                 }
 
                 if (!$user->getRole()) {
-                    $errors[] = $this->missingRoleViolation($record);
+                    $errors[] = $this->csvViolationUserManager->missingRoleViolation($record);
                     continue;
                 }
 
@@ -92,6 +93,18 @@ class CsvUserManager
                     $errors[] = $errorCsv;
                     continue;
                 }
+
+                if ($record[Csv_Records::ROLE->value] !== '3' && $record[Csv_Records::PHONE->value]){
+                    $errors[] = $this->csvViolationUserManager->violationUnautorizedPhone($record);
+                    continue;
+                }
+
+
+                if ($record[Csv_Records::ROLE->value] !== '3' && $record[Csv_Records::DEPUTY->value]){
+                    $errors[] = $this->csvViolationUserManager->roleViolationForDeputy($record);
+                    continue;
+                }
+
 
                 $csvEmails[] = $username;
                 $this->associateActorToTypeSeances($user, $record[Csv_Records::TYPE_SEANCE->value] ?? null, $structure);
@@ -102,6 +115,18 @@ class CsvUserManager
                 if ($record[Csv_Records::ROLE->value] === '3' && $record[Csv_Records::DEPUTY->value]){
                     $this->assignDeputy($record[Csv_Records::DEPUTY->value], $user);
                 }
+
+
+
+                if ($record[Csv_Records::ROLE->value] !== '3' && $record[Csv_Records::TITLE->value]){
+                    $errors[] = $this->csvViolationUserManager->violationUnautorizedTitle($record);
+                    continue;
+                }
+
+
+
+
+
             }
         }
 
@@ -128,47 +153,7 @@ class CsvUserManager
         return false;
     }
 
-    private function missingFieldViolation($record): ConstraintViolationList
-    {
-        $violation = new ConstraintViolation(
-            'Chaque ligne doit contenir 6 champs séparés par des virgules.',
-            null,
-            $record,
-            null,
-            'le nombre de champs',
-            'le nombre de champs est faux'
-        );
 
-        return new ConstraintViolationList([$violation]);
-    }
-
-    private function missingUsernameViolation($record): ConstraintViolationList
-    {
-        $violation = new ConstraintViolation(
-            'La colonne username doit être renseignée pour chaque entrée',
-            null,
-            $record,
-            null,
-            'username',
-            'Username est vide'
-        );
-
-        return new ConstraintViolationList([$violation]);
-    }
-
-    private function missingRoleViolation($record): ConstraintViolationList
-    {
-        $violation = new ConstraintViolation(
-            'Il est obligatoire de définir un role parmi les valeurs 1, 2, 3, 4, 5 ou 6.',
-            null,
-            $record,
-            null,
-            'role',
-            'le role n\'est pas bon'
-        );
-
-        return new ConstraintViolationList([$violation]);
-    }
 
     private function associateActorToTypeSeances(User $user, ?string $typeNamesString, Structure $structure): void
     {
@@ -252,9 +237,16 @@ class CsvUserManager
             ->setFirstName($this->sanitize($record[Csv_Records::FIRST_NAME->value] ?? ''))
             ->setLastName($this->sanitize($record[Csv_Records::LAST_NAME->value] ?? ''))
             ->setEmail($this->sanitize($record[Csv_Records::EMAIL->value] ?? ''))
-            ->setRole($this->getRoleFromCode(intval($record[Csv_Records::ROLE->value] ?? 0)))
-            ->setPhone($this->sanitizePhoneNumber($record[Csv_Records::PHONE->value]) ?? '' )
-            ->setTitle($record[Csv_Records::ROLE->value] === '3' ? $this->sanitize( $record[Csv_Records::TITLE->value]) : '' )
+            ->setRole($this->getRoleFromCode(intval($record[Csv_Records::ROLE->value] ?? 0)));
+
+        if (($record[Csv_Records::ROLE->value] === '3' || $record[Csv_Records::ROLE->value] === '6') && $record[Csv_Records::PHONE->value]){
+            $user->setPhone($this->sanitizePhoneNumber($record[Csv_Records::PHONE->value]));
+        }
+        if ($record[Csv_Records::ROLE->value] === '3') {
+            $user->setTitle($this->sanitize($record[Csv_Records::TITLE->value]));
+        }
+
+        $user
             ->setPassword(self::INVALID_PASSWORD)
             ->setStructure($structure);
 
@@ -285,6 +277,8 @@ class CsvUserManager
         if (str_contains($phone, '-')) {
             return str_replace('-', '', $phone);
         }
+
+        dd($phone);
         return $phone;
     }
 

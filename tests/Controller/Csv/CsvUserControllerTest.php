@@ -278,8 +278,7 @@ class CsvUserControllerTest extends WebTestCase
         $form['csv[csv]'] = $csvFile;
 
         $this->client->submit($form);
-
-        $title = $crawler->filter('html:contains("Erreurs lors de l\'import")');
+        $title = $crawler->filter('html:contains("Certains utilisateurs n\'ont pas pu être importés")');
         $this->assertCount(1, $title);
 
 
