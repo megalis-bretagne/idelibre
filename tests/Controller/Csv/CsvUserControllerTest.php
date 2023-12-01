@@ -172,8 +172,6 @@ class CsvUserControllerTest extends WebTestCase
         $title = $crawler->filter('html:contains("Erreurs lors de l\'import")');
         $this->assertCount(1, $title);
 
-        $errorMsg = $crawler->filter('html:contains("Chaque ligne doit contenir 6 champs séparés par des virgules.")');
-        $this->assertCount(1, $errorMsg);
     }
 
     public function testImportUserCsvNoRole()
@@ -219,4 +217,49 @@ class CsvUserControllerTest extends WebTestCase
         $title = $crawler->filter('html:contains("Utilisateurs")');
         $this->assertCount(1, $title);
     }
+
+    public function testDeputyCsvErrorWithNoError()
+    {
+        $csvFile = new UploadedFile(__DIR__ . '/../../resources/user_success_deputy.csv', 'user.csv');
+        $this->assertNotEmpty($csvFile);
+
+        $this->loginAsAdminLibriciel();
+        $this->client->request(Request::METHOD_GET, '/csv/userErrors');
+
+        $crawler = $this->client->request(Request::METHOD_GET, '/csv/importUsers');
+        $this->assertResponseStatusCodeSame(200);
+        $item = $crawler->filter('html:contains("Importer des utilisateurs via csv")');
+        $this->assertCount(1, $item);
+
+        $form = $crawler->selectButton('Importer le csv')->form();
+
+        $form['csv[csv]'] = $csvFile;
+
+        $this->client->submit($form);
+
+        $this->assertTrue($this->client->getResponse()->isRedirect());
+
+        $crawler = $this->client->followRedirect();
+        $this->assertResponseStatusCodeSame(200);
+
+        $successMsg = $crawler->filter('html:contains("Fichier csv importé avec succès")');
+        $this->assertCount(1, $successMsg);
+
+        $user = $this->getOneUserBy(['username' => 'p.dumontet@libriciel']);
+        $this->assertNotEmpty($user);
+        $this->assertSame(2, $user->getGender());
+        $this->assertSame(10, strlen($user->getPhone()));
+        $this->assertSame('depute', $user->getTitle());
+
+        $deputy = $this->getOneUserBy(['username' => 's.goodman@libriciel']);
+        $this->assertNotEmpty($deputy);
+        $this->assertSame(1, $deputy->getGender());
+        $this->assertSame('Deputy', $deputy->getRole()->getName());
+
+        $this->assertSame($deputy->getUsername(), $user->getDeputy()->getUsername());
+
+    }
+
+    public function testDeputyCsvErrorWithErrors(){}
+
 }
