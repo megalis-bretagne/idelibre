@@ -2,13 +2,59 @@
 
 namespace App\Service\Csv;
 
+use App\Entity\Structure;
 use App\Entity\User;
+use App\Repository\UserRepository;
+use App\Service\Enum\Csv_Records;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class CsvViolationUserManager
+class CsvUserErrorManager
 {
+
+    public function __construct(
+        private readonly ValidatorInterface      $validator,
+        private readonly UserRepository          $userRepository,
+    )
+    {
+    }
+
+    public function isExistUsername(string $username, Structure $structure): bool
+    {
+        return 0 !== $this->userRepository->count(['username' => $username, 'structure' => $structure]);
+    }
+
+    public function preSavingValidation(array $record): ?ConstraintViolationList
+    {
+        if ($this->isMissingFields($record)) {
+            return $this->missingFieldViolation($record);
+        }
+
+        if ($record[Csv_Records::USERNAME->value] === "") {
+            return $this->missingUsernameViolation($record);
+        }
+        return null;
+    }
+
+    public function postSavingValidation(array $record, $user, $csvEmails): ?ConstraintViolationList
+    {
+        if (0 !== $this->validator->validate($user)->count()) {
+            return $this->validator->validate($user);
+        }
+
+        if (!$user->getRole()) {
+            return $this->missingRoleViolation($record);
+        }
+
+        if ($errorCsv = $this->isUsernameTwiceInCsv($csvEmails, $user->getUserName(), $user)) {
+            return $errorCsv;
+        }
+
+        return null;
+    }
+
     public function isUsernameTwiceInCsv(array $csvEmails, string $email, User $user): ?ConstraintViolationListInterface
     {
         if (in_array($email, $csvEmails)) {
@@ -82,34 +128,6 @@ class CsvViolationUserManager
             null,
             'role',
             'Assignation du suppléant impossible'
-        );
-
-        return new ConstraintViolationList([$violation]);
-    }
-
-    public function violationUnautorizedPhone($record): ConstraintViolationList
-    {
-        $violation = new ConstraintViolation(
-            'Seuls les élus et suppléants ont la possibilité d\'enregistrer leur numéro de téléphone.',
-            null,
-            $record,
-            null,
-            'phone',
-            'Assignation du numéro de téléphone impossible'
-        );
-
-        return new ConstraintViolationList([$violation]);
-    }
-
-    public function violationUnautorizedTitle($record): ConstraintViolationList
-    {
-        $violation = new ConstraintViolation(
-            'Seuls les élus ont la possibilité d\'enregistrer leur titre.',
-            null,
-            $record,
-            null,
-            'title',
-            'Assignation du titre impossible'
         );
 
         return new ConstraintViolationList([$violation]);

@@ -44,7 +44,7 @@ class CsvUserControllerTest extends WebTestCase
 
     public function testImportUsers()
     {
-        $csvFile = new UploadedFile(__DIR__ . '/../../resources/user_success.csv', 'user_success.csv');
+        $csvFile = new UploadedFile(__DIR__ . '/../../resources/csv/user_success.csv', 'user_success.csv');
         $this->assertNotEmpty($csvFile);
 
         $this->loginAsAdminLibriciel();
@@ -70,25 +70,29 @@ class CsvUserControllerTest extends WebTestCase
         $user = $this->getOneUserBy(['username' => 'p.dumontet@libriciel']);
         $this->assertNotEmpty($user);
         $this->assertSame(2, $user->getGender());
-        $this->assertSame(10, strlen($user->getPhone()));
-
+        $this->assertSame('Actor', $user->getRole()->getName());
+        $this->assertSame('0687896754', $user->getPhone());
+        $this->assertSame('Depute', $user->getTitle());
         $this->assertCount(4, $user->getAssociatedTypes()->toArray());
         $this->assertNotEmpty($this->getOneEntityBy(Type::class, ['name' => 'New type']));
 
         $user2 = $this->getOneUserBy(['username' => 'P.JUSSEAU@libriciel']);
         $this->assertNotEmpty($user2);
-        $this->assertSame(10, strlen($user->getPhone()));
+        $this->assertSame('Admin', $user2->getRole()->getName());
+        $this->assertSame("", $user2->getPhone());
         $this->assertCount(0, $user2->getAssociatedTypes()->toArray());
 
         $employee = $this->getOneUserBy(['username' => 'T.AUCLAIR@libriciel']);
         $this->assertNotEmpty($employee);
-        $this->assertSame(10, strlen($user->getPhone()));
         $this->assertSame(2, $employee->getGender());
+        $this->assertSame('0687896754', $employee->getPhone());
+        $this->assertSame('senateur', $employee->getTitle());
+
     }
 
     public function testImportUsersMissingEmail()
     {
-        $csvFile = new UploadedFile(__DIR__ . '/../../resources/user_email_missing.csv', 'user.csv');
+        $csvFile = new UploadedFile(__DIR__ . '/../../resources/csv/user_email_missing.csv', 'user.csv');
         $this->assertNotEmpty($csvFile);
 
         $this->loginAsAdminLibriciel();
@@ -119,7 +123,7 @@ class CsvUserControllerTest extends WebTestCase
 
     public function testImportUsersMissingUsername()
     {
-        $csvFile = new UploadedFile(__DIR__ . '/../../resources/user_username_missing.csv', 'user.csv');
+        $csvFile = new UploadedFile(__DIR__ . '/../../resources/csv/user_username_missing.csv', 'user.csv');
         $this->assertNotEmpty($csvFile);
 
         $this->loginAsAdminLibriciel();
@@ -146,10 +150,9 @@ class CsvUserControllerTest extends WebTestCase
         $this->assertNotEmpty($this->getOneEntityBy(User::class, ['username' => 'e.dupont@libriciel']));
     }
 
-
     public function testImportUserCsvMissingField()
     {
-        $csvFile = new UploadedFile(__DIR__ . '/../../resources/user_missing_fields.csv', 'user.csv');
+        $csvFile = new UploadedFile(__DIR__ . '/../../resources/csv/user_missing_fields.csv', 'user.csv');
         $this->assertNotEmpty($csvFile);
 
         $this->loginAsAdminLibriciel();
@@ -176,7 +179,7 @@ class CsvUserControllerTest extends WebTestCase
 
     public function testImportUserCsvNoRole()
     {
-        $csvFile = new UploadedFile(__DIR__ . '/../../resources/user_no_role.csv', 'user.csv');
+        $csvFile = new UploadedFile(__DIR__ . '/../../resources/csv/user_no_role.csv', 'user.csv');
         $this->assertNotEmpty($csvFile);
 
         $this->loginAsAdminLibriciel();
@@ -218,9 +221,9 @@ class CsvUserControllerTest extends WebTestCase
         $this->assertCount(1, $title);
     }
 
-    public function testDeputyCsvErrorWithNoError()
+    public function testAddDeputyToActorNoErrors()
     {
-        $csvFile = new UploadedFile(__DIR__ . '/../../resources/user_success_deputy.csv', 'user.csv');
+        $csvFile = new UploadedFile(__DIR__ . '/../../resources/csv/user_success_deputy.csv', 'user.csv');
         $this->assertNotEmpty($csvFile);
 
         $this->loginAsAdminLibriciel();
@@ -248,21 +251,23 @@ class CsvUserControllerTest extends WebTestCase
         $user = $this->getOneUserBy(['username' => 'p.dumontet@libriciel']);
         $this->assertNotEmpty($user);
         $this->assertSame(2, $user->getGender());
-        $this->assertSame(10, strlen($user->getPhone()));
+        $this->assertSame('Actor', $user->getRole()->getName());
+        $this->assertSame('0687896754', $user->getPhone());
         $this->assertSame('Depute', $user->getTitle());
+        $this->assertSame('s.goodman@libriciel', $user->getDeputy()->getUsername());
 
         $deputy = $this->getOneUserBy(['username' => 's.goodman@libriciel']);
         $this->assertNotEmpty($deputy);
         $this->assertSame(1, $deputy->getGender());
         $this->assertSame('Deputy', $deputy->getRole()->getName());
+        $this->assertSame('', $deputy->getPhone());
 
         $this->assertSame($deputy->getUsername(), $user->getDeputy()->getUsername());
-
     }
 
     public function testDeputyCsvErrorWithErrors()
     {
-        $csvFile = new UploadedFile(__DIR__ . '/../../resources/user_error_role_deputy.csv', 'user.csv');
+        $csvFile = new UploadedFile(__DIR__ . '/../../resources/csv/user_error_role_deputy.csv', 'user.csv');
         $this->assertNotEmpty($csvFile);
 
         $this->loginAsAdminLibriciel();
@@ -286,12 +291,13 @@ class CsvUserControllerTest extends WebTestCase
 
         $title = $crawler->filter('html:contains("Erreurs lors de l\'import")');
         $this->assertCount(1, $title);
+        $this->assertEmpty($this->getOneEntityBy(User::class, ['username' => 'p.dumontet@libriciel']));
     }
 
 
     public function testPhoneWrongFormat()
     {
-        $csvFile = new UploadedFile(__DIR__ . '/../../resources/user_error_wrong_format_phone.csv', 'user.csv');
+        $csvFile = new UploadedFile(__DIR__ . '/../../resources/csv/user_error_wrong_format_phone.csv', 'user.csv');
         $this->assertNotEmpty($csvFile);
 
         $this->loginAsAdminLibriciel();
@@ -319,7 +325,7 @@ class CsvUserControllerTest extends WebTestCase
 
     public function testPhoneForWrongRole()
     {
-        $csvFile = new UploadedFile(__DIR__ . '/../../resources/user_error_wrong_role_phone.csv', 'user.csv');
+        $csvFile = new UploadedFile(__DIR__ . '/../../resources/csv/user_error_wrong_role_phone.csv', 'user.csv');
         $this->assertNotEmpty($csvFile);
 
         $this->loginAsAdminLibriciel();
