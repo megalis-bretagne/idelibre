@@ -278,10 +278,72 @@ class CsvUserControllerTest extends WebTestCase
         $form['csv[csv]'] = $csvFile;
 
         $this->client->submit($form);
-        $title = $crawler->filter('html:contains("Certains utilisateurs n\'ont pas pu être importés")');
+
+        $this->assertTrue($this->client->getResponse()->isRedirect());
+
+        $crawler = $this->client->followRedirect();
+        $this->assertResponseStatusCodeSame(200);
+
+        $title = $crawler->filter('html:contains("Erreurs lors de l\'import")');
         $this->assertCount(1, $title);
-
-
     }
+
+
+    public function testPhoneWrongFormat()
+    {
+        $csvFile = new UploadedFile(__DIR__ . '/../../resources/user_error_wrong_format_phone.csv', 'user.csv');
+        $this->assertNotEmpty($csvFile);
+
+        $this->loginAsAdminLibriciel();
+        $this->client->request(Request::METHOD_GET, '/csv/userErrors');
+
+        $crawler = $this->client->request(Request::METHOD_GET, '/csv/importUsers');
+        $this->assertResponseStatusCodeSame(200);
+        $item = $crawler->filter('html:contains("Importer des utilisateurs via csv")');
+        $this->assertCount(1, $item);
+
+        $form = $crawler->selectButton('Importer le csv')->form();
+
+        $form['csv[csv]'] = $csvFile;
+
+        $this->client->submit($form);
+
+        $this->assertTrue($this->client->getResponse()->isRedirect());
+
+        $crawler = $this->client->followRedirect();
+        $this->assertResponseStatusCodeSame(200);
+
+        $title = $crawler->filter('html:contains("Erreurs lors de l\'import")');
+        $this->assertCount(1, $title);
+    }
+
+    public function testPhoneForWrongRole()
+    {
+        $csvFile = new UploadedFile(__DIR__ . '/../../resources/user_error_wrong_role_phone.csv', 'user.csv');
+        $this->assertNotEmpty($csvFile);
+
+        $this->loginAsAdminLibriciel();
+        $this->client->request(Request::METHOD_GET, '/csv/userErrors');
+
+        $crawler = $this->client->request(Request::METHOD_GET, '/csv/importUsers');
+        $this->assertResponseStatusCodeSame(200);
+        $item = $crawler->filter('html:contains("Importer des utilisateurs via csv")');
+        $this->assertCount(1, $item);
+
+        $form = $crawler->selectButton('Importer le csv')->form();
+
+        $form['csv[csv]'] = $csvFile;
+
+        $this->client->submit($form);
+
+        $this->assertTrue($this->client->getResponse()->isRedirect());
+
+        $crawler = $this->client->followRedirect();
+        $this->assertResponseStatusCodeSame(200);
+
+        $title = $crawler->filter('html:contains("Erreurs lors de l\'import")');
+        $this->assertCount(1, $title);
+    }
+
 
 }

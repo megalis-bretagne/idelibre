@@ -2,6 +2,8 @@
 
 namespace App\Service\Csv;
 
+use App\Entity\Enum\Role_Code;
+use App\Entity\Enum\Role_Name;
 use App\Entity\Role;
 use App\Entity\Structure;
 use App\Entity\Timezone;
@@ -19,11 +21,13 @@ use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use ForceUTF8\Encoding;
 use League\Csv\Reader;
+use League\Csv\UnavailableStream;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use function PHPUnit\Framework\isEmpty;
 use function PHPUnit\Framework\stringContains;
 use function PHPUnit\Framework\throwException;
 
@@ -33,18 +37,21 @@ class CsvUserManager
     public const INVALID_PASSWORD = 'CHANGEZMOI';
 
     public function __construct(
-        private readonly EntityManagerInterface $em,
-        private readonly ValidatorInterface $validator,
-        private readonly UserRepository $userRepository,
-        private readonly TypeRepository $typeRepository,
-        private readonly RoleManager $roleManager,
-        private readonly SubscriptionManager $subscriptionManager,
+        private readonly EntityManagerInterface  $em,
+        private readonly ValidatorInterface      $validator,
+        private readonly UserRepository          $userRepository,
+        private readonly TypeRepository          $typeRepository,
+        private readonly RoleManager             $roleManager,
+        private readonly SubscriptionManager     $subscriptionManager,
         private readonly CsvViolationUserManager $csvViolationUserManager,
-    ) {
+    )
+    {
     }
 
     /**
      * @return ConstraintViolationListInterface[]
+     * @throws UnavailableStream
+     * @throws \League\Csv\Exception
      */
     public function importUsers(UploadedFile $file, Structure $structure): array
     {
@@ -54,13 +61,11 @@ class CsvUserManager
         $csv = Reader::createFromPath($file->getRealPath(), 'r');
         $records = $csv->getRecords();
 
-        $this->saveDeputyFirst($records, $structure, $csvEmails, $errors);
-
-
+        $errors = $this->saveDeputyFirst($records, $structure, $csvEmails, $errors);
 
         foreach ($records as $record) {
 
-            if ($this->isMissingFields($record)) {
+            if ($this->csvViolationUserManager->isMissingFields($record)) {
                 $errors[] = $this->csvViolationUserManager->missingFieldViolation($record);
                 continue;
             }
@@ -89,19 +94,8 @@ class CsvUserManager
                     continue;
                 }
 
-                if ($errorCsv = $this->isUsernameTwiceInCsv($csvEmails, $username, $user)) {
+                if ($errorCsv = $this->csvViolationUserManager->isUsernameTwiceInCsv($csvEmails, $username, $user)) {
                     $errors[] = $errorCsv;
-                    continue;
-                }
-
-                if ($record[Csv_Records::ROLE->value] !== '3' && $record[Csv_Records::PHONE->value]){
-                    $errors[] = $this->csvViolationUserManager->violationUnautorizedPhone($record);
-                    continue;
-                }
-
-
-                if ($record[Csv_Records::ROLE->value] !== '3' && $record[Csv_Records::DEPUTY->value]){
-                    $errors[] = $this->csvViolationUserManager->roleViolationForDeputy($record);
                     continue;
                 }
 
@@ -112,20 +106,8 @@ class CsvUserManager
                 $this->em->persist($user);
                 $this->em->flush();
 
-                if ($record[Csv_Records::ROLE->value] === '3' && $record[Csv_Records::DEPUTY->value]){
-                    $this->assignDeputy($record[Csv_Records::DEPUTY->value], $user);
-                }
 
-
-
-                if ($record[Csv_Records::ROLE->value] !== '3' && $record[Csv_Records::TITLE->value]){
-                    $errors[] = $this->csvViolationUserManager->violationUnautorizedTitle($record);
-                    continue;
-                }
-
-
-
-
+                $this->assignDeputy($record, $user);
 
             }
         }
@@ -135,10 +117,6 @@ class CsvUserManager
 
 
 
-    private function isMissingFields(array $record): bool
-    {
-        return  7 > count($record);
-    }
 
     private function isSecretaryOrAdmin(User $user): bool
     {
@@ -146,13 +124,12 @@ class CsvUserManager
             return false;
         }
 
-        if (Role::NAME_ROLE_SECRETARY === $user->getRole()->getName() || Role::NAME_ROLE_STRUCTURE_ADMINISTRATOR === $user->getRole()->getName()) {
+        if (Role_Name::NAME_ROLE_SECRETARY === $user->getRole()->getName() || Role_Name::NAME_ROLE_STRUCTURE_ADMINISTRATOR === $user->getRole()->getName()) {
             return true;
         }
 
         return false;
     }
-
 
 
     private function associateActorToTypeSeances(User $user, ?string $typeNamesString, Structure $structure): void
@@ -178,33 +155,17 @@ class CsvUserManager
         }
 
         return match ($roleId) {
-            Role::CODE_ROLE_SECRETARY => $this->roleManager->getSecretaryRole(),
-            Role::CODE_ROLE_STRUCTURE_ADMIN => $this->roleManager->getStructureAdminRole(),
-            Role::CODE_ROLE_ACTOR => $this->roleManager->getActorRole(),
-            Role::CODE_ROLE_EMPLOYEE => $this->roleManager->getEmployeeRole(),
-            Role::CODE_ROLE_GUEST => $this->roleManager->getGuestRole(),
-            Role::CODE_ROLE_DEPUTY => $this->roleManager->getDeputyRole(),
+            Role_Code::CODE_ROLE_SECRETARY => $this->roleManager->getSecretaryRole(),
+            Role_Code::CODE_ROLE_STRUCTURE_ADMIN => $this->roleManager->getStructureAdminRole(),
+            Role_Code::CODE_ROLE_ACTOR => $this->roleManager->getActorRole(),
+            Role_Code::CODE_ROLE_EMPLOYEE => $this->roleManager->getEmployeeRole(),
+            Role_Code::CODE_ROLE_GUEST => $this->roleManager->getGuestRole(),
+            Role_Code::CODE_ROLE_DEPUTY => $this->roleManager->getDeputyRole(),
             default => null,
         };
     }
 
-    private function isUsernameTwiceInCsv(array $csvEmails, string $email, User $user): ?ConstraintViolationListInterface
-    {
-        if (in_array($email, $csvEmails)) {
-            $violation = new ConstraintViolation(
-                'Le meme nom d\'utilisateur est déja présent dans ce csv. il n\'a donc pas été ajouté',
-                null,
-                ['username'],
-                $user,
-                'username',
-                $user->getEmail()
-            );
 
-            return new ConstraintViolationList([$violation]);
-        }
-
-        return null;
-    }
 
     private function isExistUsername(string $username, Structure $structure): bool
     {
@@ -231,24 +192,18 @@ class CsvUserManager
     private function createUserFromRecord(Structure $structure, array $record): User
     {
         $user = new User();
+
         $user
             ->setGender($this->getGenderCode(intval($record[Csv_Records::GENDER->value] ?? 0)))
             ->setUsername($this->sanitize($record[Csv_Records::USERNAME->value] ?? '') . '@' . $structure->getSuffix())
             ->setFirstName($this->sanitize($record[Csv_Records::FIRST_NAME->value] ?? ''))
             ->setLastName($this->sanitize($record[Csv_Records::LAST_NAME->value] ?? ''))
             ->setEmail($this->sanitize($record[Csv_Records::EMAIL->value] ?? ''))
-            ->setRole($this->getRoleFromCode(intval($record[Csv_Records::ROLE->value] ?? 0)));
-
-        if (($record[Csv_Records::ROLE->value] === '3' || $record[Csv_Records::ROLE->value] === '6') && $record[Csv_Records::PHONE->value]){
-            $user->setPhone($this->sanitizePhoneNumber($record[Csv_Records::PHONE->value]));
-        }
-        if ($record[Csv_Records::ROLE->value] === '3') {
-            $user->setTitle($this->sanitize($record[Csv_Records::TITLE->value]));
-        }
-
-        $user
+            ->setRole($this->getRoleFromCode(intval($record[Csv_Records::ROLE->value] ?? 0)))
+            ->setPhone($this->sanitizePhoneNumber($record[Csv_Records::PHONE->value] ?? ''))
             ->setPassword(self::INVALID_PASSWORD)
             ->setStructure($structure);
+
 
         return $user;
     }
@@ -269,7 +224,7 @@ class CsvUserManager
     private function sanitizePhoneNumber(string $phone): string
     {
         if (str_contains($phone, '.')) {
-            return str_replace('.', '', $phone) ;
+            return str_replace('.', '', $phone);
         }
         if (str_contains($phone, ' ')) {
             return str_replace(' ', '', $phone);
@@ -278,67 +233,92 @@ class CsvUserManager
             return str_replace('-', '', $phone);
         }
 
-        dd($phone);
         return $phone;
     }
 
-    private function saveDeputyFirst(iterable $records, Structure $structure, $csvEmails, $errors):void
+    private function saveDeputyFirst(iterable $records, Structure $structure, $csvEmails, $errors): array
     {
-        foreach ($records as $record){
-            if ($record[Csv_Records::ROLE->value] === '6'){
-                if ($this->isMissingFields($record)) {
-                    $errors[] = $this->missingFieldViolation($record);
+        foreach ($records as $record) {
+            if ($record[Csv_Records::ROLE->value] !== '6') {
+                continue;
+            }
+
+            $validatationErrors = $this->validateFields($records);
+            if ($validatationErrors) {
+                $errors[] = $validatationErrors;
+                continue;
+            }
+
+            $username = $this->sanitize($record[Csv_Records::USERNAME->value] ?? '') . '@' . $structure->getSuffix();
+            if (!$this->isExistUsername($username, $structure)) {
+
+
+                $user = $this->createUserFromRecord($structure, $record);
+
+                if (0 !== $this->validator->validate($user)->count()) {
+                    $errors[] = $this->validator->validate($user);
                     continue;
                 }
 
-                if ($record[1] === "") {
-                    $errors[] = $this->missingUsernameViolation($record);
+                if (!$user->getRole()) {
+                    $errors[] = $this->csvViolationUserManager->missingRoleViolation($record);
                     continue;
                 }
-                $username = $this->sanitize($record[Csv_Records::USERNAME->value] ?? '') . '@' . $structure->getSuffix();
-                if (!$this->isExistUsername($username, $structure)) {
 
-
-                    $user = $this->createUserFromRecord($structure, $record);
-
-                    if (0 !== $this->validator->validate($user)->count()) {
-                        $errors[] = $this->validator->validate($user);
-                        continue;
-                    }
-
-                    if (!$user->getRole()) {
-                        $errors[] = $this->missingRoleViolation($record);
-                        continue;
-                    }
-
-                    if ($errorCsv = $this->isUsernameTwiceInCsv($csvEmails, $username, $user)) {
-                        $errors[] = $errorCsv;
-                        continue;
-                    }
-
-                    $csvEmails[] = $username;
-                    $this->em->persist($user);
-                    $this->em->flush();
+                if ($errorCsv = $this->csvViolationUserManager->isUsernameTwiceInCsv($csvEmails, $username, $user)) {
+                    $errors[] = $errorCsv;
                     continue;
-
                 }
+
+
+                $csvEmails[] = $username;
+                $this->em->persist($user);
+                $this->em->flush();
             }
         }
+        return $errors;
 
     }
 
-    private function assignDeputy(string $deputy, $user):void
+
+    private function validateFields($record): ?ConstraintViolationList
     {
-        $deputyUsername = $this->sanitize($deputy . '@' . $user->getStructure()->getSuffix());
+        $errors = [];
+        if ($this->csvViolationUserManager->isMissingFields($record)) {
+            return $this->csvViolationUserManager->missingFieldViolation($record);
 
-        $deputy = $this->userRepository->findOneBy(['username' => $deputyUsername, 'structure' => $user->getStructure()]);
+        }
 
-        if($deputy !== null){
-//            dd($deputy, $user);
+        if ($record[1] === "") {
+            return $this->csvViolationUserManager->missingUsernameViolation($record);
 
-            $user->setDeputy($deputy);
-            $this->em->persist($user);
-            $this->em->flush();
+        }
+        return null;
+    }
+
+    private function assignDeputy(array $record, $user): void
+    {
+        if ($this->isActorWithDeputy($record)) {
+
+            $deputyUsername = $this->sanitize($record[Csv_Records::DEPUTY->value] . '@' . $user->getStructure()->getSuffix());
+
+            $deputy = $this->userRepository->findOneBy(['username' => $deputyUsername, 'structure' => $user->getStructure()]);
+
+            if ($deputy !== null) {
+                $user->setDeputy($deputy);
+                $this->em->persist($user);
+                $this->em->flush();
+            }
         }
     }
+
+    private
+    function isActorWithDeputy(array $record): bool
+    {
+        return $record[Csv_Records::ROLE->value] === '3' && !empty($record[Csv_Records::DEPUTY->value]);
+    }
+
+
+
+
 }

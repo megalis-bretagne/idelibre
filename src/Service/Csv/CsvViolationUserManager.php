@@ -2,11 +2,35 @@
 
 namespace App\Service\Csv;
 
+use App\Entity\User;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 class CsvViolationUserManager
 {
+    public function isUsernameTwiceInCsv(array $csvEmails, string $email, User $user): ?ConstraintViolationListInterface
+    {
+        if (in_array($email, $csvEmails)) {
+            $violation = new ConstraintViolation(
+                'Le meme nom d\'utilisateur est déja présent dans ce csv. il n\'a donc pas été ajouté',
+                null,
+                ['username'],
+                $user,
+                'username',
+                $user->getEmail()
+            );
+
+            return new ConstraintViolationList([$violation]);
+        }
+
+        return null;
+    }
+
+    public function isMissingFields(array $record): bool
+    {
+        return count($record) < 6;
+    }
     public function missingFieldViolation($record): ConstraintViolationList
     {
         $violation = new ConstraintViolation(
