@@ -28,6 +28,8 @@ class FileGenerator
      */
     public function genFullSittingPdf(Sitting $sitting): void
     {
+        $this->deleteFullSittingFile($sitting, 'pdf');
+
         $fullSittingDocsPath = $this->getFullSittingDocsPath($sitting);
         $pdfDocsPathFinal = $this->genFullSittingDirPath($sitting, 'pdf');
 
@@ -50,6 +52,9 @@ class FileGenerator
      */
     public function genFullSittingZip(Sitting $sitting): string
     {
+
+        $this->deleteZipIfAlreadyExists($this->genFullSittingDirPath($sitting, 'zip'));
+
         if (!$this->fileChecker->isValid('zip', null, $sitting)) {
             $this->logger->error('zip is too heavy, max size is' . $this->bag->get('maximum_size_pdf_zip_generation'));
 
