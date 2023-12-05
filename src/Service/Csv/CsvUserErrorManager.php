@@ -118,18 +118,4 @@ class CsvUserErrorManager
 
         return new ConstraintViolationList([$violation]);
     }
-
-    public function roleViolationForDeputy($record): ConstraintViolationList
-    {
-        $violation = new ConstraintViolation(
-            'Seul un élu est en mesure d\'avoir un suppléant.',
-            null,
-            $record,
-            null,
-            'role',
-            'Assignation du suppléant impossible'
-        );
-
-        return new ConstraintViolationList([$violation]);
-    }
 }
