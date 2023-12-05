@@ -52,8 +52,8 @@ class FileGenerator
      */
     public function genFullSittingZip(Sitting $sitting): string
     {
-
-        $this->deleteZipIfAlreadyExists($this->genFullSittingDirPath($sitting, 'zip'));
+        $zipPath = $this->genFullSittingDirPath($sitting, 'zip');
+        $this->deleteZipIfAlreadyExists($zipPath);
 
         if (!$this->fileChecker->isValid('zip', null, $sitting)) {
             $this->logger->error('zip is too heavy, max size is' . $this->bag->get('maximum_size_pdf_zip_generation'));
@@ -62,7 +62,7 @@ class FileGenerator
         }
 
         $zip = new ZipArchive();
-        $zipPath = $this->genFullSittingDirPath($sitting, 'zip');
+
         $this->deleteZipIfAlreadyExists($zipPath);
         $zip->open($zipPath, ZipArchive::CREATE);
         $zip->addFile($sitting->getConvocationFile()->getPath(), $sitting->getConvocationFile()->getName());
@@ -170,6 +170,9 @@ class FileGenerator
         $this->filesystem->remove($path);
     }
 
+    /**
+     * @throws UnsupportedExtensionException
+     */
     public function deleteFullSittingFile(Sitting $sitting, string $extension): void
     {
         $path = $this->genFullSittingDirPath($sitting, $extension);
