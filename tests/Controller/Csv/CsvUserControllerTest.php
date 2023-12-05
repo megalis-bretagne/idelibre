@@ -289,9 +289,8 @@ class CsvUserControllerTest extends WebTestCase
         $crawler = $this->client->followRedirect();
         $this->assertResponseStatusCodeSame(200);
 
-        $title = $crawler->filter('html:contains("Erreurs lors de l\'import")');
-        $this->assertCount(1, $title);
-        $this->assertEmpty($this->getOneEntityBy(User::class, ['username' => 'p.dumontet@libriciel']));
+        $user = $this->getOneUserBy(['username' => 'p.dumontet@libriciel']);
+        $this->assertEmpty($user->getDeputy());
     }
 
 
