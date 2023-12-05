@@ -23,16 +23,16 @@ use Symfony\Component\Messenger\MessageBusInterface;
 class SittingManager
 {
     public function __construct(
-        private ConvocationManager $convocationManager,
-        private FileManager $fileManager,
-        private EntityManagerInterface $em,
-        private MessageBusInterface $messageBus,
-        private ProjectManager $projectManager,
-        private RoleManager $roleManager,
-        private SittingRepository $sittingRepository,
-        private FileGenerator $fileGenerator,
-        private ProjectRepository $projectRepository,
-        private OtherdocRepository $otherdocRepository
+        private readonly ConvocationManager     $convocationManager,
+        private readonly FileManager            $fileManager,
+        private readonly EntityManagerInterface $em,
+        private readonly MessageBusInterface    $messageBus,
+        private readonly ProjectManager         $projectManager,
+        private readonly RoleManager            $roleManager,
+        private readonly SittingRepository      $sittingRepository,
+        private readonly FileGenerator          $fileGenerator,
+        private readonly ProjectRepository      $projectRepository,
+        private readonly OtherdocRepository     $otherdocRepository
     ) {
     }
 
