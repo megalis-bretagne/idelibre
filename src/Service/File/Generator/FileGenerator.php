@@ -168,6 +168,9 @@ class FileGenerator
         $this->filesystem->remove($path);
     }
 
+    /**
+     * @throws UnsupportedExtensionException
+     */
     public function deleteFullSittingFile(Sitting $sitting, string $extension): void
     {
         $path = $this->genFullSittingDirPath($sitting, $extension);
