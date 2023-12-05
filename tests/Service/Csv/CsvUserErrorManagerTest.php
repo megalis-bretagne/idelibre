@@ -6,7 +6,6 @@ use App\Service\Csv\CsvUserErrorManager;
 use App\Tests\Factory\StructureFactory;
 use App\Tests\Factory\UserFactory;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Validator\ConstraintViolationList;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
 
@@ -73,6 +72,8 @@ class CsvUserErrorManagerTest extends KernelTestCase
             'email' => 'email@lib',
             'role' => '',
         ];
+
+
         $validation = $this->csvUserErrorManager->postSavingValidation($record, $user, $csvEmails);
         $this->assertNotNull($validation);
         $this->assertCount(1, $validation);
@@ -86,5 +87,78 @@ class CsvUserErrorManagerTest extends KernelTestCase
         ];
         $validation2 = $this->csvUserErrorManager->postSavingValidation($record2, $user, $csvEmails);
         $this->assertNotNull($validation2);
+    }
+
+    public function testIsUsernameTwiceInCsv() {
+        $structure = StructureFactory::createOne()->object();
+        $user = UserFactory::createOne(['username' => 'test', 'structure' => $structure])->object();
+        $csvEmails = ['test'];
+        $validation = $this->csvUserErrorManager->isUsernameTwiceInCsv($csvEmails, $user->getUsername(), $user);
+        $this->assertNotNull($validation);
+        $this->assertCount(1, $validation);
+    }
+
+    public function testIsMissingFields() {
+        $record = [
+            'gender' => "1",
+            'username' => 'username@lib',
+            'firstname' => 'firstname',
+            'lastname' => 'lastname',
+            'email' => 'email@mail.com',
+            'role' => '3',
+        ];
+        $this->assertFalse($this->csvUserErrorManager->isMissingFields($record));
+
+        $record2 = [
+            'username' => '',
+            'firstname' => 'firstname',
+            'lastname' => 'lastname',
+            'email' => '',
+            'role' => '3',
+        ];
+        $this->assertTrue($this->csvUserErrorManager->isMissingFields($record2));
+    }
+
+    public function testMissingFieldViolation(){
+        $record = [
+            'gender' => "1",
+            'username' => 'username',
+            'firstname' => 'firstname',
+            'lastname' => 'lastname',
+            'email' => '',
+            'role' => '3',
+        ];
+        $validation = $this->csvUserErrorManager->missingFieldViolation($record);
+        $this->assertNotNull($validation);
+        $this->assertCount(1, $validation);
+    }
+
+    public function testMissingUsernameViolation(){
+        $record = [
+            'gender' => '1',
+            'username' => '',
+            'firstname' => 'firstname',
+            'lastname' => 'lastname',
+            'email' => 'email@mail.com',
+            'role' => '3',
+        ];
+        $validation = $this->csvUserErrorManager->missingUsernameViolation($record);
+        $this->assertNotNull($validation);
+        $this->assertCount(1, $validation);
+    }
+
+    public function testMissingRoleViolation()
+    {
+        $record = [
+            'gender' => '1',
+            'username' => '',
+            'firstname' => 'firstname',
+            'lastname' => 'lastname',
+            'email' => 'email@mail.com',
+            'role' => '',
+        ];
+        $validation = $this->csvUserErrorManager->missingUsernameViolation($record);
+        $this->assertNotNull($validation);
+        $this->assertCount(1, $validation);
     }
 }
