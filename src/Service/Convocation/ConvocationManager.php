@@ -3,6 +3,7 @@
 namespace App\Service\Convocation;
 
 use App\Entity\Convocation;
+use App\Entity\Enum\Role_Name;
 use App\Entity\File;
 use App\Entity\Role;
 use App\Entity\Sitting;
@@ -82,7 +83,7 @@ class ConvocationManager
 
     private function getConvocationCategory(User $user): string
     {
-        if (Role::NAME_ROLE_ACTOR === $user->getRole()->getName()) {
+        if (Role_Name::NAME_ROLE_ACTOR === $user->getRole()->getName()) {
             return Convocation::CATEGORY_CONVOCATION;
         }
 
@@ -290,13 +291,13 @@ class ConvocationManager
     private function getConvocationNotSentByUserProfile(Sitting $sitting, ?string $userProfile): array
     {
         switch ($userProfile) {
-            case Role::NAME_ROLE_ACTOR:
+            case Role_Name::NAME_ROLE_ACTOR:
                 $convocations = $this->convocationRepository->getActorConvocationsBySitting($sitting);
                 break;
-            case Role::NAME_ROLE_GUEST:
+            case Role_Name::NAME_ROLE_GUEST:
                 $convocations = $this->convocationRepository->getGuestConvocationsBySitting($sitting);
                 break;
-            case Role::NAME_ROLE_EMPLOYEE:
+            case Role_Name::NAME_ROLE_EMPLOYEE:
                 $convocations = $this->convocationRepository->getInvitableEmployeeConvocationsBySitting($sitting);
                 break;
             default:

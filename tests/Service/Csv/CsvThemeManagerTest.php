@@ -46,7 +46,7 @@ class CsvThemeManagerTest extends WebTestCase
         $rootTheme = ThemeFactory::createOne(['name' => 'ROOT', 'structure' => $libricielProxy]);
         $structure = $libricielProxy->object();
 
-        $csvFile = new UploadedFile(__DIR__ . '/../../resources/theme_success.csv', 'theme_success.csv');
+        $csvFile = new UploadedFile(__DIR__ . '/../../resources/csv/theme_success.csv', 'theme_success.csv');
         $this->assertNotEmpty($csvFile);
 
         $errors = $this->csvThemeManager->importThemes($csvFile, $structure);
@@ -63,7 +63,7 @@ class CsvThemeManagerTest extends WebTestCase
         $rootTheme = ThemeFactory::createOne(['name' => 'ROOT', 'structure' => $libricielProxy]);
         $structure = $libricielProxy->object();
 
-        $csvFile = new UploadedFile(__DIR__ . '/../../resources/theme_withSubTheme.csv', 'theme_withSubTheme.csv');
+        $csvFile = new UploadedFile(__DIR__ . '/../../resources/csv/theme_withSubTheme.csv', 'theme_withSubTheme.csv');
         $this->assertNotEmpty($csvFile);
 
         $errors = $this->csvThemeManager->importThemes($csvFile, $structure);
@@ -85,7 +85,7 @@ class CsvThemeManagerTest extends WebTestCase
         $rootTheme = ThemeFactory::createOne(['name' => 'ROOT', 'structure' => $libricielProxy]);
         $structure = $libricielProxy->object();
 
-        $csvFile = new UploadedFile(__DIR__ . '/../../resources/theme_noName.csv', 'theme_noName.csv');
+        $csvFile = new UploadedFile(__DIR__ . '/../../resources/csv/theme_noName.csv', 'theme_noName.csv');
         $this->assertNotEmpty($csvFile);
 
         /** @var ConstraintViolationList[] $errors */
@@ -108,7 +108,7 @@ class CsvThemeManagerTest extends WebTestCase
         $rootTheme = ThemeFactory::createOne(['name' => 'ROOT', 'structure' => $libricielProxy]);
         $structure = $libricielProxy->object();
 
-        $csvFile = new UploadedFile(__DIR__ . '/../../resources/theme_tooLong.csv', 'theme_tooLong.csv');
+        $csvFile = new UploadedFile(__DIR__ . '/../../resources/csv/theme_tooLong.csv', 'theme_tooLong.csv');
         $this->assertNotEmpty($csvFile);
 
         /** @var ConstraintViolationList[] $errors */
