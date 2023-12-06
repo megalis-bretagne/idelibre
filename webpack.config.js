@@ -37,6 +37,7 @@ Encore
     .addEntry('userDynamicFields', './assets/js/userDynamicFields.js')
     .addEntry('attendance', './assets/js/attendance.js')
     .addEntry('invalidatePassword', './assets/js/invalidatePassword.js')
+    .addEntry('accordeonTitle', './assets/js/accordeonTitle.js')
 
 
         // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
