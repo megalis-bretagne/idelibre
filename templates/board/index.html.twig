@@ -14,8 +14,8 @@
         <table class="table table-striped bg-white ">
             <thead>
                 <tr>
-                    <th class="text-secondary expand-icon expandable" style="font-size: 1.2em">
-                        <span class="ml-3">{{ sitting.name }} {{ sitting.date | date('d/m/Y : H:i', timezone) }}</span>
+                    <th class="text-primary expand-icon expandable" style="font-size: 1.2em" >
+                        <span class="ms-2">{{ sitting.name }} {{ sitting.date | date('d/m/Y : H:i', timezone) }}</span>
                     </th>
                 </tr>
 
@@ -32,30 +32,35 @@
                         <td class="col-4">{{ convocation.user.lastname }} {{ convocation.user.firstname }}</td>
                         <td class="col-3">
                             {% if convocation.sentTimestamp is not null %}
-                                <span class="badge bg-success fas fa-check d-block mr-2"></span>
+                                <span class="text-success fas fa-check d-block me-2" title="Envoyé"></span>
                                 {{ convocation.sentTimestamp.createdAt |  date('d/m/Y : H:i', timezone) }}
 
                             {% else %}
-                                <span class="badge bg-danger fa fa-times"> </span>
+                                <span class="text-danger fa fa-times me-2" title="Non envoyé"></span>
                             {% endif %}
                         </td>
                         <td class="col-3">
                             {% if convocation.receivedTimestamp is not null %}
-                                <span class="badge bg-success fas fa-check"></span>
+                                <span class="text-success fas fa-check" title="Reçu"></span>
                                 {{ convocation.receivedTimestamp.createdAt |  date('d/m/Y : H:i', timezone) }}
                             {% else %}
-                                <span class="badge bg-danger fa fa-times "> </span>
+                                <span class="text-danger fa fa-times" title="non reçu"> </span>
                             {% endif %}
                         </td>
                         <td class="col-2">
                             {% if convocation.attendance is null %}
-                                <span class="badge bg-warning fas fa-question"> </span>
+                                <span class="text-warning fas fa-question" title="Sans réponse"></span>
                             {% elseif convocation.attendance == 'present' %}
-                                <span class="badge bg-success fas fa-check"> </span>
+                                <span class="text-success fas fa-check" title="Présent"> </span>
                             {% elseif convocation.attendance == 'remote' %}
                                 <span class="text-success" title="En distanciel"><i class="fas fa-laptop-house "></i> </span>
-                            {% else %}
-                                <span class="badge bg-danger fa fa-times "> </span>
+                             {% elseif convocation.attendance == 'deputy' %}
+                                 <span class="text-info" title="Remplacé par son suppléant"><i class="fa fa-arrow-right-arrow-left"></i> </span>
+                             {% elseif convocation.attendance == 'poa' %}
+                                 <span class="text-info" title="Donne pouvoir par procuration"><i class="fa fa-arrows-left-right"></i> </span>
+
+                             {% else %}
+                                <span class="text-danger fa fa-times" title="Absent"> </span>
                             {% endif %}
                         </td>
                     </tr>
@@ -65,6 +70,10 @@
             </tbody>
         </table>
     {% endfor %}
+{% endblock %}
+
+{% block javascripts %}
+{{ encore_entry_script_tags('accordeonTitle') }}
 {% endblock %}
 
 
