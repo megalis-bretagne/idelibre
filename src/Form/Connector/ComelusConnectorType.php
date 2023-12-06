@@ -17,11 +17,9 @@ use Symfony\Component\Validator\Constraints\Length;
 
 class ComelusConnectorType extends AbstractType
 {
-    private ComelusConnectorManager $comelusConnectorManager;
 
-    public function __construct(ComelusConnectorManager $comelusConnectorManager)
+    public function __construct(private readonly ComelusConnectorManager $comelusConnectorManager)
     {
-        $this->comelusConnectorManager = $comelusConnectorManager;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)

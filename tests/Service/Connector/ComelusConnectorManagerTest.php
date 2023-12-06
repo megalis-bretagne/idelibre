@@ -69,7 +69,7 @@ class ComelusConnectorManagerTest extends WebTestCase
         $comelusConnectorManager = $container->get(ComelusConnectorManager::class);
 
 
-        $url = 'https://comelus.dev.libriciel.net';
+        $url = 'https://fakeUrl';
         $apiKey = 'a772bb210ba620a4d4';
 
         $checked = $comelusConnectorManager->checkApiKey($url, $apiKey);
@@ -93,7 +93,7 @@ class ComelusConnectorManagerTest extends WebTestCase
 
         $comelusConnectorManager = $container->get(ComelusConnectorManager::class);
 
-        $url = 'https://comelus.dev.libriciel.net';
+        $url = 'https://fakeUrl';
         $apiKey = 'a772bb210ba620a4d4';
 
         $checked = $comelusConnectorManager->checkApiKey($url, $apiKey);
@@ -113,7 +113,7 @@ class ComelusConnectorManagerTest extends WebTestCase
 
         $comelusConnectorManager = $container->get(ComelusConnectorManager::class);
 
-        $url = 'https://comelus.dev.libriciel.net';
+        $url = 'https://fakeUrl';
         $apiKey = 'a997931df22772bb210ba620a4d4';
 
         $mailingListArray = $comelusConnectorManager->getMailingLists($url, $apiKey);

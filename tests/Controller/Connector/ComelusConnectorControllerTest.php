@@ -10,6 +10,7 @@ use App\Tests\Story\LsmessageConnectorStory;
 use App\Tests\Story\StructureStory;
 use App\Tests\Story\UserStory;
 use Doctrine\Persistence\ObjectManager;
+use Libriciel\ComelusApiWrapper\ComelusWrapper;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -44,6 +45,16 @@ class ComelusConnectorControllerTest extends WebTestCase
 
     public function testEdit()
     {
+        $ComelusMock = $this->getMockBuilder(ComelusWrapper::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $ComelusMock->method('getMailingLists')->willReturn([]);
+        $container = self::getContainer();
+        $container->set(ComelusWrapper::class, $ComelusMock);
+
+        $this->client->disableReboot();
+
         $structure = $this->getOneStructureBy(['name' => 'Libriciel']);
 
         $this->loginAsAdminLibriciel();
@@ -69,5 +80,6 @@ class ComelusConnectorControllerTest extends WebTestCase
         /** @var ComelusConnector $comelusConnector */
         $comelusConnector = $this->getOneEntityBy(ComelusConnector::class, ['structure' => $structure]);
         $this->assertSame('new api key', $comelusConnector->getApiKey());
+        $this->client->enableReboot();
     }
 }

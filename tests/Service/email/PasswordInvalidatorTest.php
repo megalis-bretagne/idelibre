@@ -43,5 +43,4 @@ class PasswordInvalidatorTest extends WebTestCase
             $this->assertSame($user->getPassword(), PasswordInvalidator::INVALID_PASSWORD);
         }
     }
-
 }

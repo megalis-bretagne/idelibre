@@ -24,5 +24,4 @@ final class GroupStory extends Story
             'isStructureCreator' => true,
         ]));
     }
-
 }

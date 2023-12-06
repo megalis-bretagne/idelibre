@@ -2,6 +2,16 @@
 All notable changes to this project will be documented in this file.
 
 
+
+## [4.2.18] - 2023-12-06
+
+### Evolution
+- Mise à jour SF 6.4.1, des dépendances composer et npm
+
+### Correction
+- Si la séance dépasse la limite maximum pour la génération du PDF complet et du zip, les anciens fichier générés sont supprimés (#484)
+
+
 ## [4.2.17] - 2023-12-01
 
 ### Evolution
