@@ -11,13 +11,11 @@ const initPasswordFalse = document.querySelector('#user_initPassword_1');
 window.addEventListener('load', function () {
 
     if (roleInput.value === adminRoleId) {
-        console.log('admin')
         hidePasswordForAdmin()
         return;
     }
 
     if (roleInput.value === actorRoleId) {
-        console.log('actor')
         showDataForActor()
         return;
     }
@@ -27,7 +25,6 @@ window.addEventListener('load', function () {
         return;
     }
 
-    console.log('autre')
     passwordInitGroup.classList.remove('d-none');
     actorInfo.classList.add('d-none');
 });

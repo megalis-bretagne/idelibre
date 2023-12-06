@@ -30,7 +30,7 @@
         {{ form_row(form.authorizedTypes) }}
         {{ form_row(form.isActive) }}
         {{ form_row(form.initPassword) }}
-        <div class="password-group d-none">
+        <div class="d-none" id="passwordGroup">
             {{ form_row(form.plainPassword) }}
         </div>
 
@@ -46,7 +46,14 @@
             {{ form_row(form.isActive) }}
 
             {{ form_row(form.initPassword) }}
-            <div class="password-group d-none">
+            <div class="d-none" id="passwordGroup">
+                {{ form_row(form.plainPassword) }}
+            </div>
+
+            {% elseif user.role.prettyName is same as "Invité" or user.role.prettyName is same as "Personnel administratif" %}
+                {{ form_row(form.isActive) }}
+                {{ form_row(form.initPassword) }}
+            <div class="d-none" id="passwordGroup">
                 {{ form_row(form.plainPassword) }}
             </div>
     {% endif %}
@@ -77,5 +84,6 @@
 {% block javascripts %}
     {{ encore_entry_script_tags('enable-select2') }}
     {{ encore_entry_script_tags('showPasswordEntropy') }}
+    {{ encore_entry_script_tags('initPassword') }}
     {{ encore_entry_script_tags('setPasswordUser') }}
 {% endblock %}

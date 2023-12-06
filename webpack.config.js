@@ -35,6 +35,7 @@ Encore
     .addEntry('showPasswordEntropy', './assets/js/password/showPasswordEntropy.js')
     .addEntry('setPasswordUser', './assets/js/password/setPasswordUser.js')
     .addEntry('attendance', './assets/js/attendance.js')
+    .addEntry('initPassword', './assets/js/password/initPassword.js')
     .addEntry('invalidatePassword', './assets/js/invalidatePassword.js')
     .addEntry('accordeonTitle', './assets/js/accordeonTitle.js')
 
