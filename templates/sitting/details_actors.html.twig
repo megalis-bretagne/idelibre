@@ -401,18 +401,19 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header align-items-start">
-                            <h4 class="modal-title">Attention</h4>
+                            <h4 class="modal-title">Envoie à tous les destinataires</h4>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" title="Fermer"></button>
                         </div>
                         <div class="modal-body">
-                            Veuillez valider l'envoi à tous les destinataires (élus, personnels administratifs, invités)
+                            Souhaitez-vous vraiment envoyer la convocation à tous les destinataires ? (élus, persionnels administratifs et invités)
                         </div>
 
                         <div class="modal-footer">
                             {{ macro.cancelBtnModal() }}
 
-                            <button class="btn btn-primary" data-bs-dismiss="modal" type="button" title="Envoyer"
+                            <button class="btn btn-primary btn-soft-warning" data-bs-dismiss="modal" type="button" title="Envoyer"
                                     v-on:click="sendConvocations()">
+                                <i class="fa fa-paper-plane"></i>
                                 Envoyer
                             </button>
                         </div>
@@ -571,6 +572,7 @@
 
                             <button class="btn btn-primary" data-bs-dismiss="modal" type="button" title="Envoyer à Lsvote"
                                     v-on:click="sendLsvote()">
+                                <i class="fa fa-paper-plane"></i>
                                 Envoyer
                             </button>
                         </div>
@@ -589,7 +591,7 @@
                                     <div class="modal-header align-items-start">
                                         <h5 class="modal-title">Gestion des présences</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true" @click="showModalAttendance = false">&times;</span>
+                                            <span aria-hidden="true" @click="showModalAttendance = false" style="color: transparent">&times;</span>
                                         </button>
                                     </div>
                                     <div class="modal-body">
@@ -735,9 +737,11 @@
                                 <div class="modal-content">
                                     <div class="modal-header align-items-start">
                                         <h5 class="modal-title">Notifier les convoqués et invités</h5>
+
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" title="Notifier à nouveau">
-                                            <span aria-hidden="true"  @click="showModalNotifyAgain = false"></span>
+                                            <span aria-hidden="true"  @click="showModalNotifyAgain = false" style="color: transparent">&times</span>
                                         </button>
+
                                     </div>
                                     <div class="modal-body">
                                         <div class="form-group">
