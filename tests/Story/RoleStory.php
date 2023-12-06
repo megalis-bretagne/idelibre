@@ -72,5 +72,14 @@ final class RoleStory extends Story
                 'ROLE_EMPLOYEE',
             ],
         ]));
+
+        $this->addState('deputy', RoleFactory::new([
+            'name' => 'Deputy',
+            'prettyName' => 'Suppléant',
+            'isInStructureRole' => true,
+            'composites' => [
+                'ROLE_DEPUTY',
+            ],
+        ]));
     }
 }

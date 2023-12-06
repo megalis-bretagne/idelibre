@@ -5,6 +5,7 @@ namespace App\Service\Connector;
 use App\Entity\Connector\Exception\LsvoteConnectorException;
 use App\Entity\Connector\LsvoteConnector;
 use App\Entity\Convocation;
+use App\Entity\Enum\Role_Name;
 use App\Entity\LsvoteSitting;
 use App\Entity\Role;
 use App\Entity\Sitting;
@@ -141,7 +142,7 @@ class LsvoteConnectorManager
                 ->setAttendance($convocation->getAttendance() ? $convocation->getAttendance() : "")
             ;
 
-            if ($convocation->getUser()->getRoles() === Role::NAME_ROLE_DEPUTY) {
+            if ($convocation->getUser()->getRoles() === Role_Name::NAME_ROLE_DEPUTY) {
                 $lsvoteVoter->setIsDeputy(true);
             }
             if ($convocation->getDeputy()) {

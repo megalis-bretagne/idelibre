@@ -40,7 +40,7 @@ class CsvThemeControllerTest extends WebTestCase
 
     public function testImportTheme()
     {
-        $csvFile = new UploadedFile(__DIR__ . '/../../resources/theme_success.csv', 'theme_success.csv');
+        $csvFile = new UploadedFile(__DIR__ . '/../../resources/csv/theme_success.csv', 'theme_success.csv');
         $this->assertNotEmpty($csvFile);
 
         $this->loginAsAdminLibriciel();
@@ -69,7 +69,7 @@ class CsvThemeControllerTest extends WebTestCase
 
     public function testImportCsvError()
     {
-        $csvFile = new UploadedFile(__DIR__ . '/../../resources/theme_tooLong.csv', 'theme_tooLong.csv');
+        $csvFile = new UploadedFile(__DIR__ . '/../../resources/csv/theme_tooLong.csv', 'theme_tooLong.csv');
         $this->assertNotEmpty($csvFile);
 
         $this->loginAsAdminLibriciel();

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Enum\Role_Name;
 use App\Entity\Role;
 use App\Entity\Structure;
 use App\Form\UserPasswordType;
@@ -35,7 +36,7 @@ class SecurityController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        if (in_array($this->getUser()->getRole()->getName(), [Role::NAME_ROLE_ACTOR, Role::NAME_ROLE_EMPLOYEE, Role::NAME_ROLE_GUEST])) {
+        if (in_array($this->getUser()->getRole()->getName(), [Role_Name::NAME_ROLE_ACTOR, Role_Name::NAME_ROLE_EMPLOYEE, Role_Name::NAME_ROLE_GUEST])) {
             return $this->render('security/noActors.html.twig');
         }
 

@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Convocation;
+use App\Entity\Enum\Role_Name;
 use App\Entity\Role;
 use App\Entity\Sitting;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -26,7 +27,7 @@ class ConvocationRepository extends ServiceEntityRepository
      */
     public function getActorConvocationsBySitting(Sitting $sitting): array
     {
-        return $this->getWithRolesConvocationsBySitting($sitting, [Role::NAME_ROLE_ACTOR]);
+        return $this->getWithRolesConvocationsBySitting($sitting, [Role_Name::NAME_ROLE_ACTOR]);
     }
 
     /**
@@ -34,7 +35,7 @@ class ConvocationRepository extends ServiceEntityRepository
      */
     public function getInvitableEmployeeConvocationsBySitting(Sitting $sitting): array
     {
-        return $this->getWithRolesConvocationsBySitting($sitting, Role::INVITABLE_EMPLOYEE);
+        return $this->getWithRolesConvocationsBySitting($sitting, Role_Name::INVITABLE_EMPLOYEE);
     }
 
     /**
@@ -42,7 +43,7 @@ class ConvocationRepository extends ServiceEntityRepository
      */
     public function getGuestConvocationsBySitting(Sitting $sitting): array
     {
-        return $this->getWithRolesConvocationsBySitting($sitting, [Role::NAME_ROLE_GUEST]);
+        return $this->getWithRolesConvocationsBySitting($sitting, [Role_Name::NAME_ROLE_GUEST]);
     }
 
     /**

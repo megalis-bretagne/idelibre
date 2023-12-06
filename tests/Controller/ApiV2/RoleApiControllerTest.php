@@ -53,6 +53,6 @@ class RoleApiControllerTest extends WebTestCase
         $response = $this->client->getResponse();
         $roles = json_decode($response->getContent(), true);
 
-        $this->assertCount(5, $roles);
+        $this->assertCount(6, $roles);
     }
 }

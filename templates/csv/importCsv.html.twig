@@ -32,10 +32,13 @@
             <li>Invité : 5</li>
             <li>Suppléant : 6</li>
         </ul>
+        champ 7 : Numéro de téléphone. Le format du numéro doit être le suivant : 06XXXXXXXX ou 07XXXXXXXX <br>
+        champ 8 : Titre (uniquement si l'utilisateur est un élu) <br>
+        champ 9 : Nom d'utilisateur du suppléant (uniquement si l'utilisateur est un élu) <br>
         <br>
         Exemple : <br>
-        2,d.martin,Damien,Martin,d.martin@exemple.org,2<br>
-        1,e.durant,Emilie,Durant,e.durant@exemple.org,3 <br>
+        2,d.martin,Damien,Martin,d.martin@exemple.org,2,0612345678<br>
+        1,e.durant,Emilie,Durant,e.durant@exemple.org,3,0709455321, conseiller, n.pascal <br>
         <b>Attention :</b> Si un acteur existe déja alors il ne sera pas modifié.
     </div>
 {% endblock %}

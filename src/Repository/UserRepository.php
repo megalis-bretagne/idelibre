@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Convocation;
+use App\Entity\Enum\Role_Name;
 use App\Entity\Group;
 use App\Entity\Role;
 use App\Entity\Sitting;
@@ -11,6 +12,7 @@ use App\Entity\Type;
 use App\Entity\User;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
@@ -132,18 +134,21 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         return $this->createQueryBuilder('u')
             ->leftJoin('u.role', 'r')
             ->andWhere(' r.name =:actor')
-            ->setParameter('actor', Role::NAME_ROLE_ACTOR)
+            ->setParameter('actor', Role_Name::NAME_ROLE_ACTOR)
             ->andWhere('u.structure = :structure')
             ->setParameter('structure', $structure)
             ->orderBy('u.lastName', 'ASC');
     }
 
+    /**
+     * @throws NonUniqueResultException
+     */
     public function findOneSecretaryInStructure(Structure $structure, string $username): ?User
     {
         return $this->createQueryBuilder('u')
             ->leftJoin('u.role', 'r')
             ->andWhere(' r.name =:secretary')
-            ->setParameter('secretary', Role::NAME_ROLE_SECRETARY)
+            ->setParameter('secretary', Role_Name::NAME_ROLE_SECRETARY)
             ->andWhere(' u.username =:username')
             ->setParameter('username', $username)
             ->andWhere('u.structure = :structure')
@@ -185,9 +190,9 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         return $this->createQueryBuilder('u')
             ->leftJoin('u.role', 'r')
             ->andWhere(' r.name =:employee or r.name=:secretary or r.name=:administrator')
-            ->setParameter('employee', Role::NAME_ROLE_EMPLOYEE)
-            ->setParameter('secretary', Role::NAME_ROLE_SECRETARY)
-            ->setParameter('administrator', Role::NAME_ROLE_STRUCTURE_ADMINISTRATOR)
+            ->setParameter('employee', Role_Name::NAME_ROLE_EMPLOYEE)
+            ->setParameter('secretary', Role_Name::NAME_ROLE_SECRETARY)
+            ->setParameter('administrator', Role_Name::NAME_ROLE_STRUCTURE_ADMINISTRATOR)
             ->andWhere('u.structure = :structure')
             ->setParameter('structure', $structure)
             ->orderBy('u.lastName', 'ASC');
@@ -195,17 +200,17 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
     public function findActorsInSitting(Sitting $sitting): QueryBuilder
     {
-        return $this->findWithRoleInSitting($sitting, [Role::NAME_ROLE_ACTOR]);
+        return $this->findWithRoleInSitting($sitting, [Role_Name::NAME_ROLE_ACTOR]);
     }
 
     public function findInvitableEmployeesInSitting(Sitting $sitting): QueryBuilder
     {
-        return $this->findWithRoleInSitting($sitting, Role::INVITABLE_EMPLOYEE);
+        return $this->findWithRoleInSitting($sitting, Role_Name::INVITABLE_EMPLOYEE);
     }
 
     public function findGuestsInSitting(Sitting $sitting): QueryBuilder
     {
-        return $this->findWithRoleInSitting($sitting, [Role::NAME_ROLE_GUEST]);
+        return $this->findWithRoleInSitting($sitting, [Role_Name::NAME_ROLE_GUEST]);
     }
 
     /**
@@ -224,17 +229,17 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
     public function findActorsNotInSitting(Sitting $sitting, Structure $structure): QueryBuilder
     {
-        return $this->findWithRoleNotInSitting($sitting, $structure, [Role::NAME_ROLE_ACTOR]);
+        return $this->findWithRoleNotInSitting($sitting, $structure, [Role_Name::NAME_ROLE_ACTOR]);
     }
 
     public function findInvitableEmployeesNotInSitting(Sitting $sitting, Structure $structure): QueryBuilder
     {
-        return $this->findWithRoleNotInSitting($sitting, $structure, Role::INVITABLE_EMPLOYEE);
+        return $this->findWithRoleNotInSitting($sitting, $structure, Role_Name::INVITABLE_EMPLOYEE);
     }
 
     public function findGuestNotInSitting(Sitting $sitting, Structure $structure): QueryBuilder
     {
-        return $this->findWithRoleNotInSitting($sitting, $structure, [Role::NAME_ROLE_GUEST]);
+        return $this->findWithRoleNotInSitting($sitting, $structure, [Role_Name::NAME_ROLE_GUEST]);
     }
 
     private function findWithRoleNotInSitting(Sitting $sitting, Structure $structure, array $roleNames): QueryBuilder
@@ -259,17 +264,17 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
     public function findActorIdsConvocationSent(Sitting $sitting): array
     {
-        return $this->findWithRolesIdsConvocationSent($sitting, [Role::NAME_ROLE_ACTOR]);
+        return $this->findWithRolesIdsConvocationSent($sitting, [Role_Name::NAME_ROLE_ACTOR]);
     }
 
     public function findInvitableEmployeesIdsConvocationSent(Sitting $sitting): array
     {
-        return $this->findWithRolesIdsConvocationSent($sitting, Role::INVITABLE_EMPLOYEE);
+        return $this->findWithRolesIdsConvocationSent($sitting, Role_Name::INVITABLE_EMPLOYEE);
     }
 
     public function findGuestsIdsConvocationSent(Sitting $sitting): array
     {
-        return $this->findWithRolesIdsConvocationSent($sitting, [Role::NAME_ROLE_GUEST]);
+        return $this->findWithRolesIdsConvocationSent($sitting, [Role_Name::NAME_ROLE_GUEST]);
     }
 
     private function findWithRolesIdsConvocationSent(Sitting $sitting, array $roleNames): array
@@ -296,17 +301,17 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
     public function getAssociatedActorsWithType(?Type $type): ?array
     {
-        return $this->getAssociatedUsersRoleWithType([Role::NAME_ROLE_ACTOR], $type);
+        return $this->getAssociatedUsersRoleWithType([Role_Name::NAME_ROLE_ACTOR], $type);
     }
 
     public function getAssociatedInvitableEmployeesWithType(?Type $type): ?array
     {
-        return $this->getAssociatedUsersRoleWithType(Role::INVITABLE_EMPLOYEE, $type);
+        return $this->getAssociatedUsersRoleWithType(Role_Name::INVITABLE_EMPLOYEE, $type);
     }
 
     public function getAssociatedGuestWithType(?Type $type): ?array
     {
-        return $this->getAssociatedUsersRoleWithType([Role::NAME_ROLE_GUEST], $type);
+        return $this->getAssociatedUsersRoleWithType([Role_Name::NAME_ROLE_GUEST], $type);
     }
 
     /**
@@ -473,7 +478,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->setParameter('structure', $structure)
             ->leftJoin('u.role', 'r')
             ->andWhere(' r.name = :actor')
-            ->setParameter('actor', Role::NAME_ROLE_ACTOR)
+            ->setParameter('actor', Role_Name::NAME_ROLE_ACTOR)
             ->andWhere('u.isActive = true')
             ->orderBy('u.lastName', 'ASC')
         ;
@@ -486,7 +491,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->setParameter('structure', $structure)
             ->leftJoin('u.role', 'r')
             ->andWhere(' r.name = :actor')
-            ->setParameter('actor', Role::NAME_ROLE_ACTOR)
+            ->setParameter('actor', Role_Name::NAME_ROLE_ACTOR)
             ->andWhere('u.isActive = true')
             ->andWhere('u.associatedWith IS null')
         ;
@@ -505,7 +510,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->andWhere('u.isActive = true')
             ->join('u.role', 'r')
             ->andWhere(' r.name = :deputy')
-            ->setParameter('deputy', Role::NAME_ROLE_DEPUTY)
+            ->setParameter('deputy', Role_Name::NAME_ROLE_DEPUTY)
             ->orderBy('u.lastName', 'ASC')
             ->getQuery()
             ->getResult();
@@ -519,7 +524,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->andWhere('u.isActive = true')
             ->join('u.role', 'r')
             ->andWhere(' r.name = :deputy')
-            ->setParameter('deputy', Role::NAME_ROLE_DEPUTY)
+            ->setParameter('deputy', Role_Name::NAME_ROLE_DEPUTY)
             ->orderBy('u.lastName', 'ASC')
         ;
         if ($toExclude) {
@@ -538,7 +543,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->andWhere('u.isActive = true')
             ->join('u.role', 'r')
             ->andWhere(' r.name = :actor')
-            ->setParameter('actor', Role::NAME_ROLE_ACTOR)
+            ->setParameter('actor', Role_Name::NAME_ROLE_ACTOR)
             ->orderBy('u.lastName', 'ASC')
         ;
         if ($toExclude) {

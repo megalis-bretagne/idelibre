@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use App\Validator\Gsm;
 use App\Validator\OneAtMax;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -105,6 +106,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[Column(type: 'string', length: 30, nullable: true)]
     #[Groups(['user:read', 'user:write'])]
+    #[Gsm]
     private $phone;
 
     #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
