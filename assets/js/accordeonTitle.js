@@ -1,13 +1,16 @@
-const accordeon = document.querySelector('th.expandable');
-accordeon.setAttribute('title', 'Déplier');
+const accordeons = document.querySelectorAll('th.expandable');
+accordeons.forEach((a, index) => {
+    a.onclick = () => {
+       if (a.classList.contains('collapse-icon')){
+           a.setAttribute('title', 'Replier')
+           return;
+       }
+       a.setAttribute('title', 'Deplier')
+    }
+})
 
-accordeon.onclick = function () {
-    if (accordeon.classList.contains('expand-icon')) {
-        this.setAttribute('title', 'Déplier')
-    }
-    else {
-        this.setAttribute('title', 'Replier')
-    }
-}
+
+
+
 
 
