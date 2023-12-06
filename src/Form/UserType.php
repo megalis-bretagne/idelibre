@@ -70,6 +70,9 @@ class UserType extends AbstractType
             ->add('phone', TextType::class, [
                 'label' => 'Téléphone mobile (06XXXXXXXX ou 07XXXXXXXX) ',
                 'required' => false,
+                'constraints' => [
+                    new Regex('/^0(6|7)\d{8}$/', 'Le numéro de téléphone doit être de la forme 06xxxxxxxx ou 07xxxxxxxx'),
+                ],
             ])
             ->add('redirect_url', HiddenType::class, [
                 'mapped' => false,
@@ -104,7 +107,8 @@ class UserType extends AbstractType
                     'label' => 'Suppléant',
                     'row_attr' => ["class" => "d-none", "id" => "deputyGroup"],
                     'class' => User::class,
-                    'choice_label' => 'lastName',
+                    'choice_label' => fn(User $user) => $this->formatName($user),
+//                    'choice_label' => 'lastName',
                     'query_builder' => $this->userRepository->findDeputiesWithNoAssociation($options['structure'], $options['toExclude']),
                     'placeholder' => "--",
                     'required' => false,
@@ -119,6 +123,8 @@ class UserType extends AbstractType
                 'class' => User::class,
                 'choice_label' => 'lastName',
                 'query_builder' => $this->userRepository->findDeputiesWithNoAssociation($options['structure'], $options['toExclude']),
+                'data' => $user->getDeputy() ,
+
                 'required' => false,
                 //todo queryBuilder limitant aux deputy disponiblent de la structure.
             ]);
@@ -156,7 +162,6 @@ class UserType extends AbstractType
                         'Non' => false,
                         'Oui' => true,
                     ],
-                    'data' => false,
                     'required' => true,
                 ])
                 ->add('plainPassword', RepeatedType::class, [
@@ -262,5 +267,10 @@ class UserType extends AbstractType
         $user = $options['data'];
 
         return $user->getRole()->getId() === $this->roleManager->getAdminRole()->getId();
+    }
+
+    private function formatName($user): string
+    {
+        return $user->getLastName() . ' ' . $user->getFirstname();
     }
 }
