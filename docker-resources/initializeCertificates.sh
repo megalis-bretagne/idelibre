@@ -1,11 +1,21 @@
 #!/bin/bash
 
 il_path="/opt/idelibre/dist"
+il_current_path="/opt/idelibre/current"
 
+## prequisites checks
+#check if docker-compose-plugin is installed
+if [ ! -e "/usr/libexec/docker/cli-plugins/docker-compose" ]; then
+    echo -e "Please check if docker-compose-plugin is installed on this system. \nStopping ⛔️"
+    exit 253
+fi
 #check from where the script is executed
-if [[ ! "$(pwd)" = "${il_path}/docker-resources" ]]; then
-    echo -e "The script must be executed in ${il_path}/docker-resources \nStopping."
-    exit 0
+if [ ! "$(pwd)" = "${il_current_path}" ]; then
+    echo -e "Please change your working directory to /opt/idelibre/current \nStopping ⛔️"
+    exit 254
+    elif [ ! -L "${il_current_path}/docker-compose.yml" ] || [ ! -e "${il_current_path}/.env" ]; then
+        echo -e "One of the needed files does not exist in ${il_current_path} : docker-compose.yml, .env \nStopping ⛔️"
+        exit 255
 fi
 
 ## set the environement file you want to use
