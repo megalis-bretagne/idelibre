@@ -109,7 +109,7 @@
                 </div>
                 <div class="col-8">
                     {% if isProjectsSizeTooBig %}
-                        <div class="text-warning mt-1"><i class="fa fa-exclamation-triangle"></i> Le ZIP complet de la séance n'a pas été généré car le poids total des fichiers dépasse 200 Mo -  Poids total : {{ totalSize|sizeFormatter }} </div>
+                        <div class="text-warning mt-1"><i class="fa fa-exclamation-triangle"></i> Le ZIP de la séance n'a pas été généré car le poids total des fichiers dépasse 200 Mo - Poids total : {{ totalSize|sizeFormatter }} </div>
                     {% else %}
                         {{ sitting.name }}.zip
                         <a class="btn btn-outline-secondary borderless"
@@ -127,7 +127,7 @@
                 </div>
                 <div class="col-8">
                     {% if isProjectsSizeTooBig %}
-                        <div class="text-warning mt-1"> <i class="fa fa-exclamation-triangle"></i> Le PDF de la séance n'a pas été généré car le poids total des fichiers dépasse 200 Mo -  Poids total : {{ totalSize|sizeFormatter }} </div>
+                        <div class="text-warning mt-1"> <i class="fa fa-exclamation-triangle"></i> Le PDF complet de la séance n'a pas été généré car le poids total des fichiers dépasse 200 Mo - Poids total : {{ totalSize|sizeFormatter }} </div>
                     {% else %}
                         {{ sitting.name }}.pdf
                         <a class="btn btn-outline-secondary borderless"
