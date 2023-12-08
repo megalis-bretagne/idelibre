@@ -241,7 +241,7 @@ let app = new Vue({
         showMessageError(msg) {
             window.scrollTo(0, 0);
             this.messageError = msg;
-            setTimeout(() => this.messageError = null, 3000);
+            setTimeout(() => this.messageError = null, 10000);
         },
     },
 

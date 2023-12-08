@@ -227,7 +227,11 @@
             </button>
 
 
-            <button class="btn btn-primary" @click="save()" id="save-sitting">
+            <button v-if="sittingTooBig" class="btn btn-primary" disabled id="save-sitting">
+                <span class="fa fa-save"></span>
+                Enregistrer les modifications
+            </button>
+            <button v-else class="btn btn-primary" @click="save()" id="save-sitting">
                 <span class="fa fa-save"></span>
                 Enregistrer les modifications
             </button>
