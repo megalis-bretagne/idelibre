@@ -59,6 +59,7 @@ class StructureController extends AbstractController
 
     #[Route(path: '/structure/add', name: 'structure_add')]
     #[IsGranted('CREATE_STRUCTURE')]
+    #[Breadcrumb(title: 'Ajouter une structure')]
     public function add(Request $request, StructureCreator $structureCreator, ParameterBagInterface $bag): Response
     {
         $form = $this->createForm(StructureType::class, null, [

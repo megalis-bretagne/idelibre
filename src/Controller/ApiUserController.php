@@ -43,7 +43,7 @@ class ApiUserController extends AbstractController
 
     #[Route(path: '/apikey/add', name: 'apiUser_add', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_MANAGE_API_USER')]
-    #[Breadcrumb(title: 'Ajouter')]
+    #[Breadcrumb(title: 'Ajouter une clé d\'api')]
     public function add(Request $request, EntityManagerInterface $em): Response
     {
         $form = $this->createForm(ApiUserType::class, null, ['structure' => $this->getUser()->getStructure()]);

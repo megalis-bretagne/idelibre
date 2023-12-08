@@ -43,7 +43,7 @@ class GroupController extends AbstractController
 
     #[Route(path: '/group/add', name: 'group_add')]
     #[IsGranted('ROLE_SUPERADMIN')]
-    #[Breadcrumb(title: 'Ajouter')]
+    #[Breadcrumb(title: 'Ajouter un groupe')]
     public function add(Request $request, GroupManager $groupManager, ParameterBagInterface $bag): Response
     {
         $form = $this->createForm(GroupType::class, null, [

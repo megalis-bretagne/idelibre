@@ -20,7 +20,6 @@ class ThemeController extends AbstractController
 {
     public function __construct(
         private readonly ThemeManager $themeManager,
-        private readonly ThemeRepository $themeRepository
     )
     {
     }
@@ -41,7 +40,7 @@ class ThemeController extends AbstractController
 
     #[Route(path: '/theme/add', name: 'theme_add')]
     #[IsGranted('ROLE_MANAGE_THEMES')]
-    #[Breadcrumb(title: 'Ajouter')]
+    #[Breadcrumb(title: 'Ajouter un thème')]
     public function add(Request $request): Response
     {
         $form = $this->createForm(ThemeWithParentType::class, null, ['structure' => $this->getUser()->getStructure()]);

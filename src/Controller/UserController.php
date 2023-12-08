@@ -57,7 +57,7 @@ class UserController extends AbstractController
 
     #[Route(path: '/user/add', name: 'user_add')]
     #[IsGranted('ROLE_MANAGE_USERS')]
-    #[Breadcrumb(title: 'Ajouter')]
+    #[Breadcrumb(title: 'Ajouter un utilisateur')]
     public function add(Request $request, UserManager $userManager, EventLogManager $eventLog): Response
     {
         $form = $this->createForm(UserType::class, new User(), [
@@ -173,7 +173,7 @@ class UserController extends AbstractController
 
     #[Route(path: '/user/preferences', name: 'user_preferences', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_MANAGE_PREFERENCES')]
-    #[Breadcrumb(null)]
+    #[Breadcrumb(title: null)]
     public function preferences(Request $request, UserManager $userManager, UserLoginEntropy $userLoginEntropy): Response
     {
         $user = $this->getUser();

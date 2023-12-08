@@ -46,7 +46,7 @@ class TypeController extends AbstractController
 
     #[Route(path: '/type/add', name: 'type_add')]
     #[IsGranted('ROLE_MANAGE_TYPES')]
-    #[Breadcrumb(title: 'Ajouter')]
+    #[Breadcrumb(title: 'Ajouter un type de séance')]
     public function add(Request $request, TypeManager $typeManager): Response
     {
         $form = $this->createForm(
