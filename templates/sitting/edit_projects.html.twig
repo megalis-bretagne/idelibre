@@ -92,8 +92,8 @@
                     <span class="fa fa-plus-circle"></span> Ajouter des projets
                 </label>
                 <div class=" ml-auto d-flex justify-content-end mt-2">
-                    <p v-if="fileTooBig === true">
-                        <small><span class="text-danger">Le PDF complet ainsi que le ZIP de la séance ne seront pas générés - Poids total: ${formatSize(totalFileSize)} </span></small>
+                    <p v-if="fileTooBig === true" class=" alert alert-warning mb-0">
+                        <small><span> <i class="fa fa-triangle-exclamation"></i> Le PDF complet ainsi que le Zip de la séance ne seront pas générés car le poids total des fichiers dépasse 200 Mo - Poids total : ${formatSize(totalFileSize)} </span></small>
                     </p>
                     <p v-else >
                         <small> Poids total: <span class="text-success">${formatSize(totalFileSize)} </span></small>
