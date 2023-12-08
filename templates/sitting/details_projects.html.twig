@@ -79,8 +79,8 @@
                 <div class="d-flex justify-content-between">
                     <h2>Projets</h2>
                     {% if isProjectsSizeTooBig %}
-                        <span class="text-danger"><small>Le PDF complet ainsi que le ZIP de la séance n'ont pas été générés  -  Poids total: <span
-                                        class={{ isProjectsSizeTooBig ? "text-danger" : "text-success"  }}> {{ totalSize|sizeFormatter }} </span> </small></span>
+                        <span class="alert alert-warning"><small> <i class=" fa fa-triangle-exclamation"></i> Le PDF complet ainsi que le zip de la séance n'ont pas été générés car le poids total des fichiers dépasse 200 Mo - Poids total des fichiers : <span
+                                        class={{ isProjectsSizeTooBig ? "text-warning" : "text-success"  }}> {{ totalSize|sizeFormatter }} </span> </small></span>
                     {% else %}
                         <span><small> Poids total: <span
                                         class="text-success">{{ totalSize|sizeFormatter }} </span> </small></span>
