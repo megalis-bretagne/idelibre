@@ -3,7 +3,7 @@
 {% block body %}
     <div class="form-side">
 
-        <div class="form-content" style="width: 600px">
+        <div class="form-content" style="width: 700px">
             <div class="soft-logo">
                 <img id="libriciel-logo" alt="Image du Libriciel"
                      height="10" width="10"
@@ -23,7 +23,7 @@
                 {% endfor %}
 
                 <div class="row">
-                    <div class="col-4 mt-5">
+                    <div class="col-3 mt-5">
                         <div class="text-center mt-5">
                             <a href="/idelibre_client/" class="btn btn-primary btn-lg"> Accès aux séances</a>
                         </div>
@@ -31,19 +31,19 @@
 
                     <div class="col-1 mt-5" style="border-right: 2px solid var(--bs-ls-grey-200);">
                     </div>
-                    <div class="col-7">
+                    <div class="col-8">
                         <h1 class="page-title">Veuillez saisir vos identifiants de connexion </h1>
                         <form method="post">
                             <input type="hidden" name="_csrf_token"
                                    value="{{ csrf_token('authenticate') }}">
 
 
-                            <div class="form-group row">
-                                <label for="staticEmail" class="col-sm-3 col-form-label" hidden>Identifiant</label>
-                                <div class="col-sm-12">
+                            <div class="form-group row d-flex">
+                                <label for="staticEmail" class="col-sm-3 col-form-label" >Identifiant</label>
+                                <div class="col-sm-9">
 
                                     <div class="input-group mb-2">
-                                        <div class="input-group-text"><span class="fa fa-user"></span></div>
+                                        <div class="input-group-text login-icon"><span class="fa fa-user"></span></div>
                                         <input type="text" value="{{ last_username }}" name="username" id="inputUsername"
                                                class="form-control" placeholder="Nom d'utilisateur" required autofocus>
                                     </div>
@@ -51,11 +51,11 @@
                             </div>
 
                             <div class="form-group row">
-                                <label for="inputPassword" class="col-sm-3 col-form-label" hidden>Mot de passe</label>
-                                <div class="col-sm-12">
+                                <label for="inputPassword" class="col-sm-3 col-form-label" >Mot de passe</label>
+                                <div class="col-sm-9">
 
                                     <div class="input-group mb-2" id="show_hide_password">
-                                        <div class="input-group-text"><span class="fa fa-lock"></span></div>
+                                        <div class="input-group-text login-icon"><span class="fa fa-lock"></span></div>
                                         <span id="showPassword" class="fas fa-eye-slash eye-password"></span>
 
                                         <input type="password" name="password" id="inputPassword" class="form-control"

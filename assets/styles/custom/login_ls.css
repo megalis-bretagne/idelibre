@@ -9,7 +9,7 @@
 }
 
 .connection-page {
-    height: calc(100vh - 40px);
+    height: calc(100vh - 30px);
     position: relative;
     display: flex;
     flex-direction: column;
@@ -125,11 +125,18 @@ span.btn {
     color: var(--bs-ls-grey-500)
 }
 
+.login-icon {
+    background-color: #222222;
+    color: white;
+}
+
 
 @media screen and (max-width: 800px) {
     .coll-side {
         display: none;
     }
 }
+
+
 
 

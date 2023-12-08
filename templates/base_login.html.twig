@@ -13,7 +13,7 @@
 
 {% endblock %}
 
-<div class="container-fluid">
+<div class="container-fluid p-0">
 
     <main class="connection-page">
         <section class="main">
@@ -22,7 +22,6 @@
             {% if not hide_left_banner_login %}
             <div class="coll-side">
                 <div class="img-container">
-
 
                     {% if structure.logoPath is defined and structure.logoPath is not null %}
                         <img src="{{ asset('custom_logos/' ~ structure.logoPath) }}" alt="logo" class="epci-logo">
@@ -44,7 +43,7 @@
     </main>
 </div>
 
-{{ include('include/_footer.html.twig') }}
+{{ include('include/_footer_ls_login.html.twig') }}
 
 {{ encore_entry_script_tags('app') }}
 {% block javascripts %}{% endblock %}
