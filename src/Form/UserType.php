@@ -46,8 +46,10 @@ class UserType extends AbstractType
         $user = $builder->getData();
         $isMySelf = ($this->security->getUser() === $user);
 
+
+
         $builder
-            ->add('gender', LsChoiceType::class, [
+            ->add('gender', ChoiceType::class, [
                 'label' => 'Civilité',
                 'choices' => [
                     'Madame' => 1,
@@ -70,6 +72,9 @@ class UserType extends AbstractType
             ->add('phone', TextType::class, [
                 'label' => 'Téléphone mobile (06XXXXXXXX ou 07XXXXXXXX) ',
                 'required' => false,
+                'constraints' => [
+                    new Regex('/^0(6|7)\d{8}$/', 'Le numéro de téléphone doit être de la forme 06xxxxxxxx ou 07xxxxxxxx'),
+                ],
             ])
             ->add('redirect_url', HiddenType::class, [
                 'mapped' => false,
@@ -84,6 +89,10 @@ class UserType extends AbstractType
                 'choice_label' => 'prettyName',
                 'query_builder' => $this->roleRepository->findInStructureQueryBuilder(),
                 'placeholder' => 'Sélectionnez une valeur',
+                'attr' =>[
+                    'data-roleAdmin' => $this->roleManager->getAdminRole()->getId(),
+                    'data-roleActor' => $this->roleManager->getActorRole()->getId(),
+                ]
             ]);
         }
 
@@ -104,7 +113,7 @@ class UserType extends AbstractType
                     'label' => 'Suppléant',
                     'row_attr' => ["class" => "d-none", "id" => "deputyGroup"],
                     'class' => User::class,
-                    'choice_label' => 'lastName',
+                    'choice_label' => fn(User $user) => $this->formatName($user),
                     'query_builder' => $this->userRepository->findDeputiesWithNoAssociation($options['structure'], $options['toExclude']),
                     'placeholder' => "--",
                     'required' => false,
@@ -117,8 +126,10 @@ class UserType extends AbstractType
             $builder->add('deputy', EntityType::class, [
                 'label' => 'Suppléant',
                 'class' => User::class,
-                'choice_label' => 'lastName',
+                'choice_label' => fn(User $user) => $this->formatName($user),
                 'query_builder' => $this->userRepository->findDeputiesWithNoAssociation($options['structure'], $options['toExclude']),
+                'data' => $options['data']->getDeputy() ? $options['data']->getDeputy() : null,
+
                 'required' => false,
                 //todo queryBuilder limitant aux deputy disponiblent de la structure.
             ]);
@@ -153,10 +164,9 @@ class UserType extends AbstractType
                     'mapped' => false,
                     'label' => 'Voulez vous définir le mot de passe de l\'utilisateur ?',
                     'choices' => [
-                        'Non' => false,
                         'Oui' => true,
+                        'Non' => false,
                     ],
-                    'data' => false,
                     'required' => true,
                 ])
                 ->add('plainPassword', RepeatedType::class, [
@@ -262,5 +272,10 @@ class UserType extends AbstractType
         $user = $options['data'];
 
         return $user->getRole()->getId() === $this->roleManager->getAdminRole()->getId();
+    }
+
+    private function formatName($user): string
+    {
+        return $user->getLastName() . ' ' . $user->getFirstname();
     }
 }

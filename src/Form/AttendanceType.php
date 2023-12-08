@@ -46,8 +46,8 @@ class AttendanceType extends AbstractType
                 'row_attr' => ["id" => "attendance_deputy_group", "class" => 'd-none'],
                 'required' => true,
                 'class' => User::class,
-                'query_builder' => $this->userRepository->findDeputyByUserId($options['deputyId']),
-                'choice_label' => 'lastName',
+                'query_builder' => $this->userRepository->findDeputyById(['id' => $options['deputyId']]),
+                'choice_label' => fn(User $user) => $this->formatName($user),
                 'disabled' => false,
             ]);
         }
@@ -111,5 +111,10 @@ class AttendanceType extends AbstractType
             return false;
         }
         return true;
+    }
+
+    private function formatName(User $user): string
+    {
+        return $user->getLastName() . ' ' . $user->getFirstName();
     }
 }

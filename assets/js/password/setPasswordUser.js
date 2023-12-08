@@ -1,30 +1,5 @@
 import $ from 'jquery';
 
-const initPasswordTrue = document.querySelector('#user_initPassword_1');
-const initPasswordFalse = document.querySelector('#user_initPassword_0');
-const passwordGroup = document.querySelector('.password-group');
-
-
-initPasswordTrue.addEventListener('change', function () {
-    if (initPasswordTrue.checked) {
-        passwordGroup.classList.remove('d-none');
-    }
-});
-
-initPasswordFalse.addEventListener('change', function () {
-    if (initPasswordFalse.checked) {
-        passwordGroup.classList.add('d-none');
-    }
-});
-
-document.addEventListener('load', function () {
-    if (initPasswordTrue.checked) {
-        passwordGroup.classList.remove('d-none');
-    }
-    passwordGroup.classList.add('d-none');
-});
-
-
 function resetPlainPassword()
 {
     let firstPlainPassword = $('#user_plainPassword_first');
