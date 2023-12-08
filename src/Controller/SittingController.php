@@ -20,6 +20,7 @@ use App\Service\Seance\SittingManager;
 use App\Sidebar\Annotation\Sidebar;
 use App\Sidebar\State\SidebarState;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
+use APY\BreadcrumbTrailBundle\BreadcrumbTrail\Trail;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -49,8 +50,10 @@ class SittingController extends AbstractController
 
     #[Route(path: '/sitting', name: 'sitting_index')]
     #[IsGranted('ROLE_MANAGE_SITTINGS')]
-    public function index(PaginatorInterface $paginator, Request $request): Response
+    public function index(PaginatorInterface $paginator, Request $request, Trail $breadcrumbTrail): Response
     {
+        $request->get('status') === Sitting::ARCHIVED ? $breadcrumbTrail->add("Classées") : $breadcrumbTrail->add("En cours");
+
         $formSearch = $this->createForm(SearchType::class);
         $sittings = $paginator->paginate(
             $this->sittingManager->getListSittingByStructureQuery($this->getUser(), $request->query->get('search'), $request->query->get('status')),
@@ -76,7 +79,7 @@ class SittingController extends AbstractController
     #[Route(path: '/sitting/add', name: 'sitting_add')]
     #[IsGranted('ROLE_MANAGE_SITTINGS')]
     #[Sidebar(active: ['sitting-active-nav'])]
-    #[Breadcrumb(title: 'Ajouter')]
+    #[Breadcrumb(title: 'Ajouter une séance')]
     public function createSitting(Request $request): Response
     {
         $form = $this->createForm(SittingType::class, null, ['structure' => $this->getUser()->getStructure(), 'user' => $this->getUser()]);

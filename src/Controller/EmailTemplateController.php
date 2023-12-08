@@ -42,7 +42,7 @@ class EmailTemplateController extends AbstractController
 
     #[Route(path: '/emailTemplate/add', name: 'email_template_add')]
     #[IsGranted('ROLE_MANAGE_EMAIL_TEMPLATES')]
-    #[Breadcrumb(title: 'Ajouter')]
+    #[Breadcrumb(title: 'Ajouter un modèle d\'email ')]
     public function add(Request $request, EmailTemplateManager $templateManager): Response
     {
         $form = $this->createForm(EmailTemplateType::class, null, ['structure' => $this->getUser()->getStructure()]);

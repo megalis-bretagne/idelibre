@@ -23,15 +23,15 @@
                     </a>
 
 
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown" style="margin-left: -4rem;">
+                    <div class="dropdown-menu dropdown-menu-right popup-menu-right" aria-labelledby="navbarDropdown">
                         <a href="{{ path('user_preferences') }}" class="dropdown-item">
-                            <span class="fas fa-user-cog"></span>
-                            Préférences utilisateur
+                            <span class="fas fa-user"></span>
+                            Mes préférences
                         </a>
-                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-divider" style="color: white"></div>
                         <a href="{{ path('gdpr_notice') }}" class="dropdown-item">
                             <span class="fas fa-user-secret"></span>
-                            Politique de confidentialité
+                            Politique de confidentialité (RGPD)
                         </a>
 
                         {% if (is_granted('ROLE_MANAGE_STRUCTURES') and app.user.structure) %}

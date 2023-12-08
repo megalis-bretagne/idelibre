@@ -52,7 +52,7 @@ class AdminController extends AbstractController
 
     #[Route(path: '/admin/add', name: 'admin_add')]
     #[IsGranted('ROLE_SUPERADMIN')]
-    #[Breadcrumb(title: 'Ajouter')]
+    #[Breadcrumb(title: 'Ajouter un administrateur')]
     public function add(Request $request, UserManager $userManager, RoleManager $roleManager, ParameterBagInterface $bag): Response
     {
         $form = $this->createForm(SuperUserType::class, null, [

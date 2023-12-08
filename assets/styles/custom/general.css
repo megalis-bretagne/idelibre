@@ -10,6 +10,26 @@ a { text-decoration: none; }
     margin: 50px auto auto;
 }
 
+#navbarDropdown {
+    padding-bottom: 0;
+}
+
+.popup-menu-right {
+    margin-left: -4.5rem;
+    background-color: black;
+}
+
+.popup-menu-right .dropdown-item {
+    color: white;
+}
+
+.popup-menu-right .dropdown-item span {
+    margin-right: .5rem;
+}
+
+.dropdown-divider {
+    background-color: white;
+}
 .form-signin .checkbox {
     font-weight: 400;
 }

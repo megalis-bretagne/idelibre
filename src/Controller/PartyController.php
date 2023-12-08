@@ -40,7 +40,7 @@ class PartyController extends AbstractController
 
     #[Route(path: '/party/add', name: 'party_add')]
     #[IsGranted('ROLE_MANAGE_PARTIES')]
-    #[Breadcrumb(title: 'Ajouter')]
+    #[Breadcrumb(title: 'Ajouter un groupe politique')]
     public function add(Request $request, PartyManager $partyManager): Response
     {
         $form = $this->createForm(PartyType::class, null, ['structure' => $this->getUser()->getStructure()]);
