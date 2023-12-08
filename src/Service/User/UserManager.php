@@ -153,15 +153,16 @@ class UserManager
         return true;
     }
 
-    public function AlreadyTakenDeputies(Structure $structure): array
+    public function AlreadyTakenDeputies(Structure $structure, ?User $currentUser): array
     {
         $users = $this->userRepository->findActorsByStructure($structure)->getQuery()->getResult();
         $takenDeputies = [];
         foreach ($users as $user) {
-            if ($user->getDeputy() !== null) {
+            if ($user->getDeputy() !== null && $user !== $currentUser ) {
                 $takenDeputies[] = $user->getDeputy();
             }
         }
+
         return $takenDeputies;
     }
 }

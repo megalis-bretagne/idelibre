@@ -29,6 +29,8 @@ class AttendanceController extends AbstractController
         $sitting = $attendanceToken->getConvocation()->getSitting();
         $deputyId = $user->getDeputy() ? $user->getDeputy()->getId() : null;
 
+//        dd($deputyId);
+
         $form = $this->createForm(AttendanceType::class, null, [
             'isRemoteAllowed' => $sitting->getIsRemoteAllowed(),
             'convocation' => $convocation,
@@ -93,17 +95,4 @@ class AttendanceController extends AbstractController
         ]);
     }
 
-    #[Route('/attendance/{token}/deputy', name: 'attendance_deputies_list')]
-    public function getDeputiesList(AttendanceToken $attendanceToken): Response
-    {
-        $structure = $attendanceToken->getConvocation()->getSitting()->getStructure();
-        $user = $attendanceToken->getConvocation()->getUser();
-
-        $user ? $toExclude[] = $user : $toExclude = [];
-        $deputies = $this->userRepository->findDeputiesWithNoAssociation($structure, $toExclude)->getQuery()->getResult();
-
-        return $this->render('confirm_attendance/includes/_list_actors.html.twig', [
-            "availables" => $deputies
-        ]);
-    }
 }

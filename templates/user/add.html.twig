@@ -24,20 +24,24 @@
     </div>
 
     {{ form_help(form.username) }}
-
     {{ form_row(form.email) }}
+    {{ form_row(form.phone) }}
     {{ form_row(form.role) }}
 
-    <div id="actor-info" style="display: none">
+
+    <div id="actor-info" class="d-none">
         {{ form_row(form.party) }}
         {{ form_row(form.title) }}
+        {{ form_row(form.deputy) }}
     </div>
 
-    {{ form_row(form.phone) }}
     {{ form_row(form.isActive) }}
-    {{ form_row(form.initPassword) }}
 
-    <div class="password-group d-none">
+    <div id="passwordInitGroup">
+        {{ form_row(form.initPassword) }}
+    </div>
+
+    <div id="passwordGroup" class="d-none">
         {{ form_row(form.plainPassword) }}
     </div>
 
@@ -54,5 +58,4 @@
     {{ encore_entry_script_tags('create-user') }}
     {{ encore_entry_script_tags('showPasswordEntropy') }}
     {{ encore_entry_script_tags('setPasswordUser') }}
-    {{ encore_entry_script_tags('userDynamicFields') }}
 {% endblock %}
