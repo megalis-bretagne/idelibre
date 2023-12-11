@@ -36,12 +36,14 @@
             {{ macroTab.editTabs('projects', sitting) }}
 
             {# Poids total #}
-            <div class="col-12 px-3 here mt-4 form-white">
-                <div class="d-flex justify-content-between">
+            <div class="col here mt-4 form-white">
+                <div class="d-flex justify-content-end">
 
-
-                    <p v-if="!isSittingTooBigForGeneration"><small>Poids total: <span class="text-success"> ${formatSize(totalAllFileSize)} </span> </small></p>
-                    <p v-if="!isSittingTooBigForGeneration"><small>Poids total: <span class="text-success"> ${formatSize(totalAllFileSize)} </span> </small></p>
+                    <p v-if="isSittingTooBigForGeneration === true" class="w-100 mx-0 alert alert-warning d-flex justify-content-between" >
+                        <span><i class="fa fa-triangle-exclamation"></i> Le PDF complet ainsi que le Zip de la séance ne seront pas générés car le poids total des fichiers dépasse 200 Mo  </span>
+                        <span> Poids total: ${formatSize(totalAllFileSize)}</span>
+                    </p>
+                    <p v-else class="alert alert-success">Poids total:  ${formatSize(totalAllFileSize)}</p>
                 </div>
                 <div class="mt-4"></div>
             </div>
@@ -55,7 +57,10 @@
                 </label>
 
                 <div class=" ml-auto d-flex justify-content-end mt-2">
-                    <p><small> Poids des documents : <span class="text-success">${formatSize(otherdocsTotalFileSize)}  </span></small></p>
+                    <p v-if="documentFilesTooBig === true">
+                        Poids des documents : <span class="text-warning"><i class="fa fa-triangle-exclamation"></i> ${formatSize(otherdocsTotalFileSize)}</span>
+                    </p>
+                    <p ><small> Poids des documents : <span class="text-info">${formatSize(otherdocsTotalFileSize)}  </span></small></p>
                 </div>
             </div>
 
@@ -105,11 +110,11 @@
                     <span class="fa fa-plus-circle"></span> Ajouter des projets
                 </label>
                 <div class=" ml-auto d-flex justify-content-end mt-2">
-                    <p v-if="fileTooBig === true" class=" alert alert-warning mb-0">
-                        <small><span> <i class="fa fa-triangle-exclamation"></i> Le PDF complet ainsi que le Zip de la séance ne seront pas générés car le poids total des fichiers dépasse 200 Mo - Poids des projets : ${formatSize(totalProjectFileSize)} </span></small>
+                    <p v-if="projectFilesTooBig === true">
+                        Poids des projets : <span class="text-warning"><i class="fa fa-triangle-exclamation"></i> ${formatSize(totalProjectFileSize)}</span>
                     </p>
                     <p v-else >
-                        <small> Poids des projets : <span class="text-success">${formatSize(totalProjectFileSize)} </span></small>
+                        <small> Poids des projets : <span class="text-info">${formatSize(totalProjectFileSize)} </span></small>
                     </p>
                 </div>
             </div>
