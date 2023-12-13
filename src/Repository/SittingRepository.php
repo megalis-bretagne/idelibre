@@ -118,6 +118,24 @@ class SittingRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
+    public function findWithProjectsAnnexesAndOtherDocs(string $sittingId): ?Sitting
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.id =:sittingId')
+            ->setParameter('sittingId', $sittingId)
+            ->leftjoin('s.convocations', 'c')
+            ->leftJoin('s.projects', 'p')
+            ->leftJoin('p.annexes', 'a')
+            ->leftJoin('s.otherdocs', 'od')
+            ->addSelect('c')
+            ->addSelect('p')
+            ->addSelect('a')
+            ->addSelect('od')
+            ->orderBy('p.rank', 'ASC')
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     /**
      * @return Sitting[]
      */
