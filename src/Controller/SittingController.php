@@ -269,10 +269,13 @@ class SittingController extends AbstractController
         return $this->render('sitting/details_projects.html.twig', [
             'sitting' => $sitting,
             'projects' => $projectRepository->getProjectsWithAssociatedEntities($sitting),
-            'totalSize' => $this->sittingManager->getProjectsAndAnnexesTotalSize($sitting),
             'otherdocs' => $otherdocRepository->getOtherdocsWithAssociatedEntities($sitting),
-            'otherdocsTotalSize' => $this->sittingManager->getOtherDocsTotalSize($sitting),
+            'projectsFilesSize' => $this->sittingManager->getProjectsAndAnnexesTotalSize($sitting),
+            'otherdocsFilesSize' => $this->sittingManager->getOtherDocsTotalSize($sitting),
+            'totalFilesSize' => $this->sittingManager->getAllFilesSize($sitting),
             'isProjectsSizeTooBig' => $this->sittingManager->getProjectsAndAnnexesTotalSize($sitting) > intval($bag->get('maximum_size_pdf_zip_generation')),
+            'isOthersSizeTooBig' => $this->sittingManager->getOtherDocsTotalSize($sitting) > intval($bag->get('maximum_size_pdf_zip_generation')),
+            'isTotalSizeTooBig' => $this->sittingManager->getAllFilesSize($sitting) > intval($bag->get('maximum_size_pdf_zip_generation')),
         ]);
     }
 

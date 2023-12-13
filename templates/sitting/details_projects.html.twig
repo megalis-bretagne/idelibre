@@ -27,21 +27,34 @@
             {{ macroTab.showTabs('projects', sitting) }}
 
 
-{#            #}{# Poids total #}
-{#            <div class="col-12 px-3 here mt-4 form-white">#}
-{#                <div class="d-flex justify-content-between">#}
-{#                    <h2>Poids total</h2>#}
-{#                    <span><small>Poids total: <span class="text-success"> {{ otherdocsTotalSize|sizeFormatter }} </span> </small></span>#}
-{#                </div>#}
-{#                <div class="mt-4"></div>#}
-{#            </div>#}
+
+            <div class="col-12 px-3 here mt-4 form-white">
+                <div class="d-flex justify-content-between">
+                    {% if isTotalSizeTooBig == true %}
+                        <p class="alert alert-warning d-flex justify-content-between w-100">
+                            <span> <i class="fa fa-exclamation-triangle"> </i> Le PDF complet ainsi que le zip de la séance n'ont pas été générés car le poids total des fichiers dépasse 200mo </span>
+                            <span> Poids Total : {{ totalFilesSize|sizeFormatter }}</span>
+                        </p>
+                    {% endif %}
+                    {% if isTotalSizeTooBig == false %}
+                        <p class="text-end w-100">Poids total : <span class="text-success"> {{ totalFilesSize|sizeFormatter }} </span></p>
+                    {% endif %}
+                </div>
+                <div class="mt-4"></div>
+            </div>
 
 
             {#  Other Docs #}
             <div class="col-12 px-3 here mt-4 form-white">
                 <div class="d-flex justify-content-between">
                     <h2>Autres documents</h2>
-                    <span><small>Poids total: <span class="text-success"> {{ otherdocsTotalSize|sizeFormatter }} </span> </small></span>
+
+                    {% if isOthersSizeTooBig == true %}
+                        <p>Poids total : <span class="text-warning"> <i class="fa fa-exclamation-triangle"> </i> {{ otherdocsFilesSize|sizeFormatter }} </span></p>
+                    {% endif %}
+                    {% if isOthersSizeTooBig == false %}
+                        <p>Poids total : <span class="text-success"> {{ otherdocsFilesSize|sizeFormatter }} </span></p>
+                    {% endif %}
                 </div>
                 <div class="mt-4"></div>
 
@@ -87,12 +100,11 @@
             <div class="col-12 px-3 mt-4 form-white">
                 <div class="d-flex justify-content-between">
                     <h2>Projets</h2>
-                    {% if isProjectsSizeTooBig %}
-                        <span class="alert alert-warning"><small> <i class=" fa fa-triangle-exclamation"></i> Le PDF complet ainsi que le zip de la séance n'ont pas été générés car le poids total des fichiers dépasse 200 Mo - Poids total des fichiers : <span
-                                        class={{ isProjectsSizeTooBig ? "text-warning" : "text-success"  }}> {{ totalSize|sizeFormatter }} </span> </small></span>
-                    {% else %}
-                        <span><small> Poids total: <span
-                                        class="text-success">{{ totalProjectFileSize|sizeFormatter }} </span> </small></span>
+                    {% if isProjectsSizeTooBig == true %}
+                        <p>Poids total : <span class="text-warning"> <i class="fa fa-exclamation-triangle"></i> {{ projectsFilesSize|sizeFormatter }} </span> </p>
+                    {% endif %}
+                    {% if isProjectsSizeTooBig == false %}
+                        <p> Poids total : <span class="text-success">{{ projectsFilesSize|sizeFormatter }} </span></p>
                     {% endif %}
                 </div>
 
