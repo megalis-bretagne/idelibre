@@ -66,7 +66,7 @@
                     <p v-if="documentFilesTooBig === true">
                         Poids des documents : <span class="text-warning"><i class="fa fa-triangle-exclamation"></i> ${formatSize(otherDocsFilesSize)}</span>
                     </p>
-                    <p v-else><small> Poids des documents : <span class="text-info">${formatSize(otherDocsFilesSize)}  </span></small></p>
+                    <p v-else><small> Poids des documents : <span class="text-success">${formatSize(otherDocsFilesSize)}  </span></small></p>
                 </div>
             </div>
 
@@ -120,7 +120,7 @@
                         Poids des projets : <span class="text-warning"><i class="fa fa-triangle-exclamation"></i> ${formatSize(projectFilesSize)}</span>
                     </p>
                     <p v-else >
-                        <small> Poids des projets : <span class="text-info">${formatSize(projectFilesSize)} </span></small>
+                        <small> Poids des projets : <span class="text-success">${formatSize(projectFilesSize)} </span></small>
                     </p>
                 </div>
             </div>
