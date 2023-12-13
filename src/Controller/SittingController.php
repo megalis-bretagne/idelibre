@@ -222,8 +222,8 @@ class SittingController extends AbstractController
             'isLsvoteResults' => !empty($sitting->getLsvoteSitting()?->getResults()),
             'isSentLsvote' => !empty($sitting->getLsvoteSitting()),
             'timezone' => $sitting->getStructure()->getTimezone()->getName(),
-            'isProjectsSizeTooBig' => $this->sittingManager->getProjectsAndAnnexesTotalSize($sitting) > intval($bag->get('maximum_size_pdf_zip_generation')),
-            'totalSize' => $this->sittingManager->getProjectsAndAnnexesTotalSize($sitting),
+            'isTotalSizeTooBig' => $this->sittingManager->getAllFilesSize($sitting) > intval($bag->get('maximum_size_pdf_zip_generation')),
+            'totalFilesSize' => $this->sittingManager->getAllFilesSize($sitting),
         ]);
     }
 

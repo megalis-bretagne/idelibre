@@ -11,8 +11,6 @@ import draggable from 'vuedraggable';
 Vue.component('v-select', VueSelect);
 Vue.component('draggable', draggable);
 
-
-
 let app = new Vue({
     delimiters: ['${', '}'],
     el: "#app",
@@ -25,23 +23,16 @@ let app = new Vue({
         messageError: null,
         showModal: false,
         uploadPercent: 0,
-
-        /* Limite de poids */
         sittingMaxSize: 0,
         maxGenerationSize: 0,
         fileMaxSize: 0,
-
-        /* Vérification de poids */
         projectFilesTooBig: false,
         documentFilesTooBig: false,
         sittingTooBigForCreation: false,
         sittingTooBigForGeneration: false,
-
-        /* Poids des elements */
         projectFilesSize: 0,
         otherDocsFilesSize: 0,
         totalAllFileSize: 0,
-
     },
 
 
@@ -116,7 +107,6 @@ let app = new Vue({
             }
             this.projectFilesSize = getProjectsFilesWeight(this.projects)
             this.totalAllFileSize = getAllFilesWeight(this.otherDocsFilesSize, this.projectFilesSize);
-
             this.projectFilesTooBig = isOverWeight(this.projectFilesSize, this.maxGenerationSize);
             this.sittingTooBigForGeneration = isOverWeight(this.otherDocsFilesSize + this.projectFilesSize, this.maxGenerationSize);
             this.sittingTooBigForCreation = isOverWeight(this.otherDocsFilesSize + this.projectFilesSize, this.sittingMaxSize);
@@ -128,7 +118,6 @@ let app = new Vue({
             annexes.splice(index, 1);
             this.projectFilesSize = getProjectsFilesWeight(this.projects)
             this.totalAllFileSize = getAllFilesWeight(this.otherDocsFilesSize, this.projectFilesSize);
-
             this.projectFilesTooBig = isOverWeight(this.projectFilesSize, this.maxGenerationSize);
             this.sittingTooBigForGeneration = isOverWeight(this.otherDocsFilesSize + this.projectFilesSize, this.maxGenerationSize);
             this.sittingTooBigForCreation = isOverWeight(this.otherDocsFilesSize + this.projectFilesSize, this.sittingMaxSize);
@@ -151,15 +140,9 @@ let app = new Vue({
             }
             this.otherDocsFilesSize = getOtherdocsFilesWeight(this.otherdocs);
             this.totalAllFileSize = getAllFilesWeight(this.otherDocsFilesSize, this.projectFilesSize);
-
             this.documentFilesTooBig = isOverWeight(this.otherDocsFilesSize, this.maxGenerationSize);
             this.sittingTooBigForGeneration = isOverWeight(this.otherDocsFilesSize + this.projectFilesSize, this.maxGenerationSize);
             this.sittingTooBigForCreation = isOverWeight(this.otherDocsFilesSize + this.projectFilesSize, this.sittingMaxSize);
-
-            console.log(this.otherDocsFilesSize, this.projectFilesSize, this.totalAllFileSize)
-
-            // 1 600 478 934 - 105 552 826 - 1 706 031 760
-
             isDirty = true;
         },
 
@@ -167,7 +150,6 @@ let app = new Vue({
             this.otherdocs.splice(index, 1);
             this.otherDocsFilesSize = getOtherdocsFilesWeight(this.otherdocs)
             this.totalAllFileSize = getAllFilesWeight(this.otherDocsFilesSize, this.projectFilesSize);
-
             this.documentFilesTooBig = isOverWeight(this.otherDocsFilesSize, this.maxGenerationSize);
             this.sittingTooBigForGeneration = isOverWeight(this.otherDocsFilesSize + this.projectFilesSize, this.maxGenerationSize);
             this.sittingTooBigForCreation = isOverWeight(this.otherDocsFilesSize + this.projectFilesSize, this.sittingMaxSize);
@@ -283,14 +265,10 @@ let app = new Vue({
             this.otherDocsFilesSize = getOtherdocsFilesWeight(this.otherdocs);
             this.totalAllFileSize = getAllFilesWeight(this.otherDocsFilesSize, this.projectFilesSize);
             this.totalAllFileSize = this.projectFilesSize + this.otherDocsFilesSize;
-
             this.projectFilesTooBig = isOverWeight(this.projectFilesSize, this.maxGenerationSize);
             this.documentFilesTooBig = isOverWeight(this.otherDocsFilesSize, this.maxGenerationSize);
             this.sittingTooBigForGeneration = isOverWeight(this.totalAllFileSize, this.maxGenerationSize);
             this.sittingTooBigForCreation = isOverWeight(this.totalAllFileSize, this.sittingMaxSize)
-
-            console.log(this.projectFilesSize, this.otherDocsFilesSize, this.totalAllFileSize)
-
         });
 
     }
@@ -366,9 +344,6 @@ function getAllFilesWeight(getOTrherdocsFilesWeight, getProjectsFilesWeight) {
     return getProjectsFilesWeight + getOTrherdocsFilesWeight;
 }
 
-
-
-
 function getPrettyNameFromFileName(fileName) {
     return fileName.replace(/\.[^/.]+$/, "").replace(/_/g, " ");
 }
@@ -425,8 +400,6 @@ function setOtherdocsRank(otherdocs) {
         otherdocs[i].rank = i;
     }
 }
-
-
 
 
 let isDirty = false;
