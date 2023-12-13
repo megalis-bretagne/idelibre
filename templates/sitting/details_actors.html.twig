@@ -552,14 +552,17 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" title="Fermer"></button>
                         </div>
                         <div class="modal-body">
-                            <p v-if="!lsvoteId">
-
-                                <span v-if="notAnswered > 0">
-                                    A ce jour ${ notAnswered } destinataires de l'envoi n'ont pas donné de réponses
-                                    <br>
-                                </span>
+                            <p v-if="!lsvoteId" class="alert alert-warning">
+                                <small>
+                                    <span v-if="notAnswered > 0">
+                                        <i class="fa fa-exclamation-triangle me-1"></i>
+                                        A ce jour ${ notAnswered } destinataires de l'envoi n'ont pas donné de réponses
+                                        <br>
+                                    </span>
+                                </small>
+                            </p>
+                            <p class="mt-2">
                                 Voulez-vous vraiment envoyer la séance vers Lsvote ?
-
                             </p>
                             <span v-if="lsvoteId">
                                 <i class="fa fa-warning mr-2 text-warning"></i> Attention. <br>
