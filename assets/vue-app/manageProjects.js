@@ -33,6 +33,8 @@ let app = new Vue({
         projectFilesSize: 0,
         otherDocsFilesSize: 0,
         totalAllFileSize: 0,
+
+        coefficientCorrecteur: 1.17647058824,
     },
 
 
@@ -68,7 +70,7 @@ let app = new Vue({
                     reporterId: null,
                     linkedFileKey: null,
                     id: null,
-                    size:event.target.files[i].size,
+                    size:event.target.files[i].size * this.coefficientCorrecteur
                 };
                 project.file.size > this.fileMaxSize ? this.showMessageError(`La taille du fichier ne doit pas dépasser les 200Mo. Taille actuelle de votre ficher : ${this.formatSize(project.file.size)}`) :
                 this.projects.push(project);
@@ -100,7 +102,7 @@ let app = new Vue({
                     linkedFileKey: null,
                     fileName: file.name,
                     id: null,
-                    size:event.target.files[i].size
+                    size:event.target.files[i].size * this.coefficientCorrecteur
                 };
                 annex.file.size > this.fileMaxSize ? this.showMessageError(`La taille du fichier ne doit pas dépasser les 200Mo. Taille actuelle de votre ficher : ${this.formatSize(annex.file.size)}`):
                 project.annexes.push(annex);
@@ -133,7 +135,7 @@ let app = new Vue({
                     file: file,
                     linkedFileKey: null,
                     id: null,
-                    size:event.target.files[i].size,
+                    size:event.target.files[i].size * this.coefficientCorrecteur
                 };
                 otherdoc.file.size > this.fileMaxSize ? this.showMessageError(`La taille du fichier ne doit pas dépasser les 200Mo. Taille actuelle de votre ficher : ${this.formatSize(otherdoc.file.size)}`) :
                 this.otherdocs.push(otherdoc);
@@ -318,7 +320,6 @@ function formatBytes(a, b = 0) {
 
 function getProjectsFilesWeight(projects) {
     let projectFilesSize = 0;
-    let coefficientCorrecteur = 1.17647058824;
 
     for (let project of projects) {
         projectFilesSize += project.size;
@@ -326,17 +327,16 @@ function getProjectsFilesWeight(projects) {
             projectFilesSize += annexe.size
         }
     }
-    return projectFilesSize * coefficientCorrecteur
+    return projectFilesSize
 }
 
 function getOtherdocsFilesWeight(otherdocs) {
     let otherDocsFilesSize = 0
-    let coefficientCorrecteur = 1.17647058824;
 
     for (let otherdoc of otherdocs) {
         otherDocsFilesSize += otherdoc.size
     }
-    return otherDocsFilesSize *  coefficientCorrecteur
+    return otherDocsFilesSize ;
 }
 
 function getAllFilesWeight(getOTrherdocsFilesWeight, getProjectsFilesWeight) {
