@@ -22,9 +22,9 @@ let app = new Vue({
         themes: [],
         reporters: [],
         messageInfo: null,
+        messageError: null,
         showModal: false,
         uploadPercent: 0,
-        messageError: null,
 
         /* Limite de poids */
         sittingMaxSize: 0,
@@ -41,7 +41,6 @@ let app = new Vue({
         projectFilesSize: 0,
         otherDocsFilesSize: 0,
         totalAllFileSize: 0,
-        totalSittingSize: 0,
 
     },
 
@@ -84,6 +83,7 @@ let app = new Vue({
                 this.projects.push(project);
             }
             this.projectFilesSize = getProjectsFilesWeight(this.projects);
+            this.totalAllFileSize = getAllFilesWeight(this.otherDocsFilesSize, this.projectFilesSize);
 
             this.projectFilesTooBig = isOverWeight(this.projectFilesSize, this.maxGenerationSize);
             this.sittingTooBigForGeneration = isOverWeight(this.otherDocsFilesSize + this.projectFilesSize, this.maxGenerationSize);
@@ -92,14 +92,10 @@ let app = new Vue({
 
         },
 
-        /**
-         *
-         * ON CONTINUE DE CLEAN LE CODE REMOVE PROJECT , ANNEXE  ADD ET DELETE AVEC LES overweight
-         */
-
         removeProject(index) {
             this.projects.splice(index, 1);
             this.projectFilesSize = getProjectsFilesWeight(this.projects)
+            this.totalAllFileSize = getAllFilesWeight(this.otherDocsFilesSize, this.projectFilesSize);
             this.projectFilesTooBig = isOverWeight(this.projectFilesSize, this.maxGenerationSize);
             this.sittingTooBigForGeneration = isOverWeight(this.otherDocsFilesSize + this.projectFilesSize, this.maxGenerationSize);
             this.sittingTooBigForCreation = isOverWeight(this.otherDocsFilesSize + this.projectFilesSize, this.sittingMaxSize);
@@ -120,6 +116,8 @@ let app = new Vue({
                 project.annexes.push(annex);
             }
             this.projectFilesSize = getProjectsFilesWeight(this.projects)
+            this.totalAllFileSize = getAllFilesWeight(this.otherDocsFilesSize, this.projectFilesSize);
+
             this.projectFilesTooBig = isOverWeight(this.projectFilesSize, this.maxGenerationSize);
             this.sittingTooBigForGeneration = isOverWeight(this.otherDocsFilesSize + this.projectFilesSize, this.maxGenerationSize);
             this.sittingTooBigForCreation = isOverWeight(this.otherDocsFilesSize + this.projectFilesSize, this.sittingMaxSize);
@@ -130,6 +128,8 @@ let app = new Vue({
         deleteAnnex(annexes, index) {
             annexes.splice(index, 1);
             this.projectFilesSize = getProjectsFilesWeight(this.projects)
+            this.totalAllFileSize = getAllFilesWeight(this.otherDocsFilesSize, this.projectFilesSize);
+
             this.projectFilesTooBig = isOverWeight(this.projectFilesSize, this.maxGenerationSize);
             this.sittingTooBigForGeneration = isOverWeight(this.otherDocsFilesSize + this.projectFilesSize, this.maxGenerationSize);
             this.sittingTooBigForCreation = isOverWeight(this.otherDocsFilesSize + this.projectFilesSize, this.sittingMaxSize);
@@ -151,6 +151,8 @@ let app = new Vue({
                 this.otherdocs.push(otherdoc);
             }
             this.otherDocsFilesSize = getOtherdocsFilesWeight(this.otherdocs);
+            this.totalAllFileSize = getAllFilesWeight(this.otherDocsFilesSize, this.projectFilesSize);
+
             this.documentFilesTooBig = isOverWeight(this.otherDocsFilesSize, this.maxGenerationSize);
             this.sittingTooBigForGeneration = isOverWeight(this.otherDocsFilesSize + this.projectFilesSize, this.maxGenerationSize);
             this.sittingTooBigForCreation = isOverWeight(this.otherDocsFilesSize + this.projectFilesSize, this.sittingMaxSize);
@@ -160,6 +162,8 @@ let app = new Vue({
         removeOtherdoc(index) {
             this.otherdocs.splice(index, 1);
             this.otherDocsFilesSize = getOtherdocsFilesWeight(this.otherdocs)
+            this.totalAllFileSize = getAllFilesWeight(this.otherDocsFilesSize, this.projectFilesSize);
+
             this.documentFilesTooBig = isOverWeight(this.otherDocsFilesSize, this.maxGenerationSize);
             this.sittingTooBigForGeneration = isOverWeight(this.otherDocsFilesSize + this.projectFilesSize, this.maxGenerationSize);
             this.sittingTooBigForCreation = isOverWeight(this.otherDocsFilesSize + this.projectFilesSize, this.sittingMaxSize);
@@ -168,7 +172,7 @@ let app = new Vue({
 
         save() {
 
-            if(isOverWeight(this.totalSittingSize, this.sittingMaxSize)) {
+            if(isOverWeight(this.totalAllFileSize, this.sittingMaxSize)) {
                 this.sittingTooBigForCreation = true
                 this.showMessageError("Le poids de la séance dépasse les 2Go, elle ne pourra pas être enregistrée. Veuillez réduire le poids de vos pdfs.")
             }
@@ -274,12 +278,14 @@ let app = new Vue({
             this.projectFilesSize = getProjectsFilesWeight(this.projects);
             this.otherDocsFilesSize = getOtherdocsFilesWeight(this.otherdocs);
             this.totalAllFileSize = getAllFilesWeight(this.otherDocsFilesSize, this.projectFilesSize);
-            this.totalSittingSize = this.projectFilesSize + this.otherDocsFilesSize;
+            this.totalAllFileSize = this.projectFilesSize + this.otherDocsFilesSize;
 
             this.projectFilesTooBig = isOverWeight(this.projectFilesSize, this.maxGenerationSize);
             this.documentFilesTooBig = isOverWeight(this.otherDocsFilesSize, this.maxGenerationSize);
             this.sittingTooBigForGeneration = isOverWeight(this.totalAllFileSize, this.maxGenerationSize);
-            this.sittingTooBigForCreation = isOverWeight(this.totalSittingSize, this.sittingMaxSize)
+            this.sittingTooBigForCreation = isOverWeight(this.totalAllFileSize, this.sittingMaxSize)
+
+            console.log(this.projectFilesSize, this.otherDocsFilesSize, this.totalAllFileSize)
 
         });
 
