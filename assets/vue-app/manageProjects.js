@@ -264,7 +264,6 @@ let app = new Vue({
             this.projectFilesSize = getProjectsFilesWeight(this.projects);
             this.otherDocsFilesSize = getOtherdocsFilesWeight(this.otherdocs);
             this.totalAllFileSize = getAllFilesWeight(this.otherDocsFilesSize, this.projectFilesSize);
-            this.totalAllFileSize = this.projectFilesSize + this.otherDocsFilesSize;
             this.projectFilesTooBig = isOverWeight(this.projectFilesSize, this.maxGenerationSize);
             this.documentFilesTooBig = isOverWeight(this.otherDocsFilesSize, this.maxGenerationSize);
             this.sittingTooBigForGeneration = isOverWeight(this.totalAllFileSize, this.maxGenerationSize);

@@ -8,6 +8,7 @@ use App\Entity\Structure;
 use App\Entity\Type;
 use DateTimeInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -102,22 +103,11 @@ class SittingRepository extends ServiceEntityRepository
         return $sittings;
     }
 
-    public function findWithProjectsAndAnnexes(string $sittingId): ?Sitting
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.id =:sittingId')
-            ->setParameter('sittingId', $sittingId)
-            ->leftjoin('s.convocations', 'c')
-            ->leftJoin('s.projects', 'p')
-            ->leftJoin('p.annexes', 'a')
-            ->addSelect('c')
-            ->addSelect('p')
-            ->addSelect('a')
-            ->orderBy('p.rank', 'ASC')
-            ->getQuery()
-            ->getOneOrNullResult();
-    }
-
+    /**
+     * @param string $sittingId
+     * @return Sitting|null
+     * @throws NonUniqueResultException
+     */
     public function findWithProjectsAnnexesAndOtherDocs(string $sittingId): ?Sitting
     {
         return $this->createQueryBuilder('s')
