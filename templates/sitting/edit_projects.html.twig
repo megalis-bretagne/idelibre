@@ -41,7 +41,7 @@
 
                     <p v-if="sittingTooBigForCreation === true" class="w-100 mx-0 alert alert-danger d-flex justify-content-between" >
                         <span><i class="fa fa-triangle-exclamation"></i> La séance ne pourra être enregistrée car le poids total dépasse le poids maximum autorisé de 2 Go. Veuillez réduire la taille ou le nombre de fichiers.</span>
-                        <span> Poids total: ${formatSize(totalAllFileSize)}</span>
+                        <span> Poids total: ${formatSize(totalAllFileSize )}</span>
                     </p>
                     <p v-else-if="sittingTooBigForGeneration === true" class="w-100 mx-0 alert alert-warning d-flex justify-content-between" >
                         <span><i class="fa fa-triangle-exclamation"></i> Le PDF complet ainsi que le Zip de la séance ne seront pas générés car le poids total des fichiers dépasse 200 Mo  </span>

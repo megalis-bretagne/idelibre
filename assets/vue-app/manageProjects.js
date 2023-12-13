@@ -84,7 +84,6 @@ let app = new Vue({
             }
             this.projectFilesSize = getProjectsFilesWeight(this.projects);
             this.totalAllFileSize = getAllFilesWeight(this.otherDocsFilesSize, this.projectFilesSize);
-
             this.projectFilesTooBig = isOverWeight(this.projectFilesSize, this.maxGenerationSize);
             this.sittingTooBigForGeneration = isOverWeight(this.otherDocsFilesSize + this.projectFilesSize, this.maxGenerationSize);
             this.sittingTooBigForCreation = isOverWeight(this.otherDocsFilesSize + this.projectFilesSize, this.sittingMaxSize);
@@ -156,6 +155,11 @@ let app = new Vue({
             this.documentFilesTooBig = isOverWeight(this.otherDocsFilesSize, this.maxGenerationSize);
             this.sittingTooBigForGeneration = isOverWeight(this.otherDocsFilesSize + this.projectFilesSize, this.maxGenerationSize);
             this.sittingTooBigForCreation = isOverWeight(this.otherDocsFilesSize + this.projectFilesSize, this.sittingMaxSize);
+
+            console.log(this.otherDocsFilesSize, this.projectFilesSize, this.totalAllFileSize)
+
+            // 1 600 478 934 - 105 552 826 - 1 706 031 760
+
             isDirty = true;
         },
 
@@ -337,22 +341,25 @@ function formatBytes(a, b = 0) {
 
 function getProjectsFilesWeight(projects) {
     let projectFilesSize = 0;
+    let coefficientCorrecteur = 1.17647058824;
+
     for (let project of projects) {
         projectFilesSize += project.size;
         for (let annexe of project.annexes) {
             projectFilesSize += annexe.size
         }
     }
-    return projectFilesSize;
+    return projectFilesSize * coefficientCorrecteur
 }
 
 function getOtherdocsFilesWeight(otherdocs) {
     let otherDocsFilesSize = 0
+    let coefficientCorrecteur = 1.17647058824;
 
     for (let otherdoc of otherdocs) {
         otherDocsFilesSize += otherdoc.size
     }
-    return otherDocsFilesSize;
+    return otherDocsFilesSize *  coefficientCorrecteur
 }
 
 function getAllFilesWeight(getOTrherdocsFilesWeight, getProjectsFilesWeight) {
