@@ -11,8 +11,10 @@ use App\Service\Connector\ComelusConnectorManager;
 use App\Service\Connector\LsvoteConnectorManager;
 use App\Service\Connector\LsvoteSittingCreationException;
 use App\Service\Convocation\ConvocationManager;
+use App\Service\Email\EmailNotSendException;
 use App\Service\Email\NotificationService;
 use App\Service\Util\Converter;
+use Doctrine\DBAL\ConnectionException;
 use PHPUnit\Util\Json;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -27,14 +29,19 @@ class SittingController extends AbstractController
 {
     public function __construct(
         private readonly UserRepository $userRepository,
+        private readonly ConvocationManager $convocationManager,
     ) {
     }
 
+    /**
+     * @throws ConnectionException
+     * @throws EmailNotSendException
+     */
     #[Route(path: '/api/sittings/{id}/sendConvocations', name: 'api_convocations_send', methods: ['POST'])]
     #[IsGranted('MANAGE_SITTINGS', subject: 'sitting')]
-    public function sendConvocations(Sitting $sitting, ConvocationManager $convocationManager, Request $request): JsonResponse
+    public function sendConvocations(Sitting $sitting, Request $request): JsonResponse
     {
-        $convocationManager->sendAllConvocations($sitting, $request->get('userProfile'));
+        $this->convocationManager->sendAllConvocations($sitting, $request->get('userProfile'));
 
         return $this->json(['success' => true]);
     }
@@ -121,5 +128,12 @@ class SittingController extends AbstractController
         return $this->json([
             "actors" => $this->userRepository->findActorsInSittingWithExclusion($sitting, [])->getQuery()->getResult(),
         ], 200, [], ['groups' => ['user']]);
+    }
+
+    #[Route(path: '/api/sittings/{id}/countNotAnswered', name: 'api_sitting_count_attendance', methods: ['GET'])]
+    #[IsGranted('MANAGE_SITTINGS', subject: 'sitting')]
+    public function countAttendance(Sitting $sitting): JsonResponse
+    {
+        return $this->json(["notAnswered" => $this->convocationManager->countConvocationNotanswered($sitting->getConvocations())]);
     }
 }
