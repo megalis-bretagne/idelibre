@@ -100,9 +100,9 @@ let app = new Vue({
         removeProject(index) {
             this.projects.splice(index, 1);
             this.projectFilesSize = getProjectsFilesWeight(this.projects)
-            this.projectFilesSize > this.maxGenerationSize ? this.projectFilesTooBig = true: this.projectFilesTooBig = false ;
-            (this.otherDocsFilesSize + this.projectFilesSize) > this.maxGenerationSize ? this.sittingTooBigForGeneration = true : this.sittingTooBigForGeneration = false;
-            this.projectFilesSize + this.otherDocsFilesSize < this.sittingMaxSize ? document.querySelector('#save-sitting').disabled = false : document.querySelector('#save-sitting').disabled = true;
+            this.projectFilesTooBig = isOverWeight(this.projectFilesSize, this.maxGenerationSize);
+            this.sittingTooBigForGeneration = isOverWeight(this.otherDocsFilesSize + this.projectFilesSize, this.maxGenerationSize);
+            this.sittingTooBigForCreation = isOverWeight(this.otherDocsFilesSize + this.projectFilesSize, this.sittingMaxSize);
             isDirty = true;
         },
 
@@ -120,12 +120,9 @@ let app = new Vue({
                 project.annexes.push(annex);
             }
             this.projectFilesSize = getProjectsFilesWeight(this.projects)
-            this.projectFilesSize > this.maxGenerationSize ? this.projectFilesTooBig = true: this.projectFilesTooBig = false ;
-            (this.otherDocsFilesSize + this.projectFilesSize) > this.maxGenerationSize ? this.sittingTooBigForGeneration = true : this.sittingTooBigForGeneration = false;
-            if(this.sittingMaxSize <  this.projectFilesSize + this.otherDocsFilesSize){
-                this.showMessageError("Le poids de la séance dépasse les 2Go, elle ne pourra pas être enregistrée. Veuillez réduire le poids de vos pdfs.")
-                document.querySelector('#save-sitting').disabled = true
-            }
+            this.projectFilesTooBig = isOverWeight(this.projectFilesSize, this.maxGenerationSize);
+            this.sittingTooBigForGeneration = isOverWeight(this.otherDocsFilesSize + this.projectFilesSize, this.maxGenerationSize);
+            this.sittingTooBigForCreation = isOverWeight(this.otherDocsFilesSize + this.projectFilesSize, this.sittingMaxSize);
 
             isDirty = true;
         },
@@ -133,9 +130,9 @@ let app = new Vue({
         deleteAnnex(annexes, index) {
             annexes.splice(index, 1);
             this.projectFilesSize = getProjectsFilesWeight(this.projects)
-            this.projectFilesSize > this.maxGenerationSize ? this.projectFilesTooBig = true: this.projectFilesTooBig = false ;
-            (this.otherDocsFilesSize + this.projectFilesSize) > this.maxGenerationSize ? this.sittingTooBigForGeneration = true : this.sittingTooBigForGeneration = false;
-            this.projectFilesSize + this.otherDocsFilesSize < this.sittingMaxSize ? document.querySelector('#save-sitting').disabled = false : document.querySelector('#save-sitting').disabled = true;
+            this.projectFilesTooBig = isOverWeight(this.projectFilesSize, this.maxGenerationSize);
+            this.sittingTooBigForGeneration = isOverWeight(this.otherDocsFilesSize + this.projectFilesSize, this.maxGenerationSize);
+            this.sittingTooBigForCreation = isOverWeight(this.otherDocsFilesSize + this.projectFilesSize, this.sittingMaxSize);
             isDirty = true;
         },
 
