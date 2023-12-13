@@ -27,6 +27,15 @@
             {{ macroTab.showTabs('projects', sitting) }}
 
 
+{#            #}{# Poids total #}
+{#            <div class="col-12 px-3 here mt-4 form-white">#}
+{#                <div class="d-flex justify-content-between">#}
+{#                    <h2>Poids total</h2>#}
+{#                    <span><small>Poids total: <span class="text-success"> {{ otherdocsTotalSize|sizeFormatter }} </span> </small></span>#}
+{#                </div>#}
+{#                <div class="mt-4"></div>#}
+{#            </div>#}
+
 
             {#  Other Docs #}
             <div class="col-12 px-3 here mt-4 form-white">
@@ -83,7 +92,7 @@
                                         class={{ isProjectsSizeTooBig ? "text-warning" : "text-success"  }}> {{ totalSize|sizeFormatter }} </span> </small></span>
                     {% else %}
                         <span><small> Poids total: <span
-                                        class="text-success">{{ totalSize|sizeFormatter }} </span> </small></span>
+                                        class="text-success">{{ totalProjectFileSize|sizeFormatter }} </span> </small></span>
                     {% endif %}
                 </div>
 
