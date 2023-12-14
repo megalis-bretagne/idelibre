@@ -552,14 +552,18 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" title="Fermer"></button>
                         </div>
                         <div class="modal-body">
-                            <span v-if="!lsvoteId">
-                                {% if convocationNotAnswered > 0  %}
-                                    A ce jour {{ convocationNotAnswered }} convocation(s) n'ont pas reçu de réponse.
-                                    <br>
-                                {% endif %}
-                                Voulez-vous vraiment envoyer la séance vers lsvote ?
-
-                            </span>
+                            <div v-if="!lsvoteId" >
+                                <p v-if="notAnswered > 0" class="alert alert-warning">
+                                    <small>
+                                        <i class="fa fa-exclamation-triangle me-1"></i>
+                                        A ce jour ${ notAnswered } destinataires de l'envoi n'ont pas donné de réponses
+                                        <br>
+                                    </small>
+                                </p>
+                            </div>
+                            <p class="mt-2">
+                                Voulez-vous vraiment envoyer la séance vers Lsvote ?
+                            </p>
                             <span v-if="lsvoteId">
                                 <i class="fa fa-warning mr-2 text-warning"></i> Attention. <br>
                                 La séance a déjà été envoyée à lsvote. Effectuer un renvoi effacera la séance précèdement envoyée sur lsvote pour la remplacer par celle-ci. <br>
