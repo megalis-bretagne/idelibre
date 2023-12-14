@@ -23,17 +23,17 @@ class PurgeGeneratedPdfAndZipCommand extends Command
         private readonly StructureRepository $structureRepository,
         private readonly FileGenerator       $fileGenerator,
         string                               $name = null
-    ) {
+    )
+    {
         parent::__construct($name);
     }
 
     protected function configure(): void
     {
         $this
-            ->setDescription('delete sittings before')
-            ->setHelp('delete sittings before')
-            ->addArgument('before', InputArgument::REQUIRED, 'before date')
-        ;
+            ->setDescription('delete generated pdf and zip before')
+            ->setHelp('delete generated pdf and zip before')
+            ->addArgument('before', InputArgument::REQUIRED, 'before date');
     }
 
     /**
@@ -41,18 +41,19 @@ class PurgeGeneratedPdfAndZipCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $io = new SymfonyStyle($input, $output);
         $beforeString = $input->getArgument('before');
         $before = DateTimeImmutable::createFromFormat('d/m/yy', $beforeString);
 
         $structures = $this->structureRepository->findAll();
         foreach ($structures as $structure) {
+            $io->text('traitement de la suppresion des pdf et zip générés de la structure : ' . $structure->getName());
             $toRemoveSittings = $this->sittingRepository->findSittingsBefore($before, $structure);
 
             $this->removeGeneratedZipAndPdf($toRemoveSittings);
         }
 
-        $io = new SymfonyStyle($input, $output);
-        $io->success('Séances supprimées');
+        $io->success('Pdf et Zip supprimées');
 
         return Command::SUCCESS;
     }
