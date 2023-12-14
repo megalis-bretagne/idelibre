@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 
 
+## [4.2.19] - 2023-??-??
+
+### Evolution
+- Ajout d'un script de purge des PDFs complets et ZIP des séances pour toutes les structures
+
 
 ## [4.2.18] - 2023-12-06
 

@@ -22,8 +22,7 @@ class PurgeGeneratedPdfAndZipCommand extends Command
         private readonly StructureRepository $structureRepository,
         private readonly FileGenerator       $fileGenerator,
         string                               $name = null
-    )
-    {
+    ) {
         parent::__construct($name);
     }
 
