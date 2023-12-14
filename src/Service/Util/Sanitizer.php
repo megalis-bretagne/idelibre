@@ -10,7 +10,7 @@ class Sanitizer
     {
         $removeAccent = Transliterator::create('NFD; [:Nonspacing Mark:] Remove; NFC')
             ->transliterate($name);
-        $removeAccent = preg_replace(['/\s+/', '/\'/'], '-', $removeAccent);
+        $removeAccent = preg_replace(['/\s+/', '/\'/', "/\//", '/_/'], '-', $removeAccent);
         $isTrimmed = trim($removeAccent);
 
         return (strlen($isTrimmed) > $length) ? substr($isTrimmed, 0, $length) . '[...]' : $isTrimmed;
