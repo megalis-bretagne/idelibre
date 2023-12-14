@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [4.2.19] - 2023-??-??
 
+### Correction
+- Traitement de nouveaux caractères dans les noms de fichiers lors de l'envoi via comelus
+
+
 ### Evolution
 - Ajout d'un script de purge des PDFs complets et ZIP des séances pour toutes les structures
 
