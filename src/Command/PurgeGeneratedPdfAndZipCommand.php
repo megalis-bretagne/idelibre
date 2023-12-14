@@ -5,7 +5,6 @@ namespace App\Command;
 use App\Repository\SittingRepository;
 use App\Repository\StructureRepository;
 use App\Service\File\Generator\FileGenerator;
-use App\Service\Seance\SittingManager;
 use DateTimeImmutable;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -47,13 +46,13 @@ class PurgeGeneratedPdfAndZipCommand extends Command
 
         $structures = $this->structureRepository->findAll();
         foreach ($structures as $structure) {
-            $io->text('traitement de la suppresion des pdf et zip générés de la structure : ' . $structure->getName());
+            $io->text('Traitement de la suppression des pdf et zip générés pour la structure : ' . $structure->getName());
             $toRemoveSittings = $this->sittingRepository->findSittingsBefore($before, $structure);
 
             $this->removeGeneratedZipAndPdf($toRemoveSittings);
         }
 
-        $io->success('Pdf et Zip supprimées');
+        $io->success('Pdf et Zip supprimés');
 
         return Command::SUCCESS;
     }
