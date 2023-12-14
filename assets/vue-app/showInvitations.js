@@ -52,6 +52,7 @@ let app = new Vue({
         timezone: "",
         options: "",
         actorsInSitting : [],
+        notAnswered: 0
     },
 
     computed: {
@@ -130,6 +131,13 @@ let app = new Vue({
                 });
         },
 
+        getCountNotAnswered() {
+            axios.get(`/api/sittings/${getSittingId()}/countNotAnswered`)
+                .then(response => {
+                    this.notAnswered = response.data.notAnswered
+                });
+        },
+
 
         resetFilters() {
             this.filter = {actor: "", guest: "", employees: ""};
@@ -197,6 +205,7 @@ let app = new Vue({
             this.showModalAttendance = true;
         },
 
+
         changeAttendance(status) {
             const attendanceNull = status.attendance === ""
             const attendancePresence = status.attendance === "present"
@@ -206,6 +215,7 @@ let app = new Vue({
             if( isPoaOrDeputyWithoutDeputy(status) ){
                 return;
             }
+
 
             if ( attendanceNull || attendancePresence|| attendanceRemote || attendanceAbsent ) {
                 this.changedAttendance.push({
@@ -227,6 +237,9 @@ let app = new Vue({
         },
 
         saveAttendance() {
+
+
+
             axios.post(`/api/convocations/attendance`, this.changedAttendance).then(
                 (response) => {
                     this.getConvocations()
@@ -239,6 +252,7 @@ let app = new Vue({
                 .finally(() => {
                     this.showModalAttendance = false
                     this.changedAttendance = [];
+                    this.getCountNotAnswered();
                 });
         },
 
@@ -269,6 +283,7 @@ let app = new Vue({
         this.getConvocations();
         this.getSitting();
         this.saveAttendance();
+        this.getCountNotAnswered();
     }
 });
 

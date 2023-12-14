@@ -14,6 +14,7 @@ use App\Repository\SittingRepository;
 use App\Service\Convocation\ConvocationManager;
 use App\Service\File\FileManager;
 use App\Service\File\Generator\FileGenerator;
+use App\Service\File\Generator\UnsupportedExtensionException;
 use App\Service\Project\ProjectManager;
 use App\Service\role\RoleManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -81,6 +82,9 @@ class SittingManager
         }
     }
 
+    /**
+     * @throws UnsupportedExtensionException
+     */
     public function deleteByStructure(Structure $structure): void
     {
         $sittings = $this->sittingRepository->findByStructure($structure)->getQuery()->getResult();
@@ -89,6 +93,9 @@ class SittingManager
         }
     }
 
+    /**
+     * @throws UnsupportedExtensionException
+     */
     public function delete(Sitting $sitting): void
     {
         $this->fileManager->delete($sitting->getConvocationFile());
