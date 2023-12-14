@@ -3,6 +3,33 @@ All notable changes to this project will be documented in this file.
 
 ## [4.3.0] - 2024-??-??
 
+## [4.2.19] - 2023-??-??
+
+### Correction
+- Traitement de nouveaux caractères dans les noms de fichiers lors de l'envoi via comelus
+
+
+### Evolution
+- Ajout d'un script de purge des PDFs complets et ZIP des séances pour toutes les structures
+
+
+## [4.2.18] - 2023-12-06
+
+### Evolution
+- Mise à jour SF 6.4.1, des dépendances composer et npm
+
+### Correction
+- Si la séance dépasse la limite maximum pour la génération du PDF complet et du zip, les anciens fichier générés sont supprimés (#484)
+
+
+## [4.2.17] - 2023-12-01
+
+### Evolution
+- Procédure d'installation normalisée pour la compatibilité avec le script libriciel-update.sh
+- Mise à jour SF 6.4.0 et des dépendances composer
+
+
+
 ## [4.2.16] - 2023-11-23
 
 ### Evolution
@@ -40,67 +67,6 @@ All notable changes to this project will be documented in this file.
 ### Correction
 - La purge des séances ne fonctionnait pas à cause d'une erreur dans la configuration de la durée par défaut
 
-## [4.2.11] - 2023-08-02
-### Evolution
-- Mise à jour symfony en 6.3.3
-
-### Correction
-- Les utilisateurs possédant un profil Administrateur ne pouvaient plus être modifiés
-
-## [4.2.10] - 2023-07-18
-### Correction
-￼- L'entropie du mot de passe des profils "Administrateur" était celui défini par la structure au lieu du niveau maximum (130).
-- Désormais, il n'est plus possible de définir le mot de passe pour les profils "Administrateur", qui ont donc par défaut un niveau d'entropie de 130.
-
-## [4.2.9] - 2023-07-06
-### Correction
-￼- Suite au passage en Symfony 6.3.1, le breadcrumb ne transformait plus les variables définies dans les controllers (données dans le fil d'ariane).
-
-## [4.2.8] - 2023-06-29
-### Evolution
-- Mise à jour symfony en 6.3.1
-- suppression de la lib sensioExtraFramework dépréciée
-- Mise à jour des lib npm
-
-
-### Correction
-￼- Le fuseau horaire contenu dans le fichier ics envoyé dans le mail de la séance présentait un décalage d'1 heure selon certain logiciel de gestion d'agenda
-￼	
-
-## [4.2.7] - 2023-06-28
-
-### Correction
-￼- Le fuseau horaire contenu dans le fichier ics envoyé dans le mail de la séance présentait un décalage d'1 heure selon certain logiciel de gestion d'agenda 
-
-## [4.2.6] - 2023-06-02
-
-### Correction
-￼- Le chargement de certains PDFs posent soucis si leur contenu ne finit pas par un EOF
-
-## [4.2.7] - 2023-06-28
-
-### Correction
-￼- Le fuseau horaire contenu dans le fichier ics envoyé dans le mail de la séance présentait un décalage d'1 heure selon certain logiciel de gestion d'agenda
-
-## [4.2.6] - 2023-06-02
-
-### Correction
-￼- Le chargement de certains PDFs posent soucis si leur contenu ne finit pas par un EOF
-
-## [4.2.7] - 2023-06-28
-
-### Correction
-￼- Le fuseau horaire contenu dans le fichier ics envoyé dans le mail de la séance présentait un décalage d'1 heure selon certain logiciel de gestion d'agenda
-
-## [4.2.6] - 2023-06-02
-
-### Correction
-￼- Le chargement de certains PDFs posent soucis si leur contenu ne finit pas par un EOF
-
-## [4.2.5] - 2023-06-02
-
-### Correction
-￼- Le téléchargement des autres documents n'était pas possible
 
 ## [4.2.11] - 2023-08-02
 ### Evolution
@@ -170,8 +136,8 @@ All notable changes to this project will be documented in this file.
 ### Evolution
 - Mise à jour symfony en 6.2.10
 - Ajout des fonctionnalités manquantes dans l'api :
-    - Séance autorisée à distance
-    - Ajout de documents non numérotés
+  - Séance autorisée à distance
+  - Ajout de documents non numérotés
 
 ### Correction
 - Script de mise à jour initBdd:subscription_user trop long.
@@ -191,8 +157,8 @@ All notable changes to this project will be documented in this file.
 - Un mail d'initialisation du mot de passe est envoyé lors de la création d'un compte superadmin et admin de groupe.
 - Délai de purge de donnée configurable par entité (#256)
 - Lors de la création d'un utilisateur dans une structure, il existe deux possiblité concernant le mot de passe :
-    - soit un mail d'initialisation du mot de passe est envoyé
-    - soit il est possible de définir le mot de passe
+  - soit un mail d'initialisation du mot de passe est envoyé
+  - soit il est possible de définir le mot de passe
 - Mise en place d'envoi d'un mail de réinitialisation du mot de passe.
 - Mise en place de l'invalidation des mots de passe de tous les utilisateurs de la structure.
 - Empêcher IL de générer les pdfs complets s'il y a trop de volume (#290)
@@ -350,3 +316,4 @@ All notable changes to this project will be documented in this file.
 
 ### Corrections
 - Correction du calcul du hash du legacy password coté client (nodejs)
+
