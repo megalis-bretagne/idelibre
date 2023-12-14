@@ -39,6 +39,8 @@ class SittingManager
     ) {
     }
 
+    public const COEFFICIENT_CORRECTEUR = 1.17647058824;
+
     public function save(
         Sitting $sitting,
         UploadedFile $uploadedConvocationFile,
@@ -232,7 +234,7 @@ class SittingManager
             }
         }
 
-        return $total;
+        return $total * self::COEFFICIENT_CORRECTEUR;
     }
 
     public function getOtherDocsTotalSize(Sitting $sitting): int
@@ -243,6 +245,15 @@ class SittingManager
         foreach ($otherDocs as $otherDoc) {
             $total += $otherDoc->getFile()->getSize();
         }
+
+        return $total * self::COEFFICIENT_CORRECTEUR;
+    }
+
+    public function getAllFilesSize(Sitting $sitting): int
+    {
+        $total = 0;
+        $total += $this->getProjectsAndAnnexesTotalSize($sitting);
+        $total += $this->getOtherDocsTotalSize($sitting);
 
         return $total;
     }

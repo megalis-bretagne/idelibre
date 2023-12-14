@@ -107,7 +107,7 @@ class FileGenerator
 
 
 
-        return [...$fullSittingDocsPath, ...$this->getProjectsAndAnnexesPath($sitting->getProjects())];
+        return [...$fullSittingDocsPath, ...$this->getProjectsAndAnnexesPath($sitting->getProjects()), ...$this->getOtherDocsPath($sitting->getOtherdocs())];
     }
 
     private function getConvocationPath(Sitting $sitting): string
@@ -128,6 +128,17 @@ class FileGenerator
         }
 
         return $projectsAndAnnexesPaths;
+    }
+
+    private function getOtherDocsPath(iterable $otherDocs): array
+    {
+        $otherDocsPaths = [];
+
+        foreach ($otherDocs as $otherDoc) {
+            $otherDocsPaths[] = $otherDoc->getFile()->getPath();
+        }
+
+        return $otherDocsPaths;
     }
 
     /**

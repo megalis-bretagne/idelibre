@@ -30,7 +30,8 @@ class GenPdfSittingHandler
     public function __invoke(UpdatedSitting $genFullSitting): void
     {
         $this->em->clear();
-        $sitting = $this->sittingRepository->findWithProjectsAndAnnexes($genFullSitting->getSittingId());
+        $sitting = $this->sittingRepository->findWithProjectsAnnexesAndOtherDocs($genFullSitting->getSittingId());
+
         if (!$sitting) {
             throw new NotFoundHttpException('the sitting with id ' . $genFullSitting->getSittingId() . 'does not exists');
         }

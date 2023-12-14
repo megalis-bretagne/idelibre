@@ -38,7 +38,7 @@ class ModifiedSittingTimestampGeneratorHandler
     public function __invoke(UpdatedSitting $genZipSitting): void
     {
         $this->em->clear();
-        $sitting = $this->sittingRepository->findWithProjectsAndAnnexes($genZipSitting->getSittingId());
+        $sitting = $this->sittingRepository->findWithProjectsAnnexesAndOtherDocs($genZipSitting->getSittingId());
         if (!$sitting) {
             throw new NotFoundHttpException('the sitting with id ' . $genZipSitting->getSittingId() . 'does not exists');
         }
