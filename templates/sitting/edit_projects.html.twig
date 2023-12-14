@@ -35,6 +35,26 @@
         <div class="col-11 offset-1 mt-4 px-3 form-white">
             {{ macroTab.editTabs('projects', sitting) }}
 
+            {# Poids total #}
+            <div class="col here mt-4 form-white">
+                <div class="d-flex justify-content-end">
+
+                    <p v-if="sittingTooBigForCreation === true" class="w-100 mx-0 alert alert-danger d-flex justify-content-between" >
+                        <span><i class="fa fa-triangle-exclamation"></i> La séance ne pourra être enregistrée car le poids total dépasse le poids maximum autorisé de 2 Go. Veuillez réduire la taille ou le nombre de fichiers.</span>
+                        <span> Poids total: ${formatSize(totalAllFileSize )}</span>
+                    </p>
+                    <p v-else-if="sittingTooBigForGeneration === true" class="w-100 mx-0 alert alert-warning d-flex justify-content-between" >
+                        <span><i class="fa fa-triangle-exclamation"></i> Le PDF complet ainsi que le Zip de la séance ne seront pas générés car le poids total des fichiers dépasse 200 Mo  </span>
+                        <span> Poids total: ${formatSize(totalAllFileSize)}</span>
+                    </p>
+
+                    <p v-else class="alert alert-success">Poids total:  ${formatSize(totalAllFileSize)}</p>
+                </div>
+                <div class="mt-4"></div>
+            </div>
+
+
+            {# autres documents #}
             <div class="d-flex justify-content-between">
                 <label class="project-file-btn btn btn-primary" title="Ajouter des documents">
                     <input class="project-file-btn" type="file" accept=".pdf,.PDF" multiple @change="addOtherdoc($event)" onclick="this.value=null">
@@ -42,7 +62,11 @@
                 </label>
 
                 <div class=" ml-auto d-flex justify-content-end mt-2">
-                    <p><small> Poids total: <span class="text-success">${formatSize(otherdocsTotalFileSize)}  </span></small></p>
+
+                    <p v-if="documentFilesTooBig === true">
+                        Poids des documents : <span class="text-warning"><i class="fa fa-triangle-exclamation"></i> ${formatSize(otherDocsFilesSize)}</span>
+                    </p>
+                    <p v-else><small> Poids des documents : <span class="text-success">${formatSize(otherDocsFilesSize)}  </span></small></p>
                 </div>
             </div>
 
@@ -92,11 +116,11 @@
                     <span class="fa fa-plus-circle"></span> Ajouter des projets
                 </label>
                 <div class=" ml-auto d-flex justify-content-end mt-2">
-                    <p v-if="fileTooBig === true" class=" alert alert-warning mb-0">
-                        <small><span> <i class="fa fa-triangle-exclamation"></i> Le PDF complet ainsi que le Zip de la séance ne seront pas générés car le poids total des fichiers dépasse 200 Mo - Poids total : ${formatSize(totalFileSize)} </span></small>
+                    <p v-if="projectFilesTooBig === true">
+                        Poids des projets : <span class="text-warning"><i class="fa fa-triangle-exclamation"></i> ${formatSize(projectFilesSize)}</span>
                     </p>
                     <p v-else >
-                        <small> Poids total: <span class="text-success">${formatSize(totalFileSize)} </span></small>
+                        <small> Poids des projets : <span class="text-success">${formatSize(projectFilesSize)} </span></small>
                     </p>
                 </div>
             </div>
@@ -227,7 +251,12 @@
             </button>
 
 
-            <button class="btn btn-primary" @click="save()" id="save-sitting">
+            <button v-if="sittingTooBigForCreation === true" class="btn btn-primary" id="save-sitting" disabled>
+                <span class="fa fa-save"></span>
+                Enregistrer les modifications
+            </button>
+
+            <button v-else class="btn btn-primary" @click="save()" id="save-sitting">
                 <span class="fa fa-save"></span>
                 Enregistrer les modifications
             </button>

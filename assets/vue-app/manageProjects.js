@@ -11,8 +11,6 @@ import draggable from 'vuedraggable';
 Vue.component('v-select', VueSelect);
 Vue.component('draggable', draggable);
 
-
-
 let app = new Vue({
     delimiters: ['${', '}'],
     el: "#app",
@@ -22,18 +20,21 @@ let app = new Vue({
         themes: [],
         reporters: [],
         messageInfo: null,
+        messageError: null,
         showModal: false,
         uploadPercent: 0,
-        messageError: null,
-        fileTooBig: false,
-        sittingTooBig: false,
         sittingMaxSize: 0,
         maxGenerationSize: 0,
         fileMaxSize: 0,
-        totalFileSize: 0,
-        otherdocsTotalFileSize: 0,
-        totalSittingSize: 0
+        projectFilesTooBig: false,
+        documentFilesTooBig: false,
+        sittingTooBigForCreation: false,
+        sittingTooBigForGeneration: false,
+        projectFilesSize: 0,
+        otherDocsFilesSize: 0,
+        totalAllFileSize: 0,
 
+        coefficientCorrecteur: 1.17647058824,
     },
 
 
@@ -69,28 +70,27 @@ let app = new Vue({
                     reporterId: null,
                     linkedFileKey: null,
                     id: null,
-                    size:event.target.files[i].size,
+                    size:event.target.files[i].size * this.coefficientCorrecteur
                 };
                 project.file.size > this.fileMaxSize ? this.showMessageError(`La taille du fichier ne doit pas dépasser les 200Mo. Taille actuelle de votre ficher : ${this.formatSize(project.file.size)}`) :
                 this.projects.push(project);
             }
-            this.totalFileSize = getFilesWeight(this.projects);
-            this.totalFileSize > this.maxGenerationSize ? this.fileTooBig = true: this.fileTooBig = false ;
-
-            if(this.sittingMaxSize <  this.totalFileSize + this.otherdocsTotalFileSize){
-                this.showMessageError("Le poids de la séance dépasse les 2Go, elle ne pourra pas être enregistrée. Veuillez réduire le poids de vos pdfs.")
-                document.querySelector('#save-sitting').disabled = true
-            }
-
+            this.projectFilesSize = getProjectsFilesWeight(this.projects);
+            this.totalAllFileSize = getAllFilesWeight(this.otherDocsFilesSize, this.projectFilesSize);
+            this.projectFilesTooBig = isOverWeight(this.projectFilesSize, this.maxGenerationSize);
+            this.sittingTooBigForGeneration = isOverWeight(this.otherDocsFilesSize + this.projectFilesSize, this.maxGenerationSize);
+            this.sittingTooBigForCreation = isOverWeight(this.otherDocsFilesSize + this.projectFilesSize, this.sittingMaxSize);
             isDirty = true;
 
         },
 
         removeProject(index) {
             this.projects.splice(index, 1);
-            this.totalFileSize = getFilesWeight(this.projects)
-            this.totalFileSize > this.maxGenerationSize ? this.fileTooBig = true: this.fileTooBig = false ;
-            this.totalFileSize + this.otherdocsTotalFileSize < this.sittingMaxSize ? document.querySelector('#save-sitting').disabled = false : document.querySelector('#save-sitting').disabled = true;
+            this.projectFilesSize = getProjectsFilesWeight(this.projects)
+            this.totalAllFileSize = getAllFilesWeight(this.otherDocsFilesSize, this.projectFilesSize);
+            this.projectFilesTooBig = isOverWeight(this.projectFilesSize, this.maxGenerationSize);
+            this.sittingTooBigForGeneration = isOverWeight(this.otherDocsFilesSize + this.projectFilesSize, this.maxGenerationSize);
+            this.sittingTooBigForCreation = isOverWeight(this.otherDocsFilesSize + this.projectFilesSize, this.sittingMaxSize);
             isDirty = true;
         },
 
@@ -102,27 +102,27 @@ let app = new Vue({
                     linkedFileKey: null,
                     fileName: file.name,
                     id: null,
-                    size:event.target.files[i].size
+                    size:event.target.files[i].size * this.coefficientCorrecteur
                 };
                 annex.file.size > this.fileMaxSize ? this.showMessageError(`La taille du fichier ne doit pas dépasser les 200Mo. Taille actuelle de votre ficher : ${this.formatSize(annex.file.size)}`):
                 project.annexes.push(annex);
             }
-            this.totalFileSize = getFilesWeight(this.projects)
-            this.totalFileSize > this.maxGenerationSize ? this.fileTooBig = true: this.fileTooBig = false ;
-
-            if(this.sittingMaxSize <  this.totalFileSize + this.otherdocsTotalFileSize){
-                this.showMessageError("Le poids de la séance dépasse les 2Go, elle ne pourra pas être enregistrée. Veuillez réduire le poids de vos pdfs.")
-                document.querySelector('#save-sitting').disabled = true
-            }
+            this.projectFilesSize = getProjectsFilesWeight(this.projects)
+            this.totalAllFileSize = getAllFilesWeight(this.otherDocsFilesSize, this.projectFilesSize);
+            this.projectFilesTooBig = isOverWeight(this.projectFilesSize, this.maxGenerationSize);
+            this.sittingTooBigForGeneration = isOverWeight(this.otherDocsFilesSize + this.projectFilesSize, this.maxGenerationSize);
+            this.sittingTooBigForCreation = isOverWeight(this.otherDocsFilesSize + this.projectFilesSize, this.sittingMaxSize);
 
             isDirty = true;
         },
 
         deleteAnnex(annexes, index) {
             annexes.splice(index, 1);
-            this.totalFileSize = getFilesWeight(this.projects)
-            this.totalFileSize > this.maxGenerationSize ? this.fileTooBig = true: this.fileTooBig = false ;
-            this.totalFileSize + this.otherdocsTotalFileSize < this.sittingMaxSize ? document.querySelector('#save-sitting').disabled = false : document.querySelector('#save-sitting').disabled = true;
+            this.projectFilesSize = getProjectsFilesWeight(this.projects)
+            this.totalAllFileSize = getAllFilesWeight(this.otherDocsFilesSize, this.projectFilesSize);
+            this.projectFilesTooBig = isOverWeight(this.projectFilesSize, this.maxGenerationSize);
+            this.sittingTooBigForGeneration = isOverWeight(this.otherDocsFilesSize + this.projectFilesSize, this.maxGenerationSize);
+            this.sittingTooBigForCreation = isOverWeight(this.otherDocsFilesSize + this.projectFilesSize, this.sittingMaxSize);
             isDirty = true;
         },
 
@@ -135,32 +135,33 @@ let app = new Vue({
                     file: file,
                     linkedFileKey: null,
                     id: null,
-                    size:event.target.files[i].size,
+                    size:event.target.files[i].size * this.coefficientCorrecteur
                 };
                 otherdoc.file.size > this.fileMaxSize ? this.showMessageError(`La taille du fichier ne doit pas dépasser les 200Mo. Taille actuelle de votre ficher : ${this.formatSize(otherdoc.file.size)}`) :
                 this.otherdocs.push(otherdoc);
             }
-            this.otherdocsTotalFileSize = getOtherdocsFilesWeight(this.otherdocs)
-
-            if(this.sittingMaxSize <  this.totalFileSize + this.otherdocsTotalFileSize){
-                this.showMessageError("Le poids de la séance dépasse les 2Go, elle ne pourra pas être enregistrée. Veuillez réduire le poids de vos pdfs.")
-                document.querySelector('#save-sitting').disabled = true
-            }
-
+            this.otherDocsFilesSize = getOtherdocsFilesWeight(this.otherdocs);
+            this.totalAllFileSize = getAllFilesWeight(this.otherDocsFilesSize, this.projectFilesSize);
+            this.documentFilesTooBig = isOverWeight(this.otherDocsFilesSize, this.maxGenerationSize);
+            this.sittingTooBigForGeneration = isOverWeight(this.otherDocsFilesSize + this.projectFilesSize, this.maxGenerationSize);
+            this.sittingTooBigForCreation = isOverWeight(this.otherDocsFilesSize + this.projectFilesSize, this.sittingMaxSize);
             isDirty = true;
         },
 
         removeOtherdoc(index) {
             this.otherdocs.splice(index, 1);
-            this.otherdocsTotalFileSize = getOtherdocsFilesWeight(this.otherdocs)
-            this.totalFileSize + this.otherdocsTotalFileSize < this.sittingMaxSize ? document.querySelector('#save-sitting').disabled = false : document.querySelector('#save-sitting').disabled = true;
+            this.otherDocsFilesSize = getOtherdocsFilesWeight(this.otherdocs)
+            this.totalAllFileSize = getAllFilesWeight(this.otherDocsFilesSize, this.projectFilesSize);
+            this.documentFilesTooBig = isOverWeight(this.otherDocsFilesSize, this.maxGenerationSize);
+            this.sittingTooBigForGeneration = isOverWeight(this.otherDocsFilesSize + this.projectFilesSize, this.maxGenerationSize);
+            this.sittingTooBigForCreation = isOverWeight(this.otherDocsFilesSize + this.projectFilesSize, this.sittingMaxSize);
             isDirty = true;
         },
 
         save() {
 
-            if(!checkNotOverweightSitting(this.totalSittingSize, this.sittingMaxSize)) {
-                this.sittingTooBig = true
+            if(isOverWeight(this.totalAllFileSize, this.sittingMaxSize)) {
+                this.sittingTooBigForCreation = true
                 this.showMessageError("Le poids de la séance dépasse les 2Go, elle ne pourra pas être enregistrée. Veuillez réduire le poids de vos pdfs.")
             }
 
@@ -241,7 +242,7 @@ let app = new Vue({
         showMessageError(msg) {
             window.scrollTo(0, 0);
             this.messageError = msg;
-            setTimeout(() => this.messageError = null, 3000);
+            setTimeout(() => this.messageError = null, 10000);
         },
     },
 
@@ -262,21 +263,21 @@ let app = new Vue({
             this.maxGenerationSize = response[4].data.maxGenerationSize;
             this.fileMaxSize = response[5].data.fileMaxSize;
             this.sittingMaxSize = response[6].data.sittingMaxSize;
-            this.totalFileSize = getFilesWeight(this.projects);
-            this.otherdocsTotalFileSize = getOtherdocsFilesWeight(this.otherdocs);
-            this.totalSittingSize = this.totalFileSize + this.otherdocsTotalFileSize;
-            this.fileTooBig = getFileTooBig(this.totalFileSize, this.maxGenerationSize);
-            this.sittingTooBig = getSittingTooBig(this.totalSittingSize, this.sittingMaxSize)
+            this.projectFilesSize = getProjectsFilesWeight(this.projects);
+            this.otherDocsFilesSize = getOtherdocsFilesWeight(this.otherdocs);
+            this.totalAllFileSize = getAllFilesWeight(this.otherDocsFilesSize, this.projectFilesSize);
+            this.projectFilesTooBig = isOverWeight(this.projectFilesSize, this.maxGenerationSize);
+            this.documentFilesTooBig = isOverWeight(this.otherDocsFilesSize, this.maxGenerationSize);
+            this.sittingTooBigForGeneration = isOverWeight(this.totalAllFileSize, this.maxGenerationSize);
+            this.sittingTooBigForCreation = isOverWeight(this.totalAllFileSize, this.sittingMaxSize)
         });
+
     }
 });
 
 
-function getFileTooBig(totalFileSize, maxGenerationSize) {
-    return !checkNotOverweightFile(totalFileSize, maxGenerationSize);
-}
-function getSittingTooBig(totalSittingSize, sittingMaxSize) {
-    return  !checkNotOverweightSitting(totalSittingSize, sittingMaxSize)
+function isOverWeight(current, limit) {
+    return current > limit;
 }
 
 function addProjectAndAnnexeFiles(projects, formData) {
@@ -317,32 +318,29 @@ function formatBytes(a, b = 0) {
     return `${parseFloat((a / Math.pow(1000, d)).toFixed(c))} ${["Octets", "Ko", "Mo", "Go"][d]}`
 }
 
-function getFilesWeight(projects) {
-    let totalFileSize = 0;
+function getProjectsFilesWeight(projects) {
+    let projectFilesSize = 0;
+
     for (let project of projects) {
-        totalFileSize += project.size;
+        projectFilesSize += project.size;
         for (let annexe of project.annexes) {
-            totalFileSize += annexe.size
+            projectFilesSize += annexe.size
         }
     }
-    return totalFileSize;
+    return projectFilesSize
 }
 
 function getOtherdocsFilesWeight(otherdocs) {
-    let otherdocsTotalFileSize = 0
+    let otherDocsFilesSize = 0
 
     for (let otherdoc of otherdocs) {
-        otherdocsTotalFileSize += otherdoc.size
+        otherDocsFilesSize += otherdoc.size
     }
-    return otherdocsTotalFileSize;
+    return otherDocsFilesSize ;
 }
 
-
-function  checkNotOverweightFile(totalFileSize, maxGenerationSize) {
-    return maxGenerationSize > totalFileSize;
-}
-function  checkNotOverweightSitting(totalSittingSize , sittingMaxSize) {
-    return  sittingMaxSize > totalSittingSize;
+function getAllFilesWeight(getOTrherdocsFilesWeight, getProjectsFilesWeight) {
+    return getProjectsFilesWeight + getOTrherdocsFilesWeight;
 }
 
 function getPrettyNameFromFileName(fileName) {
@@ -401,8 +399,6 @@ function setOtherdocsRank(otherdocs) {
         otherdocs[i].rank = i;
     }
 }
-
-
 
 
 let isDirty = false;
