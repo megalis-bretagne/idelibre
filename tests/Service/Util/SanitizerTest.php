@@ -25,9 +25,13 @@ class SanitizerTest extends WebTestCase
     {
         $name = 'Lorem ipsum dolor sit amet consectetur adipiscing elit Vestibulum ut ex urna. Phasellus venenatis et justo id porta Proin egestas dapibus felis, nec mattis ligula mattis id Interdum et malesuada fames ac ante ipsum primis ';
         $length = 100;
+        $string = 'é/ekejdj_1234';
 
         $sanitized_name = $this->sanitizer->fileNameSanitizer($name, $length);
+        $sanitized_string = $this->sanitizer->fileNameSanitizer($string, $length);
+
 
         $this->assertEquals($length, strlen($sanitized_name) - 5);
+        $this->assertEquals('e-ekejdj-1234', $sanitized_string);
     }
 }
