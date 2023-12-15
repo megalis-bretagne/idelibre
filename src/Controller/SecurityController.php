@@ -110,7 +110,7 @@ class SecurityController extends AbstractController
             } catch (EntityNotFoundException $e) {
                 $logger->info('this username does not exist : ' . $username);
             }
-            $this->addFlash('success', 'Un email vous a été envoyé si un compte lui est associé.');
+            $this->addFlash('success', 'Un email vous a été envoyé si un compte lui est associé');
 
             return $this->redirectToRoute('app_login');
         }
@@ -147,7 +147,9 @@ class SecurityController extends AbstractController
             $user = $resetPassword->getUserFromToken($token);
         } catch (TimeoutException $e) {
             //throw new TimeoutException('expired TOKEN', 498);
-            return $this->render('security/expired_token_ls.html.twig');
+            return $this->render('security/expired_token_ls.html.twig' , [
+                'token' => $token
+            ]);
         } catch (EntityNotFoundException $e) {
             throw new NotFoundHttpException('this token does not exist');
         }
@@ -203,11 +205,15 @@ class SecurityController extends AbstractController
         return $this->json(['message' => 'success'], 200);
     }
 
+    /**
+     * @throws EntityNotFoundException
+     */
     #[Route(path: '/security/{token}/reSendEmail', name: 'security_re_send_email')]
-    public function reSendEmail(Request $request, UserRepository $userRepository, ForgetTokenRepository $forgetTokenRepository): Response
+    public function reSendEmail(Request $request, ResetPassword $resetPassword, ForgetTokenRepository $forgetTokenRepository): Response
     {
         $token = $forgetTokenRepository->findOneBy(['token' => $request->get('token')]);
-        $this->addFlash('success', 'Un email vous a été envoyé si un compte lui est associé');
+        $resetPassword->reset($token->getUser()->getUsername());
+        $this->addFlash('success', 'Un email vous a été renvoyé si un compte lui est associé');
 
         return $this->redirectToRoute('app_login');
     }

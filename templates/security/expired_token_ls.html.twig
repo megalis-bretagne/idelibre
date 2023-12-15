@@ -14,7 +14,7 @@
                 <h1 class="page-title">Lien de reinitialisation expiré</h1>
 
                     <div class="mt-5">
-                        <a href="{{ path('app_forget') }}"> Votre Lien a expiré, cliquez ici pour demander un nouveau lien de reinitialisation du mot de passe de votre compte </a>
+                        <a href="{{ path('security_re_send_email', {token: token}) }}"> Votre Lien a expiré, cliquez ici pour demander un nouveau lien de reinitialisation du mot de passe de votre compte </a>
                     </div>
 
 
