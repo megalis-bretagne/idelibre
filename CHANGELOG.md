@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 
 
-## [4.2.19] - 2023-??-??
+## [4.2.19] - 2023-12-15
 
 ### Correction
 - Traitement de nouveaux caractères dans les noms de fichiers lors de l'envoi via comelus
