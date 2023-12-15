@@ -2,13 +2,10 @@
 
 namespace App\Controller;
 
-use App\Entity\ForgetToken;
 use App\Entity\Enum\Role_Name;
-use App\Entity\Role;
 use App\Entity\Structure;
 use App\Form\UserPasswordType;
 use App\Repository\ForgetTokenRepository;
-use App\Repository\UserRepository;
 use App\Security\Password\PasswordChange;
 use App\Security\Password\PasswordUpdater;
 use App\Security\Password\PasswordUpdaterException;

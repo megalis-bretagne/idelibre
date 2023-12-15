@@ -107,7 +107,7 @@ class SecurityControllerTest extends WebTestCase
         $crawler = $this->client->followRedirect();
         $this->assertResponseStatusCodeSame(200);
 
-        $flash = $crawler->filter('html:contains("Si vos informations sont correctes, un email vous a été envoyé.")');
+        $flash = $crawler->filter('html:contains("Un email vous a été envoyé si un compte lui est associé")');
         $this->assertCount(1, $flash);
 
         $user = $this->getOneUserBy(['username' => 'superadmin']);
@@ -123,7 +123,7 @@ class SecurityControllerTest extends WebTestCase
         $crawler = $this->client->followRedirect();
         $this->assertResponseStatusCodeSame(200);
 
-        $flash = $crawler->filter('html:contains("Si vos informations sont correctes, un email vous a été envoyé.")');
+        $flash = $crawler->filter('html:contains("Un email vous a été envoyé si un compte lui est associé")');
         $this->assertCount(1, $flash);
 
         $user = $this->getOneUserBy(['username' => 'admin@libriciel']);
@@ -323,7 +323,5 @@ class SecurityControllerTest extends WebTestCase
 
         $flash = $crawler->filter('html:contains("Un email contenant le lien de réinitialisation de votre mot de passe vous a été renvoyé")');
         $this->assertCount(1, $flash);
-
-
     }
 }
