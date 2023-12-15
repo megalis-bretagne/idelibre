@@ -67,7 +67,6 @@ All notable changes to this project will be documented in this file.
 ### Correction
 - La purge des séances ne fonctionnait pas à cause d'une erreur dans la configuration de la durée par défaut
 
-
 ## [4.2.11] - 2023-08-02
 ### Evolution
 - Mise à jour symfony en 6.3.3
@@ -90,11 +89,6 @@ All notable changes to this project will be documented in this file.
 - suppression de la lib sensioExtraFramework dépréciée
 - Mise à jour des lib npm
 
-
-### Correction
-￼- Le fuseau horaire contenu dans le fichier ics envoyé dans le mail de la séance présentait un décalage d'1 heure selon certain logiciel de gestion d'agenda
-￼
-
 ## [4.2.7] - 2023-06-28
 
 ### Correction
@@ -109,6 +103,7 @@ All notable changes to this project will be documented in this file.
 
 ### Correction
 ￼- Le téléchargement des autres documents n'était pas possible
+
 
 ## [4.2.4] - 2023-05-19
 
@@ -136,8 +131,8 @@ All notable changes to this project will be documented in this file.
 ### Evolution
 - Mise à jour symfony en 6.2.10
 - Ajout des fonctionnalités manquantes dans l'api :
-  - Séance autorisée à distance
-  - Ajout de documents non numérotés
+    - Séance autorisée à distance
+    - Ajout de documents non numérotés
 
 ### Correction
 - Script de mise à jour initBdd:subscription_user trop long.
@@ -157,8 +152,8 @@ All notable changes to this project will be documented in this file.
 - Un mail d'initialisation du mot de passe est envoyé lors de la création d'un compte superadmin et admin de groupe.
 - Délai de purge de donnée configurable par entité (#256)
 - Lors de la création d'un utilisateur dans une structure, il existe deux possiblité concernant le mot de passe :
-  - soit un mail d'initialisation du mot de passe est envoyé
-  - soit il est possible de définir le mot de passe
+    - soit un mail d'initialisation du mot de passe est envoyé
+    - soit il est possible de définir le mot de passe
 - Mise en place d'envoi d'un mail de réinitialisation du mot de passe.
 - Mise en place de l'invalidation des mots de passe de tous les utilisateurs de la structure.
 - Empêcher IL de générer les pdfs complets s'il y a trop de volume (#290)
@@ -316,4 +311,3 @@ All notable changes to this project will be documented in this file.
 
 ### Corrections
 - Correction du calcul du hash du legacy password coté client (nodejs)
-
