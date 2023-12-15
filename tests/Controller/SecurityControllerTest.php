@@ -305,4 +305,9 @@ class SecurityControllerTest extends WebTestCase
 
         $this->assertResponseStatusCodeSame(403);
     }
+
+    public function testReSendEmail()
+    {
+        UserFactory::createOne()
+    }
 }
