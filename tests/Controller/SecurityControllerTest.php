@@ -5,6 +5,7 @@ namespace App\Tests\Controller;
 use App\Entity\Structure;
 use App\Entity\User;
 use App\Security\Password\LegacyPassword;
+use App\Tests\Factory\ForgetTokenFactory;
 use App\Tests\Factory\UserFactory;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
@@ -308,6 +309,21 @@ class SecurityControllerTest extends WebTestCase
 
     public function testReSendEmail()
     {
-        UserFactory::createOne()
+        $user = UserFactory::createOne([
+            'email' => 'email@mail.com',
+            'username' => 'username',
+            'firstname' => 'firstname'
+        ]);
+        $forgetToken = ForgetTokenFactory::createOne(['user' => $user]);
+
+        $this->client->request(Request::METHOD_POST, 'security/' . $forgetToken->getToken() . '/reSendEmail', ['username' => 'admin@libriciel']);
+        $this->assertResponseRedirects('/login');
+        $crawler = $this->client->followRedirect();
+        $this->assertResponseStatusCodeSame(200);
+
+        $flash = $crawler->filter('html:contains("Un email contenant le lien de réinitialisation de votre mot de passe vous a été renvoyé")');
+        $this->assertCount(1, $flash);
+
+
     }
 }

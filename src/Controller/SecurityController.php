@@ -213,7 +213,7 @@ class SecurityController extends AbstractController
     {
         $token = $forgetTokenRepository->findOneBy(['token' => $request->get('token')]);
         $resetPassword->reset($token->getUser()->getUsername());
-        $this->addFlash('success', 'Un email vous a été renvoyé si un compte lui est associé');
+        $this->addFlash('success', 'Un email contenant le lien de réinitialisation de votre mot de passe vous a été renvoyé');
 
         return $this->redirectToRoute('app_login');
     }
