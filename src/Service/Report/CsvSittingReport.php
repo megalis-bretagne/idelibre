@@ -28,7 +28,7 @@ class CsvSittingReport
         $writer = Writer::createFromPath($csvPath, 'w+');
         $writer->insertOne($this->getHeaders());
 
-        $convocations = $this->convocationRepository->getActorConvocationsBySitting($sitting);
+        $convocations = $this->convocationRepository->getEveryoneInSitting($sitting);
         foreach ($convocations as $convocation) {
             $writer->insertOne($this->getConvocationData($convocation));
         }
@@ -38,7 +38,7 @@ class CsvSittingReport
 
     private function getHeaders(): array
     {
-        return ['Prénom', 'Nom', 'Envoi', 'Réception', 'Présence', 'Mandataire'];
+        return ['Prénom', 'Nom', 'Envoi', 'Réception', 'Présence', 'Mandataire', 'Role'];
     }
 
     private function getConvocationData(Convocation $convocation): array
@@ -51,7 +51,8 @@ class CsvSittingReport
             $this->getDateFormattedTimeStamp($convocation->getSentTimestamp(), $structure),
             $this->getDateFormattedTimeStamp($convocation->getReceivedTimestamp(), $structure),
             $this->formatConvocationAttendance($convocation->getAttendance()),
-            $convocation->getDeputy() ?? '',
+            $this->setMandatorDeputy($convocation),
+            $convocation->getUser()->getRole()->getPrettyName(),
         ];
     }
 
@@ -67,10 +68,25 @@ class CsvSittingReport
     private function formatConvocationAttendance($convocation): string
     {
         return match ($convocation) {
-            'remote' => 'Distanciel',
+            'remote' => 'A distance',
             'absent' => 'Absent',
             'present' => 'Présent',
+            'poa' => 'Donne pouvoir',
+            'deputy' => 'Remplacé',
             default => '',
         };
+    }
+
+    private function setMandatorDeputy($convocation):string
+    {
+        if ($convocation->getDeputy()) {
+            return $convocation->getDeputy()->getFirstName() . ' ' . $convocation->getDeputy()->getLastName();
+        }
+
+        if ($convocation->getMandator()) {
+            return $convocation->getMandator()->getFirstName() . ' ' . $convocation->getMandator()->getLastName();
+        }
+
+        return '';
     }
 }
