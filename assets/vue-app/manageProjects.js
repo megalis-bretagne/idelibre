@@ -57,6 +57,9 @@ let app = new Vue({
         otherdocChange(event) {
             isDirty = true;
         },
+        annexChange(event) {
+            isDirty = true;
+        },
 
         addProject(event) {
             for (let i = 0; i < event.target.files.length; i++) {
@@ -170,6 +173,8 @@ let app = new Vue({
             setProjectsRank(this.projects);
             formData.append('projects', JSON.stringify(this.projects));
 
+            console.log(formData)
+
             let formDataDocs = new FormData();
             addOtherdocFiles(this.otherdocs, formDataDocs);
             setOtherdocsRank(this.otherdocs);
@@ -201,11 +206,11 @@ let app = new Vue({
                     isDirty = false;
                     this.showModal = false;
                     window.scrollTo(0, 0);
-                    setTimeout(function(){
-                        window.location.href = `/sitting/show/${getSittingId()}/projects`
-                    },
-                        1000);
-                    ;
+                    // setTimeout(function(){
+                    //     window.location.href = `/sitting/show/${getSittingId()}/projects`
+                    // },
+                    //     1000);
+                    // ;
                 })
                 .catch((e, m) => {
                     this.showModal = false;
@@ -283,7 +288,12 @@ function isOverWeight(current, limit) {
 function addProjectAndAnnexeFiles(projects, formData) {
     for (let i = 0; i < projects.length; i++) {
         if (isNewProject(projects[i])) {
-            formData.append(`projet_${i}_rapport`, projects[i].file, projects[i].file.name, projects[i].size);
+            formData.append(`projet_${i}_rapport`,
+                projects[i].file,
+                projects[i].file.name,
+                projects[i].size
+            );
+
             projects[i].linkedFileKey = `projet_${i}_rapport`;
         }
         addAnnexeFiles(projects[i], i, formData);
@@ -296,7 +306,13 @@ function addAnnexeFiles(project, index, formData) {
     }
     for (let j = 0; j < project.annexes.length; j++) {
         if (isNewAnnex(project.annexes[j]) ) {
-            formData.append(`projet_${index}_${j}_annexe`, project.annexes[j].file, project.annexes[j].file.name, project.annexes[j].size);
+            formData.append(`projet_${index}_${j}_annexe`,
+                project.annexes[j].file,
+                project.annexes[j].file.name,
+                project.annexes[j].size,
+                project.annexes[j].title
+            );
+
             project.annexes[j].linkedFileKey = `projet_${index}_${j}_annexe`;
         }
     }
@@ -305,7 +321,11 @@ function addAnnexeFiles(project, index, formData) {
 function addOtherdocFiles(otherdocs, formDataDocs) {
     for (let k = 0; k < otherdocs.length; k++) {
         if (isNewOtherdoc(otherdocs[k])) {
-            formDataDocs.append(`autre_${k}_rapport`, otherdocs[k].file, otherdocs[k].file.name, otherdocs[k].size);
+            formDataDocs.append(`autre_${k}_rapport`,
+                otherdocs[k].file,
+                otherdocs[k].file.name,
+                otherdocs[k].size
+            );
             otherdocs[k].linkedFileKey = `autre_${k}_rapport`;
         }
     }
