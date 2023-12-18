@@ -101,7 +101,7 @@ let app = new Vue({
             for (let i = 0; i < event.target.files.length; i++) {
                 let file = event.target.files[i];
                 let annex = {
-                    name: getPrettyNameFromFileName(file.name),
+                    title: getPrettyNameFromFileName(file.name),
                     file: file,
                     linkedFileKey: null,
                     fileName: file.name,

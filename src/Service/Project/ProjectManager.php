@@ -190,7 +190,9 @@ class ProjectManager
             $annexApi->setRank($annex->getRank())
                 ->setId($annex->getId())
                 ->setFileName($annex->getFile()->getName())
-                ->setSize($annex->getFile()->getSize());
+                ->setSize($annex->getFile()->getSize())
+                ->setTitle($annex->getTitle() ?? null)
+            ;
             $apiAnnexes[] = $annexApi;
         }
 
