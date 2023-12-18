@@ -84,6 +84,10 @@ class ComelusConnectorManager
         return $this->comelusWrapper->getMailingLists();
     }
 
+    /**
+     * @throws UnsupportedExtensionException
+     * @throws ComelusException
+     */
     public function sendComelus(Sitting $sitting): ?string
     {
         $comelusConnetor = $this->comelusConnectorRepository->findOneBy(['structure' => $sitting->getStructure()]);
@@ -156,7 +160,7 @@ class ComelusConnectorManager
 
     private function uploadProjectHelper($project): UploadedFile
     {
-        return new UploadedFile($project->getFile()->getPath(), 0, 0, $project->getRank() + 1 . '. ' . $this->sanitizer->fileNameSanitizer($project->getName(), 150) . '.pdf');
+        return new UploadedFile($project->getFile()->getPath(), 0, 0, $project->getRank() + 1 . '-' . $this->sanitizer->fileNameSanitizer($project->getName(), 150) . '.pdf');
     }
 
     private function uploadOtherDocHelper($otherDoc): UploadedFile
@@ -166,7 +170,7 @@ class ComelusConnectorManager
 
     private function uploadAnnexesHelper($annex): UploadedFile
     {
-        return new UploadedFile($annex->getFile()->getPath(), 0, 0, '- ' . $annex->getFile()->getName());
+        return new UploadedFile($annex->getFile()->getPath(), 0, 0, $annex->getRank() + 1  . '-' . $this->sanitizer->fileNameSanitizer($annex->getFile()->getName(), 150) . '.pdf');
     }
 
     /**
