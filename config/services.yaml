@@ -101,6 +101,12 @@ services:
 
   Libriciel\Password\Service\PasswordStrengthMeterAnssi:
 
+  Psr\Http\Client\ClientInterface:
+     class: Symfony\Component\HttpClient\Psr18Client
+     calls:
+       - withOptions: [ timeout: 300 ]
+
+
   App\EventListener\PartySaveNotifier:
     tags:
       - name: 'doctrine.orm.entity_listener'

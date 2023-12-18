@@ -98,6 +98,7 @@ class ComelusConnectorManager
         $this->comelusWrapper->setUrl($comelusConnetor->getUrl());
 
 
+        ini_set("default_socket_timeout", 5);
 
         $response = $this->comelusWrapper->createDocument(
             $this->getDocumentName($sitting),
@@ -105,6 +106,8 @@ class ComelusConnectorManager
             $this->comelusContentGenerator->createDescription($comelusConnetor->getDescription(), $sitting),
             $uploadedFiles
         );
+
+
 
         $comelusId = $response['id'] ?? null;
 
