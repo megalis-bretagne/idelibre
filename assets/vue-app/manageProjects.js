@@ -70,7 +70,7 @@ let app = new Vue({
                     reporterId: null,
                     linkedFileKey: null,
                     id: null,
-                    size:event.target.files[i].size * this.coefficientCorrecteur
+                    size:Math.round(file.size * this.coefficientCorrecteur)
                 };
                 project.file.size > this.fileMaxSize ? this.showMessageError(`La taille du fichier ne doit pas dépasser les 200Mo. Taille actuelle de votre ficher : ${this.formatSize(project.file.size)}`) :
                 this.projects.push(project);
@@ -102,7 +102,7 @@ let app = new Vue({
                     linkedFileKey: null,
                     fileName: file.name,
                     id: null,
-                    size:event.target.files[i].size * this.coefficientCorrecteur
+                    size:Math.round(file.size * this.coefficientCorrecteur)
                 };
                 annex.file.size > this.fileMaxSize ? this.showMessageError(`La taille du fichier ne doit pas dépasser les 200Mo. Taille actuelle de votre ficher : ${this.formatSize(annex.file.size)}`):
                 project.annexes.push(annex);
@@ -135,7 +135,7 @@ let app = new Vue({
                     file: file,
                     linkedFileKey: null,
                     id: null,
-                    size:event.target.files[i].size * this.coefficientCorrecteur
+                    size:Math.round(file.size * this.coefficientCorrecteur)
                 };
                 otherdoc.file.size > this.fileMaxSize ? this.showMessageError(`La taille du fichier ne doit pas dépasser les 200Mo. Taille actuelle de votre ficher : ${this.formatSize(otherdoc.file.size)}`) :
                 this.otherdocs.push(otherdoc);

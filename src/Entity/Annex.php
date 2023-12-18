@@ -27,18 +27,22 @@ class Annex
     #[Column(type: 'integer')]
     #[NotBlank]
     #[Groups(['project:read'])]
-    private $rank;
+    private ?int $rank;
 
     #[OneToOne(inversedBy: 'annex', targetEntity: File::class, cascade: ['persist', 'remove'])]
     #[JoinColumn(nullable: false)]
     #[NotNull]
     #[Groups(['project:read'])]
-    private $file;
+    private ?File $file;
 
     #[ManyToOne(targetEntity: Project::class, inversedBy: 'annexes')]
     #[JoinColumn(nullable: false, onDelete: 'CASCADE')]
     #[NotNull]
-    private $project;
+    private ?Project $project;
+
+    #[ORM\Column(length: 512, nullable: true)]
+    #[Groups(['project:read'])]
+    private ?string $title = null;
 
     public function getId(): ?string
     {
@@ -77,6 +81,18 @@ class Annex
     public function setProject(?Project $project): self
     {
         $this->project = $project;
+
+        return $this;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(?string $title): static
+    {
+        $this->title = $title;
 
         return $this;
     }
