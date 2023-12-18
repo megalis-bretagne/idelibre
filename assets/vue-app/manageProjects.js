@@ -101,6 +101,7 @@ let app = new Vue({
             for (let i = 0; i < event.target.files.length; i++) {
                 let file = event.target.files[i];
                 let annex = {
+                    name: getPrettyNameFromFileName(file.name),
                     file: file,
                     linkedFileKey: null,
                     fileName: file.name,
@@ -206,11 +207,11 @@ let app = new Vue({
                     isDirty = false;
                     this.showModal = false;
                     window.scrollTo(0, 0);
-                    // setTimeout(function(){
-                    //     window.location.href = `/sitting/show/${getSittingId()}/projects`
-                    // },
-                    //     1000);
-                    // ;
+                    setTimeout(function(){
+                        window.location.href = `/sitting/show/${getSittingId()}/projects`
+                    },
+                        1000);
+
                 })
                 .catch((e, m) => {
                     this.showModal = false;

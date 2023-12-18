@@ -220,6 +220,7 @@ class ProjectManager
         }
 
         $annex->setRank($clientAnnex->getRank());
+        $annex->setTitle($clientAnnex->getTitle());
         $this->em->persist($annex);
     }
 
@@ -231,7 +232,11 @@ class ProjectManager
         $annex = new Annex();
         $annex->setRank($clientAnnex->getRank())
             ->setProject($project)
-            ->setFile($this->fileManager->save($uploadedFiles[$clientAnnex->getLinkedFileKey()], $structure));
+            ->setFile($this->fileManager->save($uploadedFiles[$clientAnnex->getLinkedFileKey()], $structure))
+            ->setTitle($clientAnnex->getTitle())
+        ;
+
+//        dd($annex->getTitle());
         $this->em->persist($annex);
     }
 

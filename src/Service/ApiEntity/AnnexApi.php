@@ -15,6 +15,21 @@ class AnnexApi
 
     public ?string $fileName = null;
 
+    public ?string $title = null;
+
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(?string $title): AnnexApi
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
     public function getLinkedFileKey(): ?string
     {
         return $this->linkedFileKey;
