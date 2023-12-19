@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.2.20] - 2023-12-19
+
+### Correction
+- Correction du timeout lorsque le temps d'envoi et de traitement de comelus est trop long (idle timeout)
+
 
 ## [4.2.19] - 2023-12-15
 
