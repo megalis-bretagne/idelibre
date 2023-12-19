@@ -174,8 +174,6 @@ let app = new Vue({
             setProjectsRank(this.projects);
             formData.append('projects', JSON.stringify(this.projects));
 
-            console.log(formData)
-
             let formDataDocs = new FormData();
             addOtherdocFiles(this.otherdocs, formDataDocs);
             setOtherdocsRank(this.otherdocs);
