@@ -86,6 +86,8 @@ class ComelusConnectorManager
 
     public function sendComelus(Sitting $sitting): ?string
     {
+        ini_set('default_socket_timeout',300); // Prevent socket timeout if the request takes too long
+
         $comelusConnetor = $this->comelusConnectorRepository->findOneBy(['structure' => $sitting->getStructure()]);
 
         if (!$comelusConnetor->getActive() || !$comelusConnetor->getMailingListId()) {
