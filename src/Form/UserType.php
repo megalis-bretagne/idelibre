@@ -72,9 +72,6 @@ class UserType extends AbstractType
             ->add('phone', TextType::class, [
                 'label' => 'Téléphone mobile (06XXXXXXXX ou 07XXXXXXXX) ',
                 'required' => false,
-                'constraints' => [
-                    new Regex('/^0(6|7)\d{8}$/', 'Le numéro de téléphone doit être de la forme 06xxxxxxxx ou 07xxxxxxxx'),
-                ],
             ])
             ->add('redirect_url', HiddenType::class, [
                 'mapped' => false,
