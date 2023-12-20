@@ -140,6 +140,7 @@ class LsvoteConnectorManager
                 ->setFirstName($user->getFirstName())
                 ->setLastName($user->getLastName())
                 ->setAttendance($convocation->getAttendance() ? $convocation->getAttendance() : "")
+
             ;
 
             if ($convocation->getUser()->getRoles() === Role_Name::NAME_ROLE_DEPUTY) {
@@ -148,9 +149,12 @@ class LsvoteConnectorManager
             if ($convocation->getDeputy()) {
                 $lsvoteVoter->setDeputy($this->createUserFromUser($convocation->getUser()->getDeputy()));
             }
+
             if ($convocation->getMandator()) {
                 $lsvoteVoter->setMandatorId($convocation->getMandator()->getId());
             }
+
+            $lsvoteVoter->setDeputy($user->getDeputy() ? $this->createUserFromUser($user->getDeputy()) : null);
 
             $lsvoteVoters[] = $lsvoteVoter;
         }
