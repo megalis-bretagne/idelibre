@@ -190,7 +190,9 @@ class ProjectManager
             $annexApi->setRank($annex->getRank())
                 ->setId($annex->getId())
                 ->setFileName($annex->getFile()->getName())
-                ->setSize($annex->getFile()->getSize());
+                ->setSize($annex->getFile()->getSize())
+                ->setTitle($annex->getTitle() ?? null)
+            ;
             $apiAnnexes[] = $annexApi;
         }
 
@@ -220,6 +222,7 @@ class ProjectManager
         }
 
         $annex->setRank($clientAnnex->getRank());
+        $annex->setTitle($clientAnnex->getTitle());
         $this->em->persist($annex);
     }
 
@@ -231,7 +234,11 @@ class ProjectManager
         $annex = new Annex();
         $annex->setRank($clientAnnex->getRank())
             ->setProject($project)
-            ->setFile($this->fileManager->save($uploadedFiles[$clientAnnex->getLinkedFileKey()], $structure));
+            ->setFile($this->fileManager->save($uploadedFiles[$clientAnnex->getLinkedFileKey()], $structure))
+            ->setTitle($clientAnnex->getTitle())
+        ;
+
+//        dd($annex->getTitle());
         $this->em->persist($annex);
     }
 

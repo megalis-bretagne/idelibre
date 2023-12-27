@@ -57,6 +57,9 @@ let app = new Vue({
         otherdocChange(event) {
             isDirty = true;
         },
+        annexChange(event) {
+            isDirty = true;
+        },
 
         addProject(event) {
             for (let i = 0; i < event.target.files.length; i++) {
@@ -70,7 +73,7 @@ let app = new Vue({
                     reporterId: null,
                     linkedFileKey: null,
                     id: null,
-                    size:event.target.files[i].size * this.coefficientCorrecteur
+                    size:Math.round(file.size * this.coefficientCorrecteur)
                 };
                 project.file.size > this.fileMaxSize ? this.showMessageError(`La taille du fichier ne doit pas dépasser les 200Mo. Taille actuelle de votre ficher : ${this.formatSize(project.file.size)}`) :
                 this.projects.push(project);
@@ -98,11 +101,12 @@ let app = new Vue({
             for (let i = 0; i < event.target.files.length; i++) {
                 let file = event.target.files[i];
                 let annex = {
+                    title: getPrettyNameFromFileName(file.name),
                     file: file,
                     linkedFileKey: null,
                     fileName: file.name,
                     id: null,
-                    size:event.target.files[i].size * this.coefficientCorrecteur
+                    size:Math.round(file.size * this.coefficientCorrecteur)
                 };
                 annex.file.size > this.fileMaxSize ? this.showMessageError(`La taille du fichier ne doit pas dépasser les 200Mo. Taille actuelle de votre ficher : ${this.formatSize(annex.file.size)}`):
                 project.annexes.push(annex);
@@ -135,7 +139,7 @@ let app = new Vue({
                     file: file,
                     linkedFileKey: null,
                     id: null,
-                    size:event.target.files[i].size * this.coefficientCorrecteur
+                    size:Math.round(file.size * this.coefficientCorrecteur)
                 };
                 otherdoc.file.size > this.fileMaxSize ? this.showMessageError(`La taille du fichier ne doit pas dépasser les 200Mo. Taille actuelle de votre ficher : ${this.formatSize(otherdoc.file.size)}`) :
                 this.otherdocs.push(otherdoc);
@@ -205,7 +209,7 @@ let app = new Vue({
                         window.location.href = `/sitting/show/${getSittingId()}/projects`
                     },
                         1000);
-                    ;
+
                 })
                 .catch((e, m) => {
                     this.showModal = false;
@@ -283,7 +287,12 @@ function isOverWeight(current, limit) {
 function addProjectAndAnnexeFiles(projects, formData) {
     for (let i = 0; i < projects.length; i++) {
         if (isNewProject(projects[i])) {
-            formData.append(`projet_${i}_rapport`, projects[i].file, projects[i].file.name, projects[i].size);
+            formData.append(`projet_${i}_rapport`,
+                projects[i].file,
+                projects[i].file.name,
+                projects[i].size
+            );
+
             projects[i].linkedFileKey = `projet_${i}_rapport`;
         }
         addAnnexeFiles(projects[i], i, formData);
@@ -296,7 +305,13 @@ function addAnnexeFiles(project, index, formData) {
     }
     for (let j = 0; j < project.annexes.length; j++) {
         if (isNewAnnex(project.annexes[j]) ) {
-            formData.append(`projet_${index}_${j}_annexe`, project.annexes[j].file, project.annexes[j].file.name, project.annexes[j].size);
+            formData.append(`projet_${index}_${j}_annexe`,
+                project.annexes[j].file,
+                project.annexes[j].file.name,
+                project.annexes[j].size,
+                project.annexes[j].title
+            );
+
             project.annexes[j].linkedFileKey = `projet_${index}_${j}_annexe`;
         }
     }
@@ -305,7 +320,11 @@ function addAnnexeFiles(project, index, formData) {
 function addOtherdocFiles(otherdocs, formDataDocs) {
     for (let k = 0; k < otherdocs.length; k++) {
         if (isNewOtherdoc(otherdocs[k])) {
-            formDataDocs.append(`autre_${k}_rapport`, otherdocs[k].file, otherdocs[k].file.name, otherdocs[k].size);
+            formDataDocs.append(`autre_${k}_rapport`,
+                otherdocs[k].file,
+                otherdocs[k].file.name,
+                otherdocs[k].size
+            );
             otherdocs[k].linkedFileKey = `autre_${k}_rapport`;
         }
     }
