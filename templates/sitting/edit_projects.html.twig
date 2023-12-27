@@ -222,9 +222,16 @@
 
                             <draggable v-model="project.annexes" v-on:change="projectChange()" class="annex-list">
                                 <div class="project-line annex cursor-grab" v-for="(annex, index) in project.annexes">
+                                    <div class="badge bg-info ms-2 d-flex align-items-start" style="font-size: 1em">
+                                        ${index + 1}
+                                    </div>
+
+                                    <div class="project-item">
+                                        <textarea v-model="annex.title" class="form-control" v-on:change="annexChange()"> </textarea>
+                                    </div>
                                     <div class="project-item d-flex justify-content-between">
                                         <div>
-                                            <span class="">${index + 1} - </span> ${annex.fileName}
+                                            ${annex.fileName}
                                         </div>
                                         <span class="ml-5"><small> ${formatSize(annex.size)} </small></span>
                                     </div>

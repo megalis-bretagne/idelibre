@@ -166,9 +166,8 @@
                                 {% for annex in project.annexes %}
 
                                     <div class="project-line annex">
-                                        <div class="project-item">
-                                            {{ annex.rank + 1 }} - {{ annex.file.name }}
-                                        </div>
+                                        <div class="project-item">{{ annex.rank + 1 }} - {{ annex.title ? annex.title : annex.file.name }}</div>
+                                        <div class="project-item">{{ annex.file.name }}</div>
                                         <div class="annexeSize"><small> {{ annex.file.size|sizeFormatter }} </small></div>
                                         <div class="project-item action">
                                             <a class="btn btn-outline-secondary borderless"

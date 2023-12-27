@@ -2,6 +2,8 @@
 All notable changes to this project will be documented in this file.
 
 ## [4.3.0] - 2024-??-??
+### Evolution
+- Possibilité de définir un titre pour les annexes
 
 ## [4.2.19] - 2023-??-??
 
