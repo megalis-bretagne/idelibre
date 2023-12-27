@@ -5,6 +5,7 @@ namespace App\Tests\Controller;
 use App\Entity\Structure;
 use App\Entity\User;
 use App\Security\Password\LegacyPassword;
+use App\Tests\Factory\ForgetTokenFactory;
 use App\Tests\Factory\UserFactory;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
@@ -106,7 +107,7 @@ class SecurityControllerTest extends WebTestCase
         $crawler = $this->client->followRedirect();
         $this->assertResponseStatusCodeSame(200);
 
-        $flash = $crawler->filter('html:contains("Si vos informations sont correctes, un email vous a été envoyé.")');
+        $flash = $crawler->filter('html:contains("Un email vous a été envoyé si un compte lui est associé")');
         $this->assertCount(1, $flash);
 
         $user = $this->getOneUserBy(['username' => 'superadmin']);
@@ -122,7 +123,7 @@ class SecurityControllerTest extends WebTestCase
         $crawler = $this->client->followRedirect();
         $this->assertResponseStatusCodeSame(200);
 
-        $flash = $crawler->filter('html:contains("Si vos informations sont correctes, un email vous a été envoyé.")');
+        $flash = $crawler->filter('html:contains("Un email vous a été envoyé si un compte lui est associé")');
         $this->assertCount(1, $flash);
 
         $user = $this->getOneUserBy(['username' => 'admin@libriciel']);
@@ -304,5 +305,23 @@ class SecurityControllerTest extends WebTestCase
         $this->client->request(Request::METHOD_POST, '/security/changePassword', content: json_encode($data));
 
         $this->assertResponseStatusCodeSame(403);
+    }
+
+    public function testReSendEmail()
+    {
+        $user = UserFactory::createOne([
+            'email' => 'email@mail.com',
+            'username' => 'username',
+            'firstname' => 'firstname'
+        ]);
+        $forgetToken = ForgetTokenFactory::createOne(['user' => $user]);
+
+        $this->client->request(Request::METHOD_POST, 'security/' . $forgetToken->getToken() . '/reSendEmail', ['username' => 'admin@libriciel']);
+        $this->assertResponseRedirects('/login');
+        $crawler = $this->client->followRedirect();
+        $this->assertResponseStatusCodeSame(200);
+
+        $flash = $crawler->filter('html:contains("Un email contenant le lien de réinitialisation de votre mot de passe vous a été renvoyé")');
+        $this->assertCount(1, $flash);
     }
 }
