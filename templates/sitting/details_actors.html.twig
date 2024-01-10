@@ -131,7 +131,7 @@
                         </td>
 
                         <td class="col-3 {{ classToChange }} ">
-                            ${convocation.user.firstName} ${convocation.user.lastName}
+                            ${convocation.user.lastName} ${convocation.user.firstName}
                         </td>
 
                         <td class="col-1 {{ classToChange }} ">
@@ -234,11 +234,11 @@
                     <table class="table table-striped mt-5 bg-white">
                         <thead>
                         <tr class="d-flex">
-                            <th class="col-3">Nom</th>
+                            <th class="col-4">Nom</th>
                             <th class="col-2">Envoyée</th>
                             <th class="col-2">Reçue</th>
                             <th class="col-2">Présence</th>
-                            <th class="col-3"></th>
+                            <th class="col-2"></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -249,8 +249,8 @@
                         </tr>
 
                         <tr class="d-flex" v-for="convocation in filteredEmployeeConvocations">
-                            <td class="col-3">
-                                ${convocation.user.firstName} ${convocation.user.lastName}
+                            <td class="col-4">
+                                ${convocation.user.lastName} ${convocation.user.firstName}
                             </td>
 
                             <td v-if="convocation.sentTimestamp" class="col-2">
@@ -296,7 +296,7 @@
                                     </span>
                             </td>
 
-                            <td class="col-3"></td>
+                            <td class="col-2"></td>
                         </tr>
                         </tbody>
                     </table>
@@ -329,11 +329,11 @@
                     <table class="table table-striped mt-5 bg-white">
                         <thead>
                         <tr class="d-flex">
-                            <th class="col-3">Nom</th>
+                            <th class="col-4">Nom</th>
                             <th class="col-2">Envoyée</th>
                             <th class="col-2">Reçue</th>
                             <th class="col-2">Présence</th>
-                            <th class="col-3"></th>
+                            <th class="col-2"></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -344,8 +344,8 @@
                         </tr>
 
                         <tr class="d-flex" v-for="convocation in filteredGuestConvocations">
-                            <td class="col-3">
-                                ${convocation.user.firstName} ${convocation.user.lastName}
+                            <td class="col-4">
+                                ${convocation.user.lastName} ${convocation.user.firstName}
                             </td>
 
                             <td v-if="convocation.sentTimestamp" class="col-2"><span
@@ -390,7 +390,7 @@
                                     </span>
                             </td>
 
-                            <td class="col-3"></td>
+                            <td class="col-2"></td>
                         </tr>
                         </tbody>
                     </table>
