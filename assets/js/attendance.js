@@ -1,5 +1,6 @@
 const attendanceInput = document.querySelector('#attendance_attendance');
 const mandataireGroup = document.querySelector('#attendance_mandataire_group');
+const mandataireInput = document.querySelector('#attendance_mandataire');
 const deputyGroup = document.querySelector('#attendance_deputy_group')
 const deputy = document.querySelector("h1").dataset.deputy
 
@@ -15,6 +16,7 @@ window.onload = () => {
 
     if(attendanceValue === "poa"){
         show(mandataireGroup)
+        mandataireInput.setAttribute("required", "required")
         hide(deputyGroup)
         return;
     }
@@ -34,6 +36,7 @@ attendanceInput.onchange = () => {
 
     if(attendanceValue === "poa"){
         show(mandataireGroup)
+        mandataireInput.setAttribute("required", "required")
         hide(deputyGroup)
         return;
     }
