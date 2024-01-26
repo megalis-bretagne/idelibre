@@ -69,7 +69,7 @@ class UserType extends AbstractType
                 'label' => 'Nom d\'utilisateur',
                 'disabled' => $user->getId() ? true : false,
                 'attr' => [
-                    'readonly' => $user ? true : false,
+                    'readonly' => $user->getId() ? true : false,
                 ],
             ]) ;
 
