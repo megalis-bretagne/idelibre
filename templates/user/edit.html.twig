@@ -46,6 +46,7 @@
                 {{ form_row(form.isActive) }}
             {% endif %}
 
+
         {% elseif user.role.prettyName is same as "Elu" %}
             {{ form_row(form.party) }}
             {{ form_row(form.title) }}
@@ -57,12 +58,19 @@
                 {{ form_row(form.plainPassword) }}
             </div>
 
-            {% elseif user.role.prettyName is same as "Invité" or user.role.prettyName is same as "Personnel administratif" %}
-                {{ form_row(form.isActive) }}
-                {{ form_row(form.initPassword) }}
+        {% elseif user.role.prettyName is same as "Suppléant" %}
+            {{ form_row(form.isActive) }}
+            {{ form_row(form.initPassword) }}
             <div class="d-none" id="passwordGroup">
                 {{ form_row(form.plainPassword) }}
             </div>
+
+        {% elseif user.role.prettyName is same as "Invité" or user.role.prettyName is same as "Personnel administratif" %}
+            {{ form_row(form.isActive) }}
+            {{ form_row(form.initPassword) }}
+        <div class="d-none" id="passwordGroup">
+            {{ form_row(form.plainPassword) }}
+        </div>
     {% endif %}
 
 
