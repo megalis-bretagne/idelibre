@@ -26,6 +26,13 @@
         </div>
     </div>
 
+
+    <div class="input-group mb-3 d-flex flex-column">
+        <label class="form-label" for="">Profil</label>
+        <input type="text" class="form-control w-100"  aria-label="Profil" title="profil" aria-describedby="profil utilisateur"
+               value="{{ user.role.prettyName }}" disabled readonly >
+    </div>
+
     {% if user.role.prettyName is same as "Gestionnaire de séance" %}
         {{ form_row(form.authorizedTypes) }}
         {{ form_row(form.isActive) }}

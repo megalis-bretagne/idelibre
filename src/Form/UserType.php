@@ -62,11 +62,19 @@ class UserType extends AbstractType
             ])
             ->add('lastName', TextType::class, [
                 'label' => 'Nom',
-            ])
-            ->add('username', TextType::class, [
+            ]);
+
+
+            $builder->add('username', TextType::class, [
                 'label' => 'Nom d\'utilisateur',
-            ])
-            ->add('email', EmailType::class, [
+                'disabled' => $user->getId() ? true : false,
+                'attr' => [
+                    'readonly' => $user ? true : false,
+                ],
+            ]) ;
+
+
+        $builder->add('email', EmailType::class, [
                 'label' => 'Email',
             ])
             ->add('phone', TextType::class, [
