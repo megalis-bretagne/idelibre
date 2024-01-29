@@ -70,7 +70,7 @@ final class UserStory extends Story
             'structure' => StructureStory::libriciel(),
             'role' => RoleStory::actor(),
             'party' => PartyStory::majorite(),
-            'deputy' => null
+            'deputy' => null,
         ]));
 
         $this->addState('actorLibriciel2', UserFactory::new([
