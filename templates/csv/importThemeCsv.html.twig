@@ -23,7 +23,8 @@
 
 {% block pageForm %}
     {{ form_start(form) }}
-    {{ form_widget(form) }}
+    {{ form_row(form.csv) }}
+    {{ form_errors(form.csv) }}
     <div class="alert alert-warning">Attention : L'import des themes peut durer plusieurs dizaines de secondes</div>
 
     <div class="float-end">
