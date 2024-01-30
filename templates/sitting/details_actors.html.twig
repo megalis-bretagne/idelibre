@@ -28,13 +28,9 @@
             <div class="col-11 offset-1 form-white mt-4 px-3">
                 {{ macroTab.showTabs('actors', sitting) }}
 
-                <div class="alert alert-danger" v-if="errorMessage">
-                    ${ errorMessage }
-                </div>
+                <div class="alert alert-danger" v-if="errorMessage">${errorMessage}</div>
+                <div class="alert alert-success" v-if="infoMessage">${infoMessage}</div>
 
-                <div class="alert alert-success" v-if="infoMessage">
-                    ${ infoMessage }
-                </div>
 
                 <div class="row">
                     <div class="col-12 mb-3" v-if="!isArchived">
@@ -670,7 +666,7 @@
                                             Annuler
                                         </button>
 
-                                        <button type="button" class="btn btn-primary" @click="saveAttendance()" title="Enregistrer">
+                                        <button type="button" class="btn btn-primary" @click="saveAttendance();" title="Enregistrer">
                                             <span class="fa fa-save"></span>
                                             Enregistrer
                                         </button>

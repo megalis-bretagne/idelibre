@@ -238,8 +238,6 @@ let app = new Vue({
 
         saveAttendance() {
 
-
-
             axios.post(`/api/convocations/attendance`, this.changedAttendance).then(
                 (response) => {
                     this.getConvocations()
@@ -253,6 +251,7 @@ let app = new Vue({
                     this.showModalAttendance = false
                     this.changedAttendance = [];
                     this.getCountNotAnswered();
+
                 });
         },
 
