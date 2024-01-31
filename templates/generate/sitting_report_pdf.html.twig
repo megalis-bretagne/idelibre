@@ -74,9 +74,9 @@
                     <td style="width: 10%;">
                         {% if convocation.attendance == "present" %} Présent {% endif %}
                         {% if convocation.attendance == "absent" %} Absent {% endif %}
-                        {% if convocation.attendance == "poa" %} A donné pouvoir {% endif %}
-                        {% if convocation.attendance == "remote" %} A distance {% endif %}
-                        {% if convocation.attendance == "deputy" %} Remplacé {% endif %}
+                        {% if convocation.attendance == "poa" %} A donné pouvoir par procuration{% endif %}
+                        {% if convocation.attendance == "remote" %} Présent à distance {% endif %}
+                        {% if convocation.attendance == "deputy" %} Remplacé par son suppléant {% endif %}
                         {% if convocation.attendance == "" %} Sans réponse {% endif %}
                     </td>
                     <td style="width: 30%;">
