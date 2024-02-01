@@ -37,8 +37,6 @@ class ConfigurationType extends AbstractType
             ->add('sittingSuppressionDelay', ChoiceType::class, [
                 'required' => false,
                 'label' => 'Temps après lequel une séance est supprimée',
-                'label_attr' => ['class' => 'form-select'],
-
                 'choices' => SuppressionDelayFormatter::DELAYS,
                 'placeholder' => '-- Choisir une durée --',
             ])
