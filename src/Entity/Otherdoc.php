@@ -26,7 +26,7 @@ class Otherdoc
     private $id;
 
     #[Column(type: 'string', length: 512)]
-    #[Length(max: '512')]
+    #[Length(max: '512', maxMessage: 'Le nom du document ne doit pas dépasser 512 caractères.')]
     #[NotBlank]
     #[Groups(['otherdoc:read'])]
     private $name;

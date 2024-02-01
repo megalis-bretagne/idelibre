@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToOne;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotNull;
 
@@ -42,6 +43,7 @@ class Annex
 
     #[ORM\Column(length: 512, nullable: true)]
     #[Groups(['project:read'])]
+    #[Length(max: '512', maxMessage: 'Le titre de l\'annexe ne doit pas dépasser 512 caractères.')]
     private ?string $title = null;
 
     public function getId(): ?string
