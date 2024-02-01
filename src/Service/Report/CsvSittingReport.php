@@ -9,6 +9,8 @@ use App\Entity\Timestamp;
 use App\Repository\ConvocationRepository;
 use App\Service\Util\DateUtil;
 use League\Csv\CannotInsertRecord;
+use League\Csv\Exception;
+use League\Csv\UnavailableStream;
 use League\Csv\Writer;
 
 class CsvSittingReport
@@ -19,8 +21,11 @@ class CsvSittingReport
     ) {
     }
 
+
     /**
+     * @throws UnavailableStream
      * @throws CannotInsertRecord
+     * @throws Exception
      */
     public function generate(Sitting $sitting): string
     {
@@ -68,11 +73,11 @@ class CsvSittingReport
     private function formatConvocationAttendance($convocation): string
     {
         return match ($convocation) {
-            'remote' => 'A distance',
+            'remote' => 'Présent à distance',
             'absent' => 'Absent',
             'present' => 'Présent',
-            'poa' => 'Donne pouvoir',
-            'deputy' => 'Remplacé',
+            'poa' => 'Donne pouvoir par procuration',
+            'deputy' => 'Remplacé par son suppléant',
             default => '',
         };
     }
