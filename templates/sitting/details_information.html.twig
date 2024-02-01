@@ -192,11 +192,12 @@
                         <b>Importer les résultats depuis lsvote :</b>
                     </div>
                     <div class="col-8">
-                        <a class="btn btn-outline-primary"
-                           href="{{ path('sitting_lsvote_results', {'id': sitting.id}) }}"
-                           title="Télécharger les résultats">
-                            <span class="fa fa-cloud-download-alt"></span> Récupérer les résultats
-                        </a>
+                        Télécharger les résultats .json
+                        {{ macro.fetchLsvoteResults(
+                            sitting.nameWithDate,
+                            sitting.id,
+
+                        ) }}
                     </div>
                 </div>
             {% endif %}

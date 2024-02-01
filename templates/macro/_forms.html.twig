@@ -198,7 +198,8 @@
                     <h4 class="modal-title">
                         {{ title }}
                     </h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
                 <div class="modal-body">
                     {{ content }}
                 </div>
@@ -327,4 +328,41 @@
         <span class="fa fa-times"></span>
         Annuler
     </button>
+{% endmacro %}
+
+{% macro fetchLsvoteResults(title, id ) %}
+    <button type="button" class="btn btn-outline-secondary borderless" data-bs-toggle="modal" data-bs-target="#modal-lsvote-result">
+        <i class="fa fa-download"></i>
+    </button>
+
+    <div class="modal fade" id="modal-lsvote-result" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Télécharger les résultats de la seance {{ title }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-warning">
+                        <i class="fa fa-exclamation-triangle text-warning"></i>
+                        Cette action est irréversible.
+                    </div>
+                    Assurez que toutes vos modifications soient à jour coté Lsvote avant de lancer la récupération des résultats.
+                    <br>
+                    Êtes-vous sûr de vouloir de vouloir lancer la récupération des résultats ?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal" title="annuler">
+                        <span class="fa fa-times"></span>
+                        Annuler
+                    </button>
+                    <a href="{{ path('sitting_lsvote_results', {'id': id }) }}" type="button" class="btn btn-primary" title="Télécharger les résultats">
+                        <i class="fa fa-download"></i>
+                        Télécharger les résultats
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endmacro %}
