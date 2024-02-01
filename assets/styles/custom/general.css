@@ -52,6 +52,37 @@ a { text-decoration: none; }
     background-color: #5B5B5B;
     margin: 0;
 }
+
+#footer-logo-container{
+    position: relative;
+    height: 25px;
+}
+
+#footer-logo-container img:first-child {
+    position: absolute;
+    opacity: 0;
+    height: 20px;
+    top: 0;
+    left: 0;
+}
+
+#footer-logo-container img:last-child {
+    position: relative;
+    opacity: 1;
+    height: 20px;
+    top: 0;
+    left: 0;
+}
+
+#footer-logo-container:hover img:first-child {
+    opacity: 1;
+    transform: translateY(2px);
+}
+
+#footer-logo-container:hover img:last-child {
+    opacity: 0;
+}
+
 .form-signin .checkbox {
     font-weight: 400;
 }
