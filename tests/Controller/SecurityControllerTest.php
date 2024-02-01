@@ -107,7 +107,7 @@ class SecurityControllerTest extends WebTestCase
         $crawler = $this->client->followRedirect();
         $this->assertResponseStatusCodeSame(200);
 
-        $flash = $crawler->filter('html:contains("Un email vous a été envoyé si un compte lui est associé")');
+        $flash = $crawler->filter('html:contains("Si vos informations sont correctes, un e-mail vous a été envoyé")');
         $this->assertCount(1, $flash);
 
         $user = $this->getOneUserBy(['username' => 'superadmin']);
@@ -123,7 +123,7 @@ class SecurityControllerTest extends WebTestCase
         $crawler = $this->client->followRedirect();
         $this->assertResponseStatusCodeSame(200);
 
-        $flash = $crawler->filter('html:contains("Un email vous a été envoyé si un compte lui est associé")');
+        $flash = $crawler->filter('html:contains("Si vos informations sont correctes, un e-mail vous a été envoyé")');
         $this->assertCount(1, $flash);
 
         $user = $this->getOneUserBy(['username' => 'admin@libriciel']);
