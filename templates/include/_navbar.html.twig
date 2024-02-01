@@ -24,29 +24,36 @@
 
 
                     <div class="dropdown-menu dropdown-menu-right popup-menu-right" aria-labelledby="navbarDropdown">
-                        <a href="{{ path('user_preferences') }}" class="dropdown-item">
-                            <span class="fas fa-user"></span>
-                            Mes préférences
-                        </a>
-                        <div class="dropdown-divider" style="color: white"></div>
-                        <a href="{{ path('gdpr_notice') }}" class="dropdown-item">
-                            <span class="fas fa-user-secret"></span>
-                            Politique de confidentialité (RGPD)
-                        </a>
+                        <div class="dropdown-content">
 
-                        {% if (is_granted('ROLE_MANAGE_STRUCTURES') and app.user.structure) %}
-                            <div class="dropdown-divider"></div>
-                            <a href="{{ path('security_impersonate_exit') }}" class="dropdown-item">
-                                <span class="fas fa-sign-out-alt"></span>
-                                {{ app.user.structure.name }}
+                            <a href="{{ path('user_preferences') }}" class="dropdown-item">
+                                <span class="fas fa-user"></span>
+                                Mes préférences
                             </a>
-                        {% endif %}
 
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="{{ path('app_logout') }}">
-                            <span class="fas fa-sign-out-alt"></span>
-                            Se déconnecter
-                        </a>
+                            <div class="dropdown-divider"></div>
+
+                            <a href="{{ path('gdpr_notice') }}" class="dropdown-item">
+                                <span class="fas fa-user-secret"></span>
+                                Politique de confidentialité (RGPD)
+                            </a>
+
+                            {% if (is_granted('ROLE_MANAGE_STRUCTURES') and app.user.structure) %}
+                                <div class="dropdown-divider"></div>
+                                <a href="{{ path('security_impersonate_exit') }}" class="dropdown-item">
+                                    <span class="fas fa-sign-out-alt"></span>
+                                    {{ app.user.structure.name }}
+                                </a>
+                            {% endif %}
+
+                            <div class="dropdown-divider"></div>
+
+                            <a class="dropdown-item" href="{{ path('app_logout') }}">
+                                <span class="fas fa-sign-out-alt"></span>
+                                Se déconnecter
+                            </a>
+
+                        </div>
                     </div>
                 </li>
             </ul>
