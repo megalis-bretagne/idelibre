@@ -47,7 +47,7 @@ class AttendanceType extends AbstractType
                 'required' => true,
                 'class' => User::class,
                 'query_builder' => $this->userRepository->findDeputyById(['id' => $options['deputyId']]),
-                'choice_label' => fn(User $user) => $this->formatName($user),
+                'choice_label' => fn (User $user) => $this->formatName($user),
                 'disabled' => false,
             ]);
         }

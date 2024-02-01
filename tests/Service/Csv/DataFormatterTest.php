@@ -37,13 +37,13 @@ class DataFormatterTest extends KernelTestCase
 
     public function testGetGenderCode()
     {
-        $male  = $this->dataFormatter->getGenderCode(2);
+        $male = $this->dataFormatter->getGenderCode(2);
         $this->assertSame(GenderConverter::MALE, $male);
 
-        $female  = $this->dataFormatter->getGenderCode(1);
+        $female = $this->dataFormatter->getGenderCode(1);
         $this->assertSame(GenderConverter::FEMALE, $female);
 
-        $notDefined  = $this->dataFormatter->getGenderCode(0);
+        $notDefined = $this->dataFormatter->getGenderCode(0);
         $this->assertSame(GenderConverter::NOT_DEFINED, $notDefined);
     }
 
@@ -67,7 +67,4 @@ class DataFormatterTest extends KernelTestCase
         $phone = '06 67 76 45 23';
         $this->assertSame($expected, $this->dataFormatter->sanitizePhoneNumber($phone));
     }
-
-
-
 }

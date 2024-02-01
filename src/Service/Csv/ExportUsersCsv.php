@@ -37,30 +37,49 @@ class ExportUsersCsv
 
         $csvWriter = Writer::createFromPath($pathDir . '/' . $structure->getName() . '.csv', 'w+');
 
-        $csvWriter->insertOne($this->getHeaders());
-
         foreach ($users as $user) {
             $csvWriter->insertOne(
                 [
-                    $user->getId(),
+                    $user->getGender(),
+                    $this->formatUsername($user->getUsername()),
                     $user->getFirstName(),
                     $user->getLastName(),
-                    $user->getIsActive() ? 'oui' : 'non',
-                    $user->getRole()->getPrettyName(),
-                    $user->getParty()?->getName() ? $user->getParty()->getName() : '',
-                    ]
+                    $user->getEmail(),
+                    $this->formatRole($user->getRole()->getPrettyName()),
+                    $user->getPhone(),
+                    $user->getTitle() ? $user->getTitle() : null,
+                    $user->getDeputy() ? $this->formatUsername($user->getDeputy()->getUsername()) : null,
+                ]
             );
         }
-
-
         return $pathDir . '/' . $structure->getName() . '.csv';
     }
 
-    private function getHeaders(): array
+
+    private function formatUsername(string $username): string
     {
-        return ['id', 'Prénom', 'Nom', 'est actif', 'Profil', 'Groupe_Politique'];
+        return substr($username, 0, strpos($username, "@"));
     }
 
+    private function formatRole(string $role): int
+    {
+        return match ($role) {
+            'Gestionnaire de séance' => 1,
+            'Administrateur' => 2,
+            'Elu' => 3,
+            'Personnel administratif' => 4,
+            'Invité' => 5,
+            'Suppléant' => 6,
+            default => 0,
+        };
+    }
+
+
+    /**
+     * @throws UnavailableStream
+     * @throws CannotInsertRecord
+     * @throws Exception
+     */
     public function exportGroupUsers(Group $group): string
     {
         $structuresPath = [];

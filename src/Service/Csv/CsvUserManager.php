@@ -31,8 +31,7 @@ class CsvUserManager
         private readonly SubscriptionManager     $subscriptionManager,
         private readonly CsvUserErrorManager     $csvUserErrorManager,
         private readonly DataFormatter           $dataFormatter,
-    )
-    {
+    ) {
     }
 
     /**
@@ -115,7 +114,6 @@ class CsvUserManager
     private function saveDeputy(iterable $records, Structure $structure, $csvEmails, $errors): array
     {
         foreach ($records as $record) {
-
             if ($record[Csv_Records::ROLE->value] !== strval(Role_Code::CODE_ROLE_DEPUTY)) {
                 continue;
             }
@@ -128,7 +126,6 @@ class CsvUserManager
 
             $username = $this->dataFormatter->formatUsername($record[Csv_Records::USERNAME->value] ?? '', $structure);
             if (!$this->csvUserErrorManager->isExistUsername($username, $structure)) {
-
                 $user = $this->createUserFromRecord($structure, $record);
 
                 $postValidationErrors = $this->csvUserErrorManager->postSavingValidation($record, $user, $csvEmails);
@@ -143,13 +140,11 @@ class CsvUserManager
             }
         }
         return $errors;
-
     }
 
     private function saveOthers($records, $structure, $csvEmails, $errors): array
     {
         foreach ($records as $record) {
-
             $validatationErrors = $this->csvUserErrorManager->preSavingValidation($record);
             if ($validatationErrors) {
                 $errors[] = $validatationErrors;
@@ -158,7 +153,6 @@ class CsvUserManager
 
             $username = $this->dataFormatter->formatUsername($record[Csv_Records::USERNAME->value] ?? '', $structure);
             if (!$this->csvUserErrorManager->isExistUsername($username, $structure)) {
-
                 $user = $this->createUserFromRecord($structure, $record);
 
                 if ($this->isSecretaryOrAdmin($user)) {
@@ -179,7 +173,6 @@ class CsvUserManager
 
 
                 $this->assignDeputy($record, $user);
-
             }
         }
         return $errors;
@@ -188,7 +181,6 @@ class CsvUserManager
     private function assignDeputy(array $record, $user): void
     {
         if ($this->isActorWithDeputy($record)) {
-
             $deputyUsername = $this->dataFormatter->formatUsername($record[Csv_Records::DEPUTY->value] ?? '', $user->getStructure());
             $deputy = $this->userRepository->findOneBy(['username' => $deputyUsername, 'structure' => $user->getStructure()]);
 
@@ -204,5 +196,4 @@ class CsvUserManager
     {
         return $record[Csv_Records::ROLE->value] === strval(Role_Code::CODE_ROLE_ACTOR) && !empty($record[Csv_Records::DEPUTY->value]);
     }
-
 }
