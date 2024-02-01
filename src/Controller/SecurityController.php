@@ -107,7 +107,7 @@ class SecurityController extends AbstractController
             } catch (EntityNotFoundException $e) {
                 $logger->info('this username does not exist : ' . $username);
             }
-            $this->addFlash('success', 'Un email vous a été envoyé si un compte lui est associé');
+            $this->addFlash('success', 'Si vos informations sont correctes, un e-mail vous a été envoyé');
 
             return $this->redirectToRoute('app_login');
         }
