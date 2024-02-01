@@ -11,7 +11,6 @@ use Zenstruck\Foundry\Test\ResetDatabase;
 
 class CsvUserErrorManagerTest extends KernelTestCase
 {
-
     use Factories;
     use ResetDatabase;
 
@@ -89,7 +88,8 @@ class CsvUserErrorManagerTest extends KernelTestCase
         $this->assertNotNull($validation2);
     }
 
-    public function testIsUsernameTwiceInCsv() {
+    public function testIsUsernameTwiceInCsv()
+    {
         $structure = StructureFactory::createOne()->object();
         $user = UserFactory::createOne(['username' => 'test', 'structure' => $structure])->object();
         $csvEmails = ['test'];
@@ -98,7 +98,8 @@ class CsvUserErrorManagerTest extends KernelTestCase
         $this->assertCount(1, $validation);
     }
 
-    public function testIsMissingFields() {
+    public function testIsMissingFields()
+    {
         $record = [
             'gender' => "1",
             'username' => 'username@lib',
@@ -119,7 +120,8 @@ class CsvUserErrorManagerTest extends KernelTestCase
         $this->assertTrue($this->csvUserErrorManager->isMissingFields($record2));
     }
 
-    public function testMissingFieldViolation(){
+    public function testMissingFieldViolation()
+    {
         $record = [
             'gender' => "1",
             'username' => 'username',
@@ -133,7 +135,8 @@ class CsvUserErrorManagerTest extends KernelTestCase
         $this->assertCount(1, $validation);
     }
 
-    public function testMissingUsernameViolation(){
+    public function testMissingUsernameViolation()
+    {
         $record = [
             'gender' => '1',
             'username' => '',
@@ -161,6 +164,4 @@ class CsvUserErrorManagerTest extends KernelTestCase
         $this->assertNotNull($validation);
         $this->assertCount(1, $validation);
     }
-
-
 }

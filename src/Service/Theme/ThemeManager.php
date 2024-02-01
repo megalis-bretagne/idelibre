@@ -33,7 +33,6 @@ class ThemeManager
 
     public function update(Theme $theme): void
     {
-
         $parent = $theme->getParent() ?? $this->themeRepository->findRootNodeByStructure($theme->getStructure());
         $theme->setParent($parent);
         $this->em->persist($theme);
@@ -117,7 +116,7 @@ class ThemeManager
         return $parentTheme;
     }
 
-    private function findOrCreateTheme(string $themeName, int $level, ?Theme $parentTheme,  Structure $structure): Theme
+    private function findOrCreateTheme(string $themeName, int $level, ?Theme $parentTheme, Structure $structure): Theme
     {
         $theme = $this->themeRepository->findOneBy(['structure' => $structure, 'name' => $themeName, 'lvl' => $level]);
         if ($theme) {
@@ -128,5 +127,4 @@ class ThemeManager
 
         return $this->save($newTheme, $structure);
     }
-
 }

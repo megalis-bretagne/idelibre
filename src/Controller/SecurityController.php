@@ -144,7 +144,7 @@ class SecurityController extends AbstractController
             $user = $resetPassword->getUserFromToken($token);
         } catch (TimeoutException $e) {
             //throw new TimeoutException('expired TOKEN', 498);
-            return $this->render('security/expired_token_ls.html.twig' , [
+            return $this->render('security/expired_token_ls.html.twig', [
                 'token' => $token
             ]);
         } catch (EntityNotFoundException $e) {

@@ -42,17 +42,16 @@ class ThemeRepository extends NestedTreeRepository
     {
         return $this->findOneBy(['name' => 'ROOT', 'structure' => $structure]);
     }
-     public function getNotChildrenNode(Theme $theme): QueryBuilder
-     {
-         return $this->createQueryBuilder('t')
-             ->andWhere('t.structure =:structure')
-             ->andWhere('t.lft <:rootNodeLft or t.rgt >:rootNodeRgt')
-             ->andWhere('t != :rootNode')
-             ->setParameter('structure', $theme->getStructure())
-             ->setParameter('rootNodeLft', $theme->getLft())
-             ->setParameter('rootNodeRgt', $theme->getRgt())
-             ->setParameter('rootNode', $theme->getRoot())
-             ;
-     }
-
+    public function getNotChildrenNode(Theme $theme): QueryBuilder
+    {
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.structure =:structure')
+            ->andWhere('t.lft <:rootNodeLft or t.rgt >:rootNodeRgt')
+            ->andWhere('t != :rootNode')
+            ->setParameter('structure', $theme->getStructure())
+            ->setParameter('rootNodeLft', $theme->getLft())
+            ->setParameter('rootNodeRgt', $theme->getRgt())
+            ->setParameter('rootNode', $theme->getRoot())
+        ;
+    }
 }

@@ -399,11 +399,11 @@ class UserControllerTest extends WebTestCase
         $user->refresh();
     }
 
-    public function testInvalidateUserPasswordAsGroupAdmin() {
-
+    public function testInvalidateUserPasswordAsGroupAdmin()
+    {
         GroupStory::organisation();
 
-        $structure =  StructureFactory::new([
+        $structure = StructureFactory::new([
             'name' => 'Lib',
             'suffix' => 'lib',
             'legacyConnectionName' => 'lib',
@@ -437,8 +437,8 @@ class UserControllerTest extends WebTestCase
         $this->assertSame(PasswordInvalidator::INVALID_PASSWORD, $actor->getPassword());
     }
 
-    public function testInvalidateUserPasswordAsStructureAdmin() {
-
+    public function testInvalidateUserPasswordAsStructureAdmin()
+    {
         $structure = StructureStory::libriciel();
         UserStory::adminLibriciel();
 
@@ -456,8 +456,8 @@ class UserControllerTest extends WebTestCase
         $this->assertSame(PasswordInvalidator::INVALID_PASSWORD, $actor->getPassword());
     }
 
-    public function testInvalidateUserPasswordNotAdminRole() {
-
+    public function testInvalidateUserPasswordNotAdminRole()
+    {
         UserStory::secretaryLibriciel1();
         $actor = UserFactory::createOne(['structure' => StructureStory::libriciel()]);
 
@@ -466,7 +466,4 @@ class UserControllerTest extends WebTestCase
         $this->client->request(Request::METHOD_POST, '/user_invalidate_password/' . $actor->getId());
         $this->assertResponseStatusCodeSame(403);
     }
-
 }
-
-

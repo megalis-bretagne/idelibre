@@ -18,12 +18,10 @@ class GsmValidator extends ConstraintValidator
             throw new UnexpectedValueException($value, 'string');
         }
 
-        if(!preg_match('/^0[67][0-9]{8}$/', $value)) {
+        if (!preg_match('/^0[67][0-9]{8}$/', $value)) {
             $this->context->buildViolation($constraint->message)
                 ->setParameter('{{ string }}', $value)
                 ->addViolation();
         }
-
-
     }
 }

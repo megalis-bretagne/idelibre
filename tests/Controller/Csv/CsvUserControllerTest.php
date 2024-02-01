@@ -87,7 +87,6 @@ class CsvUserControllerTest extends WebTestCase
         $this->assertSame(2, $employee->getGender());
         $this->assertSame('0687896754', $employee->getPhone());
         $this->assertSame('senateur', $employee->getTitle());
-
     }
 
     public function testImportUsersMissingEmail()
@@ -174,7 +173,6 @@ class CsvUserControllerTest extends WebTestCase
 
         $title = $crawler->filter('html:contains("Erreurs lors de l\'import")');
         $this->assertCount(1, $title);
-
     }
 
     public function testImportUserCsvNoRole()
@@ -322,34 +320,32 @@ class CsvUserControllerTest extends WebTestCase
         $this->assertCount(1, $title);
     }
 
-   public function testTitleToNotActor()
-   {
-       $csvFile = new UploadedFile(__DIR__ . '/../../resources/csv/user_error_wrong_role_title.csv', 'user.csv');
-       $this->assertNotEmpty($csvFile);
+    public function testTitleToNotActor()
+    {
+        $csvFile = new UploadedFile(__DIR__ . '/../../resources/csv/user_error_wrong_role_title.csv', 'user.csv');
+        $this->assertNotEmpty($csvFile);
 
-       $this->loginAsAdminLibriciel();
-       $this->client->request(Request::METHOD_GET, '/csv/userErrors');
+        $this->loginAsAdminLibriciel();
+        $this->client->request(Request::METHOD_GET, '/csv/userErrors');
 
-       $crawler = $this->client->request(Request::METHOD_GET, '/csv/importUsers');
-       $this->assertResponseStatusCodeSame(200);
-       $item = $crawler->filter('html:contains("Importer des utilisateurs via csv")');
-       $this->assertCount(1, $item);
+        $crawler = $this->client->request(Request::METHOD_GET, '/csv/importUsers');
+        $this->assertResponseStatusCodeSame(200);
+        $item = $crawler->filter('html:contains("Importer des utilisateurs via csv")');
+        $this->assertCount(1, $item);
 
-       $form = $crawler->selectButton('Importer le csv')->form();
+        $form = $crawler->selectButton('Importer le csv')->form();
 
-       $form['csv[csv]'] = $csvFile;
+        $form['csv[csv]'] = $csvFile;
 
-       $this->client->submit($form);
+        $this->client->submit($form);
 
-       $this->assertTrue($this->client->getResponse()->isRedirect());
+        $this->assertTrue($this->client->getResponse()->isRedirect());
 
-       $this->client->followRedirect();
-       $this->assertResponseStatusCodeSame(200);
+        $this->client->followRedirect();
+        $this->assertResponseStatusCodeSame(200);
 
-       $this->assertNotEmpty($this->getOneEntityBy(User::class, ['username' => 'T.AUCLAIR@libriciel']));
-       $user = $this->getOneEntityBy(User::class, ['username' => 'T.AUCLAIR@libriciel']);
-       $this->assertSame('', $user->getTitle());
-
-   }
-
+        $this->assertNotEmpty($this->getOneEntityBy(User::class, ['username' => 'T.AUCLAIR@libriciel']));
+        $user = $this->getOneEntityBy(User::class, ['username' => 'T.AUCLAIR@libriciel']);
+        $this->assertSame('', $user->getTitle());
+    }
 }

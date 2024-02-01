@@ -42,7 +42,7 @@ class ThemeWithParentType extends AbstractType
                 },
 
                 'multiple' => false,
-                'query_builder' => $theme ? $this->themeRepository->getNotChildrenNode($theme) :  $this->themeRepository->findChildrenFromStructure($options['structure']),
+                'query_builder' => $theme ? $this->themeRepository->getNotChildrenNode($theme) : $this->themeRepository->findChildrenFromStructure($options['structure']),
             ])
             ->add('structure', HiddenEntityType::class, [
                 'data' => $options['structure'],
