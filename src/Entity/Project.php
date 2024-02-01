@@ -31,7 +31,7 @@ class Project
     private $id;
 
     #[Column(type: 'string', length: 512)]
-    #[Length(max: '512')]
+    #[Length(max: '512', maxMessage: 'Le nom du projet ne doit pas dépasser 512 caractères.')]
     #[NotBlank]
     #[Groups(['project:read'])]
     private $name;

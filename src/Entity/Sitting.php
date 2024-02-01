@@ -41,7 +41,7 @@ class Sitting
     private $id;
 
     #[Column(type: 'string', length: 255)]
-    #[Length(max: '255')]
+    #[Length(max: '255', maxMessage: 'Le nom de la séance ne doit pas dépasser 255 caractères.')]
     #[Groups(groups: ['sitting', 'sitting:read'])]
     private $name;
 

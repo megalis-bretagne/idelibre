@@ -86,8 +86,8 @@
 
                         <div class="otherdoc-right">
                             <div class="otherdoc-line">
-                                <div class="otherdoc-item">
-                                    <textarea v-model="otherdoc.name" class="form-control" v-on:change="otherdocChange()"> </textarea>
+                                <div class="otherdoc-item" ref="documentTitleBlock">
+                                    <textarea v-model="otherdoc.name" ref="documentTitle" class="form-control" v-on:change="otherdocChange(); documentTitleTooLong()"> </textarea>
                                 </div>
                                 <div class="otherdoc-item d-flex justify-content-between">
                                     ${otherdoc.fileName}
@@ -147,8 +147,8 @@
 
                         <div class="project-right">
                             <div class="project-line">
-                                <div class="project-item">
-                                    <textarea v-model="project.name" class="form-control" v-on:change="projectChange()"> </textarea>
+                                <div class="project-item" ref="projectTitleBlock">
+                                    <textarea ref="projectTitle" v-model="project.name" class="form-control" v-on:change="projectChange(); projectTitleTooLong()"> </textarea>
                                 </div>
                                 <div class="project-item d-flex justify-content-between">
                                     ${project.fileName}
@@ -226,8 +226,8 @@
                                         ${index + 1}
                                     </div>
 
-                                    <div class="project-item">
-                                        <textarea v-model="annex.title" class="form-control" v-on:change="annexChange()"> </textarea>
+                                    <div class="project-item" ref="annexTitleBlock">
+                                        <textarea v-model="annex.title" ref="annexTitle" class="form-control" v-on:change="annexChange(); annexTitleTooLong()"> </textarea>
                                     </div>
                                     <div class="project-item d-flex justify-content-between">
                                         <div>
@@ -263,7 +263,7 @@
                 Enregistrer les modifications
             </button>
 
-            <button v-else class="btn btn-primary" @click="save()" id="save-sitting">
+            <button v-else class="btn btn-primary" @click="save()" id="save-sitting" ref="submitBtn">
                 <span class="fa fa-save"></span>
                 Enregistrer les modifications
             </button>

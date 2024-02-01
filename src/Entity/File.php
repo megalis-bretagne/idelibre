@@ -34,7 +34,7 @@ class File
 
     #[Column(type: 'string', length: 512)]
     #[NotBlank]
-    #[Length(max: '125')]
+    #[Length(max: '125', maxMessage: 'Le nom du fichier ne doit pas dépasser 125 caractères.')]
     #[Groups(['sitting:detail', 'project:read', 'otherdoc:read'])]
     private $name;
 

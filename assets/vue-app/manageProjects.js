@@ -61,6 +61,50 @@ let app = new Vue({
             isDirty = true;
         },
 
+        checkTitleLength(element, title) {
+            if (title.length > 512) {
+                this.$refs.submitBtn.setAttribute('disabled', 'disabled');
+                element.insertAdjacentHTML('beforeend', '<small class="text-danger ps-3"><span class="fa fa-exclamation-circle me-2"></span>Le libellé ne doit pas dépasser 512 caractères</small>');
+                setTimeout(() => {
+                    element.removeChild(element.lastChild);
+                }, 3000);
+                return;
+            }
+            this.$refs.submitBtn.removeAttribute('disabled');
+        },
+
+        projectTitleTooLong() {
+            this.$nextTick(() => {
+                for (let i = 0; i < this.$refs.projectTitleBlock.length; i++) {
+                    const titleBlock = this.$refs.projectTitleBlock[i]
+                    const title = this.$refs.projectTitle[i].value;
+                    this.checkTitleLength(titleBlock, title);
+                }
+            });
+        },
+
+        annexTitleTooLong() {
+            this.$nextTick(() => {
+                for (let i = 0; i < this.$refs.annexTitleBlock.length; i++) {
+                    const titleBlock = this.$refs.annexTitleBlock[i]
+                    const title = this.$refs.annexTitle[i].value;
+                    this.checkTitleLength(titleBlock, title);
+                }
+            });
+        },
+
+        documentTitleTooLong() {
+            this.$nextTick(() => {
+                for (let i = 0; i < this.$refs.documentTitleBlock.length; i++) {
+                    const titleBlock = this.$refs.documentTitleBlock[i]
+                    const title = this.$refs.documentTitle[i].value;
+                    this.checkTitleLength(titleBlock, title);
+                }
+            });
+        },
+
+
+
         addProject(event) {
             for (let i = 0; i < event.target.files.length; i++) {
                 let file = event.target.files[i];
@@ -207,8 +251,7 @@ let app = new Vue({
                     window.scrollTo(0, 0);
                     setTimeout(function(){
                         window.location.href = `/sitting/show/${getSittingId()}/projects`
-                    },
-                        1000);
+                    },1000);
 
                 })
                 .catch((e, m) => {
@@ -246,7 +289,7 @@ let app = new Vue({
         showMessageError(msg) {
             window.scrollTo(0, 0);
             this.messageError = msg;
-            setTimeout(() => this.messageError = null, 10000);
+            setTimeout(() => this.messageError = null, 5000);
         },
     },
 

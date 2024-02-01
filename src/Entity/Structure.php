@@ -34,7 +34,7 @@ class Structure
 
     #[Column(type: 'string', length: 255, unique: true)]
     #[NotBlank]
-    #[Length(max: '255')]
+    #[Length(max: '255', maxMessage: 'Le nom de la structure ne doit pas dépasser 255 caractères.')]
     private $name;
 
     #[Column(type: 'string', length: 255, nullable: false)]
