@@ -238,7 +238,6 @@ class ProjectManager
             ->setTitle($clientAnnex->getTitle())
         ;
 
-        //        dd($annex->getTitle());
         $this->em->persist($annex);
     }
 
