@@ -13,7 +13,6 @@ use function _PHPStan_d5c599c96\RingCentral\Psr7\str;
 
 class ExportUserTest extends KernelTestCase
 {
-
     use ResetDatabase;
     use Factories;
 
@@ -28,15 +27,14 @@ class ExportUserTest extends KernelTestCase
     {
         $structure = StructureStory::libriciel()->object();
         $csvPath = $this->exportUsersCsv->exportStructureUsers($structure);
-        $this->assertSame('/tmp/export/' . $structure->getName() . '.csv' , $csvPath);
+        $this->assertSame('/tmp/export/' . $structure->getName() . '.csv', $csvPath);
     }
 
     public function testExportCsvUserFromGroup()
     {
         $group = GroupStory::recia()->object();
         $zipPath = $this->exportUsersCsv->exportGroupUsers($group);
-        $this->assertStringContainsString('/tmp/' , $zipPath);
-        $this->assertStringContainsString('.zip' , $zipPath);
+        $this->assertStringContainsString('/tmp/', $zipPath);
+        $this->assertStringContainsString('.zip', $zipPath);
     }
-
 }

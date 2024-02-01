@@ -59,10 +59,9 @@ class ConvocationManagerTest extends WebTestCase
 
     public function testCountConvocationNotAnswered()
     {
-
         $sitting = SittingStory::sittingConseilLibriciel();
-        $convocation1 = ConvocationFactory::createOne(["sitting" => $sitting , "attendance" => ""]);
-        $convocation2 = ConvocationFactory::createOne(["sitting" => $sitting , "attendance" => Convocation::PRESENT]);
+        $convocation1 = ConvocationFactory::createOne(["sitting" => $sitting, "attendance" => ""]);
+        $convocation2 = ConvocationFactory::createOne(["sitting" => $sitting, "attendance" => Convocation::PRESENT]);
 
         $convocations = [$convocation1, $convocation2];
 

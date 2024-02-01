@@ -13,12 +13,10 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class CsvUserErrorManager
 {
-
     public function __construct(
         private readonly ValidatorInterface      $validator,
         private readonly UserRepository          $userRepository,
-    )
-    {
+    ) {
     }
 
     public function isExistUsername(string $username, Structure $structure): bool

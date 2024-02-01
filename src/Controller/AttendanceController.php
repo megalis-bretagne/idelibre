@@ -29,8 +29,6 @@ class AttendanceController extends AbstractController
         $sitting = $attendanceToken->getConvocation()->getSitting();
         $deputyId = $user->getDeputy() ? $user->getDeputy()->getId() : null;
 
-//        dd($deputyId);
-
         $form = $this->createForm(AttendanceType::class, null, [
             'isRemoteAllowed' => $sitting->getIsRemoteAllowed(),
             'convocation' => $convocation,
@@ -94,5 +92,4 @@ class AttendanceController extends AbstractController
             "availables" => $actors
         ]);
     }
-
 }

@@ -14,8 +14,7 @@ class DataFormatter
 {
     public function __construct(
         private readonly RoleManager $roleManager,
-    )
-    {
+    ) {
     }
 
     public function formatUsername(string $username, Structure $structure): string

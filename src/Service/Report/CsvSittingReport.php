@@ -77,7 +77,7 @@ class CsvSittingReport
         };
     }
 
-    private function setMandatorDeputy($convocation):string
+    private function setMandatorDeputy($convocation): string
     {
         if ($convocation->getDeputy()) {
             return $convocation->getDeputy()->getFirstName() . ' ' . $convocation->getDeputy()->getLastName();

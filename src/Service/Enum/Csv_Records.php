@@ -14,5 +14,4 @@ enum Csv_Records: int
     case TITLE = 7;
     case DEPUTY = 8;
     case TYPE_SEANCE = 9;
-
 }

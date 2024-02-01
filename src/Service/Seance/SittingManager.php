@@ -28,7 +28,7 @@ class SittingManager
         private readonly ConvocationManager     $convocationManager,
         private readonly FileManager            $fileManager,
         private readonly EntityManagerInterface $em,
-        private readonly  MessageBusInterface   $messageBus,
+        private readonly MessageBusInterface   $messageBus,
         private readonly ProjectManager         $projectManager,
         private readonly RoleManager            $roleManager,
         private readonly SittingRepository      $sittingRepository,

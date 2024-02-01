@@ -74,11 +74,11 @@ class AttendanceControllerTest extends WebTestCase
         $token = $convocation->getAttendancetoken()->getToken();
 
         $this->loginAsUserMontpellier();
-        $crawler = $this->client->request(Request::METHOD_GET,'/attendance/confirmation/' . $token);
+        $crawler = $this->client->request(Request::METHOD_GET, '/attendance/confirmation/' . $token);
         $this->assertResponseStatusCodeSame(200);
 
         $item = $crawler->filter('title')->text("Confirmation de présence à la séance");
-        $this->assertSame("Confirmation de présence à la séance" , $item);
+        $this->assertSame("Confirmation de présence à la séance", $item);
 
         $form = $crawler->selectButton('Enregistrer')->form();
         $form['attendance[attendance]'] = 'present';
