@@ -411,8 +411,8 @@
                         <div class="modal-footer">
                             {{ macro.cancelBtnModal() }}
 
-                            <button class="btn btn-primary btn-soft-warning" data-bs-dismiss="modal" type="button" title="Envoyer"
-                                    v-on:click="sendConvocations()">
+                            <button class="btn" data-bs-dismiss="modal" type="button" title="Envoyer"
+                                    v-on:click="sendConvocations()" style="background: var(--bs-ls-warning-600)">
                                 <i class="fa fa-paper-plane"></i>
                                 Envoyer
                             </button>
@@ -561,14 +561,16 @@
                                     </small>
                                 </p>
                             </div>
+
+                            <div class="mt-2 alert alert-warning" v-if="lsvoteId">
+                                <i class="fa fa-warning mr-2"></i> Attention. <br>
+                                La séance a déjà été envoyée à lsvote. Effectuer un renvoi effacera la séance précèdement envoyée sur lsvote pour la remplacer par celle-ci. <br>
+                                Cette action est impossible si la séance est a déjà été démarrée.
+                            </div>
+
                             <p class="mt-2">
                                 Voulez-vous vraiment envoyer la séance vers Lsvote ?
                             </p>
-                            <span v-if="lsvoteId">
-                                <i class="fa fa-warning mr-2 text-warning"></i> Attention. <br>
-                                La séance a déjà été envoyée à lsvote. Effectuer un renvoi effacera la séance précèdement envoyée sur lsvote pour la remplacer par celle-ci. <br>
-                                Cette action est impossible si la séance est a déjà été démarrée.
-                            </span>
                         </div>
 
                         <div class="modal-footer">
