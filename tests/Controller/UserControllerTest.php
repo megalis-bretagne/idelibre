@@ -456,6 +456,24 @@ class UserControllerTest extends WebTestCase
         $this->assertSame(PasswordInvalidator::INVALID_PASSWORD, $actor->getPassword());
     }
 
+    public function testInvalidateSelfPasswordAsAdmin()
+    {
+        UserStory::adminLibriciel();
+
+        $admin = UserStory::adminLibriciel();
+
+        $this->loginAsAdminLibriciel();
+
+        $this->client->request(Request::METHOD_POST, '/user_invalidate_password/' . $admin->getId());
+        $this->assertTrue($this->client->getResponse()->isRedirect());
+        $crawler = $this->client->followRedirect();
+        $this->assertResponseStatusCodeSame(200);
+
+        $successMsg = $crawler->filter('html:contains("Un e-mail de réinitialisation du mot de passe a été envoyé")');
+        $this->assertCount(1, $successMsg);
+        $this->assertSame(PasswordInvalidator::INVALID_PASSWORD, $admin->getPassword());
+    }
+
     public function testInvalidateUserPasswordNotAdminRole()
     {
         UserStory::secretaryLibriciel1();

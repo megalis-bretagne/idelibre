@@ -29,10 +29,6 @@ class PasswordInvalidator
 
     public function isAuthorizeInvalidate(User $userToDeactivate, User $loggedInUser): bool
     {
-        if ($userToDeactivate->getId() === $loggedInUser->getId()) {
-            return false;
-        }
-
         return $this->isAdminRole();
     }
 
