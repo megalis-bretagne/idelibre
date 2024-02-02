@@ -15,6 +15,8 @@ final class ConvocationStory extends Story
             'user' => UserStory::actorLibriciel1(),
             'category' => Convocation::CATEGORY_CONVOCATION,
             'sentTimestamp' => null,
+            'mandator' => null,
+            'deputy' => null,
         ]));
 
         $this->addState('convocationActor2Sent', ConvocationFactory::new([

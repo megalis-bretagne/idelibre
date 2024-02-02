@@ -95,6 +95,66 @@ class AttendanceControllerTest extends WebTestCase
         $this->assertNotEmpty($this->getOneEntityBy(Convocation::class, ['attendance' => 'present']));
     }
 
+    public function testAttendanceIsReplacedbyMandator()
+    {
+        $user = UserStory::actorLibriciel1()->object();
+        $mandator = UserFactory::createOne();
+
+
+        $convocation = ConvocationFactory::createOne([
+            'sitting' => SittingStory::sittingConseilLibriciel(),
+            'user' => $user,
+            'category' => Convocation::CATEGORY_CONVOCATION,
+            'sentTimestamp' => null,
+            'mandator' => null,
+            'deputy' => null
+        ]);
+
+        $convocation2  = ConvocationFactory::createOne([
+            'sitting' => SittingStory::sittingConseilLibriciel(),
+            'user' => $mandator,
+            'category' => Convocation::CATEGORY_CONVOCATION,
+            'sentTimestamp' => null,
+            'mandator' => null,
+            'deputy' => null
+        ]);
+
+        AttendanceTokenFactory::createOne([
+            'token' => 'mytoken',
+            'convocation' => $convocation,
+        ]);
+        $token = $convocation->getAttendancetoken()->getToken();
+
+
+        $this->loginAsUserMontpellier();
+        $crawler = $this->client->request(
+            Request::METHOD_GET,
+            '/attendance/confirmation/' . $token
+        );
+        $this->assertResponseStatusCodeSame(200);
+
+        $item = $crawler->filter('html:contains("Merci de confirmer votre présence")');
+        $this->assertCount(1, $item);
+
+        $form = $crawler->selectButton('Enregistrer')->form();
+        $form['attendance[attendance]'] = 'poa';
+        $form['attendance[mandataire]'] = $convocation2->getUser()->getId();
+
+        $this->client->submit($form);
+
+        $crawler->filter('h1')->children('div.badge-info')->count(1);
+
+        $this->assertTrue($this->client->getResponse()->isRedirect());
+        $crawler = $this->client->followRedirect();
+        $this->assertResponseStatusCodeSame(200);
+        $alert = $crawler->filter('section')->children('div.alert')->count();
+        $this->assertSame(1, $alert);
+
+        $this->assertNotEmpty($this->getOneEntityBy(Convocation::class, ['attendance' => 'poa']));
+    }
+
+
+
     public function testAttendanceIsAbsentReplacedByDeputy()
     {
         $convocation = ConvocationStory::convocationActor3SentWithToken();
