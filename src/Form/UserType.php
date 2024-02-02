@@ -67,9 +67,9 @@ class UserType extends AbstractType
 
             $builder->add('username', TextType::class, [
                 'label' => 'Nom d\'utilisateur',
-                'disabled' => $user->getId() ? true : false,
+                'disabled' => !$this->isNew($options),
                 'attr' => [
-                    'readonly' => $user->getId() ? true : false,
+                    'readonly' => !$this->isNew($options),
                 ],
             ]) ;
 
