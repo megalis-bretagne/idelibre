@@ -1,87 +1,83 @@
+# You can override the included template(s) by including variable overrides
+# SAST customization: https://docs.gitlab.com/ee/user/application_security/sast/#customizing-the-sast-settings
+# Secret Detection customization: https://docs.gitlab.com/ee/user/application_security/secret_detection/#customizing-settings
+# Dependency Scanning customization: https://docs.gitlab.com/ee/user/application_security/dependency_scanning/#customizing-the-dependency-scanning-settings
+# Container Scanning customization: https://docs.gitlab.com/ee/user/application_security/container_scanning/#customizing-the-container-scanning-settings
+# Note that environment variables can be set in several places
+# See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
 include:
-  - project: "libriciel/integration-continue/templates"
-    ref: master
-    file: '/publish-container-to-registry.yml'
-
-  - project: "libriciel/integration-continue/templates"
-    ref:  security-check@1.2.1
-    file: 'jobs/security-check/security-check.yml'
-
-  - project: "libriciel/integration-continue/templates"
-    ref: publish-compose-to-nexus@0.1.3
-    file: '/jobs/publish-compose-to-nexus/publish-compose-to-nexus.yml'
-
-
-
+- project: libriciel/integration-continue/templates
+  ref: master
+  file: "/publish-container-to-registry.yml"
+- project: libriciel/integration-continue/templates
+  ref: security-check@1.2.1
+  file: jobs/security-check/security-check.yml
+- project: libriciel/integration-continue/templates
+  ref: publish-compose-to-nexus@0.1.3
+  file: "/jobs/publish-compose-to-nexus/publish-compose-to-nexus.yml"
+- template: Security/SAST.gitlab-ci.yml
 security-check:
   only:
-    - master
+  - master
   allow_failure: true
   variables:
     TRIVY_IMAGE_TIMEOUT: 10m
-
-
 stages:
-  - build
-  - build-nocache
-  - deploy
-  - testWithoutCovering
-  - test
-  - quality
-  - release
-
+- build
+- build-nocache
+- deploy
+- testWithoutCovering
+- test
+- quality
+- release
 variables:
   CONTAINER_IMAGE: "${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_NAME}"
-  REGISTRY_CONTAINER_PATH: /public/citoyens/idelibre
-#  CANARY_BRANCH_NAME: 321-test-v4-2-les-elus-n-ont-pas-la-seance-a-disposition-dans-leur-espace-idelibre
-
-
-
+  REGISTRY_CONTAINER_PATH: "/public/citoyens/idelibre"
 build:
   stage: build
   tags:
-    - citoyen-shell
+  - citoyen-shell
   except:
     variables:
-      - $CI_COMMIT_MESSAGE =~ /nocache/
+    - "$CI_COMMIT_MESSAGE =~ /nocache/"
   script:
-    - docker login -u "gitlab-ci-token" -p "$CI_JOB_TOKEN" $CI_REGISTRY
-    - docker pull $CI_REGISTRY_IMAGE:latest || true
-    - docker build --cache-from $CI_REGISTRY_IMAGE:latest --tag ${CONTAINER_IMAGE} --tag $CI_REGISTRY_IMAGE:latest .
-    - docker login -u "gitlab-ci-token" -p "$CI_JOB_TOKEN" $CI_REGISTRY
-    - docker push ${CONTAINER_IMAGE}
-    - docker push $CI_REGISTRY_IMAGE:latest
-
-
+  - docker login -u "gitlab-ci-token" -p "$CI_JOB_TOKEN" $CI_REGISTRY
+  - docker pull $CI_REGISTRY_IMAGE:latest || true
+  - docker build --cache-from $CI_REGISTRY_IMAGE:latest --tag ${CONTAINER_IMAGE} --tag
+    $CI_REGISTRY_IMAGE:latest .
+  - docker login -u "gitlab-ci-token" -p "$CI_JOB_TOKEN" $CI_REGISTRY
+  - docker push ${CONTAINER_IMAGE}
+  - docker push $CI_REGISTRY_IMAGE:latest
 build-nocache:
   stage: build-nocache
   only:
     variables:
-      - $CI_COMMIT_MESSAGE =~ /nocache/
+    - "$CI_COMMIT_MESSAGE =~ /nocache/"
   tags:
-    - citoyen-shell
+  - citoyen-shell
   script:
-    - docker login -u "gitlab-ci-token" -p "$CI_JOB_TOKEN" $CI_REGISTRY
-    - docker build --tag ${CONTAINER_IMAGE} --tag $CI_REGISTRY_IMAGE:latest . --no-cache
-    - docker login -u "gitlab-ci-token" -p "$CI_JOB_TOKEN" $CI_REGISTRY
-    - docker push ${CONTAINER_IMAGE}
-    - docker push $CI_REGISTRY_IMAGE:latest
-
-
+  - docker login -u "gitlab-ci-token" -p "$CI_JOB_TOKEN" $CI_REGISTRY
+  - docker build --tag ${CONTAINER_IMAGE} --tag $CI_REGISTRY_IMAGE:latest . --no-cache
+  - docker login -u "gitlab-ci-token" -p "$CI_JOB_TOKEN" $CI_REGISTRY
+  - docker push ${CONTAINER_IMAGE}
+  - docker push $CI_REGISTRY_IMAGE:latest
 phpTest:
   stage: test
   only:
-    - tags
-    - master
-  image: $CONTAINER_IMAGE
+  - tags
+  - master
+  image: "$CONTAINER_IMAGE"
   services:
-    - name: postgres:13-alpine
-      alias: postgresidelibre
-      command: [ "postgres", "-N", "1000" ]
+  - name: postgres:13-alpine
+    alias: postgresidelibre
+    command:
+    - postgres
+    - "-N"
+    - '1000'
   variables:
     GIT_STRATEGY: none
     COMPOSER_PROCESS_TIMEOUT: 1200
-    DONT_RETRIEVE_VALIDCA: "true"
+    DONT_RETRIEVE_VALIDCA: 'true'
     APP_ENV: test
     POSTGRES_HOST: postgresidelibre
     POSTGRES_VERSION: 13
@@ -92,32 +88,33 @@ phpTest:
     DATABASE_URL: postgresql://idelibretest:idelibretest@postgresidelibre:5432/idelibre?serverVersion=13&charset=utf8
     XDEBUG_MODE: coverage
   before_script:
-    - cd /app
-    - apt -y install php-xdebug
-    - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-    - php composer-setup.php --install-dir=/usr/local/bin
-    - mv /usr/local/bin/composer.phar /usr/local/bin/composer
+  - cd /app
+  - apt -y install php-xdebug
+  - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+  - php composer-setup.php --install-dir=/usr/local/bin
+  - mv /usr/local/bin/composer.phar /usr/local/bin/composer
   script:
-    - composer install
-    - SYMFONY_DEPRECATIONS_HELPER=disabled bin/phpunit --coverage-text --colors=never --coverage-clover coverage/coverage.xml --log-junit coverage/logfile.xml
-    - cp -rf coverage $CI_PROJECT_DIR
+  - composer install
+  - SYMFONY_DEPRECATIONS_HELPER=disabled bin/phpunit --coverage-text --colors=never
+    --coverage-clover coverage/coverage.xml --log-junit coverage/logfile.xml
+  - cp -rf coverage $CI_PROJECT_DIR
   artifacts:
     paths:
-      - coverage
+    - coverage
     expire_in: 1h
-
-
-
 phpTestWithoutCovering:
   stage: testWithoutCovering
   except:
-    - tags
-    - master
-  image: $CONTAINER_IMAGE
+  - tags
+  - master
+  image: "$CONTAINER_IMAGE"
   services:
-    - name: postgres:13-alpine
-      alias: postgresidelibre
-      command: [ "postgres", "-N", "1000" ]
+  - name: postgres:13-alpine
+    alias: postgresidelibre
+    command:
+    - postgres
+    - "-N"
+    - '1000'
   variables:
     XDEBUG_MODE: coverage
     APP_ENV: test
@@ -131,78 +128,80 @@ phpTestWithoutCovering:
     GIT_STRATEGY: none
     COMPOSER_PROCESS_TIMEOUT: 1200
   before_script:
-    - cd /app
-    - apt -y install php-xdebug
-    - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-    - php composer-setup.php --install-dir=/usr/local/bin
-    - mv /usr/local/bin/composer.phar /usr/local/bin/composer
+  - cd /app
+  - apt -y install php-xdebug
+  - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+  - php composer-setup.php --install-dir=/usr/local/bin
+  - mv /usr/local/bin/composer.phar /usr/local/bin/composer
   script:
-    - composer install
-    - SYMFONY_DEPRECATIONS_HELPER=disabled bin/phpunit --colors=never
-
+  - composer install
+  - SYMFONY_DEPRECATIONS_HELPER=disabled bin/phpunit --colors=never
 quality:
   stage: quality
   only:
-    - master
+  - master
   image: gitlab.libriciel.fr:4567/docker/sonar-scanner:latest
   script:
-    - mkdir /app
-    - cp -rf $CI_PROJECT_DIR/* /app
-    - cd /app
-    - /sonar-scanner -Dsonar.login=$SONAR_LOGIN -Dsonar.host.url=$SONAR_HOST_URL
-
+  - mkdir /app
+  - cp -rf $CI_PROJECT_DIR/* /app
+  - cd /app
+  - "/sonar-scanner -Dsonar.login=$SONAR_LOGIN -Dsonar.host.url=$SONAR_HOST_URL"
 publish:
   stage: deploy
   only:
-    - tags
+  - tags
   variables:
     IMAGE_VERSION: "$CI_COMMIT_REF_NAME"
-    REGISTRY_CONTAINER_PATH: ""
+    REGISTRY_CONTAINER_PATH: ''
   tags:
-    - docker-build
+  - docker-build
   script:
-    - echo "Création de l'image ${REGISTRY_CONTAINER_HOST}/public/citoyens/idelibre/idelibre:${IMAGE_VERSION}"
-    - echo ${IMAGE_VERSION} > VERSION
-    - docker login -u "$REGISTRY_CONTAINER_USER" -p "$REGISTRY_CONTAINER_PASSWORD" "$REGISTRY_CONTAINER_HOST"
-    - docker build --pull -t ${REGISTRY_CONTAINER_HOST}/public/citoyens/idelibre/idelibre:${IMAGE_VERSION} .
-    - docker push ${REGISTRY_CONTAINER_HOST}/public/citoyens/idelibre/idelibre:${IMAGE_VERSION}
-
+  - echo "Création de l'image ${REGISTRY_CONTAINER_HOST}/public/citoyens/idelibre/idelibre:${IMAGE_VERSION}"
+  - echo ${IMAGE_VERSION} > VERSION
+  - docker login -u "$REGISTRY_CONTAINER_USER" -p "$REGISTRY_CONTAINER_PASSWORD" "$REGISTRY_CONTAINER_HOST"
+  - docker build --pull -t ${REGISTRY_CONTAINER_HOST}/public/citoyens/idelibre/idelibre:${IMAGE_VERSION}
+    .
+  - docker push ${REGISTRY_CONTAINER_HOST}/public/citoyens/idelibre/idelibre:${IMAGE_VERSION}
 deploy_master:
   stage: deploy
   environment:
     name: idelibre-4-2.dev.libriciel.net
     url: https://idelibre-4-2.dev.libriciel.net
   tags:
-    - citoyen-shell
+  - citoyen-shell
   only:
-    - master
+  - master
   variables:
-    PAYLOAD: "payload={\"text\": \"[idelibre-4-2.dev.libriciel.net](https://idelibre-4-2.dev.libriciel.net) a été mis à jour - [build $CI_PIPELINE_ID]($CI_PROJECT_URL/pipelines/$CI_PIPELINE_ID)\"}"
+    PAYLOAD: 'payload={"text": "[idelibre-4-2.dev.libriciel.net](https://idelibre-4-2.dev.libriciel.net)
+      a été mis à jour - [build $CI_PIPELINE_ID]($CI_PROJECT_URL/pipelines/$CI_PIPELINE_ID)"}'
   script:
-    - eval $(ssh-agent -s)
-    - ssh-add <(echo "$IDELIBRECI_SSH_KEY")
-    - mkdir -p ~/.ssh
-    - 'echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-    - scp ./docker-compose-deploy.yml idelibreci@idelibre-4-2.dev.libriciel.net:/data/docker-files/docker-compose.yml
-    - scp ./initializeCertificatesDeploy.sh idelibreci@idelibre-4-2.dev.libriciel.net:/data/docker-files/initializeCertificatesDeploy.sh
-    - scp ./docker-resources/nginx_template.vhost idelibreci@idelibre-4-2.dev.libriciel.net:/data/docker-files/docker-resources/nginx_template.vhost
-    - scp ./docker-resources/nginx.conf idelibreci@idelibre-4-2.dev.libriciel.net:/data/docker-files/docker-resources/nginx.conf
-    - scp ./docker-resources/options-ssl-nginx.conf idelibreci@idelibre-4-2.dev.libriciel.net:/data/docker-files/docker-resources/options-ssl-nginx.conf
-    - scp ./docker-resources/ssl-dhparams.pem idelibreci@idelibre-4-2.dev.libriciel.net:/data/docker-files/docker-resources/ssl-dhparams.pem
-    - scp ./docker-resources/initApp.sh idelibreci@idelibre-4-2.dev.libriciel.net:/data/docker-files/docker-resources/initApp.sh
-    - echo "$MASTER_ENV_FILE_CONTENT" > /tmp/.env.dist
-    - scp /tmp/.env.dist idelibreci@idelibre-4-2.dev.libriciel.net:/data/docker-files/.env
-    - ssh -tt idelibreci@idelibre-4-2.dev.libriciel.net "cd /data/docker-files/  && docker compose pull && ./initializeCertificatesDeploy.sh -f"
-    - curl -i -X POST -d "$PAYLOAD" $MATTERMOST_WEBHOOK
-
+  - eval $(ssh-agent -s)
+  - ssh-add <(echo "$IDELIBRECI_SSH_KEY")
+  - mkdir -p ~/.ssh
+  - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+  - scp ./docker-compose-deploy.yml idelibreci@idelibre-4-2.dev.libriciel.net:/data/docker-files/docker-compose.yml
+  - scp ./initializeCertificatesDeploy.sh idelibreci@idelibre-4-2.dev.libriciel.net:/data/docker-files/initializeCertificatesDeploy.sh
+  - scp ./docker-resources/nginx_template.vhost idelibreci@idelibre-4-2.dev.libriciel.net:/data/docker-files/docker-resources/nginx_template.vhost
+  - scp ./docker-resources/nginx.conf idelibreci@idelibre-4-2.dev.libriciel.net:/data/docker-files/docker-resources/nginx.conf
+  - scp ./docker-resources/options-ssl-nginx.conf idelibreci@idelibre-4-2.dev.libriciel.net:/data/docker-files/docker-resources/options-ssl-nginx.conf
+  - scp ./docker-resources/ssl-dhparams.pem idelibreci@idelibre-4-2.dev.libriciel.net:/data/docker-files/docker-resources/ssl-dhparams.pem
+  - scp ./docker-resources/initApp.sh idelibreci@idelibre-4-2.dev.libriciel.net:/data/docker-files/docker-resources/initApp.sh
+  - echo "$MASTER_ENV_FILE_CONTENT" > /tmp/.env.dist
+  - scp /tmp/.env.dist idelibreci@idelibre-4-2.dev.libriciel.net:/data/docker-files/.env
+  - ssh -tt idelibreci@idelibre-4-2.dev.libriciel.net "cd /data/docker-files/  &&
+    docker compose pull && ./initializeCertificatesDeploy.sh -f"
+  - curl -i -X POST -d "$PAYLOAD" $MATTERMOST_WEBHOOK
 publish-compose-to-nexus:
   variables:
     INPUT_DIRECTORY: docker
   before_script:
-    - mkdir -p ${INPUT_DIRECTORY}
-    - cp ./docker-compose.yml ${INPUT_DIRECTORY}/docker-compose.yml
-    - cp ./.env.dist ${INPUT_DIRECTORY}/.env.dist
-    - cp -R ./docker-resources ${INPUT_DIRECTORY}/docker-resources
-    - rm ${INPUT_DIRECTORY}/docker-resources/initApp.sh ${INPUT_DIRECTORY}/docker-resources/minimum.sql ${INPUT_DIRECTORY}/docker-resources/opcache.ini ${INPUT_DIRECTORY}/docker-resources/zz-idelibre.ini
-    - rm ${INPUT_DIRECTORY}/docker-resources/wkhtmltox_0.12.6.1-2.jammy_amd64.deb
-    - sed -i -e"s|TAG|$CI_COMMIT_REF_NAME|" ${INPUT_DIRECTORY}/docker-compose.yml
+  - mkdir -p ${INPUT_DIRECTORY}
+  - cp ./docker-compose.yml ${INPUT_DIRECTORY}/docker-compose.yml
+  - cp ./.env.dist ${INPUT_DIRECTORY}/.env.dist
+  - cp -R ./docker-resources ${INPUT_DIRECTORY}/docker-resources
+  - rm ${INPUT_DIRECTORY}/docker-resources/initApp.sh ${INPUT_DIRECTORY}/docker-resources/minimum.sql
+    ${INPUT_DIRECTORY}/docker-resources/opcache.ini ${INPUT_DIRECTORY}/docker-resources/zz-idelibre.ini
+  - rm ${INPUT_DIRECTORY}/docker-resources/wkhtmltox_0.12.6.1-2.jammy_amd64.deb
+  - sed -i -e"s|TAG|$CI_COMMIT_REF_NAME|" ${INPUT_DIRECTORY}/docker-compose.yml
+sast:
+  stage: test
