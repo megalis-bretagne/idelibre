@@ -36,7 +36,6 @@ class AttendanceType extends AbstractType
                 'query_builder' => $this->userRepository->findActorsInSittingWithExclusion($options['sitting'], $options['toExclude']),
                 'choice_label' => "lastname",
                 'disabled' => false,
-                'placeholder' => '--'
             ]);
 
         if ($options['deputyId'] !== null) {
