@@ -16,7 +16,6 @@ window.onload = () => {
 
     if(attendanceValue === "poa"){
         show(mandataireGroup)
-        mandataireInput.setAttribute("required", "required")
         hide(deputyGroup)
         return;
     }
@@ -36,7 +35,6 @@ attendanceInput.onchange = () => {
 
     if(attendanceValue === "poa"){
         show(mandataireGroup)
-        mandataireInput.setAttribute("required", "required")
         hide(deputyGroup)
         return;
     }
