@@ -219,7 +219,7 @@
     </div>
 {%- endmacro -%}
 
-{% macro btnInvalidePasswordWithModal(title, content, pathAction, btn_description = "Invalidation des mots de passe") %}
+{% macro btnInvalidePasswordsWithModal(title, content, pathAction, btn_description = "Invalidation des mots de passe") %}
     {% set htmlId = random() %}
 
     <button type="button" class="btn btn-outline-primary" title="{{ btn_description }}"
@@ -238,7 +238,7 @@
                     <h4 class="modal-title">
                         {{ title }}
                     </h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close"  id="close-invalidate" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     {{ content }}
@@ -274,31 +274,31 @@
     </div>
 {% endmacro %}
 
-{% macro btnReloadPasswordWithModal(id, title, pathAction, content, page = 1) %}
-    <button type="button" class="btn btn-outline-primary borderless stacked" title="Réinitialisation du mot de passe de l'utilisateur"
-            data-bs-target="#modalReload{{ id }}" data-bs-toggle="modal">
+{% macro btnInvalidateSinglePasswordWithModal(id, title, pathAction, content, page = 1) %}
+    <button type="button" class="btn btn-outline-primary borderless stacked" title="Invalidation du mot de passe de l'utilisateur"
+            data-bs-target="#modalReload{{ id }}" data-bs-toggle="modal" >
         <span class="fa-passwd-reset fa-stack small">
             <i class="fa fa-sync-alt fa-stack-2x"></i>
             <i class="fa fa-lock fa-stack-1x small font-weight-bold"></i>
         </span>
     </button>
 
-    <div id="modalReload{{ id }}" tabindex="-1" class="modal fade" aria-hidden="true">
+    <div id="modalReload{{ id }}" tabindex="-1" class="modal fade" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header align-items-start">
                     <h4 class="modal-title">{{ title }}</h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close close-invalidate-single" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     {{ content }}
                     <div class="mt-3  alert alert-soft-warning">
                         <label for="invalidateSinglePassword" class="form-label">
                             <i class="fa fa-exclamation-triangle"></i>
-                            Merci de taper le mot INVALIDER afin de confirmer l'invalidation des mots de passe
+                            Merci de taper le mot INVALIDER afin de confirmer l'invalidation du mot de passe
                         </label>
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" id="invalidateSinglePassword" aria-describedby="basic-addon3" data-invalidate="INVALIDER">
+                            <input type="text" class="form-control invalidateInput" aria-describedby="basic-addon3" data-invalidate="INVALIDER">
                         </div>
                     </div>
 
@@ -306,13 +306,13 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-link" data-bs-dismiss="modal" title="Annuler" id="invalidateSingleCancelBtn">
+                    <button type="button" class="btn btn-link invalidateSingleCancelBtn" data-bs-dismiss="modal" title="Annuler">
                         <span class="fa fa-times"></span>
                         Annuler
                     </button>
                     <form method="post" action="{{ path(pathAction, {id: id, page: page}) }}" style="display: inline-block">
                         <input type="hidden" name="_method" value="POST">
-                        <button type="submit" class="btn btn-primary" id="invalidateSingleConfirmBtn" disabled>
+                        <button type="submit" class="btn btn-primary invalidateSingleConfirmBtn" disabled>
                             <span class="fas fa-sync-alt"></span>
                             Invalider le mot de passe
                         </button>

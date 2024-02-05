@@ -9,8 +9,11 @@ window.addEventListener('load', function () {
         initPasswordFalse.checked = true;
     }
 
+    if (initPasswordTrue.checked) {
+        passwordGroup.classList.remove('d-none');
+    }
+
     if (initPasswordFalse.checked) {
-        // console.log('passwordInitFalse')
         passwordGroup.classList.add('d-none');
     }
 
@@ -21,4 +24,5 @@ initPasswordTrue.addEventListener('change', function () {
 });
 initPasswordFalse.addEventListener('change', function () {
     passwordGroup.classList.add('d-none');
+
 } );
