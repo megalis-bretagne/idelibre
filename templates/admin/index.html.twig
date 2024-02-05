@@ -56,11 +56,11 @@
                     <td class="active_column">{{ user.isActive }}</td>
                     <td class="col-2 actionButton">
                         {% if (app.user != user) %}
-                            {{ macros.btnReloadPasswordWithModal(
+                            {{ macros.btnInvalidateSinglePasswordWithModal(
                                 user.id,
-                                'Réinitialisation du mot de passe de l\'utilisateur',
+                                'Réinitialisation du mot de passe de l\'utilisateur' ~ user.lastName ~ ' ' ~ user.firstName,
                                 'invalidate_admin_password',
-                                'Voulez-vous vraiment activer la procédure de réinitialisation du mot de passe de l\'utilisateur ?',
+                                'Voulez-vous vraiment activer la procédure de réinitialisation du mot de passe de l\'utilisateur' ~ user.lastName ~ " " ~ user.firstName ~  ' ?',
                                 users.currentPageNumber
                             ) }}
                         {% endif %}
@@ -85,3 +85,7 @@
 {% endblock %}
 
 {% block pagePagination knp_pagination_render(users) %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('invalidatePassword') }}
+{% endblock %}

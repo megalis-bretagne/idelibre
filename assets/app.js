@@ -18,7 +18,7 @@ import './js/lsmessage'
 import './js/lsvote'
 import './js/expandable'
 import './js/refreshApiKey'
-import './js/showPassword'
+import './js/password/showPassword'
 import './js/utils/retrieveFromUrl'
 import './js/utils/showHide'
 

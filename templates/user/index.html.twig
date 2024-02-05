@@ -22,7 +22,7 @@
                 'btn-outline-primary'
             ) }}
 
-            {{ macros.btnInvalidePasswordWithModal(
+            {{ macros.btnInvalidePasswordsWithModal(
                 'Invalidation de tout les mots de passe utilisateurs',
                 'En invalidant les mots de passe de tous les utilisateurs, cela entrainera la réinitialisation du mot de passe de chacun d\'entre eux.',
                 'invalidate_users_password',
@@ -61,22 +61,11 @@
             {% for user in users %}
 
                 <tr class="d-flex">
-                    <td class="col-1">
-                        {{ user.lastName }}
-                    </td>
-                    <td class="col-2">
-                        {{ user.firstName }}
-                    </td>
-                    <td class="col-2">
-                        {{ user.username | noSuffix }}
-                    </td>
-                    <td class="col">
-                        {{ user.role ? user.role.prettyName : '' }}
-                    </td>
-                    <td class="col">
-                        {{ user.party ?  ( user.party.name|length > 10 ? user.party.name|slice(0,20) ~ '...' : user.party.name)  : ''  }}
-                    </td>
-
+                    <td class="col-1">{{ user.lastName }}</td>
+                    <td class="col-2">{{ user.firstName }}</td>
+                    <td class="col-2">{{ user.username | noSuffix }}</td>
+                    <td class="col">{{ user.role ? user.role.prettyName : '' }}</td>
+                    <td class="col">{{ user.party ?  ( user.party.name|length > 10 ? user.party.name|slice(0,20) ~ '...' : user.party.name)  : ''  }}</td>
                     <td class="col">
                         {% if user.deputy is not null and user.deputy.role.name == "Deputy" %}{{ user.deputy.firstName|first|upper }}. {{ user.deputy.lastName}} {% endif %}
                     </td>
@@ -84,11 +73,11 @@
                     <td class="active_column d-none">{{ user.isActive }}</td>
                     <td class="col-2 actionButton">
                         {% if (app.user != user) %}
-                            {{ macros.btnReloadPasswordWithModal(
+                            {{  macros.btnInvalidateSinglePasswordWithModal(
                                 user.id,
-                                "Invalidation du mot de passe de l'utilisateur",
+                                'Invalidation du mot de passe de l\'utilisateur ' ~ user.lastName ~ ' ' ~ user.firstName,
                                 'invalidate_user_password',
-                                'En invalidant le mot de passe de l\'utilisateur, cela entrainera la réinitialisation de son mot de passe.',
+                                'En invalidant le mot de passe de l\'utilisateur ' ~ user.lastName ~ ' ' ~ user.firstName ~ ', cela entrainera la réinitialisation de son mot de passe.',
                                 users.currentPageNumber,
 
                             ) }}
