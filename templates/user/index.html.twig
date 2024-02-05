@@ -79,20 +79,19 @@
                                 'invalidate_user_password',
                                 'En invalidant le mot de passe de l\'utilisateur ' ~ user.lastName ~ ' ' ~ user.firstName ~ ', cela entrainera la réinitialisation de son mot de passe.',
                                 users.currentPageNumber,
-
                             ) }}
                         {% endif %}
 
                         {{ macros.editButton('user_edit', user.id, 'Modifier l\'utilisateur') }}
 
-                        {{ macros.button_open_modal_delete(
+                        {{ macros.button_open_modal_secure_delete(
                             user.id,
                             'Suppression de l\'utilisateur ' ~ user.lastName ~ ' ' ~ user.firstName,
                             'user_delete',
-                            "Voulez-vous vraiment supprimer l\'utilisateur " ~ user.lastName ~ ' ' ~ user.firstName ~ " ?
+                            "La suppression d'un utilisateur entraînera également la suppression de ses données présentes dans les éléments
+                            passés auxquels il était lié (anciennes séances, rapports pdf, etc.)
 
-                            Attention : la suppression d'un utilisateur entraînera également la suppression de ses données présentes dans les éléments
-                            passés auxquels il était lié (anciennes séances, rapports pdf, etc.)",
+                            Voulez-vous vraiment supprimer l\'utilisateur " ~ user.lastName ~ ' ' ~ user.firstName ~ " ?",
                             users.currentPageNumber,
                             'Supprimer l\'utilisateur',
                         ) }}

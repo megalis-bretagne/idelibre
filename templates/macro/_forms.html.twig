@@ -246,7 +246,7 @@
                     <div class="mt-3  alert alert-soft-warning">
                         <label for="invalidatePassword" class="form-label">
                             <i class="fa fa-exclamation-triangle"></i>
-                            Merci de taper le mot INVALIDER afin de confirmer l'invalidation des mots de passe
+                            Merci de taper le mot <b>INVALIDER</b> afin de confirmer l'invalidation des mots de passe
                         </label>
                         <div class="input-group mb-3">
                             <input type="text" class="form-control" id="invalidatePassword" aria-describedby="basic-addon3" data-invalidate="INVALIDER">
@@ -295,7 +295,7 @@
                     <div class="mt-3  alert alert-soft-warning">
                         <label for="invalidateSinglePassword" class="form-label">
                             <i class="fa fa-exclamation-triangle"></i>
-                            Merci de taper le mot INVALIDER afin de confirmer l'invalidation du mot de passe
+                            Merci de taper le mot <b>INVALIDER</b> afin de confirmer l'invalidation du mot de passe
                         </label>
                         <div class="input-group mb-3">
                             <input type="text" class="form-control invalidateInput" aria-describedby="basic-addon3" data-invalidate="INVALIDER">
@@ -365,5 +365,55 @@
             </div>
         </div>
     </div>
-
 {% endmacro %}
+
+
+
+
+{% macro button_open_modal_secure_delete(id, title, pathAction, content, page = 1, titleAttribut = 'Supprimer') %}
+    <button type="button" class="btn btn-outline-danger borderless" title="{{ titleAttribut }}"
+            data-bs-target="#delete{{ id }}" data-bs-toggle="modal">
+        <span class="fa fa-trash-alt"></span>
+    </button>
+
+    <div id="delete{{ id }}" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header d-flex align-items-start">
+                    <h4 class="modal-title">
+                        {{ title }}
+                    </h4>
+                    <button type="button" class="btn-close close-delete-user" data-bs-dismiss="modal" aria-label="Close" ></button>
+                </div>
+                <div class="modal-body">
+                    {{ content | nl2br | raw }}
+                    <div class="mt-3  alert alert-soft-warning">
+                        <label for="invalidateSinglePassword" class="form-label">
+                            <i class="fa fa-exclamation-triangle"></i>
+                            Merci de taper le mot <b>SUPPRIMER</b> afin de confirmer la suppression de l'utilisateur.
+                        </label>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control delete-input" aria-describedby="basic-addon3" data-delete="SUPPRIMER">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link cancel-delete-user-btn" data-bs-dismiss="modal" title="">
+                        <span class="fa fa-times"></span>
+                        Annuler
+                    </button>
+
+                    <form method="post" action="{{ path(pathAction, {id: id, page: page}) }}" style="display: inline-block">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ id) }}">
+                        <button type="submit" class="btn btn-danger delete-user-btn" disabled>
+                            <span class="fa fa-trash-alt"></span>
+                            Supprimer
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{%- endmacro -%}
