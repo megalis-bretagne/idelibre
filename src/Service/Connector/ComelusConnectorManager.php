@@ -16,6 +16,7 @@ use App\Service\Util\Sanitizer;
 use Doctrine\ORM\EntityManagerInterface;
 use Libriciel\ComelusApiWrapper\ComelusException;
 use Libriciel\ComelusApiWrapper\ComelusWrapper;
+use Libriciel\ComelusApiWrapper\Model\ComelusDocument;
 use Nyholm\Psr7\UploadedFile;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -60,8 +61,9 @@ class ComelusConnectorManager
         $this->em->flush();
     }
 
-    public function checkApiKey(?string $url, ?string $apiKey): bool
+    public function checkApiKey(string $url, string $apiKey): bool
     {
+//        dd($apiKey);
         try {
             $this->comelusWrapper->setApiKey($apiKey);
             $this->comelusWrapper->setUrl($url);
@@ -84,6 +86,10 @@ class ComelusConnectorManager
         return $this->comelusWrapper->getMailingLists();
     }
 
+    /**
+     * @throws UnsupportedExtensionException
+     * @throws ComelusException
+     */
     public function sendComelus(Sitting $sitting): ?string
     {
         $comelusConnetor = $this->comelusConnectorRepository->findOneBy(['structure' => $sitting->getStructure()]);
@@ -98,13 +104,13 @@ class ComelusConnectorManager
         $this->comelusWrapper->setUrl($comelusConnetor->getUrl());
 
 
+        $comelusDocument = new ComelusDocument();
+        $comelusDocument->setName($this->getDocumentName($sitting));
+        $comelusDocument->setMailingListId($comelusConnetor->getMailingListId());
+        $comelusDocument->setDescription($this->comelusContentGenerator->createDescription($comelusConnetor->getDescription(), $sitting));
+        $comelusDocument->setFiles($uploadedFiles);
 
-        $response = $this->comelusWrapper->createDocument(
-            $this->getDocumentName($sitting),
-            $comelusConnetor->getMailingListId(),
-            $this->comelusContentGenerator->createDescription($comelusConnetor->getDescription(), $sitting),
-            $uploadedFiles
-        );
+        $response = $this->comelusWrapper->createDocument($comelusDocument);
 
         $comelusId = $response['id'] ?? null;
 
