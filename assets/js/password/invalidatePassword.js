@@ -29,21 +29,24 @@ for (let i = 0; i < invalidateInputs.length; i++) {
 }
 
 
-// secure deletion
-// const deleteInputs = document.querySelectorAll('.delete-input');
-// for (let j = 0; j < deleteInputs.length; j++) {
-//
-//         let deleteInput = $(deleteInputs[i]);
-//         let dataDelete = $(deleteInputs[i]).data('delete');
-//         let deleteConfirmBtn = deleteInput.parents('.modal-content').find('.delete-user-btn');
-//         let cancelDeleteBtn = deleteInput.parents('.modal-content').find('.cancel-delete-user-btn');
-//         let closeDeleteBtn = deleteInput.parents('.modal-content').find('.close-delete-user');
-//
-//         secureConfirmation(deleteInput, deleteConfirmBtn, dataDelete);
-//         clearInput(deleteConfirmBtn, deleteInput, deleteConfirmBtn);
-//         clearInput(cancelDeleteBtn, deleteInput, deleteConfirmBtn);
-//         clearInput(closeDeleteBtn, deleteInput, deleteConfirmBtn);
-// }
+// secure single user/structure deletion
+const deleteInputs = document.querySelectorAll('.delete-input');
+for (let j = 0; j < deleteInputs.length; j++) {
+
+        let deleteInput = $(deleteInputs[j]);
+        let dataDelete = $(deleteInputs[j]).data('delete');
+        let deleteConfirmBtn = deleteInput.parents('.modal-content').find('.delete-btn');
+        let cancelDeleteBtn = deleteInput.parents('.modal-content').find('.cancel-delete-btn');
+        let closeDeleteBtn = deleteInput.parents('.modal-content').find('.delete-close-btn');
+
+        secureConfirmation(deleteInput, deleteConfirmBtn, dataDelete);
+        clearInput(deleteConfirmBtn, deleteInput, deleteConfirmBtn);
+        clearInput(cancelDeleteBtn, deleteInput, deleteConfirmBtn);
+        clearInput(closeDeleteBtn, deleteInput, deleteConfirmBtn);
+}
+
+// secure multiple user deletion
+
 
 
 
@@ -65,7 +68,9 @@ function secureConfirmation(target, confirmBtn, data) {
 function clearInput(btn, target, toDisable ) {
     btn.on('click', function (e) {
         target.val("");
-        toDisable.attr('disabled', true);
+        setTimeout(function() {
+            toDisable.attr('disabled', true);
+        }, 3000);
     });
 }
 

@@ -74,7 +74,7 @@
                         {{ macros.editButton('structure_edit', structure.id, 'Modifier la structure') }}
 
                         {% if is_granted('ROLE_SUPERADMIN') %}
-                            {{ macros.button_open_modal_delete(
+                            {{ macros.button_open_modal_secure_delete(
                                 structure.id,
                                 "Suppression de la structure " ~ structure.name,
                                 "structure_delete",
@@ -92,3 +92,7 @@
 {% endblock %}
 
 {% block pagePagination knp_pagination_render(structures) %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('invalidatePassword') }}
+{% endblock %}

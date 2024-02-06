@@ -84,7 +84,7 @@
 
                         {{ macros.editButton('user_edit', user.id, 'Modifier l\'utilisateur') }}
 
-                        {{ macros.button_open_modal_delete(
+                        {{ macros.button_open_modal_secure_delete(
                             user.id,
                             'Suppression de l\'utilisateur ' ~ user.lastName ~ ' ' ~ user.firstName,
                             'user_delete',
