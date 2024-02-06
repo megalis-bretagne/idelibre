@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-// Invalidate multiple users password
+// secure invalidate multiple users password
 const invalidatePassword =$('#invalidate-password');
 const dataInvalidate = invalidatePassword.data('invalidate');
 const invalidateConfirmBtn = $('#invalidate-confirm-btn');
@@ -12,7 +12,7 @@ clearInput(invalidateConfirmBtn, invalidatePassword, invalidateConfirmBtn);
 clearInput(cancelBtn, invalidatePassword, invalidateConfirmBtn);
 clearInput(closeBtn, invalidatePassword, invalidateConfirmBtn);
 
-// Invalidate single user password
+// secure invalidation user password
 const invalidateInputs = document.querySelectorAll('.invalidate-input');
 for (let i = 0; i < invalidateInputs.length; i++) {
 
@@ -29,25 +29,22 @@ for (let i = 0; i < invalidateInputs.length; i++) {
 }
 
 
-// secure user deletion
-const deleteInputs = document.querySelectorAll('.delete-input');
-for (let i = 0; i < deleteInputs.length; i++) {
+// secure deletion
+// const deleteInputs = document.querySelectorAll('.delete-input');
+// for (let j = 0; j < deleteInputs.length; j++) {
+//
+//         let deleteInput = $(deleteInputs[i]);
+//         let dataDelete = $(deleteInputs[i]).data('delete');
+//         let deleteConfirmBtn = deleteInput.parents('.modal-content').find('.delete-user-btn');
+//         let cancelDeleteBtn = deleteInput.parents('.modal-content').find('.cancel-delete-user-btn');
+//         let closeDeleteBtn = deleteInput.parents('.modal-content').find('.close-delete-user');
+//
+//         secureConfirmation(deleteInput, deleteConfirmBtn, dataDelete);
+//         clearInput(deleteConfirmBtn, deleteInput, deleteConfirmBtn);
+//         clearInput(cancelDeleteBtn, deleteInput, deleteConfirmBtn);
+//         clearInput(closeDeleteBtn, deleteInput, deleteConfirmBtn);
+// }
 
-        let deleteInput = $(deleteInputs[i]);
-        let dataDelete = $(deleteInputs[i]).data('delete');
-        let deleteConfirmBtn = deleteInput.parents('.modal-content').find('.delete-user-btn');
-        let cancelDeleteBtn = deleteInput.parents('.modal-content').find('.cancel-delete-user-btn');
-        let closeDeleteBtn = deleteInput.parents('.modal-content').find('.close-delete-user');
-
-        secureConfirmation(deleteInput, deleteConfirmBtn, dataDelete);
-        clearInput(deleteConfirmBtn, deleteInput, deleteConfirmBtn);
-        clearInput(cancelDeleteBtn, deleteInput, deleteConfirmBtn);
-        clearInput(closeDeleteBtn, deleteInput, deleteConfirmBtn);
-}
-
-
-// secure structure deletion
-const deleteStructureInputs = document.querySelectorAll('.delete-structure-input');
 
 
 
