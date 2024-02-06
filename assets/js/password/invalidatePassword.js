@@ -1,10 +1,10 @@
 import $ from 'jquery';
 
-// Invalidation des tous les utilisateurs
-const invalidatePassword =$('#invalidatePassword');
+// Invalidate multiple users password
+const invalidatePassword =$('#invalidate-password');
 const dataInvalidate = invalidatePassword.data('invalidate');
-const invalidateConfirmBtn = $('#invalidateConfirmBtn');
-const cancelBtn = $('#invalidateCancelBtn');
+const invalidateConfirmBtn = $('#invalidate-confirm-btn');
+const cancelBtn = $('#invalidate-cancel-btn');
 const closeBtn = $('#close-invalidate')
 
 secureConfirmation(invalidatePassword, invalidateConfirmBtn, dataInvalidate);
@@ -13,13 +13,13 @@ clearInput(cancelBtn, invalidatePassword, invalidateConfirmBtn);
 clearInput(closeBtn, invalidatePassword, invalidateConfirmBtn);
 
 // Invalidate single user password
-const invalidateInputs = document.querySelectorAll('.invalidateInput');
+const invalidateInputs = document.querySelectorAll('.invalidate-input');
 for (let i = 0; i < invalidateInputs.length; i++) {
 
     let invalidateInput = $(invalidateInputs[i]);
     let dataInvalidateSingle = $(invalidateInputs[i]).data('invalidate');
-    let invalidateSingleConfirmBtn = invalidateInput.parents('.modal-content').find('.invalidateSingleConfirmBtn');
-    let cancelSingleBtn = invalidateInput.parents('.modal-content').find('.invalidateSingleCancelBtn');
+    let invalidateSingleConfirmBtn = invalidateInput.parents('.modal-content').find('.invalidate-single-confirm-btn');
+    let cancelSingleBtn = invalidateInput.parents('.modal-content').find('.invalidate-single-cancel-btn');
     let closeSingleBtn = invalidateInput.parents('.modal-content').find('.close-invalidate-single');
 
     secureConfirmation(invalidateInput, invalidateSingleConfirmBtn, dataInvalidateSingle);
@@ -44,6 +44,10 @@ for (let i = 0; i < deleteInputs.length; i++) {
         clearInput(cancelDeleteBtn, deleteInput, deleteConfirmBtn);
         clearInput(closeDeleteBtn, deleteInput, deleteConfirmBtn);
 }
+
+
+// secure structure deletion
+const deleteStructureInputs = document.querySelectorAll('.delete-structure-input');
 
 
 

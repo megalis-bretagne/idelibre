@@ -89,7 +89,8 @@
                     <h4 class="modal-title">
                         {{ title }}
                     </h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
                 <div class="modal-body">
                     {{ content | nl2br | raw }}
                 </div>
@@ -178,8 +179,6 @@
 {%- endmacro -%}
 
 
-
-
 {% macro button_top_open_modal_post(title, content, pathAction, icon, btn_description = "Envoyer",
     confirmMessage = '<span class="fas fa-exclamation-circle"></span> Confirmer' ) %}
 
@@ -249,21 +248,21 @@
                             Merci de taper le mot <b>INVALIDER</b> afin de confirmer l'invalidation des mots de passe
                         </label>
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" id="invalidatePassword" aria-describedby="basic-addon3" data-invalidate="INVALIDER">
+                            <input type="text" class="form-control" id="invalidate-password" aria-describedby="basic-addon3" data-invalidate="INVALIDER">
                         </div>
                     </div>
 
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-link" data-bs-dismiss="modal" id="invalidateCancelBtn">
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal" id="invalidate-cancel-btn">
                         <span class="fa fa-times"></span>
                         Annuler
                     </button>
 
                     <form method="post" action="{{ path(pathAction) }}" style="display: inline-block">
                         <input type="hidden" name="_token" value="{{ csrf_token('postForm') }}">
-                        <button type="submit" class="btn btn-danger submit_post" id="invalidateConfirmBtn" disabled>
+                        <button type="submit" class="btn btn-danger submit_post" id="invalidate-confirm-btn" disabled>
                             <span class="fas fa-exclamation-triangle"></span>
                             Invalider tous les mots de passe
                         </button>
@@ -298,7 +297,7 @@
                             Merci de taper le mot <b>INVALIDER</b> afin de confirmer l'invalidation du mot de passe
                         </label>
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control invalidateInput" aria-describedby="basic-addon3" data-invalidate="INVALIDER">
+                            <input type="text" class="form-control invalidate-input" aria-describedby="basic-addon3" data-invalidate="INVALIDER">
                         </div>
                     </div>
 
@@ -306,13 +305,13 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-link invalidateSingleCancelBtn" data-bs-dismiss="modal" title="Annuler">
+                    <button type="button" class="btn btn-link invalidate-single-cancel-btn" data-bs-dismiss="modal" title="Annuler">
                         <span class="fa fa-times"></span>
                         Annuler
                     </button>
                     <form method="post" action="{{ path(pathAction, {id: id, page: page}) }}" style="display: inline-block">
                         <input type="hidden" name="_method" value="POST">
-                        <button type="submit" class="btn btn-primary invalidateSingleConfirmBtn" disabled>
+                        <button type="submit" class="btn btn-primary invalidate-single-confirm-btn" disabled>
                             <span class="fas fa-sync-alt"></span>
                             Invalider le mot de passe
                         </button>
@@ -370,50 +369,50 @@
 
 
 
-{% macro button_open_modal_secure_delete(id, title, pathAction, content, page = 1, titleAttribut = 'Supprimer') %}
-    <button type="button" class="btn btn-outline-danger borderless" title="{{ titleAttribut }}"
-            data-bs-target="#delete{{ id }}" data-bs-toggle="modal">
-        <span class="fa fa-trash-alt"></span>
-    </button>
+{#{% macro button_open_modal_secure_delete(id, title, pathAction, content, page = 1, titleAttribut = 'Supprimer') %}#}
+{#    <button type="button" class="btn btn-outline-danger borderless" title="{{ titleAttribut }}"#}
+{#            data-bs-target="#delete{{ id }}" data-bs-toggle="modal">#}
+{#        <span class="fa fa-trash-alt"></span>#}
+{#    </button>#}
 
-    <div id="delete{{ id }}" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header d-flex align-items-start">
-                    <h4 class="modal-title">
-                        {{ title }}
-                    </h4>
-                    <button type="button" class="btn-close close-delete-user" data-bs-dismiss="modal" aria-label="Close" ></button>
-                </div>
-                <div class="modal-body">
-                    {{ content | nl2br | raw }}
-                    <div class="mt-3  alert alert-soft-warning">
-                        <label for="invalidateSinglePassword" class="form-label">
-                            <i class="fa fa-exclamation-triangle"></i>
-                            Merci de taper le mot <b>SUPPRIMER</b> afin de confirmer la suppression de l'utilisateur.
-                        </label>
-                        <div class="input-group mb-3">
-                            <input type="text" class="form-control delete-input" aria-describedby="basic-addon3" data-delete="SUPPRIMER">
-                        </div>
-                    </div>
+{#    <div id="delete{{ id }}" class="modal fade" role="dialog">#}
+{#        <div class="modal-dialog">#}
+{#            <div class="modal-content">#}
+{#                <div class="modal-header d-flex align-items-start">#}
+{#                    <h4 class="modal-title">#}
+{#                        {{ title }}#}
+{#                    </h4>#}
+{#                    <button type="button" class="btn-close close-delete-user" data-bs-dismiss="modal" aria-label="Close" ></button>#}
+{#                </div>#}
+{#                <div class="modal-body">#}
+{#                    {{ content | nl2br | raw }}#}
+{#                    <div class="mt-3  alert alert-soft-warning">#}
+{#                        <label for="invalidateSinglePassword" class="form-label">#}
+{#                            <i class="fa fa-exclamation-triangle"></i>#}
+{#                            Merci de taper le mot <b>SUPPRIMER</b> afin de confirmer la suppression de l'utilisateur.#}
+{#                        </label>#}
+{#                        <div class="input-group mb-3">#}
+{#                            <input type="text" class="form-control delete-input" data-delete="SUPPRIMER">#}
+{#                        </div>#}
+{#                    </div>#}
 
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-link cancel-delete-user-btn" data-bs-dismiss="modal" title="">
-                        <span class="fa fa-times"></span>
-                        Annuler
-                    </button>
+{#                </div>#}
+{#                <div class="modal-footer">#}
+{#                    <button type="button" class="btn btn-link cancel-delete-user-btn" data-bs-dismiss="modal" title="">#}
+{#                        <span class="fa fa-times"></span>#}
+{#                        Annuler#}
+{#                    </button>#}
 
-                    <form method="post" action="{{ path(pathAction, {id: id, page: page}) }}" style="display: inline-block">
-                        <input type="hidden" name="_method" value="DELETE">
-                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ id) }}">
-                        <button type="submit" class="btn btn-danger delete-user-btn" disabled>
-                            <span class="fa fa-trash-alt"></span>
-                            Supprimer
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-{%- endmacro -%}
+{#                    <form method="post" action="{{ path(pathAction, {id: id, page: page}) }}" style="display: inline-block">#}
+{#                        <input type="hidden" name="_method" value="DELETE">#}
+{#                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ id) }}">#}
+{#                        <button type="submit" class="btn btn-danger delete-user-btn" disabled>#}
+{#                            <span class="fa fa-trash-alt"></span>#}
+{#                            Supprimer#}
+{#                        </button>#}
+{#                    </form>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{#{%- endmacro -%}#}

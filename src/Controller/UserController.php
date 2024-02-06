@@ -141,11 +141,7 @@ class UserController extends AbstractController
 
             return $this->redirectToRoute('user_index');
         }
-        //        dd($user);
-        if ($user->getDeputy() !== null) {
-            $this->addFlash("error", "Veuillez retirer le suppléant avant de supprimer cet utilisateur");
-            return $this->redirectToRoute('user_index');
-        }
+
         $userManager->delete($user);
         $this->addFlash('success', 'L\'utilisateur a bien été supprimé');
 

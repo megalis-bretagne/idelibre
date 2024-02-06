@@ -12,6 +12,7 @@ use App\Security\Password\ResetPassword;
 use App\Service\role\RoleManager;
 use App\Service\Subscription\SubscriptionManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -30,6 +31,9 @@ class UserManager
     ) {
     }
 
+    /**
+     * @throws EntityNotFoundException
+     */
     public function save(User $user, ?string $plainPassword, ?Structure $structure): bool
     {
         $user->setStructure($structure);
@@ -96,6 +100,9 @@ class UserManager
         return null;
     }
 
+    /**
+     * @throws EntityNotFoundException
+     */
     public function saveAdmin(User $user, Role $role = null, ?Group $group = null, $resetPassword = false): void
     {
         if ($resetPassword) {
@@ -127,9 +134,26 @@ class UserManager
 
     public function delete(User $user): void
     {
+        $this->removeDeputy($user);
+        $this->removeTitular($user);
         $this->em->remove($user);
         $this->em->flush();
     }
+
+    private function removeDeputy(User $user): void
+    {
+        if ($user->getDeputy()) {
+            $user->setDeputy(null);
+        }
+    }
+
+    private function removeTitular(User $user): void
+    {
+        if($user->getRole()->getName() === 'Deputy' && $user->getTitular()){
+            $user->setTitular(null);
+        }
+    }
+
 
     public function preference(User $user, ?string $plainPassword = null): ?bool
     {
