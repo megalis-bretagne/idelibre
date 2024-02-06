@@ -110,7 +110,7 @@ class AttendanceControllerTest extends WebTestCase
             'deputy' => null
         ]);
 
-        $convocation2  = ConvocationFactory::createOne([
+        $convocation2 = ConvocationFactory::createOne([
             'sitting' => SittingStory::sittingConseilLibriciel(),
             'user' => $mandator,
             'category' => Convocation::CATEGORY_CONVOCATION,

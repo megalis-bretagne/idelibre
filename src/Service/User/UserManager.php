@@ -149,7 +149,7 @@ class UserManager
 
     private function removeTitular(User $user): void
     {
-        if($user->getRole()->getName() === 'Deputy' && $user->getTitular()){
+        if ($user->getRole()->getName() === 'Deputy' && $user->getTitular()) {
             $user->setTitular(null);
         }
     }

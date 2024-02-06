@@ -58,18 +58,9 @@ clearInput(deleteBatchConfirmBtn, deleteBatchInput, deleteBatchConfirmBtn);
 clearInput(cancelDeleteBtn, deleteBatchInput, deleteBatchConfirmBtn);
 clearInput(closeDeleteBatchBtn, deleteBatchInput, deleteBatchConfirmBtn);
 
-
-
-
-
-
-
-
 function secureConfirmation(target, confirmBtn, data) {
     $(target).bind("input changes", function() {
         const value =  $(this).val();
-        console.log(data + " " + value)
-
 
         if(value === data) {
             confirmBtn.removeAttr('disabled');
