@@ -45,7 +45,20 @@ for (let j = 0; j < deleteInputs.length; j++) {
         clearInput(closeDeleteBtn, deleteInput, deleteConfirmBtn);
 }
 
+
 // secure multiple user deletion
+let deleteBatchInput =  $('#delete-batch-input')
+let dataDelete = deleteBatchInput.data('delete');
+let deleteBatchConfirmBtn = deleteBatchInput.parents('.modal-content').find('#delete-batch-btn');
+let cancelDeleteBtn = deleteBatchInput.parents('.modal-content').find('#cancel-delete-batch-btn');
+let closeDeleteBatchBtn = deleteBatchInput.parents('.modal-content').find('#delete-batch-close-btn');
+
+secureConfirmation(deleteBatchInput, deleteBatchConfirmBtn, dataDelete);
+clearInput(deleteBatchConfirmBtn, deleteBatchInput, deleteBatchConfirmBtn);
+clearInput(cancelDeleteBtn, deleteBatchInput, deleteBatchConfirmBtn);
+clearInput(closeDeleteBatchBtn, deleteBatchInput, deleteBatchConfirmBtn);
+
+
 
 
 
