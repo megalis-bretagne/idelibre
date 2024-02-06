@@ -140,6 +140,18 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->orderBy('u.lastName', 'ASC');
     }
 
+    public function findActorsAndDeputiesByStructure(Structure $structure): QueryBuilder
+    {
+        return $this->createQueryBuilder('u')
+            ->leftJoin('u.role', 'r')
+            ->andWhere(' r.name = :actor OR r.name = :deputy')
+            ->setParameter('actor', Role_Name::NAME_ROLE_ACTOR)
+            ->setParameter('deputy', Role_Name::NAME_ROLE_DEPUTY)
+            ->andWhere('u.structure = :structure')
+            ->setParameter('structure', $structure)
+            ->orderBy('u.lastName', 'ASC');
+    }
+
     /**
      * @throws NonUniqueResultException
      */
@@ -161,7 +173,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     /**
      * @param string[] $userIds
      */
-    public function deleteActorsByStructure(Structure $structure, array $userIds)
+    public function deleteActorsAndDeputiesByStructure(Structure $structure, array $userIds)
     {
         $qb = $this->createQueryBuilder('u')
             ->delete()

@@ -51,6 +51,7 @@ for (let j = 0; j < deleteInputs.length; j++) {
 
 
 
+
 function secureConfirmation(target, confirmBtn, data) {
     $(target).bind("input changes", function() {
         const value =  $(this).val();

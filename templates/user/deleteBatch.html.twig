@@ -20,23 +20,29 @@
                     <tr class="d-flex">
                         <th class="col-1"></th>
                         <th class="col-3">Prénom</th>
-                        <th class="col-4">Nom</th>
-                        <th class="col-4">Nom d'utilisateur</th>
+                        <th class="col-3">Nom</th>
+                        <th class="col-2">Profil</th>
+                        <th class="col-3">Nom d'utilisateur</th>
                     </tr>
                     </thead>
                     <tbody>
                     {% for actor in actors %}
                         <tr class="d-flex ">
                             <td class="col-1 ">
-                                <input type="checkbox" class="checkbox select-batch"
-                                       data-username="{{ actor.username }}"
-                                       data-firstname="{{ actor.firstName }}"
-                                       data-lastname="{{ actor.lastName }}"
-                                       value="{{ actor.id }}">
+
+                                <span class="form-check">
+                                    <input type="checkbox" class="checkbox select-batch form-check-input"
+                                           data-username="{{ actor.username }}"
+                                           data-firstname="{{ actor.firstName }}"
+                                           data-lastname="{{ actor.lastName }}"
+                                           data-role="{{ actor.role.prettyName }}"
+                                           value="{{ actor.id }}">
+                                </span>
                             </td>
                             <td class="col-3">{{ actor.firstName }}</td>
-                            <td class="col-4">{{ actor.lastName }}</td>
-                            <td class="col-4">{{ actor.username }}</td>
+                            <td class="col-3">{{ actor.lastName }}</td>
+                            <td class="col-2">{{ actor.role.prettyName }}</td>
+                            <td class="col-3">{{ actor.username }}</td>
                         </tr>
                     {% endfor %}
                     </tbody>
@@ -52,12 +58,8 @@
                         Supprimer
                     </button>
                 </div>
-
-
             </div>
         </div>
-
-
     </div>
 
 
