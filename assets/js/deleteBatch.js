@@ -26,7 +26,8 @@ window.deleteAll = function() {
             toDelete.push({
                 id: this.value,
                 username: $(this).data('username'),
-                fullName: $(this).data('firstname') + " " + $(this).data('lastname')
+                fullName: $(this).data('firstname') + " " + $(this).data('lastname'),
+                role: $(this).data('role')
             });
         }
     });
@@ -50,8 +51,9 @@ function generateUserList() {
     for (let i = 0; i < deleteList.length; i++) {
         html += '<tr class="d-flex">'
 
-        html += '<td class="col-7">' +  deleteList[i].fullName + '</td>' ;
-        html += '<td class="col-5">' + deleteList[i].username + '</td>';
+        html += '<td class="col-4">' +  deleteList[i].fullName + '</td>' ;
+        html += '<td class="col-4">' + deleteList[i].username + '</td>';
+        html += '<td class="col-4">' + deleteList[i].role + '</td>';
         html += '</tr>';
     }
     html += '</tbody> </table>';
