@@ -242,10 +242,6 @@ let app = new Vue({
                 (response) => {
                     this.getConvocations();
                 })
-                .then(() => {
-
-                    this.setInfoMessage("Présences enregistrées")
-                })
                 .catch((e) => {
                     console.log("erreur : " + e);
                     this.setErrorMessage("Erreur lors de l'enregistrement des présences")
@@ -255,6 +251,8 @@ let app = new Vue({
                     this.showModalAttendance = false
                     this.changedAttendance = [];
                     this.getCountNotAnswered();
+                    this.setInfoMessage("Présences enregistrées");
+                    return false;
                 });
             },
 
