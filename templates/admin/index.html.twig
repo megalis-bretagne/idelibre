@@ -68,7 +68,7 @@
                         {{ macros.editButton('admin_edit', user.id, 'Modifier l\'administrateur') }}
 
                         {% if (app.user != user) %}
-                            {{ macros.button_open_modal_delete(
+                            {{ macros.button_open_modal_secure_delete(
                                 user.id,
                                 'Suppression de l\'administrateur ' ~ user.lastName ~ ' ' ~ user.firstName,
                                 'admin_delete',
@@ -87,5 +87,5 @@
 {% block pagePagination knp_pagination_render(users) %}
 
 {% block javascripts %}
-    {{ encore_entry_script_tags('invalidatePassword') }}
+    {{ encore_entry_script_tags('passphraseConfirmationBox') }}
 {% endblock %}

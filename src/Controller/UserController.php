@@ -141,11 +141,7 @@ class UserController extends AbstractController
 
             return $this->redirectToRoute('user_index');
         }
-        //        dd($user);
-        if ($user->getDeputy() !== null) {
-            $this->addFlash("error", "Veuillez retirer le suppléant avant de supprimer cet utilisateur");
-            return $this->redirectToRoute('user_index');
-        }
+
         $userManager->delete($user);
         $this->addFlash('success', 'L\'utilisateur a bien été supprimé');
 
@@ -159,12 +155,12 @@ class UserController extends AbstractController
     public function deleteBatch(UserRepository $userRepository, Request $request): Response
     {
         if ($request->isMethod('POST')) {
-            $userRepository->deleteActorsByStructure($this->getUser()->getStructure(), $request->request->all('users') ?? []);
+            $userRepository->deleteActorsAndDeputiesByStructure($this->getUser()->getStructure(), $request->request->all('users') ?? []);
             $this->addFlash('success', 'Les élus ont été supprimés.');
 
             return $this->redirectToRoute('user_index');
         }
-        $actors = $userRepository->findActorsByStructure($this->getUser()->getStructure())->getQuery()->getResult();
+        $actors = $userRepository->findActorsAndDeputiesByStructure($this->getUser()->getStructure())->getQuery()->getResult();
 
         return $this->render('user/deleteBatch.html.twig', [
             'actors' => $actors,
