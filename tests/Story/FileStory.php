@@ -12,49 +12,49 @@ final class FileStory extends Story
         $this->addState('fileProject1', FileFactory::new([
             'name' => 'Fichier projet 1',
             'size' => 100,
-            'path' => '/tmp/fileProject1',
+            'path' =>  TMP_TESTDIR . '/fileProject1',
         ]));
 
         $this->addState('fileProject2', FileFactory::new([
             'name' => 'Fichier projet 2',
             'size' => 100,
-            'path' => '/tmp/fileProject2',
+            'path' => TMP_TESTDIR . '/fileProject2',
         ]));
 
         $this->addState('fileAnnex1', FileFactory::new([
             'name' => 'Fichier annexe 1',
             'size' => 100,
-            'path' => '/tmp/fileAnnex1',
+            'path' => TMP_TESTDIR . '/fileAnnex1',
         ]));
 
         $this->addState('fileAnnex2', FileFactory::new([
             'name' => 'Fichier annexe 2',
             'size' => 100,
-            'path' => '/tmp/fileAnnex2',
+            'path' =>  TMP_TESTDIR . '/fileAnnex2',
         ]));
 
         $this->addState('fileConvocation', FileFactory::new([
             'name' => 'Fichier de convocation',
             'size' => 100,
-            'path' => '/tmp/convocation',
+            'path' => TMP_TESTDIR .'/convocation',
         ]));
 
         $this->addState('fileConvocation2', FileFactory::new([
             'name' => 'Fichier de convocation',
             'size' => 100,
-            'path' => '/tmp/convocation',
+            'path' => TMP_TESTDIR . '/convocation',
         ]));
 
         $this->addState('fileConvocation3', FileFactory::new([
             'name' => 'Fichier de convocation',
             'size' => 100,
-            'path' => '/tmp/convocation',
+            'path' => TMP_TESTDIR . '/convocation',
         ]));
 
         $this->addState('fileConvocation4', FileFactory::new([
             'name' => 'Fichier de convocation 4',
             'size' => 100,
-            'path' => '/tmp/convocation',
+            'path' => TMP_TESTDIR . '/convocation',
         ]));
 
         $this->addState('fileEncrypted', FileFactory::new([
@@ -78,7 +78,7 @@ final class FileStory extends Story
         $this->addState('fileConvocationOther', FileFactory::new([
             'name' => 'Fichier de convocation autre',
             'size' => 100,
-            'path' => '/tmp/convocation',
+            'path' => TMP_TESTDIR . '/convocation',
         ]));
     }
 }

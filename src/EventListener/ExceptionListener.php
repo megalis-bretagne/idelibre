@@ -18,6 +18,20 @@ class ExceptionListener implements EventSubscriberInterface
 
     public function onKernelException(ExceptionEvent $event)
     {
+
+        if(getenv('APP_ENV') === 'test') {
+            $response = new JsonResponse(
+                ['message' => $event->getThrowable()->getMessage()],
+                $this->getStatusCode($event->getThrowable())
+            );
+            $response->headers->set('Content-Type', 'application/problem+json');
+
+            $event->setResponse($response);
+
+            return;
+        }
+
+
         if (!$this->shouldReturnJson($event)) {
             return;
         }

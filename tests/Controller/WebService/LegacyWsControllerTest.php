@@ -52,19 +52,19 @@ class LegacyWsControllerTest extends WebTestCase
     public function testAddSitting()
     {
         $filesystem = new FileSystem();
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/convocation.pdf');
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/project1.pdf');
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/project2.pdf');
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/project3.pdf');
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/annex1.pdf');
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/annex2.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/resources/convocation.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/resources/project1.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/resources/project2.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/resources/project3.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/resources/annex1.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/resources/annex2.pdf');
 
-        $fileConvocation = new UploadedFile(__DIR__ . '/../../resources/convocation.pdf', 'convocation.pdf', 'application/pdf');
-        $fileProject1 = new UploadedFile(__DIR__ . '/../../resources/project1.pdf', 'project1.pdf', 'application/pdf');
-        $fileProject2 = new UploadedFile(__DIR__ . '/../../resources/project2.pdf', 'project2.pdf', 'application/pdf');
-        $fileProject3 = new UploadedFile(__DIR__ . '/../../resources/project3.pdf', 'project3.pdf', 'application/pdf');
-        $fileAnnex1 = new UploadedFile(__DIR__ . '/../../resources/annex1.pdf', 'annex1.pdf', 'application/pdf');
-        $fileAnnex2 = new UploadedFile(__DIR__ . '/../../resources/annex2.pdf', 'annex2.pdf', 'application/pdf');
+        $fileConvocation = new UploadedFile(TMP_TESTDIR . '/resources/convocation.pdf', 'convocation.pdf', 'application/pdf');
+        $fileProject1 = new UploadedFile(TMP_TESTDIR . '/resources/project1.pdf', 'project1.pdf', 'application/pdf');
+        $fileProject2 = new UploadedFile(TMP_TESTDIR . '/resources/project2.pdf', 'project2.pdf', 'application/pdf');
+        $fileProject3 = new UploadedFile(TMP_TESTDIR . '/resources/project3.pdf', 'project3.pdf', 'application/pdf');
+        $fileAnnex1 = new UploadedFile(TMP_TESTDIR . '/resources/annex1.pdf', 'annex1.pdf', 'application/pdf');
+        $fileAnnex2 = new UploadedFile(TMP_TESTDIR . '/resources/annex2.pdf', 'annex2.pdf', 'application/pdf');
 
         $username = 'secretary1';
         $password = 'password';
@@ -156,19 +156,19 @@ class LegacyWsControllerTest extends WebTestCase
     public function testAddSittingExistingType()
     {
         $filesystem = new FileSystem();
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/convocation.pdf');
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/project1.pdf');
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/project2.pdf');
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/project3.pdf');
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/annex1.pdf');
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/annex2.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/resources/convocation.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/resources/project1.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/resources/project2.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/resources/project3.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/resources/annex1.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/resources/annex2.pdf');
 
-        $fileConvocation = new UploadedFile(__DIR__ . '/../../resources/convocation.pdf', 'convocation.pdf', 'application/pdf');
-        $fileProject1 = new UploadedFile(__DIR__ . '/../../resources/project1.pdf', 'project1.pdf', 'application/pdf');
-        $fileProject2 = new UploadedFile(__DIR__ . '/../../resources/project2.pdf', 'project2.pdf', 'application/pdf');
-        $fileProject3 = new UploadedFile(__DIR__ . '/../../resources/project3.pdf', 'project3.pdf', 'application/pdf');
-        $fileAnnex1 = new UploadedFile(__DIR__ . '/../../resources/annex1.pdf', 'annex1.pdf', 'application/pdf');
-        $fileAnnex2 = new UploadedFile(__DIR__ . '/../../resources/annex2.pdf', 'annex2.pdf', 'application/pdf');
+        $fileConvocation = new UploadedFile(TMP_TESTDIR . '/resources/convocation.pdf', 'convocation.pdf', 'application/pdf');
+        $fileProject1 = new UploadedFile(TMP_TESTDIR . '/resources/project1.pdf', 'project1.pdf', 'application/pdf');
+        $fileProject2 = new UploadedFile(TMP_TESTDIR . '/resources/project2.pdf', 'project2.pdf', 'application/pdf');
+        $fileProject3 = new UploadedFile(TMP_TESTDIR . '/resources/project3.pdf', 'project3.pdf', 'application/pdf');
+        $fileAnnex1 = new UploadedFile(TMP_TESTDIR . '/resources/annex1.pdf', 'annex1.pdf', 'application/pdf');
+        $fileAnnex2 = new UploadedFile(TMP_TESTDIR . '/resources/annex2.pdf', 'annex2.pdf', 'application/pdf');
 
         $username = 'secretary1';
         $password = 'password';
@@ -263,19 +263,19 @@ class LegacyWsControllerTest extends WebTestCase
     public function testAddSittingActeurs_convoquesNotJson()
     {
         $filesystem = new FileSystem();
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/convocation.pdf');
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/project1.pdf');
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/project2.pdf');
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/project3.pdf');
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/annex1.pdf');
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/annex2.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/resources/convocation.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/resources/project1.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/resources/project2.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/resources/project3.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/resources/annex1.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/resources/annex2.pdf');
 
-        $fileConvocation = new UploadedFile(__DIR__ . '/../../resources/convocation.pdf', 'convocation.pdf', 'application/pdf');
-        $fileProject1 = new UploadedFile(__DIR__ . '/../../resources/project1.pdf', 'project1.pdf', 'application/pdf');
-        $fileProject2 = new UploadedFile(__DIR__ . '/../../resources/project2.pdf', 'project2.pdf', 'application/pdf');
-        $fileProject3 = new UploadedFile(__DIR__ . '/../../resources/project3.pdf', 'project3.pdf', 'application/pdf');
-        $fileAnnex1 = new UploadedFile(__DIR__ . '/../../resources/annex1.pdf', 'annex1.pdf', 'application/pdf');
-        $fileAnnex2 = new UploadedFile(__DIR__ . '/../../resources/annex2.pdf', 'annex2.pdf', 'application/pdf');
+        $fileConvocation = new UploadedFile(TMP_TESTDIR . '/resources/convocation.pdf', 'convocation.pdf', 'application/pdf');
+        $fileProject1 = new UploadedFile(TMP_TESTDIR . '/resources/project1.pdf', 'project1.pdf', 'application/pdf');
+        $fileProject2 = new UploadedFile(TMP_TESTDIR . '/resources/project2.pdf', 'project2.pdf', 'application/pdf');
+        $fileProject3 = new UploadedFile(TMP_TESTDIR . '/resources/project3.pdf', 'project3.pdf', 'application/pdf');
+        $fileAnnex1 = new UploadedFile(TMP_TESTDIR . '/resources/annex1.pdf', 'annex1.pdf', 'application/pdf');
+        $fileAnnex2 = new UploadedFile(TMP_TESTDIR . '/resources/annex2.pdf', 'annex2.pdf', 'application/pdf');
 
         $username = 'secretary1';
         $password = 'password';
@@ -390,9 +390,9 @@ class LegacyWsControllerTest extends WebTestCase
     public function testAddSittingNoProjects()
     {
         $filesystem = new FileSystem();
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/convocation.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/resources/convocation.pdf');
 
-        $fileConvocation = new UploadedFile(__DIR__ . '/../../resources/convocation.pdf', 'convocation.pdf', 'application/pdf');
+        $fileConvocation = new UploadedFile(TMP_TESTDIR . '/resources/convocation.pdf', 'convocation.pdf', 'application/pdf');
 
         $username = 'secretary1';
         $password = 'password';

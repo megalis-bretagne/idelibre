@@ -81,9 +81,9 @@ class SittingControllerTest extends WebTestCase
         $this->assertCount(1, $item);
 
         $filesystem = new FileSystem();
-        $filesystem->copy(__DIR__ . '/../resources/fichier.pdf', __DIR__ . '/../resources/convocation.pdf');
+        $filesystem->copy(__DIR__ . '/../resources/fichier.pdf', TMP_TESTDIR . '/resources/convocation.pdf');
 
-        $fileConvocation = new UploadedFile(__DIR__ . '/../resources/convocation.pdf', 'convocation.pdf', 'application/pdf');
+        $fileConvocation = new UploadedFile(TMP_TESTDIR . '/resources/convocation.pdf', 'convocation.pdf', 'application/pdf');
 
         $form = $crawler->selectButton('Ajouter la séance')->form();
 
@@ -294,7 +294,7 @@ class SittingControllerTest extends WebTestCase
     public function testEditInformation()
     {
         $filesystem = new Filesystem();
-        $filesystem->copy(__DIR__ . '/../resources/fichier.pdf', '/tmp/convocation');
+        $filesystem->copy(__DIR__ . '/../resources/fichier.pdf', TMP_TESTDIR . '/convocation');
         $sitting = SittingStory::sittingConseilLibriciel();
 
 
