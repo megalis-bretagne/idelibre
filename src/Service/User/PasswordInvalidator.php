@@ -18,27 +18,13 @@ class PasswordInvalidator
     public const INVALIDATE_PASSWORD_SUBJECT = 'Réinitialisation de votre mot de passe';
 
     public function __construct(
-        private EntityManagerInterface $em,
-        private UserRepository $userRepository,
-        private EmailServiceInterface $emailService,
+        private EntityManagerInterface         $em,
+        private UserRepository                 $userRepository,
+        private EmailServiceInterface          $emailService,
         private readonly ParameterBagInterface $bag,
-        private readonly Security $security
-    ) {
-    }
-
-
-    public function isAuthorizeInvalidate(User $userToDeactivate, User $loggedInUser): bool
+    )
     {
-        return $this->isAdminRole();
     }
-
-    private function isAdminRole()
-    {
-        return $this->security->isGranted('ROLE_SUPERADMIN') ||
-                $this->security->isGranted('ROLE_GROUP_ADMIN') ||
-                $this->security->isGranted('ROLE_STRUCTURE_ADMIN');
-    }
-
 
     /**
      * @param array<User> $users
