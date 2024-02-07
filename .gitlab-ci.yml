@@ -4,7 +4,7 @@ include:
     file: '/publish-container-to-registry.yml'
 
   - project: "libriciel/integration-continue/templates"
-    ref:  security-check@1.2.1
+    ref: security-check@1.2.1
     file: 'jobs/security-check/security-check.yml'
 
   - project: "libriciel/integration-continue/templates"
@@ -132,14 +132,18 @@ phpTestWithoutCovering:
     COMPOSER_PROCESS_TIMEOUT: 1200
   before_script:
     - cd /app
-    - apt -y install php-xdebug
-    - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-    - php composer-setup.php --install-dir=/usr/local/bin
-    - mv /usr/local/bin/composer.phar /usr/local/bin/composer
+  #    - apt -y install php-xdebug
+  #    - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+  #    - php composer-setup.php --install-dir=/usr/local/bin
+  #    - mv /usr/local/bin/composer.phar /usr/local/bin/composer
   script:
-    - composer install
-    - SYMFONY_DEPRECATIONS_HELPER=disabled vendor/bin/paratest
 
+    - SYMFONY_DEPRECATIONS_HELPER=disabled vendor/bin/paratest --coverage-text --colors=never --coverage-clover coverage/coverage.xml --log-junit coverage/logfile.xml
+    - cp -rf coverage $CI_PROJECT_DIR
+  artifacts:
+    paths:
+      - coverage
+    expire_in: 1h
 
 quality:
   stage: quality
