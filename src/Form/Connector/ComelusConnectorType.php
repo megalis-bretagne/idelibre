@@ -4,7 +4,7 @@ namespace App\Form\Connector;
 
 use App\Entity\Connector\ComelusConnector;
 use App\Form\Type\LsChoiceType;
-use App\Service\Connector\Comelus\ComelusConnectorManager;
+use App\Service\Connector\ComelusConnectorManager;
 use Libriciel\ComelusApiWrapper\ComelusException;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -24,7 +24,7 @@ class ComelusConnectorType extends AbstractType
         $this->comelusConnectorManager = $comelusConnectorManager;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         /** @var ComelusConnector $comelusConnector */
         $comelusConnector = $options['data'] ?? null;

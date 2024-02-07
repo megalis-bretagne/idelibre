@@ -17,9 +17,9 @@ use App\Service\Util\Sanitizer;
 use Doctrine\ORM\EntityManagerInterface;
 use Libriciel\ComelusApiWrapper\ComelusException;
 use Libriciel\ComelusApiWrapper\ComelusWrapper;
+use Libriciel\ComelusApiWrapper\Model\ComelusDocument;
 use Nyholm\Psr7\UploadedFile;
 use Symfony\Component\Filesystem\Filesystem;
-//use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class ComelusConnectorManager

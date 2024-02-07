@@ -5,14 +5,16 @@ namespace App\Controller\api;
 use App\Entity\Sitting;
 use App\Repository\UserRepository;
 use App\Requirements\Is;
-use App\Service\Connector\Comelus\ComelusConnectorManager;
+use App\Service\Connector\ComelusConnectorManager;
 use App\Service\Connector\LsvoteConnectorManager;
 use App\Service\Connector\LsvoteSittingCreationException;
 use App\Service\Convocation\ConvocationManager;
 use App\Service\Email\EmailNotSendException;
 use App\Service\Email\NotificationService;
+use App\Service\File\Generator\UnsupportedExtensionException;
 use App\Service\Util\Converter;
 use Doctrine\DBAL\ConnectionException;
+use Libriciel\ComelusApiWrapper\ComelusException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -59,6 +61,10 @@ class SittingController extends AbstractController
         return $this->json($sitting, 200, [], ['groups' => ['sitting']]);
     }
 
+    /**
+     * @throws UnsupportedExtensionException
+     * @throws ComelusException
+     */
     #[Route(path: '/api/sittings/{id}/sendComelus', name: 'api_sitting_send_comelus', methods: ['POST'])]
     #[IsGranted('MANAGE_SITTINGS', subject: 'sitting')]
     public function sendComelus(Sitting $sitting, ComelusConnectorManager $comelusConnectorManager): JsonResponse

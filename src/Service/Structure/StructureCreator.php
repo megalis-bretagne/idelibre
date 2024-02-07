@@ -10,7 +10,7 @@ use App\Entity\Structure;
 use App\Entity\User;
 use App\Security\Password\ResetPassword;
 use App\Service\Configuration\ConfigurationManager;
-use App\Service\Connector\Comelus\ComelusConnectorManager;
+use App\Service\Connector\ComelusConnectorManager;
 use App\Service\Connector\LsmessageConnectorManager;
 use App\Service\Connector\LsvoteConnectorManager;
 use App\Service\EmailTemplate\DefaultTemplateCreator;
@@ -18,7 +18,9 @@ use App\Service\Subscription\SubscriptionManager;
 use App\Service\Theme\ThemeManager;
 use App\Service\User\UserManager;
 use Doctrine\DBAL\ConnectionException;
+use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 class StructureCreator
@@ -41,6 +43,9 @@ class StructureCreator
      * @throws ComelusConnectorException
      * @throws LsmessageConnectorException
      * @throws ConnectionException
+     * @throws Exception
+     * @throws LsvoteConnectorException
+     * @throws EntityNotFoundException
      */
     public function create(Structure $structure, User $user, Group $group = null): ?ConstraintViolationListInterface
     {

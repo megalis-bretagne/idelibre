@@ -18,6 +18,7 @@ class ComelusConnector extends Connector
     public const NAME = 'comelus';
     public const MAX_URL_LENGTH = 255;
     public const MAX_API_KEY_LENGTH = 255;
+
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]

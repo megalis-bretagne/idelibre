@@ -4,7 +4,7 @@ namespace App\Controller\Connector;
 
 use App\Form\Connector\ComelusConnectorType;
 use App\Repository\Connector\ComelusConnectorRepository;
-use App\Service\Connector\Comelus\ComelusConnectorManager;
+use App\Service\Connector\ComelusConnectorManager;
 use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Libriciel\ComelusApiWrapper\ComelusException;
