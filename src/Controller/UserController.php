@@ -28,9 +28,10 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class UserController extends AbstractController
 {
     public function __construct(
-        private readonly UserManager $userManager,
+        private readonly UserManager    $userManager,
         private readonly UserRepository $userRepository,
-    ) {
+    )
+    {
     }
 
     #[Route(path: '/user', name: 'user_index')]
@@ -123,7 +124,6 @@ class UserController extends AbstractController
         }
 
 
-
         return $this->render('user/edit.html.twig', [
             'form' => $form->createView(),
             'suffix' => $this->getUser()->getStructure()->getSuffix(),
@@ -213,12 +213,6 @@ class UserController extends AbstractController
     #[IsGranted('MANAGE_USERS', subject: 'user')]
     public function invalidateUserPassword(User $user, Request $request, PasswordInvalidator $passwordInvalidator): Response
     {
-        if (!$passwordInvalidator->isAuthorizeInvalidate($user, $this->getUser())) {
-            $this->addFlash('error', 'Impossible d\'invalider le mot de passe de cet utilisateur');
-
-            return $this->redirectToRoute('user_index');
-        }
-
         $passwordInvalidator->invalidatePassword([$user], $user->getStructure()->getReplyTo());
 
         $this->addFlash(
