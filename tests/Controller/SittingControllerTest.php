@@ -294,7 +294,7 @@ class SittingControllerTest extends WebTestCase
     public function testEditInformation()
     {
         $filesystem = new Filesystem();
-        $filesystem->copy(__DIR__ . '/../resources/fichier.pdf', '/tmp/convocation');
+        $filesystem->copy(__DIR__ . '/../resources/fichier.pdf', TMP_TESTDIR . '/convocation');
         $sitting = SittingStory::sittingConseilLibriciel();
 
 

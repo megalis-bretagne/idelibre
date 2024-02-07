@@ -63,7 +63,7 @@ class ProjectControllerTest extends WebTestCase
         $this->loginAsAdminLibriciel();
 
         $filesystem = new Filesystem();
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', '/tmp/convocation');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/convocation');
         $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/resources/project1.pdf');
         $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/resources/project2.pdf');
         $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/resources/annex1.pdf');
