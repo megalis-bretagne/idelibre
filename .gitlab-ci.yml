@@ -25,7 +25,6 @@ stages:
   - build
   - build-nocache
   - deploy
-  - testWithoutCovering
   - test
   - quality
   - release
@@ -68,51 +67,11 @@ build-nocache:
     - docker push $CI_REGISTRY_IMAGE:latest
 
 
+
+
+
 phpTest:
   stage: test
-  only:
-    - tags
-    - master
-  image: $CONTAINER_IMAGE
-  services:
-    - name: postgres:13-alpine
-      alias: postgresidelibre
-      command: [ "postgres", "-N", "1000" ]
-  variables:
-    GIT_STRATEGY: none
-    COMPOSER_PROCESS_TIMEOUT: 1200
-    DONT_RETRIEVE_VALIDCA: "true"
-    APP_ENV: test
-    POSTGRES_HOST: postgresidelibre
-    POSTGRES_VERSION: 13
-    POSTGRES_DB: idelibre_test
-    POSTGRES_USER: idelibretest
-    POSTGRES_PASSWORD: idelibretest
-    POSTGRES_PORT: 5432
-    DATABASE_URL: postgresql://idelibretest:idelibretest@postgresidelibre:5432/idelibre?serverVersion=13&charset=utf8
-    XDEBUG_MODE: coverage
-  before_script:
-    - cd /app
-    - apt -y install php-xdebug
-    - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-    - php composer-setup.php --install-dir=/usr/local/bin
-    - mv /usr/local/bin/composer.phar /usr/local/bin/composer
-  script:
-    - composer install
-    - SYMFONY_DEPRECATIONS_HELPER=disabled bin/phpunit --coverage-text --colors=never --coverage-clover coverage/coverage.xml --log-junit coverage/logfile.xml
-    - cp -rf coverage $CI_PROJECT_DIR
-  artifacts:
-    paths:
-      - coverage
-    expire_in: 1h
-
-
-
-phpTestWithoutCovering:
-  stage: testWithoutCovering
-  except:
-    - tags
-    - master
   image: $CONTAINER_IMAGE
   services:
     - name: postgres:13-alpine
@@ -132,12 +91,7 @@ phpTestWithoutCovering:
     COMPOSER_PROCESS_TIMEOUT: 1200
   before_script:
     - cd /app
-  #    - apt -y install php-xdebug
-  #    - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-  #    - php composer-setup.php --install-dir=/usr/local/bin
-  #    - mv /usr/local/bin/composer.phar /usr/local/bin/composer
   script:
-
     - SYMFONY_DEPRECATIONS_HELPER=disabled vendor/bin/paratest --coverage-text --colors=never --coverage-clover coverage/coverage.xml --log-junit coverage/logfile.xml
     - cp -rf coverage $CI_PROJECT_DIR
   artifacts:
