@@ -64,13 +64,13 @@ class ProjectControllerTest extends WebTestCase
 
         $filesystem = new Filesystem();
         $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', '/tmp/convocation');
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/project1.pdf');
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/project2.pdf');
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/annex1.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/resources/project1.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/resources/project2.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/resources/annex1.pdf');
 
-        $fileProject1 = new UploadedFile(__DIR__ . '/../../resources/project1.pdf', 'fichier.pdf', 'application/pdf');
-        $fileProject2 = new UploadedFile(__DIR__ . '/../../resources/project2.pdf', 'fichier.pdf', 'application/pdf');
-        $fileAnnex1 = new UploadedFile(__DIR__ . '/../../resources/annex1.pdf', 'fichier.pdf', 'application/pdf');
+        $fileProject1 = new UploadedFile(TMP_TESTDIR . '/resources/project1.pdf', 'fichier.pdf', 'application/pdf');
+        $fileProject2 = new UploadedFile(TMP_TESTDIR . '/resources/project2.pdf', 'fichier.pdf', 'application/pdf');
+        $fileAnnex1 = new UploadedFile(TMP_TESTDIR . '/resources/annex1.pdf', 'fichier.pdf', 'application/pdf');
 
         $annex = new AnnexApi();
         $annex->setLinkedFileKey('annex1')
@@ -118,13 +118,13 @@ class ProjectControllerTest extends WebTestCase
 
         $filesystem = new Filesystem();
 
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/project1.txt');
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/project2.pdf');
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/annex1.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/resources/project1.txt');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/resources/project2.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/resources/annex1.pdf');
 
-        $fileProject1 = new UploadedFile(__DIR__ . '/../../resources/project1.txt', 'fichier.pdf', 'application/txt');
-        $fileProject2 = new UploadedFile(__DIR__ . '/../../resources/project2.pdf', 'fichier.pdf', 'application/pdf');
-        $fileAnnex1 = new UploadedFile(__DIR__ . '/../../resources/annex1.pdf', 'fichier.pdf', 'application/pdf');
+        $fileProject1 = new UploadedFile(TMP_TESTDIR . '/resources/project1.txt', 'fichier.pdf', 'application/txt');
+        $fileProject2 = new UploadedFile(TMP_TESTDIR . '/resources/project2.pdf', 'fichier.pdf', 'application/pdf');
+        $fileAnnex1 = new UploadedFile(TMP_TESTDIR . '/resources/annex1.pdf', 'fichier.pdf', 'application/pdf');
 
         $annex = new AnnexApi();
         $annex->setLinkedFileKey('annex1')

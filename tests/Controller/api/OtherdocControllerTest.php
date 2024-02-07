@@ -67,10 +67,10 @@ class OtherdocControllerTest extends WebTestCase
 
         $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', '/tmp/convocation.pdf');
 
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/document.pdf');
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/document2.pdf');
-        $otherdocFile1 = new UploadedFile(__DIR__ . '/../../resources/document.pdf', 'fichier.pdf', 'application/pdf');
-        $otherdocFile2 = new UploadedFile(__DIR__ . '/../../resources/document2.pdf', 'fichier.pdf', 'application/pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/resources/document.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/resources/document2.pdf');
+        $otherdocFile1 = new UploadedFile(TMP_TESTDIR . '/resources/document.pdf', 'fichier.pdf', 'application/pdf');
+        $otherdocFile2 = new UploadedFile(TMP_TESTDIR . '/resources/document2.pdf', 'fichier.pdf', 'application/pdf');
 
         $otherdoc1 = new OtherdocApi();
         $otherdoc1
