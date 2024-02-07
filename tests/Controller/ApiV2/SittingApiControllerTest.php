@@ -144,14 +144,14 @@ class SittingApiControllerTest extends WebTestCase
         $structure = StructureStory::libriciel();
         $apiUser = ApiUserStory::apiAdminLibriciel();
         $type = TypeStory::typeConseilLibriciel();
-        $convocation = ConvocationStory::load();
+        ConvocationStory::load();
 
         $filesystem = new Filesystem();
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/invitation.pdf');
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/convocation.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/resources/invitation.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/resources/convocation.pdf');
 
-        $invitationFile = new UploadedFile(__DIR__ . '/../../resources/invitation.pdf', 'invitation.pdf', 'application/pdf');
-        $convocationFile = new UploadedFile(__DIR__ . '/../../resources/convocation.pdf', 'convocation.pdf', 'application/pdf');
+        $invitationFile = new UploadedFile(TMP_TESTDIR . '/resources/invitation.pdf', 'invitation.pdf', 'application/pdf');
+        $convocationFile = new UploadedFile(TMP_TESTDIR . '/resources/convocation.pdf', 'convocation.pdf', 'application/pdf');
 
         $this->client->request(
             Request::METHOD_POST,
@@ -191,9 +191,9 @@ class SittingApiControllerTest extends WebTestCase
         ConvocationStory::load();
 
         $filesystem = new Filesystem();
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/convocation.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/resources/convocation.pdf');
 
-        $convocationFile = new UploadedFile(__DIR__ . '/../../resources/convocation.pdf', 'convocation.pdf', 'application/pdf');
+        $convocationFile = new UploadedFile(TMP_TESTDIR . '/resources/convocation.pdf', 'convocation.pdf', 'application/pdf');
 
         $this->client->request(
             Request::METHOD_POST,
@@ -259,14 +259,14 @@ class SittingApiControllerTest extends WebTestCase
         $sittingConseil = SittingStory::sittingConseilLibriciel();
 
         $filesystem = new Filesystem();
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/invitation_updated.pdf');
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/convocation_updated.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/resources/invitation_updated.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/resources/convocation_updated.pdf');
 
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', '/tmp/fileProject1');
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', '/tmp/fileProject2');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/fileProject1');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/fileProject2');
 
-        $invitationFile = new UploadedFile(__DIR__ . '/../../resources/invitation_updated.pdf', 'invitation_updated.pdf', 'application/pdf');
-        $convocationFile = new UploadedFile(__DIR__ . '/../../resources/convocation_updated.pdf', 'convocation_updated.pdf', 'application/pdf');
+        $invitationFile = new UploadedFile(TMP_TESTDIR . '/resources/invitation_updated.pdf', 'invitation_updated.pdf', 'application/pdf');
+        $convocationFile = new UploadedFile(TMP_TESTDIR . '/resources/convocation_updated.pdf', 'convocation_updated.pdf', 'application/pdf');
 
         $this->client->request(
             Request::METHOD_PUT,
@@ -302,15 +302,15 @@ class SittingApiControllerTest extends WebTestCase
         $themeBudget = ThemeStory::budgetTheme();
 
         $filesystem = new Filesystem();
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/project1.pdf');
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/project2.pdf');
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/annex1_project2.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/resources/project1.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/resources/project2.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/resources/annex1_project2.pdf');
 
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', '/tmp/convocation');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/convocation');
 
-        $project1File = new UploadedFile(__DIR__ . '/../../resources/project1.pdf', 'project1.pdf', 'application/pdf');
-        $project2File = new UploadedFile(__DIR__ . '/../../resources/project2.pdf', 'project2.pdf', 'application/pdf');
-        $annex1Project2File = new UploadedFile(__DIR__ . '/../../resources/annex1_project2.pdf', 'annex1_project2.pdf', 'application/pdf');
+        $project1File = new UploadedFile(TMP_TESTDIR . '/resources/project1.pdf', 'project1.pdf', 'application/pdf');
+        $project2File = new UploadedFile(TMP_TESTDIR . '/resources/project2.pdf', 'project2.pdf', 'application/pdf');
+        $annex1Project2File = new UploadedFile(TMP_TESTDIR . '/resources/annex1_project2.pdf', 'annex1_project2.pdf', 'application/pdf');
 
         $project1 = (new ProjectApi())
             ->setName('project1')
@@ -375,15 +375,15 @@ class SittingApiControllerTest extends WebTestCase
 
 
         $filesystem = new Filesystem();
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', '/tmp/convocation');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/convocation');
 
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/otherdoc1.pdf');
-        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', __DIR__ . '/../../resources/otherdoc2.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/resources/otherdoc1.pdf');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/resources/otherdoc2.pdf');
 
 
 
-        $otherdoc1File = new UploadedFile(__DIR__ . '/../../resources/otherdoc1.pdf', 'otherdoc1.pdf', 'application/pdf');
-        $otherdoc2File = new UploadedFile(__DIR__ . '/../../resources/otherdoc2.pdf', 'otherdoc2.pdf', 'application/pdf');
+        $otherdoc1File = new UploadedFile(TMP_TESTDIR . '/resources/otherdoc1.pdf', 'otherdoc1.pdf', 'application/pdf');
+        $otherdoc2File = new UploadedFile(TMP_TESTDIR . '/resources/otherdoc2.pdf', 'otherdoc2.pdf', 'application/pdf');
 
         $otherdoc1 = (new OtherdocApi())
             ->setName('otherdoc1')
@@ -481,6 +481,12 @@ class SittingApiControllerTest extends WebTestCase
         $apiUser = ApiUserStory::apiAdminLibriciel();
         $sittingConseil = SittingStory::sittingConseilLibriciel();
         $projectId = ProjectStory::project1()->getId();
+
+        $filesystem = new Filesystem();
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/convocation');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/fileProject2');
+        $filesystem->copy(__DIR__ . '/../../resources/fichier.pdf', TMP_TESTDIR . '/fileProject1');
+
 
         $this->client->request(
             Request::METHOD_DELETE,
