@@ -138,7 +138,8 @@ phpTestWithoutCovering:
     - mv /usr/local/bin/composer.phar /usr/local/bin/composer
   script:
     - composer install
-    - SYMFONY_DEPRECATIONS_HELPER=disabled bin/phpunit --colors=never
+    - SYMFONY_DEPRECATIONS_HELPER=disabled vendor/bin/paratest
+
 
 quality:
   stage: quality
