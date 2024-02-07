@@ -240,7 +240,11 @@ let app = new Vue({
 
             axios.post(`/api/convocations/attendance`, this.changedAttendance).then(
                 (response) => {
-                    this.getConvocations()
+                    this.getConvocations();
+                })
+                .then(() => {
+
+                    this.setInfoMessage("Présences enregistrées")
                 })
                 .catch((e) => {
                     console.log("erreur : " + e);
@@ -251,9 +255,8 @@ let app = new Vue({
                     this.showModalAttendance = false
                     this.changedAttendance = [];
                     this.getCountNotAnswered();
-
                 });
-        },
+            },
 
         setErrorMessage(msg) {
             this.errorMessage = msg
