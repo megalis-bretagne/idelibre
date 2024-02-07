@@ -2,7 +2,7 @@
 
 namespace App\Tests\Controller\api;
 
-use App\Service\Connector\ComelusConnectorManager;
+use App\Service\Connector\Comelus\ComelusConnectorManager;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
 use App\Tests\Story\SittingStory;

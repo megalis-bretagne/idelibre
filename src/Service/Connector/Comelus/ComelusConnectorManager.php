@@ -17,9 +17,9 @@ use App\Service\Util\Sanitizer;
 use Doctrine\ORM\EntityManagerInterface;
 use Libriciel\ComelusApiWrapper\ComelusException;
 use Libriciel\ComelusApiWrapper\ComelusWrapper;
-use Libriciel\ComelusApiWrapper\Model\ComelusDocument;
 use Nyholm\Psr7\UploadedFile;
 use Symfony\Component\Filesystem\Filesystem;
+//use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class ComelusConnectorManager
@@ -97,6 +97,7 @@ class ComelusConnectorManager
         if (!$comelusConnetor->getActive() || !$comelusConnetor->getMailingListId()) {
             throw new BadRequestHttpException('Comelus is not enabled');
         }
+
 
         $uploadedFiles = $this->prepareFiles($sitting);
 

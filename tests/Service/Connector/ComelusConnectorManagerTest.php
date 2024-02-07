@@ -3,7 +3,7 @@
 namespace App\Tests\Service\Connector;
 
 use App\Repository\Connector\ComelusConnectorRepository;
-use App\Service\Connector\ComelusConnectorManager;
+use App\Service\Connector\Comelus\ComelusConnectorManager;
 use App\Tests\Factory\ComelusConnectorFactory;
 use App\Tests\Factory\FileFactory;
 use App\Tests\Factory\SittingFactory;

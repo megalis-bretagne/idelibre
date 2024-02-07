@@ -4,10 +4,9 @@ namespace App\Form\Connector;
 
 use App\Entity\Connector\ComelusConnector;
 use App\Form\Type\LsChoiceType;
-use App\Service\Connector\ComelusConnectorManager;
+use App\Service\Connector\Comelus\ComelusConnectorManager;
 use Libriciel\ComelusApiWrapper\ComelusException;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;

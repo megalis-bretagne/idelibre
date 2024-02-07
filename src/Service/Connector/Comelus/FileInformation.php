@@ -1,20 +1,16 @@
 <?php
 
-namespace App\Service\ApiEntity;
+namespace App\Service\Connector\Comelus;
 
 class FileInformation
 {
 
-    public string $id;
     public string $name;
     public string $rank;
     public string $linkedFile;
 
 
-    public function getId(): string
-    {
-        return $this->id;
-    }
+
     public function getName(): string
     {
         return $this->name;

@@ -10,7 +10,7 @@ use App\Entity\Structure;
 use App\Entity\User;
 use App\Security\Password\ResetPassword;
 use App\Service\Configuration\ConfigurationManager;
-use App\Service\Connector\ComelusConnectorManager;
+use App\Service\Connector\Comelus\ComelusConnectorManager;
 use App\Service\Connector\LsmessageConnectorManager;
 use App\Service\Connector\LsvoteConnectorManager;
 use App\Service\EmailTemplate\DefaultTemplateCreator;
