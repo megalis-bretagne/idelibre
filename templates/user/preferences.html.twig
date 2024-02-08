@@ -9,7 +9,6 @@
 
 {% block pageForm %}
 
-{{ dump(subscriptionResponse) }}
     {% if app.user.role.name == "Secretary" %}
         <div id="subscriptionEmails" data-subscription="{% if subscriptionResponse is same as true %} true {% endif %}"> </div>
     {% endif %}
