@@ -46,6 +46,7 @@ class ComelusConnectorController extends AbstractController
     {
         $url = $request->query->get('url');
         $apiKey = $request->query->get('apiKey');
+
         if ($comelusConnectorManager->checkApiKey($url, $apiKey)) {
             return $this->json(null);
         }

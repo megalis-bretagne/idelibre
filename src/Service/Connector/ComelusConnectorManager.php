@@ -9,7 +9,7 @@ use App\Entity\Structure;
 use App\Repository\Connector\ComelusConnectorRepository;
 use App\Repository\OtherdocRepository;
 use App\Repository\ProjectRepository;
-use App\Service\ApiEntity\FileInformation;
+use App\Service\Connector\Comelus\FileInformation;
 use App\Service\File\Generator\FileGenerator;
 use App\Service\File\Generator\UnsupportedExtensionException;
 use App\Service\Util\DateUtil;

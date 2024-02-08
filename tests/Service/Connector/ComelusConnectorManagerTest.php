@@ -40,6 +40,7 @@ class ComelusConnectorManagerTest extends WebTestCase
             ->getManager();
 
         $this->comelusConnectorRepository = self::getContainer()->get(ComelusConnectorRepository::class);
+        $this->comelusConnectorManager = self::getContainer()->get(ComelusConnectorManager::class);
 
         self::ensureKernelShutdown();
     }
@@ -85,23 +86,11 @@ class ComelusConnectorManagerTest extends WebTestCase
 
     public function testCheckApiKeyFalse()
     {
-        $comelusWrapperMock = $this->getMockBuilder(ComelusWrapper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-//        $comelusWrapperMock->method('setApiKey')->willReturn(null);
-//        $comelusWrapperMock->method('setUrl')->willThrowException(new ComelusException("bad url format"));
-//        $comelusWrapperMock->method('check')->willReturn([]);
-
-        $container = self::getContainer();
-        $container->set(ComelusWrapper::class, $comelusWrapperMock);
-
-        $comelusConnectorManager = $container->get(ComelusConnectorManager::class);
 
         $url = 'https://comelus.dev.libriciel.net';
         $apiKey = 1234;
 
-        $checked = $comelusConnectorManager->checkApiKey($url, $apiKey);
+        $checked = $this->comelusConnectorManager->checkApiKey($url, $apiKey);
         $this->assertFalse($checked);
     }
 
