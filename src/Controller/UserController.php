@@ -196,6 +196,7 @@ class UserController extends AbstractController
         return $this->render('user/preferences.html.twig', [
             'form' => $form->createView(),
             'suffix' => $this->isGranted('ROLE_MANAGE_STRUCTURES') ? null : $user->getStructure()->getSuffix(),
+            'subscriptionResponse' => $user->getSubscription()->getAcceptMailRecap(),
         ]);
     }
 

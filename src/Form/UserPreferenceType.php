@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Structure;
+use App\Entity\Subscription;
 use App\Entity\User;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\AbstractType;
@@ -22,7 +23,7 @@ class UserPreferenceType extends AbstractType
         $this->security = $security;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         /** @var User $user */
         $user = $options['data'];
