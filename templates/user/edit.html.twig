@@ -26,13 +26,6 @@
         </div>
     </div>
 
-
-    <div class="input-group mb-3 d-flex flex-column">
-        <label class="form-label" for="">Profil</label>
-        <input type="text" class="form-control w-100"  aria-label="Profil" title="profil" aria-describedby="profil utilisateur"
-               value="{{ user.role.prettyName }}" disabled readonly >
-    </div>
-
     {% if user.role.prettyName is same as "Gestionnaire de séance" %}
         {{ form_row(form.authorizedTypes) }}
         {{ form_row(form.isActive) }}
@@ -41,12 +34,13 @@
             {{ form_row(form.plainPassword) }}
         </div>
 
-        {% elseif user.role.prettyName is same as"Administrateur" %}
+        {% elseif user.role.name is same as"Admin" %}
             {% if app.user != user %}
                 {{ form_row(form.isActive) }}
             {% endif %}
 
-        {% elseif user.role.prettyName is same as "Elu" %}
+
+        {% elseif user.role.name is same as "Actor" %}
             {{ form_row(form.party) }}
             {{ form_row(form.title) }}
             {{ form_row(form.deputy) }}
@@ -57,12 +51,19 @@
                 {{ form_row(form.plainPassword) }}
             </div>
 
-            {% elseif user.role.prettyName is same as "Invité" or user.role.prettyName is same as "Personnel administratif" %}
-                {{ form_row(form.isActive) }}
-                {{ form_row(form.initPassword) }}
+        {% elseif user.role.name is same as "Deputy" %}
+            {{ form_row(form.isActive) }}
+            {{ form_row(form.initPassword) }}
             <div class="d-none" id="passwordGroup">
                 {{ form_row(form.plainPassword) }}
             </div>
+
+        {% elseif user.role.name is same as "Invité" or user.role.name is same as "Employee" %}
+            {{ form_row(form.isActive) }}
+            {{ form_row(form.initPassword) }}
+        <div class="d-none" id="passwordGroup">
+            {{ form_row(form.plainPassword) }}
+        </div>
     {% endif %}
 
 
