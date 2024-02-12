@@ -46,6 +46,11 @@ class ExportUsersController extends AbstractController
         return $response;
     }
 
+    /**
+     * @throws UnavailableStream
+     * @throws CannotInsertRecord
+     * @throws Exception
+     */
     #[Route('/export/csv/group/{id}/users', name: 'export_csv_users_group', methods: ['GET'])]
     #[isGranted('MANAGE_GROUPS', subject: 'group')]
     public function exportCsvUsersFromGroup(Group $group): Response
