@@ -81,6 +81,7 @@ class Sitting
     private $structure;
 
     #[OneToOne(inversedBy: 'convocationSitting', targetEntity: File::class, cascade: ['persist', 'remove'])]
+    #[NotNull(message: 'Le fichier de convocation est obligatoire')]
     #[Groups(['sitting:detail'])]
     private $convocationFile;
 

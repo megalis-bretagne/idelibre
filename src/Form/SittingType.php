@@ -14,7 +14,6 @@ use App\Service\role\RoleManager;
 use App\Service\Seance\SittingManager;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -34,7 +33,7 @@ class SittingType extends AbstractType
         $this->roleManager = $roleManager;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         /** @var Sitting|null $sitting */
         $sitting = $builder->getData();
@@ -79,7 +78,6 @@ class SittingType extends AbstractType
                 'disabled' => $isAlreadySentConvocation,
                 'constraints' => $isNew ?
                     [
-                        new NotNull(null, 'le fichier de convocation est obligatoire'),
                         new File([
                             'mimeTypes' => ['application/pdf'],
                             'mimeTypesMessage' => 'Le fichier doit être un pdf',
@@ -130,7 +128,7 @@ class SittingType extends AbstractType
             ]);
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Sitting::class,
