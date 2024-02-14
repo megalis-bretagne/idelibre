@@ -62,7 +62,7 @@ WORKDIR /app
 
 RUN chmod +x docker-resources/initApp.sh
 
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
 
 RUN cd /app && \
     composer install && \
