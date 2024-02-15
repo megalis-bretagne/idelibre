@@ -22,8 +22,7 @@ class PasswordInvalidator
         private UserRepository                 $userRepository,
         private EmailServiceInterface          $emailService,
         private readonly ParameterBagInterface $bag,
-    )
-    {
+    ) {
     }
 
     /**
