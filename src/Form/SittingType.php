@@ -78,6 +78,7 @@ class SittingType extends AbstractType
                 'disabled' => $isAlreadySentConvocation,
                 'constraints' => $isNew ?
                     [
+                        new NotNull(null, 'le fichier de convocation est obligatoire'),
                         new File([
                             'mimeTypes' => ['application/pdf'],
                             'mimeTypesMessage' => 'Le fichier doit être un pdf',
