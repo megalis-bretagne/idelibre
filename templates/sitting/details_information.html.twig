@@ -206,12 +206,26 @@
             {% if isLsvoteResults %}
                 <div class="row mt-2">
                     <div class="col-4 text-end mt-1">
-                        <b>Télécharger le rapport des résultats en json:</b>
+                        <b>Télécharger le rapport des résultats en json :</b>
                     </div>
                     <div class="col-8">
                         {{ sitting.name }}_results_lsvote.json
                         <a class="btn btn-outline-secondary borderless"
                            href="{{ path('sitting_lsvote_results_json', {'id': sitting.id}) }}"
+                           title="Télécharger les résultats">
+                            <span class="fas fa-download"></span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col-4 text-end mt-1">
+                        <b>Télécharger le rapport des résultats en pdf :</b>
+                    </div>
+                    <div class="col-8">
+                        {{ sitting.name }}_results_lsvote.pdf
+                        <a class="btn btn-outline-secondary borderless"
+                           href="{{ path('sitting_lsvote_results_pdf', {'id': sitting.id}) }}"
                            title="Télécharger les résultats">
                             <span class="fas fa-download"></span>
                         </a>

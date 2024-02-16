@@ -6,6 +6,7 @@ use App\Entity\Connector\Exception\LsvoteConnectorException;
 use App\Entity\Connector\LsvoteConnector;
 use App\Entity\Convocation;
 use App\Entity\Enum\Role_Name;
+use App\Entity\File;
 use App\Entity\LsvoteSitting;
 use App\Entity\Role;
 use App\Entity\Sitting;
@@ -312,14 +313,12 @@ class LsvoteConnectorManager
     }
 
     /**
-     * @param LsvoteException|Exception $e
-     * @param Sitting $sitting
      * @param mixed $connector
      * @param mixed $lsvoteEnvelope
      * @return mixed
      * @throws LsvoteSittingCreationException
      */
-    public function editIfSittingWasDeleted(Sitting $sitting, mixed $connector, mixed $lsvoteEnvelope): mixed
+    public function editIfSittingWasDeleted(mixed $connector, mixed $lsvoteEnvelope): mixed
     {
         try {
             return $this->lsvoteClient->sendSitting($connector->getUrl(), $connector->getApiKey(), $lsvoteEnvelope);
@@ -327,4 +326,21 @@ class LsvoteConnectorManager
             throw new LsvoteSittingCreationException("Impossible de mettre à jour la séance");
         }
     }
+
+    /**
+     * @throws LsvoteException
+     */
+    public function fetchLsvoteResultsPdf(mixed $connector, Sitting $sitting): string|bool
+    {
+        try {
+            $content = $this->lsvoteClient->fetchLsvoteResultsPdf($connector->getUrl(), $connector->getApiKey(), $sitting->getLsvoteSitting()->getLsvoteSittingId());
+            $path = '/tmp/' . $sitting->getName() . 'pdf_results.pdf';
+            file_put_contents($path, $content);
+
+            return $path;
+        } catch (LsvoteException $e) {
+            throw new LsvoteException($e->getMessage());
+        }
+    }
+
 }

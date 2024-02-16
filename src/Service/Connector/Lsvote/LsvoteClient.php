@@ -6,6 +6,9 @@ use App\Service\Connector\Lsvote\Model\LsvoteEnveloppe;
 use Symfony\Component\HttpClient\Exception\ClientException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Throwable;
@@ -123,7 +126,6 @@ class LsvoteClient
 
                 ]
             );
-            //            dd( json_decode($response->getContent(), true));
             $content = json_decode($response->getContent(), true);
 
             return $content['id'];
@@ -139,6 +141,10 @@ class LsvoteClient
 
     /**
      * @throws LsvoteException
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
      */
     public function resultSitting(string $url, string $apiKey, string $sittingId): array
     {
@@ -146,9 +152,8 @@ class LsvoteClient
             $response = $this->httpClient->request(
                 "GET",
                 $url . self::API_SITTING_URI . "/" . $sittingId . '/result',
-                ["headers" => [
-                    "Authorization" => $apiKey
-                ],
+                [
+                    "headers" => [ "Authorization" => $apiKey ],
                     "verify_peer" => false,
                     "verify_host" => false,
                 ]
@@ -159,6 +164,33 @@ class LsvoteClient
             if ($response?->getContent(false)) {
                 throw new LsvoteException($response->getContent(false));
             }
+            throw new LsvoteException($e->getMessage());
+        }
+    }
+
+
+    /**
+     * @throws LsvoteException
+     */
+    public function fetchLsvoteResultsPdf(string $url, string $apiKey, string $sittingId): bool|string
+    {
+        try {
+            $response = $this->httpClient->request(
+                "GET",
+                $url . self::API_SITTING_URI . "/" . $sittingId . '/result/pdf',
+                [
+                    "headers" => [
+                        "Authorization" => $apiKey,
+                        'Content-Disposition'=> 'attachment',
+                        'Content-Transfer-Encoding' => 'binary',
+                        'Content-Type' => 'application/pdf',
+                        ],
+                    "verify_peer" => false,
+                    "verify_host" => false,
+                ],
+            );
+            return $response->getContent();
+        } catch (Throwable $e) {
             throw new LsvoteException($e->getMessage());
         }
     }
