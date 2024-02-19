@@ -8,6 +8,11 @@
 {% endblock %}
 
 {% block pageForm %}
+
+    {% if app.user.role.name == "Secretary" %}
+        <div id="subscriptionEmails" data-subscription="{% if subscriptionResponse is same as true %} true {% endif %}"> </div>
+    {% endif %}
+
     {{ form_start(form) }}
 
     {{ form_row(form.firstName) }}
@@ -17,12 +22,12 @@
     {{ form_label(form.username) }}
     {{ form_errors(form.username) }}
 
-    <div class="row mb-3">
+    <div class="mb-3 d-flex">
         <div class="col-7">
             {{ form_widget(form.username) }}
         </div>
         {% if suffix %}
-            <div class="col-5 form-control borderless">
+            <div class="col-3 form-control borderless">
                 <b class="text-ls-dark">@{{ suffix }}</b>
             </div>
         {% endif %}
@@ -39,4 +44,5 @@
 
 {% block javascripts %}
     {{ encore_entry_script_tags('showPasswordEntropy') }}
+    {{ encore_entry_script_tags('subscriptionEmails') }}
 {% endblock %}
