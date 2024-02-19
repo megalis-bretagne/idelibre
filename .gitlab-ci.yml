@@ -4,10 +4,6 @@ include:
     file: '/publish-container-to-registry.yml'
 
   - project: "libriciel/integration-continue/templates"
-    ref: security-check@1.2.1
-    file: 'jobs/security-check/security-check.yml'
-
-  - project: "libriciel/integration-continue/templates"
     ref: publish-compose-to-nexus@0.1.3
     file: '/jobs/publish-compose-to-nexus/publish-compose-to-nexus.yml'
 
