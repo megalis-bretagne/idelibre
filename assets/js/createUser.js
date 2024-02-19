@@ -4,6 +4,8 @@ const roleInput = document.querySelector('#user_role');
 const actorInfo = document.querySelector('#actor-info');
 const passwordInitGroup = document.querySelector('#passwordInitGroup');
 const passwordGroup = document.querySelector('#passwordGroup');
+const passwordInput = document.querySelector('#user_plainPassword_first');
+const passwordInputBis = document.querySelector('#user_plainPassword_second');
 const initPasswordTrue = document.querySelector('#user_initPassword_0');
 const initPasswordFalse = document.querySelector('#user_initPassword_1');
 
@@ -25,6 +27,11 @@ window.addEventListener('load', function () {
         return;
     }
 
+    if (initPasswordFalse.checked) {
+        passwordInput.value = '';
+        passwordInputBis.value = '';
+    }
+
     passwordInitGroup.classList.remove('d-none');
     actorInfo.classList.add('d-none');
 });
@@ -41,6 +48,12 @@ roleInput.addEventListener('change', function () {
         showDataForActor()
         return;
     }
+
+    if (initPasswordFalse.checked) {
+        passwordInput.value = '';
+        passwordInputBis.value = '';
+    }
+
     passwordInitGroup.classList.remove('d-none');
     actorInfo.classList.add('d-none');
 
@@ -51,14 +64,12 @@ function hidePasswordForAdmin() {
     passwordGroup.classList.add('d-none');
     actorInfo.classList.add('d-none');
     initPasswordFalse.checked = true;
-
 }
 
 function showDataForActor() {
     actorInfo.classList.remove('d-none');
     passwordInitGroup.classList.remove('d-none');
-    initPasswordTrue.checked = true;
-    passwordGroup.classList.remove('d-none');
+    initPasswordFalse.checked = true;
 }
 
 initPasswordTrue.addEventListener('change', function () {
