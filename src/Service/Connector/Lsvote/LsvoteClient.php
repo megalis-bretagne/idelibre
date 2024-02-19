@@ -181,7 +181,7 @@ class LsvoteClient
                 [
                     "headers" => [
                         "Authorization" => $apiKey,
-                        'Content-Disposition'=> 'attachment',
+                        'Content-Disposition' => 'attachment',
                         'Content-Transfer-Encoding' => 'binary',
                         'Content-Type' => 'application/pdf',
                         ],

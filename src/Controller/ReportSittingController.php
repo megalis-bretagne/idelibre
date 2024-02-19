@@ -60,5 +60,4 @@ class ReportSittingController extends AbstractController
 
         return $response;
     }
-
 }

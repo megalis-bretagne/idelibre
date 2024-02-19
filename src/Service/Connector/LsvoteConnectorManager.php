@@ -21,6 +21,8 @@ use App\Service\Connector\Lsvote\LsvoteNotFoundException;
 use App\Service\Connector\Lsvote\Model\LsvoteEnveloppe;
 use App\Service\Connector\Lsvote\Model\LsvoteProject;
 use App\Service\Connector\Lsvote\Model\LsvoteVoter;
+use App\Service\File\Generator\FileGenerator;
+use App\Service\Util\FileUtil;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Psr\Log\LoggerInterface;
@@ -33,7 +35,8 @@ class LsvoteConnectorManager
         private readonly LsvoteClient              $lsvoteClient,
         private readonly EntityManagerInterface    $entityManager,
         private readonly LoggerInterface           $logger,
-        private readonly ConvocationRepository $convocationRepository
+        private readonly ConvocationRepository     $convocationRepository,
+        private readonly FileGenerator            $fileGenerator,
     ) {
     }
 
@@ -334,7 +337,7 @@ class LsvoteConnectorManager
     {
         try {
             $content = $this->lsvoteClient->fetchLsvoteResultsPdf($connector->getUrl(), $connector->getApiKey(), $sitting->getLsvoteSitting()->getLsvoteSittingId());
-            $path = '/tmp/' . $sitting->getName() . 'pdf_results.pdf';
+            $path = '/tmp/' . $this->fileGenerator->createPrettyName($sitting, 255) . '_pdf_results.pdf';
             file_put_contents($path, $content);
 
             return $path;
@@ -342,5 +345,4 @@ class LsvoteConnectorManager
             throw new LsvoteException($e->getMessage());
         }
     }
-
 }

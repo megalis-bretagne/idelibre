@@ -10,6 +10,7 @@ use App\Service\Connector\Lsvote\LsvoteException;
 use App\Service\Connector\LsvoteConnectorManager;
 use App\Service\Connector\LsvoteResultException;
 use App\Service\Connector\LsvoteSittingCreationException;
+use App\Service\File\Generator\FileGenerator;
 use App\Tests\Factory\LsvoteConnectorFactory;
 use App\Tests\Factory\LsvoteSittingFactory;
 use App\Tests\Factory\SittingFactory;
@@ -44,7 +45,7 @@ class LsvoteConnectorManagerTest extends WebTestCase
             ->getMock();
 
         $lsvoteClientMock->method('checkApiKey')->willReturn(true);
-        $service = self::getContainer()->set(LsvoteClient::class, $lsvoteClientMock);
+        self::getContainer()->set(LsvoteClient::class, $lsvoteClientMock);
 
         /** @var LsvoteConnectorManager $lsvoteConnectorManager */
         $lsvoteConnectorManager = self::getContainer()->get(LsvoteConnectorManager::class);
@@ -134,7 +135,7 @@ class LsvoteConnectorManagerTest extends WebTestCase
         $lsvoteConnectorManager = self::getContainer()->get(LsvoteConnectorManager::class);
 
         $this->expectException(LsvoteSittingCreationException::class);
-        $id = $lsvoteConnectorManager->createSitting($sitting->object());
+        $lsvoteConnectorManager->createSitting($sitting->object());
     }
 
     public function testDeleteLsvoteSitting()
@@ -285,12 +286,15 @@ class LsvoteConnectorManagerTest extends WebTestCase
         $this-> assertNotNull($sitting->getLsvoteSitting()->getLsvoteSittingId());
     }
 
+    /**
+     * @throws LsvoteException
+     */
     public function testEditLsvoteSittingFailed()
     {
         $structure = StructureFactory::createOne([])->object();
         $sitting = SittingFactory::createOne(['structure' => $structure]);
 
-        $lsvoteSitting = LsvoteSittingFactory::createOne([
+        LsvoteSittingFactory::createOne([
             "results" => [],
             "sitting" => $sitting,
         ])->object();
@@ -308,6 +312,6 @@ class LsvoteConnectorManagerTest extends WebTestCase
         $lsvoteConnectorManager = self::getContainer()->get(LsvoteConnectorManager::class);
 
         $this->expectException(LsvoteSittingCreationException::class);
-        $id = $lsvoteConnectorManager->editLsvoteSitting($sitting->object());
+        $lsvoteConnectorManager->editLsvoteSitting($sitting->object());
     }
 }

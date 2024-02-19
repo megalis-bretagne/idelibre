@@ -63,7 +63,7 @@ class ComelusConnectorManager
 
     public function checkApiKey(string $url, string $apiKey): bool
     {
-//        dd($apiKey);
+        //        dd($apiKey);
         try {
             $this->comelusWrapper->setApiKey($apiKey);
             $this->comelusWrapper->setUrl($url);

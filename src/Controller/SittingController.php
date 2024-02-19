@@ -396,7 +396,7 @@ class SittingController extends AbstractController
         $response = new BinaryFileResponse($jsonPath);
         $response->setContentDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            $this->fileGenerator->createPrettyName($sitting, "json")
+            'lsvote_results_' . $this->fileGenerator->createPrettyName($sitting, "json")
         );
 
         $response->deleteFileAfterSend();
@@ -408,10 +408,11 @@ class SittingController extends AbstractController
      * @throws LsvoteException
      */
     #[Route(path: '/sitting/{id}/lsvote-results/pdf', name: 'sitting_lsvote_results_pdf', methods: ['GET'])]
-    public function fetchLsvoteResultPdf(Sitting $sitting, LsvoteConnectorRepository $lsvoteConnectorRepository) : Response
+    #[IsGranted('ROLE_MANAGE_SITTINGS')]
+    public function fetchLsvoteResultPdf(Sitting $sitting, LsvoteConnectorRepository $lsvoteConnectorRepository): Response
     {
         $lsvoteConnector = $lsvoteConnectorRepository->findOneBy(["structure" => $sitting->getStructure()]);
-        $pdfPath = $this->lsvoteConnectorManager->fetchLsvoteResultsPdf($lsvoteConnector , $sitting);
+        $pdfPath = $this->lsvoteConnectorManager->fetchLsvoteResultsPdf($lsvoteConnector, $sitting);
 
         $response = new BinaryFileResponse($pdfPath);
         $response->setContentDisposition(
@@ -422,5 +423,4 @@ class SittingController extends AbstractController
 
         return $response;
     }
-
 }

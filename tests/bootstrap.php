@@ -11,7 +11,7 @@ if (file_exists(dirname(__DIR__) . '/config/bootstrap.php')) {
 }
 
 
-$tokenSuffix = getenv('TEST_TOKEN') ? '_'.getenv('TEST_TOKEN') : '';
+$tokenSuffix = getenv('TEST_TOKEN') ? '_' . getenv('TEST_TOKEN') : '';
 if (!defined('TMP_TESTDIR')) {
-    define('TMP_TESTDIR', sys_get_temp_dir().DIRECTORY_SEPARATOR.'testunit'.$tokenSuffix);
+    define('TMP_TESTDIR', sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'testunit' . $tokenSuffix);
 }
