@@ -109,7 +109,10 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         }
 
         if (!empty($search)) {
-            $qb->andWhere('LOWER(u.lastName) like :search OR LOWER(u.email) like :search')
+            $qb->andWhere(
+                'LOWER(u.lastName) like :search OR 
+                LOWER(u.email) like :search OR
+                LOWER(u.username) like :search')
                 ->setParameter('search', mb_strtolower("%${search}%"));
         }
 
