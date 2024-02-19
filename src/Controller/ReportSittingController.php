@@ -2,7 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Connector\LsvoteConnector;
 use App\Entity\Sitting;
+use App\Service\Connector\Lsvote\LsvoteException;
+use App\Service\Connector\LsvoteConnectorManager;
 use App\Service\Report\CsvSittingReport;
 use App\Service\Report\PdfSittingReport;
 use App\Service\Util\FileUtil;

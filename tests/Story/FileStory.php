@@ -12,7 +12,7 @@ final class FileStory extends Story
         $this->addState('fileProject1', FileFactory::new([
             'name' => 'Fichier projet 1',
             'size' => 100,
-            'path' =>  TMP_TESTDIR . '/fileProject1',
+            'path' => TMP_TESTDIR . '/fileProject1',
         ]));
 
         $this->addState('fileProject2', FileFactory::new([
@@ -30,13 +30,13 @@ final class FileStory extends Story
         $this->addState('fileAnnex2', FileFactory::new([
             'name' => 'Fichier annexe 2',
             'size' => 100,
-            'path' =>  TMP_TESTDIR . '/fileAnnex2',
+            'path' => TMP_TESTDIR . '/fileAnnex2',
         ]));
 
         $this->addState('fileConvocation', FileFactory::new([
             'name' => 'Fichier de convocation',
             'size' => 100,
-            'path' => TMP_TESTDIR .'/convocation',
+            'path' => TMP_TESTDIR . '/convocation',
         ]));
 
         $this->addState('fileConvocation2', FileFactory::new([

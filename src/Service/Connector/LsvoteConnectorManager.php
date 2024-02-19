@@ -6,6 +6,7 @@ use App\Entity\Connector\Exception\LsvoteConnectorException;
 use App\Entity\Connector\LsvoteConnector;
 use App\Entity\Convocation;
 use App\Entity\Enum\Role_Name;
+use App\Entity\File;
 use App\Entity\LsvoteSitting;
 use App\Entity\Role;
 use App\Entity\Sitting;
@@ -20,6 +21,8 @@ use App\Service\Connector\Lsvote\LsvoteNotFoundException;
 use App\Service\Connector\Lsvote\Model\LsvoteEnveloppe;
 use App\Service\Connector\Lsvote\Model\LsvoteProject;
 use App\Service\Connector\Lsvote\Model\LsvoteVoter;
+use App\Service\File\Generator\FileGenerator;
+use App\Service\Util\FileUtil;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Psr\Log\LoggerInterface;
@@ -32,7 +35,8 @@ class LsvoteConnectorManager
         private readonly LsvoteClient              $lsvoteClient,
         private readonly EntityManagerInterface    $entityManager,
         private readonly LoggerInterface           $logger,
-        private readonly ConvocationRepository $convocationRepository
+        private readonly ConvocationRepository     $convocationRepository,
+        private readonly FileGenerator            $fileGenerator,
     ) {
     }
 
@@ -312,19 +316,33 @@ class LsvoteConnectorManager
     }
 
     /**
-     * @param LsvoteException|Exception $e
-     * @param Sitting $sitting
      * @param mixed $connector
      * @param mixed $lsvoteEnvelope
      * @return mixed
      * @throws LsvoteSittingCreationException
      */
-    public function editIfSittingWasDeleted(Sitting $sitting, mixed $connector, mixed $lsvoteEnvelope): mixed
+    public function editIfSittingWasDeleted(mixed $connector, mixed $lsvoteEnvelope): mixed
     {
         try {
             return $this->lsvoteClient->sendSitting($connector->getUrl(), $connector->getApiKey(), $lsvoteEnvelope);
         } catch (LsvoteException $e) {
             throw new LsvoteSittingCreationException("Impossible de mettre à jour la séance");
+        }
+    }
+
+    /**
+     * @throws LsvoteException
+     */
+    public function fetchLsvoteResultsPdf(mixed $connector, Sitting $sitting): string|bool
+    {
+        try {
+            $content = $this->lsvoteClient->fetchLsvoteResultsPdf($connector->getUrl(), $connector->getApiKey(), $sitting->getLsvoteSitting()->getLsvoteSittingId());
+            $path = '/tmp/' . $this->fileGenerator->createPrettyName($sitting, 255) . '_pdf_results.pdf';
+            file_put_contents($path, $content);
+
+            return $path;
+        } catch (LsvoteException $e) {
+            throw new LsvoteException($e->getMessage());
         }
     }
 }
