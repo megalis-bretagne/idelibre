@@ -2,13 +2,16 @@
 
 namespace App\Controller;
 
+use App\Entity\Connector\LsvoteConnector;
 use App\Entity\Sitting;
 use App\Form\SearchType;
 use App\Form\SittingType;
 use App\Repository\EmailTemplateRepository;
+use App\Repository\LsvoteConnectorRepository;
 use App\Repository\OtherdocRepository;
 use App\Repository\ProjectRepository;
 use App\Repository\UserRepository;
+use App\Service\Connector\Lsvote\LsvoteException;
 use App\Service\Connector\LsvoteConnectorManager;
 use App\Service\Connector\LsvoteResultException;
 use App\Service\Convocation\ConvocationManager;
@@ -17,6 +20,7 @@ use App\Service\File\Generator\FileGenerator;
 use App\Service\File\Generator\UnsupportedExtensionException;
 use App\Service\Pdf\PdfValidator;
 use App\Service\Seance\SittingManager;
+use App\Service\Util\FileUtil;
 use App\Sidebar\Annotation\Sidebar;
 use App\Sidebar\State\SidebarState;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
@@ -362,22 +366,6 @@ class SittingController extends AbstractController
         return $this->redirect($request->headers->get('referer'));
     }
 
-    #[Route(path: '/sitting/{id}/lsvote-results/json', name: 'sitting_lsvote_results_json', methods: ['GET'])]
-    #[IsGranted('ROLE_MANAGE_SITTINGS')]
-    public function downloadLsvoteResultsCsv(Sitting $sitting): Response
-    {
-        $jsonPath = $this->lsvoteConnectorManager->createJsonFile($sitting);
-
-        $response = new BinaryFileResponse($jsonPath);
-        $response->setContentDisposition(
-            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            $this->fileGenerator->createPrettyName($sitting, "json")
-        );
-
-        $response->deleteFileAfterSend();
-
-        return $response;
-    }
 
     #[Route('/sitting/{id}/list/actors', name: 'sitting_actors_list', methods: ['GET'])]
     public function getAllActorsList(UserRepository $userRepository): Response
@@ -396,5 +384,43 @@ class SittingController extends AbstractController
         }
         $this->sittingManager->removeInvitationFile($sitting);
         return $this->json(['success' => true]);
+    }
+
+
+    #[Route(path: '/sitting/{id}/lsvote-results/json', name: 'sitting_lsvote_results_json', methods: ['GET'])]
+    #[IsGranted('ROLE_MANAGE_SITTINGS')]
+    public function downloadLsvoteResultsCsv(Sitting $sitting): Response
+    {
+        $jsonPath = $this->lsvoteConnectorManager->createJsonFile($sitting);
+
+        $response = new BinaryFileResponse($jsonPath);
+        $response->setContentDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            'lsvote_results_' . $this->fileGenerator->createPrettyName($sitting, "json")
+        );
+
+        $response->deleteFileAfterSend();
+
+        return $response;
+    }
+
+    /**
+     * @throws LsvoteException
+     */
+    #[Route(path: '/sitting/{id}/lsvote-results/pdf', name: 'sitting_lsvote_results_pdf', methods: ['GET'])]
+    #[IsGranted('ROLE_MANAGE_SITTINGS')]
+    public function fetchLsvoteResultPdf(Sitting $sitting, LsvoteConnectorRepository $lsvoteConnectorRepository): Response
+    {
+        $lsvoteConnector = $lsvoteConnectorRepository->findOneBy(["structure" => $sitting->getStructure()]);
+        $pdfPath = $this->lsvoteConnectorManager->fetchLsvoteResultsPdf($lsvoteConnector, $sitting);
+
+        $response = new BinaryFileResponse($pdfPath);
+        $response->setContentDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            'lsvote_results_' . $this->fileGenerator->createPrettyName($sitting, "pdf")
+        );
+        $response->deleteFileAfterSend();
+
+        return $response;
     }
 }
