@@ -6,6 +6,8 @@ use App\Form\CsvType;
 use App\Service\Csv\CsvUserManager;
 use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
+use League\Csv\Exception;
+use League\Csv\UnavailableStream;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,6 +19,10 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Breadcrumb(title: 'Utilisateurs', routeName: 'user_index')]
 class CsvUserController extends AbstractController
 {
+    /**
+     * @throws UnavailableStream
+     * @throws Exception
+     */
     #[Route(path: '/csv/importUsers', name: 'csv_add_users')]
     #[IsGranted('ROLE_MANAGE_USERS')]
     #[Breadcrumb(title: 'Importer des utilisateurs via csv')]

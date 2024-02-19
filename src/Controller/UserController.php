@@ -30,8 +30,7 @@ class UserController extends AbstractController
     public function __construct(
         private readonly UserManager    $userManager,
         private readonly UserRepository $userRepository,
-    )
-    {
+    ) {
     }
 
     #[Route(path: '/user', name: 'user_index')]
