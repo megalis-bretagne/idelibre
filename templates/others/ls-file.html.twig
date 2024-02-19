@@ -16,5 +16,8 @@
             {%- if not disabled %}<span class="{{ remove_icon }} btn btn-outline-danger borderless delete-file"> </span> {% endif %}
             <span class="file-title">{{ file_name | default("") }}</span>
         </div>
+
+        {{- form_errors(form) -}}
     </div>
+
 {% endblock %}

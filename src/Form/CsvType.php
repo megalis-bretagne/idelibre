@@ -27,7 +27,7 @@ class CsvType extends AbstractType
                 'multiple' => false,
                 'attr' => [
                     'placeholder' => 'Sélectionner un csv',
-//                    'accept' => '.csv',
+                    'accept' => '.csv',
                 ],
                 'constraints' => [
                     new NotNull(null, 'Le fichier est obligatoire'),
@@ -44,8 +44,6 @@ class CsvType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
-            // Configure your form options here
-        ]);
+        $resolver->setDefaults([]);
     }
 }
