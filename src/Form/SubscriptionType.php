@@ -13,7 +13,6 @@ class SubscriptionType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $subscription = $builder->getData();
         $builder
             ->add('acceptMailRecap', LsChoiceType::class, [
                 'label' => 'Voulez-vous recevoir des mails récaptulatifs des présences/absences des élus ?',
@@ -21,7 +20,6 @@ class SubscriptionType extends AbstractType
                     'Oui' => true,
                     'Non' => false,
                 ],
-                'data' => $subscription ? $subscription->getAcceptMailRecap() : false,
                 'required' => false,
             ])
         ;

@@ -38,6 +38,7 @@ Encore
     .addEntry('initPassword', './assets/js/password/initPassword.js')
     .addEntry('passphraseConfirmationBox', './assets/js/passphraseConfirmationBox.js')
     .addEntry('accordeonTitle', './assets/js/accordeonTitle.js')
+    .addEntry('subscriptionEmails', './assets/js/subscriptionEmails.js')
 
 
         // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
