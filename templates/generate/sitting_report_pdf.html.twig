@@ -58,8 +58,6 @@
                     <th style="width: 10%;">Groupe politique</th>
                     <th style="width: 15%;">Envoi</th>
                     <th style="width: 15%;">Reception</th>
-                    <th style="width: 10%;">Présence</th>
-                    <th style="width: 30%;">Mandataire</th>
                 </tr>
             </thead>
             <tbody>
@@ -71,18 +69,6 @@
                     <td style="width: 10%;">{{ convocation.user.party ? convocation.user.party.name : '' }} </td>
                     <td style="width: 15%;">{{ convocation.sentTimestamp ? convocation.sentTimestamp.createdAt | date('d/m/Y H:i', timezone) : '' }} </td>
                     <td style="width: 15%;">{{ convocation.receivedTimestamp ? convocation.receivedTimestamp.createdAt | date('d/m/Y H:i', timezone) : '' }} </td>
-                    <td style="width: 10%;">
-                        {% if convocation.attendance == "present" %} Présent {% endif %}
-                        {% if convocation.attendance == "absent" %} Absent {% endif %}
-                        {% if convocation.attendance == "poa" %} A donné pouvoir par procuration{% endif %}
-                        {% if convocation.attendance == "remote" %} Présent à distance {% endif %}
-                        {% if convocation.attendance == "deputy" %} Remplacé par son suppléant {% endif %}
-                        {% if convocation.attendance == "" %} Sans réponse {% endif %}
-                    </td>
-                    <td style="width: 30%;">
-                        {% if convocation.deputy %} {{ convocation.deputy.firstname ~ ' ' ~ convocation.deputy.lastName }} {% endif %}
-                        {% if convocation.mandator %} {{ convocation.mandator.firstname ~ ' ' ~ convocation.mandator.lastName }} {% endif %}
-                    </td>
                 </tr>
                 {% endif %}
             {% endfor %}
