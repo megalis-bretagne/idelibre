@@ -77,6 +77,11 @@ class EmailTemplateType extends AbstractType
                     'inline' => true,
                     'block_unsupported_drop' => false,
                     'images_file_types' => 'jpg,png,jpeg',
+                    'automatic_uploads' => true,
+                    'images_upload_url' => '/api/tinymce-upload/image',
+                    'file_picker_types' => 'image',
+//                    'file_picker_callback' => , // fn() => mycallbackfn() ,
+
                 ],
                 'label' => 'Contenu',
             ]);

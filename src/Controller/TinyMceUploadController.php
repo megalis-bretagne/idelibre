@@ -1,31 +1,34 @@
 <?php
 
-namespace App\Controller\api;
+namespace App\Controller;
 
 //use App\Storage\UserUploadStorage;
+//use App\Controller\api\UserUploadStorage;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class TinyMceUploadController extends AbstractController
 {
-    const MAX_FILESIZE = 20000000; // 20 MB
+    const MAX_FILESIZE = 2000000; // 2 MB
 
     public function __construct(
-        private readonly UploadedFile $uplodedFile,
+        private readonly ParameterBagInterface $bag,
     )
     {
     }
 
 
     #[Route("/api/tinymce-upload/image", name:"api_tinymce_upload_image")]
-    public function upload(Request $request, UserUploadStorage $userUploadStorage): Response
+    public function upload(Request $request, /*UserUploadStorage $userUploadStorage*/): Response
     {
         // @TODO: Set your own domain(s) in `$allowedOrigins`
-        $allowedOrigins = ["https://localhost", "https://idelibre-api.com"];
+        $allowedOrigins = ["https://localhost", $this->bag->get('base_url')];
         $origin = $request->server->get('HTTP_ORIGIN');
 
         // same-origin requests won't set an origin. If the origin is set, it must be valid.
@@ -58,11 +61,16 @@ class TinyMceUploadController extends AbstractController
          * The $fileUrl variable should contain the publicly accessible URL of
          * the file/image.
          */
-        $filePath = $this->uplodedFile->;
-        $fileUrl = $userUploadStorage->upload($file->getContent());
+
+        $imgDirPath = '/data/maStructure/emailTemplateImages/' . $fil;
+        if (!file_exists($imgDirPath)) {
+            mkdir($imgDirPath, 0755, true);
+        }
+        file_put_contents($imgDirPath , file_get_contents($file->getClientOriginalName()));
+//        $fileUrl = $userUploadStorage->upload($file->getContent());
 
         return new JsonResponse(
-            ["location" => $fileUrl],
+            ["location" => $imgDirPath],
             200,
             [
                 "Access-Control-Allow-Origin" => $origin,
