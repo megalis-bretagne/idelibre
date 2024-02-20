@@ -34,9 +34,11 @@
     <div class="float-end">
         {% block pageSaveReturn %}{{ macro.save('email_template_index', {}, 'Ajouter le modèle d\'email', 'fa fa-plus-circle') }}{% endblock %}
     </div>
+
     {{ form_end(form) }}
 {% endblock %}
 
 {% block javascripts %}
     {{ encore_entry_script_tags('enable-popover') }}
+    {{ encore_entry_script_tags('ls_tinymce') }}
 {% endblock %}

@@ -9,6 +9,7 @@ use App\Form\Type\HiddenEntityType;
 use App\Form\Type\LsChoiceType;
 use App\Repository\TypeRepository;
 use App\Service\Email\EmailData;
+use Eckinox\TinymceBundle\Form\Type\TinymceType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -28,7 +29,7 @@ class EmailTemplateType extends AbstractType
         $this->typeRepository = $typeRepository;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         /** @var EmailTemplate|null $emailTemplate */
         $emailTemplate = $builder->getData();
@@ -67,12 +68,20 @@ class EmailTemplateType extends AbstractType
         $builder->add('subject', TextType::class, [
             'label' => 'Objet',
         ])
-            ->add('content', TextareaType::class, [
-                'sanitize_html' => true,
-                'sanitizer' => 'emailtemplate_content',
+            ->add('content', TinymceType::class, [
+                "attr" => [
+                    'plugins' => "advlist autolink link image media table lists",
+                    'menubar' => false,
+                    'toolbar'=> 'bold italic underline | bullist numlist | table link image | undo redo | fontfamily fontsize', 'forecolor backcolor | alignleft aligncenter alignright alignfull | numlist bullist outdent indent',
+                    'valid_elements'=> 'strong,em,span[style],a[href]',
+                    'inline' => true,
+                    'block_unsupported_drop' => false,
+                    'images_file_types' => 'jpg,png,jpeg',
+                ],
                 'label' => 'Contenu',
-                'attr' => ['rows' => 15],
             ]);
+
+
 
         if (!$this->IsEmailRecapitulatif($options['data'] ?? null)) {
             $builder->add('isAttachment', LsChoiceType::class, [
@@ -92,7 +101,7 @@ class EmailTemplateType extends AbstractType
         ]);
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => EmailTemplate::class,
