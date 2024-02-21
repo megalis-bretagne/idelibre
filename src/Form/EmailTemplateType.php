@@ -11,6 +11,7 @@ use App\Repository\TypeRepository;
 use App\Service\Email\EmailData;
 use Eckinox\TinymceBundle\Form\Type\TinymceType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -23,6 +24,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class EmailTemplateType extends AbstractType
 {
     private TypeRepository $typeRepository;
+    private ParameterBagInterface $bag;
 
     public function __construct(TypeRepository $typeRepository)
     {
@@ -70,6 +72,7 @@ class EmailTemplateType extends AbstractType
         ])
             ->add('content', TinymceType::class, [
                 "attr" => [
+                    'skin' => 'oxide',
                     'plugins' => "advlist autolink link image media table lists",
                     'menubar' => false,
                     'toolbar'=> 'bold italic underline | bullist numlist | table link image | undo redo | fontfamily fontsize', 'forecolor backcolor | alignleft aligncenter alignright alignfull | numlist bullist outdent indent',
@@ -79,7 +82,10 @@ class EmailTemplateType extends AbstractType
                     'images_file_types' => 'jpg,png,jpeg',
                     'automatic_uploads' => true,
                     'images_upload_url' => '/api/tinymce-upload/image',
+//                    'images_upload_base_path' => '/data/image/' . $options['structure']->getId() . '/emailTemplateImages/',
                     'file_picker_types' => 'image',
+                    'images_reuse_filename' => true,
+
 //                    'file_picker_callback' => , // fn() => mycallbackfn() ,
 
                 ],

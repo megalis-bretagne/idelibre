@@ -10,19 +10,16 @@ class UploadStorageHandler
     {
     }
 
-
-    public function upload(string $content, string $imgDirPath, Structure $structure)
+    public function upload(mixed $file, Structure $structure, string $fileName ): void
     {
-        $this->uploadDirectory($structure);
-    }
+        $imgDirPath = '/data/image/' . $structure->getId() . '/emailTemplateImages/';
+        $imgPath = $imgDirPath . $fileName;
 
-    private function uploadDirectory($structure): string
-    {
-        $imgDirectory = '/data/' . $structure->getId() . '/emailTemplateImages/';
-        if (!file_exists($imgDirectory)) {
-            mkdir($imgDirectory, 0755, true);
+        if (!file_exists($imgDirPath)) {
+            mkdir($imgDirPath, 0755, true);
         }
-        return $imgDirectory;
+
+        file_put_contents($imgPath, $file->getContent());
     }
 
 }
