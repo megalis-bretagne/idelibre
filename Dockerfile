@@ -1,5 +1,6 @@
 FROM ubuntu:22.04 as idelibrefpm
 
+
 ARG TIMEZONE=UTC
 RUN ln -snf /usr/share/zoneinfo/$TIMEZONE /etc/localtime && echo $TIMEZONE > /etc/timezone
 
@@ -16,7 +17,8 @@ ENV PHP_OPCACHE_VALIDATE_TIMESTAMPS="0" \
     PHP_PM_MAX_CHILDREN='15' \
     PHP_PM_START_SERVERS='3' \
     PHP_PM_MIN_SPARE_SERVERS='2' \
-    PHP_PM_MAX_SPARE_SERVERS='4'
+    PHP_PM_MAX_SPARE_SERVERS='4'\
+    COMPOSER_ALLOW_SUPERUSER=1
 
 RUN apt-get update -yqq \
     && apt dist-upgrade -yqq \
@@ -62,7 +64,7 @@ WORKDIR /app
 
 RUN chmod +x docker-resources/initApp.sh
 
-COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.7 /usr/bin/composer /usr/bin/composer
 
 RUN cd /app && \
     composer install && \
