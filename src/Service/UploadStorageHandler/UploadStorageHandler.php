@@ -6,11 +6,7 @@ use App\Entity\Structure;
 
 class UploadStorageHandler
 {
-    public function __construct()
-    {
-    }
-
-    public function upload(mixed $file, Structure $structure, string $fileName ): void
+    public function upload(mixed $file, Structure $structure, string $fileName): void
     {
         $imgDirPath = '/data/image/' . $structure->getId() . '/emailTemplateImages/';
         $imgPath = $imgDirPath . $fileName;
@@ -19,8 +15,8 @@ class UploadStorageHandler
             mkdir($imgDirPath, 0755, true);
         }
 
+        file_put_contents($imgPath, base64_encode($file->getContent()));
 
-        file_put_contents($imgPath, $file->getContent());
+        
     }
-
 }

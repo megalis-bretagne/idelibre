@@ -11,17 +11,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-
 #[Route("/api/tinymce-upload")]
 class TinyMceUploadController extends AbstractController
 {
-    const MAX_FILESIZE = 200000; // 200 kB
+    public const MAX_FILESIZE = 200000; // 200 kB
 
     public function __construct(
         private readonly ParameterBagInterface $bag,
         private readonly UploadStorageHandler $uploadStorageHandler
-    )
-    {
+    ) {
     }
 
 
@@ -63,7 +61,7 @@ class TinyMceUploadController extends AbstractController
 
         $this->uploadStorageHandler->upload($file, $structure, $fileName);
 
-        $location = $this->generateUrl('serve_image', ['structureId' => $structure->getId() ,'fileName' =>  $fileName]);
+        $location = $this->generateUrl('serve_image', ['structureId' => $structure->getId(), 'fileName' => $fileName]);
 
 
         return new JsonResponse(
@@ -81,10 +79,8 @@ class TinyMceUploadController extends AbstractController
     #[Route("/serveImage/{structureId}/{fileName}", name: "serve_image", methods: ["GET"])]
     public function getImageTinyMce(string $fileName, string $structureId): Response
     {
-        $file = file_get_contents( '/data/image/' . $structureId . '/emailTemplateImages/' . $fileName);
+        $file = file_get_contents('/data/image/' . $structureId . '/emailTemplateImages/' . $fileName);
 
         return new Response($file, 200, ['Content-Type' => 'image/png']);
-
     }
-
 }

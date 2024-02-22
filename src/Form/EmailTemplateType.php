@@ -2,7 +2,6 @@
 
 namespace App\Form;
 
-use App\Controller\TinyMceUploadController;
 use App\Entity\EmailTemplate;
 use App\Entity\Structure;
 use App\Entity\Type;
@@ -20,12 +19,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class EmailTemplateType extends AbstractType
 {
-
     public function __construct(
         private readonly TypeRepository $typeRepository,
         private readonly ParameterBagInterface $bag
-    )
-    {
+    ) {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -62,10 +59,10 @@ class EmailTemplateType extends AbstractType
             ->add('content', TinymceType::class, [
                 "attr" => [
                     'skin' => 'oxide',
-                    'plugins' => "advlist autolink link image media table lists",
+                    'plugins' => "advlist autolink link image media table lists code paste",
                     'menubar' => false,
-                    'toolbar'=> 'bold italic underline | bullist numlist | table link image | undo redo | fontfamily fontsize', 'forecolor backcolor | alignleft aligncenter alignright alignfull | numlist bullist outdent indent',
-                    'valid_elements'=> 'strong,em,span[style],a[href]',
+                    'toolbar' => 'bold italic underline | bullist numlist | table link image | undo redo | fontfamily fontsize', 'forecolor backcolor | alignleft aligncenter alignright alignfull | numlist bullist outdent indent',
+                    'valid_elements' => 'strong,em,span[style],a[href]',
                     'inline' => true,
                     'block_unsupported_drop' => false,
                     'images_file_types' => 'jpg,png,jpeg, JPEG',
@@ -74,7 +71,7 @@ class EmailTemplateType extends AbstractType
                     'images_upload_url' => '/api/tinymce-upload/image',
                     'file_picker_types' => 'image',
                     'images_reuse_filename' => true,
-                    'atta'
+                    'paste_data_images' => true,
                 ],
                 'label' => 'Contenu',
             ]);
@@ -125,6 +122,4 @@ class EmailTemplateType extends AbstractType
     {
         return $emailTemplate && EmailTemplate::CATEGORY_RECAPITULATIF === $emailTemplate->getCategory();
     }
-
-
 }
