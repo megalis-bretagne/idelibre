@@ -10,6 +10,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
+use Symfony\Component\Mime\Part\DataPart;
 
 class SimpleEmailService implements EmailServiceInterface
 {
@@ -40,6 +41,7 @@ class SimpleEmailService implements EmailServiceInterface
             $this->setContent($email, $emailData);
             $this->setAttachment($email, $emailData);
             $this->setCal($email, $emailData);
+
 
             try {
                 $this->mailer->send($email);

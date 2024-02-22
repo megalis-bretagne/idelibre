@@ -39,37 +39,37 @@ class EmailTemplate
     #[Column(type: 'string', length: 255)]
     #[NotBlank]
     #[Length(max: '255')]
-    private $name;
+    private ?string $name;
 
     #[Column(type: 'text')]
     #[NotBlank]
-    private $content;
+    private ?string $content;
 
     #[ManyToOne(targetEntity: Structure::class)]
     #[JoinColumn(nullable: false, onDelete: 'CASCADE')]
     #[NotNull]
-    private $structure;
+    private ?Structure $structure;
 
     #[OneToOne(inversedBy: 'emailTemplate', targetEntity: Type::class)]
     #[JoinColumn(nullable: true, onDelete: 'SET NULL')]
-    private $type;
+    private ?Type $type;
 
     #[Column(type: 'string', length: 255)]
     #[NotBlank]
     #[Length(max: '255')]
-    private $subject;
+    private ?string $subject;
 
     #[Column(type: 'boolean')]
-    private $isDefault = false;
+    private bool $isDefault = false;
 
     #[Column(type: 'string', length: 255)]
-    private $category = self::CATEGORY_CONVOCATION;
+    private string $category = self::CATEGORY_CONVOCATION;
 
     #[Column(type: 'boolean')]
-    private $isAttachment = false;
+    private bool $isAttachment = false;
 
-    #[Column(type: 'string', length: 255)]
-    private $format = EmailData::FORMAT_HTML;
+    #[Column(type: 'string', length: 255, options: ['default' => EmailData::FORMAT_HTML])]
+    private string $format = EmailData::FORMAT_HTML;
 
     public function getId(): ?string
     {

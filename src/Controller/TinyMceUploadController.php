@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 
+#[Route("/api/tinymce-upload")]
 class TinyMceUploadController extends AbstractController
 {
     const MAX_FILESIZE = 200000; // 200 kB
@@ -24,7 +25,7 @@ class TinyMceUploadController extends AbstractController
     }
 
 
-    #[Route("/api/tinymce-upload/image", name: "api_tinymce_upload_image")]
+    #[Route("/image", name: "api_tinymce_upload_image")]
     public function upload(Request $request): Response
     {
         // @TODO: Set your own domain(s) in `$allowedOrigins`
@@ -49,7 +50,7 @@ class TinyMceUploadController extends AbstractController
         }
 
         if ($file->getSize() > self::MAX_FILESIZE) {
-            $this->addFlash("error", "Le poids maximal de l'image doit être de 200Kb : " . (self::MAX_FILESIZE / 1000000) . "MB");
+            # $this->addFlash("error", "Le poids maximal de l'image doit être de 200Kb : " . (self::MAX_FILESIZE / 1000000) . "MB");
             return new Response("Le poids maximal de l'image doit être de 200Kb : " . (self::MAX_FILESIZE / 1000000) . "MB", 400);
         }
 
@@ -57,12 +58,13 @@ class TinyMceUploadController extends AbstractController
             return new Response("Le fichier doit être au format jpeg,jpg ou png.", 400);
         }
 
-
         $structure = $this->getUser()->getStructure();
         $fileName = 'image' . uniqid() . '.' . $file->guessExtension();
+
         $this->uploadStorageHandler->upload($file, $structure, $fileName);
 
-        $location = $this->generateUrl('serve_image', ['fileName' =>  $fileName , 'structureId' => $structure->getId()]);
+        $location = $this->generateUrl('serve_image', ['structureId' => $structure->getId() ,'fileName' =>  $fileName]);
+
 
         return new JsonResponse(
             ["location" => $location],
@@ -76,13 +78,13 @@ class TinyMceUploadController extends AbstractController
     }
 
 
-    #[Route("/api/tinymce-upload/serveImage/{fileName}/{structureId}", name: "serve_image")]
+    #[Route("/serveImage/{structureId}/{fileName}", name: "serve_image", methods: ["GET"])]
     public function getImageTinyMce(string $fileName, string $structureId): Response
     {
-        $file = file_get_contents('/data/image/' . $structureId . '/emailTemplateImages/' . $fileName);
-        $response = new Response($file);
-        $response->headers->set('Content-Type', 'image/png');
-        return $response;
+        $file = file_get_contents( '/data/image/' . $structureId . '/emailTemplateImages/' . $fileName);
+
+        return new Response($file, 200, ['Content-Type' => 'image/png']);
+
     }
 
 }

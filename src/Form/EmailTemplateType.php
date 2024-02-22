@@ -2,33 +2,30 @@
 
 namespace App\Form;
 
+use App\Controller\TinyMceUploadController;
 use App\Entity\EmailTemplate;
 use App\Entity\Structure;
 use App\Entity\Type;
 use App\Form\Type\HiddenEntityType;
 use App\Form\Type\LsChoiceType;
 use App\Repository\TypeRepository;
-use App\Service\Email\EmailData;
 use Eckinox\TinymceBundle\Form\Type\TinymceType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class EmailTemplateType extends AbstractType
 {
-    private TypeRepository $typeRepository;
-    private ParameterBagInterface $bag;
 
-    public function __construct(TypeRepository $typeRepository)
+    public function __construct(
+        private readonly TypeRepository $typeRepository,
+        private readonly ParameterBagInterface $bag
+    )
     {
-        $this->typeRepository = $typeRepository;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -58,14 +55,6 @@ class EmailTemplateType extends AbstractType
                 ]);
         }
 
-        $builder->add('format', LsChoiceType::class, [
-            'label' => "Format de l'email",
-            'choices' => [
-                'Html' => EmailData::FORMAT_HTML,
-                'Texte' => EmailData::FORMAT_TEXT,
-            ],
-            'data' => !$emailTemplate ? EmailData::FORMAT_HTML : $emailTemplate->getFormat(),
-        ]);
 
         $builder->add('subject', TextType::class, [
             'label' => 'Objet',
@@ -79,15 +68,13 @@ class EmailTemplateType extends AbstractType
                     'valid_elements'=> 'strong,em,span[style],a[href]',
                     'inline' => true,
                     'block_unsupported_drop' => false,
-                    'images_file_types' => 'jpg,png,jpeg',
+                    'images_file_types' => 'jpg,png,jpeg, JPEG',
                     'automatic_uploads' => true,
+                    'images_upload_base_path' => $this->bag->get('base_url'),
                     'images_upload_url' => '/api/tinymce-upload/image',
-//                    'images_upload_base_path' => '/data/image/' . $options['structure']->getId() . '/emailTemplateImages/',
                     'file_picker_types' => 'image',
                     'images_reuse_filename' => true,
-
-//                    'file_picker_callback' => , // fn() => mycallbackfn() ,
-
+                    'atta'
                 ],
                 'label' => 'Contenu',
             ]);
@@ -138,4 +125,6 @@ class EmailTemplateType extends AbstractType
     {
         return $emailTemplate && EmailTemplate::CATEGORY_RECAPITULATIF === $emailTemplate->getCategory();
     }
+
+
 }
