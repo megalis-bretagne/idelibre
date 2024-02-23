@@ -6,6 +6,7 @@ use App\Entity\Convocation;
 use App\Entity\EmailTemplate;
 use App\Entity\Sitting;
 use App\Entity\User;
+use App\Service\Base64_encoder\Encoder;
 use App\Service\Email\EmailData;
 use App\Service\Util\DateUtil;
 use App\Service\Util\GenderConverter;
@@ -20,7 +21,8 @@ class EmailGenerator
         private readonly GenderConverter $genderConverter,
         private readonly EmailTemplateManager $emailTemplateManager,
         private readonly ParameterBagInterface $bag,
-        private readonly RouterInterface $router
+        private readonly RouterInterface $router,
+        private readonly Encoder $encoder
     ) {
     }
 
@@ -31,7 +33,7 @@ class EmailGenerator
     {
         $emailData = new EmailData(
             $this->generate($emailTemplate->getSubject(), $params),
-            $this->generate($emailTemplate->getContent(), $params),
+            $this->generate($this->encoder->encodeImages($emailTemplate->getContent()) , $params),
             $emailTemplate->getFormat()
         );
 

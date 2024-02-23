@@ -15,8 +15,8 @@ class UploadStorageHandler
             mkdir($imgDirPath, 0755, true);
         }
 
-        file_put_contents($imgPath, base64_encode($file->getContent()));
+        file_put_contents($imgPath, $file->getContent());
 
-        
+
     }
 }

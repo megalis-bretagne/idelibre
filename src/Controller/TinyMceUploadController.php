@@ -81,6 +81,7 @@ class TinyMceUploadController extends AbstractController
     {
         $file = file_get_contents('/data/image/' . $structureId . '/emailTemplateImages/' . $fileName);
 
+
         return new Response($file, 200, ['Content-Type' => 'image/png']);
     }
 }
