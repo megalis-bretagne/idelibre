@@ -124,4 +124,18 @@ class FileManager
 
         return $files;
     }
+
+    public function saveImage(Structure $structure, string $extension): string
+    {
+        $imgPath = '/data/image/' . $structure->getId();
+
+        $file = new File();
+        $this->em->persist($file);
+        $file->setPath($imgPath . '/' . $file->getId() . '.' . $extension  );
+        $file->setName($file->getId() . '.' . $extension);
+        $this->em->persist($file);
+        $this->em->flush();
+
+        return $file->getId() . '.' . $extension;
+    }
 }

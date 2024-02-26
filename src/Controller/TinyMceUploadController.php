@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Service\File\FileManager;
 use App\Service\UploadStorageHandler\UploadStorageHandler;
+use Faker\Provider\Uuid;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -18,7 +20,8 @@ class TinyMceUploadController extends AbstractController
 
     public function __construct(
         private readonly ParameterBagInterface $bag,
-        private readonly UploadStorageHandler $uploadStorageHandler
+        private readonly UploadStorageHandler $uploadStorageHandler,
+        private readonly FileManager $fileManager
     ) {
     }
 
@@ -26,6 +29,8 @@ class TinyMceUploadController extends AbstractController
     #[Route("/image", name: "api_tinymce_upload_image")]
     public function upload(Request $request): Response
     {
+        $structure = $this->getUser()->getStructure();
+
         // @TODO: Set your own domain(s) in `$allowedOrigins`
         $allowedOrigins = ["https://localhost", $this->bag->get('base_url')];
         $origin = $request->server->get('HTTP_ORIGIN');
@@ -48,7 +53,6 @@ class TinyMceUploadController extends AbstractController
         }
 
         if ($file->getSize() > self::MAX_FILESIZE) {
-            # $this->addFlash("error", "Le poids maximal de l'image doit être de 200Kb : " . (self::MAX_FILESIZE / 1000000) . "MB");
             return new Response("Le poids maximal de l'image doit être de 200Kb : " . (self::MAX_FILESIZE / 1000000) . "MB", 400);
         }
 
@@ -56,12 +60,12 @@ class TinyMceUploadController extends AbstractController
             return new Response("Le fichier doit être au format jpeg,jpg ou png.", 400);
         }
 
-        $structure = $this->getUser()->getStructure();
-        $fileName = 'image' . uniqid() . '.' . $file->guessExtension();
+        $extension = pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
 
-        $this->uploadStorageHandler->upload($file, $structure, $fileName);
+        $filename = $this->fileManager->saveImage($structure, $extension);
+        $this->uploadStorageHandler->upload($file, $structure, $filename);
 
-        $location = $this->generateUrl('serve_image', ['structureId' => $structure->getId(), 'fileName' => $fileName]);
+        $location = $this->generateUrl('serve_image', ['structureId' => $structure->getId(), 'fileName' => $filename]);
 
 
         return new JsonResponse(
@@ -76,12 +80,10 @@ class TinyMceUploadController extends AbstractController
     }
 
 
-    #[Route("/serveImage/{structureId}/{fileName}", name: "serve_image", methods: ["GET"])]
+    #[Route("/serve-image/{structureId}/{fileName}", name: "serve_image", methods: ["GET"])]
     public function getImageTinyMce(string $fileName, string $structureId): Response
     {
-        $file = file_get_contents('/data/image/' . $structureId . '/emailTemplateImages/' . $fileName);
-
-
+        $file = file_get_contents('/tmp/image/' . $structureId . '/' . $fileName);
         return new Response($file, 200, ['Content-Type' => 'image/png']);
     }
 }

@@ -8,6 +8,7 @@ use App\Entity\Type;
 use App\Form\Type\HiddenEntityType;
 use App\Form\Type\LsChoiceType;
 use App\Repository\TypeRepository;
+use App\Service\Base64_encoder\Encoder;
 use Eckinox\TinymceBundle\Form\Type\TinymceType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -21,7 +22,8 @@ class EmailTemplateType extends AbstractType
 {
     public function __construct(
         private readonly TypeRepository $typeRepository,
-        private readonly ParameterBagInterface $bag
+        private readonly ParameterBagInterface $bag,
+        private readonly Encoder $encoder
     ) {
     }
 

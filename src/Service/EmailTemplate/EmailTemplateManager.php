@@ -5,13 +5,14 @@ namespace App\Service\EmailTemplate;
 use App\Entity\EmailTemplate;
 use App\Entity\Structure;
 use App\Repository\EmailTemplateRepository;
+use App\Service\File\FileManager;
 use Doctrine\ORM\EntityManagerInterface;
 
 class EmailTemplateManager
 {
     public function __construct(
-        private EmailTemplateRepository $templateRepository,
-        private EntityManagerInterface $em
+        private readonly EmailTemplateRepository $templateRepository,
+        private readonly EntityManagerInterface $em,
     ) {
     }
 
@@ -45,4 +46,5 @@ class EmailTemplateManager
             'isDefault' => true,
         ]);
     }
+
 }

@@ -4,19 +4,24 @@ namespace App\Service\UploadStorageHandler;
 
 use App\Entity\Structure;
 
+
 class UploadStorageHandler
 {
-    public function upload(mixed $file, Structure $structure, string $fileName): void
-    {
-        $imgDirPath = '/data/image/' . $structure->getId() . '/emailTemplateImages/';
-        $imgPath = $imgDirPath . $fileName;
 
-        if (!file_exists($imgDirPath)) {
-            mkdir($imgDirPath, 0755, true);
+    public function upload(mixed $file, Structure $structure, string $filename): void
+    {
+        $tmpDirPath = '/tmp/image/' . $structure->getId() . '/';
+        $dirPath = '/data/image/' . $structure->getId() . '/';
+
+        if (!file_exists($tmpDirPath)) {
+            mkdir($tmpDirPath, 0755, true);
+        }
+        if (!file_exists($dirPath)) {
+            mkdir($tmpDirPath, 0755, true);
         }
 
-        file_put_contents($imgPath, $file->getContent());
-
-
+        file_put_contents($tmpDirPath . $filename , $file->getContent());
+        copy($tmpDirPath . $filename, $dirPath . $filename);
     }
-}
+
+  }
