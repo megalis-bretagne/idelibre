@@ -136,6 +136,7 @@ class FileManager
         $this->em->persist($file);
         $this->em->flush();
 
+
         return $file->getId() . '.' . $extension;
     }
 }
