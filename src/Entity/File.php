@@ -16,6 +16,8 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 #[Entity(repositoryClass: 'App\Repository\FileRepository')]
 class File
 {
+    public const IMG_DIR= '/data/image/';
+
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]

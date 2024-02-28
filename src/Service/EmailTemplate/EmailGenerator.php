@@ -22,7 +22,6 @@ class EmailGenerator
         private readonly EmailTemplateManager $emailTemplateManager,
         private readonly ParameterBagInterface $bag,
         private readonly RouterInterface $router,
-        private readonly Encoder $encoder
     ) {
     }
 
@@ -33,8 +32,7 @@ class EmailGenerator
     {
         $emailData = new EmailData(
             $this->generate($emailTemplate->getSubject(), $params),
-            $this->generate($this->encoder->encodeImages($emailTemplate->getContent()), $params),
-//            $this->generate($emailTemplate->getContent(), $params),
+            $this->generate($emailTemplate->getContent(), $params),
             $emailTemplate->getFormat()
         );
 

@@ -127,7 +127,7 @@ class FileManager
 
     public function saveImage(Structure $structure, string $extension): string
     {
-        $imgPath = '/data/image/' . $structure->getId();
+        $imgPath = '/tmp/image/' . $structure->getId();
 
         $file = new File();
         $this->em->persist($file);

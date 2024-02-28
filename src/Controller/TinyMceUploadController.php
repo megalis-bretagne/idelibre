@@ -83,7 +83,15 @@ class TinyMceUploadController extends AbstractController
     #[Route("/serve-image/{structureId}/{fileName}", name: "serve_image", methods: ["GET"])]
     public function getImageTinyMce(string $fileName, string $structureId): Response
     {
-        $file = file_get_contents('/tmp/image/' . $structureId . '/' . $fileName);
+        $tmpPath = '/tmp/image/' . $structureId . '/' . $fileName;
+        $truePath = '/data/image/' . $structureId . '/' . $fileName;
+
+        if (file_exists($truePath)) {
+            $file = file_get_contents($truePath);
+            return new Response($file, 200, ['Content-Type' => 'image/png']);
+        }
+
+        $file = file_get_contents($tmpPath);
         return new Response($file, 200, ['Content-Type' => 'image/png']);
     }
 }
