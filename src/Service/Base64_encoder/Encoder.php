@@ -49,7 +49,6 @@ class Encoder
 
     private function imgEncode(string $content, string $structureId): callable
     {
-//        dd($content);
         return function ($matches) use ($structureId) {
             foreach($matches as $match) {
                 $path = File::IMG_DIR . $structureId .  '/' ;
@@ -58,9 +57,6 @@ class Encoder
 
                 $filename = $this->extractFilename($imgPath[0]);
                 $filenameWithoutExtension = $this->extractFilenameWithoutExtension($filename);
-
-//                $filename = array_slice(explode('/', $imgPath[0]), -1)[0];
-//                $filenameWithoutExtension = array_slice(explode('.', $filename), 0, -1)[0];
 
                 $file = $this->fileRepository->findFileById($filenameWithoutExtension);
 
