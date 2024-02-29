@@ -29,9 +29,11 @@ class TinyMceUploadController extends AbstractController
     #[Route("/image", name: "api_tinymce_upload_image")]
     public function upload(Request $request): Response
     {
+        $file = $request->files->get("file");
+
         $structure = $this->getUser()->getStructure();
 
-        // @TODO: Set your own domain(s) in `$allowedOrigins`
+        // @TODO: Set your own domain(s) in `$allowedOrigins`  Dans un voter
         $allowedOrigins = ["https://localhost", $this->bag->get('base_url')];
         $origin = $request->server->get('HTTP_ORIGIN');
 
@@ -62,7 +64,7 @@ class TinyMceUploadController extends AbstractController
 
         $extension = pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
 
-        $filename = $this->fileManager->saveImage($structure, $extension);
+        $filename = $this->fileManager->saveTmpImage($structure, $extension);
         $this->uploadStorageHandler->upload($file, $structure, $filename);
 
         $location = $this->generateUrl('serve_image', ['structureId' => $structure->getId(), 'fileName' => $filename]);

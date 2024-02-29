@@ -56,7 +56,7 @@ class EmailTemplateController extends AbstractController
         $form = $this->createForm(EmailTemplateType::class, null, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->encoder->imageHandler($form->getData()->getContent(), $this->getUser()->getStructure()->getId());
+            //$this->encoder->imageHandler($form->getData()->getContent(), $this->getUser()->getStructure()->getId());
             $templateManager->save($form->getData());
             $this->addFlash('success', 'Votre modèle d\'email a été enregistré');
 

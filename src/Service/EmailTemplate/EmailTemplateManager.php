@@ -5,6 +5,7 @@ namespace App\Service\EmailTemplate;
 use App\Entity\EmailTemplate;
 use App\Entity\Structure;
 use App\Repository\EmailTemplateRepository;
+use App\Service\Base64_encoder\Encoder;
 use App\Service\File\FileManager;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -13,12 +14,14 @@ class EmailTemplateManager
     public function __construct(
         private readonly EmailTemplateRepository $templateRepository,
         private readonly EntityManagerInterface $em,
+        private readonly Encoder $encoder,
     ) {
     }
 
     public function save(EmailTemplate $template): void
     {
-        $template->setContent(html_entity_decode($template->getContent()));
+        $updatedContent = $this->encoder->imageHandlerAndUpdateContent($template->getContent(), $template->getStructure()->getId());
+        $template->setContent(html_entity_decode($updatedContent));
         $this->em->persist($template);
         $this->em->flush();
     }

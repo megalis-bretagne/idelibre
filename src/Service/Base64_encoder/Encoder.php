@@ -4,6 +4,8 @@ namespace App\Service\Base64_encoder;
 
 use App\Entity\File;
 use App\Repository\FileRepository;
+use App\Service\File\FileManager;
+use Symfony\Component\Filesystem\Filesystem;
 
 class Encoder
 {
@@ -11,31 +13,34 @@ class Encoder
     public const URL_PATTERN = '/https:\/\/\S+\.(jpg|png)/';
 
     public function __construct(
-        private readonly FileRepository $fileRepository
+        private readonly FileRepository $fileRepository,
+        private readonly FileManager    $fileManager,
+        private readonly Filesystem     $filesystem
     )
     {
     }
 
 
-    public function imageHandler(string $content, string $structureId): callable
+    public function imageHandlerAndUpdateContent(string $content, string $structureId): string
     {
-        return function ($matches) use ($structureId) {
-            foreach($matches as $match) {
-                $path = File::IMG_DIR . $structureId .  '/' ;
+        preg_match_all(self::URL_PATTERN, $content, $imagesSrc);
+        if (!isset($imagesSrc[0])) {
+            return $content;
+        }
 
-                $pattern = self::URL_PATTERN;
-                preg_match($pattern, $match, $imgPath);
+        foreach ($imagesSrc[0] as $imageSrc) {
+            $filename = $this->extractFilename($imageSrc);
+            $fileId = $this->extractFilenameWithoutExtension($filename);
+            $content = $this->replaceSrcUrlContent($imageSrc, $fileId ,$content);
 
-                $filename = $this->extractFilename($imgPath[0]);
-                $filenameWithoutExtension = $this->extractFilenameWithoutExtension($filename);
+            $path = File::IMG_DIR . $structureId . '/' . $filename;
+            $this->filesystem->copy("/tmp/image/{$structureId}/{$filename}", $path);
 
-                $file = $this->fileRepository->findFileById($filenameWithoutExtension);
+            $file = $this->fileRepository->findFileById($fileId);
+            $this->fileManager->saveFinalImg($file, $path);
+        }
 
-                copy($this->replaceUrl($imgPath[0]), $path . $filename);
-
-                $file->setPath($path . $filename);
-            }
-        };
+        return $content;
     }
 
     public function encodeImages(string $content, string $structureId): string
@@ -50,8 +55,8 @@ class Encoder
     private function imgEncode(string $content, string $structureId): callable
     {
         return function ($matches) use ($structureId) {
-            foreach($matches as $match) {
-                $path = File::IMG_DIR . $structureId .  '/' ;
+            foreach ($matches as $match) {
+                $path = File::IMG_DIR . $structureId . '/';
                 $pattern = '/https:\/\/\S+\.(jpg|png)/';
                 preg_match($pattern, $match, $imgPath);
 
@@ -64,12 +69,10 @@ class Encoder
 
                 $encodedImage = base64_encode(file_get_contents($file->getPath()));
 
-
-                return str_replace($imgPath[0], 'data:image/' . $extension .';base64,' . $encodedImage, $match);
+                return str_replace($imgPath[0], 'data:image/' . $extension . ';base64,' . $encodedImage, $match);
             }
         };
     }
-
 
 
     private function extractFilename(string $imgPath): string
@@ -79,16 +82,12 @@ class Encoder
 
     private function extractFilenameWithoutExtension(string $filename): string
     {
-        return array_slice(explode('.', $filename), 0, -1)[0];
+        return explode('.', $filename)[0];
     }
 
-    private function replaceUrl(string $url): string
+    private function replaceSrcUrlContent(string $url, string $fileName, string $content): string
     {
-        return  preg_replace(
-            '/https:\/\/idelibre\.recette\.libriciel\.fr\/api\/tinymce-upload\/serve-image\//',
-            '/tmp/image/',
-            $url
-        );
+        return str_replace($url, $fileName, $content);
     }
 
 }

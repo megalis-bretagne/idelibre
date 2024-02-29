@@ -125,7 +125,7 @@ class FileManager
         return $files;
     }
 
-    public function saveImage(Structure $structure, string $extension): string
+    public function saveTmpImage(Structure $structure, string $extension): string
     {
         $imgPath = '/tmp/image/' . $structure->getId();
 
@@ -138,5 +138,12 @@ class FileManager
 
 
         return $file->getId() . '.' . $extension;
+    }
+
+    public function saveFinalImg($file, string $path): void
+    {
+        $file->setPath($path);
+        $this->em->persist($file);
+        $this->em->flush();
     }
 }
