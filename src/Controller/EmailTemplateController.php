@@ -5,10 +5,10 @@ namespace App\Controller;
 use App\Entity\EmailTemplate;
 use App\Form\EmailTemplateType;
 use App\Repository\EmailTemplateRepository;
-use App\Service\Base64_encoder\Encoder;
 use App\Service\Email\EmailData;
 use App\Service\EmailTemplate\EmailGenerator;
 use App\Service\EmailTemplate\EmailTemplateManager;
+use App\Service\File\FileManager;
 use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
@@ -22,13 +22,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Breadcrumb(title: "Modèles d'email", routeName: 'email_template_index')]
 class EmailTemplateController extends AbstractController
 {
-    public function __construct(
-        private readonly Encoder $encoder,
-    )
-    {
-    }
-
-
     #[Route(path: '/emailTemplate', name: 'email_template_index', methods: ['GET'])]
     #[IsGranted('ROLE_MANAGE_EMAIL_TEMPLATES')]
     public function index(EmailTemplateRepository $repository, PaginatorInterface $paginator, Request $request): Response
@@ -56,7 +49,6 @@ class EmailTemplateController extends AbstractController
         $form = $this->createForm(EmailTemplateType::class, null, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            //$this->encoder->imageHandler($form->getData()->getContent(), $this->getUser()->getStructure()->getId());
             $templateManager->save($form->getData());
             $this->addFlash('success', 'Votre modèle d\'email a été enregistré');
 

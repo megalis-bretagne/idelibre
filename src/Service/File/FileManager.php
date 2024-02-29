@@ -7,6 +7,7 @@ use App\Entity\File;
 use App\Entity\Project;
 use App\Entity\Sitting;
 use App\Entity\Structure;
+use App\Repository\FileRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -14,10 +15,13 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class FileManager
 {
+
     public function __construct(
-        private Filesystem $filesystem,
-        private EntityManagerInterface $em,
-        private ParameterBagInterface $bag,
+        private readonly Filesystem             $filesystem,
+        private readonly EntityManagerInterface $em,
+        private readonly ParameterBagInterface  $bag,
+        private readonly FileRepository $fileRepository,
+
     ) {
     }
 
@@ -146,4 +150,5 @@ class FileManager
         $this->em->persist($file);
         $this->em->flush();
     }
+
 }

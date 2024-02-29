@@ -5,8 +5,7 @@ namespace App\Service\EmailTemplate;
 use App\Entity\EmailTemplate;
 use App\Entity\Structure;
 use App\Repository\EmailTemplateRepository;
-use App\Service\Base64_encoder\Encoder;
-use App\Service\File\FileManager;
+use App\Service\ImageHandler\Encoder;
 use Doctrine\ORM\EntityManagerInterface;
 
 class EmailTemplateManager

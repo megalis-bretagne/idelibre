@@ -49,6 +49,8 @@ services:
       ofelia.job-exec.purge.command: "/app/bin/console purge:structures"
       ofelia.job-exec.attendance.schedule: "0 0 8 * * * "
       ofelia.job-exec.attendance.command: "/app/bin/console attendance:notification"
+      ofelia.job-exec.clean.schedule: "0 0 2 * * * "
+      ofelia.job-exec.clean.commane: "/app/bin/console clean:tmp-image"
 
   node-idelibre:
     container_name: node-idelibre

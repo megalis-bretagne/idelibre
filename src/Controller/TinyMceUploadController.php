@@ -3,8 +3,7 @@
 namespace App\Controller;
 
 use App\Service\File\FileManager;
-use App\Service\UploadStorageHandler\UploadStorageHandler;
-use Faker\Provider\Uuid;
+use App\Service\ImageHandler\UploadStorageHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;

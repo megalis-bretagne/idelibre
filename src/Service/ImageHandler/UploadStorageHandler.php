@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\UploadStorageHandler;
+namespace App\Service\ImageHandler;
 
 use App\Entity\Structure;
 
