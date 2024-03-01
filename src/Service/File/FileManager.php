@@ -20,8 +20,6 @@ class FileManager
         private readonly Filesystem             $filesystem,
         private readonly EntityManagerInterface $em,
         private readonly ParameterBagInterface  $bag,
-        private readonly FileRepository $fileRepository,
-
     ) {
     }
 
