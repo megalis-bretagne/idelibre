@@ -15,14 +15,18 @@ class imageUploadValidator
         if (!$file) {
             return new Response("Missing file.", 400);
         }
+
         return $file;
     }
 
     public function isTooBig($file): UploadedFile|Response
     {
+
         if ($file->getSize() > self::MAX_FILESIZE) {
+            dd('here');
             return new Response  ("Le poids maximal de l'image doit être de 200Kb : " . (self::MAX_FILESIZE / 1000000) . "MB", 400);
         }
+
         return $file;
     }
 

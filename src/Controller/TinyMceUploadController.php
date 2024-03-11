@@ -51,11 +51,9 @@ class TinyMceUploadController extends AbstractController
         /** @var UploadedFile|null $file */
         $file = $request->files->get("file");
 
-
         $this->imageUploadValidator->isMissingFile($file);
         $this->imageUploadValidator->isTooBig($file);
         $this->imageUploadValidator->isNotImage($file);
-
 
         $extension = pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
 
