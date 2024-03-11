@@ -6,6 +6,8 @@ use App\Entity\Group;
 use App\Entity\Structure;
 use App\Entity\User;
 use App\Service\Csv\ExportUsersCsv;
+use App\Service\Export\ExportToZip;
+use App\Service\Util\Sanitizer;
 use League\Csv\CannotInsertRecord;
 use League\Csv\Exception;
 use League\Csv\UnavailableStream;
@@ -21,6 +23,8 @@ class ExportUsersController extends AbstractController
 {
     public function __construct(
         private readonly ExportUsersCsv $exportUsersCsv,
+        private readonly Sanitizer $sanitizer,
+        private readonly ExportToZip $exportToZip,
     ) {
     }
 
@@ -38,7 +42,7 @@ class ExportUsersController extends AbstractController
         $response = new BinaryFileResponse($this->exportUsersCsv->exportStructureUsers($structure));
         $response->setContentDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            $structure->getName() . '.csv'
+            $this->sanitizer->fileNameSanitizer($structure->getName(), 255) . '.csv'
         );
 
         $response->deleteFileAfterSend();
@@ -55,10 +59,10 @@ class ExportUsersController extends AbstractController
     #[isGranted('MANAGE_GROUPS', subject: 'group')]
     public function exportCsvUsersFromGroup(Group $group): Response
     {
-        $response = new BinaryFileResponse($this->exportUsersCsv->exportGroupUsers($group));
+        $response = new BinaryFileResponse($this->exportToZip->exportGroupUsers($group));
         $response->setContentDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            $group->getName() . '.zip'
+            $this->sanitizer->fileNameSanitizer($group->getName(), 255) . '.zip'
         );
 
         $response->deleteFileAfterSend();
