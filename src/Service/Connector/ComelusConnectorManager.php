@@ -9,6 +9,7 @@ use App\Entity\Structure;
 use App\Repository\Connector\ComelusConnectorRepository;
 use App\Repository\OtherdocRepository;
 use App\Repository\ProjectRepository;
+use App\Service\ApiEntity\FileInformation;
 use App\Service\File\Generator\FileGenerator;
 use App\Service\File\Generator\UnsupportedExtensionException;
 use App\Service\Util\DateUtil;
@@ -61,9 +62,8 @@ class ComelusConnectorManager
         $this->em->flush();
     }
 
-    public function checkApiKey(string $url, string $apiKey): bool
+    public function checkApiKey(?string $url, ?string $apiKey): bool
     {
-        //        dd($apiKey);
         try {
             $this->comelusWrapper->setApiKey($apiKey);
             $this->comelusWrapper->setUrl($url);
@@ -173,6 +173,43 @@ class ComelusConnectorManager
     private function uploadAnnexesHelper($annex): UploadedFile
     {
         return new UploadedFile($annex->getFile()->getPath(), 0, 0, '- ' . $annex->getFile()->getName());
+    }
+
+    private function filesInfos(iterable $projects, iterable $otherDocs): array
+    {
+        $projectInfos = [];
+        $annexInfos = [];
+        $otherDocInfos = [];
+
+        foreach ($projects as $project)
+        {
+            $projectInformations = new FileInformation();
+            $projectInformations->setName($this->sanitizer->fileNameSanitizer($project->getName(), 550));
+            $projectInformations->setRank($project->getRank() + 1);
+            $projectInformations->setLinkedFile($project->getFile()->getPath());
+            $projectInfos[] = $projectInformations;
+
+
+            foreach ($project->getAnnexes() as $annex)
+            {
+                $annexInformations = new FileInformation();
+                $annexInformations->setName($this->sanitizer->fileNameSanitizer($annex->getFile()->getName(), 550));
+                $annexInformations->setRank($annex->getRank() + 1);
+                $annexInformations->setLinkedFile($annex->getFile()->getPath());
+                $annexInfos[] = $annexInformations;
+            }
+
+        }
+
+        foreach ($otherDocs as $otherDoc)
+        {
+            $otherDocInformations = new FileInformation();
+            $otherDocInformations->setName($this->sanitizer->fileNameSanitizer($otherDoc->getName(), 550));;
+            $otherDocInformations->setLinkedFile($otherDoc->getFile()->getPath());
+            $otherDocInfos[] = $otherDocInformations;
+        }
+
+        return [...$projectInfos, ...$annexInfos, ...$otherDocInfos];
     }
 
     /**

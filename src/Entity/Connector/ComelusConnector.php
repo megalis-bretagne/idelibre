@@ -132,7 +132,7 @@ class ComelusConnector extends Connector
     /**
      * @throws ComelusConnectorException
      */
-    private function validateLength(?string $string, int $length)
+    private function validateLength(?string $string, int $length): void
     {
         if (!$string) {
             return;
