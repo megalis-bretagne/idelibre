@@ -22,28 +22,17 @@ class TinyMceUploadController extends AbstractController
         private readonly UploadStorageHandler $uploadStorageHandler,
         private readonly FileManager $fileManager,
         private readonly imageUploadValidator $imageUploadValidator,
-        private readonly ParameterBagInterface $bag
     ) {
     }
 
 
     #[Route("/image", name: "api_tinymce_upload_image")]
-//    #[IsGranted('ALLOWED_ORIGINS' , subject: 'request')]
+    #[IsGranted('ROLE_MANAGE_EMAIL_TEMPLATES')]
     public function upload(Request $request): Response
     {
         $structure = $this->getUser()->getStructure();
         $origin = $request->server->get('HTTP_ORIGIN');
 
-
-        // @TODO: Set your own domain(s) in `$allowedOrigins`  Dans un voter
-        $allowedOrigins = ["https://localhost", $this->bag->get('base_url')];
-
-        // same-origin requests won't set an origin. If the origin is set, it must be valid.
-        if ($origin && !in_array($origin, $allowedOrigins)) {
-            return new Response("Vous n'avez pas la permission d'accéder à cette ressource.", 403);
-        }
-
-        // Don't attempt to process the upload on an OPTIONS request
         if ($request->isMethod("OPTIONS")) {
             return new Response("", 200, ["Access-Control-Allow-Methods" => "POST, OPTIONS"]);
         }

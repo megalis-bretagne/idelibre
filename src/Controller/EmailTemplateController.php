@@ -10,6 +10,7 @@ use App\Service\EmailTemplate\EmailGenerator;
 use App\Service\EmailTemplate\EmailTemplateManager;
 use App\Service\File\FileManager;
 use App\Service\ImageHandler\Encoder;
+use App\Service\ImageHandler\imageUploadValidator;
 use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
@@ -24,6 +25,14 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Breadcrumb(title: "Modèles d'email", routeName: 'email_template_index')]
 class EmailTemplateController extends AbstractController
 {
+
+    public function __construct(
+        private readonly imageUploadValidator $imageUploadValidator,
+    )
+    {
+    }
+
+
     #[Route(path: '/emailTemplate', name: 'email_template_index', methods: ['GET'])]
     #[IsGranted('ROLE_MANAGE_EMAIL_TEMPLATES')]
     public function index(EmailTemplateRepository $repository, PaginatorInterface $paginator, Request $request): Response
@@ -51,6 +60,12 @@ class EmailTemplateController extends AbstractController
         $form = $this->createForm(EmailTemplateType::class, null, ['structure' => $this->getUser()->getStructure()]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+
+            if($this->imageUploadValidator->tooManyImages($form->getData()->getContent())) {
+                $this->addFlash('error', 'Vous ne pouvez pas ajouter plus de 5 images dans un email');
+                return $this->redirectToRoute('email_template_add');
+            }
+
             $templateManager->save($form->getData());
             $this->addFlash('success', 'Votre modèle d\'email a été enregistré');
 

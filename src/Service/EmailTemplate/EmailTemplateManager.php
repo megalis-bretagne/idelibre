@@ -6,7 +6,9 @@ use App\Entity\EmailTemplate;
 use App\Entity\Structure;
 use App\Repository\EmailTemplateRepository;
 use App\Service\ImageHandler\Encoder;
+use App\Service\ImageHandler\imageUploadValidator;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\NonUniqueResultException;
 
 class EmailTemplateManager
 {
@@ -14,9 +16,13 @@ class EmailTemplateManager
         private readonly EmailTemplateRepository $templateRepository,
         private readonly EntityManagerInterface $em,
         private readonly Encoder $encoder,
+        private imageUploadValidator $imageUploadValidator
     ) {
     }
 
+    /**
+     * @throws NonUniqueResultException
+     */
     public function save(EmailTemplate $template): void
     {
         $updatedContent = $this->encoder->imageHandlerAndUpdateContent($template->getContent(), $template->getStructure()->getId());

@@ -21,9 +21,7 @@ class imageUploadValidator
 
     public function isTooBig($file): UploadedFile|Response
     {
-
         if ($file->getSize() > self::MAX_FILESIZE) {
-            dd('here');
             return new Response  ("Le poids maximal de l'image doit être de 200Kb : " . (self::MAX_FILESIZE / 1000000) . "MB", 400);
         }
 
@@ -39,4 +37,8 @@ class imageUploadValidator
         return $file;
     }
 
+    public function tooManyImages(string $content): bool
+    {
+        return preg_match_all('/<img src="([^"]+)"[^>]+>/', $content, $images) > 5;
+    }
 }
