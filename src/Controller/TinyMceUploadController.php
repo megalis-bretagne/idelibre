@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Service\File\FileManager;
+use App\Service\ImageHandler\imageUploadValidator;
 use App\Service\ImageHandler\UploadStorageHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -11,28 +12,31 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route("/api/tinymce-upload")]
 class TinyMceUploadController extends AbstractController
 {
-    public const MAX_FILESIZE = 200000; // 200 kB
 
     public function __construct(
-        private readonly ParameterBagInterface $bag,
         private readonly UploadStorageHandler $uploadStorageHandler,
-        private readonly FileManager $fileManager
+        private readonly FileManager $fileManager,
+        private readonly imageUploadValidator $imageUploadValidator,
+        private readonly ParameterBagInterface $bag
     ) {
     }
 
 
     #[Route("/image", name: "api_tinymce_upload_image")]
+//    #[IsGranted('ALLOWED_ORIGINS' , subject: 'request')]
     public function upload(Request $request): Response
     {
         $structure = $this->getUser()->getStructure();
+        $origin = $request->server->get('HTTP_ORIGIN');
+
 
         // @TODO: Set your own domain(s) in `$allowedOrigins`  Dans un voter
         $allowedOrigins = ["https://localhost", $this->bag->get('base_url')];
-        $origin = $request->server->get('HTTP_ORIGIN');
 
         // same-origin requests won't set an origin. If the origin is set, it must be valid.
         if ($origin && !in_array($origin, $allowedOrigins)) {
@@ -47,17 +51,11 @@ class TinyMceUploadController extends AbstractController
         /** @var UploadedFile|null $file */
         $file = $request->files->get("file");
 
-        if (!$file) {
-            return new Response("Missing file.", 400);
-        }
 
-        if ($file->getSize() > self::MAX_FILESIZE) {
-            return new Response("Le poids maximal de l'image doit être de 200Kb : " . (self::MAX_FILESIZE / 1000000) . "MB", 400);
-        }
+        $this->imageUploadValidator->isMissingFile($file);
+        $this->imageUploadValidator->isTooBig($file);
+        $this->imageUploadValidator->isNotImage($file);
 
-        if (!str_starts_with($file->getMimeType(), "image/")) {
-            return new Response("Le fichier doit être au format jpeg,jpg ou png.", 400);
-        }
 
         $extension = pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
 

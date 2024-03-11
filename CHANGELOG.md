@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 ## [4.3.0] - 2024-??-??
 ### Evolution
 - Possibilité de définir un titre pour les annexes
+- Possibilité de formater le contenu des templates d'email. 
+- Possibilité d'ajouter des images dans les templates d'email
 
 ## [4.2.19] - 2023-??-??
 
