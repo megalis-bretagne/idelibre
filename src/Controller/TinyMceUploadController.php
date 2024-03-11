@@ -28,8 +28,6 @@ class TinyMceUploadController extends AbstractController
     #[Route("/image", name: "api_tinymce_upload_image")]
     public function upload(Request $request): Response
     {
-        $file = $request->files->get("file");
-
         $structure = $this->getUser()->getStructure();
 
         // @TODO: Set your own domain(s) in `$allowedOrigins`  Dans un voter

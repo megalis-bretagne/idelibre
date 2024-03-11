@@ -9,10 +9,12 @@ use App\Service\Email\EmailData;
 use App\Service\EmailTemplate\EmailGenerator;
 use App\Service\EmailTemplate\EmailTemplateManager;
 use App\Service\File\FileManager;
+use App\Service\ImageHandler\Encoder;
 use App\Sidebar\Annotation\Sidebar;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -63,8 +65,9 @@ class EmailTemplateController extends AbstractController
     #[Route(path: '/emailTemplate/edit/{id}', name: 'email_template_edit', methods: ['GET', 'POST'])]
     #[IsGranted('MANAGE_EMAIL_TEMPLATES', subject: 'emailTemplate')]
     #[Breadcrumb(title: 'Modification du modèle d\'email {emailTemplate.name}')]
-    public function edit(Request $request, EmailTemplate $emailTemplate, EmailTemplateManager $templateManager): Response
+    public function edit(Request $request, EmailTemplate $emailTemplate, EmailTemplateManager $templateManager, Encoder $encoder): Response
     {
+        $emailTemplate->setContent($encoder->encodeImages($emailTemplate->getContent(), $this->getUser()->getStructure()->getId()));
         $form = $this->createForm(EmailTemplateType::class, $emailTemplate, [
             'structure' => $this->getUser()->getStructure(),
         ]);
@@ -230,4 +233,5 @@ class EmailTemplateController extends AbstractController
                 </tbody>
             </table>';
     }
+
 }

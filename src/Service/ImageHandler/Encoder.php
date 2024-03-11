@@ -5,6 +5,7 @@ namespace App\Service\ImageHandler;
 use App\Entity\File;
 use App\Repository\FileRepository;
 use App\Service\File\FileManager;
+use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Component\Filesystem\Filesystem;
 
 class Encoder
@@ -21,6 +22,9 @@ class Encoder
     }
 
 
+    /**
+     * @throws NonUniqueResultException
+     */
     public function imageHandlerAndUpdateContent(string $content, string $structureId): string
     {
         preg_match_all(self::URL_PATTERN, $content, $imagesSrc);
@@ -52,25 +56,32 @@ class Encoder
         );
     }
 
-    private function imgEncode(string $content, string $structureId): callable
+    public function imgEncode(string $content, string $structureId): callable
     {
         return function ($matches) use ($structureId) {
             foreach ($matches as $match) {
 
-                $uuidPattern = '/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89ab][0-9a-fA-F]{3}-[0-9a-fA-F]{12}/i';
-
-                preg_match($uuidPattern, $match, $uuid);
-                $imgId = $uuid[0] ?? null;
-
-                $file = $this->fileRepository->findFileById($imgId);
-
+                $file = $this->findFileFromId($match);
                 $extension = pathinfo($file->getName(), PATHINFO_EXTENSION);
 
                 $encodedImage = base64_encode(file_get_contents($file->getPath()));
-
-                return str_replace($imgId, 'data:image/' .$extension . ';base64,' . $encodedImage, $match);
+                return str_replace($file->getId(), 'data:image/' .$extension . ';base64,' . $encodedImage, $match);
             }
         };
+    }
+
+    /**
+     * @throws NonUniqueResultException
+     */
+    public function findFileFromId($match): ?File
+    {
+        $uuidPattern = '/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89ab][0-9a-fA-F]{3}-[0-9a-fA-F]{12}/i';
+
+        preg_match($uuidPattern, $match, $uuid);
+        $imgId = $uuid[0] ?? null;
+
+        return $this->fileRepository->findFileById($imgId);
+
     }
 
 

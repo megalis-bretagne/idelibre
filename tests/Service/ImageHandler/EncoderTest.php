@@ -38,18 +38,12 @@ class EncoderTest extends WebTestCase
             'structure' => $structure,
         ])->object();
 
-
-        dd($emailTemplate->getContent());
-
-
         $filesystem = new Filesystem();
         $filesystem->copy(__DIR__ . '/../../resources/image.jpg', '/tmp/image/' . $structure->getId() . '/image.jpg');
 
+        $updatedContent = $this->encoder->imageHandlerAndUpdateContent($emailTemplate->getContent(), $structure->getId());
 
-        $content = '<img src="https://www.example.com/image.jpg" alt="image" />';
-        $updatedContent = $this->encoder->imageHandlerAndUpdateContent($content, $structure->getId());
-//        dd($updatedContent);
-
-        $this->assertStringContainsString("src=$structure->getId()", $content);
+        $this->assertStringContainsString($emailTemplate->getContent(),$updatedContent);
     }
+
 }
