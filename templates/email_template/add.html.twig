@@ -21,8 +21,10 @@
             data-bs-toggle="popover"
             title="Liste des variables"
             data-html="true"
-            data-content="{{ include('include/_mailing_info.html.twig') }}">Variables
+            data-bs-placement="right"
+            data-bs-content="{{ include('include/_mailing_info.html.twig') }}">Variables
     </button>
+
     {{ form_errors(form.content) }}
     {{ form_widget(form.content) }}
     {{ form_help(form.content) }}
