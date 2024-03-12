@@ -97,7 +97,7 @@ class ExportUsersCsv
         $zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE);
 
         foreach ($structuresPath as $structurePath) {
-            $zip->addFile($structurePath);
+            $zip->addFile($structurePath, basename($structurePath, '.csv'));
         }
 
         $zip->close();
