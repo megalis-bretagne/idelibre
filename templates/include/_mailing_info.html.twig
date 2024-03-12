@@ -1,26 +1,26 @@
 {% if email_template is not defined or email_template.category == 'convocation' %}
-    civilité de l'élu : #civilite# --
-    prénom de l'élu : #prenom# --
-    nom de l'élu : #nom# --
+    Civilité de l'élu : #civilite# <br>
+    Prénom de l'élu : #prenom# <br>
+    Nom de l'élu : #nom# <br>
 {% else %}
-    civilité de l'utilisateur : #civilite# --
-    prénom de l'utilisateur : #prenom# --
-    nom de l'utilisateur : #nom# --
+    Civilité de l'utilisateur : #civilite# <br>
+    Prénom de l'utilisateur : #prenom# <br>
+    Nom de l'utilisateur : #nom# <br>
 {% endif %}
 
 {% if email_template is not defined or email_template.category != 'recapitulatif' %}
-    date de la séance : #dateseance# --
-    heure de la séance : #heureseance# --
-    lieu de la seance : #lieuseance# --
-    type de la séance : #typeseance# --
-    lien vers la séance : #urlseance# --
+    Date de la séance : #dateseance# <br>
+    Heure de la séance : #heureseance# <br>
+    Lieu de la seance : #lieuseance# <br>
+    Type de la séance : #typeseance# <br>
+    Lien vers la séance : #urlseance# <br>
 
     {% if email_template is not defined or email_template.category == 'convocation' %}
-        titre de l'élu : #titre# --
+        Titre de l'élu : #titre# <br>
     {% endif %}
-    confirmation présence : #urlpresence#
+    Confirmation présence : #urlpresence#
 
 
 {% else %}
-    contenu complet du message : #recapitulatif# --
+    Contenu complet du message : #recapitulatif# <br>
 {% endif %}
