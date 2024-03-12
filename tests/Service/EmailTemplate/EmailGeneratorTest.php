@@ -5,6 +5,7 @@ namespace App\Tests\Service\EmailTemplate;
 use App\Entity\EmailTemplate;
 use App\Service\EmailTemplate\EmailGenerator;
 use App\Service\EmailTemplate\EmailTemplateManager;
+use App\Service\ImageHandler\Encoder;
 use App\Service\Util\DateUtil;
 use App\Service\Util\GenderConverter;
 use App\Tests\Factory\AttendanceTokenFactory;
@@ -44,6 +45,7 @@ class EmailGeneratorTest extends WebTestCase
         $this->params = self::getContainer()->getParameterBag();
         $this->router = self::getContainer()->get(RouterInterface::class);
         $this->emailGenerator = self::getContainer()->get(EmailGenerator::class);
+        $this->encoder = self::getContainer()->get(Encoder::class);
 
         self::ensureKernelShutdown();
 
@@ -57,13 +59,15 @@ class EmailGeneratorTest extends WebTestCase
         $emailTemplate = new EmailTemplate();
         $emailTemplate->setContent('test de génération de message : #variable#');
         $emailTemplate->setSubject('test de génération de titre : #variable#');
+        $emailTemplate->setStructure(StructureStory::libriciel()->object());
 
         $generator = new EmailGenerator(
             new DateUtil(),
             new GenderConverter(),
             $this->emailTemplateManager,
             $this->params,
-            $this->router
+            $this->router,
+            $this->encoder
         );
 
         $emailData = $generator->generateFromTemplate($emailTemplate, ['#variable#' => 'test']);
@@ -93,6 +97,7 @@ class EmailGeneratorTest extends WebTestCase
             $this->emailTemplateManager,
             $this->params,
             $this->router,
+            $this->encoder
         );
 
         $expected = [
@@ -124,6 +129,7 @@ class EmailGeneratorTest extends WebTestCase
             $this->emailTemplateManager,
             $this->params,
             $this->router,
+            $this->encoder,
         );
 
         $expected = [
@@ -155,6 +161,7 @@ class EmailGeneratorTest extends WebTestCase
             $this->emailTemplateManager,
             $this->params,
             $this->router,
+            $this->encoder
         );
 
         $expected = 'idelibre : une nouvelle convocation pour le type Conseil Libriciel';
