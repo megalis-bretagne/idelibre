@@ -99,6 +99,8 @@ class ComelusConnectorManager
         }
 
 
+
+
         $uploadedFiles = $this->prepareFiles($sitting);
 
         $this->comelusWrapper->setApiKey($comelusConnetor->getApiKey());
