@@ -43,7 +43,7 @@ class ExportUsersCsv
         ;
 
 
-        $csvWriter = Writer::createFromPath( $pathDir . '/' . $structure->getName() . '.csv', 'w+');
+        $csvWriter = Writer::createFromPath( $pathDir . '/' . $this->sanitizer->fileNameSanitizer($structure->getName(), 255) . '.csv', 'w+');
         $csvWriter->addFormatter($encoder);
 
         foreach ($users as $user) {
@@ -92,6 +92,7 @@ class ExportUsersCsv
     public function exportGroupUsers(Group $group): string
     {
         $structuresPath = [];
+
         foreach ($group->getStructures() as $structure) {
             $structuresPath[] = $this->exportStructureUsers($structure);
         }
@@ -102,13 +103,13 @@ class ExportUsersCsv
     private function genZipAndGetPath(array $structuresPath): string
     {
         $zip = new ZipArchive();
-        $zipPath = '/tmp/' . uniqid('zip_report') . '.zip';
+        $zipPath = '/tmp/' . uniqid('users-group') . '.zip';
         $zip->open($zipPath, ZipArchive::CREATE);
         $zip->setCompressionName('deflate',ZipArchive::CM_DEFLATE);
         $zip->setArchiveComment(ZipArchive::FL_ENC_UTF_8);
 
         foreach ($structuresPath as $structurePath) {
-            $zip->addFile($structurePath);
+            $zip->addFile($structurePath, $this->sanitizer->fileNameSanitizer(basename($structurePath), 255));
         }
 
         $zip->close();
@@ -128,7 +129,6 @@ class ExportUsersCsv
 
         if (!$this->fileSystem->exists($pathFile)) {
             $this->fileSystem->mkdir($pathFile, 0755, true);
-//            $this->fileSystem->chownS($pathFile, 'www-data');
             $this->fileSystem->rename($pathFile, '/export');
         }
         return $pathFile;
