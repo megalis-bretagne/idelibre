@@ -58,10 +58,12 @@ class ExportUsersController extends AbstractController
     #[isGranted('MANAGE_GROUPS', subject: 'group')]
     public function exportCsvUsersFromGroup(Group $group): Response
     {
-        $response = new BinaryFileResponse($this->exportUsersCsv->exportGroupUsers($group));
+        $response = new BinaryFileResponse($this->exportUsersCsv->exportGroupUsers($group), 200, [
+            'Content-Type' => 'application/zip',
+        ]);
         $response->setContentDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            $this->sanitizer->fileNameSanitizer($group->getName(), 255) . '.zip'
+            $this->sanitizer->fileNameSanitizer($group->getName(), 255) . '.zip',
         );
 
         $response->deleteFileAfterSend();
