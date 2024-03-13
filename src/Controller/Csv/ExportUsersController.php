@@ -24,7 +24,6 @@ class ExportUsersController extends AbstractController
     public function __construct(
         private readonly ExportUsersCsv $exportUsersCsv,
         private readonly Sanitizer $sanitizer,
-        private readonly ExportToZip $exportToZip,
     ) {
     }
 
