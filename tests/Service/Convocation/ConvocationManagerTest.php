@@ -63,7 +63,7 @@ class ConvocationManagerTest extends WebTestCase
         $convocation1 = ConvocationFactory::createOne(["sitting" => $sitting, "attendance" => ""]);
         $convocation2 = ConvocationFactory::createOne(["sitting" => $sitting, "attendance" => Convocation::PRESENT]);
 
-        $convocations = [$convocation1, $convocation2];
+        $convocations = [$convocation1->object(), $convocation2->object()];
 
         $countConvocationNotAnswered = $this->convocationManager->countConvocationNotanswered($convocations);
         $this->assertIsInt($countConvocationNotAnswered);
