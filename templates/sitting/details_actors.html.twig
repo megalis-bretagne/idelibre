@@ -556,7 +556,8 @@
                                 <p v-if="notAnswered > 0" class="alert alert-warning">
                                     <small>
                                         <i class="fa fa-exclamation-triangle me-1"></i>
-                                        A ce jour ${ notAnswered } destinataires de l'envoi n'ont pas donné de réponses
+                                        A ce jour ${ notAnswered }
+                                         ${ notAnswered > 1 ? ' destinataires de l\'envoi n\'ont pas donné de réponses' : 'destinataire de l\'envoi n\'a pas donné de réponse' }
                                         <br>
                                     </small>
                                 </p>

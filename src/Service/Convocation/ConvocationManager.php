@@ -361,10 +361,23 @@ class ConvocationManager
     {
         $count = 0;
         foreach ($convocations as $convocation) {
-            if ($convocation->getAttendance() === "" || $convocation->getAttendance() === null) {
-                $count++;
+            if ($this->isActorConvocation($convocation) || $this->isDeputyConvocation($convocation)) {
+                if ($convocation->getAttendance() === "" || $convocation->getAttendance() === null) {
+                    $count++;
+                }
             }
+
         }
         return $count;
+    }
+
+    private function isActorConvocation(Convocation $convocation)
+    {
+        return $convocation->getUser()->getRole()->getName() === Role_Name::NAME_ROLE_ACTOR;
+    }
+
+    private function isDeputyConvocation(Convocation $convocation)
+    {
+        return $convocation->getUser()->getRole()->getName() === Role_Name::NAME_ROLE_DEPUTY;
     }
 }
