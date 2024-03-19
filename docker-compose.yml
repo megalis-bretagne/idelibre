@@ -39,7 +39,7 @@ services:
       - MAXIMUM_SIZE_PDF_ZIP_GENERATION=${MAXIMUM_SIZE_PDF_ZIP_GENERATION:-200000000}
       - LOCK_DSN=${LOCK_DSN:-semaphore}
     volumes:
-      - data-public:/app/public
+      - data-public:/app/public.env.lo
       - /data/files:/data
     command: [ "/app/docker-resources/initApp.sh" ]
     restart: unless-stopped
@@ -102,14 +102,9 @@ services:
 
   lshorodatage:
     container_name: lshorodatage
-    image: registry.libriciel.fr:443/public/citoyens/lshorodatage/lshorodatage:1.0.0
+    image: registry.libriciel.fr:443/public/citoyens/lshorodatage/lshorodatage:2.0.0
     environment:
       - NODE_ENV=production
-      - POSTGRES_HOST=${POSTGRES_HOST:-172.17.0.1}
-      - POSTGRES_DB=lshorodatage
-      - POSTGRES_USER=${POSTGRES_USER:-idelibre}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-idelibre}
-      - POSTGRES_PORT=${POSTGRES_PORT:-5432}
       - SITE_HOSTNAME=${URL:-lshorodatage.libriciel.fr}
     volumes:
       - /data/certificates:/certificates
