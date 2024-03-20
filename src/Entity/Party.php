@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
@@ -24,6 +25,7 @@ use Symfony\Component\Validator\Constraints\NotNull;
 #[Table]
 #[UniqueEntity(fields: ['name', 'structure'], message: 'Ce nom de groupe politique existe déjà', errorPath: 'name')]
 #[UniqueConstraint(name: 'IDX_PARTY_NAME_STRUCTURE', columns: ['name', 'structure_id'])]
+#[HasLifecycleCallbacks]
 class Party
 {
     #[ORM\Id]
@@ -55,6 +57,12 @@ class Party
     #[Length(max: '10')]
     #[Groups(['party:read'])]
     private ?string $initials = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $updatedAt = null;
 
     public function __construct()
     {
@@ -146,5 +154,28 @@ class Party
         $this->initials = $initials;
 
         return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): void
+    {
+        $this->createdAt = new \DateTimeImmutable();
+        $this->setUpdatedAtValue();
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
+
+    #[ORM\PreUpdate]
+    public function setUpdatedAtValue(): void
+    {
+        $this->updatedAt = new \DateTimeImmutable();
     }
 }

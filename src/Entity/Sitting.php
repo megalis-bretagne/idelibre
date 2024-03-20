@@ -29,6 +29,7 @@ use Symfony\Component\Validator\Constraints\NotNull;
 #[Table]
 #[UniqueEntity(fields: ['type', 'structure', 'date'], message: 'Une séance du même type existe déja à la même heure', errorPath: 'name')]
 #[UniqueConstraint(name: 'IDX_SITTING_NAME_DATE_STRUCTURE', columns: ['name', 'structure_id', 'date'])]
+#[ORM\HasLifecycleCallbacks]
 class Sitting
 {
     public const ARCHIVED = 'archived';
@@ -114,6 +115,12 @@ class Sitting
     #[ORM\OneToOne(mappedBy: 'sitting', cascade: ['persist', 'remove'])]
     #[Groups(groups: ['sitting'])]
     private ?LsvoteSitting $lsvoteSitting = null;
+
+
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $updatedAt = null;
+
 
     public function __construct()
     {
@@ -434,5 +441,23 @@ class Sitting
         $this->lsvoteSitting = $lsvoteSitting;
 
         return $this;
+    }
+
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): void
+    {
+        $this->createdAt = new \DateTimeImmutable();
+        $this->setUpdatedAtValue();
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
+
+    #[ORM\PreUpdate]
+    public function setUpdatedAtValue(): void
+    {
+        $this->updatedAt = new \DateTimeImmutable();
     }
 }
