@@ -165,6 +165,12 @@ class Theme
         return $this;
     }
 
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
     #[ORM\PrePersist]
     public function setCreatedAtValue(): void
     {
