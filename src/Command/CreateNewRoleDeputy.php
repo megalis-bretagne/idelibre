@@ -16,9 +16,10 @@ class CreateNewRoleDeputy extends Command
 {
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
-        private readonly RoleManager $roleManager,
-        string $name = null,
-    ) {
+        private readonly RoleManager            $roleManager,
+        string                                  $name = null,
+    )
+    {
         parent::__construct($name);
     }
 
@@ -28,6 +29,13 @@ class CreateNewRoleDeputy extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
+
+        if (!$this->isAlreadyInit()) {
+            $io->text("La base de données n'est pas encore initialisée, rien à mettre à jour");
+
+            return Command::SUCCESS;
+        }
+
 
         if ($this->alreadyExistLsvoteConnector()) {
             $io->text('Le rôle "Suppléant existe déja"');
@@ -48,4 +56,15 @@ class CreateNewRoleDeputy extends Command
 
         return $statement->rowCount() > 0;
     }
+
+    private function isAlreadyInit(): bool
+    {
+        $pdo = $this->entityManager->getConnection()->getNativeConnection();
+        $statement = $pdo->prepare('select * from "user"');
+        $statement->execute();
+        $count = $statement->rowCount();
+
+        return $count > 0;
+    }
+
 }

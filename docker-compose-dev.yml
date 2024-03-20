@@ -7,7 +7,8 @@ services:
     build: .
     restart: always
     depends_on:
-      - maildev-idelibre
+       postgres-idelibre:
+          condition: service_healthy
     env_file:
       - .env.docker.local
     volumes:
@@ -31,6 +32,7 @@ services:
     command: ["/app/docker-resources/initApp.sh"]
     networks:
       - network_idelibre_dev
+
     labels:
       ofelia.enabled: "true"
       ofelia.job-exec.purge.schedule: "0 0 2 * * * "
@@ -49,7 +51,7 @@ services:
 #      - ../idelibre4-nodejs:/app:ro
     environment:
       - TYPEORM_CONNECTION=postgres
-      - TYPEORM_HOST=${POSTGRES_HOST:-172.17.0.1}
+      - TYPEORM_HOST=${POSTGRES_HOST:-postgres-idelibre}
       - TYPEORM_USERNAME=${POSTGRES_USER:-idelibre}
       - TYPEORM_PASSWORD=${POSTGRES_PASSWORD:-idelibre}
       - TYPEORM_DATABASE=${POSTGRES_DB:-idelibre}
@@ -63,6 +65,10 @@ services:
       - PASSPHRASE=${PASSPHRASE:-passphrase}
       - JWT_SECRET=${JWT_SECRET:-jwtsecret}
       - JWT_TIMEOUT=${JWT_TIMEOUT:-86400}
+
+    depends_on:
+      postgres-idelibre:
+        condition: service_healthy
 
     command: [ "/app/docker-resources/init.sh" ]
 #    command: "sleep 3000"
@@ -105,20 +111,37 @@ services:
 
   lshorodatage:
     container_name: lshorodatage
-    image: registry.libriciel.fr:443/public/citoyens/lshorodatage/lshorodatage:1.0.0
+    image: registry.libriciel.fr:443/public/citoyens/lshorodatage/lshorodatage:2.0.0
     ports:
       - 5000:3000
     environment:
       - NODE_ENV=production
-      - POSTGRES_HOST=${POSTGRES_HOST:-172.17.0.1}
-      - POSTGRES_DB=lshorodatage
-      - POSTGRES_USER=idelibre
-      - POSTGRES_PASSWORD=idelibre
-      - POSTGRES_PORT=${POSTGRES_PORT:-5432}
       - SITE_HOSTNAME=${URL:-lshorodatage.libriciel.fr}
     command: ["/app/docker-resources/init.sh"]
     networks:
       - network_idelibre_dev
+
+
+  postgres-idelibre:
+    container_name: postgres-idelibre
+    image: postgres:16.2-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-idelibre}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-idelibre}
+      - POSTGRES_DB=${POSTGRES_DB:-idelibre}
+
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "$POSTGRES_USER", "-d", "$POSTGRES_DB" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    networks:
+      - network_idelibre_dev
+
+    volumes:
+      - /data/postgres-docker-idelibre:/var/lib/postgresql/data
 
 
   maildev-idelibre:
