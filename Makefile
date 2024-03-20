@@ -7,6 +7,10 @@ up:
 down:
 	$(DOCKER_COMPOSE) down -v
 
+
+kill:
+	docker rm $$( docker container ls -aq) -f
+
 logs:
 	$(DOCKER_COMPOSE) logs -f
 
