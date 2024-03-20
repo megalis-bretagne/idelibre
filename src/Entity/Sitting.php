@@ -119,6 +119,7 @@ class Sitting
 
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['sitting', 'sitting:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
 

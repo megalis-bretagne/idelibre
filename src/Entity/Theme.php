@@ -78,9 +78,11 @@ class Theme
 
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['theme:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['theme:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
 

@@ -59,9 +59,11 @@ class Party
     private ?string $initials = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['party:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['party:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     public function __construct()
