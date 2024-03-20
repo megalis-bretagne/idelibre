@@ -4,6 +4,9 @@ services:
   fpm-idelibre:
     container_name: fpm-idelibre
     image: registry.libriciel.fr:443/public/citoyens/idelibre/idelibre:TAG
+    depends_on:
+      postgres-idelibre:
+        condition: service_healthy
     environment:
       - APP_ENV=${APP_ENV:-prod}
       - APP_SECRET=${APP_SECRET:-b64dca717248e387bc88b36d9c485244}
@@ -53,6 +56,9 @@ services:
   node-idelibre:
     container_name: node-idelibre
     image: registry.libriciel.fr:443/public/citoyens/idelibre-node/idelibre-node:4.2.1
+    depends_on:
+      postgres-idelibre:
+        condition: service_healthy
     volumes:
       - /data/files:/data
     environment:
@@ -71,6 +77,7 @@ services:
       - JWT_SECRET=${JWT_SECRET:-jwtsecret}
       - JWT_TIMEOUT=${JWT_TIMEOUT:-86400}
     command: [ "/app/docker-resources/init.sh" ]
+
     restart: unless-stopped
 
 
@@ -99,6 +106,30 @@ services:
     volumes:
       - /data/certbot/conf:/etc/letsencrypt
       - /data/certbot/www:/var/www/certbot
+
+
+  postgres-idelibre:
+    container_name: postgres-idelibre
+    image: postgres:16.2-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-idelibre}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-idelibre}
+      - POSTGRES_DB=${POSTGRES_DB:-idelibre}
+
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "$POSTGRES_USER", "-d", "$POSTGRES_DB" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    networks:
+      - network_idelibre_dev
+
+    volumes:
+      - /data/postgres-docker-idelibre:/var/lib/postgresql/data
+
+
 
   lshorodatage:
     container_name: lshorodatage

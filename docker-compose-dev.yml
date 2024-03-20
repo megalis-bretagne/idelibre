@@ -111,7 +111,7 @@ services:
 
   lshorodatage:
     container_name: lshorodatage
-    image: registry.libriciel.fr:443/public/citoyens/lshorodatage/lshorodatage:2.0.0-rc.1
+    image: registry.libriciel.fr:443/public/citoyens/lshorodatage/lshorodatage:2.0.0
     ports:
       - 5000:3000
     environment:
@@ -124,7 +124,7 @@ services:
 
   postgres-idelibre:
     container_name: postgres-idelibre
-    image: postgres:15
+    image: postgres:16.2-alpine
     restart: always
     environment:
       - POSTGRES_USER=${POSTGRES_USER:-idelibre}
@@ -132,7 +132,7 @@ services:
       - POSTGRES_DB=${POSTGRES_DB:-idelibre}
 
     healthcheck:
-      test: [ "CMD", "pg_isready", "-U", "idelibre", "-d", "idelibre" ]
+      test: [ "CMD", "pg_isready", "-U", "$POSTGRES_USER", "-d", "$POSTGRES_DB" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -140,8 +140,8 @@ services:
     networks:
       - network_idelibre_dev
 
-#    volumes:
-#      - /data/postgres-docker-idelibre:/var/lib/postgresql/data
+    volumes:
+      - /data/postgres-docker-idelibre:/var/lib/postgresql/data
 
 
   maildev-idelibre:
