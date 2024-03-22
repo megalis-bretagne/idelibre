@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\JoinTable;
 use Doctrine\ORM\Mapping\ManyToMany;
@@ -26,6 +27,7 @@ use Symfony\Component\Validator\Constraints\NotNull;
 #[Table]
 #[UniqueEntity(fields: ['name', 'structure'], message: 'Ce type est déja utilisé dans cette structure', errorPath: 'name')]
 #[UniqueConstraint(name: 'IDX_TYPE_NAME_STRUCTURE', columns: ['name', 'structure_id'])]
+#[hasLifecycleCallbacks]
 class Type
 {
     #[ORM\Id]
@@ -76,6 +78,14 @@ class Type
     #[Column(type: 'boolean', nullable: true)]
     #[Groups(['sitting', 'type:read', 'type:write'])]
     private ?bool $isSmsEmployees = false;
+
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $updatedAt = null;
+
 
     public function __construct()
     {
@@ -240,5 +250,29 @@ class Type
     public function getIsSmsEmployees(): bool
     {
         return $this->isSmsEmployees ?? false;
+    }
+
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): void
+    {
+        $this->createdAt = new \DateTimeImmutable();
+        $this->setUpdatedAtValue();
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
+
+    #[ORM\PreUpdate]
+    public function setUpdatedAtValue(): void
+    {
+        $this->updatedAt = new \DateTimeImmutable();
     }
 }

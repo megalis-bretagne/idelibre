@@ -18,8 +18,7 @@ class CreateNewRoleDeputy extends Command
         private readonly EntityManagerInterface $entityManager,
         private readonly RoleManager            $roleManager,
         string                                  $name = null,
-    )
-    {
+    ) {
         parent::__construct($name);
     }
 
@@ -66,5 +65,4 @@ class CreateNewRoleDeputy extends Command
 
         return $count > 0;
     }
-
 }
