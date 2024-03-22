@@ -23,6 +23,7 @@ use Symfony\Component\Validator\Constraints\NotNull;
 #[Index(columns: ['lft'], name: 'lft_ix')]
 #[Index(columns: ['rgt'], name: 'rgt_ix')]
 #[Index(columns: ['lvl'], name: 'lvl_ix')]
+#[ORM\HasLifecycleCallbacks]
 class Theme
 {
     #[ORM\Id]
@@ -74,6 +75,16 @@ class Theme
     #[Column(type: 'string', length: 512, nullable: true)]
     #[Groups(['theme', 'theme:read', 'project:read'])]
     private $fullName;
+
+
+    #[ORM\Column(nullable: true)]
+    #[Groups(['theme:read'])]
+    private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\Column(nullable: true)]
+    #[Groups(['theme:read'])]
+    private ?\DateTimeImmutable $updatedAt = null;
+
 
     public function getId(): ?string
     {
@@ -152,5 +163,29 @@ class Theme
         $this->fullName = $fullName;
 
         return $this;
+    }
+
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): void
+    {
+        $this->createdAt = new \DateTimeImmutable();
+        $this->setUpdatedAtValue();
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
+
+    #[ORM\PreUpdate]
+    public function setUpdatedAtValue(): void
+    {
+        $this->updatedAt = new \DateTimeImmutable();
     }
 }
