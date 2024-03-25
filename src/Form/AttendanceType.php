@@ -52,46 +52,7 @@ class AttendanceType extends AbstractType
         }
     }
 
-    private function getAttendanceValues(Convocation $convocation, ?bool $isRemoteAllowed): array
-    {
-        if ($isRemoteAllowed && Convocation::CATEGORY_CONVOCATION === $convocation->getCategory()) {
-            if ($convocation->getUser()->getDeputy() !== null) {
-                $values = [
-                    'Présent' => Convocation::PRESENT,
-                    'Présent à distance' => Convocation::REMOTE,
-                    'Absent' => Convocation::ABSENT,
-                    'Donne pouvoir via procuration' => Convocation::ABSENT_GIVE_POA,
-                    'Remplacé par son suppléant' => Convocation::ABSENT_SEND_DEPUTY,
-                ];
-            } else {
-                $values = [
-                    'Présent' => Convocation::PRESENT,
-                    'Présent à distance' => Convocation::REMOTE,
-                    'Absent' => Convocation::ABSENT,
-                    'Donne pouvoir via procuration' => Convocation::ABSENT_GIVE_POA,
-                ];
-            }
-        }
 
-        if (!$isRemoteAllowed && Convocation::CATEGORY_CONVOCATION === $convocation->getCategory()) {
-            if ($convocation->getUser()->getDeputy() !== null) {
-                $values = [
-                    'Présent' => Convocation::PRESENT,
-                    'Absent' => Convocation::ABSENT,
-                    'Donne pouvoir via procuration' => Convocation::ABSENT_GIVE_POA,
-                    'Remplacé par son suppléant' => Convocation::ABSENT_SEND_DEPUTY,
-                ];
-            } else {
-                $values = [
-                    'Présent' => Convocation::PRESENT,
-                    'Absent' => Convocation::ABSENT,
-                    'Donne pouvoir via procuration' => Convocation::ABSENT_GIVE_POA,
-                ];
-            }
-        }
-
-        return $values;
-    }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
@@ -116,4 +77,81 @@ class AttendanceType extends AbstractType
     {
         return $user->getLastName() . ' ' . $user->getFirstName();
     }
+
+    private function getAttendanceValues(Convocation $convocation, ?bool $isRemoteAllowed): array
+    {
+        if ($isRemoteAllowed && Convocation::CATEGORY_CONVOCATION === $convocation->getCategory()) {
+
+            if ($convocation->getUser()->getDeputy() !== null) {
+                return $this->valuesIfDeputyAndIfRemote();
+            }
+
+            if ($convocation->getUser()->getDeputy() === null) {
+               return $this->valuesIfNoDeputyAndIfRemote();
+            }
+        }
+
+        if (!$isRemoteAllowed && Convocation::CATEGORY_CONVOCATION === $convocation->getCategory()) {
+
+            if ($convocation->getUser()->getDeputy() !== null) {
+                return $this->valuesIfDeputyAndIfNotRemote();
+            }
+
+            if ($convocation->getUser()->getDeputy() === null) {
+                return $this->valuesIfNoDeputyAndIfNotRemote();
+            }
+        }
+
+        return $this->valuesIfNotActors();
+    }
+
+    private function valuesIfDeputyAndIfRemote(): array
+    {
+        return [
+            'Présent' => Convocation::PRESENT,
+            'Présent à distance' => Convocation::REMOTE,
+            'Absent' => Convocation::ABSENT,
+            'Donne pouvoir via procuration' => Convocation::ABSENT_GIVE_POA,
+            'Remplacé par son suppléant' => Convocation::ABSENT_SEND_DEPUTY,
+        ];
+    }
+
+    private function valuesIfDeputyAndIfNotRemote(): array
+    {
+        return [
+            'Présent' => Convocation::PRESENT,
+            'Absent' => Convocation::ABSENT,
+            'Donne pouvoir via procuration' => Convocation::ABSENT_GIVE_POA,
+            'Remplacé par son suppléant' => Convocation::ABSENT_SEND_DEPUTY,
+        ];
+    }
+
+    private function valuesIfNoDeputyAndIfRemote(): array
+    {
+        return [
+                'Présent' => Convocation::PRESENT,
+                'Présent à distance' => Convocation::REMOTE,
+                'Absent' => Convocation::ABSENT,
+                'Donne pouvoir via procuration' => Convocation::ABSENT_GIVE_POA,
+            ];
+    }
+
+    private function valuesIfNoDeputyAndIfNotRemote(): array
+    {
+        return [
+            'Présent' => Convocation::PRESENT,
+            'Absent' => Convocation::ABSENT,
+            'Donne pouvoir via procuration' => Convocation::ABSENT_GIVE_POA,
+        ];
+    }
+
+    private function valuesIfNotActors(): array
+    {
+        return [
+            'Présent' => Convocation::PRESENT,
+            'Présent à distance' => Convocation::REMOTE,
+            'Absent' => Convocation::ABSENT,
+        ];
+    }
+
 }
