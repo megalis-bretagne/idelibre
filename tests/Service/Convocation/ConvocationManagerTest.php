@@ -3,10 +3,13 @@
 namespace App\Tests\Service\Convocation;
 
 use App\Entity\Convocation;
+use App\Entity\Enum\Role_Name;
 use App\Service\Convocation\ConvocationManager;
 use App\Tests\Factory\ConvocationFactory;
 use App\Tests\Factory\SittingFactory;
 use App\Tests\Factory\TimestampFactory;
+use App\Tests\Factory\UserFactory;
+use App\Tests\Story\RoleStory;
 use App\Tests\Story\SittingStory;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -60,10 +63,14 @@ class ConvocationManagerTest extends WebTestCase
     public function testCountConvocationNotAnswered()
     {
         $sitting = SittingStory::sittingConseilLibriciel();
+        $gestionnaire = UserFactory::createOne([
+            'role' => RoleStory::secretary(),
+        ]);
         $convocation1 = ConvocationFactory::createOne(["sitting" => $sitting, "attendance" => ""]);
         $convocation2 = ConvocationFactory::createOne(["sitting" => $sitting, "attendance" => Convocation::PRESENT]);
+        $convocation3 = ConvocationFactory::createOne(["sitting" => $sitting, "attendance" => Convocation::PRESENT, 'user' => $gestionnaire]);
 
-        $convocations = [$convocation1, $convocation2];
+        $convocations = [$convocation1->object(), $convocation2->object(), $convocation3->object()];
 
         $countConvocationNotAnswered = $this->convocationManager->countConvocationNotanswered($convocations);
         $this->assertIsInt($countConvocationNotAnswered);
