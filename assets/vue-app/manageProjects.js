@@ -67,7 +67,7 @@ let app = new Vue({
                 element.insertAdjacentHTML('beforeend', '<small class="text-danger ps-3"><span class="fa fa-exclamation-circle me-2"></span>Le libellé ne doit pas dépasser 512 caractères</small>');
                 setTimeout(() => {
                     element.removeChild(element.lastChild);
-                }, 3000);
+                }, 10000);
                 return;
             }
             this.$refs.submitBtn.removeAttribute('disabled');
