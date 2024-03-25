@@ -2,6 +2,7 @@
 
 namespace App\Tests\Controller\Csv;
 
+use App\Service\Util\Sanitizer;
 use App\Tests\Factory\StructureFactory;
 use App\Tests\Factory\UserFactory;
 use App\Tests\FindEntityTrait;
@@ -27,6 +28,8 @@ class ExportCsvUserControllerTest extends WebTestCase
 
     private ?KernelBrowser $client;
     private ObjectManager $entityManager;
+    private Sanitizer $sanitizer;
+
     protected function setUp(): void
     {
         $kernel = self::bootKernel();
@@ -36,6 +39,7 @@ class ExportCsvUserControllerTest extends WebTestCase
 
         self::ensureKernelShutdown();
         $this->client = static::createClient();
+        $this->sanitizer = self::getContainer()->get(Sanitizer::class);
     }
 
     public function testExportUserFromStructure()
@@ -48,7 +52,7 @@ class ExportCsvUserControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(200);
         $response = $this->client->getResponse();
         $this->assertTrue($response->headers->has('content-disposition'));
-        $this->assertSame('attachment; filename=' . $structure->getName() . '.csv', $response->headers->get('content-disposition'));
+        $this->assertSame('attachment; filename=' . $this->sanitizer->fileNameSanitizer($structure->getName(), 255) . '.csv', $response->headers->get('content-disposition'));
         $this->assertSame('text/csv; charset=UTF-8', $response->headers->get('content-type'));
         $this->assertGreaterThan(20, intval($response->headers->get('content-length')));
     }
@@ -83,7 +87,7 @@ class ExportCsvUserControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(200);
         $response = $this->client->getResponse();
         $this->assertTrue($response->headers->has('content-disposition'));
-        $this->assertSame('attachment; filename=' . $group->getName() . '.zip', $response->headers->get('content-disposition'));
+        $this->assertSame('attachment; filename=' . $this->sanitizer->fileNameSanitizer($group->getName(), 255) . '.zip', $response->headers->get('content-disposition'));
         $this->assertSame('application/zip', $response->headers->get('content-type'));
         $this->assertGreaterThan(20, intval($response->headers->get('content-length')));
     }

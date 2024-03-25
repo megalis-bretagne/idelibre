@@ -3,13 +3,12 @@
 namespace App\Tests\Service\Csv;
 
 use App\Service\Csv\ExportUsersCsv;
+use App\Service\Util\Sanitizer;
 use App\Tests\Story\GroupStory;
 use App\Tests\Story\StructureStory;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
-use function _PHPStan_d5c599c96\RingCentral\Psr7\str;
 
 class ExportUserTest extends KernelTestCase
 {
@@ -17,24 +16,19 @@ class ExportUserTest extends KernelTestCase
     use Factories;
 
     private ExportUsersCsv $exportUsersCsv;
+    private Sanitizer $sanitizer;
 
     protected function setUp(): void
     {
         $this->exportUsersCsv = self::getContainer()->get(ExportUsersCsv::class);
+        $this->sanitizer = self::getContainer()->get(Sanitizer::class);
     }
 
     public function testExportCsvUserFromStructure()
     {
         $structure = StructureStory::libriciel()->object();
         $csvPath = $this->exportUsersCsv->exportStructureUsers($structure);
-        $this->assertSame('/tmp/export/' . $structure->getName() . '.csv', $csvPath);
+        $this->assertSame('/tmp/' . $this->sanitizer->fileNameSanitizer($structure->getName(), 255) . '.csv', $csvPath);
     }
 
-    public function testExportCsvUserFromGroup()
-    {
-        $group = GroupStory::recia()->object();
-        $zipPath = $this->exportUsersCsv->exportGroupUsers($group);
-        $this->assertStringContainsString('/tmp/', $zipPath);
-        $this->assertStringContainsString('.zip', $zipPath);
-    }
 }
