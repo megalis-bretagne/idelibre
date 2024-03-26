@@ -42,7 +42,7 @@ services:
       - MAXIMUM_SIZE_PDF_ZIP_GENERATION=${MAXIMUM_SIZE_PDF_ZIP_GENERATION:-200000000}
       - LOCK_DSN=${LOCK_DSN:-semaphore}
     volumes:
-      - data-public:/app/public.env.lo
+      - data-public:/app/public
       - /data/files:/data
     command: [ "/app/docker-resources/initApp.sh" ]
     restart: unless-stopped
@@ -55,7 +55,7 @@ services:
 
   node-idelibre:
     container_name: node-idelibre
-    image: registry.libriciel.fr:443/public/citoyens/idelibre-node/idelibre-node:4.2.1
+    image: registry.libriciel.fr:443/public/citoyens/idelibre-node/idelibre-node:4.3.0-alpha.1
     depends_on:
       postgres-idelibre:
         condition: service_healthy
