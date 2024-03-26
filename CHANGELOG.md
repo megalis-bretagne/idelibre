@@ -8,9 +8,9 @@ All notable changes to this project will be documented in this file.
 - Possibilité de définir un titre pour les annexes
 - Export des utilisateurs en CSV par structure et par groupe de structure
 - Les "autres documents" sont affichés dans le PDF complet de la séance
-- Les admins peuvent désormais invalider les mots de passe des utilisateurs y compris les leur via la fonction "invalider mot de passe"
+- Les admins peuvent désormais invalider les mots de passe des utilisateurs y compris le leur via la fonction "invalider mot de passe"
 - Nouveau rôle ajouté : "Suppléant" lors de la création d'un utilisateur
-- Possibilité de désigner un suppléant pour une séance
+- Possibilité d'assigner un suppléant et de le désigner comme remplaçant pour une séance
 - Possibilité de donner procuration à un élu pour une séance
 - Ajout d'un connecteur vers l'application Lsvote
 - Bouton d'envoi de la séance vers lsvote
