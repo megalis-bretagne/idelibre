@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Convocation;
 use App\Entity\User;
 use App\Repository\UserRepository;
+use phpDocumentor\Reflection\Types\This;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -102,7 +103,7 @@ class AttendanceType extends AbstractType
             }
         }
 
-        return $this->valuesIfNotActors();
+        return $this->defaultPresenceValues();
     }
 
     private function valuesIfDeputyAndIfRemote(): array
@@ -145,13 +146,12 @@ class AttendanceType extends AbstractType
         ];
     }
 
-    private function valuesIfNotActors(): array
+    private function defaultPresenceValues(): array
     {
         return [
             'Présent' => Convocation::PRESENT,
-            'Présent à distance' => Convocation::REMOTE,
             'Absent' => Convocation::ABSENT,
-        ];
+            ];
     }
 
 }

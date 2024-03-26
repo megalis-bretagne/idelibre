@@ -606,11 +606,14 @@
                                             <tbody style="display: block;overflow-y: auto;max-height: 60vh;">
                                             <tr class="d-flex" v-for="status in attendanceStatus">
 
+                                                ${attendanceInput}
+
                                                 <td class="col-4">
                                                     ${status.firstName} ${status.lastName}
                                                 </td>
 
                                                 <td class="col-5" id="changeAttendancePresenceGroup">
+
                                                     <select class="select form-control" v-model="status.attendance"
                                                             @change="changeAttendance(status);" >
                                                         <option value="">Sans Réponse</option>
