@@ -38,7 +38,11 @@ let app = new Vue({
             employee: ""
         },
         showModalAttendance: false,
-        attendanceStatus: [],
+        // attendanceStatus: [],
+        attendanceStatusActors: [],
+        attendanceStatusEmployee: [],
+        attendanceStatusGuest: [],
+
         changedAttendance: [],
         errorMessage: null,
         infoMessage: null,
@@ -196,11 +200,12 @@ let app = new Vue({
         },
 
         openShowModalAttendance() {
-            this.attendanceStatus = [
-                ...formatAttendanceStatus(this.actorConvocations),
-                ...formatAttendanceStatus(this.employeeConvocations),
-                ...formatAttendanceStatus(this.guestConvocations)
-            ];
+            this.attendanceStatusActors = formatAttendanceStatus(this.actorConvocations);
+            this.attendanceStatusEmployee = formatAttendanceStatus(this.employeeConvocations);
+            this.attendanceStatusGuest = formatAttendanceStatus(this.guestConvocations);
+                // ...formatAttendanceStatus(this.employeeConvocations),
+                // ...formatAttendanceStatus(this.guestConvocations)
+            // ];
 
             this.showModalAttendance = true;
         },
