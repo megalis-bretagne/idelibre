@@ -41,6 +41,12 @@ dependency: composer-install npm-install npm-run
 fpm-bash:
 	$(DOCKER) exec -ti fpm-idelibre bash
 
+reset-db:
+	$(DOCKER_COMPOSE) run --entrypoint="bin/console d:d:d -f" --user="root" fpm-idelibre
+	$(DOCKER_COMPOSE) run --entrypoint="bin/console d:d:c" --user="root" fpm-idelibre
+	$(DOCKER_COMPOSE) run --entrypoint="bin/console d:m:m " --user="root" fpm-idelibre
+	$(DOCKER_COMPOSE) run --entrypoint="bin/console initBdd docker-resources/minimum.sql" --user="root" fpm-idelibre
+
 
 ecs:
 	$(DOCKER_COMPOSE) run --entrypoint="vendor/bin/ecs check --fix" fpm-idelibre
