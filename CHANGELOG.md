@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.2.21] - 2024-03-27
+
+### Evolution
+- Mise à jour SF 6.4.5, des dépendances composer et npm jour 
+
+
 ## [4.2.20] - 2023-12-19
 
 ### Correction
