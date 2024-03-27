@@ -300,8 +300,11 @@ function formatAttendanceStatus(convocations) {
             deputy: convocation.deputy,
             mandator: convocation.mandator,
             category: convocation.category,
+            role: convocation.user.role.name
         })
     }
+
+
     return status;
 }
 

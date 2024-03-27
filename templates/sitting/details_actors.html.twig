@@ -606,10 +606,9 @@
                                             <tbody style="display: block;overflow-y: auto;max-height: 60vh;">
                                             <tr class="d-flex" v-for="status in attendanceStatus">
 
-                                                ${attendanceInput}
-
                                                 <td class="col-4">
                                                     ${status.firstName} ${status.lastName}
+                                                    ${status.role}
                                                 </td>
 
                                                 <td class="col-5" id="changeAttendancePresenceGroup">
@@ -622,9 +621,12 @@
                                                             <option value="remote">À distance</option>
                                                         {% endif %}
                                                         <option value="absent">Absent</option>
-                                                        <option value="poa">Donne pouvoir par procuration</option>
+
+
+                                                        <option v-if="status.role==='Actor'"
+                                                                value="poa">Donne pouvoir par procuration</option>
                                                         <option v-for="actors in actorConvocations"
-                                                                v-if="status.convocationId === actors.id && actors.user.deputy !== null"
+                                                                v-if="status.convocationId === actors.id && actors.user.deputy !== null && status.role==='Actor'"
                                                                 value="deputy">Remplacé par son suppléant
                                                         </option>
                                                     </select>
