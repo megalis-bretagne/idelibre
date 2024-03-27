@@ -5,7 +5,6 @@ namespace App\Form;
 use App\Entity\Convocation;
 use App\Entity\User;
 use App\Repository\UserRepository;
-use phpDocumentor\Reflection\Types\This;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -53,36 +52,9 @@ class AttendanceType extends AbstractType
         }
     }
 
-
-
-    public function configureOptions(OptionsResolver $resolver): void
-    {
-        $resolver->setDefaults([
-            'isRemoteAllowed' => false,
-            'convocation' => null,
-            'sitting' => null,
-            'deputyId' => null,
-            'toExclude' => null
-        ]);
-    }
-
-    private function hasDeputy(array $options): bool
-    {
-        if (!$options['toExclude'][0]->getDeputy()) {
-            return false;
-        }
-        return true;
-    }
-
-    private function formatName(User $user): string
-    {
-        return $user->getLastName() . ' ' . $user->getFirstName();
-    }
-
     private function getAttendanceValues(Convocation $convocation, ?bool $isRemoteAllowed): array
     {
         if ($isRemoteAllowed && Convocation::CATEGORY_CONVOCATION === $convocation->getCategory()) {
-
             if ($convocation->getUser()->getDeputy() !== null) {
                 return $this->valuesIfDeputyAndIfRemote();
             }
