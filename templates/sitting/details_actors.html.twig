@@ -691,12 +691,14 @@
                                                             <option value="absent">Absent</option>
                                                         </select>
                                                     </td>
+
+                                                    <td class="col-3"></td>
                                                 </tr>
 
                                                 <tr class="d-flex">
                                                     <th class="col-12">Invités</th>
                                                 </tr>
-                                                <tr class="d-flex" v-for="status in attendanceStatusGuest">
+                                                <tr class="d-flex w-100 col-12" v-for="status in attendanceStatusGuest">
 
                                                     <td class="col-4">
                                                         ${status.firstName} ${status.lastName}
@@ -714,6 +716,8 @@
                                                             <option value="absent">Absent</option>
                                                         </select>
                                                     </td>
+
+                                                    <td class="col-3"></td>
                                                 </tr>
 
                                             </tbody>

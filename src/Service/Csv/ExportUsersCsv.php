@@ -43,7 +43,7 @@ class ExportUsersCsv
         ;
 
 
-        $csvWriter = Writer::createFromPath( $pathDir . '/' . $this->sanitizer->fileNameSanitizer($structure->getName(), 255) . '.csv', 'w+');
+        $csvWriter = Writer::createFromPath($pathDir . '/' . $this->sanitizer->fileNameSanitizer($structure->getName(), 255) . '.csv', 'w+');
         $csvWriter->addFormatter($encoder);
 
         foreach ($users as $user) {
@@ -105,7 +105,7 @@ class ExportUsersCsv
         $zip = new ZipArchive();
         $zipPath = '/tmp/' . uniqid('users-group') . '.zip';
         $zip->open($zipPath, ZipArchive::CREATE);
-        $zip->setCompressionName('deflate',ZipArchive::CM_DEFLATE);
+        $zip->setCompressionName('deflate', ZipArchive::CM_DEFLATE);
         $zip->setArchiveComment(ZipArchive::FL_ENC_UTF_8);
 
         foreach ($structuresPath as $structurePath) {
