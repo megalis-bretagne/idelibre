@@ -14,6 +14,7 @@ use Doctrine\ORM\Mapping\OrderBy;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotNull;
@@ -60,7 +61,7 @@ class Theme
     #[Gedmo\TreeParent]
     #[ManyToOne(targetEntity: Theme::class, inversedBy: 'children')]
     #[JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    #[Groups('theme:write:post')]
+    #[Groups(['theme:write:post'])]
     private $parent;
 
     #[OneToMany(mappedBy: 'parent', targetEntity: Theme::class)]
@@ -187,5 +188,18 @@ class Theme
     public function setUpdatedAtValue(): void
     {
         $this->updatedAt = new \DateTimeImmutable();
+    }
+
+
+
+    #[Groups(['theme:read'])]
+    #[SerializedName('parentId')]
+    public function getParentId(): ?string
+    {
+        if(!$this->parent || $this->parent->getName() === 'ROOT') {
+            return null;
+        }
+
+        return $this->parent->getId();
     }
 }
