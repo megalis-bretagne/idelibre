@@ -55,7 +55,7 @@ class CsvSittingReport
             $this->getDateFormattedTimeStamp($convocation->getSentTimestamp(), $structure),
             $this->getDateFormattedTimeStamp($convocation->getReceivedTimestamp(), $structure),
             $convocation->getUser()->getRole()->getPrettyName(),
-            $this->associatedGroup($convocation),
+            $this->associatedParty($convocation),
             $this->formatConvocationAttendance($convocation->getAttendance()),
             $this->setMandatorDeputy($convocation),
         ];
@@ -70,10 +70,10 @@ class CsvSittingReport
         return $this->dateUtil->getFormattedDateTime($timestamp->getCreatedAt(), $structure->getTimezone()->getName());
     }
 
-    private function associatedGroup($convocation): string
+    private function associatedParty($convocation): string
     {
-        if ($convocation->getUser()->getGroup()) {
-            return $convocation->getUser()->getGroup();
+        if ($convocation->getUser()->getParty()) {
+            return $convocation->getUser()->getParty()->getName();
         }
 
         return "";
