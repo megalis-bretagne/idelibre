@@ -43,7 +43,7 @@ class CsvSittingReport
 
     private function getHeaders(): array
     {
-        return ['Prénom', 'Nom', 'Envoi', 'Réception', 'Role'];
+        return ['Nom', 'Envoi', 'Réception', 'Role', 'groupe politique, présence, mandataire'];
     }
 
     private function getConvocationData(Convocation $convocation): array
@@ -51,11 +51,13 @@ class CsvSittingReport
         $structure = $convocation->getSitting()->getStructure();
 
         return [
-            $convocation->getUser()->getFirstName(),
-            $convocation->getUser()->getLastName(),
+            $convocation->getUser()->getLastName() . ' ' . $convocation->getUser()->getFirstName(),
             $this->getDateFormattedTimeStamp($convocation->getSentTimestamp(), $structure),
             $this->getDateFormattedTimeStamp($convocation->getReceivedTimestamp(), $structure),
             $convocation->getUser()->getRole()->getPrettyName(),
+            $this->associatedParty($convocation),
+            $this->formatConvocationAttendance($convocation->getAttendance()),
+            $this->setMandatorDeputy($convocation),
         ];
     }
 
@@ -68,14 +70,23 @@ class CsvSittingReport
         return $this->dateUtil->getFormattedDateTime($timestamp->getCreatedAt(), $structure->getTimezone()->getName());
     }
 
+    private function associatedParty($convocation): string
+    {
+        if ($convocation->getUser()->getParty()) {
+            return $convocation->getUser()->getParty()->getName();
+        }
+
+        return "";
+    }
+
     private function formatConvocationAttendance($convocation): string
     {
         return match ($convocation) {
-            'remote' => 'Présent à distance',
-            'absent' => 'Absent',
-            'present' => 'Présent',
-            'poa' => 'Donne pouvoir par procuration',
-            'deputy' => 'Remplacé par son suppléant',
+            Convocation::REMOTE => 'Présent à distance',
+            Convocation::ABSENT => 'Absent',
+            Convocation::PRESENT => 'Présent',
+            Convocation::ABSENT_GIVE_POA => 'Donne pouvoir par procuration',
+            Convocation::ABSENT_SEND_DEPUTY => 'Remplacé par son suppléant',
             default => '',
         };
     }

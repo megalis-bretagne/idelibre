@@ -20,26 +20,40 @@
     <h3> {{ sitting.name }} - {{ sitting.date | date('d/m/Y à H:i', timezone) }}</h3>
 
     <div class="m-5">
-        <h3 class="mb-3">Personnels administratifs </h3>
+        <h3 class="mb-2">Elus</h3>
+
         <table class="table table-striped mt-4">
             <thead>
             <tr class="d-flex text-start">
-                <th style="width: 10%;">Prénom</th>
-                <th style="width: 10%;">Nom</th>
+                <th style="width: 15%;">Nom</th>
                 <th style="width: 15%;">Envoi</th>
                 <th style="width: 15%;">Reception</th>
-                <th style="width: 10%;">Role</th>
+                <th style="width: 15%;">Groupe politique</th>
+                <th style="width: 25%;">Présence</th>
+                <th style="width: 15%;">Mandataire</th>
             </tr>
             </thead>
             <tbody>
             {% for convocation in convocations %}
-                {% if convocation.user.role.name == 'Employee' or convocation.user.role.name == 'Secretary' or convocation.user.role.name == 'Admin' %}
+                {% if convocation.user.role.name == 'Actor' or convocation.user.role.name == 'deputy' %}
                     <tr class="d-flex text-start">
-                        <td style="width: 10%;">{{ convocation.user.firstName }} </td>
-                        <td style="width: 10%;">{{ convocation.user.lastName }} </td>
+                        <td style="width: 15%;">{{ convocation.user.lastName }} {{ convocation.user.firstName }}</td>
                         <td style="width: 15%;">{{ convocation.sentTimestamp ? convocation.sentTimestamp.createdAt | date('d/m/Y H:i', timezone) : '' }} </td>
                         <td style="width: 15%;">{{ convocation.receivedTimestamp ? convocation.receivedTimestamp.createdAt | date('d/m/Y H:i', timezone) : '' }} </td>
-                        <td style="width: 10%;">{{ convocation.user.role.prettyName }}</td>
+                        <td style="width: 15%;">{{ convocation.user.party ? convocation.user.party.name : '' }} </td>
+                        <td style="width: 25%;">
+                            {% if convocation.attendance is same as "present" %} Présent {% endif %}
+                            {% if convocation.attendance is same as "absent" %} Absent {% endif %}
+                            {% if convocation.attendance is same as "remote" %} A distance {% endif %}
+                            {% if convocation.attendance is same as "poa" %} Donne pouvoir par procuration {% endif %}
+                            {% if convocation.attendance is same as "deputy" %} Remplacé par son suppléant {% endif %}
+                        </td>
+                        <td style="width: 15%;">
+                            {% if convocation.mandator is not null or convocation.deputy is not null %}
+                                {% if convocation.attendance is same as "poa" %} {{ convocation.mandator.lastName}} {{ convocation.mandator.firstname}} {% endif %}
+                                {% if convocation.attendance is same as "deputy" %} {{ convocation.deputy.lastName}} {{ convocation.deputy.firstname}} {% endif %}
+                            {% endif %}
+                        </td>
                     </tr>
                 {% endif %}
             {% endfor %}
@@ -48,28 +62,31 @@
     </div>
 
     <div class="m-5">
-        <h3 class="mb-2">Elus</h3>
-
+        <h3 class="mb-3">Personnels administratifs </h3>
         <table class="table table-striped mt-4">
             <thead>
-                <tr class="d-flex text-start">
-                    <th style="width: 10%;">Prénom</th>
-                    <th style="width: 10%;">Nom</th>
-                    <th style="width: 10%;">Groupe politique</th>
-                    <th style="width: 15%;">Envoi</th>
-                    <th style="width: 15%;">Reception</th>
-                </tr>
+            <tr class="d-flex text-start">
+                <th style="width: 15%;">Nom</th>
+                <th style="width: 15%;">Envoi</th>
+                <th style="width: 15%;">Reception</th>
+                <th style="width: 25%;">Role</th>
+                <th style="width: 30%;">Présence</th>
+            </tr>
             </thead>
             <tbody>
             {% for convocation in convocations %}
-                {% if convocation.user.role.name == 'Actor' or convocation.user.role.name == 'deputy' %}
-                <tr class="d-flex text-start">
-                    <td style="width: 10%;">{{ convocation.user.firstName }} </td>
-                    <td style="width: 10%;">{{ convocation.user.lastName }} </td>
-                    <td style="width: 10%;">{{ convocation.user.party ? convocation.user.party.name : '' }} </td>
-                    <td style="width: 15%;">{{ convocation.sentTimestamp ? convocation.sentTimestamp.createdAt | date('d/m/Y H:i', timezone) : '' }} </td>
-                    <td style="width: 15%;">{{ convocation.receivedTimestamp ? convocation.receivedTimestamp.createdAt | date('d/m/Y H:i', timezone) : '' }} </td>
-                </tr>
+                {% if convocation.user.role.name == 'Employee' or convocation.user.role.name == 'Secretary' or convocation.user.role.name == 'Admin' %}
+                    <tr class="d-flex text-start">
+                        <td style="width: 15%;">{{ convocation.user.lastName }} {{ convocation.user.firstName }} </td>
+                        <td style="width: 15%;">{{ convocation.sentTimestamp ? convocation.sentTimestamp.createdAt | date('d/m/Y H:i', timezone) : '' }} </td>
+                        <td style="width: 15%;">{{ convocation.receivedTimestamp ? convocation.receivedTimestamp.createdAt | date('d/m/Y H:i', timezone) : '' }} </td>
+                        <td style="width: 25%;">{{ convocation.user.role.prettyName }}</td>
+                        <td style="width: 30%;">
+                            {% if convocation.attendance is same as "present" %} Présent {% endif %}
+                            {% if convocation.attendance is same as "absent" %} Absent {% endif %}
+                            {% if convocation.attendance is same as "remote" %} A distance {% endif %}
+                        </td>
+                    </tr>
                 {% endif %}
             {% endfor %}
             </tbody>
@@ -81,22 +98,26 @@
         <table class="table table-striped mt-4">
             <thead>
             <tr class="d-flex text-start">
-                <th style="width: 10%;">Prénom</th>
-                <th style="width: 10%;">Nom</th>
+                <th style="width: 15%;">Nom</th>
                 <th style="width: 15%;">Envoi</th>
                 <th style="width: 15%;">Reception</th>
-                <th style="width: 10%;">Role</th>
+                <th style="width: 25%;">Role</th>
+                <th style="width: 30%;">Présence</th>
             </tr>
             </thead>
             <tbody>
             {% for convocation in convocations %}
                 {% if convocation.user.role.name == 'Guest' %}
                     <tr class="d-flex text-start">
-                        <td style="width: 10%;">{{ convocation.user.firstName }} </td>
-                        <td style="width: 10%;">{{ convocation.user.lastName }} </td>
+                        <td style="width: 15%;">{{ convocation.user.firstName }} {{ convocation.user.lastName }} </td>
                         <td style="width: 15%;">{{ convocation.sentTimestamp ? convocation.sentTimestamp.createdAt | date('d/m/Y H:i', timezone) : '' }} </td>
                         <td style="width: 15%;">{{ convocation.receivedTimestamp ? convocation.receivedTimestamp.createdAt | date('d/m/Y H:i', timezone) : '' }} </td>
-                        <td style="width: 10%;">{{ convocation.user.role.prettyName }}</td>
+                        <td style="width: 25%;">{{ convocation.user.role.prettyName }}</td>
+                        <td style="width: 30%;">
+                            {% if convocation.attendance is same as "present" %} Présent {% endif %}
+                            {% if convocation.attendance is same as "absent" %} Absent {% endif %}
+                            {% if convocation.attendance is same as "remote" %} A distance {% endif %}
+                        </td>
                     </tr>
                 {% endif %}
             {% endfor %}
