@@ -46,8 +46,8 @@ class SittingController extends AbstractController
         private readonly ConvocationManager $convocationManager,
         private readonly SittingManager $sittingManager,
         private readonly PdfValidator $pdfValidator,
-        private LsvoteConnectorManager $lsvoteConnectorManager,
-        private SidebarState $sidebarState,
+        private readonly LsvoteConnectorManager $lsvoteConnectorManager,
+        private readonly SidebarState $sidebarState,
         private readonly FileGenerator $fileGenerator,
     ) {
     }
