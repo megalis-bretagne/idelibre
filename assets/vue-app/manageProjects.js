@@ -62,15 +62,22 @@ let app = new Vue({
         },
 
         checkTitleLength(element, title) {
+            const lenghtValidator = '<div id="lenghtValidator"><small class="text-danger ps-3"><span class="fa fa-exclamation-circle me-2"></span>Le libellé ne doit pas dépasser 512 caractères</small></div>'
+            const validatorElement = document.querySelector('#lenghtValidator');
             if (title.length > 512) {
                 this.$refs.submitBtn.setAttribute('disabled', 'disabled');
-                element.insertAdjacentHTML('beforeend', '<small class="text-danger ps-3"><span class="fa fa-exclamation-circle me-2"></span>Le libellé ne doit pas dépasser 512 caractères</small>');
-                setTimeout(() => {
-                    element.removeChild(element.lastChild);
-                }, 10000);
+                element.insertAdjacentHTML('beforeend', lenghtValidator);
+                // setTimeout(() => {
+                //     element.removeChild(element.lastChild);
+                // }, 10000);
                 return;
             }
+
+            validatorElement.remove();
+
+            // remove(document.querySelector('#lenghtValidator'));
             this.$refs.submitBtn.removeAttribute('disabled');
+
         },
 
         projectTitleTooLong() {
