@@ -288,7 +288,7 @@ class LsvoteConnectorManager
             $this->entityManager->flush();
             return $id;
         } catch (LsvoteNotFoundException $e) {
-            $id = $this->editIfSittingWasDeleted($sitting, $connector, $lsvoteEnvelope);
+            $id = $this->editIfSittingWasDeleted($connector, $lsvoteEnvelope);
             $sitting->getLsvoteSitting()->setLsvoteSittingId($id);
             $this->entityManager->flush();
             return $id;
