@@ -46,8 +46,9 @@ class AttendanceController extends AbstractController
                 $convocationAttendance->setMandataire(null) :
                 $convocationAttendance->setMandataire($form->get('mandataire')->getData()->getId());
 
-            array_key_exists('deputyId', $form->createView()->children) && $form->get('attendance')->getData() === "deputy" ?
-                $convocationAttendance->setDeputyId($form->get('deputyId')->getData()->getId()) : dump('pas la');
+            if (array_key_exists('deputyId', $form->createView()->children) && $form->get('attendance')->getData() === "deputy") {
+                $convocationAttendance->setDeputyId($form->get('deputyId')->getData()->getId());
+            }
 
             $convocationAttendance->setConvocationId($attendanceToken->getConvocation()->getId());
 
