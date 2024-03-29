@@ -28,7 +28,7 @@ class Role
     #[Column(type: 'string', length: 255, unique: true)]
     #[NotBlank]
     #[Length(max: '255')]
-    #[Groups(['role:read', 'user:read'])]
+    #[Groups(['role:read', 'user:read', 'convocation', 'convocation:read'])]
     private $name;
 
     #[Column(type: 'json', options: ['jsonb' => true])]

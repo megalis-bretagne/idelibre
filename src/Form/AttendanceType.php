@@ -14,8 +14,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class AttendanceType extends AbstractType
 {
-    public function __construct(private readonly UserRepository $userRepository)
-    {
+    public function __construct(
+        private readonly UserRepository $userRepository
+    ) {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -53,8 +54,6 @@ class AttendanceType extends AbstractType
         }
     }
 
-
-
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
@@ -79,21 +78,20 @@ class AttendanceType extends AbstractType
         return $user->getLastName() . ' ' . $user->getFirstName();
     }
 
+
     private function getAttendanceValues(Convocation $convocation, ?bool $isRemoteAllowed): array
     {
         if ($isRemoteAllowed && Convocation::CATEGORY_CONVOCATION === $convocation->getCategory()) {
-
             if ($convocation->getUser()->getDeputy() !== null) {
                 return $this->valuesIfDeputyAndIfRemote();
             }
 
             if ($convocation->getUser()->getDeputy() === null) {
-               return $this->valuesIfNoDeputyAndIfRemote();
+                return $this->valuesIfNoDeputyAndIfRemote();
             }
         }
 
         if (!$isRemoteAllowed && Convocation::CATEGORY_CONVOCATION === $convocation->getCategory()) {
-
             if ($convocation->getUser()->getDeputy() !== null) {
                 return $this->valuesIfDeputyAndIfNotRemote();
             }
@@ -153,5 +151,4 @@ class AttendanceType extends AbstractType
             'Absent' => Convocation::ABSENT,
             ];
     }
-
 }
