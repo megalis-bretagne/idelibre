@@ -1,9 +1,30 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+
+
 ## [4.3.0] - 2024-??-??
 ### Evolution
 - Possibilité de définir un titre pour les annexes
+- Export des utilisateurs en CSV par structure et par groupe de structure
+- Les "autres documents" sont affichés dans le PDF complet de la séance
+- Les admins peuvent désormais invalider les mots de passe des utilisateurs y compris le leur via la fonction "invalider mot de passe"
+- Nouveau rôle ajouté : "Suppléant" lors de la création d'un utilisateur
+- Possibilité d'assigner un suppléant et de le désigner comme remplaçant pour une séance
+- Possibilité de donner procuration à un élu pour une séance
+- Ajout d'un connecteur vers l'application Lsvote
+- Bouton d'envoi de la séance vers lsvote
+- Importation des résultats de vote depuis lsvote en pdf ou json
+- Ajout d'un décompte des élus n'ayant pas donné de réponse à la convocation en cas d'envoi de la séance vers l'application Lsvote
+- Ajout d'une sécurité lors de la suppression d'une structure, d'un utilisateur ou groupe d'utilisateur, et de l'invalidation de mot de passe(s)
+- 
+
+
+### Correction
+- fix un bug sur la recherche d'un admin
+- fix un bug de style sur la creation d'un template d'email
+- fix bug lors de la suppression d'un import pdf du fichier d'invitation
+
 
 ## [4.2.19] - 2023-??-??
 
