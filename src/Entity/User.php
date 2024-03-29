@@ -80,7 +80,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ManyToOne(targetEntity: Role::class)]
     #[JoinColumn(nullable: true, onDelete: 'SET NULL')]
     #[NotNull]
-    #[Groups(['user:read', 'user:write:post'])]
+    #[Groups(['user:read', 'user:write:post', 'convocation', 'convocation:read'])]
     private $role;
 
     #[ManyToMany(targetEntity: Type::class, mappedBy: 'associatedUsers')]

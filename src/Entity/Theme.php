@@ -196,7 +196,7 @@ class Theme
     #[SerializedName('parentId')]
     public function getParentId(): ?string
     {
-        if(!$this->parent || $this->parent->getName() === 'ROOT') {
+        if (!$this->parent || $this->parent->getName() === 'ROOT') {
             return null;
         }
 

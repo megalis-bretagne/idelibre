@@ -366,7 +366,6 @@ class ConvocationManager
                     $count++;
                 }
             }
-
         }
         return $count;
     }

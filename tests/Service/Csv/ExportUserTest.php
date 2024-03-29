@@ -30,5 +30,4 @@ class ExportUserTest extends KernelTestCase
         $csvPath = $this->exportUsersCsv->exportStructureUsers($structure);
         $this->assertSame('/tmp/' . $this->sanitizer->fileNameSanitizer($structure->getName(), 255) . '.csv', $csvPath);
     }
-
 }
