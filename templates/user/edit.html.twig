@@ -26,6 +26,11 @@
         </div>
     </div>
 
+    <div class="d-flex flex-column col-6 mb-3">
+        <label for="role" class="form-label fw-bold">Rôle</label>
+        <input type="text" class="form-control" value="{{ user.role.prettyName }}" readonly disabled>
+    </div>
+
     {% if user.role.prettyName is same as "Gestionnaire de séance" %}
         {{ form_row(form.authorizedTypes) }}
         {{ form_row(form.isActive) }}
