@@ -67,7 +67,7 @@ let app = new Vue({
             if (event){
                 if (isTooLong(event.target.value, 512)) {
                     this.$refs.submitBtn.setAttribute('disabled', 'disabled');
-                    element.insertAdjacentHTML('beforeend', errorValidation);
+                    !element.querySelector('.text-danger') ? element.insertAdjacentHTML('beforeend', errorValidation): null;
                     return;
                 }
                 element.querySelector('.text-danger') ? element.querySelector('.text-danger').remove() : null;

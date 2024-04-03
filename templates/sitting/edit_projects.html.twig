@@ -76,7 +76,7 @@
                 Aucun document associé
             </div>
 
-            <draggable v-model="otherdocs" class="bg-white" v-on:change="otherdocChange()" handle=".handle">
+            <draggable v-model="otherdocs" class="bg-white" @change="otherdocChange()" handle=".handle">
 
                 <div v-for="(otherdoc, index) in otherdocs">
                     <div class="il-otherdoc">
@@ -86,8 +86,8 @@
 
                         <div class="otherdoc-right">
                             <div class="otherdoc-line">
-                                <div class="otherdoc-item" ref="documentTitleBlock">
-                                    <textarea v-model="otherdoc.name" ref="documentTitle" class="form-control" v-on:change="otherdocChange(); documentTitleTooLong()"> </textarea>
+                                <div class="otherdoc-item">
+                                    <textarea v-model="otherdoc.name" ref="documentTitle" class="form-control" @change="otherdocChange()" @mouseleave="errorMsgTitleTooLong"> </textarea>
                                 </div>
                                 <div class="otherdoc-item d-flex justify-content-between">
                                     ${otherdoc.fileName}
@@ -97,7 +97,7 @@
 
                                 <div class="otherdoc-item action">
                                     <button class="btn btn-outline-danger borderless float-end"
-                                            v-on:click="removeOtherdoc(index)">
+                                            @click="removeOtherdoc(index)">
                                         <span class="fa fa-trash-alt" title="Supprimer"></span>
                                     </button>
                                 </div>
@@ -131,7 +131,7 @@
                 Aucun projet associé
             </div>
 
-            <draggable v-model="projects" class="bg-white" v-on:change="projectChange()" handle=".handle">
+            <draggable v-model="projects" class="bg-white" @change="projectChange()" handle=".handle">
 
                 <div v-for="(project, index) in projects">
                     <div class="il-project">
@@ -139,7 +139,7 @@
                             <div class="dropdown">
                                 <span class="badge bg-primary rank">${index + 1}</span>
                                 <div class="dropdown-content">
-                                    <div v-for="rank in projects.length" class="newRank" v-on:click="move(index, rank -1)"> ${rank}</div>
+                                    <div v-for="rank in projects.length" class="newRank" @click="move(index, rank -1)"> ${rank}</div>
                                 </div>
 
                             </div>
@@ -147,8 +147,8 @@
 
                         <div class="project-right">
                             <div class="project-line">
-                                <div class="project-item" ref="projectTitleBlock">
-                                    <textarea ref="projectTitle" v-model="project.name" class="form-control" v-on:change="projectChange()" @mouseleave="errorMsgTitleTooLong"> </textarea>
+                                <div class="project-item">
+                                    <textarea v-model="project.name" class="form-control" @change="projectChange()" @mouseleave="errorMsgTitleTooLong"> </textarea>
                                 </div>
                                 <div class="project-item d-flex justify-content-between">
                                     ${project.fileName}
@@ -158,7 +158,7 @@
 
                                 <div class="project-item action">
                                     <button class="btn btn-outline-danger borderless float-end"
-                                            v-on:click="removeProject(index)">
+                                            @click="removeProject(index)">
                                         <span class="fa fa-trash-alt" title="Supprimer"></span>
                                     </button>
                                 </div>
@@ -220,14 +220,14 @@
                                 </div>
                             </div>
 
-                            <draggable v-model="project.annexes" v-on:change="projectChange()" class="annex-list">
+                            <draggable v-model="project.annexes" @change="projectChange()" class="annex-list">
                                 <div class="project-line annex cursor-grab" v-for="(annex, index) in project.annexes">
                                     <div class="badge bg-info ms-2 d-flex align-items-start" style="font-size: 1em">
                                         ${index + 1}
                                     </div>
 
                                     <div class="project-item" ref="annexTitleBlock">
-                                        <textarea v-model="annex.title" ref="annexTitle" class="form-control" v-on:change="annexChange(); annexTitleTooLong()"> </textarea>
+                                        <textarea v-model="annex.title" ref="annexTitle" class="form-control" @change="annexChange()" @mouseleave="errorMsgTitleTooLong"> </textarea>
                                     </div>
                                     <div class="project-item d-flex justify-content-between">
                                         <div>
