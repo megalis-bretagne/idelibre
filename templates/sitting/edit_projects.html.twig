@@ -148,7 +148,7 @@
                         <div class="project-right">
                             <div class="project-line">
                                 <div class="project-item" ref="projectTitleBlock">
-                                    <textarea ref="projectTitle" v-model="project.name" class="form-control" v-on:change="projectChange(); projectTitleTooLong()"> </textarea>
+                                    <textarea ref="projectTitle" v-model="project.name" class="form-control" v-on:change="projectChange()" @mouseleave="errorMsgTitleTooLong"> </textarea>
                                 </div>
                                 <div class="project-item d-flex justify-content-between">
                                     ${project.fileName}
