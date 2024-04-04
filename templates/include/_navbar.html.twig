@@ -1,6 +1,6 @@
-<nav class="navbar navbar-expand-md navbar-dark bg-ls-dark fixed-top" style="height: 30px">
-    <a class="nav-item mr-3" href="#">
-        <img style="height: 22px; padding-bottom: 2px;" src="{{ asset('assets/img/id-color-white.svg') }}" alt="idelibre" class="img-fluid">
+<nav id="navbarContainer" class="navbar navbar-expand-md navbar-ls navbar-dark bg-ls-dark">
+    <a class="navbar-brand" href="#">
+        <img style="height: 22px; padding-bottom: 2px;" src="{{ asset('assets/img/ls-logo.svg') }}" alt="idelibre" class="img-fluid">
     </a>
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-target="#navbarSupportedContent"
@@ -60,3 +60,49 @@
         {% endif %}
     </div>
 </nav>
+
+
+
+
+{#<nav class="navbar navbar-expand-md navbar-ls navbar-dark bg-ls-dark">#}
+{#    <a class="navbar-brand" [routerLink]="">#}
+{#        <img src="assets/ls-logo.svg" title="Revenir à l'accueil de l'application" alt="Logo de l'application">#}
+{#    </a>#}
+
+{#    <div class="navbar-collapse justify-content-end">#}
+{#        <ul class="navbar-nav">#}
+{#            <li ngbDropdown class="nav-item">#}
+{#                <a ngbDropdownToggle class="nav-link" [routerLink]="" id="navbarDropdown" role="button"#}
+{#                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">#}
+{#                    Nom du groupe/entitié - Nom de l'utilisateur#}
+{#                </a>#}
+{#                <div ngbDropdownMenu class="dropdown-menu-right" aria-labelledby="navbarDropdown">#}
+{#                    <a ngbDropdownItem [routerLink]="">#}
+{#                        <i class="fa fa-cog"></i>#}
+{#                        <span>Administration</span>#}
+{#                    </a>#}
+{#                    <div class="dropdown-divider"></div>#}
+{#                    <a ngbDropdownItem [routerLink]="">#}
+{#                        <i class="fa fa-user"></i>#}
+{#                        <span>Mes préférences</span>#}
+{#                    </a>#}
+{#                    <div class="dropdown-divider"></div>#}
+{#                    <a ngbDropdownItem [routerLink]="">#}
+{#                        <i class="fa fa-question"></i>#}
+{#                        <span>À propos - Aide</span>#}
+{#                    </a>#}
+{#                    <a ngbDropdownItem [routerLink]="">#}
+{#                        <i class="fa fa-user-secret"></i>#}
+{#                        <span>Politique de confidentialité (RGPD)</span>#}
+{#                    </a>#}
+{#                    <div class="dropdown-divider"></div>#}
+{#                    <a ngbDropdownItem [routerLink]="">#}
+{#                        <i class="fas fa-sign-out-alt"></i>#}
+{#                        <span>Se déconnecter</span>#}
+{#                    </a>#}
+{#                </div>#}
+{#            </li>#}
+{#        </ul>#}
+{#    </div>#}
+{#</nav>#}
+
