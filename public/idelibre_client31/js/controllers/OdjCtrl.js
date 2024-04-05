@@ -1,18 +1,24 @@
 (function () {
     'use strict';
 
-    angular.module('idelibreApp').controller('OdjCtrl', function ($scope, $log, $routeParams, $rootScope, $location, dlOriginalSrv, localDbSrv, fakeUrlSrv, accountSrv, $modal) {
+    angular.module('idelibreApp').controller('OdjCtrl', function (
+        $scope, $log, $routeParams, $rootScope, $location, dlOriginalSrv, localDbSrv, fakeUrlSrv, accountSrv, $modal, attendanceSrv) {
         $rootScope.$broadcast('buttonDrawersVisibility', {visibility: false});
 
         $scope.seanceId = $routeParams.seanceId;
         $scope.accountId = $routeParams.accountId;
 
 
+
+
         var account = accountSrv.findAccountById($scope.accountId);
 
 
         var seance = account.findSeance($scope.seanceId);
-        console.log(seance);
+
+
+
+
 
         $scope.isInvite = account.type == INVITES;
 
@@ -147,14 +153,15 @@
                     },
                     seance: function () {
                         return seance;
+                    },
+                    attendance: function () {
+                        return $scope.attendance;
                     }
                 },
 
             })
                 .result.then(function (res) {
-                if (res === Seance.ABSENT) {
-                    openConfirmAbsent()
-                }
+                attendanceSrv.getAttendanceStatus(account, $scope.seanceId, getAttendanceCallBackSuccess, getAttendanceCallBackError );
             });
         };
 
@@ -274,6 +281,16 @@
 
         };
 
+        let getAttendanceCallBackSuccess = function (attendance) {
+            $scope.attendance = attendance;
+            console.log(attendance);
+        }
+
+        let getAttendanceCallBackError = function () {
+            console.log("attendanceError");
+        }
+
+        attendanceSrv.getAttendanceStatus(account, $scope.seanceId, getAttendanceCallBackSuccess, getAttendanceCallBackError );
 
     });
 })();

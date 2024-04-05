@@ -5,23 +5,46 @@
 
 <div class="modal-body">
 
-    <div ng-show="!isPresenceStatusEditable">
+    <div ng-show="!isPresenceStatusEditable && !isMandatorList">
         La date de la séance est passéee. Vous ne pouvez plus préciser votre présence.
     </div>
 
-    <div ng-show="isPresenceStatusEditable">
+    <div ng-show="isPresenceStatusEditable && !isMandatorList">
         {{ getPresenceMessageEditable() }}
+    </div>
+
+    <div ng-show="isMandatorList" >
+
+        Veuillez renseigner le mandataire qui vous représentera à la séance.
+
+        <div style="display: flex; justify-content: center ; margin-top: 20px">
+            <select style="width: 80%" class="select form-control" ng-model="selectedMandator"
+                    ng-options="option.id as (option.firstName + ' ' + option.lastName) for option in availableMandators"></select>
+        </div>
+
     </div>
 
 </div>
 
 
 <div class="modal-footer">
-    <button class="btn btn-danger pull-left" ng-click="cancel()">Annuler</button>
 
-    <div ng-show="isPresenceStatusEditable">
-        <button  class="btn btn-warning" ng-click="absent()">Absent</button>
-        <button  class="btn btn-success" ng-click="present()">Présent</button>
+
+    <button ng-show="isMandatorList" class="btn btn-success" ng-click="chooseMandator()">Choisir ce mandataire</button>
+
+
+    <button  class="btn btn-danger pull-left" ng-click="cancel()">Annuler</button>
+
+    <div ng-show="isPresenceStatusEditable && !isMandatorList">
+        <button class="btn btn-warning" ng-click="absent()">Absent</button>
+        <button class="btn btn-success" ng-click="present()">Présent</button>
+
+
+        <button ng-show="attendance.hasdeputy" class="btn btn-warning" ng-click="absentDeputy()">Envoyer son suppléant
+        </button>
+
+        <button class="btn btn-warning" ng-click="absentMandator()">Donne pouvoir</button>
+
         <button ng-show="isAllowedRemote" class="btn btn-success"
                 ng-click="presentRemotely()">Présent en distanciel
         </button>
