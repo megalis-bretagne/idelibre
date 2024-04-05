@@ -10,8 +10,35 @@ a { text-decoration: none; }
     margin: 50px auto auto;
 }
 
+#navbarContainer {
+    background-color: rgba(var(--bs-ls-dark-rgb),var(--bs-bg-opacity)) !important;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    width: 100vw;
+    height: 40px;
+    display: flex;
+    align-items: center;
+}
+
+#navbarContainer img {
+    height: 1.5rem;
+    width: auto;
+}
+
+#navbarSupportedContent {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
 #navbarDropdown {
-    padding-bottom: 0;
+    padding: 0;
+}
+
+.navbar-ls .nav-item .dropdown-menu{
+    top: 2rem!important;
 }
 
 .navbar-nav .dropdown-menu {
@@ -56,6 +83,7 @@ a { text-decoration: none; }
 #footer-logo-container{
     position: relative;
     height: 25px;
+    display: flex;
 }
 
 #footer-logo-container img:first-child {
@@ -76,11 +104,13 @@ a { text-decoration: none; }
 
 #footer-logo-container:hover img:first-child {
     opacity: 1;
-    transform: translateY(2px);
+    transition: .1s ease-in;
 }
 
 #footer-logo-container:hover img:last-child {
     opacity: 0;
+    transition: .1s ease-in;
+
 }
 
 .form-signin .checkbox {
