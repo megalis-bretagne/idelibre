@@ -61,48 +61,19 @@ let app = new Vue({
             isDirty = true;
         },
 
-        checkTitleLength(element, title) {
-            if (title.length > 512) {
-                this.$refs.submitBtn.setAttribute('disabled', 'disabled');
-                element.insertAdjacentHTML('beforeend', '<small class="text-danger ps-3"><span class="fa fa-exclamation-circle me-2"></span>Le libellé ne doit pas dépasser 512 caractères</small>');
-                setTimeout(() => {
-                    element.removeChild(element.lastChild);
-                }, 10000);
-                return;
+        errorMsgTitleTooLong(event) {
+            const errorValidation = '<small class="text-danger ps-3"><span class="fa fa-exclamation-circle me-2"></span>Le libellé ne doit pas dépasser 512 caractères</small>'
+            let element = event.target.parentElement;
+            if (event){
+                if (isTooLong(event.target.value, 512)) {
+                    this.$refs.submitBtn.setAttribute('disabled', 'disabled');
+                    !element.querySelector('.text-danger') ? element.insertAdjacentHTML('beforeend', errorValidation): null;
+                    return;
+                }
+                element.querySelector('.text-danger') ? element.querySelector('.text-danger').remove() : null;
+                this.$refs.submitBtn.removeAttribute('disabled');
             }
-            this.$refs.submitBtn.removeAttribute('disabled');
         },
-
-        projectTitleTooLong() {
-            this.$nextTick(() => {
-                for (let i = 0; i < this.$refs.projectTitleBlock.length; i++) {
-                    const titleBlock = this.$refs.projectTitleBlock[i]
-                    const title = this.$refs.projectTitle[i].value;
-                    this.checkTitleLength(titleBlock, title);
-                }
-            });
-        },
-
-        annexTitleTooLong() {
-            this.$nextTick(() => {
-                for (let i = 0; i < this.$refs.annexTitleBlock.length; i++) {
-                    const titleBlock = this.$refs.annexTitleBlock[i]
-                    const title = this.$refs.annexTitle[i].value;
-                    this.checkTitleLength(titleBlock, title);
-                }
-            });
-        },
-
-        documentTitleTooLong() {
-            this.$nextTick(() => {
-                for (let i = 0; i < this.$refs.documentTitleBlock.length; i++) {
-                    const titleBlock = this.$refs.documentTitleBlock[i]
-                    const title = this.$refs.documentTitle[i].value;
-                    this.checkTitleLength(titleBlock, title);
-                }
-            });
-        },
-
 
 
         addProject(event) {
@@ -322,6 +293,10 @@ let app = new Vue({
     }
 });
 
+
+function isTooLong(title, max) {
+    return title.length > max;
+}
 
 function isOverWeight(current, limit) {
     return current > limit;
