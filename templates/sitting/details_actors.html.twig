@@ -202,7 +202,7 @@
             </div>
 
             {% if sitting.invitationFile %}
-                <div class="col-11 offset-1 form-white mt-4">
+                <div class="col-11 offset-1 form-white mt-4 px-3">
                     <div class="row">
                         <div class="col-6">
                             <h2>Personnels administratifs</h2>
@@ -298,7 +298,7 @@
                     </table>
                 </div>
 
-                <div class="col-11 offset-1 form-white mt-4">
+                <div class="col-11 offset-1 form-white mt-4 px-3">
                     <div class="row">
                         <div class="col-6">
                             <h2>Invités</h2>
@@ -516,11 +516,11 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header align-items-start">
-                            <h4 class="modal-title">Attention</h4>
+                            <h4 class="modal-title">Envoi via comélus</h4>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" title="Fermer"></button>
                         </div>
                         <div class="modal-body">
-                            Veuillez valider l'envoi de tous les documents via comelus
+                            Voulez-vous vraiment envoyer les documents via comélus ?
                         </div>
 
                         <div class="modal-footer">
@@ -542,8 +542,8 @@
                     <div class="modal-content">
                         <div class="modal-header align-items-start">
                             <h4 class="modal-title">
-                                <span v-if="!lsvoteId">Envoi de la séance à Lsvote</span>
-                                <span v-if="lsvoteId">Renvoi de la séance à Lsvote</span>
+                                <span v-if="!lsvoteId">Envoi de la séance à lsvote</span>
+                                <span v-if="lsvoteId">Renvoi de la séance à lsvote</span>
                             </h4>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" title="Fermer"></button>
                         </div>
@@ -566,7 +566,7 @@
                             </div>
 
                             <p class="mt-2">
-                                Voulez-vous vraiment envoyer la séance vers Lsvote ?
+                                Voulez-vous vraiment envoyer la séance à lsvote ?
                             </p>
                         </div>
 
