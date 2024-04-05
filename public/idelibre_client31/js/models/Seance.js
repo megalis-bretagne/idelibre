@@ -50,6 +50,8 @@ var Seance = function (id, name, rev, dateSeance) {
 Seance.PRESENT = "present";
 Seance.ABSENT = "absent";
 Seance.REMOTE = "remote";
+Seance.DEPUTY = "deputy"
+Seance.POA = 'poa';
 Seance.UNDEFINED = "undefined";
 
 /**
