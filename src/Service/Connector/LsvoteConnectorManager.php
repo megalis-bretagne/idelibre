@@ -6,15 +6,11 @@ use App\Entity\Connector\Exception\LsvoteConnectorException;
 use App\Entity\Connector\LsvoteConnector;
 use App\Entity\Convocation;
 use App\Entity\Enum\Role_Name;
-use App\Entity\File;
 use App\Entity\LsvoteSitting;
-use App\Entity\Role;
 use App\Entity\Sitting;
 use App\Entity\Structure;
-use App\Entity\User;
 use App\Repository\ConvocationRepository;
 use App\Repository\LsvoteConnectorRepository;
-use App\Repository\UserRepository;
 use App\Service\Connector\Lsvote\LsvoteClient;
 use App\Service\Connector\Lsvote\LsvoteException;
 use App\Service\Connector\Lsvote\LsvoteNotFoundException;
@@ -22,11 +18,8 @@ use App\Service\Connector\Lsvote\Model\LsvoteEnveloppe;
 use App\Service\Connector\Lsvote\Model\LsvoteProject;
 use App\Service\Connector\Lsvote\Model\LsvoteVoter;
 use App\Service\File\Generator\FileGenerator;
-use App\Service\Util\FileUtil;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Filesystem\Filesystem;
 
 class LsvoteConnectorManager
 {
@@ -143,36 +136,40 @@ class LsvoteConnectorManager
                 ->setIdentifier($user->getId())
                 ->setFirstName($user->getFirstName())
                 ->setLastName($user->getLastName())
+                ->setEmail($user->getEmail())
                 ->setAttendance($convocation->getAttendance() ? $convocation->getAttendance() : "")
-
+                ->setMandatorId($convocation->getMandator() ? $convocation->getMandator()->getId() : null)
             ;
 
             if ($convocation->getUser()->getRoles() === Role_Name::NAME_ROLE_DEPUTY) {
                 $lsvoteVoter->setIsDeputy(true);
+
             }
             if ($convocation->getDeputy()) {
-                $lsvoteVoter->setDeputy($this->createUserFromUser($convocation->getUser()->getDeputy()));
+                $lsvoteVoter->setDeputy($this->createUserFromUser($convocation));
             }
 
-            if ($convocation->getMandator()) {
-                $lsvoteVoter->setMandatorId($convocation->getMandator()->getId());
-            }
-
-            $lsvoteVoter->setDeputy($user->getDeputy() ? $this->createUserFromUser($user->getDeputy()) : null);
+            $lsvoteVoter->setDeputy($user->getDeputy() ? $this->createUserFromUser($convocation) : null);
 
             $lsvoteVoters[] = $lsvoteVoter;
+
         }
 
         return $lsvoteVoters;
     }
 
-    public function createUserFromUser($user): LsvoteVoter
+    public function createUserFromUser($convocation): LsvoteVoter
     {
+        $user = $convocation->getUser();
         return (new LsvoteVoter())
-                ->setIdentifier($user->getId())
-                ->setFirstName($user->getFirstName())
-                ->setLastName($user->getLastName())
+                ->setIdentifier($user->getDeputy()->getId())
+                ->setFirstName($user->getDeputy()->getFirstName())
+                ->setLastName($user->getDeputy()->getLastName())
+                ->setEmail($user->getDeputy()->getEmail())
+                ->setAttendance($convocation->getAttendance() === "deputy" ? Convocation::PRESENT : Convocation::ABSENT)
                 ->setIsDeputy(true)
+                ->setDeputy(null)
+                ->setMandatorId(null)
         ;
     }
 

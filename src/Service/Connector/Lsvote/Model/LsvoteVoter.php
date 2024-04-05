@@ -9,6 +9,8 @@ class LsvoteVoter
     private string $identifier;
     private string $firstName;
     private string $lastName;
+    private string $email;
+
     private string $attendance;
     private bool $isDeputy = false;
     private ?LsvoteVoter $deputy;
@@ -86,6 +88,17 @@ class LsvoteVoter
     public function setAttendance(string $attendance): LsvoteVoter
     {
         $this->attendance = $attendance;
+        return $this;
+    }
+
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): LsvoteVoter
+    {
+        $this->email = $email;
         return $this;
     }
 }
