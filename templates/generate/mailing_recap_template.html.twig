@@ -28,7 +28,7 @@
     tbody > tr:last-child > td {
         border-bottom: none;
     }
-    
+
 </style>
 <br>
 <br>
@@ -47,9 +47,12 @@
     {% for convocation in convocations %}
         <tr>
             <td>{{ convocation.category |trans(category) }}</td>
-            <td>{{ convocation.user.firstName }} {{ convocation.user.lastName }}</td>
+            <td>{{ convocation.user.lastName }} {{ convocation.user.firstName }} </td>
             <td>{{ convocation.attendance ? convocation.attendance |trans(attendance)  : 'Non renseigné'}} </td>
-            <td>{{ convocation.deputy ? convocation.deputy  : '' }} </td>
+            <td>
+                {% if convocation.deputy %} {{ convocation.deputy.lastName}} {{ convocation.deputy.firstName}} {% endif %}
+                {% if convocation.mandator %} {{ convocation.mandator.lastName}} {{ convocation.mandator.firstName}} {% endif %}
+            </td>
         </tr>
     {% endfor %}
     </tbody>

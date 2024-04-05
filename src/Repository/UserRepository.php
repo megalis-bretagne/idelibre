@@ -462,15 +462,17 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getResult();
     }
 
-    public function findSecretariesAndAdminByStructure($structure): QueryBuilder
+    public function findSecretariesAndAdminByStructureWithMailsRecap($structure): QueryBuilder
     {
         return $this->createQueryBuilder('u')
-            ->leftJoin('u.role', 'r')
-            ->andWhere('r.name = :secretary or r.name=:admin')
-            ->setParameter('secretary', 'Secretary')
-            ->setParameter('admin', 'Admin')
             ->andWhere('u.structure = :structure')
             ->andWhere('u.isActive = true')
+            ->leftJoin('u.role', 'r')
+            ->leftJoin('u.subscription', 's')
+            ->andWhere('r.name = :secretary or r.name=:admin')
+            ->andWhere('s.acceptMailRecap = true')
+            ->setParameter('secretary', 'Secretary')
+            ->setParameter('admin', 'Admin')
             ->setParameter('structure', $structure)
             ->orderBy('u.lastName', 'ASC');
     }

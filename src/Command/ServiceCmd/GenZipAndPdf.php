@@ -33,7 +33,7 @@ class GenZipAndPdf
      */
     private function listActiveSittingsByStructure(Structure $structure): array
     {
-        return $this->sittingRepository->findActiveSittingsAfterDate($structure, new DateTime('- 4month'));
+        return $this->sittingRepository->findActiveSittingsAfterDateByStructure($structure, new DateTime('- 4month'));
     }
 
     /**
