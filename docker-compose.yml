@@ -13,7 +13,7 @@ services:
       - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
       - VERSION=${VERSION:-TAG}
       - PRODUCT_NAME=${PRODUCT_NAME:-idelibre}
-      - PRODUCT_EDITOR=${PRODUCT_EDITOR:-libriciel scop}
+      - PRODUCT_EDITOR=${PRODUCT_EDITOR:-libriciel SCOP}
       - HIDE_LEFT_BANNER_LOGIN=${HIDE_LEFT_BANNER_LOGIN:-false}
       - MAILER_DSN=${MAILER_DSN:-null://localhost}
       - MAILJET_KEY=${MAILJET_KEY:-null}
