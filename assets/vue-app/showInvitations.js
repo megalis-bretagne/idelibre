@@ -203,10 +203,6 @@ let app = new Vue({
             this.attendanceStatusActors = formatAttendanceStatus(this.actorConvocations);
             this.attendanceStatusEmployee = formatAttendanceStatus(this.employeeConvocations);
             this.attendanceStatusGuest = formatAttendanceStatus(this.guestConvocations);
-                // ...formatAttendanceStatus(this.employeeConvocations),
-                // ...formatAttendanceStatus(this.guestConvocations)
-            // ];
-
             this.showModalAttendance = true;
         },
 
@@ -256,7 +252,6 @@ let app = new Vue({
                     this.showModalAttendance = false
                     this.changedAttendance = [];
                     this.getCountNotAnswered();
-                    this.setInfoMessage("Présences enregistrées");
                     return false;
                 });
             },
