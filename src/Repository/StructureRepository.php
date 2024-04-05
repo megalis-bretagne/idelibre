@@ -51,4 +51,15 @@ class StructureRepository extends ServiceEntityRepository
 
         return $qb;
     }
+
+
+
+    public function findActiveStructures(): array
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.active = true')
+            ->orderBy('s.name')
+            ->getQuery()
+            ->getResult();
+    }
 }

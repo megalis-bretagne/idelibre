@@ -2,10 +2,14 @@
 
 namespace App\Tests\Repository;
 
+use App\Entity\Subscription;
 use App\Repository\UserRepository;
+use App\Tests\Factory\SubscriptionFactory;
+use App\Tests\Factory\UserFactory;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
 use App\Tests\Story\GroupStory;
+use App\Tests\Story\RoleStory;
 use App\Tests\Story\StructureStory;
 use App\Tests\Story\UserStory;
 use Doctrine\Persistence\ObjectManager;
@@ -104,7 +108,21 @@ class UserRepositoryTest extends WebTestCase
     public function testFindSecretariesAndAdminByStructure()
     {
         $structure = StructureStory::libriciel();
-        $secreateryAdminQb = $this->userRepository->findSecretariesAndAdminByStructure($structure->object());
+
+        $admin = UserStory::adminLibriciel();
+        SubscriptionFactory::createOne([
+            'acceptMailRecap' => true,
+            'user' => $admin
+        ])->object();
+
+        $secretaryLibriciel1 = UserStory::secretaryLibriciel1();
+        SubscriptionFactory::createOne([
+            'acceptMailRecap' => true,
+            'user' => $secretaryLibriciel1
+        ])->object();
+
+        $secreateryAdminQb = $this->userRepository->findSecretariesAndAdminByStructureWithMailsRecap($structure->object());
+
         $this->assertCount(2, $secreateryAdminQb->getQuery()->getResult());
     }
 }

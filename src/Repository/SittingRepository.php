@@ -129,7 +129,7 @@ class SittingRepository extends ServiceEntityRepository
     /**
      * @return Sitting[]
      */
-    public function findActiveSittingsAfterDate(Structure $structure, DateTimeInterface $after): array
+    public function findActiveSittingsAfterDateByStructure(Structure $structure, DateTimeInterface $after): array
     {
         return $this->createQueryBuilder('s')
             ->andWhere('s.structure =:structure')

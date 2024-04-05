@@ -2,6 +2,7 @@
 
 namespace App\Command\ServiceCmd;
 
+use App\Entity\Convocation;
 use App\Entity\EmailTemplate;
 use App\Entity\Sitting;
 use App\Entity\Structure;
@@ -12,12 +13,16 @@ use App\Repository\EmailTemplateRepository;
 use App\Repository\SittingRepository;
 use App\Repository\StructureRepository;
 use App\Repository\UserRepository;
+use App\Service\Email\EmailNotSendException;
 use App\Service\Email\EmailServiceInterface;
 use App\Service\EmailTemplate\EmailGenerator;
 use App\Service\EmailTemplate\TemplateTag;
 use App\Service\Util\GenderConverter;
 use DateTime;
 use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class AttendanceNotification
 {
@@ -34,48 +39,59 @@ class AttendanceNotification
     ) {
     }
 
-    /**
-     * @return Structure[]
-     */
-    private function listStructures(): array
-    {
-        return $this->structureRepository->findAll();
-    }
 
     /**
-     * @return Sitting[]
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws LoaderError
+     * @throws EmailNotSendException
      */
-    private function listActiveSittingsByStructure(Structure $structure): array
-    {
-        return $this->sittingRepository->findActiveSittingsAfterDate($structure, new DateTime('0 days'));
-    }
-
     public function genAllAttendanceNotification(): void
     {
-        foreach ($this->listStructures() as $structure) {
-            $this->getAttendanceNotification($structure);
+        $structures = $this->structureRepository->findBy(['isActive' => true]);
+        foreach ($structures as $structure) {
+            $this->sendNotifications($structure);
         }
     }
 
-    public function getAttendanceNotification(Structure $structure): void
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws EmailNotSendException
+     */
+    public function sendNotifications(Structure $structure): void
     {
-        $users = $this->userRepository->findSecretariesAndAdminByStructure($structure)->getQuery()->getResult();
-        $sittings = $this->listActiveSittingsByStructure($structure);
+        $users = $this->userRepository->findSecretariesAndAdminByStructureWithMailsRecap($structure)->getQuery()->getResult();
+        $sittings = $this->sittingRepository->findActiveSittingsAfterDateByStructure($structure, new DateTime('0 days'));
 
-        /** @var User $user */
         foreach ($users as $user) {
-            if ($user->getSubscription()?->getAcceptMailRecap()) {
-                $attendanceData = [];
-                foreach ($sittings as $sitting) {
-                    if ($this->isAuthorizedSittingType($sitting->getType(), $user)) {
-                        $attendanceData[] = $this->prepareDatas($sitting);
-                    }
-                }
-                $this->prepareAndSendMail($structure, $attendanceData, $user);
-            }
+            $this->hydrateAndSendSittingDatas($sittings, $user, $structure);
         }
     }
 
+    /**
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws LoaderError
+     * @throws EmailNotSendException
+     */
+    private function hydrateAndSendSittingDatas(array $sittings, User $user, Structure $structure): void
+    {
+        $attendanceData = [];
+        foreach ($sittings as $sitting) {
+            if ($this->isAuthorizedSittingType($sitting->getType(), $user)) {
+                $attendanceData[] = $this->prepareDatas($sitting);
+            }
+            $this->prepareAndSendMail($structure, $attendanceData, $user);
+        }
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
     public function prepareDatas(Sitting $sitting): string
     {
         $convocations = $this->convocationRepository->getConvocationsWithUserBySitting($sitting);
@@ -83,13 +99,15 @@ class AttendanceNotification
         return $this->twig->render('generate/mailing_recap_template.html.twig', [
             'convocations' => $convocations,
             'attendance' => [
-                'present' => 'Présent',
-                'absent' => 'Absent',
-                'remote' => 'Distanciel',
+                Convocation::PRESENT => 'Présent',
+                Convocation::ABSENT => 'Absent',
+                Convocation::REMOTE => 'Distanciel',
+                Convocation::ABSENT_GIVE_POA => 'Donne pouvoir par procuration',
+                Convocation::ABSENT_SEND_DEPUTY => 'Remplacé par son suppléant',
             ],
             'category' => [
-                'convocation' => 'Élus',
-                'invitation' => 'Invités/Personnels administratifs',
+                Convocation::CATEGORY_CONVOCATION => 'Élus',
+                Convocation::CATEGORY_INVITATION => 'Invités/Personnels administratifs',
             ],
             'sitting' => $sitting,
             'timezone' => $sitting->getStructure()->getTimezone()->getName(),
@@ -98,12 +116,14 @@ class AttendanceNotification
 
     /**
      * @param array<string> $content
+     * @throws EmailNotSendException
      */
     private function prepareAndSendMail(Structure $structure, array $content, User $user): void
     {
         if (empty($content)) {
             return;
         }
+
         $emailTemplate = $this->emailTemplateRepository->findOneByStructureAndCategory($structure, EmailTemplate::CATEGORY_RECAPITULATIF);
         if (!empty($emailTemplate)) {
             $emailDest = $user->getEmail();
@@ -129,10 +149,6 @@ class AttendanceNotification
 
     private function isAuthorizedSittingType(Type $type, User $user): bool
     {
-        if ('Admin' == $user->getRole()->getName()) {
-            return true;
-        }
-
-        return $user->getAuthorizedTypes()->contains($type);
+        return $user->getRole()->getName() === "Admin" or $user->getAuthorizedTypes()->contains($type);
     }
 }
