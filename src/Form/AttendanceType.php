@@ -71,7 +71,7 @@ class AttendanceType extends AbstractType
         return $user->getLastName() . ' ' . $user->getFirstName();
     }
 
-    public function presenceValues($convocation): array
+    private function presenceValues($convocation): array
     {
         $presenceStatusList = [
             'Présent' => Convocation::PRESENT,
