@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Connector\LsvoteConnector;
 use App\Entity\Sitting;
 use App\Form\SearchType;
 use App\Form\SittingType;
@@ -14,13 +13,13 @@ use App\Repository\UserRepository;
 use App\Service\Connector\Lsvote\LsvoteException;
 use App\Service\Connector\LsvoteConnectorManager;
 use App\Service\Connector\LsvoteResultException;
+use App\Service\Connector\LsvoteSittingCreationException;
 use App\Service\Convocation\ConvocationManager;
 use App\Service\EmailTemplate\EmailGenerator;
 use App\Service\File\Generator\FileGenerator;
 use App\Service\File\Generator\UnsupportedExtensionException;
 use App\Service\Pdf\PdfValidator;
 use App\Service\Seance\SittingManager;
-use App\Service\Util\FileUtil;
 use App\Sidebar\Annotation\Sidebar;
 use App\Sidebar\State\SidebarState;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
@@ -46,9 +45,9 @@ class SittingController extends AbstractController
         private readonly ConvocationManager $convocationManager,
         private readonly SittingManager $sittingManager,
         private readonly PdfValidator $pdfValidator,
-        private readonly LsvoteConnectorManager $lsvoteConnectorManager,
         private readonly SidebarState $sidebarState,
         private readonly FileGenerator $fileGenerator,
+        private readonly LsvoteConnectorManager $lsvoteConnectorManager,
     ) {
     }
 
@@ -201,6 +200,9 @@ class SittingController extends AbstractController
         return $this->redirectToRoute('edit_sitting_information', ['id' => $sitting->getId()]);
     }
 
+    /**
+     * @throws UnsupportedExtensionException
+     */
     #[Route(path: '/sitting/delete/{id}', name: 'sitting_delete', methods: ['DELETE'])]
     #[IsGranted('MANAGE_SITTINGS', subject: 'sitting')]
     public function delete(Sitting $sitting, Request $request): Response
@@ -301,6 +303,9 @@ class SittingController extends AbstractController
         return $response;
     }
 
+    /**
+     * @throws UnsupportedExtensionException
+     */
     #[Route(path: '/sitting/pdf/{id}', name: 'sitting_full_pdf', methods: ['GET'])]
     #[IsGranted('MANAGE_SITTINGS', subject: 'sitting')]
     public function getFullPdfSitting(Sitting $sitting): Response
