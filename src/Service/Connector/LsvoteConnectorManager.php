@@ -181,6 +181,7 @@ class LsvoteConnectorManager
             ->setName($sitting->getName())
             ->setDate($sitting->getDate()->format('y-m-d H:i'))
             ->setRemote($sitting->getIsRemoteAllowed())
+            ->setIsMandatorAllowed($sitting->isMandatorAllowed())
         ;
 
         return $lsvoteSitting;

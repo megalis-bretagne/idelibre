@@ -5,10 +5,9 @@ namespace App\Service\Connector\Lsvote\Model;
 class LsvoteSitting
 {
     private string $name;
-
     private string $date;
-
     private bool $remote;
+    private bool $isMandatorAllowed;
 
 
     public function getName(): string
@@ -42,6 +41,17 @@ class LsvoteSitting
     {
         $this->remote = $remote;
 
+        return $this;
+    }
+
+    public function isMandatorAllowed(): bool
+    {
+        return $this->isMandatorAllowed;
+    }
+
+    public function setIsMandatorAllowed(bool $isMandatorAllowed): LsvoteSitting
+    {
+        $this->isMandatorAllowed = $isMandatorAllowed;
         return $this;
     }
 }
