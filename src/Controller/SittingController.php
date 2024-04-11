@@ -301,6 +301,9 @@ class SittingController extends AbstractController
         return $response;
     }
 
+    /**
+     * @throws UnsupportedExtensionException
+     */
     #[Route(path: '/sitting/pdf/{id}', name: 'sitting_full_pdf', methods: ['GET'])]
     #[IsGranted('MANAGE_SITTINGS', subject: 'sitting')]
     public function getFullPdfSitting(Sitting $sitting): Response

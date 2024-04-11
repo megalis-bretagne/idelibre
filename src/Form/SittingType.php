@@ -124,7 +124,7 @@ class SittingType extends AbstractType
             ])
 
             ->add('isMandatorAllowed', LsChoiceType::class, [
-                'label' => 'Autoriser la participation des mandants',
+                'label' => 'Autoriser les mandataires',
                 'data' => !$sitting || $sitting->isMandatorAllowed(),
                 'attr' => [
                     'class' => $isAlreadySentConvocation || $isAlreadySentInvitation ? 'isDisabled' : '',
