@@ -57,7 +57,6 @@ class ReportSittingController extends AbstractController
         $response->setContentDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
             $fileUtil->sanitizeName($sitting->getName()) . '_rapport.csv',
-
         );
         $response->deleteFileAfterSend();
 

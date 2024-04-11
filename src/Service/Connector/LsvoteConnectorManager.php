@@ -143,7 +143,6 @@ class LsvoteConnectorManager
 
             if ($convocation->getUser()->getRoles() === Role_Name::NAME_ROLE_DEPUTY) {
                 $lsvoteVoter->setIsDeputy(true);
-
             }
             if ($convocation->getDeputy()) {
                 $lsvoteVoter->setDeputy($this->createUserFromUser($convocation));
@@ -152,7 +151,6 @@ class LsvoteConnectorManager
             $lsvoteVoter->setDeputy($user->getDeputy() ? $this->createUserFromUser($convocation) : null);
 
             $lsvoteVoters[] = $lsvoteVoter;
-
         }
 
         return $lsvoteVoters;

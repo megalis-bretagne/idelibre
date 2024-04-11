@@ -79,7 +79,6 @@ class AttendanceType extends AbstractType
         ];
 
         if ($convocation->getCategory() === Convocation::CATEGORY_CONVOCATION) {
-
             if ($convocation->getSitting()->getIsRemoteAllowed() === true) {
                 $presenceStatusList = [...$presenceStatusList, ...[ 'Présent à distance' => Convocation::REMOTE ]];
             }
@@ -95,5 +94,4 @@ class AttendanceType extends AbstractType
 
         return $presenceStatusList;
     }
-
 }
