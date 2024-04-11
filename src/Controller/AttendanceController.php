@@ -31,6 +31,7 @@ class AttendanceController extends AbstractController
 
         $form = $this->createForm(AttendanceType::class, null, [
             'isRemoteAllowed' => $sitting->getIsRemoteAllowed(),
+            'isMandatorAllowed' => $sitting->isMandatorAllowed(),
             'convocation' => $convocation,
             'sitting' => $sitting,
             'toExclude' => [$user],
