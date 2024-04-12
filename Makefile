@@ -47,6 +47,14 @@ reset-db:
 	$(DOCKER_COMPOSE) run --entrypoint="bin/console d:m:m " --user="root" fpm-idelibre
 	$(DOCKER_COMPOSE) run --entrypoint="bin/console initBdd docker-resources/minimum.sql" --user="root" fpm-idelibre
 
+entity:
+	$(DOCKER_COMPOSE) run --entrypoint="bin/console make:entity" fpm-idelibre
+
+migration:
+	$(DOCKER_COMPOSE) run --entrypoint="bin/console make:migration" fpm-idelibre
+
+d-m-m:
+	$(DOCKER_COMPOSE) run --entrypoint="bin/console d:m:m" fpm-idelibre
 
 ecs:
 	$(DOCKER_COMPOSE) run --entrypoint="vendor/bin/ecs check --fix" fpm-idelibre

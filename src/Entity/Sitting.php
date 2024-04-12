@@ -19,6 +19,7 @@ use Doctrine\ORM\Mapping\OneToOne;
 use Doctrine\ORM\Mapping\OrderBy;
 use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\UniqueConstraint;
+use Exception;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -121,6 +122,10 @@ class Sitting
     #[ORM\Column(nullable: true)]
     #[Groups(['sitting', 'sitting:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
+
+    #[ORM\Column(type: 'boolean', options: ['default' => true])]
+    #[Groups(groups: ['sitting', 'sitting:read', 'sitting:write:post'])]
+    private ?bool $isMandatorAllowed = true;
 
 
     public function __construct()
@@ -324,6 +329,9 @@ class Sitting
         return $this;
     }
 
+    /**
+     * @throws Exception
+     */
     public function getNameWithDate(): string
     {
         $dateTime = new DateTime('', new DateTimeZone($this->getStructure()->getTimezone()->getName()));
@@ -350,7 +358,7 @@ class Sitting
     }
 
     /**
-     * @return Collection|Timestamp[]
+     * @return Collection
      */
     public function getUpdatedTimestamps(): Collection
     {
@@ -380,7 +388,7 @@ class Sitting
     }
 
     /**
-     * @return Collection|Otherdoc[]
+     * @return Collection
      */
     public function getOtherdocs(): Collection
     {
@@ -460,5 +468,17 @@ class Sitting
     public function setUpdatedAtValue(): void
     {
         $this->updatedAt = new \DateTimeImmutable();
+    }
+
+    public function isMandatorAllowed(): ?bool
+    {
+        return $this->isMandatorAllowed;
+    }
+
+    public function setIsMandatorAllowed(bool $isMandatorAllowed): self
+    {
+        $this->isMandatorAllowed = $isMandatorAllowed;
+
+        return $this;
     }
 }

@@ -123,6 +123,19 @@ class SittingType extends AbstractType
 
             ])
 
+            ->add('isMandatorAllowed', LsChoiceType::class, [
+                'label' => 'Autoriser les mandataires',
+                'data' => !$sitting || $sitting->isMandatorAllowed(),
+                'attr' => [
+                    'class' => $isAlreadySentConvocation || $isAlreadySentInvitation ? 'isDisabled' : '',
+                    'data-infos' => $sitting ? $sitting->getId() : '',
+                ],
+                'choices' => [
+                    'Oui' => true,
+                    'Non' => false,
+                ],
+            ])
+
             ->add('structure', HiddenEntityType::class, [
                 'data' => $options['structure'],
                 'class_name' => Structure::class,
