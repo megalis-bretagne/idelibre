@@ -2,18 +2,18 @@
     angular.module('idelibreApp').controller('ModalpresenceCtrl', function ($scope, account, seance, attendance, $rootScope, $modalInstance, socketioSrv, accountSrv, attendanceSrv) {
 
 
-        console.log(attendance);
 
         $scope.isAllowedRemote = seance.isRemoteAllowed
 
         $scope.isPresenceStatusEditable = seance.getDate() > Date.now();
 
         $scope.attendance = attendance;
-        //$scope.presenceStatus = seance.getPresentStatus();
 
         $scope.isMandatorList = false
         $scope.selectedMandator = null;
         $scope.availableMandators = attendance.availableMandators;
+
+        $scope.isMandatorAllowed = attendance.isMandatorAllowed;
 
 
         $scope.getPresenceMessageEditable = () => {
@@ -37,12 +37,10 @@
         }
 
         let callBackSuccess = function () {
-            console.log('success');
             $modalInstance.close();
         }
 
         let callBackError = function () {
-            console.log('error');
             $modalInstance.dismiss('cancel');
         }
 
@@ -52,34 +50,15 @@
         };
 
         $scope.present = function () {
-            //seance.setPresentStatus(Seance.PRESENT);
-            //  accountSrv.save();
-            // socketioSrv.sendConfirmPresence(account, seance.id, Seance.PRESENT, null);
             attendanceSrv.postAttendanceStatus(account, seance.id, {attendance: Seance.PRESENT}, callBackSuccess, callBackError);
-            //$modalInstance.close();
-            //$modalInstance.dismiss('cancel');
         };
 
         $scope.presentRemotely = function () {
-            //  seance.setPresentStatus(Seance.REMOTE);
-            //  accountSrv.save();
-            //socketioSrv.sendConfirmPresence(account, seance.id, Seance.REMOTE, null);
             attendanceSrv.postAttendanceStatus(account, seance.id, {attendance: Seance.REMOTE}, callBackSuccess, callBackError);
-            //$modalInstance.dismiss('cancel');
-            //$modalInstance.close();
         }
 
         $scope.absent = function () {
-            // seance.setPresentStatus(Seance.ABSENT);
-            // accountSrv.save();
-            //socketioSrv.sendConfirmPresence(account, seance.id, Seance.ABSENT);
-
             attendanceSrv.postAttendanceStatus(account, seance.id, {attendance: Seance.ABSENT}, callBackSuccess, callBackError);
-            //$modalInstance.close();
-            //            $modalInstance.dismiss('cancel');
-            //} else {
-            //     $modalInstance.close(Seance.ABSENT);
-            // }
         };
 
         $scope.absentMandator = function () {
@@ -87,17 +66,11 @@
         }
 
         $scope.chooseMandator = function () {
-            console.log($scope.selectedMandator);
             attendanceSrv.postAttendanceStatus(account, seance.id, {attendance: Seance.POA, mandatorId: $scope.selectedMandator}, callBackSuccess, callBackError);
-            //$modalInstance.close();
-            //$modalInstance.dismiss('cancel');
         }
 
         $scope.absentDeputy = function () {
-            console.log($scope.selectedMandator);
             attendanceSrv.postAttendanceStatus(account, seance.id, {attendance: Seance.DEPUTY, mandatorId: null}, callBackSuccess, callBackError);
-
-            //$modalInstance.dismiss('cancel');
         }
     });
 
