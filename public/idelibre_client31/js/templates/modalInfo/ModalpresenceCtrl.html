@@ -43,7 +43,8 @@
         <button ng-show="attendance.hasdeputy" class="btn btn-warning" ng-click="absentDeputy()">Envoyer son suppléant
         </button>
 
-        <button class="btn btn-warning" ng-click="absentMandator()">Donne pouvoir</button>
+
+        <button ng-show="isMandatorAllowed" class="btn btn-warning" ng-click="absentMandator()">Donne pouvoir</button>
 
         <button ng-show="isAllowedRemote" class="btn btn-success"
                 ng-click="presentRemotely()">Présent en distanciel
