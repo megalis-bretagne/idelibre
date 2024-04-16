@@ -1,11 +1,12 @@
 include:
   - project: "libriciel/integration-continue/templates"
-    ref: master
-    file: '/publish-container-to-registry.yml'
+    ref: publish-container-to-registry@2.0.0
+    file: '/jobs/publish-container-to-registry/publish-container-to-registry.yml'
 
   - project: "libriciel/integration-continue/templates"
     ref: publish-compose-to-nexus@0.1.3
     file: '/jobs/publish-compose-to-nexus/publish-compose-to-nexus.yml'
+
 
   - template: Code-Quality.gitlab-ci.yml
   - template: Jobs/SAST.gitlab-ci.yml
