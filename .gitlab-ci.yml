@@ -96,7 +96,7 @@ phpTest:
   before_script:
     - cd /app
   script:
-    - SYMFONY_DEPRECATIONS_HELPER=disabled vendor/bin/paratest --coverage-text --colors=never --coverage-clover coverage/coverage.xml --log-junit coverage/logfile.xml
+    - SYMFONY_DEPRECATIONS_HELPER=disabled /app/bin/phpunit --coverage-text --colors=never --coverage-clover coverage/coverage.xml --log-junit coverage/logfile.xml
     - cp -rf coverage $CI_PROJECT_DIR
   artifacts:
     paths:
