@@ -68,6 +68,7 @@ class PasswordInvalidator
             $emailsData[] = $emailData;
         }
 
+//        dd($emailsData);
         $this->emailService->sendBatch($emailsData);
     }
 
@@ -76,12 +77,13 @@ class PasswordInvalidator
         $prenom = $user->getFirstName();
         $nom = $user->getLastName();
         $productName = $this->bag->get('product_name');
+        $forgetUrl = $this->bag->get('base_url') . '/forget';
 
         return <<<HTML
                 <p>Bonjour $nom $prenom,</p>\r
                 <p>Une demande de réinitialisation de votre mot de passe a &eacute;t&eacute; faite par un administrateur de l'application $productName</p>\r
                 <p>Votre mot de passe doit être changé afin de correspondre aux exigences de sécurité.</p>\r
-                <p>Veuillez utiliser l'option "Mot de passe oublié" lors de votre prochaine connexion à nos services.</p>\r
+                <p>Veuillez utiliser l'option "Mot de passe oublié" lors de votre prochaine connexion à nos services, ou cliquer <a href="$forgetUrl">ici</a></p>\r
                 <p>Merci</p>
             HTML;
     }
