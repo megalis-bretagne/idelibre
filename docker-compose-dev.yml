@@ -117,6 +117,8 @@ services:
     environment:
       - NODE_ENV=production
       - SITE_HOSTNAME=${URL:-lshorodatage.libriciel.fr}
+    volumes:
+      - /data/certificates:/certificates
     command: ["/app/docker-resources/init.sh"]
     networks:
       - network_idelibre_dev

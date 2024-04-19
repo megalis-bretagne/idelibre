@@ -25,9 +25,7 @@ class Timestamp
     #[Groups(['convocation:read'])]
     private $id;
 
-    /**
-     * @var DateTimeInterface
-     */
+
     #[Column(type: 'datetime')]
     #[Groups(['convocation', 'convocation:read'])]
     private $createdAt;
@@ -38,18 +36,18 @@ class Timestamp
     #[Column(type: 'string', length: 255)]
     #[NotBlank]
     #[Length(max: '255')]
-    private $filePathContent;
+    private ?string $filePathContent;
 
     /**
      * @var string|null
      */
     #[Column(type: 'string', length: 255, nullable: true)]
     #[Length(max: '255')]
-    private $filePathTsa;
+    private ?string $filePathTsa;
 
     #[ManyToOne(targetEntity: Sitting::class, inversedBy: 'updatedTimestamps')]
     #[JoinColumn(onDelete: 'CASCADE')]
-    private $sitting;
+    private ?Sitting $sitting;
 
     public function __construct()
     {

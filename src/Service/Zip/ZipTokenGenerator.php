@@ -23,7 +23,7 @@ class ZipTokenGenerator
         return $tmpPath;
     }
 
-    private function getTimestampDirectory(Sitting $sitting): string
+    public function getTimestampDirectory(Sitting $sitting): string
     {
         $year = $sitting->getDate()->format('Y');
 

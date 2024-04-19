@@ -193,6 +193,18 @@
                         </a>
                     </div>
                 </div>
+
+                <div class="row mt-2">
+                    <div class="col-4 text-end mt-1">
+                        <b>Vérifier le jeton d'horodatage :</b>
+                    </div>
+                    <div class="col-8">
+                        Vérifier les jetons d'horodatage
+                        <a href="{{ path('timestamp_list_sitting', {'id': sitting.id}) }}" class="btn btn-outline-secondary borderless" title="Vérifier les jetons d'horodatage">
+                            <i class="fa fa-clock-rotate-left"></i>
+                        </a>
+                    </div>
+                </div>
             {% endif %}
 
             {% if isActiveLsvote and not isLsvoteResults and isSentLsvote %}
