@@ -1,5 +1,6 @@
 body {
     background-color: var(--bs-ls-grey-50);
+    overflow-x: hidden;
 }
 
 a { text-decoration: none; }
@@ -20,6 +21,7 @@ a { text-decoration: none; }
     height: 40px;
     display: flex;
     align-items: center;
+    /*overflow-x: hidden;*/
 }
 
 #navbarContainer img {
@@ -42,7 +44,8 @@ a { text-decoration: none; }
 }
 
 .navbar-nav .dropdown-menu {
-    left: -6rem;
+    left: -115%;
+    top: 31px;
     width: max-content;
     background-color: #222222;
     border-radius: 0;

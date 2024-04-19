@@ -1,63 +1,65 @@
-<nav id="navbarContainer" class="navbar navbar-expand-md navbar-ls navbar-dark bg-ls-dark">
-    <a class="navbar-brand" href="#">
-        <img style="height: 22px; padding-bottom: 2px;" src="{{ asset('assets/img/ls-logo.svg') }}" alt="idelibre" class="img-fluid">
+<nav class="navbar navbar-expand-md ls-bg-info-nav fixed-top navbar-dark bg-ls-dark" style="height: 40px;">
+    <a class="nav-item mr-3" href="{% if app.user.structure == null %}{{ path('structure_index') }}{% else %}{{ path('sitting_index') }}{% endif %}">
+        <img style="height: 22px; padding-bottom: 2px;" src="{{ asset('assets/img/id-color-white.svg') }}"
+             alt="lsvote"
+             class="img-fluid"
+             title="{% if app.user.structure == null %}Revenir à l'écran des structures{% else %}Revenir à l'écran des séances {% endif %}"
+        >
     </a>
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-target="#navbarSupportedContent"
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse d-flex justify-content-end" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto"></ul>
-        {% if app.user %}
-            <ul class="navbar-nav">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                       data-bs-toggle="dropdown"
-                       aria-haspopup="true" aria-expanded="false">
-                        {% if app.user.structure %}
-                            {{ app.user.structure.name }} -
-                        {% endif %}
-                        {{ app.user.username }}
-                    </a>
-
-
-                    <div class="dropdown-menu dropdown-menu-right popup-menu-right" aria-labelledby="navbarDropdown">
-                        <div class="dropdown-content">
+    <div class="collapse navbar-collapse justify-content-end " id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+            </ul>
+            {% if app.user %}
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-bs-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false" onclick="changeColor()" >
+                            {{ app.user.username }}
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right popup-menu-right" aria-labelledby="navbarDropdown">
 
                             <a href="{{ path('user_preferences') }}" class="dropdown-item">
-                                <span class="fas fa-user"></span>
-                                Mes préférences
+                                <span class="fas fa-user"></span> Mes préférences
                             </a>
-
-                            <div class="dropdown-divider"></div>
-
                             <a href="{{ path('gdpr_notice') }}" class="dropdown-item">
-                                <span class="fas fa-user-secret"></span>
-                                Politique de confidentialité (RGPD)
+                                <span class="fas fa-user-secret"></span> Politique de confidentialité (RGPD)
                             </a>
 
                             {% if (is_granted('ROLE_MANAGE_STRUCTURES') and app.user.structure) %}
                                 <div class="dropdown-divider"></div>
                                 <a href="{{ path('security_impersonate_exit') }}" class="dropdown-item">
-                                    <span class="fas fa-sign-out-alt"></span>
-                                    {{ app.user.structure.name }}
+                                    <span class="fas fa-sign-out-alt"></span> {{ app.user.structure.name }}
                                 </a>
                             {% endif %}
 
                             <div class="dropdown-divider"></div>
-
                             <a class="dropdown-item" href="{{ path('app_logout') }}">
-                                <span class="fas fa-sign-out-alt"></span>
-                                Se déconnecter
+                                <span class="fas fa-sign-out-alt"></span> Se déconnecter
                             </a>
-
                         </div>
-                    </div>
-                </li>
-            </ul>
-        {% endif %}
-    </div>
+
+                    </li>
+                </ul>
+            {% endif %}
+        </div>
 </nav>
 
+{% block javascript %}
+
+<script>
+    const link = document.querySelector('#navbarDropdown');
+    function changeColor(){
+    link.classList.contains('show') ? link.style.color = 'var(--bs-ls-info-400)' : link.style.color = 'white'
+}
+
+
+</script>
+
+{% endblock %}
