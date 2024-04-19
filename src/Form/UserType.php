@@ -167,7 +167,7 @@ class UserType extends AbstractType
             $builder
                 ->add('initPassword', LsChoiceType::class, [
                     'mapped' => false,
-                    'label' => 'Voulez vous définir le mot de passe de l\'utilisateur ?',
+                    'label' => "Voulez vous   le mot de passe de l\'utilisateur ?,
                     'choices' => [
                         'Oui' => true,
                         'Non' => false,
