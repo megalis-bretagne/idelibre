@@ -17,13 +17,13 @@
             </ul>
             {% if app.user %}
                 <ul class="navbar-nav">
-                    <li class="nav-item dropdown">
+                    <li class="nav-item dropdown" id="navDropdown">
                         <a class="dropdown-toggle" href="#" id="navbarDropdown" role="button"
                            data-bs-toggle="dropdown"
-                           aria-haspopup="true" aria-expanded="false" onclick="changeColor()" >
-                            {{ app.user.username }}
+                           aria-haspopup="true" aria-expanded="false">
+                            {{ app.user.structure ? app.user.structure.name : "" }} - {{ app.user.username }}
                         </a>
-                        <div class="dropdown-menu dropdown-menu-right popup-menu-right" aria-labelledby="navbarDropdown">
+                        <div class="dropdown-menu dropdown-menu-right popup-menu-right" aria-labelledby="navbarDropdown" id="navbarDropdownWindow">
 
                             <a href="{{ path('user_preferences') }}" class="dropdown-item">
                                 <span class="fas fa-user"></span> Mes préférences
@@ -52,14 +52,5 @@
 </nav>
 
 {% block javascript %}
-
-<script>
-    const link = document.querySelector('#navbarDropdown');
-    function changeColor(){
-    link.classList.contains('show') ? link.style.color = 'var(--bs-ls-info-400)' : link.style.color = 'white'
-}
-
-
-</script>
-
+    {{ encore_entry_script_tags('navbarToggleColor') }}
 {% endblock %}

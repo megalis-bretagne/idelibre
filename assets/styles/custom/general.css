@@ -37,6 +37,7 @@ a { text-decoration: none; }
 
 #navbarDropdown {
     padding: 0;
+    color: white;
 }
 
 .navbar-ls .nav-item .dropdown-menu{
@@ -44,7 +45,7 @@ a { text-decoration: none; }
 }
 
 .navbar-nav .dropdown-menu {
-    left: -115%;
+    left: -6.5rem;
     top: 31px;
     width: max-content;
     background-color: #222222;

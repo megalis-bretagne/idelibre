@@ -39,6 +39,7 @@ Encore
     .addEntry('passphraseConfirmationBox', './assets/js/passphraseConfirmationBox.js')
     .addEntry('accordeonTitle', './assets/js/accordeonTitle.js')
     .addEntry('subscriptionEmails', './assets/js/subscriptionEmails.js')
+    .addEntry('navbarToggleColor', './assets/js/_navbarToggleColor.js')
 
 
         // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
