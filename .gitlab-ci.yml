@@ -133,29 +133,29 @@ publish:
 deploy_master:
   stage: deploy
   environment:
-    name: idelibre-4-2.dev.libriciel.net
-    url: https://idelibre-4-2.dev.libriciel.net
+    name: idelibre-4-3.dev.libriciel.net
+    url: https://idelibre-4-3.dev.libriciel.net
   tags:
     - citoyen-shell
   only:
     - master
   variables:
-    PAYLOAD: "payload={\"text\": \"[idelibre-4-2.dev.libriciel.net](https://idelibre-4-2.dev.libriciel.net) a été mis à jour - [build $CI_PIPELINE_ID]($CI_PROJECT_URL/pipelines/$CI_PIPELINE_ID)\"}"
+    PAYLOAD: "payload={\"text\": \"[idelibre-4-3.dev.libriciel.net](https://idelibre-4-3.dev.libriciel.net) a été mis à jour - [build $CI_PIPELINE_ID]($CI_PROJECT_URL/pipelines/$CI_PIPELINE_ID)\"}"
   script:
     - eval $(ssh-agent -s)
     - ssh-add <(echo "$IDELIBRECI_SSH_KEY")
     - mkdir -p ~/.ssh
     - 'echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-    - scp ./docker-compose-deploy.yml idelibreci@idelibre-4-2.dev.libriciel.net:/data/docker-files/docker-compose.yml
-    - scp ./initializeCertificatesDeploy.sh idelibreci@idelibre-4-2.dev.libriciel.net:/data/docker-files/initializeCertificatesDeploy.sh
-    - scp ./docker-resources/nginx_template.vhost idelibreci@idelibre-4-2.dev.libriciel.net:/data/docker-files/docker-resources/nginx_template.vhost
-    - scp ./docker-resources/nginx.conf idelibreci@idelibre-4-2.dev.libriciel.net:/data/docker-files/docker-resources/nginx.conf
-    - scp ./docker-resources/options-ssl-nginx.conf idelibreci@idelibre-4-2.dev.libriciel.net:/data/docker-files/docker-resources/options-ssl-nginx.conf
-    - scp ./docker-resources/ssl-dhparams.pem idelibreci@idelibre-4-2.dev.libriciel.net:/data/docker-files/docker-resources/ssl-dhparams.pem
-    - scp ./docker-resources/initApp.sh idelibreci@idelibre-4-2.dev.libriciel.net:/data/docker-files/docker-resources/initApp.sh
+    - scp ./docker-compose-deploy.yml idelibreci@idelibre-4-3.dev.libriciel.net:/data/docker-files/docker-compose.yml
+    - scp ./initializeCertificatesDeploy.sh idelibreci@idelibre-4-3.dev.libriciel.net:/data/docker-files/initializeCertificatesDeploy.sh
+    - scp ./docker-resources/nginx_template.vhost idelibreci@idelibre-4-3.dev.libriciel.net:/data/docker-files/docker-resources/nginx_template.vhost
+    - scp ./docker-resources/nginx.conf idelibreci@idelibre-4-3.dev.libriciel.net:/data/docker-files/docker-resources/nginx.conf
+    - scp ./docker-resources/options-ssl-nginx.conf idelibreci@idelibre-4-3.dev.libriciel.net:/data/docker-files/docker-resources/options-ssl-nginx.conf
+    - scp ./docker-resources/ssl-dhparams.pem idelibreci@idelibre-4-3.dev.libriciel.net:/data/docker-files/docker-resources/ssl-dhparams.pem
+    - scp ./docker-resources/initApp.sh idelibreci@idelibre-4-3.dev.libriciel.net:/data/docker-files/docker-resources/initApp.sh
     - echo "$MASTER_ENV_FILE_CONTENT" > /tmp/.env.dist
-    - scp /tmp/.env.dist idelibreci@idelibre-4-2.dev.libriciel.net:/data/docker-files/.env
-    - ssh -tt idelibreci@idelibre-4-2.dev.libriciel.net "cd /data/docker-files/  && docker compose pull && ./initializeCertificatesDeploy.sh -f"
+    - scp /tmp/.env.dist idelibreci@idelibre-4-3.dev.libriciel.net:/data/docker-files/.env
+    - ssh -tt idelibreci@idelibre-4-3.dev.libriciel.net "cd /data/docker-files/  && docker compose pull && ./initializeCertificatesDeploy.sh -f"
     - curl -i -X POST -d "$PAYLOAD" $MATTERMOST_WEBHOOK
 
 publish-compose-to-nexus:
