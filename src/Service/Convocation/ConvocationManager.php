@@ -54,6 +54,7 @@ class ConvocationManager
     public function createConvocationsInvitableEmployees(Sitting $sitting): void
     {
         $associatedInvitableEmployees = $this->userRepository->getAssociatedInvitableEmployeesWithType($sitting->getType());
+        dd($associatedInvitableEmployees);
         $this->createConvocations($sitting, $associatedInvitableEmployees);
     }
 
