@@ -21,6 +21,7 @@ import './js/refreshApiKey'
 import './js/password/showPassword'
 import './js/utils/retrieveFromUrl'
 import './js/utils/showHide'
+import './js/_navbarToggleColor'
 
 $(document).ready(function () {
     let config = {
