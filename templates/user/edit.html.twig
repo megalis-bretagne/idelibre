@@ -31,7 +31,7 @@
         <input type="text" class="form-control" value="{{ user.role.prettyName }}" readonly disabled>
     </div>
 
-    {% if user.role.prettyName is same as "Gestionnaire de séance" %}
+    {% if user.role.name is same as "Secretary" %}
         {{ form_row(form.authorizedTypes) }}
         {{ form_row(form.isActive) }}
         {{ form_row(form.initPassword) }}
@@ -63,7 +63,7 @@
                 {{ form_row(form.plainPassword) }}
             </div>
 
-        {% elseif user.role.name is same as "Invité" or user.role.name is same as "Employee" %}
+        {% elseif user.role.name is same as "Guest" or user.role.name is same as "Employee" %}
             {{ form_row(form.isActive) }}
             {{ form_row(form.initPassword) }}
         <div class="d-none" id="passwordGroup">
