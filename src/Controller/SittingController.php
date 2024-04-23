@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Sitting;
 use App\Form\SearchType;
 use App\Form\SittingType;
+use App\Repository\ConvocationRepository;
 use App\Repository\EmailTemplateRepository;
 use App\Repository\LsvoteConnectorRepository;
 use App\Repository\OtherdocRepository;
@@ -48,6 +49,7 @@ class SittingController extends AbstractController
         private readonly SidebarState $sidebarState,
         private readonly FileGenerator $fileGenerator,
         private readonly LsvoteConnectorManager $lsvoteConnectorManager,
+        private readonly ConvocationRepository $convocationRepository,
     ) {
     }
 
@@ -252,6 +254,8 @@ class SittingController extends AbstractController
             $subjectBySittingTypeGenerated = $emailGenerator->generateEmailTemplateSubject($sitting, $emailTemplateBySittingType->getSubject());
         }
 
+//        dd( count($this->convocationRepository->getGuestConvocationsBySitting($sitting)), count($this->convocationRepository->getInvitableEmployeeConvocationsBySitting($sitting)));
+
         return $this->render('sitting/details_actors.html.twig', [
             'sitting' => $sitting,
             'emailTemplate' => $emailTemplate,
@@ -261,7 +265,9 @@ class SittingController extends AbstractController
             'subjectBySittingTypeGenerated' => $subjectBySittingTypeGenerated,
             'subjectInvitation' => $subjectInvitation,
             'isActiveLsvote' => $this->lsvoteConnectorManager->getLsvoteConnector($sitting->getStructure())->getActive(),
-            'convocationNotAnswered' => $this->convocationManager->countConvocationNotanswered($sitting->getConvocations())
+            'convocationNotAnswered' => $this->convocationManager->countConvocationNotanswered($sitting->getConvocations()),
+            'countGuest' => count($this->convocationRepository->getGuestConvocationsBySitting($sitting)),
+            'countEmployee' => count($this->convocationRepository->getInvitableEmployeeConvocationsBySitting($sitting))
         ]);
     }
 
