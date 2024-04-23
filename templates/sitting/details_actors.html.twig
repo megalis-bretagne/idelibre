@@ -667,9 +667,11 @@
 
                                                 </tr>
 
+                                                {% if countEmployee > 0 %}
                                                 <tr class="d-flex">
                                                     <th class="col-12">Personnels administratifs</th>
                                                 </tr>
+                                                {% endif %}
                                                 <tr class="d-flex" v-for="status in attendanceStatusEmployee">
 
                                                     <td class="col-4">
@@ -692,9 +694,12 @@
                                                     <td class="col-3"></td>
                                                 </tr>
 
+
+                                                {% if countGuest > 0 %}
                                                 <tr class="d-flex">
-                                                    <th class="col-12">Invités</th>
+                                                    <th class="col-12"> Invités </th>
                                                 </tr>
+                                                {% endif %}
                                                 <tr class="d-flex w-100 col-12" v-for="status in attendanceStatusGuest">
 
                                                     <td class="col-4">
