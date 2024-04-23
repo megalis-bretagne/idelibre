@@ -72,15 +72,14 @@
 
                     <td class="active_column d-none">{{ user.isActive }}</td>
                     <td class="col-2 actionButton">
-                        {% if (app.user != user) %}
-                            {{  macros.btnInvalidateSinglePasswordWithModal(
-                                user.id,
-                                'Invalidation du mot de passe de l\'utilisateur ' ~ user.lastName ~ ' ' ~ user.firstName,
-                                'invalidate_user_password',
-                                'En invalidant le mot de passe de l\'utilisateur ' ~ user.lastName ~ ' ' ~ user.firstName ~ ', cela entrainera la réinitialisation de son mot de passe.',
-                                users.currentPageNumber,
-                            ) }}
-                        {% endif %}
+
+                        {{  macros.btnInvalidateSinglePasswordWithModal(
+                            user.id,
+                            'Invalidation du mot de passe de l\'utilisateur ' ~ user.lastName ~ ' ' ~ user.firstName,
+                            'invalidate_user_password',
+                            'En invalidant le mot de passe de l\'utilisateur ' ~ user.lastName ~ ' ' ~ user.firstName ~ ', cela entrainera la réinitialisation de son mot de passe.',
+                            users.currentPageNumber,
+                        ) }}
 
                         {{ macros.editButton('user_edit', user.id, 'Modifier l\'utilisateur') }}
 
