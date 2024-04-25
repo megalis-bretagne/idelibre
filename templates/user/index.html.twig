@@ -61,13 +61,13 @@
             {% for user in users %}
 
                 <tr class="d-flex">
-                    <td class="col">{{ user.lastName }}</td>
-                    <td class="col">{{ user.firstName }}</td>
-                    <td class="col">{{ user.username | noSuffix }}</td>
+                    <td class="col {% if user.lastName|length > 29 %} overflow-scroll {% endif %}">{{ user.lastName}}</td>
+                    <td class="col  {% if user.firstName|length > 29 %} overflow-scroll {% endif %}">{{ user.firstName }}</td>
+                    <td class="col {% if user.username|length > 29 %} overflow-scroll {% endif %}">{{ user.username | noSuffix }}</td>
                     <td class="col">{{ user.role ? user.role.prettyName : '' }}</td>
-                    <td class="col">{{ user.party ?  ( user.party.name|length > 10 ? user.party.name|slice(0,20) ~ '...' : user.party.name)  : ''  }}</td>
-                    <td class="col">
-                        {% if user.deputy is not null and user.deputy.role.name == "Deputy" %}{{ user.deputy.firstName|first|upper }}. {{ user.deputy.lastName}} {% endif %}
+                    <td class="col {% if user.party and user.party.name|length > 15 %} overflow-scroll {% endif %}">{{ user.party ? user.party.name : "" }}</td>
+                    <td class="col {% if user.deputy is not null and user.deputy.lastName|length > 26 %} overflow-scroll {% endif %}">
+                        {% if user.deputy is not null and user.deputy.role.name == "Deputy" %}{{ user.deputy.firstName|first|upper }}. {{ user.deputy.lastName }} {% endif %}
                     </td>
 
                     <td class="active_column d-none">{{ user.isActive }}</td>
