@@ -26,7 +26,7 @@ services:
       - PASSPHRASE=${PASSPHRASE:-passphrase}
       - DISABLE_LEFT_BANNER_LOGIN=${DISABLE_LEFT_BANNER_LOGIN:-false}
       - MAILER_DSN=${MAILER_DSN:-smtp://idelibre_mailcatcher:25}
-      - URL=${URL:-https://idelibre-4-2.dev.libriciel.net}
+      - URL=${URL:-https://idelibre-4-3.dev.libriciel.net}
       - ENTROPY_ADMIN=${ENTROPY_ADMIN:-130}
       - MAXIMUM_SIZE_PDF_ZIP_GENERATION=${MAXIMUM_SIZE_PDF_ZIP_GENERATION:-200000000}
       - LOCK_DSN=${LOCK_DSN:-semaphore}
@@ -66,8 +66,8 @@ services:
       - fpm-idelibre
       - node-idelibre
     ports:
-      - 80:80
-      - 443:443
+      - "80:80"
+      - "443:443"
     volumes:
       - ./docker-resources/nginx.vhost:/etc/nginx/conf.d/default.conf
       - ./docker-resources/security.conf:/etc/nginx/conf.d/security.conf
@@ -88,7 +88,7 @@ services:
     container_name: lshorodatage
     image: registry.libriciel.fr:443/public/citoyens/lshorodatage/lshorodatage:1.0.0
     ports:
-      - 5000:3000
+      - "5000:3000"
     environment:
       - NODE_ENV=production
       - POSTGRES_HOST=${POSTGRES_HOST:-172.17.0.1}
