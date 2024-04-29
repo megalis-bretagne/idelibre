@@ -89,11 +89,8 @@ class SittingManager
     {
         if ($uploadedInvitationFile) {
             $invitationFile = $this->fileManager->save($uploadedInvitationFile, $structure);
-            $countInvitation = $this->sittingRepository->findActiveGuestAndEmployeeConvocationBySitting($sitting);
-//            if ($countInvitation > 0) {
-                $this->convocationManager->createConvocationsInvitableEmployees($sitting);
-                $this->convocationManager->createConvocationsGuests($sitting);
-//            }
+            $this->convocationManager->createConvocationsInvitableEmployees($sitting);
+            $this->convocationManager->createConvocationsGuests($sitting);
             $sitting->setInvitationFile($invitationFile);
         }
     }
