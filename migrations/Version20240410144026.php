@@ -20,7 +20,7 @@ final class Version20240410144026 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE sitting ADD is_mandator_allowed BOOLEAN NOT NULL');
+        $this->addSql('ALTER TABLE sitting ADD is_mandator_allowed BOOLEAN');
     }
 
     public function down(Schema $schema): void

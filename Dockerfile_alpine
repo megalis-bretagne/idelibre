@@ -1,0 +1,92 @@
+#### build stage ####
+
+FROM php:8.2-fpm-alpine as php-builder
+
+RUN apk update && apk add --no-cache \
+        oniguruma-dev \
+        postgresql-dev \
+        libxml2-dev \
+        nodejs \
+        npm \
+        curl-dev \
+        libzip-dev \
+        git \
+        libcurl
+
+RUN docker-php-ext-install  pdo pdo_pgsql opcache mbstring xml zip intl curl sysvsem
+
+
+USER www-data
+WORKDIR /app
+
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+COPY --chown=www-data:www-data  composer.json composer.lock symfony.lock  ./
+RUN composer install --no-dev --optimize-autoloader --no-scripts
+
+
+COPY --chown=www-data:www-data package.json package-lock.json webpack.config.js ./
+COPY --chown=www-data:www-data assets ./assets
+
+RUN npm install && npm run build
+
+######## Final stage ########
+
+from php:8.2-fpm-alpine as production
+
+ENV PHP_OPCACHE_VALIDATE_TIMESTAMPS="0" \
+    PHP_OPCACHE_MAX_ACCELERATED_FILES="10000" \
+    PHP_OPCACHE_MEMORY_CONSUMPTION="192" \
+    PHP_OPCACHE_MAX_WASTED_PERCENTAGE="10" \
+    PHP_MAX_FILE_UPLOADS='600' \
+    PHP_UPLOAD_MAX_FILESIZE='200M' \
+    PHP_POST_MAX_SIZE='2000M' \
+    PHP_MEMORY_LIMIT='2100M' \
+    PHP_MAX_INPUT_VAR='5000'  \
+    PHP_MAX_EXECUTION_TIME='300' \
+    PHP_PM_MAX_CHILDREN='15' \
+    PHP_PM_START_SERVERS='3' \
+    PHP_PM_MIN_SPARE_SERVERS='2' \
+    PHP_PM_MAX_SPARE_SERVERS='4'
+
+
+## Copier les extensions PHP et les config du stage builder
+COPY --from=php-builder /usr/local/etc/php/conf.d /usr/local/etc/php/conf.d
+COPY --from=php-builder /usr/local/lib/php/extensions /usr/local/lib/php/extensions
+
+COPY --from=surnet/alpine-wkhtmltopdf:3.19.1-0.12.6-small /bin/wkhtmltopdf /bin/wkhtmltopdf
+
+
+RUN apk add --no-cache  postgresql-libs libxml2 libzip libcurl bash icu
+
+RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini
+
+#wkhtmltopdf dependencies
+RUN apk add --no-cache \
+    libstdc++ \
+        libx11 \
+        libxrender \
+        libxext \
+        libssl3 \
+        ca-certificates \
+        fontconfig \
+        freetype \
+        ttf-dejavu \
+        ttf-droid \
+        ttf-freefont \
+        ttf-liberation
+
+USER www-data
+WORKDIR /app
+COPY --chown=www-data:www-data . /app
+
+COPY --from=php-builder /app /app
+
+RUN mkdir /app/data
+
+COPY docker-resources/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
+COPY docker-resources/zz-idelibre.ini /usr/local/etc/php/conf.d/zz-idelibre.ini
+
+EXPOSE 9000
+
+CMD ["php-fpm"]

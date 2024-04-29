@@ -1,10 +1,9 @@
 services:
   fpm-idelibre:
     container_name: fpm-idelibre
-#    image: registry.libriciel.fr:443/public/citoyens/idelibre:canary
-#    image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/idelibre/idelibre:4.1
-#    image: gitlab.libriciel.fr:4567/libriciel/pole-citoyens/idelibre/idelibre:latest
-    build: .
+    build:
+        context: .
+        dockerfile: Dockerfile_alpine
     restart: always
     depends_on:
        postgres-idelibre:
@@ -12,24 +11,25 @@ services:
     env_file:
       - .env.docker.local
     volumes:
-      - ./public:/app/public
+      - data-public:/app/public
       - /data/files:/data
       - ./docker-resources/initApp.sh:/app/docker-resources/initApp.sh
       - ./src:/app/src
       - ./templates:/app/templates
       - ./config:/app/config
-      - ./vendor:/app/vendor
+#      - ./vendor:/app/vendor
       - ./migrations:/app/migrations
       - ./composer.json:/app/composer.json
       - ./composer.lock:/app/composer.lock
       - ./docker-resources/minimum.sql:/app/docker-resources/minimum.sql
       - ./webpack.config.js:/app/webpack.config.js
       - ./assets:/app/assets
-      - ./node_modules:/app/node_modules
+#      - ./node_modules:/app/node_modules
       - ./tests:/app/tests
       - ./package-lock.json:/app/package-lock.json
       - ./package.json:/app/package.json
     command: ["/app/docker-resources/initApp.sh"]
+
     networks:
       - network_idelibre_dev
 
@@ -93,8 +93,8 @@ services:
       - /data/files:/data
       - /data/certbot/conf:/etc/letsencrypt
       - /data/certbot/www:/var/www/certbot
-      #- data-public:/app/public:ro
-      - ./public:/app/public
+      - data-public:/app/public:ro
+      #- ./public:/app/public
       #- /tmp/data/pdf:/data/pdf:ro
       #- /tmp/data/zip:/data/zip:ro
       #- /home/rdubourget/dataFiles/workspace:/data/workspace:ro
