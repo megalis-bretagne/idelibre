@@ -146,6 +146,7 @@ deploy_master:
     - ssh-add <(echo "$IDELIBRECI_SSH_KEY")
     - mkdir -p ~/.ssh
     - 'echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+    - sed -i -e"s|TAG|canary|" docker-compose.yml
     - scp ./docker-compose-deploy.yml idelibreci@idelibre-4-3.dev.libriciel.net:/data/docker-files/docker-compose.yml
     - scp ./initializeCertificatesDeploy.sh idelibreci@idelibre-4-3.dev.libriciel.net:/data/docker-files/initializeCertificatesDeploy.sh
     - scp ./docker-resources/nginx_template.vhost idelibreci@idelibre-4-3.dev.libriciel.net:/data/docker-files/docker-resources/nginx_template.vhost
