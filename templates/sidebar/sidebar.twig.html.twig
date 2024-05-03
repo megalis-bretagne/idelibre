@@ -138,6 +138,17 @@
                         </li>
                     {% endif %}
 
+                    {% if is_granted('ROLE_SHOW_EVENT_LOG') %}
+                        <li class="{{ 'event-log-nav' in activeNavs ? 'active' : '' }}">
+                            <a href="{{ path('event_log_index') }}">
+                                <i class="fa-solid fa-newspaper"></i>
+                                <span>Journal</span>
+                            </a>
+                            <ul class="sub-menu">
+                            </ul>
+                        </li>
+                    {% endif %}
+
                     {% if is_granted('ROLE_MANAGE_SITTINGS') %}
                         <li class="{{ 'board-nav' in activeNavs ? 'active' : '' }}">
                             <a href="{{ path('board_index') }}">

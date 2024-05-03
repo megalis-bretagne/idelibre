@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\EventLog\EventLog;
+use App\Entity\Structure;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -37,5 +38,25 @@ class EventLogRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function findByStructure(string $structureId, ?string $search = null)
+    {
+        $qb = $this->createQueryBuilder('el')
+            ->where('el.structureId = :structureId')
+            ->setParameter('structureId', $structureId);
+
+        if (!empty($search)) {
+            $qb->andWhere(
+                'LOWER(el.authorName) like :search 
+                OR LOWER(el.authorId) like :search 
+                OR LOWER(el.action) like :search 
+                OR LOWER(el.targetName) like :search
+                OR LOWER(el.targetId) like :search'
+            )
+                ->setParameter('search', mb_strtolower("%{$search}%"));
+        }
+
+        return $qb;
     }
 }

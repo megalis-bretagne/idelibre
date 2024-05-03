@@ -85,8 +85,7 @@ class SittingManager
         ?UploadedFile $uploadedInvitationFile,
         Sitting $sitting,
         Structure $structure
-    ): void
-    {
+    ): void {
         if ($uploadedInvitationFile) {
             $invitationFile = $this->fileManager->save($uploadedInvitationFile, $structure);
             $this->convocationManager->createConvocationsInvitableEmployees($sitting);

@@ -254,7 +254,7 @@ class SittingController extends AbstractController
             $subjectBySittingTypeGenerated = $emailGenerator->generateEmailTemplateSubject($sitting, $emailTemplateBySittingType->getSubject());
         }
 
-//        dd( count($this->convocationRepository->getGuestConvocationsBySitting($sitting)), count($this->convocationRepository->getInvitableEmployeeConvocationsBySitting($sitting)));
+        //        dd( count($this->convocationRepository->getGuestConvocationsBySitting($sitting)), count($this->convocationRepository->getInvitableEmployeeConvocationsBySitting($sitting)));
 
         return $this->render('sitting/details_actors.html.twig', [
             'sitting' => $sitting,

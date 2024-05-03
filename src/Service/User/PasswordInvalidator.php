@@ -68,7 +68,7 @@ class PasswordInvalidator
             $emailsData[] = $emailData;
         }
 
-//        dd($emailsData);
+        //        dd($emailsData);
         $this->emailService->sendBatch($emailsData);
     }
 

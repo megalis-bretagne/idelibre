@@ -17,8 +17,7 @@ class TimeStampController extends AbstractController
     public function __construct(
         private readonly TimestampManager  $timestampManager,
         private readonly ZipTokenGenerator $zipTokenGenerator,
-    )
-    {
+    ) {
     }
 
 

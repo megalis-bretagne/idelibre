@@ -1,0 +1,39 @@
+{% extends 'dataview.html.twig' %}
+{% import 'macro/_forms.html.twig' as macros %}
+
+{% block pageTitle 'Journal des événements' %}
+
+{% block pageActions %}
+    <div class="d-flex justify-content-end">
+        {{ macros.searchForm(formSearch, searchTerm, 'event_log_index') }}
+    </div>
+
+{% endblock %}
+
+{% block pageTable %}
+    <table class="table table-striped bg-white">
+        <thead>
+        <tr class="d-flex">
+            <th class="col-3">{{ knp_pagination_sortable(eventLogs, 'Auteur', 'el.authorName') }}</th>
+            <th class="col-3">{{ knp_pagination_sortable(eventLogs, 'Action', 'el.action') }}</th>
+            <th class="col-3">{{ knp_pagination_sortable(eventLogs, 'Cible', 'el.targetName') }}</th>
+            <th class="col-3">{{ knp_pagination_sortable(eventLogs, 'Date', 'el.createdAt') }}</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        {{ macros.emptyList(eventLogs, "Aucun événement à afficher") }}
+
+        {% for eventLog in eventLogs %}
+            <tr class="d-flex">
+                <td class="col-3">{{ eventLog.authorName }}</td>
+                <td class="col-3">{{ eventLog.action.value }}</td>
+                <td class="col-3">{{ eventLog.targetName }}</td>
+                <td class="col-3">{{ eventLog.createdAt | date('d/m/y H:i', timezone) }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block pagePagination knp_pagination_render(eventLogs) %}
