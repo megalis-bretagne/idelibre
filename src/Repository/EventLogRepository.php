@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\EventLog\EventLog;
 use App\Entity\Structure;
+use DateTimeInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -58,5 +59,30 @@ class EventLogRepository extends ServiceEntityRepository
         }
 
         return $qb;
+    }
+
+
+    public function findSittingsBefore(DateTimeInterface $before, Structure $structure)
+    {
+        return $this->createQueryBuilder('el')
+            ->andWhere('el.structure = :structure')
+            ->andWhere('el.date < :before')
+            ->setParameter('structure', $structure)
+            ->setParameter('before', $before)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @param array<string> $toRemoveEventLogIds
+     */
+    public function removeEventLogByIds(array $toRemoveEventLogIds): void
+    {
+        $this->createQueryBuilder('el')
+            ->delete()
+            ->where('el.id IN (:toRemoveEventLogIds)')
+            ->setParameter('toRemoveEventLogIds', $toRemoveEventLogIds)
+            ->getQuery()
+            ->execute();
     }
 }
