@@ -28,6 +28,7 @@ let app = new Vue({
         isAlreadySentEmployees: false,
         isArchived: true,
         showModalComelus: false,
+        showModalSend: false,
         previewUrl: "",
         previewData: "",
         previewSubject: "",
@@ -76,14 +77,23 @@ let app = new Vue({
     methods: {
         sendConvocation(convocationId) {
 
+            this.showModalSend = true;
+
             axios.post(`/api/convocations/${convocationId}/send`).then(response => {
                 updateConvocations(this.actorConvocations, response.data);
                 updateConvocations(this.guestConvocations, response.data);
                 updateConvocations(this.employeeConvocations, response.data);
 
+                this.showModalSend = false;
+
                 this.isAlreadySentActors = isAlreadySentSitting(this.actorConvocations);
                 this.isAlreadySentGuests = isAlreadySentSitting(this.guestConvocations);
                 this.isAlreadySentEmployees = isAlreadySentSitting(this.employeeConvocations);
+            }).catch((e) => {
+                console.log(e.message);
+                this.setErrorMessage("Erreur lors de l'envoi");
+                this.showModalSend = false;
+
             });
         },
 
@@ -100,8 +110,15 @@ let app = new Vue({
                 url += "?userProfile=Guest"
             }
 
+            this.showModalSend = true;
             axios.post(url).then(() => {
                 this.getConvocations();
+                this.showModalSend = false;
+            }).catch((e) => {
+                console.log(e.message);
+                this.setErrorMessage("Erreur lors de l'envoi");
+                this.showModalSend = false;
+
             });
         },
 

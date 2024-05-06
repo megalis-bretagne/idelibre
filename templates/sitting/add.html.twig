@@ -1,22 +1,46 @@
-{% extends 'form.html.twig' %}
+{% extends 'base.html.twig' %}
 {% import 'macro/_forms.html.twig' as macro %}
 
-{% block pageTitle 'Ajout d\'une séance' %}
 
-{% block pageActions %}
-    {{ macro.backButton('sitting_index', {'status' : 'active'}) }}
-{% endblock %}
-
-{% block pageForm %}
-    {{ form_start(form, {attr:{'novalidate': true}}) }}
-
-    {{ form_widget(form) }}
-
-    <div class="float-end">
-        {% block pageSaveReturn %}{{ macro.save('sitting_index', {}, 'Ajouter la séance', 'fa fa-plus-circle') }}{% endblock %}
+{% block body %}
+    {{ include('include/flash.html.twig') }}
+    <div class="col-12">
+        {{ apy_breadcrumb_trail_render(breadcrumb) }}
     </div>
 
-    {{ form_end(form) }}
+    <div class="d-flex align-items-center col-11 mt-3">
+        <h1 class="h2">Ajout d'une séance</h1>
+    </div>
+    <div class="mt-4">
+        {{ macro.backButton('sitting_index', {'status' : 'active'}) }}
+    </div>
+    <div class="col-12">
+        <div class="mt-4">
+            <div class="col-12 px-3  form-white">
+
+
+                {{ form_start(form, {attr:{'novalidate': true}}) }}
+
+                {{ form_widget(form) }}
+
+                <div class="float-end mt-5">
+                    <a href="{{ path( 'sitting_index') }}" class="btn btn-link">
+                        <span class="fa fa-times"></span> Annuler</a>
+
+                    <button class="btn btn-primary" type="submit">
+                        <span class="fa fa-plus-circle"></span>
+                        Ajouter la séance
+                    </button>
+
+
+                </div>
+
+
+                {{ form_end(form) }}
+
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block javascripts %}

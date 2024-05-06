@@ -12,7 +12,7 @@
         {{ apy_breadcrumb_trail_render(breadcrumb) }}
     </div>
 
-    <div class="d-flex align-items-center col-11 mt-3">
+    <div class="d-flex align-items-center col-12 mt-3">
         <h1 class="flex-grow-1">Détail de la séance </h1>
         {% if  not sitting.isArchived %}
             {{ macroNav.toogleView( path('edit_sitting_actor', {'id': sitting.id}) , 'show') }}
@@ -25,7 +25,7 @@
         </div>
 
         <div v-cloak id="app">
-            <div class="col-11 offset-1 form-white mt-4 px-3">
+            <div class="col-12  form-white mt-4 px-3">
                 {{ macroTab.showTabs('actors', sitting) }}
 
                 <div class="alert alert-danger" v-if="errorMessage">${errorMessage}</div>
@@ -138,6 +138,10 @@
                             <span class="fas fa-check text-success {{ classToChange }}"></span>
 
                             ${ convocation.sentTimestamp.createdAt | formatDateString(timezone)}
+
+                            <button @click="openShowModalMailExample(convocation.id, false)"
+                                    class="btn btn-outline-primary borderless mt-n2" title="Renvoyer l'email">
+                                <span class="fa fa-paper-plane"></span>
                         </td>
 
                         <td v-else-if="!isArchived" class="col-2 {{ classToChange }}">
@@ -862,6 +866,28 @@
                     </div>
                 </transition>
             </div>
+
+
+
+            <div v-if="showModalSend">
+                <transition name="modal">
+                    <div class="modal-mask">
+                        <div class="modal-wrapper">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-body text-center">
+                                        <div class=" display-2">
+                                            <span class=" fas fa-spinner fa-spin"> </span>
+                                        </div>
+                                        <b class="display-4">Envoi en cours</b>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </transition>
+            </div>
+
         </div>
     </div>
 {% endblock %}
