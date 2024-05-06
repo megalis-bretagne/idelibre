@@ -36,7 +36,7 @@ class PurgeEventLogCommand extends Command
     {
         $structures = $this->structureRepository->findAll();
         foreach ($structures as $structure) {
-            $delay = $structure->getConfiguration()->getSittingSuppressionDelay();
+            $delay = '6 months';
             $before = new \DateTimeImmutable('-' . $delay);
             $toRemoveEventLogs = $this->eventLogRepository->findSittingsBefore($before, $structure);
             $toRemoveEventLogIds = array_map(fn($eventLog) => $eventLog->getId(), $toRemoveEventLogs);
