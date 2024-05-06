@@ -1,6 +1,11 @@
 (function () {
     angular.module('idelibreApp').controller('ModalpresenceCtrl', function ($scope, account, seance, attendance, $rootScope, $modalInstance, socketioSrv, accountSrv, attendanceSrv) {
 
+        let isShowMandators = false;
+
+        if(account.type === ACTEURS){
+            isShowMandators = true;
+        }
 
 
         $scope.isAllowedRemote = seance.isRemoteAllowed
@@ -13,7 +18,7 @@
         $scope.selectedMandator = null;
         $scope.availableMandators = attendance.availableMandators;
 
-        $scope.isMandatorAllowed = attendance.isMandatorAllowed;
+        $scope.isMandatorAllowed = attendance.isMandatorAllowed && isShowMandators;
 
 
         $scope.getPresenceMessageEditable = () => {
