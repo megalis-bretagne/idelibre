@@ -170,6 +170,7 @@ class ConvocationManager
      */
     public function sendConvocation(Convocation $convocation)
     {
+
         $this->timestampAndActiveConvocations($convocation->getSitting(), [$convocation]);
         $emails = $this->generateEmailsData($convocation->getSitting(), [$convocation]);
         $this->clientNotifier->newSittingNotification([$convocation]);
