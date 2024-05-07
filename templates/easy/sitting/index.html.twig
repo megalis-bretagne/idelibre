@@ -1,0 +1,34 @@
+{% extends 'easy_base.html.twig' %}
+{% import 'macro/_forms.html.twig' as macros %}
+
+{% block pageTitle 'Séances en cours' %}
+
+
+{% block pageTable %}
+    <table class="table table-striped mt-3 bg-white">
+        <thead>
+        <tr class="d-flex">
+            <th class="col-1"></th>
+            <th class="col-7">{{ knp_pagination_sortable(sittings, 'Intitulé', 's.name') }}</th>
+            <th class="col-2">{{ knp_pagination_sortable(sittings, 'Date', 's.date') }}</th>
+            <th class="col-2">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{ macros.emptyList(sittings, "Aucune séance à afficher") }}
+
+        {% for sitting in sittings %}
+            <tr class="d-flex">
+                <td class="col-1">{% if not (sitting.convocations.0.isRead) %}  <span class="fas fa-envelope fa-lg text-danger" > </span> {% endif %}</td>
+                <td class="col-7">{{ sitting.name }}</td>
+                <td class="col-2">{{ sitting.date | date('d/m/Y : H:i' , timezone) }}</td>
+                <td class="col-2">
+                    <a href="{{ path('easy_odj_ar', {'id': sitting.id}) }}" class="btn btn-outline-primary">Consulter</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block pagePagination knp_pagination_render(sittings) %}

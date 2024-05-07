@@ -59,6 +59,22 @@ class TimestampManager
         return $timeStamp;
     }
 
+
+    public function createConvocationReceivedTimestamp( convocation $convocation): Timestamp
+    {
+        $timeStamp = new Timestamp();
+        $timeStamp->setFilePathContent($this->contentGenerator->generateConvocationReceivedFile($convocation->getSitting(), $convocation));
+
+        $tsTokenStream = $this->lshorodatage->createTimestampToken($timeStamp->getFilePathContent());
+        $timeStamp->setFilePathTsa($this->saveTimestampInFile($tsTokenStream, $timeStamp->getFilePathContent()));
+
+        $this->em->persist($timeStamp);
+        $this->em->flush();
+
+        return $timeStamp;
+    }
+
+
     /**
      * @throws LsHorodatageException
      */

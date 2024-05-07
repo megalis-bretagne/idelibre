@@ -1,0 +1,31 @@
+{% extends 'easy_base.html.twig' %}
+{% import 'macro/_forms.html.twig' as macro %}
+
+{% block pageTitle %}
+    Accuser réception de la séance
+{% endblock %}
+
+{% block pageActions %}
+    <div class="d-flex justify-content-between">
+        {{ macro.backButton('easy_sitting_index') }}
+    </div>
+{% endblock %}
+
+{% block pageTable %}
+    <div class="form-white" style="padding: 10px 50px">
+
+        <div class="text-center">
+            Pour pouvoir consulter la seance " {{ sitting.name }} du {{ sitting.date | date('d/m/y H:i', timezone) }}"
+            veuillez accuser réception de la séance en cliquant sur le bouton ci-dessous. <br>
+
+            <div class="mt-5">
+                <a href="{{ path('easy_odj_arBack', {'id': convocation.id}) }}" class="btn btn-danger">J'accuse réception de
+                    la
+                    convocation</a>
+            </div>
+        </div>
+
+
+    </div>
+{% endblock %}
+

@@ -42,7 +42,8 @@ class ConvocationManager
         private readonly MessageBusInterface     $messageBus,
         private readonly CalGenerator            $icalGenerator,
         private readonly AttendanceTokenUtil     $attendanceTokenUtil,
-    ) {
+    )
+    {
     }
 
     public function createConvocationsActors(Sitting $sitting): void
@@ -75,8 +76,7 @@ class ConvocationManager
                 ->setUser($user)
                 ->setCategory($this->getConvocationCategory($user))
                 ->setAttendanceToken($this->attendanceTokenUtil->prepareToken($sitting->getDate()))
-                ->setDeputy(null)
-            ;
+                ->setDeputy(null);
             $this->em->persist($convocation);
         }
     }
@@ -104,8 +104,7 @@ class ConvocationManager
                 ->setUser($user)
                 ->setAttendanceToken($this->attendanceTokenUtil->prepareToken($sitting->getDate()))
                 ->setCategory($this->getConvocationCategory($user))
-                ->setDeputy(null)
-            ;
+                ->setDeputy(null);
             $this->em->persist($convocation);
         }
         $this->em->flush();
@@ -157,7 +156,7 @@ class ConvocationManager
             $this->emailService->sendBatch($emails);
             $this->messageBus->dispatch(
                 new ConvocationSent(
-                    array_map(fn (Convocation $c) => $c->getId(), $convocationBatch),
+                    array_map(fn(Convocation $c) => $c->getId(), $convocationBatch),
                     $sitting->getId()
                 )
             );
@@ -220,7 +219,7 @@ class ConvocationManager
 
     private function isAlreadySent(Convocation $convocation): bool
     {
-        return (bool) $convocation->getSentTimestamp();
+        return (bool)$convocation->getSentTimestamp();
     }
 
     /**
@@ -379,5 +378,15 @@ class ConvocationManager
     private function isDeputyConvocation(Convocation $convocation)
     {
         return $convocation->getUser()->getRole()->getName() === Role_Name::NAME_ROLE_DEPUTY;
+    }
+
+
+    public function markAsRead(Convocation $convocation): void
+    {
+        $timeStamp =$this->timestampManager->createConvocationReceivedTimestamp($convocation);
+        $convocation->setIsRead(true);
+        $convocation->setReceivedTimestamp($timeStamp);
+        $this->em->persist($convocation);
+        $this->em->flush();
     }
 }

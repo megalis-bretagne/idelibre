@@ -61,4 +61,17 @@ class TimestampContentFileGenerator
 
         return $tokenDirectory;
     }
+
+    public function generateConvocationReceivedFile(Sitting $sitting, Convocation $convocation): string
+    {
+        $txt = $this->twig->render('generate/received_timestamp_template.txt.twig', [
+            'sitting' => $sitting,
+            'convocation' => $convocation,
+        ]);
+
+        $path = $this->getAndCreateTokenDirectory($sitting) . 'read_' . Uuid::uuid4();
+        file_put_contents($path, $txt);
+
+        return $path;
+    }
 }

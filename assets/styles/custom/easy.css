@@ -1,0 +1,9 @@
+.odj-element {
+    display: flex;
+    background: #eeeeee;
+    padding: 20px;
+    flex: 1;
+    border-radius: 5px;
+    align-items: center;
+    justify-content: space-between;
+}

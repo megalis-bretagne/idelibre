@@ -1,0 +1,36 @@
+<section class="mt-5">
+    <div class="d-flex">
+        <h1 class="h3 mb-4"> Vous etes actuellement enregistré comme :
+            {% if not attendance %}
+                <div class="badge bg-secondary">Présence à définir</div>
+            {% elseif attendance == 'absent' %}
+                <div class="badge bg-danger" id=""> Absent</div>
+            {% elseif attendance == 'present' %}
+                <div class="badge bg-info"> Présent</div>
+            {% elseif attendance == 'remote' %}
+                <div class="badge bg-info"> Présent à distance</div>
+            {% elseif attendance == 'poa' %}
+                <div class="badge bg-warning"> Donne pouvoir</div>
+            {% elseif attendance == 'deputy' %}
+                <div class="badge bg-soft-warning"> Remplacé par son suppléant</div>
+            {% endif %}
+        </h1>
+
+    </div>
+
+    <div class="mt-5">
+
+
+        {{ form_start(form) }}
+        {{ form_row(form.attendance) }}
+        {{ form_row(form.mandataire) }}
+        {% if deputyId != null %} {{ form_row(form.deputyId) }} {% endif %}
+        <br>
+        <div class="float-end mt2" >
+        <input type="button" class="btn btn-link" value="annuler" data-bs-dismiss="modal">
+        <input type="submit" class="btn btn-primary" value="Enregistrer">
+        </div>
+        {{ form_end(form) }}
+    </div>
+
+</section>

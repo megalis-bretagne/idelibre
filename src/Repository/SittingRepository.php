@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Sitting;
 use App\Entity\Structure;
 use App\Entity\Type;
+use App\Entity\User;
 use DateTimeInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
@@ -185,4 +186,18 @@ class SittingRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+
+    public function findActiveSittingByUser(User $user): QueryBuilder
+    {
+        return $this->createQueryBuilder('s')
+            ->leftJoin('s.convocations', 'c')
+            ->andWhere('c.isActive = true')
+            ->andWhere('c.user = :user')
+            ->andWhere('s.isArchived = false')
+            ->addSelect('c')
+            ->setParameter('user', $user);
+
+    }
+
 }
