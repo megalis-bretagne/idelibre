@@ -12,7 +12,8 @@
         {{ macro.backButton('easy_sitting_index') }}
         <div>
             <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalPresence">
-                <i class="fa-solid fa-location-crosshairs"></i> Renseigner sa présence </button>
+                <i class="fa-solid fa-location-crosshairs"></i> Renseigner sa présence
+            </button>
             <a href="{{ path('sitting_zip', {'id': sitting.id}) }}" class="btn btn-outline-primary"> <span
                         class="fas fa-download"></span> Télécharger le zip de la séance</a>
         </div>
@@ -28,7 +29,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                  {{ attendanceView | raw }}
+                    {{ attendanceView | raw }}
                 </div>
             </div>
         </div>
@@ -37,94 +38,115 @@
 {% endblock %}
 
 {% block pageTable %}
-    <div class="form-white" style="padding: 10px 50px">
+<div class="form-white" style="padding: 10px 50px">
 
-        <div class="easy-convocation mt-2 mb-5">
-            <div class="odj-element">
-                <div>
-                    Convocation
-                </div>
-                <div>
-                    <button class="btn btn-outline-dark"><span class="fas fa-eye"></span> Visualiser</button>
-                    <a href="{{ path('file_download', {'id': sitting.convocationFile.id}) }}"
-                       class="btn btn-outline-dark"><span class="fas fa-download"></span> Télécharger</a>
-                </div>
+    <div class="easy-convocation mt-2 mb-5">
+        <div class="odj-element">
+            <div>
+                Convocation
+            </div>
+            <div>
+                <button class="btn btn-outline-dark"><span class="fas fa-eye"></span> Visualiser</button>
+                <a href="{{ path('file_download', {'id': sitting.convocationFile.id}) }}"
+                   class="btn btn-outline-dark"><span class="fas fa-download"></span> Télécharger</a>
             </div>
         </div>
+    </div>
 
-        {% if otherDocs and otherDocs | length %}
-            <div class="mb-5">
-                {% for otherDoc in otherDocs %}
-                    <div class="odj-element mt-2">
+    {% if otherDocs and otherDocs | length %}
+        <div class="mb-5">
+            {% for otherDoc in otherDocs %}
+                <div class="odj-element mt-2">
+                    <div>
                         <div>
                             {{ otherDoc.name }}
                         </div>
-                        <div>
-                            <button class="btn btn-outline-dark"><span class="fas fa-eye"></span> Visualiser</button>
-                            <a href="{{ path('file_download', {'id': otherDoc.file.id}) }}"
-                               class="btn btn-outline-dark"><span class="fas fa-download"></span> Télécharger</a>
-
-                        </div>
                     </div>
+                    <div>
+                        <button class="btn btn-outline-dark"><span class="fas fa-eye"></span> Visualiser</button>
+                        <a href="{{ path('file_download', {'id': otherDoc.file.id}) }}"
+                           class="btn btn-outline-dark"><span class="fas fa-download"></span> Télécharger</a>
 
-
-
-                {% endfor %}
-
-            </div>
-        {% endif %}
-
-
-        {% for project in projects %}
-
-            <div>
-                <div class="easy-project mt-2">
-                    <div class="odj-element">
-                        <div>
-                            <span class="badge bg-primary"
-                                  style="font-size: 1.3em">{{ project.rank +1 }} </span> {{ project.name }}
-                        </div>
-                        <div>
-                            <button class="btn btn-outline-dark"><span class="fas fa-eye"></span> Visualiser</button>
-                            <a href="{{ path('file_download', {'id': project.file.id}) }}" class="btn btn-outline-dark"><span
-                                        class="fas fa-download"></span> Télécharger</a>
-                        </div>
                     </div>
                 </div>
 
-                {% if project.annexes and project.annexes | length %}
-                    {% for annex in project.annexes %}
 
-                        <div class="easy-annex mt-1" style="padding: 0 0 0 5em">
-                            <div class="odj-element">
-                                <div>
-                                    {{ annex.title }}
-                                </div>
-                                <div>
-                                    <button class="btn btn-outline-dark"><span class="fas fa-eye"></span> Visualiser
-                                    </button>
-                                    <a href="{{ path('file_download', {'id': annex.file.id}) }}"
-                                       class="btn btn-outline-dark"><span class="fas fa-download"></span>
-                                        Télécharger</a>
-                                </div>
-                            </div>
 
+            {% endfor %}
+
+        </div>
+    {% endif %}
+
+
+    {% for project in projects %}
+
+    <div>
+        <div class="easy-project mt-2">
+            {#            <div style="display: flex; background: #eeeeee; padding: 20px; flex: 1; border-radius: 5px; align-items: center;  justify-content: space-between;"> #}
+            <div style="display: flex; background: #eeeeee; padding: 20px; flex: 1; border-radius: 5px; flex-direction: column; gap:10px">
+                <div style="flex: 1; display: flex; align-items: center;  justify-content: space-between">
+                    <div>
+                            <span class="badge bg-primary"
+                                  style="font-size: 1.3em; margin-right: 0.5em">{{ project.rank +1 }} </span> {{ project.name }}
+                    </div>
+                    <div>
+                        <button class="btn btn-outline-dark"><span class="fas fa-eye"></span> Visualiser</button>
+                        <a href="{{ path('file_download', {'id': project.file.id}) }}"
+                           class="btn btn-outline-dark"><span
+                                    class="fas fa-download"></span> Télécharger</a>
+                    </div>
+
+                </div>
+                {% if project.reporter or project.theme %}
+                    <div style="flex: 1; display: flex; align-items: center;  justify-content: space-between">
+                        <div style="flex: 1;" class="text-success">
+                            {% if project.theme %}
+                            Theme : {{ project.theme.fullName }}
+                            {% endif %}
                         </div>
 
-                    {% endfor %}
-
+                        <div style="flex: 1; text-align: end" class="text-primary">
+                            {% if project.reporter %}
+                            Rapporteur : {{ project.reporter.firstName }} {{ project.reporter.lastName }}
+                            {% endif %}
+                        </div>
+                    </div>
                 {% endif %}
             </div>
+
+            {% if project.annexes and project.annexes | length %}
+                {% for annex in project.annexes %}
+
+                    <div class="easy-annex mt-1" style="padding: 0 0 0 5em">
+                        <div class="odj-element">
+                            <div>
+                                {{ annex.title }}
+                            </div>
+                            <div>
+                                <button class="btn btn-outline-dark"><span class="fas fa-eye"></span> Visualiser
+                                </button>
+                                <a href="{{ path('file_download', {'id': annex.file.id}) }}"
+                                   class="btn btn-outline-dark"><span class="fas fa-download"></span>
+                                    Télécharger</a>
+                            </div>
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+            {% endif %}
+        </div>
 
         {% endfor %}
 
     </div>
-{% endblock %}
+    {% endblock %}
 
 
-{% block javascripts %}
-    {{ encore_entry_script_tags('attendance') }}
-{% endblock %}
+    {% block javascripts %}
+        {{ encore_entry_script_tags('attendance') }}
+    {% endblock %}
 
 
 

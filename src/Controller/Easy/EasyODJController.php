@@ -28,7 +28,6 @@ class EasyODJController extends AbstractController
             'id' => $convocation->getId(),
         ]);
 
-
         return $this->render('easy/odj/index.html.twig', [
             'sitting' => $sitting,
             'projects' => $projects,

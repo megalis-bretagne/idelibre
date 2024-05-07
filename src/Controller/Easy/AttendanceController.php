@@ -56,7 +56,7 @@ class AttendanceController extends AbstractController
 
             $convocationManager->updateConvocationAttendances([$convocationAttendance]);
 
-            $this->json('success', true);
+            return $this->redirectToRoute('easy_odj_index', ['id' => $convocation->getSitting()->getId()]);
 
         }
 
