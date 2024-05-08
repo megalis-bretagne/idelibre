@@ -16,6 +16,7 @@
             </button>
             <a href="{{ path('sitting_zip', {'id': sitting.id}) }}" class="btn btn-outline-primary"> <span
                         class="fas fa-download"></span> Télécharger le zip de la séance</a>
+
         </div>
     </div>
 
@@ -46,27 +47,41 @@
                 Convocation
             </div>
             <div>
+
                 <button class="btn btn-outline-dark"><span class="fas fa-eye"></span> Visualiser</button>
                 <a href="{{ path('file_download', {'id': sitting.convocationFile.id}) }}"
                    class="btn btn-outline-dark"><span class="fas fa-download"></span> Télécharger</a>
+
+                <div class="mt-2" style="text-align: end">
+                    <span {% if sitting.convocationFile.size > 10000000 %} class="text-center" {% endif %}>
+                        {{ sitting.convocationFile.size | sizeFormatter }}
+                    </span>
+                </div>
             </div>
         </div>
     </div>
 
     {% if otherDocs and otherDocs | length %}
+        <h2>Autres documents</h2>
         <div class="mb-5">
             {% for otherDoc in otherDocs %}
-                <div class="odj-element mt-2">
+                <div class="odj-element mt-3">
                     <div>
                         <div>
                             {{ otherDoc.name }}
                         </div>
                     </div>
                     <div>
+
                         <button class="btn btn-outline-dark"><span class="fas fa-eye"></span> Visualiser</button>
                         <a href="{{ path('file_download', {'id': otherDoc.file.id}) }}"
                            class="btn btn-outline-dark"><span class="fas fa-download"></span> Télécharger</a>
 
+                        <div class="mt-2 text-end">
+                        <span {% if otherDoc.file.size > 10000000 %} class="text-center" {% endif %}>
+                            {{ otherDoc.file.size | sizeFormatter }}
+                        </span>
+                        </div>
                     </div>
                 </div>
 
@@ -78,11 +93,14 @@
     {% endif %}
 
 
+    {% if projects and projects | length %}
+        <h2>Projets</h2>
+    {% endif %}
+
     {% for project in projects %}
 
     <div>
-        <div class="easy-project mt-2">
-            {#            <div style="display: flex; background: #eeeeee; padding: 20px; flex: 1; border-radius: 5px; align-items: center;  justify-content: space-between;"> #}
+        <div class="easy-project mt-3">
             <div style="display: flex; background: #eeeeee; padding: 20px; flex: 1; border-radius: 5px; flex-direction: column; gap:10px">
                 <div style="flex: 1; display: flex; align-items: center;  justify-content: space-between">
                     <div>
@@ -97,21 +115,26 @@
                     </div>
 
                 </div>
-                {% if project.reporter or project.theme %}
-                    <div style="flex: 1; display: flex; align-items: center;  justify-content: space-between">
-                        <div style="flex: 1;" class="text-success">
-                            {% if project.theme %}
-                            Theme : {{ project.theme.fullName }}
-                            {% endif %}
-                        </div>
 
-                        <div style="flex: 1; text-align: end" class="text-primary">
-                            {% if project.reporter %}
-                            Rapporteur : {{ project.reporter.firstName }} {{ project.reporter.lastName }}
-                            {% endif %}
-                        </div>
+                <div style="flex: 1; display: flex; align-items: center;  justify-content: space-between">
+                    <div style="flex: 1;" class="text-success">
+                        {% if project.theme %}
+                            Theme : {{ project.theme.fullName }}
+                        {% endif %}
                     </div>
-                {% endif %}
+
+                    <div style="flex: 1; text-align: center" class="text-primary">
+                        {% if project.reporter %}
+                            Rapporteur : {{ project.reporter.firstName }} {{ project.reporter.lastName }}
+                        {% endif %}
+                    </div>
+
+                    <div style="text-align: end">
+                            <span {% if project.file.size > 10000000 %} class="text-center" {% endif %}>
+                            {{ project.file.size | sizeFormatter }}
+                            </span>
+                    </div>
+                </div>
             </div>
 
             {% if project.annexes and project.annexes | length %}
@@ -128,6 +151,12 @@
                                 <a href="{{ path('file_download', {'id': annex.file.id}) }}"
                                    class="btn btn-outline-dark"><span class="fas fa-download"></span>
                                     Télécharger</a>
+
+                                <div class="mt-2" style="text-align: end">
+                                    <span {% if annex.file.size > 10000000 %} class="text-center" {% endif %}>
+                                        {{ annex.file.size | sizeFormatter }}
+                                    </span>
+                                </div>
                             </div>
                         </div>
 

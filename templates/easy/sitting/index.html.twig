@@ -19,7 +19,7 @@
 
         {% for sitting in sittings %}
             <tr class="d-flex">
-                <td class="col-1">{% if not (sitting.convocations.0.isRead) %}  <span class="fas fa-envelope fa-lg text-danger" > </span> {% endif %}</td>
+                <td class="col-1 justify-content-center" >{% if not (sitting.convocations.0.isRead) %}  <span class="fas fa-envelope fa-lg text-danger" > </span> {% endif %}</td>
                 <td class="col-7">{{ sitting.name }}</td>
                 <td class="col-2">{{ sitting.date | date('d/m/Y : H:i' , timezone) }}</td>
                 <td class="col-2">
