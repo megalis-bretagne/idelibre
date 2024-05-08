@@ -16,8 +16,21 @@ class EasyViewerController extends AbstractController
     #[IsGranted('ROLE_ACTOR')] // TODO check permission
     public function viewProject(Project $project): Response
     {
+        return $this->render('easy/viewer/project.html.twig', [
+            'project' => $project
+        ]);
 
-        dd('annex viewer');
+
+    }
+
+
+    #[Route(path: '/easy/check', name: 'easy_project_viewer_check')]
+    public function check(): Response
+    {
+        return $this->render('easy/viewer/project.html.twig', [
+        ]);
+
+
     }
 
 
