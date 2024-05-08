@@ -48,9 +48,10 @@
             </div>
             <div>
 
-                <button class="btn btn-outline-dark"><span class="fas fa-eye"></span> Visualiser</button>
                 <a href="{{ path('file_download', {'id': sitting.convocationFile.id}) }}"
                    class="btn btn-outline-dark"><span class="fas fa-download"></span> Télécharger</a>
+
+                <button class="btn btn-outline-dark"><span class="fas fa-eye"></span> Visualiser</button>
 
                 <div class="mt-2" style="text-align: end">
                     <span {% if sitting.convocationFile.size > 10000000 %} class="text-center" {% endif %}>
@@ -72,10 +73,10 @@
                         </div>
                     </div>
                     <div>
-
-                        <button class="btn btn-outline-dark"><span class="fas fa-eye"></span> Visualiser</button>
                         <a href="{{ path('file_download', {'id': otherDoc.file.id}) }}"
                            class="btn btn-outline-dark"><span class="fas fa-download"></span> Télécharger</a>
+
+                        <button class="btn btn-outline-dark"><span class="fas fa-eye"></span> Visualiser</button>
 
                         <div class="mt-2 text-end">
                         <span {% if otherDoc.file.size > 10000000 %} class="text-center" {% endif %}>
@@ -84,8 +85,6 @@
                         </div>
                     </div>
                 </div>
-
-
 
             {% endfor %}
 
@@ -108,10 +107,11 @@
                                   style="font-size: 1.3em; margin-right: 0.5em">{{ project.rank +1 }} </span> {{ project.name }}
                     </div>
                     <div>
-                        <button class="btn btn-outline-dark"><span class="fas fa-eye"></span> Visualiser</button>
                         <a href="{{ path('file_download', {'id': project.file.id}) }}"
                            class="btn btn-outline-dark"><span
                                     class="fas fa-download"></span> Télécharger</a>
+
+                        <button class="btn btn-outline-dark"><span class="fas fa-eye"></span> Visualiser</button>
                     </div>
 
                 </div>
@@ -146,11 +146,15 @@
                                 {{ annex.title }}
                             </div>
                             <div>
-                                <button class="btn btn-outline-dark"><span class="fas fa-eye"></span> Visualiser
-                                </button>
                                 <a href="{{ path('file_download', {'id': annex.file.id}) }}"
                                    class="btn btn-outline-dark"><span class="fas fa-download"></span>
                                     Télécharger</a>
+
+
+                                {% if(annex.file.name | isViewable) %}
+                                <button class="btn btn-outline-dark"><span class="fas fa-eye"></span> Visualiser
+                                    {% endif %}
+                                </button>
 
                                 <div class="mt-2" style="text-align: end">
                                     <span {% if annex.file.size > 10000000 %} class="text-center" {% endif %}>
