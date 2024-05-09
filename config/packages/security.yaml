@@ -63,6 +63,7 @@ security:
       provider: app_user_provider
       custom_authenticators:
         - App\Security\LoginFormAuthenticator
+        - App\Security\MagicLinkAuthenticator
       user_checker: App\Security\UserChecker
       login_throttling:
         limiter: app.login_rate_limiter
