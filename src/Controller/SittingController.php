@@ -57,6 +57,7 @@ class SittingController extends AbstractController
     #[IsGranted('ROLE_MANAGE_SITTINGS')]
     public function index(PaginatorInterface $paginator, Request $request, Trail $breadcrumbTrail): Response
     {
+
         $request->get('status') === Sitting::ARCHIVED ? $breadcrumbTrail->add("Classées") : $breadcrumbTrail->add("En cours");
 
         $formSearch = $this->createForm(SearchType::class);

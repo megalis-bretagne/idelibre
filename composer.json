@@ -19,6 +19,7 @@
     "doctrine/orm": "2.17.*",
     "doctrine/persistence": "3.*",
     "eluceo/ical": "^2.3",
+    "firebase/php-jwt": "^6.10",
     "gedmo/doctrine-extensions": "3.7.*",
     "guzzlehttp/guzzle": "^7.2",
     "howtomakeaturn/pdfinfo": "1.*",
