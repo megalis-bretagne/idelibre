@@ -9,6 +9,12 @@ document.addEventListener('DOMContentLoaded', function () {
     setSelectedClass("document_" + selectedDocumentId);
 
 
+    elementDiv.forEach(element => {
+        element.addEventListener('click', function() {
+         setSelectedClass(this.id);
+        });
+    });
+
 
     function setSelectedClass(toSelectElementId) {
         elementDiv.forEach(element => {

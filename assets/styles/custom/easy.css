@@ -13,7 +13,8 @@
     display: flex;
     background: #e5e5e5;
     padding: 8px;
-    border-radius: 5px
+    border-radius: 5px;
+    margin: 0 2px 0 2px;
 }
 
 .element-sidebar:hover {
@@ -22,5 +23,5 @@
 }
 
 .document-selected {
-    box-shadow: 0 0 0 2px royalblue ;
+    box-shadow: 0 0 0 2px royalblue;
 }
