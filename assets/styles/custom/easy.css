@@ -17,6 +17,10 @@
 }
 
 .element-sidebar:hover {
-    /*box-shadow: 0 0 0 2px royalblue ;*/
+
     opacity: 0.8;
+}
+
+.document-selected {
+    box-shadow: 0 0 0 2px royalblue ;
 }

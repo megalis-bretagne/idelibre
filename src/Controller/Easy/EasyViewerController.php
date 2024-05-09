@@ -64,7 +64,8 @@ class EasyViewerController extends AbstractController
             'otherDocs' => $otherdocRepository->getOtherdocsBySitting($sitting),
             'convocationName' => $convocation->getCategory() === Convocation::CATEGORY_CONVOCATION ? "Convocation" : 'Invitation',
             'convocationFileId' => $convocation->getCategory() === Convocation::CATEGORY_CONVOCATION ? $sitting->getConvocationFile()->getId() : $sitting->getInvitationFile()->getId(),
-            'fileURL' => $this->generateUrl('file_download', ['id' => $file->getId()])
+            'fileURL' => $this->generateUrl('file_download', ['id' => $file->getId()]),
+            'selectedDocumentId' => $file->getId()
 
         ]);
     }

@@ -17,18 +17,20 @@
 
 
                 <div id="convocationBlock" class="mt-5" style="display: flex; flex-direction: column;">
-                        <div class="element-sidebar"
-                             onclick="changePdf('{{ path('file_download', {'id': convocationFileId}) }}')">
+                    <div class="element-sidebar"
+                         id="document_{{ convocationFileId }}"
+                         onclick="changePdf('{{ path('file_download', {'id': convocationFileId}) }}')">
                                 <span class="three-line-max">
                                    {{ convocationName }}
                                 </span>
-                        </div>
+                    </div>
                 </div>
 
 
                 <div id="otherDocList" class="mt-5" style="display: flex; flex-direction: column; gap :10px">
                     {% for otherDoc in otherDocs %}
                         <div class="element-sidebar"
+                             id="document_{{ otherDoc.file.id }}"
                              onclick="changePdf('{{ path('file_download', {'id': otherDoc.file.id}) }}')">
                                 <span class="three-line-max">
                                    {{ otherDoc.name }}
@@ -41,6 +43,7 @@
                 <div id="projectList" class="mt-5" style="display: flex; flex-direction: column; gap :10px">
                     {% for project in projects %}
                         <div class="element-sidebar"
+                             id="document_{{ project.file.id }}"
                              onclick="changePdf('{{ path('file_download', {'id': project.file.id}) }}')">
                                 <span class="three-line-max">
                                   <i class="badge bg-primary"
@@ -49,6 +52,7 @@
                         </div>
                         {% for annex in  project.annexes %}
                             <div class="element-sidebar"
+                                    id="document_{{ annex.file.id }}"
                                     {% if not (annex.file.name | isViewable) %}
                                         title="Le document n'est pas un PDF"
                                     {% endif %}
@@ -76,6 +80,7 @@
                         id="pdf-container"
                         style="overflow: auto; height: calc(90vh + 25px); width: 75vw; position: absolute; top: 50px;"
                         data-url="{{ fileURL }}"
+                        data-selected-document-id="{{ selectedDocumentId }}"
                 >
 
                     <div id="viewer" class="pdfViewer"></div>
@@ -88,4 +93,5 @@
 
 {% block javascripts %}
     {{ encore_entry_script_tags('pdfjs') }}
+    {{ encore_entry_script_tags('sideBarViewer') }}
 {% endblock %}
