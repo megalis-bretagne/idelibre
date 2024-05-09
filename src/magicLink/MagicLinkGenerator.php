@@ -18,7 +18,15 @@ class MagicLinkGenerator
     public function generate(User $user, Sitting $sitting): string
     {
         $validBefore = $sitting->getDate()->modify('+1 day');
-        $jwt = $this->jwtManager->generateTokenForUserNameAndSittingId($user->getUsername(), $sitting->getId(), $validBefore);
+
+        $isAuthorizedMagicLink = in_array($user->getRole(), ['ROLE_STRUCTURE_ADMIN', 'ROLE_SECRETARY']);
+
+        $jwt = $this->jwtManager->generateTokenForUserNameAndSittingId(
+            $user->getUsername(),
+            $sitting->getId(),
+            $isAuthorizedMagicLink,
+            $validBefore);
+
         return $this->router->generate('magic_link', ['token' => $jwt], UrlGeneratorInterface::ABSOLUTE_URL);
     }
 

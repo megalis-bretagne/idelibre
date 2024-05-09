@@ -9,6 +9,7 @@ use App\Repository\OtherdocRepository;
 use App\Repository\ProjectRepository;
 use App\Service\Convocation\ConvocationManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
@@ -18,32 +19,38 @@ class EasyODJController extends AbstractController
 {
     #[Route(path: '/easy/sitting/{id}/odj', name: 'easy_odj_index')]
     #[IsGranted('ROLE_ACTOR')]   // todo check if is is sitting and sitting active !
-    public function index(Sitting $sitting, ProjectRepository $projectRepository, ConvocationRepository $convocationRepository, OtherdocRepository $otherdocRepository): Response
+    public function index(
+        Sitting               $sitting,
+        ProjectRepository     $projectRepository,
+        ConvocationRepository $convocationRepository,
+        OtherdocRepository    $otherdocRepository,
+        Security              $security
+    ): Response
     {
         $projects = $projectRepository->getProjectsBySitting($sitting);
         $otherDocs = $otherdocRepository->getOtherdocsBySitting($sitting);
         $convocation = $convocationRepository->findOneBy(['sitting' => $sitting, 'user' => $this->getUser()]);
 
-        $attendanceFormResponse =  $this->forward(AttendanceController::class . "::index", [
+        $attendanceFormResponse = $this->forward(AttendanceController::class . "::index", [
             'id' => $convocation->getId(),
         ]);
 
         return $this->render('easy/odj/index.html.twig', [
             'sitting' => $sitting,
             'projects' => $projects,
-//            'convocation' => $convocation,
             'convocationName' => $convocation->getCategory() === Convocation::CATEGORY_CONVOCATION ? "Convocation" : 'Invitation',
             'convocationFileId' => $convocation->getCategory() === Convocation::CATEGORY_CONVOCATION ? $sitting->getConvocationFile()->getId() : $sitting->getInvitationFile()->getId(),
             'otherDocs' => $otherDocs,
             'timezone' => $this->getUser()->getStructure()->getTimezone()->getName(),
-            'attendanceView' =>$attendanceFormResponse->getContent()
+            'attendanceView' => $attendanceFormResponse->getContent(),
+            'showBackButton' => $security->isGranted('fully_authenticated')
         ]);
     }
 
 
     #[Route(path: '/easy/sitting/{id}/AR', name: 'easy_odj_ar')]
     #[IsGranted('ROLE_ACTOR')]
-    public function ar(Sitting $sitting, ConvocationRepository $convocationRepository): Response
+    public function ar(Sitting $sitting, ConvocationRepository $convocationRepository, Security $security): Response
     {
         $convocation = $convocationRepository->findOneBy(['sitting' => $sitting, 'user' => $this->getUser()]);
         if (!$convocation) {
@@ -58,6 +65,7 @@ class EasyODJController extends AbstractController
             'sitting' => $sitting,
             'convocation' => $convocation,
             'timezone' => $this->getUser()->getStructure()->getTimezone()->getName(),
+            'showBackButton' => $security->isGranted('fully_authenticated')
         ]);
 
     }

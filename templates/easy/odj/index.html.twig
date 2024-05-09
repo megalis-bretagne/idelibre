@@ -9,7 +9,10 @@
 
 {% block pageActions %}
     <div class="d-flex justify-content-between">
-        {{ macro.backButton('easy_sitting_index') }}
+        <div>
+            {% if showBackButton %} {{ macro.backButton('easy_sitting_index') }} {% endif %}
+        </div>
+
         <div>
             <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalPresence">
                 <i class="fa-solid fa-location-crosshairs"></i> Renseigner sa présence

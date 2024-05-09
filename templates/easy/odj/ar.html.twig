@@ -7,7 +7,7 @@
 
 {% block pageActions %}
     <div class="d-flex justify-content-between">
-        {{ macro.backButton('easy_sitting_index') }}
+        {% if showBackButton %}  {{ macro.backButton('easy_sitting_index') }} {% endif %}
     </div>
 {% endblock %}
 
@@ -19,7 +19,8 @@
             veuillez accuser réception de la séance en cliquant sur le bouton ci-dessous. <br>
 
             <div class="mt-5">
-                <a href="{{ path('easy_odj_arBack', {'id': convocation.id}) }}" class="btn btn-danger">J'accuse réception de
+                <a href="{{ path('easy_odj_arBack', {'id': convocation.id}) }}" class="btn btn-danger">J'accuse
+                    réception de
                     la
                     convocation</a>
             </div>

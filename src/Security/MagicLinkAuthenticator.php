@@ -46,7 +46,13 @@ class MagicLinkAuthenticator extends AbstractAuthenticator
         }
 
         $username = $decoded['sub'];
-        $sittingId = $decoded['sittingId']; // '8b6b84e2-a10b-42d1-b71b-88f81ec62c2c
+        $sittingId = $decoded['sittingId'];
+        $isAuthorizedMagicLink = $decoded['isAuthorizedMagicLink'];
+
+        if(!$isAuthorizedMagicLink) {
+            throw new UnAuthorizedMagicLinkException("Vous n'êtes pas autorisé à utiliser un magic link");
+        }
+
 
         $request->getSession()->set('authorizedSittingId', $sittingId);
 
@@ -61,7 +67,11 @@ class MagicLinkAuthenticator extends AbstractAuthenticator
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
-        throw new Http401Exception("Erreur d'authententification");
+        if($exception instanceof UnAuthorizedMagicLinkException) {
+            return new RedirectResponse($this->router->generate('unauthorized_magic_link'));
+        }
+
+        return new RedirectResponse($this->router->generate('invalid_magic_link'));
     }
 
 

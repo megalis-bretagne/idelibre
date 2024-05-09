@@ -43,12 +43,13 @@ class JwtManager
         return (array)$decodedToken;
     }
 
-    public function generateTokenForUserNameAndSittingId(string $username, string $sittingId, \DateTimeInterface $dateTime): string
+    public function generateTokenForUserNameAndSittingId(string $username, string $sittingId, bool $isAuthorizedMagicLink ,\DateTimeInterface $dateTime): string
     {
         $tokenInfo = [
             'iss' => 'avote',
             'sub' => $username,
             'sittingId' => $sittingId,
+            'isAuthorizedMagicLink' => $isAuthorizedMagicLink,
             'iat' => time(),
             'nbf' => time(),
             'exp' => $dateTime->getTimestamp()
