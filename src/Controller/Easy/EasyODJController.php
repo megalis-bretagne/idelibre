@@ -31,7 +31,9 @@ class EasyODJController extends AbstractController
         return $this->render('easy/odj/index.html.twig', [
             'sitting' => $sitting,
             'projects' => $projects,
-            'convocation' => $convocation,
+//            'convocation' => $convocation,
+            'convocationName' => $convocation->getCategory() === Convocation::CATEGORY_CONVOCATION ? "Convocation" : 'Invitation',
+            'convocationFileId' => $convocation->getCategory() === Convocation::CATEGORY_CONVOCATION ? $sitting->getConvocationFile()->getId() : $sitting->getInvitationFile()->getId(),
             'otherDocs' => $otherDocs,
             'timezone' => $this->getUser()->getStructure()->getTimezone()->getName(),
             'attendanceView' =>$attendanceFormResponse->getContent()

@@ -44,14 +44,14 @@
     <div class="easy-convocation mt-2 mb-5">
         <div class="odj-element">
             <div>
-                Convocation
+                {{ convocationName }}
             </div>
-            <div>
-
-                <a href="{{ path('file_download', {'id': sitting.convocationFile.id}) }}"
+            <div style="flex-shrink: 0;">
+                <a href="{{ path('file_download', {'id': convocationFileId}) }}"
                    class="btn btn-outline-dark"><span class="fas fa-download"></span> Télécharger</a>
 
-                <button class="btn btn-outline-dark"><span class="fas fa-eye"></span> Visualiser</button>
+                <a href="{{ path('easy_viewer', {'sittingId': sitting.id, 'fileId' : sitting.convocationFile.id}) }}"
+                   class="btn btn-outline-dark"><span class="fas fa-eye"></span> Visualiser</a>
 
                 <div class="mt-2" style="text-align: end">
                     <span {% if sitting.convocationFile.size > 10000000 %} class="text-center" {% endif %}>
@@ -72,11 +72,12 @@
                             {{ otherDoc.name }}
                         </div>
                     </div>
-                    <div>
+                    <div style="flex-shrink: 0">
                         <a href="{{ path('file_download', {'id': otherDoc.file.id}) }}"
                            class="btn btn-outline-dark"><span class="fas fa-download"></span> Télécharger</a>
 
-                        <button class="btn btn-outline-dark"><span class="fas fa-eye"></span> Visualiser</button>
+                        <a href="{{ path('easy_viewer', {'sittingId': sitting.id, 'fileId' : otherDoc.file.id}) }}"
+                           class="btn btn-outline-dark"><span class="fas fa-eye"></span> Visualiser</a>
 
                         <div class="mt-2 text-end">
                         <span {% if otherDoc.file.size > 10000000 %} class="text-center" {% endif %}>
@@ -106,12 +107,13 @@
                             <span class="badge bg-primary"
                                   style="font-size: 1.3em; margin-right: 0.5em">{{ project.rank +1 }} </span> {{ project.name }}
                     </div>
-                    <div>
+                    <div style="flex-shrink: 0">
                         <a href="{{ path('file_download', {'id': project.file.id}) }}"
                            class="btn btn-outline-dark"><span
                                     class="fas fa-download"></span> Télécharger</a>
 
-                        <button class="btn btn-outline-dark"><span class="fas fa-eye"></span> Visualiser</button>
+                        <a href="{{ path('easy_viewer', {'sittingId': sitting.id, 'fileId' : project.file.id}) }}"
+                           class="btn btn-outline-dark"><span class="fas fa-eye"></span> Visualiser</a>
                     </div>
 
                 </div>
@@ -143,18 +145,18 @@
                     <div class="easy-annex mt-1" style="padding: 0 0 0 5em">
                         <div class="odj-element">
                             <div>
-                                {{ annex.title }}
+                                {{ annex.rank + 1 }} - {{ annex.title }}
                             </div>
-                            <div>
+                            <div style="flex-shrink: 0">
                                 <a href="{{ path('file_download', {'id': annex.file.id}) }}"
                                    class="btn btn-outline-dark"><span class="fas fa-download"></span>
                                     Télécharger</a>
 
 
                                 {% if(annex.file.name | isViewable) %}
-                                <button class="btn btn-outline-dark"><span class="fas fa-eye"></span> Visualiser
-                                    {% endif %}
-                                </button>
+                                    <a href="{{ path('easy_viewer', {'sittingId': sitting.id, 'fileId' : annex.file.id}) }}"
+                                       class="btn btn-outline-dark"><span class="fas fa-eye"></span> Visualiser</a>
+                                {% endif %}
 
                                 <div class="mt-2" style="text-align: end">
                                     <span {% if annex.file.size > 10000000 %} class="text-center" {% endif %}>

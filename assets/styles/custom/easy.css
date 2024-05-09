@@ -7,3 +7,16 @@
     align-items: center;
     justify-content: space-between;
 }
+
+
+.element-sidebar {
+    display: flex;
+    background: #e5e5e5;
+    padding: 8px;
+    border-radius: 5px
+}
+
+.element-sidebar:hover {
+    /*box-shadow: 0 0 0 2px royalblue ;*/
+    opacity: 0.8;
+}
