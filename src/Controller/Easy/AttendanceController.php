@@ -33,8 +33,6 @@ class AttendanceController extends AbstractController
             'deputyId' => $this->getUser()->getDeputy() ? $this->getUser()->getDeputy()->getId() : null
         ]);
 
-
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {

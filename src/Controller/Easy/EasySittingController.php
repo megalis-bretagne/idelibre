@@ -14,10 +14,9 @@ class EasySittingController extends AbstractController
 {
 
     #[Route(path: '/easy/sitting', name: 'easy_sitting_index')]
-    #[IsGranted('ROLE_ACTOR')]
+    #[IsGranted('ROLE_VISUALIZE_SITTING')]
     public function index(PaginatorInterface $paginator, Request $request, SittingRepository $sittingRepository): Response
     {
-
         $sittings = $paginator->paginate(
             $sittingRepository->findActiveSittingByUser($this->getUser()),
             $request->query->getInt('page', 1),
@@ -28,13 +27,9 @@ class EasySittingController extends AbstractController
             ]
         );
 
-
         return $this->render('easy/sitting/index.html.twig', [
             'sittings' => $sittings,
             'timezone' => $this->getUser()->getStructure()->getTimezone()->getName(),
         ]);
     }
-
-
-
 }

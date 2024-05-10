@@ -46,7 +46,7 @@ class JwtManager
     public function generateTokenForUserNameAndSittingId(string $username, string $sittingId, bool $isAuthorizedMagicLink ,\DateTimeInterface $dateTime): string
     {
         $tokenInfo = [
-            'iss' => 'avote',
+            'iss' => 'idelibre',
             'sub' => $username,
             'sittingId' => $sittingId,
             'isAuthorizedMagicLink' => $isAuthorizedMagicLink,

@@ -18,7 +18,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class EasyODJController extends AbstractController
 {
     #[Route(path: '/easy/sitting/{id}/odj', name: 'easy_odj_index')]
-    #[IsGranted('ROLE_ACTOR')]   // todo check if is is sitting and sitting active !
+    #[IsGranted('VISUALIZE_SITTING', subject: 'sitting')]
     public function index(
         Sitting               $sitting,
         ProjectRepository     $projectRepository,
@@ -30,6 +30,7 @@ class EasyODJController extends AbstractController
         $projects = $projectRepository->getProjectsBySitting($sitting);
         $otherDocs = $otherdocRepository->getOtherdocsBySitting($sitting);
         $convocation = $convocationRepository->findOneBy(['sitting' => $sitting, 'user' => $this->getUser()]);
+
 
         $attendanceFormResponse = $this->forward(AttendanceController::class . "::index", [
             'id' => $convocation->getId(),
@@ -49,7 +50,7 @@ class EasyODJController extends AbstractController
 
 
     #[Route(path: '/easy/sitting/{id}/AR', name: 'easy_odj_ar')]
-    #[IsGranted('ROLE_ACTOR')]
+    #[IsGranted('VISUALIZE_SITTING', subject: 'sitting')]
     public function ar(Sitting $sitting, ConvocationRepository $convocationRepository, Security $security): Response
     {
         $convocation = $convocationRepository->findOneBy(['sitting' => $sitting, 'user' => $this->getUser()]);
@@ -72,7 +73,7 @@ class EasyODJController extends AbstractController
 
 
     #[Route(path: '/easy/sitting/{id}/ARBack', name: 'easy_odj_arBack')]
-    #[IsGranted('ROLE_ACTOR')]  // TODO check if convocation belongs to user
+    #[IsGranted('CONVOCATION_READ', subject: 'convocation')]
     public function arBack(Convocation $convocation, ConvocationManager $convocationManager): Response
     {
         if (!$convocation->getIsRead()) {

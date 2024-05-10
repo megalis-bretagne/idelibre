@@ -19,7 +19,7 @@ class MagicLinkGenerator
     {
         $validBefore = $sitting->getDate()->modify('+1 day');
 
-        $isAuthorizedMagicLink = in_array($user->getRole(), ['ROLE_STRUCTURE_ADMIN', 'ROLE_SECRETARY']);
+        $isAuthorizedMagicLink = !in_array($user->getRole(), ['ROLE_STRUCTURE_ADMIN', 'ROLE_SECRETARY']);
 
         $jwt = $this->jwtManager->generateTokenForUserNameAndSittingId(
             $user->getUsername(),

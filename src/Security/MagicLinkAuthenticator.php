@@ -20,11 +20,11 @@ class MagicLinkAuthenticator extends AbstractAuthenticator
 {
     public function __construct(
         private readonly RouterInterface $router,
-        private readonly JwtManager $jwtManager
+        private readonly JwtManager      $jwtManager
     )
     {
     }
-//https://localhost/easy/magic-link?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhdm90ZSIsInN1YiI6InQuY2hhcmVzdEBtYXJqb2xzdiIsInNpdHRpbmdJZCI6IjhiNmI4NGUyLWExMGItNDJkMS1iNzFiLTg4ZjgxZWM2MmMyYyIsImlhdCI6MTcxNTI2MTczNiwibmJmIjoxNzE1MjYxNzM2LCJleHAiOjE3MzQxNzQwMDB9.PxJOC3RbQOYFw542wZceZoyWL_DOYSVBLbM3x0crNHM
+
     public function supports(Request $request): bool
     {
         return 'magic_link' === $request->attributes->get('_route') && $request->isMethod('GET');
@@ -35,12 +35,12 @@ class MagicLinkAuthenticator extends AbstractAuthenticator
 
         $token = $request->query->get('token');
 
-        if(!$token) {
+        if (!$token) {
             throw new AuthenticationException("Token manquant");
         }
 
         try {
-          $decoded =  $this->jwtManager->decode($token);
+            $decoded = $this->jwtManager->decode($token);
         } catch (JwtException $e) {
             throw new AuthenticationException("Token invalide : " . $e->getMessage());
         }
@@ -49,7 +49,8 @@ class MagicLinkAuthenticator extends AbstractAuthenticator
         $sittingId = $decoded['sittingId'];
         $isAuthorizedMagicLink = $decoded['isAuthorizedMagicLink'];
 
-        if(!$isAuthorizedMagicLink) {
+
+        if (!$isAuthorizedMagicLink) {
             throw new UnAuthorizedMagicLinkException("Vous n'êtes pas autorisé à utiliser un magic link");
         }
 
@@ -61,13 +62,13 @@ class MagicLinkAuthenticator extends AbstractAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey): ?Response
     {
-       $sittingId = $request->getSession()->get('authorizedSittingId');
+        $sittingId = $request->getSession()->get('authorizedSittingId');
         return new RedirectResponse($this->router->generate('easy_odj_ar', ['id' => $sittingId]));
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
-        if($exception instanceof UnAuthorizedMagicLinkException) {
+        if ($exception instanceof UnAuthorizedMagicLinkException) {
             return new RedirectResponse($this->router->generate('unauthorized_magic_link'));
         }
 
