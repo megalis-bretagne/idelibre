@@ -28,8 +28,7 @@ parameters:
   nodejs_host: 'http://node-idelibre:3000'
   nginx_host: 'https://nginx-idelibre'
 
-  jwt_secret: 'monSecretmonSecretmonSecretmonSecretmonSecretmonSecretmonSecretmonSecretmonSecretmonSecret'
-
+  jwt_secret: '%env(MAGIC_LINK_SECRET))%'
 
   legacy_salt: '%env(SALT)%'
 
