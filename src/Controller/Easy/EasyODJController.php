@@ -27,9 +27,17 @@ class EasyODJController extends AbstractController
         Security              $security
     ): Response
     {
+
+        $convocation = $convocationRepository->findOneBy(['sitting' => $sitting, 'user' => $this->getUser()]);
+
+        if(!$convocation->getIsRead()) {
+            return $this->redirectToRoute('easy_odj_ar', ['id' => $sitting->getId()]);
+        }
+
+
         $projects = $projectRepository->getProjectsBySitting($sitting);
         $otherDocs = $otherdocRepository->getOtherdocsBySitting($sitting);
-        $convocation = $convocationRepository->findOneBy(['sitting' => $sitting, 'user' => $this->getUser()]);
+
 
 
         $attendanceFormResponse = $this->forward(AttendanceController::class . "::index", [
