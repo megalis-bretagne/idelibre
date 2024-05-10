@@ -29,6 +29,4 @@ class IsFullyAuthenticatedVoter extends Voter
         $session = $this->requestStack->getCurrentRequest()->getSession();
         return $session->get('authorizedSittingId') === null;
     }
-
-
 }

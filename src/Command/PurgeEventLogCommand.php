@@ -15,7 +15,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 #[AsCommand(name: 'purge:eventLog')]
 class PurgeEventLogCommand extends Command
 {
-
     public function __construct(
         private readonly StructureRepository $structureRepository,
         private readonly EventLogRepository $eventLogRepository,
@@ -39,7 +38,7 @@ class PurgeEventLogCommand extends Command
             $delay = '6 months';
             $before = new \DateTimeImmutable('-' . $delay);
             $toRemoveEventLogs = $this->eventLogRepository->findSittingsBefore($before, $structure);
-            $toRemoveEventLogIds = array_map(fn($eventLog) => $eventLog->getId(), $toRemoveEventLogs);
+            $toRemoveEventLogIds = array_map(fn ($eventLog) => $eventLog->getId(), $toRemoveEventLogs);
             $this->eventLogRepository->removeEventLogByIds($toRemoveEventLogIds);
         }
 
@@ -48,6 +47,4 @@ class PurgeEventLogCommand extends Command
 
         return Command::SUCCESS;
     }
-
-
 }

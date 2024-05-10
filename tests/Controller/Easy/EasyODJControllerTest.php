@@ -15,8 +15,6 @@ use Zenstruck\Foundry\Test\ResetDatabase;
 
 class EasyODJControllerTest extends WebTestCase
 {
-
-
     use ResetDatabase;
     use Factories;
     use LoginTrait;
@@ -52,7 +50,6 @@ class EasyODJControllerTest extends WebTestCase
         $this->assertResponseRedirects();
         $this->client->followRedirect();
         $this->assertSelectorTextContains('h1', 'Accuser réception de la séance');
-
     }
 
 
@@ -81,8 +78,4 @@ class EasyODJControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'Séance test');
     }
-
-
-
-
 }

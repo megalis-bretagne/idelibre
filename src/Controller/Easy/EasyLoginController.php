@@ -8,7 +8,6 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class EasyLoginController extends AbstractController
 {
-
     #[Route(path: '/easy/magic-link', name: 'magic_link')]
     public function magicLink()
     {
@@ -28,7 +27,4 @@ class EasyLoginController extends AbstractController
     {
         return $this->render('easy/magic_link/invalid.html.twig');
     }
-
-
-
 }

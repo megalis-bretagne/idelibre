@@ -13,8 +13,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class DownloadZipVoter extends Voter
 {
-
-
     public function __construct(private readonly Security $security)
     {
     }
@@ -52,8 +50,8 @@ class DownloadZipVoter extends Voter
             return $this->isInAuthorisedType($user->getAuthorizedTypes(), $sitting->getType());
         }
 
-        if($this->security->isGranted('ROLE_ACTOR')) {
-            $convocation = $sitting->getConvocations()->map(fn($convocation) => $convocation->getUser()->getId())->contains($user->getId());
+        if ($this->security->isGranted('ROLE_ACTOR')) {
+            $convocation = $sitting->getConvocations()->map(fn ($convocation) => $convocation->getUser()->getId())->contains($user->getId());
             return !empty($convocation);
         }
 

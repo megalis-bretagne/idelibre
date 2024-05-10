@@ -10,7 +10,6 @@ use Symfony\Component\Routing\RouterInterface;
 
 class MagicLinkGenerator
 {
-
     public function __construct(private readonly JwtManager $jwtManager, private readonly RouterInterface $router)
     {
     }
@@ -25,9 +24,9 @@ class MagicLinkGenerator
             $user->getUsername(),
             $sitting->getId(),
             $isAuthorizedMagicLink,
-            $validBefore);
+            $validBefore
+        );
 
         return $this->router->generate('magic_link', ['token' => $jwt], UrlGeneratorInterface::ABSOLUTE_URL);
     }
-
 }

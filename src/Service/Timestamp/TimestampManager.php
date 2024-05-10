@@ -60,7 +60,7 @@ class TimestampManager
     }
 
 
-    public function createConvocationReceivedTimestamp( convocation $convocation): Timestamp
+    public function createConvocationReceivedTimestamp(convocation $convocation): Timestamp
     {
         $timeStamp = new Timestamp();
         $timeStamp->setFilePathContent($this->contentGenerator->generateConvocationReceivedFile($convocation->getSitting(), $convocation));

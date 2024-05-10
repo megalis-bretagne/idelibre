@@ -14,13 +14,14 @@ class SetConvocationReadVoter extends Voter
 {
     public function __construct(
         private readonly RequestStack          $requestStack,
-        private readonly ConvocationRepository $convocationRepository)
-    {
+        private readonly ConvocationRepository $convocationRepository
+    ) {
     }
 
     protected function supports($attribute, $subject): bool
     {
-        return in_array($attribute, ['CONVOCATION_READ']) && ($subject instanceof Convocation);;
+        return in_array($attribute, ['CONVOCATION_READ']) && ($subject instanceof Convocation);
+        ;
     }
 
 
@@ -50,5 +51,4 @@ class SetConvocationReadVoter extends Voter
         }
         return $session->get('authorizedSittingId') === $sitting->getId();
     }
-
 }

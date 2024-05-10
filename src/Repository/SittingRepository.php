@@ -197,7 +197,5 @@ class SittingRepository extends ServiceEntityRepository
             ->andWhere('s.isArchived = false')
             ->addSelect('c')
             ->setParameter('user', $user);
-
     }
-
 }

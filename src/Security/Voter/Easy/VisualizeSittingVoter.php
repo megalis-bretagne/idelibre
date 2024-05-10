@@ -13,13 +13,14 @@ class VisualizeSittingVoter extends Voter
 {
     public function __construct(
         private readonly RequestStack          $requestStack,
-        private readonly ConvocationRepository $convocationRepository)
-    {
+        private readonly ConvocationRepository $convocationRepository
+    ) {
     }
 
     protected function supports($attribute, $subject): bool
     {
-        return in_array($attribute, ['VISUALIZE_SITTING']) && ($subject instanceof Sitting);;
+        return in_array($attribute, ['VISUALIZE_SITTING']) && ($subject instanceof Sitting);
+        ;
     }
 
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token): bool
@@ -46,7 +47,6 @@ class VisualizeSittingVoter extends Voter
         }
 
         return ($convocation->getIsActive() && $convocation->getSentTimestamp());
-
     }
 
 
@@ -59,5 +59,4 @@ class VisualizeSittingVoter extends Voter
 
         return $session->get('authorizedSittingId') === $sitting->getId();
     }
-
 }

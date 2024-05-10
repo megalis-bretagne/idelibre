@@ -13,7 +13,6 @@ use Zenstruck\Foundry\Test\ResetDatabase;
 
 class EasySittingControllerTest extends WebTestCase
 {
-
     use ResetDatabase;
     use Factories;
     use LoginTrait;
@@ -34,6 +33,4 @@ class EasySittingControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'Séances en cours');
     }
-
-
 }

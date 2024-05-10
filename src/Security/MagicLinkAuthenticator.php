@@ -15,14 +15,12 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 
-
 class MagicLinkAuthenticator extends AbstractAuthenticator
 {
     public function __construct(
         private readonly RouterInterface $router,
         private readonly JwtManager      $jwtManager
-    )
-    {
+    ) {
     }
 
     public function supports(Request $request): bool
@@ -32,7 +30,6 @@ class MagicLinkAuthenticator extends AbstractAuthenticator
 
     public function authenticate(Request $request): Passport
     {
-
         $token = $request->query->get('token');
 
         if (!$token) {
@@ -74,6 +71,4 @@ class MagicLinkAuthenticator extends AbstractAuthenticator
 
         return new RedirectResponse($this->router->generate('invalid_magic_link'));
     }
-
-
 }

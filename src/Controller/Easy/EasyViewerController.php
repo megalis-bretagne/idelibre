@@ -25,8 +25,7 @@ class EasyViewerController extends AbstractController
         ProjectRepository                                    $projectRepository,
         OtherdocRepository                                   $otherdocRepository,
         ConvocationRepository                                $convocationRepository,
-    ): Response
-    {
+    ): Response {
         $convocation = $convocationRepository->findOneBy(['sitting' => $sitting, 'user' => $this->getUser()]);
 
         return $this->render('easy/viewer/viewer.html.twig', [
@@ -39,5 +38,4 @@ class EasyViewerController extends AbstractController
             'selectedDocumentId' => $file->getId()
         ]);
     }
-
 }

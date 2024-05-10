@@ -15,9 +15,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class AttendanceController extends AbstractController
 {
-
     #[Route(path: '/attendance/{id}', name: 'easy_odj_index')]
-    #[IsGranted('ROLE_ACTOR')]   // todo check if
+    #[IsGranted('ROLE_ACTOR')] // todo check if
     public function index(Convocation $convocation, Request $request, ConvocationManager $convocationManager): Response
     {
         $sitting = $convocation->getSitting();
@@ -55,7 +54,6 @@ class AttendanceController extends AbstractController
             $convocationManager->updateConvocationAttendances([$convocationAttendance]);
 
             return $this->redirectToRoute('easy_odj_index', ['id' => $convocation->getSitting()->getId()]);
-
         }
 
         return $this->render('easy/attendance/index.twig', [
@@ -67,7 +65,5 @@ class AttendanceController extends AbstractController
             'timezone' => $sitting->getStructure()->getTimezone()->getName(),
             'form' => $form->createView()
         ]);
-
     }
-
 }

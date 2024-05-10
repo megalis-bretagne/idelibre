@@ -16,7 +16,6 @@ use Zenstruck\Foundry\Test\ResetDatabase;
 
 class EasyLoginControllerTest extends WebTestCase
 {
-
     use ResetDatabase;
     use Factories;
 
@@ -26,8 +25,8 @@ class EasyLoginControllerTest extends WebTestCase
     }
 
 
-    public function testMagicLink(){
-
+    public function testMagicLink()
+    {
         /** @var JwtManager $jwtManager */
         $jwtManager = self::getContainer()->get(JwtManager::class);
 
@@ -52,15 +51,15 @@ class EasyLoginControllerTest extends WebTestCase
         );
 
 
-        $this->client->request('GET', '/easy/magic-link?token='.$token);
+        $this->client->request('GET', '/easy/magic-link?token=' . $token);
         $this->assertResponseRedirects();
         $this->client->followRedirect();
         $this->assertSelectorTextContains('h1', 'Accuser réception de la séance');
     }
 
 
-    public function testMagicLinkExpired(){
-
+    public function testMagicLinkExpired()
+    {
         /** @var JwtManager $jwtManager */
         $jwtManager = self::getContainer()->get(JwtManager::class);
 
@@ -85,15 +84,15 @@ class EasyLoginControllerTest extends WebTestCase
         );
 
 
-        $this->client->request('GET', '/easy/magic-link?token='.$token);
+        $this->client->request('GET', '/easy/magic-link?token=' . $token);
         $this->assertResponseRedirects();
         $this->client->followRedirect();
         $this->assertSelectorTextContains('h1', 'Lien invalide');
     }
 
 
-    public function testMagicLinkForbiddenRole(){
-
+    public function testMagicLinkForbiddenRole()
+    {
         /** @var JwtManager $jwtManager */
         $jwtManager = self::getContainer()->get(JwtManager::class);
 
@@ -118,10 +117,9 @@ class EasyLoginControllerTest extends WebTestCase
         );
 
 
-        $this->client->request('GET', '/easy/magic-link?token='.$token);
+        $this->client->request('GET', '/easy/magic-link?token=' . $token);
         $this->assertResponseRedirects();
         $this->client->followRedirect();
         $this->assertSelectorTextContains('h1', 'Impossible de s\'identifier avec un lien magique');
     }
-
 }

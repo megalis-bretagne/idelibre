@@ -12,7 +12,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class EasySittingController extends AbstractController
 {
-
     #[Route(path: '/easy/sitting', name: 'easy_sitting_index')]
     #[IsGranted('ROLE_VISUALIZE_SITTING')]
     public function index(PaginatorInterface $paginator, Request $request, SittingRepository $sittingRepository): Response

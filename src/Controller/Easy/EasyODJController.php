@@ -25,12 +25,10 @@ class EasyODJController extends AbstractController
         ConvocationRepository $convocationRepository,
         OtherdocRepository    $otherdocRepository,
         Security              $security
-    ): Response
-    {
-
+    ): Response {
         $convocation = $convocationRepository->findOneBy(['sitting' => $sitting, 'user' => $this->getUser()]);
 
-        if(!$convocation->getIsRead()) {
+        if (!$convocation->getIsRead()) {
             return $this->redirectToRoute('easy_odj_ar', ['id' => $sitting->getId()]);
         }
 
@@ -76,7 +74,6 @@ class EasyODJController extends AbstractController
             'timezone' => $this->getUser()->getStructure()->getTimezone()->getName(),
             'showBackButton' => $security->isGranted('fully_authenticated')
         ]);
-
     }
 
 
@@ -90,5 +87,4 @@ class EasyODJController extends AbstractController
 
         return $this->redirectToRoute('easy_odj_index', ['id' => $convocation->getSitting()->getId()]);
     }
-
 }

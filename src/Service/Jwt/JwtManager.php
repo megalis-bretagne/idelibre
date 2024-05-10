@@ -43,7 +43,7 @@ class JwtManager
         return (array)$decodedToken;
     }
 
-    public function generateTokenForUserNameAndSittingId(string $username, string $sittingId, bool $isAuthorizedMagicLink ,\DateTimeInterface $dateTime): string
+    public function generateTokenForUserNameAndSittingId(string $username, string $sittingId, bool $isAuthorizedMagicLink, \DateTimeInterface $dateTime): string
     {
         $tokenInfo = [
             'iss' => 'idelibre',

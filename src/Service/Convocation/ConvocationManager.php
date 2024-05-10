@@ -42,8 +42,7 @@ class ConvocationManager
         private readonly MessageBusInterface     $messageBus,
         private readonly CalGenerator            $icalGenerator,
         private readonly AttendanceTokenUtil     $attendanceTokenUtil,
-    )
-    {
+    ) {
     }
 
     public function createConvocationsActors(Sitting $sitting): void
@@ -156,7 +155,7 @@ class ConvocationManager
             $this->emailService->sendBatch($emails);
             $this->messageBus->dispatch(
                 new ConvocationSent(
-                    array_map(fn(Convocation $c) => $c->getId(), $convocationBatch),
+                    array_map(fn (Convocation $c) => $c->getId(), $convocationBatch),
                     $sitting->getId()
                 )
             );
@@ -169,7 +168,6 @@ class ConvocationManager
      */
     public function sendConvocation(Convocation $convocation)
     {
-
         $this->timestampAndActiveConvocations($convocation->getSitting(), [$convocation]);
         $emails = $this->generateEmailsData($convocation->getSitting(), [$convocation]);
         $this->clientNotifier->newSittingNotification([$convocation]);
@@ -383,7 +381,7 @@ class ConvocationManager
 
     public function markAsRead(Convocation $convocation): void
     {
-        $timeStamp =$this->timestampManager->createConvocationReceivedTimestamp($convocation);
+        $timeStamp = $this->timestampManager->createConvocationReceivedTimestamp($convocation);
         $convocation->setIsRead(true);
         $convocation->setReceivedTimestamp($timeStamp);
         $this->em->persist($convocation);
