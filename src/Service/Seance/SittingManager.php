@@ -19,8 +19,6 @@ use App\Service\File\Generator\UnsupportedExtensionException;
 use App\Service\Project\ProjectManager;
 use App\Service\role\RoleManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -44,10 +42,7 @@ class SittingManager
 
     public const COEFFICIENT_CORRECTEUR = 1.17647058824;
 
-    /**
-     * @throws NonUniqueResultException
-     * @throws NoResultException
-     */
+
     public function save(
         Sitting $sitting,
         UploadedFile $uploadedConvocationFile,
@@ -284,7 +279,7 @@ class SittingManager
         $this->em->flush();
     }
 
-    public function removeInvitations(Sitting $sitting): void
+    private function removeInvitations(Sitting $sitting): void
     {
         foreach ($sitting->getConvocations() as $convocation) {
             if ($convocation->getCategory() === Convocation::CATEGORY_INVITATION) {
