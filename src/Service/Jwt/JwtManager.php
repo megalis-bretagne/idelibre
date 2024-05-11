@@ -15,7 +15,7 @@ class JwtManager
 
     public function __construct(ParameterBagInterface $bag)
     {
-        $this->key = $bag->get('jwt_secret');
+        $this->key = $bag->get('magic_link_secret');
     }
 
     public function generate(array $payload): string
