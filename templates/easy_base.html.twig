@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} {{ product_name }} {% endblock %}</title>
+    {{ encore_entry_link_tags('app') }}
+    {% block stylesheets %}{% endblock %}
+</head>
+<body>
+
+{% block navigation %}
+    {{ include('include/_navbar.html.twig') }}
+{% endblock %}
+
+
+<div class="container-fluid main-margin">
+    {% block body %}
+        <div class="mt-3 col-10 offset-1">
+
+            <h1>{% block pageTitle %}{% endblock %}</h1>
+
+            <div class="mt-4">
+                {% block pageActions %} {% endblock %}
+            </div>
+
+            <div class="mt-3">
+                {% block pageTable %}{% endblock %}
+            </div>
+
+            <div class="pagination float-end">
+                {% block pagePagination %}{% endblock %}
+            </div>
+        </div>
+    {% endblock %}
+</div>
+
+{{ include('include/_footer.html.twig') }}
+
+{{ encore_entry_script_tags('app') }}
+{% block javascripts %}{% endblock %}
+
+</body>
+</html>

@@ -58,6 +58,7 @@ class AttendanceController extends AbstractController
             return $this->redirectToRoute('app_attendance_redirect', ['token' => $attendanceToken->getToken()]);
         }
 
+
         return $this->render('confirm_attendance/confirm.html.twig', [
             'user' => $user,
             'sitting' => $sitting,

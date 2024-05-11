@@ -37,7 +37,7 @@ class SecurityController extends AbstractController
         }
 
         if (in_array($this->getUser()->getRole()->getName(), [Role_Name::NAME_ROLE_ACTOR, Role_Name::NAME_ROLE_EMPLOYEE, Role_Name::NAME_ROLE_GUEST])) {
-            return $this->render('security/noActors.html.twig');
+            return $this->redirectToRoute('easy_sitting_index');
         }
 
         if ($this->isGranted('ROLE_MANAGE_STRUCTURES')) {

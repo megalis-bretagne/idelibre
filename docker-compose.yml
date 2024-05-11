@@ -41,6 +41,7 @@ services:
       - ENTROPY_ADMIN=${ENTROPY_ADMIN:-130}
       - MAXIMUM_SIZE_PDF_ZIP_GENERATION=${MAXIMUM_SIZE_PDF_ZIP_GENERATION:-200000000}
       - LOCK_DSN=${LOCK_DSN:-semaphore}
+      - MAGIC_LINK_SECRET=${MAGIC_LINK_SECRET:-magiclinksecretmagiclinksecretmagiclinksecretmagiclinksecretmagiclinksecret}
     volumes:
       - data-public:/app/public
       - /data/files:/data

@@ -1,9 +1,9 @@
 <nav class="navbar navbar-expand-md ls-bg-info-nav fixed-top navbar-dark bg-ls-dark" style="height: 40px;">
-    <a class="nav-item mr-3" href="{% if app.user.structure == null %}{{ path('structure_index') }}{% else %}{{ path('sitting_index') }}{% endif %}">
+    <a class="nav-item mr-3" href="{% if app.user and app.user.structure == null %}{{ path('structure_index') }}{% else %}{{ path('sitting_index') }}{% endif %}">
         <img style="height: 22px; padding-bottom: 2px;" src="{{ asset('assets/img/id-color-white.svg') }}"
              alt="lsvote"
              class="img-fluid"
-             title="{% if app.user.structure == null %}Revenir à l'écran des structures{% else %}Revenir à l'écran des séances {% endif %}"
+             title="{% if app.user and app.user.structure == null %}Revenir à l'écran des structures{% else %}Revenir à l'écran des séances {% endif %}"
         >
     </a>
 

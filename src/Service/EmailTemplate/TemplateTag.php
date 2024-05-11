@@ -25,4 +25,5 @@ class TemplateTag
     public const FORGET_PASSWORD_URL = '#urlmdpoublié#';
     public const UPDATE_PASSWORD_URL = '#urlreactualisationmdp#';
     public const CONFIRM_PRESENCE_URL = '#urlpresence#';
+    public const MAGIC_LINK = '#lienmagique#';
 }
