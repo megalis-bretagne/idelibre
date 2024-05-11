@@ -47,7 +47,7 @@ final class ConvocationFactory extends ModelFactory
     protected function getDefaults(): array
     {
         return [
-            'category' => self::faker()->text(255),
+            'category' => Convocation::CATEGORY_CONVOCATION,
             'isActive' => true,
             'isRead' => false,
             'sitting' => SittingFactory::new(),

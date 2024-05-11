@@ -28,6 +28,8 @@ parameters:
   nodejs_host: 'http://node-idelibre:3000'
   nginx_host: 'https://nginx-idelibre'
 
+  magic_link_secret: '%env(MAGIC_LINK_SECRET)%'
+
   legacy_salt: '%env(SALT)%'
 
   env(HIDE_LEFT_BANNER_LOGIN): false

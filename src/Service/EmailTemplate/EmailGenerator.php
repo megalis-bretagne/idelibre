@@ -6,6 +6,7 @@ use App\Entity\Convocation;
 use App\Entity\EmailTemplate;
 use App\Entity\Sitting;
 use App\Entity\User;
+use App\magicLink\MagicLinkGenerator;
 use App\Service\Email\EmailData;
 use App\Service\Util\DateUtil;
 use App\Service\Util\GenderConverter;
@@ -20,7 +21,8 @@ class EmailGenerator
         private readonly GenderConverter $genderConverter,
         private readonly EmailTemplateManager $emailTemplateManager,
         private readonly ParameterBagInterface $bag,
-        private readonly RouterInterface $router
+        private readonly RouterInterface $router,
+        private readonly MagicLinkGenerator $magicLinkGenerator
     ) {
     }
 
@@ -97,6 +99,7 @@ class EmailGenerator
             TemplateTag::ACTOR_ATTENDANCE => $convocation->getAttendance(),
             TemplateTag::ACTOR_DEPUTY => $convocation->getDeputy(),
             TemplateTag::CONFIRM_PRESENCE_URL => $this->generateAttendanceUrl($convocation->getAttendanceToken()?->getToken()),
+            TemplateTag::MAGIC_LINK => $this->magicLinkGenerator->generate($user, $sitting),
         ];
     }
 

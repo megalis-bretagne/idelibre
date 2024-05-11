@@ -1,0 +1,97 @@
+{% extends 'easy_base.html.twig' %}
+{% import 'macro/_forms.html.twig' as macros %}
+
+
+{% block body %}
+    <div>
+
+        <div id="wrapper" style="display: flex; flex-direction: row">
+            <div id="leftMenu" style="width: 25vw; margin-top: -30px; height: calc(90vh - 30px); overflow: auto">
+                <div>
+                    <a href="{{ path('easy_odj_index', {'id' : sitting.id}) }}" class="btn btn-outline-primary"
+                       title="Retour">
+                        <span class="fa fa-arrow-left"></span>
+                        Retourner à l'ordre du jour
+                    </a>
+                </div>
+
+
+                <div id="convocationBlock" class="mt-5" style="display: flex; flex-direction: column;">
+                    <div class="element-sidebar"
+                         id="document_{{ convocationFileId }}"
+                         onclick="changePdf('{{ path('file_download', {'id': convocationFileId}) }}')">
+                                <span class="three-line-max">
+                                   {{ convocationName }}
+                                </span>
+                    </div>
+                </div>
+
+
+                <div id="otherDocList" class="mt-5" style="display: flex; flex-direction: column; gap :10px">
+                    {% for otherDoc in otherDocs %}
+                        <div class="element-sidebar"
+                             id="document_{{ otherDoc.file.id }}"
+                             onclick="changePdf('{{ path('file_download', {'id': otherDoc.file.id}) }}')">
+                                <span class="three-line-max">
+                                   {{ otherDoc.name }}
+                                </span>
+                        </div>
+                    {% endfor %}
+                </div>
+
+
+                <div id="projectList" class="mt-5" style="display: flex; flex-direction: column; gap :10px">
+                    {% for project in projects %}
+                        <div class="element-sidebar"
+                             id="document_{{ project.file.id }}"
+                             onclick="changePdf('{{ path('file_download', {'id': project.file.id}) }}')">
+                                <span class="three-line-max">
+                                  <i class="badge bg-primary"
+                                     style="font-size: 1em; margin-right: 0.3em"> {{ project.rank + 1 }} </i>  {{ project.name }}
+                                </span>
+                        </div>
+                        {% for annex in  project.annexes %}
+                            <div class="element-sidebar"
+                                    id="document_{{ annex.file.id }}"
+                                    {% if not (annex.file.name | isViewable) %}
+                                        title="Le document n'est pas un PDF"
+                                    {% endif %}
+                                 style="margin-left: 16px;  {% if not (annex.file.name | isViewable) %}  opacity: 0.5;  {% endif %} "
+                                    {% if(annex.file.name | isViewable) %}
+                                        onclick="changePdf('{{ path('file_download', {'id': annex.file.id}) }}')"
+                                    {% endif %}
+                            >
+                                <span class="three-line-max">
+                                  {{ annex.rank + 1 }} - {{ annex.title }}
+                                </span>
+                            </div>
+
+                        {% endfor %}
+
+                    {% endfor %}
+
+
+                </div>
+
+            </div>
+
+            <div>
+                <div
+                        id="pdf-container"
+                        style="overflow: auto; height: calc(90vh + 25px); width: 75vw; position: absolute; top: 50px;"
+                        data-url="{{ fileURL }}"
+                        data-selected-document-id="{{ selectedDocumentId }}"
+                >
+
+                    <div id="viewer" class="pdfViewer"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('pdfjs') }}
+    {{ encore_entry_script_tags('sideBarViewer') }}
+{% endblock %}

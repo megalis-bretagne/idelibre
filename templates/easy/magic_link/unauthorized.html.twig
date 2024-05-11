@@ -1,0 +1,26 @@
+{% extends 'easy_base.html.twig' %}
+{% import 'macro/_forms.html.twig' as macro %}
+
+{% block pageTitle %}
+    Impossible de s'identifier avec un lien magique
+{% endblock %}
+
+
+
+{% block pageTable %}
+    <div class="form-white" style="padding: 10px 50px">
+
+        <div class="text-center">
+            Votre role dans la structure ne vous permet pas de vous identifier avec un lien magique.
+
+            <div class="mt-5">
+                <a href="{{ path('app_entrypoint')}}" class="btn btn-danger">
+                    Aller à la page de connexion
+                </a>
+            </div>
+        </div>
+
+
+    </div>
+{% endblock %}
+

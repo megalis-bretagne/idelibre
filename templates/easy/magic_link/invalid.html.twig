@@ -1,0 +1,26 @@
+{% extends 'easy_base.html.twig' %}
+{% import 'macro/_forms.html.twig' as macro %}
+
+{% block pageTitle %}
+    Lien invalide
+{% endblock %}
+
+
+{% block pageTable %}
+    <div class="form-white" style="padding: 10px 50px">
+
+        <div class="text-center">
+            Votre lien ne semble pas ou plus valide. Le lien expire 24 heures après la séance.
+            Vous pouvez vous connecter aec vos identifiant pour avoir acces à l'ensemble des séances.
+
+            <div class="mt-5">
+                <a href="{{ path('app_entrypoint') }}" class="btn btn-danger">
+                    Aller à la page de connexion
+                </a>
+            </div>
+        </div>
+
+
+    </div>
+{% endblock %}
+

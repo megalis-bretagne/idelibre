@@ -288,3 +288,9 @@ INSERT INTO doctrine_migration_versions (version, executed_at, execution_time) S
 
 
 Ecrire test pour ics
+
+
+
+
+
+TODO BLOQUER LA possibilité des utilisateurs d'acceder au preference si ils sont loggé avec un magic link !

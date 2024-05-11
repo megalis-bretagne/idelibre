@@ -3,6 +3,7 @@
 namespace App\Tests\Service\EmailTemplate;
 
 use App\Entity\EmailTemplate;
+use App\magicLink\MagicLinkGenerator;
 use App\Service\EmailTemplate\EmailGenerator;
 use App\Service\EmailTemplate\EmailTemplateManager;
 use App\Service\Util\DateUtil;
@@ -58,13 +59,8 @@ class EmailGeneratorTest extends WebTestCase
         $emailTemplate->setContent('test de génération de message : #variable#');
         $emailTemplate->setSubject('test de génération de titre : #variable#');
 
-        $generator = new EmailGenerator(
-            new DateUtil(),
-            new GenderConverter(),
-            $this->emailTemplateManager,
-            $this->params,
-            $this->router
-        );
+
+        $generator = self::getContainer()->get(EmailGenerator::class);
 
         $emailData = $generator->generateFromTemplate($emailTemplate, ['#variable#' => 'test']);
 
@@ -87,13 +83,13 @@ class EmailGeneratorTest extends WebTestCase
             'convocation' => $convocation,
         ]);
 
-        $generator = new EmailGenerator(
-            new DateUtil(),
-            new GenderConverter(),
-            $this->emailTemplateManager,
-            $this->params,
-            $this->router,
-        );
+        $magicLingGeneratorMock = $this->createMock(MagicLinkGenerator::class);
+        $magicLingGeneratorMock->method('generate')->willReturn('http://localhost/easy/magic-link?=token=SHJZe0');
+        self::getContainer()->set(MagicLinkGenerator::class, $magicLingGeneratorMock);
+
+        $generator = self::getContainer()->get(EmailGenerator::class);
+
+
 
         $expected = [
             '#typeseance#' => 'Conseil',
@@ -109,6 +105,7 @@ class EmailGeneratorTest extends WebTestCase
             '#mandataire#' => null,
             '#presence#' => null,
             '#urlpresence#' => $this->emailGenerator->generateAttendanceUrl($convocation->getAttendanceToken()->getToken()),
+            '#lienmagique#' => 'http://localhost/easy/magic-link?=token=SHJZe0'
         ];
 
         $this->assertEquals($expected, $generator->generateParams($convocation->object()));
@@ -118,13 +115,7 @@ class EmailGeneratorTest extends WebTestCase
     {
         $sitting = SittingStory::sittingConseilLibriciel();
 
-        $generator = new EmailGenerator(
-            new DateUtil(),
-            new GenderConverter(),
-            $this->emailTemplateManager,
-            $this->params,
-            $this->router,
-        );
+        $generator = self::getContainer()->get(EmailGenerator::class);
 
         $expected = [
             '#typeseance#' => 'Conseil Libriciel',
@@ -149,13 +140,7 @@ class EmailGeneratorTest extends WebTestCase
             'content' => 'Voici mon template pour les seance de type conseil de la structure libriciel',
         ])->create();
 
-        $generator = new EmailGenerator(
-            new DateUtil(),
-            new GenderConverter(),
-            $this->emailTemplateManager,
-            $this->params,
-            $this->router,
-        );
+        $generator = self::getContainer()->get(EmailGenerator::class);
 
         $expected = 'idelibre : une nouvelle convocation pour le type Conseil Libriciel';
 

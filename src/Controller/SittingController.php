@@ -293,7 +293,7 @@ class SittingController extends AbstractController
      * @throws UnsupportedExtensionException
      */
     #[Route(path: '/sitting/zip/{id}', name: 'sitting_zip', methods: ['GET'])]
-    #[IsGranted('MANAGE_SITTINGS', subject: 'sitting')]
+    #[IsGranted('DOWNLOAD_ZIP', subject: 'sitting')]
     public function getZipSitting(Sitting $sitting): Response
     {
         $zipPath = $this->fileGenerator->genFullSittingDirPath($sitting, 'zip');

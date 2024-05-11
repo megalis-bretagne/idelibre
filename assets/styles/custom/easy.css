@@ -1,0 +1,27 @@
+.odj-element {
+    display: flex;
+    background: #eeeeee;
+    padding: 20px;
+    flex: 1;
+    border-radius: 5px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+.element-sidebar {
+    display: flex;
+    background: #e5e5e5;
+    padding: 8px;
+    border-radius: 5px;
+    margin: 0 2px 0 2px;
+}
+
+.element-sidebar:hover {
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+.document-selected {
+    box-shadow: 0 0 0 2px royalblue;
+}
