@@ -45,14 +45,12 @@
     <table class="table table-striped mt-3 bg-white">
         <thead>
             <tr class="d-flex">
-                <th class="col">{{ knp_pagination_sortable(users, 'Nom', 'u.lastName') }}</th>
-                <th class="col">{{ knp_pagination_sortable(users, 'Prénom', 'u.firstName') }}</th>
-                <th class="col">{{ knp_pagination_sortable(users, 'Nom d\'utilisateur', 'u.username') }}</th>
-                <th class="col">{{ knp_pagination_sortable(users, 'Profil', 'r.prettyName') }}</th>
-                <th class="col">{{ knp_pagination_sortable(users, 'Groupe politique', 'p.name') }}</th>
-                <th class="col">Suppléant</th>
+                <th class="col-3">{{ knp_pagination_sortable(users, 'Nom', 'u.lastName') }}</th>
+                <th class="col-3">{{ knp_pagination_sortable(users, 'Nom d\'utilisateur', 'u.username') }}</th>
+                <th class="col-2">{{ knp_pagination_sortable(users, 'Profil', 'r.prettyName') }}</th>
+                <th class="col-2">{{ knp_pagination_sortable(users, 'Groupe politique', 'p.name') }}</th>
                 <th class="active_column d-none">{{ knp_pagination_sortable(users, '', 'u.isActive') }}</th>
-                <th class="col">Actions</th>
+                <th class="col-2">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -61,17 +59,24 @@
             {% for user in users %}
 
                 <tr class="d-flex">
-                    <td class="col {% if user.lastName|length > 29 %} overflow-scroll {% endif %}">{{ user.lastName}}</td>
-                    <td class="col  {% if user.firstName|length > 29 %} overflow-scroll {% endif %}">{{ user.firstName }}</td>
-                    <td class="col {% if user.username|length > 29 %} overflow-scroll {% endif %}">{{ user.username | noSuffix }}</td>
-                    <td class="col">{{ user.role ? user.role.prettyName : '' }}</td>
-                    <td class="col {% if user.party and user.party.name|length > 15 %} overflow-scroll {% endif %}">{{ user.party ? user.party.name : "" }}</td>
-                    <td class="col {% if user.deputy is not null and user.deputy.lastName|length > 26 %} overflow-scroll {% endif %}">
-                        {% if user.deputy is not null and user.deputy.role.name == "Deputy" %}{{ user.deputy.firstName|first|upper }}. {{ user.deputy.lastName }} {% endif %}
-                    </td>
+                    <td class="col-3">
+                        <div style="width: 35px;">
+                            {% if user.deputy %}
+                                <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Suppléant : {{ user.deputy.lastName ~ " " ~ user.deputy.firstName }}">
+                                    <span class="text-primary" type="button" disabled><i class="fa fa-user-alt"></i></span>
+                                </span>
+                            {% endif %}
+                        </div>
 
+                        <span>
+                            {{ user.lastName}} {{ user.firstName }}
+                        </span>
+                    </td>
+                    <td class="col-3">{{ user.username | noSuffix }}</td>
+                    <td class="col-2">{{ user.role ? user.role.prettyName : '' }}</td>
+                    <td class="col-2">{{ user.party ?  ( user.party.name|length > 10 ? user.party.name|slice(0,20) ~ '...' : user.party.name)  : ''  }}</td>
                     <td class="active_column d-none">{{ user.isActive }}</td>
-                    <td class="col actionButton">
+                    <td class="col-2 actionButton">
 
                         {{  macros.btnInvalidateSinglePasswordWithModal(
                             user.id,
@@ -105,4 +110,5 @@
 
 {% block javascripts %}
     {{ encore_entry_script_tags('passphraseConfirmationBox') }}
+    {{ encore_entry_script_tags('enable-popover') }}
 {% endblock %}
