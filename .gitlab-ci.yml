@@ -122,8 +122,8 @@ publish:
     IMAGE_VERSION: "$CI_COMMIT_REF_NAME"
     REGISTRY_CONTAINER_PATH: ""
   tags:
-#    - docker-build
-    - citoyen-shell
+    - docker-build
+    #- citoyen-shell
 
   script:
     - echo "Création de l'image ${REGISTRY_CONTAINER_HOST}/public/citoyens/idelibre/idelibre:${IMAGE_VERSION}"
