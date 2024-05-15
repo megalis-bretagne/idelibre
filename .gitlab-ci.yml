@@ -124,6 +124,7 @@ publish:
   tags:
 #    - docker-build
     - citoyen-shell
+
   script:
     - echo "Création de l'image ${REGISTRY_CONTAINER_HOST}/public/citoyens/idelibre/idelibre:${IMAGE_VERSION}"
     - echo ${IMAGE_VERSION} > VERSION
