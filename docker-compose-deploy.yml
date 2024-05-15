@@ -1,9 +1,12 @@
-version: '3.4'
-
 services:
   fpm-idelibre:
     container_name: fpm-idelibre
     image: registry.libriciel.fr:443/public/citoyens/idelibre:canary
+    build: .
+    restart: always
+    depends_on:
+      postgres-idelibre:
+        condition: service_healthy
     environment:
       - APP_ENV=${APP_ENV:-prod}
       - APP_SECRET=${APP_SECRET:-b64dca717248e387bc88b36d9c485244}
@@ -37,7 +40,10 @@ services:
 
   node-idelibre:
     container_name: node-idelibre
-    image: registry.libriciel.fr:443/public/citoyens/idelibre-node/idelibre-node:4.1.1
+    image: registry.libriciel.fr:443/public/citoyens/idelibre-node/idelibre-node:4.3.0-alpha.2
+    depends_on:
+      postgres-idelibre:
+        condition: service_healthy
     volumes:
       - /data/files:/data
     environment:
@@ -58,10 +64,11 @@ services:
       - JWT_TIMEOUT=${JWT_TIMEOUT:-86400}
 
     command: [ "/app/docker-resources/init.sh" ]
+    restart: unless-stopped
 
   nginx-idelibre:
     container_name: nginx-idelibre
-    image: nginx:1.17
+    image: nginx:1.23
     depends_on:
       - fpm-idelibre
       - node-idelibre
@@ -77,6 +84,7 @@ services:
       - /data/certbot/www:/var/www/certbot
       - data-public:/app/public:ro
       - /data/files:/data:ro
+    restart: unless-stopped
 
   certbot:
     image: certbot/certbot
@@ -84,9 +92,33 @@ services:
       - /data/certbot/conf:/etc/letsencrypt
       - /data/certbot/www:/var/www/certbot
 
+  postgres-idelibre:
+    container_name: postgres-idelibre
+    image: postgres:16.2-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-idelibre}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-idelibre}
+      - POSTGRES_DB=${POSTGRES_DB:-idelibre}
+
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "$POSTGRES_USER", "-d", "$POSTGRES_DB" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+#    networks:
+#      - network_idelibre_dev
+
+    volumes:
+      - /data/postgres-docker-idelibre:/var/lib/postgresql/data
+
+
+
+
   lshorodatage:
     container_name: lshorodatage
-    image: registry.libriciel.fr:443/public/citoyens/lshorodatage/lshorodatage:1.0.0
+    image: registry.libriciel.fr:443/public/citoyens/lshorodatage/lshorodatage:2.0.0
     ports:
       - "5000:3000"
     environment:
@@ -100,6 +132,18 @@ services:
     volumes:
       - /data/certificates:/certificates
     command: [ "/app/docker-resources/init.sh" ]
+    restart: unless-stopped
+
+
+ofelia:
+  image: mcuadros/ofelia:v0.3.7
+  depends_on:
+    - fpm-idelibre
+  command: daemon --docker
+  restart: unless-stopped
+  volumes:
+    - /var/run/docker.sock:/var/run/docker.sock:ro
+
 
 
   idelibre_mailcatcher:
