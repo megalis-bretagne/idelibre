@@ -137,7 +137,8 @@ deploy_master:
     name: idelibre-4-3.dev.libriciel.net
     url: https://idelibre-4-3.dev.libriciel.net
   tags:
-    - citoyen-shell
+    #- citoyen-shell
+    - runner-citoyen
   only:
     - master
   variables:
