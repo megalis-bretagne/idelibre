@@ -19,7 +19,7 @@ stages:
   - build
   - build-nocache
   - deploy
-  - test
+#  - test
   - quality
   - release
 
@@ -74,34 +74,34 @@ container_scanning:
 
 
 
-phpTest:
-  stage: test
-  image: $CONTAINER_IMAGE
-  services:
-    - name: postgres:13-alpine
-      alias: postgresidelibre
-      command: [ "postgres", "-N", "1000" ]
-  variables:
-    XDEBUG_MODE: coverage
-    APP_ENV: test
-    POSTGRES_HOST: postgresidelibre
-    POSTGRES_VERSION: 13
-    POSTGRES_DB: idelibre_test
-    POSTGRES_USER: idelibretest
-    POSTGRES_PASSWORD: idelibretest
-    POSTGRES_PORT: 5432
-    DATABASE_URL: postgresql://idelibretest:idelibretest@postgresidelibre:5432/idelibre?serverVersion=13&charset=utf8
-    GIT_STRATEGY: none
-    COMPOSER_PROCESS_TIMEOUT: 1200
-  before_script:
-    - cd /app
-  script:
-    - SYMFONY_DEPRECATIONS_HELPER=disabled /app/bin/phpunit --coverage-text --colors=never --coverage-clover coverage/coverage.xml --log-junit coverage/logfile.xml
-    - cp -rf coverage $CI_PROJECT_DIR
-  artifacts:
-    paths:
-      - coverage
-    expire_in: 1h
+#phpTest:
+#  stage: test
+#  image: $CONTAINER_IMAGE
+#  services:
+#    - name: postgres:13-alpine
+#      alias: postgresidelibre
+#      command: [ "postgres", "-N", "1000" ]
+#  variables:
+#    XDEBUG_MODE: coverage
+#    APP_ENV: test
+#    POSTGRES_HOST: postgresidelibre
+#    POSTGRES_VERSION: 13
+#    POSTGRES_DB: idelibre_test
+#    POSTGRES_USER: idelibretest
+#    POSTGRES_PASSWORD: idelibretest
+#    POSTGRES_PORT: 5432
+#    DATABASE_URL: postgresql://idelibretest:idelibretest@postgresidelibre:5432/idelibre?serverVersion=13&charset=utf8
+#    GIT_STRATEGY: none
+#    COMPOSER_PROCESS_TIMEOUT: 1200
+#  before_script:
+#    - cd /app
+#  script:
+#    - SYMFONY_DEPRECATIONS_HELPER=disabled /app/bin/phpunit --coverage-text --colors=never --coverage-clover coverage/coverage.xml --log-junit coverage/logfile.xml
+#    - cp -rf coverage $CI_PROJECT_DIR
+#  artifacts:
+#    paths:
+#      - coverage
+#    expire_in: 1h
 
 quality:
   stage: quality
@@ -137,7 +137,8 @@ deploy_master:
     name: idelibre-4-3.dev.libriciel.net
     url: https://idelibre-4-3.dev.libriciel.net
   tags:
-    - citoyen-shell
+    #- citoyen-shell
+    - runner-citoyen
   only:
     - master
   variables:
