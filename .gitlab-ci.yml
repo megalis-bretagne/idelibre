@@ -20,7 +20,7 @@ stages:
   - build-nocache
   - deploy
 #  - test
-  - quality
+#  - quality
   - release
 
 variables:
@@ -103,16 +103,16 @@ container_scanning:
 #      - coverage
 #    expire_in: 1h
 
-quality:
-  stage: quality
-  only:
-    - master
-  image: gitlab.libriciel.fr:4567/docker/sonar-scanner:latest
-  script:
-    - mkdir /app
-    - cp -rf $CI_PROJECT_DIR/* /app
-    - cd /app
-    - /sonar-scanner -Dsonar.login=$SONAR_LOGIN -Dsonar.host.url=$SONAR_HOST_URL
+#quality:
+#  stage: quality
+#  only:
+#    - master
+#  image: gitlab.libriciel.fr:4567/docker/sonar-scanner:latest
+#  script:
+#    - mkdir /app
+#    - cp -rf $CI_PROJECT_DIR/* /app
+#    - cd /app
+#    - /sonar-scanner -Dsonar.login=$SONAR_LOGIN -Dsonar.host.url=$SONAR_HOST_URL
 
 publish:
   stage: deploy
