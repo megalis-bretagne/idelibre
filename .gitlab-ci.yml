@@ -138,7 +138,8 @@ deploy_master:
     url: https://idelibre-4-3.dev.libriciel.net
   tags:
     #- citoyen-shell
-    - runner-citoyen
+    #- runner-citoyen
+    - docker-build
   only:
     - master
   variables:
