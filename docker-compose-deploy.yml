@@ -146,13 +146,13 @@ services:
 #
 
 
-  idelibre_mailcatcher:
-    container_name: il-4-2-dev-mailcatcher
-    image: tophfr/mailcatcher:0.7.1
-    restart: always
-    ports:
-      - "2192:80"
-      - "2129:25"
+#  idelibre_mailcatcher:
+#    container_name: il-4-2-dev-mailcatcher
+#    image: tophfr/mailcatcher:0.7.1
+#    restart: always
+#    ports:
+#      - "2192:80"
+#      - "2129:25"
 
 volumes:
   data-public:
