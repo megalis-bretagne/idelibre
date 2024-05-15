@@ -124,6 +124,7 @@ publish:
   tags:
 #    - docker-build
     - citoyen-shell
+
   script:
     - echo "Création de l'image ${REGISTRY_CONTAINER_HOST}/public/citoyens/idelibre/idelibre:${IMAGE_VERSION}"
     - echo ${IMAGE_VERSION} > VERSION
@@ -137,8 +138,9 @@ deploy_master:
     name: idelibre-4-3.dev.libriciel.net
     url: https://idelibre-4-3.dev.libriciel.net
   tags:
-    #- citoyen-shell
-    - runner-citoyen
+    - citoyen-shell
+    #- runner-citoyen
+#    - docker-build
   only:
     - master
   variables:
