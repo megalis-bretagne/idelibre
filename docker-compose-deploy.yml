@@ -135,15 +135,15 @@ services:
     restart: unless-stopped
 
 
-ofelia:
-  image: mcuadros/ofelia:v0.3.7
-  depends_on:
-    - fpm-idelibre
-  command: daemon --docker
-  restart: unless-stopped
-  volumes:
-    - /var/run/docker.sock:/var/run/docker.sock:ro
-
+#ofelia:
+#  image: mcuadros/ofelia:v0.3.7
+#  depends_on:
+#    - fpm-idelibre
+#  command: daemon --docker
+#  restart: unless-stopped
+#  volumes:
+#    - /var/run/docker.sock:/var/run/docker.sock:ro
+#
 
 
   idelibre_mailcatcher:
