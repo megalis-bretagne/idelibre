@@ -80,8 +80,10 @@ class AttendanceNotification
     {
         $attendanceData = [];
         foreach ($sittings as $sitting) {
-            if ($this->isAuthorizedSittingType($sitting->getType(), $user)) {
-                $attendanceData[] = $this->prepareDatas($sitting);
+            if ($this->isAuthorizedSittingType($sitting->getType(), $user)) {  // TODO WARNING $user->getAuthorizedTypes() vas entrainer des requetes a chaque fois car elle n'est pas dans le query builder
+                $attendanceData[] = $this->prepareDatas($sitting);  // Je ne comprends pas ce que tu veux faire. tu charge un attendance data avant
+                // la boucle des sittings mais tu envoies quand meme l'email quelque soit le type et a chaque sitting.
+                // Tu voudrai en fait envoyer un seul et unique qui concataine les infos de tous les sittings  par personne a notifier?
             }
             $this->prepareAndSendMail($structure, $attendanceData, $user);
         }
