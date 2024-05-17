@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Convocation;
 use App\Entity\Sitting;
 use App\Entity\Structure;
 use App\Entity\Type;
@@ -9,6 +10,7 @@ use App\Entity\User;
 use DateTimeInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -197,5 +199,25 @@ class SittingRepository extends ServiceEntityRepository
             ->andWhere('s.isArchived = false')
             ->addSelect('c')
             ->setParameter('user', $user);
+    }
+
+    /**
+     * @throws NonUniqueResultException
+     * @throws NoResultException
+     */
+    public function findActiveGuestAndEmployeeConvocationBySitting(Sitting $sitting): int
+    {
+        $qb = $this->createQueryBuilder('s')
+            ->select('COUNT(c)')
+            ->join('s.convocations', 'c')
+            ->andWhere('c.category = :category')
+            ->andWhere('s = :sitting')
+            ->setParameter('sitting', $sitting)
+            ->setParameter('category', Convocation::CATEGORY_INVITATION)
+            ->getQuery()
+            ->getSingleScalarResult()
+            ;
+//        dd($qb);
+        return $qb;
     }
 }
