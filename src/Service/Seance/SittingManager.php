@@ -2,6 +2,7 @@
 
 namespace App\Service\Seance;
 
+use App\Entity\Convocation;
 use App\Entity\Reminder;
 use App\Entity\Sitting;
 use App\Entity\Structure;
@@ -278,7 +279,17 @@ class SittingManager
     public function removeInvitationFile(Sitting $sitting): void
     {
         $sitting->setInvitationFile(null);
+        $this->removeInvitations($sitting);
         $this->em->persist($sitting);
         $this->em->flush();
+    }
+
+    public function removeInvitations(Sitting $sitting): void
+    {
+        foreach ($sitting->getConvocations() as $convocation) {
+            if ($convocation->getCategory() === Convocation::CATEGORY_INVITATION) {
+                $this->em->remove($convocation);
+            }
+        }
     }
 }
