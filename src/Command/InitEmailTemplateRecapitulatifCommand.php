@@ -3,6 +3,8 @@
 namespace App\Command;
 
 use App\Repository\StructureRepository;
+use App\Service\NotificationMail\NotificationDataProvider;
+use App\Service\NotificationMail\NotificationFormater;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -20,6 +22,7 @@ class InitEmailTemplateRecapitulatifCommand extends Command
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly StructureRepository $structureRepository,
+        private NotificationDataProvider $notificationDataProvider,
         string $name = null
     ) {
         parent::__construct($name);
