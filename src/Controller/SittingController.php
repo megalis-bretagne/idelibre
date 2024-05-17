@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Convocation;
 use App\Entity\Sitting;
 use App\Form\SearchType;
 use App\Form\SittingType;
@@ -392,6 +393,8 @@ class SittingController extends AbstractController
             throw new BadRequestException();
         }
         $this->sittingManager->removeInvitationFile($sitting);
+        $this->sittingManager->deleteInvitations($sitting);
+
         return $this->json(['success' => true]);
     }
 

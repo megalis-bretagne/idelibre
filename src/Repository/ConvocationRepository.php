@@ -139,4 +139,17 @@ class ConvocationRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function getAndDeleteInvitationBySitting(Sitting $sitting): int
+    {
+       return $this->createQueryBuilder('c')
+           ->delete()
+           ->andWhere('c.sitting = :sitting')
+            ->setParameter('sitting', $sitting)
+            ->andWhere('c.category = :category')
+            ->setParameter('category', Convocation::CATEGORY_INVITATION)
+            ->getQuery()
+            ->getOneOrNullResult()
+           ;
+    }
 }

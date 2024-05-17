@@ -2,13 +2,17 @@
 
 namespace App\Tests\Repository;
 
+use App\Entity\Convocation;
 use App\Repository\ConvocationRepository;
 use App\Tests\Factory\ConvocationFactory;
+use App\Tests\Factory\SittingFactory;
+use App\Tests\Factory\StructureFactory;
 use App\Tests\Factory\UserFactory;
 use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
 use App\Tests\Story\SittingStory;
 use Doctrine\Persistence\ObjectManager;
+use Eluceo\iCal\Domain\ValueObject\Category;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Zenstruck\Foundry\Test\Factories;
@@ -79,5 +83,26 @@ class ConvocationRepositoryTest extends WebTestCase
         $convocations = $this->convocationRepository->getConvocationsWithUserBySitting($sitting);
 
         $this->assertCount(2, $convocations);
+    }
+
+    public function testGetAndDeleteInvitationBySitting(): void
+    {
+        $sitting = SittingFactory::createOne(["structure" => StructureFactory::createOne()]);
+        ConvocationFactory::createOne([
+            "category" => Convocation::CATEGORY_INVITATION,
+            "sitting" => $sitting,
+            "user" => UserFactory::createOne()
+        ]);
+        ConvocationFactory::createOne([
+            "category" => Convocation::CATEGORY_CONVOCATION,
+            "sitting" => $sitting,
+            "user" => UserFactory::createOne()
+        ]);
+
+        $this->convocationRepository->getAndDeleteInvitationBySitting($sitting->object());
+        $convocations = $this->convocationRepository->findAll();
+
+        $this->assertCount(1, $convocations);
+        $this->assertSame(Convocation::CATEGORY_CONVOCATION, $convocations[0]->getCategory());
     }
 }

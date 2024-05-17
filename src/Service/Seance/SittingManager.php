@@ -9,6 +9,7 @@ use App\Entity\Structure;
 use App\Entity\User;
 use App\Message\UpdatedSitting;
 use App\Repository\AnnotationRepository;
+use App\Repository\ConvocationRepository;
 use App\Repository\OtherdocRepository;
 use App\Repository\ProjectRepository;
 use App\Repository\SittingRepository;
@@ -37,6 +38,7 @@ class SittingManager
         private readonly ProjectRepository      $projectRepository,
         private readonly OtherdocRepository     $otherdocRepository,
         private readonly AnnotationRepository   $annotationRepository,
+        private readonly ConvocationRepository  $convocationRepository
     ) {
     }
 
@@ -274,16 +276,15 @@ class SittingManager
     public function removeInvitationFile(Sitting $sitting): void
     {
         $sitting->setInvitationFile(null);
-        $this->removeInvitations($sitting);
         $this->em->persist($sitting);
         $this->em->flush();
     }
 
-    private function removeInvitations(Sitting $sitting): void
+    public function deleteInvitations(Sitting $sitting): void
     {
         foreach ($sitting->getConvocations() as $convocation) {
-            if ($convocation->getCategory() === Convocation::CATEGORY_INVITATION) {
-                $this->em->remove($convocation);
+            if ($convocation->getCategory() === Convocation::CATEGORY_INVITATION ){
+                $this->convocationRepository->getAndDeleteInvitationBySitting($sitting);
             }
         }
     }
