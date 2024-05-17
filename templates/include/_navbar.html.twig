@@ -21,7 +21,7 @@
                         <a class="dropdown-toggle" href="#" id="navbarDropdown" role="button"
                            data-bs-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">
-                            {{ app.user.structure ? app.user.structure.name : "" }} - {{ app.user.username }}
+                            {{ app.user.structure ? app.user.structure.name ~ " - " : "" }} {{ app.user.username }}
                         </a>
                         <div class="dropdown-menu dropdown-menu-right popup-menu-right" aria-labelledby="navbarDropdown" id="navbarDropdownWindow">
 
