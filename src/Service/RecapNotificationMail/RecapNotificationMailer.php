@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\NotificationMail;
+namespace App\Service\RecapNotificationMail;
 
 use App\Entity\EmailTemplate;
 use App\Entity\Structure;
@@ -10,27 +10,31 @@ use App\Service\Email\EmailNotSendException;
 use App\Service\Email\EmailServiceInterface;
 use App\Service\EmailTemplate\EmailGenerator;
 use App\Service\EmailTemplate\TemplateTag;
+use App\Service\RecapNotificationMail\Model\EmailRecapData;
 use App\Service\Util\GenderConverter;
+use Psr\Log\LoggerInterface;
 
-class NotificationMailer
+class RecapNotificationMailer
 {
-
-
     public function __construct(
         private readonly EmailTemplateRepository $emailTemplateRepository,
         private readonly EmailGenerator          $emailGenerator,
         private readonly GenderConverter         $genderConverter,
         private readonly EmailServiceInterface   $emailService,
-    )
-    {
+        private readonly LoggerInterface         $logger
+    ) {
     }
 
 
-    public function prepareAndSendALLNotifications(array $notfications)
+    /**
+     * @param array<EmailRecapData> $notificationsToSend
+     */
+    public function sendAllNotifications(array $notificationsToSend)
     {
-
+        foreach ($notificationsToSend as $notificationToSend) {
+            $this->prepareAndSendMail($notificationToSend->getStructure(), $notificationToSend->getGeneratedRecapContents(), $notificationToSend->getUser());
+        }
     }
-
 
 
     /**
@@ -44,21 +48,23 @@ class NotificationMailer
         }
 
         $emailTemplate = $this->emailTemplateRepository->findOneByStructureAndCategory($structure, EmailTemplate::CATEGORY_RECAPITULATIF);
-        if (!empty($emailTemplate)) {
-            $emailDest = $user->getEmail();
-            $emailData = $this->emailGenerator->generateFromTemplate($emailTemplate, $this->replaceParams($content, $user));
-            $emailData->setTo($emailDest)->setReplyTo($structure->getReplyTo());
-            $this->emailService->sendBatch([$emailData]);
+
+        if (empty($emailTemplate)) {
+            $this->logger->error('No email template found for structure ' . $structure->getId() . ' and category ' . EmailTemplate::CATEGORY_RECAPITULATIF);
+            return;
         }
+
+        $emailDest = $user->getEmail();
+        $emailData = $this->emailGenerator->generateFromTemplate($emailTemplate, $this->getResolveParams($content, $user));
+        $emailData->setTo($emailDest)->setReplyTo($structure->getReplyTo());
+        $this->emailService->sendBatch([$emailData]);
     }
 
 
-    public function replaceParams(array $content, User $user): array
+    public function getResolveParams(array $content, User $user): array
     {
-        $contentToDisplay = implode("\n", $content);
-
         return [
-            TemplateTag::SITTING_RECAPITULATIF => $contentToDisplay,
+            TemplateTag::SITTING_RECAPITULATIF => implode("\n", $content),
             TemplateTag::ACTOR_FIRST_NAME => $user->getFirstName(),
             TemplateTag::ACTOR_LAST_NAME => $user->getLastName(),
             TemplateTag::ACTOR_USERNAME => $user->getUsername(),

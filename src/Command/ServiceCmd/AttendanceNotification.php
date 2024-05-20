@@ -83,7 +83,6 @@ class AttendanceNotification
             if ($this->isAuthorizedSittingType($sitting->getType(), $user)) {
                 $attendanceData[] = $this->prepareDatas($sitting);
             }
-
         }
         if (empty($attendanceData)) {
             return;

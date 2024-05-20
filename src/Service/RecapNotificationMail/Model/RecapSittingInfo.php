@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Service\NotificationMail;
+namespace App\Service\RecapNotificationMail\Model;
 
 use App\Entity\Convocation;
 use App\Entity\Sitting;
 
-class NotificationData
+class RecapSittingInfo
 {
     /**
      * @param array<Convocation> $convocations
@@ -14,8 +14,7 @@ class NotificationData
         private readonly array   $convocations,
         private readonly Sitting $sitting,
         private readonly string  $timezone
-    )
-    {
+    ) {
     }
 
     public function getConvocations(): array
@@ -32,5 +31,4 @@ class NotificationData
     {
         return $this->timezone;
     }
-
 }

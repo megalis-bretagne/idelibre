@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Tests\Service\NotificationMail;
+namespace App\Tests\Service\RecapNotificationMail;
 
-use App\Service\NotificationMail\NotificationDataProvider;
+use App\Service\RecapNotificationMail\RecapDataProvider;
 use App\Tests\Factory\SittingFactory;
 use App\Tests\Factory\StructureFactory;
 use App\Tests\Factory\SubscriptionFactory;
@@ -10,10 +10,13 @@ use App\Tests\Factory\TypeFactory;
 use App\Tests\Factory\UserFactory;
 use App\Tests\Story\RoleStory;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Zenstruck\Foundry\Test\Factories;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
-class NotificationDataProviderTest extends KernelTestCase
+class RecapDataProviderTest extends KernelTestCase
 {
-
+    use ResetDatabase;
+    use Factories;
 
     protected function setUp(): void
     {
@@ -105,12 +108,11 @@ class NotificationDataProviderTest extends KernelTestCase
         ]);
 
 
-        /** @var NotificationDataProvider $notificationDataProvider */
-        $notificationDataProvider = self::getContainer()->get(NotificationDataProvider::class);
-        $notificationsToSend= $notificationDataProvider->getAllStructuresAttendanceNotifications();
+        /** @var RecapDataProvider $notificationDataProvider */
+        $notificationDataProvider = self::getContainer()->get(RecapDataProvider::class);
+        $notificationsToSend = $notificationDataProvider->getAllStructuresRecapNotifications();
 
         $this->assertCount(2, $notificationsToSend);
-        $this->assertCount(2, $notificationsToSend[0]->getNotificationsData());
+        $this->assertCount(2, $notificationsToSend[0]->getRecapSittingInfo());
     }
-
 }

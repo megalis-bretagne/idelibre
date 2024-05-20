@@ -47,8 +47,8 @@ final class TimezoneFactory extends ModelFactory
     protected function getDefaults(): array
     {
         return [
-            'name' => self::faker()->text(),
-            'info' => self::faker()->timezone,
+            'name' => 'Europe/Paris',
+            'info' => 'Europe/Paris',
         ];
     }
 
