@@ -12,6 +12,7 @@ use App\Tests\Factory\SubscriptionFactory;
 use App\Tests\Factory\TypeFactory;
 use App\Tests\Factory\UserFactory;
 use App\Tests\Story\RoleStory;
+use App\Tests\Story\TimezoneStory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Mailer\MailerInterface;
@@ -34,7 +35,8 @@ class RecapNotificationServiceTest extends KernelTestCase
     public function testGenAllAttendanceNotification(): void
     {
         $structure = StructureFactory::createOne([
-            'name' => 'test'
+            'name' => 'test',
+            'timezone' => TimezoneStory::paris(),
         ]);
 
         $admin = UserFactory::createOne([
