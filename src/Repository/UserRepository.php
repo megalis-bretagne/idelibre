@@ -471,9 +471,11 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->leftJoin('u.subscription', 's')
             ->andWhere('r.name = :secretary or r.name=:admin')
             ->andWhere('s.acceptMailRecap = true')
+            ->leftJoin('u.authorizedTypes', 'at')
             ->setParameter('secretary', 'Secretary')
             ->setParameter('admin', 'Admin')
             ->setParameter('structure', $structure)
+            ->addSelect('at')
             ->orderBy('u.lastName', 'ASC');
     }
 

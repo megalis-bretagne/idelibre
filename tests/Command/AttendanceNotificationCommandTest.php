@@ -51,8 +51,8 @@ class AttendanceNotificationCommandTest extends WebTestCase
 
     public function testGetAttendanceNotification()
     {
-        $consulePwd = (new Application(self::$kernel))->find('attendance:notification');
-        $commandTester = new CommandTester($consulePwd);
+        $consolePwd = (new Application(self::$kernel))->find('attendance:notification');
+        $commandTester = new CommandTester($consolePwd);
         $commandTester->execute([]);
         $commandTester->assertCommandIsSuccessful();
         $display = $commandTester->getDisplay();
