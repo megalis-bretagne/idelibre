@@ -12,7 +12,6 @@ use App\Tests\FindEntityTrait;
 use App\Tests\LoginTrait;
 use App\Tests\Story\SittingStory;
 use Doctrine\Persistence\ObjectManager;
-use Eluceo\iCal\Domain\ValueObject\Category;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Zenstruck\Foundry\Test\Factories;
@@ -99,7 +98,7 @@ class ConvocationRepositoryTest extends WebTestCase
             "user" => UserFactory::createOne()
         ]);
 
-        $this->convocationRepository->getAndDeleteInvitationBySitting($sitting->object());
+        $this->convocationRepository->deleteInvitationsBySitting($sitting->object());
         $convocations = $this->convocationRepository->findAll();
 
         $this->assertCount(1, $convocations);
