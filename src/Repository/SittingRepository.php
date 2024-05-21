@@ -201,23 +201,4 @@ class SittingRepository extends ServiceEntityRepository
             ->setParameter('user', $user);
     }
 
-    /**
-     * @throws NonUniqueResultException
-     * @throws NoResultException
-     */
-    public function findActiveGuestAndEmployeeConvocationBySitting(Sitting $sitting): int
-    {
-        $qb = $this->createQueryBuilder('s')
-            ->select('COUNT(c)')
-            ->join('s.convocations', 'c')
-            ->andWhere('c.category = :category')
-            ->andWhere('s = :sitting')
-            ->setParameter('sitting', $sitting)
-            ->setParameter('category', Convocation::CATEGORY_INVITATION)
-            ->getQuery()
-            ->getSingleScalarResult()
-            ;
-//        dd($qb);
-        return $qb;
-    }
 }
