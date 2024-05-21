@@ -413,7 +413,7 @@
                             {{ macro.cancelBtnModal() }}
 
                             <button class="btn" data-bs-dismiss="modal" type="button" title="Envoyer"
-                                    v-on:click="sendConvocations()" style="background: var(--bs-ls-warning-600)">
+                                    v-on:click="sendConvocations()" style="background: var(--bs-ls-warning-600); color: white;">
                                 <i class="fa fa-paper-plane"></i>
                                 Envoyer
                             </button>
@@ -450,6 +450,7 @@
 
                             <button class="btn btn-primary" data-bs-dismiss="modal" type="button" title="Envoyer les convocations aux élus"
                                     v-on:click="sendConvocations('Actor')">
+                                <i class="fa fa-paper-plane"></i>
                                 Envoyer
                             </button>
                         </div>
@@ -480,6 +481,7 @@
 
                             <button class="btn btn-primary" data-bs-dismiss="modal" type="button" title="Envoyer les convocations aux employés"
                                     v-on:click="sendConvocations('Employee')">
+                                <i class="fa fa-paper-plane"></i>
                                 Envoyer
                             </button>
                         </div>
@@ -510,6 +512,7 @@
 
                             <button class="btn btn-primary" data-bs-dismiss="modal" type="button" title="Envoyer les convocations aux invités"
                                     v-on:click="sendConvocations('Guest')">
+                                <i class="fa fa-paper-plane"></i>
                                 Envoyer
                             </button>
                         </div>
@@ -533,6 +536,7 @@
 
                             <button class="btn btn-primary" data-bs-dismiss="modal" type="button" title="Envoyer à Comélus"
                                     v-on:click="sendComelus()">
+                                <i class="fa fa-paper-plane"></i>
                                 Envoyer
                             </button>
                         </div>
@@ -555,7 +559,7 @@
                                 <p v-if="notAnswered > 0" class="alert alert-warning">
                                     <small>
                                         <i class="fa fa-exclamation-triangle me-1"></i>
-                                        A ce jour ${ notAnswered }
+                                        À ce jour ${ notAnswered }
                                          ${ notAnswered > 1 ? ' élus destinataires de l\'envoi n\'ont pas donné de réponses' : 'élu destinataire de l\'envoi n\'a pas donné de réponse' }
                                         <br>
                                     </small>
