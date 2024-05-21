@@ -200,5 +200,4 @@ class SittingRepository extends ServiceEntityRepository
             ->addSelect('c')
             ->setParameter('user', $user);
     }
-
 }

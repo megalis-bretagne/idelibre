@@ -51,6 +51,5 @@ class SittingManagerTest extends WebTestCase
         $this->sittingManager->deleteInvitations($sitting->object());
         $this->assertCount(1, $sitting->object()->getConvocations());
         $this->assertSame(Convocation::CATEGORY_CONVOCATION, $sitting->object()->getConvocations()->first()->getCategory());
-
     }
 }

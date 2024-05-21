@@ -70,15 +70,15 @@ class ConvocationManager
     private function createConvocations(Sitting $sitting, array $associatedUsers): void
     {
         foreach ($associatedUsers as $user) {
-           if(!$this->alreadyHasConvocation($user, $sitting)){
-               $convocation = (new Convocation())
-                   ->setSitting($sitting)
-                   ->setUser($user)
-                   ->setCategory($this->getConvocationCategory($user))
-                   ->setAttendanceToken($this->attendanceTokenUtil->prepareToken($sitting->getDate()))
-                   ->setDeputy(null);
-               $this->em->persist($convocation);
-           }
+            if (!$this->alreadyHasConvocation($user, $sitting)) {
+                $convocation = (new Convocation())
+                    ->setSitting($sitting)
+                    ->setUser($user)
+                    ->setCategory($this->getConvocationCategory($user))
+                    ->setAttendanceToken($this->attendanceTokenUtil->prepareToken($sitting->getDate()))
+                    ->setDeputy(null);
+                $this->em->persist($convocation);
+            }
         }
     }
 

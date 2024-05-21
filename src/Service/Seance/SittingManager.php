@@ -80,8 +80,7 @@ class SittingManager
         ?UploadedFile $uploadedInvitationFile,
         Sitting $sitting,
         Structure $structure
-    ): void
-    {
+    ): void {
         if ($uploadedInvitationFile) {
             $invitationFile = $this->fileManager->save($uploadedInvitationFile, $structure);
             $this->convocationManager->createConvocationsInvitableEmployees($sitting);
@@ -282,10 +281,6 @@ class SittingManager
 
     public function deleteInvitations(Sitting $sitting): void
     {
-        foreach ($sitting->getConvocations() as $convocation) {
-            if ($convocation->getCategory() === Convocation::CATEGORY_INVITATION ){
-                $this->convocationRepository->getAndDeleteInvitationBySitting($sitting);
-            }
-        }
+        $this->convocationRepository->deleteInvitationsBySitting($sitting);
     }
 }
