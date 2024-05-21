@@ -39,11 +39,9 @@ let app = new Vue({
             employee: ""
         },
         showModalAttendance: false,
-        // attendanceStatus: [],
         attendanceStatusActors: [],
         attendanceStatusEmployee: [],
         attendanceStatusGuest: [],
-
         changedAttendance: [],
         errorMessage: null,
         infoMessage: null,

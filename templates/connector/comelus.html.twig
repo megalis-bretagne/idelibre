@@ -20,12 +20,13 @@
     {{ form_row(form.mailingListId, {attr : {'data-url-list':path("comelus_connector_mailing_lists")}}) }}
 
     {{ form_label(form.description) }}
+
     <button type="button"
          class="btn btn-outline-info borderless float-end"
          data-bs-toggle="popover"
          title="Liste des variables"
          data-html="true"
-         data-content="{{ include('connector/_comelus.popover.html.twig') }}">Variables
+         data-bs-content="{{ include('connector/_comelus.popover.html.twig') }}">Variables
     </button>
     {{ form_errors(form.description) }}
     {{ form_widget(form.description) }}

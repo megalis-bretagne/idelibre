@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Convocation;
 use App\Entity\Sitting;
 use App\Entity\Structure;
 use App\Entity\Type;
@@ -9,6 +10,7 @@ use App\Entity\User;
 use DateTimeInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
