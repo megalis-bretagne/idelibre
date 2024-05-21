@@ -54,17 +54,13 @@ class ConvocationRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('c')
             ->andWhere('c.sitting = :sitting')
             ->setParameter('sitting', $sitting)
-
             ->leftJoin('c.user', 'user')
             ->addSelect('user')
-
             ->leftJoin('user.party', 'party')
             ->addSelect('party')
-
             ->leftJoin('c.deputy', 'deputy')
             ->addSelect('deputy')
             ->innerJoin('user.role', 'r')
-
             ->andWhere('r.name in (:roleNames)')
             ->setParameter('roleNames', $roleNames)
             ->orderBy('user.lastName')
@@ -138,5 +134,17 @@ class ConvocationRepository extends ServiceEntityRepository
             ->addOrderBy('user.firstName')
             ->getQuery()
             ->getResult();
+    }
+
+    public function deleteInvitationsBySitting(Sitting $sitting): int
+    {
+        return $this->createQueryBuilder('c')
+            ->delete()
+            ->andWhere('c.sitting = :sitting')
+            ->setParameter('sitting', $sitting)
+            ->andWhere('c.category = :category')
+            ->setParameter('category', Convocation::CATEGORY_INVITATION)
+            ->getQuery()
+            ->execute();
     }
 }

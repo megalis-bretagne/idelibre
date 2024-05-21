@@ -3,6 +3,7 @@
 namespace App\Service\Structure;
 
 use App\Entity\Structure;
+use App\Service\File\Generator\UnsupportedExtensionException;
 use App\Service\Seance\SittingManager;
 use App\Service\User\ImpersonateStructure;
 use Doctrine\ORM\EntityManagerInterface;
@@ -22,6 +23,9 @@ class StructureManager
         $this->em->flush();
     }
 
+    /**
+     * @throws UnsupportedExtensionException
+     */
     public function delete(Structure $structure): void
     {
         $this->impersonateStructure->logoutEverySuperAdmin($structure);

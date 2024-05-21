@@ -2,12 +2,14 @@
 
 namespace App\Service\Seance;
 
+use App\Entity\Convocation;
 use App\Entity\Reminder;
 use App\Entity\Sitting;
 use App\Entity\Structure;
 use App\Entity\User;
 use App\Message\UpdatedSitting;
 use App\Repository\AnnotationRepository;
+use App\Repository\ConvocationRepository;
 use App\Repository\OtherdocRepository;
 use App\Repository\ProjectRepository;
 use App\Repository\SittingRepository;
@@ -18,8 +20,6 @@ use App\Service\File\Generator\UnsupportedExtensionException;
 use App\Service\Project\ProjectManager;
 use App\Service\role\RoleManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -38,15 +38,13 @@ class SittingManager
         private readonly ProjectRepository      $projectRepository,
         private readonly OtherdocRepository     $otherdocRepository,
         private readonly AnnotationRepository   $annotationRepository,
+        private readonly ConvocationRepository  $convocationRepository
     ) {
     }
 
     public const COEFFICIENT_CORRECTEUR = 1.17647058824;
 
-    /**
-     * @throws NonUniqueResultException
-     * @throws NoResultException
-     */
+
     public function save(
         Sitting $sitting,
         UploadedFile $uploadedConvocationFile,
@@ -77,10 +75,7 @@ class SittingManager
         return $sitting->getId();
     }
 
-    /**
-     * @throws NonUniqueResultException
-     * @throws NoResultException
-     */
+
     private function createInvitationsInvitableEmployeesAndGuests(
         ?UploadedFile $uploadedInvitationFile,
         Sitting $sitting,
@@ -282,5 +277,10 @@ class SittingManager
         $sitting->setInvitationFile(null);
         $this->em->persist($sitting);
         $this->em->flush();
+    }
+
+    public function deleteInvitations(Sitting $sitting): void
+    {
+        $this->convocationRepository->deleteInvitationsBySitting($sitting);
     }
 }
