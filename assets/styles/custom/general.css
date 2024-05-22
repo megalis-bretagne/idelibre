@@ -323,6 +323,11 @@ input[type="file"].project-file-btn {
     color: var(--bs-ls-grey-500);
 }
 
+.project-item .v-select ul[role="listbox"] {
+    position: relative;
+    z-index: 10000;
+}
+
 
 
 .annex-item {
