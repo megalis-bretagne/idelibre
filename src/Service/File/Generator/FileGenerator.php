@@ -50,28 +50,28 @@ class FileGenerator
     /**
      * @throws UnsupportedExtensionException
      */
-    public function genFullSittingZip(Sitting $sitting): string
-    {
-        $zipPath = $this->genFullSittingDirPath($sitting, 'zip');
-        $this->deleteZipIfAlreadyExists($zipPath);
-
-        if (!$this->fileChecker->isValid('zip', null, $sitting)) {
-            $this->logger->error('zip is too heavy, max size is' . $this->bag->get('maximum_size_pdf_zip_generation'));
-
-            return 'no zip created';
-        }
-
-        $zip = new ZipArchive();
-
-        $this->deleteZipIfAlreadyExists($zipPath);
-        $zip->open($zipPath, ZipArchive::CREATE);
-        $zip->addFile($sitting->getConvocationFile()->getPath(), $sitting->getConvocationFile()->getName());
-        $this->addProjectAndAnnexesFiles($zip, $sitting);
-        $this->addOtherDocs($zip, $sitting);
-        $zip->close();
-
-        return $zipPath;
-    }
+//    public function genFullSittingZip(Sitting $sitting): string
+//    {
+//        $zipPath = $this->genFullSittingDirPath($sitting, 'zip');
+//        $this->deleteZipIfAlreadyExists($zipPath);
+//
+//        if (!$this->fileChecker->isValid('zip', null, $sitting)) {
+//            $this->logger->error('zip is too heavy, max size is' . $this->bag->get('maximum_size_pdf_zip_generation'));
+//
+//            return 'no zip created';
+//        }
+//
+//        $zip = new ZipArchive();
+//
+//        $this->deleteZipIfAlreadyExists($zipPath);
+//        $zip->open($zipPath, ZipArchive::CREATE);
+//        $zip->addFile($sitting->getConvocationFile()->getPath(), '00_' . $sitting->getConvocationFile()->getName());
+//        $this->addProjectAndAnnexesFiles($zip, $sitting);
+//        $this->addOtherDocs($zip, $sitting);
+//        $zip->close();
+//
+//        return $zipPath;
+//    }
 
     /**
      * @throws UnsupportedExtensionException
@@ -157,29 +157,29 @@ class FileGenerator
         return $annexesPaths;
     }
 
-    private function addProjectAndAnnexesFiles(ZipArchive $zip, Sitting $sitting): void
-    {
-        foreach ($sitting->getProjects() as $project) {
-            $directory = 'projet_' . ($project->getRank() + 1) . '/';
-            $zip->addFile($project->getFile()->getPath(), $directory . $project->getFile()->getName());
-            foreach ($project->getAnnexes() as $annex) {
-                $zip->addFile($annex->getFile()->getPath(), $directory . $annex->getFile()->getName());
-            }
-        }
-    }
-
-    private function addOtherDocs(ZipArchive $zip, Sitting $sitting): void
-    {
-        foreach ($sitting->getOtherdocs() as $doc) {
-            $directory = 'documents_' . ($doc->getRank() + 1) . '/';
-            $zip->addFile($doc->getFile()->getPath(), $directory . $doc->getFile()->getName());
-        }
-    }
-
-    private function deleteZipIfAlreadyExists(string $path): void
-    {
-        $this->filesystem->remove($path);
-    }
+//    private function addProjectAndAnnexesFiles(ZipArchive $zip, Sitting $sitting): void
+//    {
+//        foreach ($sitting->getProjects() as $project) {
+//            $directory = 'projet_' . ($project->getRank() + 1) . '/';
+//            $zip->addFile($project->getFile()->getPath(), $directory . $project->getFile()->getName());
+//            foreach ($project->getAnnexes() as $annex) {
+//                $zip->addFile($annex->getFile()->getPath(), $directory . $annex->getFile()->getName());
+//            }
+//        }
+//    }
+//
+//    private function addOtherDocs(ZipArchive $zip, Sitting $sitting): void
+//    {
+//        foreach ($sitting->getOtherdocs() as $doc) {
+//            $directory = 'documents_' . ($doc->getRank() + 1) . '/';
+//            $zip->addFile($doc->getFile()->getPath(), $directory . $doc->getFile()->getName());
+//        }
+//    }
+//
+//    private function deleteZipIfAlreadyExists(string $path): void
+//    {
+//        $this->filesystem->remove($path);
+//    }
 
     /**
      * @throws UnsupportedExtensionException
@@ -194,4 +194,6 @@ class FileGenerator
     {
         return $sitting->getName() . '_' . $this->dateUtil->getUnderscoredDate($sitting->getDate()) . '.' . $extension;
     }
+
+
 }

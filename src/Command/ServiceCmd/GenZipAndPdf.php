@@ -7,6 +7,7 @@ use App\Entity\Structure;
 use App\Repository\SittingRepository;
 use App\Repository\StructureRepository;
 use App\Service\File\Generator\FileGenerator;
+use App\Service\File\Generator\SittingZipGenerator;
 use App\Service\File\Generator\UnsupportedExtensionException;
 use DateTime;
 use Doctrine\ORM\EntityNotFoundException;
@@ -17,6 +18,7 @@ class GenZipAndPdf
         private readonly StructureRepository $structureRepository,
         private readonly SittingRepository $sittingRepository,
         private readonly FileGenerator $fileGenerator,
+        private readonly SittingZipGenerator $sittingZipGenerator,
     ) {
     }
 
@@ -58,7 +60,7 @@ class GenZipAndPdf
         foreach ($this->listActiveSittingsByStructure($structure) as $key => $sitting) {
             dump('Sitting num : ' . $key);
             $this->fileGenerator->genFullSittingPdf($sitting);
-            $this->fileGenerator->genFullSittingZip($sitting);
+            $this->sittingZipGenerator->genZip($sitting);
         }
     }
 
@@ -75,7 +77,7 @@ class GenZipAndPdf
             dump('Sitting num : ' . $key);
 
             $this->fileGenerator->genFullSittingPdf($sitting);
-            $this->fileGenerator->genFullSittingZip($sitting);
+            $this->sittingZipGenerator->genZip($sitting);
         }
     }
 }
