@@ -4,6 +4,7 @@ namespace App\Controller\ApiV2;
 
 use App\Entity\Sitting;
 use App\Entity\Structure;
+use App\Service\LsvoteSitting\LsvoteSittingManager;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,9 +20,11 @@ class LsvoteResultController extends AbstractController
     public function getSittingResults(
         #[MapEntity(mapping: ['structureId' => 'id'])] Structure $structure,
         #[MapEntity(mapping: ['sittingId' => 'id'])] Sitting     $sitting,
+        LsvoteSittingManager $lsvoteSittingManager,
     ): Response
     {
-        return $this->json($sitting->getLsvoteSitting()->getResults());
+
+        return $this->json($lsvoteSittingManager->getLsvoteSittingResults($sitting));
     }
 
 }
