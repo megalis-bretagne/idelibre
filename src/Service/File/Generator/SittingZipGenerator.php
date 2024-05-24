@@ -12,7 +12,6 @@ use ZipArchive;
 
 class SittingZipGenerator
 {
-
     public function __construct(
         private readonly Filesystem            $filesystem,
         private readonly ParameterBagInterface $bag,
@@ -20,8 +19,7 @@ class SittingZipGenerator
         private readonly LoggerInterface       $logger,
         private readonly ProjectRepository     $projectRepository,
         private readonly OtherdocRepository    $otherdocRepository,
-    )
-    {
+    ) {
     }
 
     public function genZip(Sitting $sitting): string
@@ -64,7 +62,7 @@ class SittingZipGenerator
 
     private function addConvocation(Sitting $sitting, ZipArchive $zip): void
     {
-        $zip->addFromString($sitting->getConvocationFile()->getPath(), '00--Convocation');
+        $zip->addFile($sitting->getConvocationFile()->getPath(), '00__Convocation');
     }
 
     private function addProjectWithAnnexes(Sitting $sitting, ZipArchive $zip): void
@@ -72,24 +70,26 @@ class SittingZipGenerator
         $projects = $this->projectRepository->getProjectsBySitting($sitting);
         foreach ($projects as $project) {
             $cleanedName = $this->cleanFileName($project->getName());
-            $filename = sprintf("%02d--%s.%s",
+            $filename = sprintf(
+                "%02d__%s.%s",
                 $project->getRank() + 1,
                 $cleanedName,
-                pathinfo($project->getFile()->getName(), PATHINFO_EXTENSION));
+                pathinfo($project->getFile()->getName(), PATHINFO_EXTENSION)
+            );
 
             $zip->addFile($project->getFile()->getPath(), $filename);
 
             foreach ($project->getAnnexes() as $annex) {
-                $filename = sprintf("%02d_%02d--%s",
+                $filename = sprintf(
+                    "%02d_%02d__%s",
                     $project->getRank() + 1,
                     $annex->getRank() + 1,
-                    $annex->getFile()->getName());
+                    $annex->getFile()->getName()
+                );
 
                 $zip->addFile($annex->getfile()->getPath(), $filename);
             }
         }
-
-
     }
 
 
@@ -97,7 +97,7 @@ class SittingZipGenerator
     {
         $cleaned = preg_replace('/[^a-zA-Z0-9_\-]/', '-', $name);
 
-        return substr($cleaned, 0, 50);
+        return substr($cleaned, 0, 80);
     }
 
     private function addOtherDocs(Sitting $sitting, ZipArchive $zip): void
@@ -105,13 +105,14 @@ class SittingZipGenerator
         $otherDocs = $this->otherdocRepository->getOtherDocsBySitting($sitting);
         foreach ($otherDocs as $otherDoc) {
             $cleanedName = $this->cleanFileName($otherDoc->getName());
-            $filename = sprintf("DOC-%02d--%s.%s",
+            $filename = sprintf(
+                "DOC-%02d__%s.%s",
                 $otherDoc->getRank() + 1,
                 $cleanedName,
-                pathinfo($otherDoc->getFile()->getName(), PATHINFO_EXTENSION));
+                pathinfo($otherDoc->getFile()->getName(), PATHINFO_EXTENSION)
+            );
 
             $zip->addFile($otherDoc->getFile()->getPath(), $filename);
         }
     }
-
 }
