@@ -5,6 +5,7 @@ namespace App\MessageHandler;
 use App\Message\UpdatedSitting;
 use App\Repository\SittingRepository;
 use App\Service\File\Generator\FileGenerator;
+use App\Service\File\Generator\SittingZipGenerator;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Psr\Log\LoggerInterface;
@@ -15,7 +16,7 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 class GenZipSittingHandler
 {
     public function __construct(
-        private readonly FileGenerator $fileGenerator,
+        private readonly SittingZipGenerator $sittingZipGenerator,
         private readonly SittingRepository $sittingRepository,
         private readonly EntityManagerInterface $em,
         private readonly LoggerInterface $logger
@@ -31,7 +32,7 @@ class GenZipSittingHandler
         }
 
         try {
-            $this->fileGenerator->genFullSittingZip($sitting);
+            $this->sittingZipGenerator->genZip($sitting);
         } catch (Exception $exception) {
             $this->logger->error($exception->getMessage());
         }

@@ -17,7 +17,6 @@ use Zenstruck\Foundry\Test\ResetDatabase;
 
 class LsvoteResultControllerTest extends WebTestCase
 {
-
     use ResetDatabase;
     use Factories;
 
@@ -75,7 +74,6 @@ class LsvoteResultControllerTest extends WebTestCase
         $results = json_decode($this->client->getResponse()->getContent(), true);
 
         $this->assertSame('Laetitia', $results[0]['actors'][0]['fistName']);
-
     }
 
 
@@ -128,7 +126,6 @@ class LsvoteResultControllerTest extends WebTestCase
         $results = json_decode($this->client->getResponse()->getContent(), true);
 
         $this->assertSame('Laetitia', $results[0]['actors'][0]['fistName']);
-
     }
 
     public function testGetSittingResultsNotLsvotesitting()
@@ -147,9 +144,6 @@ class LsvoteResultControllerTest extends WebTestCase
 
         $this->assertResponseStatusCodeSame(404);
 
-        $this->assertSame( "Cette séance n'a pas de vote électronique associé", json_decode($this->client->getResponse()->getContent(), true)['message']);
+        $this->assertSame("Cette séance n'a pas de vote électronique associé", json_decode($this->client->getResponse()->getContent(), true)['message']);
     }
-
 }
-
-

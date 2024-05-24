@@ -15,16 +15,12 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('API_AUTHORIZED_STRUCTURE', subject: 'structure')]
 class LsvoteResultController extends AbstractController
 {
-
     #[Route('/sitting/{sittingId}', name: 'get_sitting_vote', methods: ['GET'])]
     public function getSittingResults(
         #[MapEntity(mapping: ['structureId' => 'id'])] Structure $structure,
         #[MapEntity(mapping: ['sittingId' => 'id'])] Sitting     $sitting,
         LsvoteSittingManager $lsvoteSittingManager,
-    ): Response
-    {
-
+    ): Response {
         return $this->json($lsvoteSittingManager->getLsvoteSittingResults($sitting));
     }
-
 }
