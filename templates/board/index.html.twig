@@ -20,17 +20,18 @@
                 </tr>
 
                 <tr class="d-flex hidden">
-                    <th class="col-4">Utilisateur</th>
-                    <th class="col-3">Date d'envoi</th>
-                    <th class="col-3">Date de reception</th>
+                    <th class="col-3">Utilisateur</th>
+                    <th class="col-2">Date d'envoi</th>
+                    <th class="col-2">Date de reception</th>
                     <th class="col-2">Présence</th>
+                    <th class="col-3">Mandataire</th>
                 </tr>
             </thead>
             <tbody class="hidden">
                 {% for convocation in sitting.convocations %}
                     <tr class="d-flex">
-                        <td class="col-4">{{ convocation.user.lastname }} {{ convocation.user.firstname }}</td>
-                        <td class="col-3">
+                        <td class="col-3">{{ convocation.user.lastname }} {{ convocation.user.firstname }}</td>
+                        <td class="col-2">
                             {% if convocation.sentTimestamp is not null %}
                                 <span class="text-success fas fa-check d-block me-2" title="Envoyé"></span>
                                 {{ convocation.sentTimestamp.createdAt |  date('d/m/Y : H:i', timezone) }}
@@ -39,7 +40,7 @@
                                 <span class="text-danger fa fa-times me-2" title="Non envoyé"></span>
                             {% endif %}
                         </td>
-                        <td class="col-3">
+                        <td class="col-2">
                             {% if convocation.receivedTimestamp is not null %}
                                 <span class="text-success fas fa-check" title="Reçu"></span>
                                 {{ convocation.receivedTimestamp.createdAt |  date('d/m/Y : H:i', timezone) }}
@@ -61,6 +62,14 @@
 
                              {% else %}
                                 <span class="text-danger fa fa-times" title="Absent"> </span>
+                            {% endif %}
+                        </td>
+                        <td class="col-3">
+                            {% if convocation.deputy is not null %}
+                                {{ convocation.deputy.lastname }} {{ convocation.deputy.firstname }}
+                            {% endif %}
+                            {% if convocation.mandator is not null %}
+                                {{ convocation.mandator.lastname }} {{ convocation.mandator.firstname }}
                             {% endif %}
                         </td>
                     </tr>
