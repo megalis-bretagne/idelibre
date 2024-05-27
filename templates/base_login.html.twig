@@ -26,8 +26,10 @@
                     {% if structure.logoPath is defined and structure.logoPath is not null %}
                         <img src="{{ asset('custom_logos/' ~ structure.logoPath) }}" alt="logo" class="epci-logo">
                     {% else %}
-                        <img id="libriciel-logo" alt="Image du Libriciel"
-                             src="{{ asset('assets/img/editor_logo.png') }}">
+                        <img id="libriciel-logo" alt="Logo de Libriciel"
+                             src="{{ asset('assets/img/editor_logo.png') }}"
+                        >
+                        <p class="d-flex justify-content-center">Développons ensemble vos projets de demain</p>
                     {% endif %}
 
 
