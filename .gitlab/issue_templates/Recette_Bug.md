@@ -7,7 +7,7 @@
 
 | Plateforme de recette                      | Structure / groupe  | Utilisateur   |
 | ------------------------------------------ | ------------ | ---------------|
-|                                            |              |                |
+|  https://idelibre-4-3.recette.libriciel.net  |              |                |
 
 ### Url(s)
 
@@ -19,3 +19,5 @@
 
 
 /label ~"Origine:Recette" ~"Type:Bug" ~"Recette::Dev - A corriger"
+/cc @aauzolat @pmonin @rdubourget
+
