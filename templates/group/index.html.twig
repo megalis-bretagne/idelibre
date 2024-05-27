@@ -23,7 +23,7 @@
                     <td class="col-9">{{ group.name }}</td>
                     <td class="col-3">
 
-                        {% if is_granted('ROLE_SUPERADMIN') %}
+                        {% if group.structures|length > 0 %}
                             <a href="{{ path('export_csv_users_group', {'id': group.id}) }}"
                                title="Exporter les utilisateurs de tout le groupe"
                                class="btn btn-outline-primary borderless">
