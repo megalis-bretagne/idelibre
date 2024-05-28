@@ -74,8 +74,12 @@ class DataFormatter
         return $phone;
     }
 
-    public function actorTitle(array $record): string
+    public function actorTitle(array &$record): string
     {
-        return $record[Csv_Records::ROLE->value] === strval(Role_Code::CODE_ROLE_ACTOR) ? $this->sanitize($record[Csv_Records::TITLE->value]) : '';
+        if (!empty($record[Csv_Records::TITLE->value]) && $record[Csv_Records::ROLE->value] === strval(Role_Code::CODE_ROLE_ACTOR)) {
+            return $this->sanitize($record[Csv_Records::TITLE->value]);
+        }
+
+        return $record[Csv_Records::TITLE->value] = "";
     }
 }
