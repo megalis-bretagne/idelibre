@@ -22,6 +22,7 @@ use App\Util\AttendanceTokenUtil;
 use Doctrine\DBAL\ConnectionException;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use phpDocumentor\Reflection\Types\False_;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -170,12 +171,21 @@ class ConvocationManager
      */
     public function sendConvocation(Convocation $convocation)
     {
-        $this->timestampAndActiveConvocations($convocation->getSitting(), [$convocation]);
+        $hasTimestamps = $convocation->getSentTimestamp() !== null;
+
+        if ($hasTimestamps) {
+            $this->timestampManager->createSendOrResendTimestamp($convocation->getSitting(), $convocation);
+        }
+        if (!$hasTimestamps) {
+            $this->timestampAndActiveConvocations($convocation->getSitting(), [$convocation]);
+        }
+
         $emails = $this->generateEmailsData($convocation->getSitting(), [$convocation]);
         $this->clientNotifier->newSittingNotification([$convocation]);
         $this->emailService->sendBatch($emails);
         $this->messageBus->dispatch(new ConvocationSent([$convocation->getId()], $convocation->getSitting()->getId()));
     }
+
 
     /**
      * @throws ConnectionException
