@@ -1,7 +1,6 @@
 import './vue-app.css';
 import Vue from 'vue/dist/vue';
 import axios from 'axios';
-import {nextTick} from "vue";
 
 
 Vue.filter('formatDateString', function (value, timezone) {
@@ -87,6 +86,8 @@ let app = new Vue({
                 this.isAlreadySentActors = isAlreadySentSitting(this.actorConvocations);
                 this.isAlreadySentGuests = isAlreadySentSitting(this.guestConvocations);
                 this.isAlreadySentEmployees = isAlreadySentSitting(this.employeeConvocations);
+
+                this.setInfoMessage("La convocation a été envoyée à " + response.data.user.lastName + " " + response.data.user.firstName);
             }).catch((e) => {
                 console.log(e.message);
                 this.setErrorMessage("Erreur lors de l'envoi");
@@ -112,6 +113,7 @@ let app = new Vue({
             axios.post(url).then(() => {
                 this.getConvocations();
                 this.showModalSend = false;
+                this.setInfoMessage("Les convocations ont été envoyées à tous les destinataires");
             }).catch((e) => {
                 console.log(e.message);
                 this.setErrorMessage("Erreur lors de l'envoi");
@@ -333,8 +335,7 @@ function getActorId() {
 }
 
 function getConvocationCurrentId(convocations) {
-    let convocationCurrentId = formatAttendanceStatus(convocations.data['actors'])[0].convocationId;
-    return convocationCurrentId;
+    return formatAttendanceStatus(convocations.data['actors'])[0].convocationId;
 }
 
 function updateConvocations(convocations, convocation) {
