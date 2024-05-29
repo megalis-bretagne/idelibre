@@ -56,7 +56,7 @@ services:
 
   node-idelibre:
     container_name: node-idelibre
-    image: registry.libriciel.fr:443/public/citoyens/idelibre-node/idelibre-node:4.3.0-alpha.2
+    image: registry.libriciel.fr:443/public/citoyens/idelibre-node/idelibre-node:4.3.0-alpha.3
     depends_on:
       postgres-idelibre:
         condition: service_healthy
