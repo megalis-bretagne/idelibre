@@ -449,7 +449,7 @@
                             {{ macro.cancelBtnModal() }}
 
                             <button class="btn btn-primary" data-bs-dismiss="modal" type="button" title="Envoyer les convocations aux élus"
-                                    v-on:click="sendConvocations('Actor')">
+                                    v-on:click="sendConvocations('Actor'); showModalSend()">
                                 <i class="fa fa-paper-plane"></i>
                                 Envoyer
                             </button>
@@ -841,7 +841,7 @@
                                             <span class="fa fa-times"></span>
                                             Annuler
                                         </button>
-                                        <button type="button" class="btn btn-primary" @click="sendNotifyAgain()" title="Envoyer">
+                                        <button type="button" class="btn btn-primary" @click="sendNotifyAgain(); showModalSend();" title="Envoyer">
                                             <span class="fa fa-paper-plane"></span>
                                             Envoyer
                                         </button>
@@ -878,13 +878,14 @@
                 <transition name="modal">
                     <div class="modal-mask">
                         <div class="modal-wrapper">
-                            <div class="modal-dialog" role="document">
+                            <div class="modal-dialog" role="document" style="width: 500px; height: 250px">
                                 <div class="modal-content">
                                     <div class="modal-body text-center">
                                         <div class=" display-2">
-                                            <span class=" fas fa-spinner fa-spin"> </span>
+                                            <span class=" fas fa-spinner fa-spin  text-primary"> </span>
                                         </div>
-                                        <b class="display-4">Envoi en cours</b>
+                                        <b class="fw-normal" style="font-size: 20px">
+                                            Envoi en cours</b>
                                     </div>
                                 </div>
                             </div>
