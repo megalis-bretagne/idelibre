@@ -3,24 +3,18 @@
 namespace App\Service\Timestamp;
 
 use App\Entity\Convocation;
-use App\Entity\File;
 use App\Entity\Sitting;
 use App\Entity\Timestamp;
-use App\Service\Zip\ZipTokenGenerator;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Libriciel\LshorodatageApiWrapper\LsHorodatageException;
 use Libriciel\LshorodatageApiWrapper\LshorodatageInterface;
-use phpDocumentor\Reflection\Types\False_;
 use Psr\Http\Message\StreamInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
-use ZipArchive;
-use function Symfony\Component\Translation\t;
 
 class TimestampManager
 {
@@ -60,6 +54,33 @@ class TimestampManager
     }
 
 
+    /**
+     * @throws SyntaxError
+     * @throws LsHorodatageException
+     * @throws RuntimeError
+     * @throws LoaderError
+     */
+    public function createSendOrResendTimestamp(Sitting $sitting, Convocation $convocation): Timestamp
+    {
+        $timeStamp = new Timestamp();
+        $timeStamp->setFilePathContent($this->contentGenerator->generateUpdatedConvocationFile($sitting, $convocation));
+
+        $tsTokenStream = $this->lshorodatage->createTimestampToken($timeStamp->getFilePathContent());
+        $timeStamp->setFilePathTsa($this->saveTimestampInFile($tsTokenStream, $timeStamp->getFilePathContent()));
+
+        $convocation->setSentTimestamp($timeStamp);
+
+        $this->em->persist($convocation);
+        $this->em->persist($timeStamp);
+        $this->em->flush();
+
+        return $timeStamp;
+    }
+
+
+    /**
+     * @throws LsHorodatageException
+     */
     public function createConvocationReceivedTimestamp(convocation $convocation): Timestamp
     {
         $timeStamp = new Timestamp();

@@ -1,0 +1,41 @@
+Date de mise a disposition : {{ "now" | date("d/m/Y à H:i") }} UTC
+Nom de la seance : {{ sitting.name }}
+Date de la seance : {{ sitting.date | date("d/m/Y à H:i") }} UTC
+
+Destinataire de cet envoi :
+
+
+Prénom : {{ convocation.user.firstName}}
+Nom : {{ convocation.user.lastName}}
+Identifiant : {{ convocation.user.username}}
+Email : {{ convocation.user.email}}
+UUID : {{ convocation.user.id}}
+
+
+Contenu de l'envoi original
+
+convocation :
+Fichier : {{ sitting.convocationFile.name}}
+Taille : {{ sitting.convocationFile.size }}
+UUID : {{ sitting.convocationFile.id }}
+
+Liste des projets
+{% for project in sitting.projects %}
+
+Rang : {{ project.rank + 1 }}
+Intitulé : {{ project.name }}
+Fichier : {{ project.file.name }}
+Taille : {{ project.file.size }}
+UUID : {{ project.id }}
+{% if project.annexes.count > 0 %}
+
+Annexes associées :
+{% for annex in project.annexes %}
+
+Fichier : {{ annex.file.name }}
+Taille : {{ annex.file.size }}
+UUID : {{ annex.id }}
+{% endfor %}
+{% endif %}
+----------------------------
+{% endfor %}
