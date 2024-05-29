@@ -5,6 +5,7 @@ namespace App\magicLink;
 use App\Entity\Sitting;
 use App\Entity\User;
 use App\Service\Jwt\JwtManager;
+use DateTime;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -16,7 +17,8 @@ class MagicLinkGenerator
 
     public function generate(User $user, Sitting $sitting): string
     {
-        $validBefore = $sitting->getDate()->modify('+1 day');
+        $sittingDate = DateTime::createFromInterface($sitting->getDate());
+        $validBefore = $sittingDate->modify('+1 day');
 
         $isAuthorizedMagicLink = !in_array($user->getRole(), ['ROLE_STRUCTURE_ADMIN', 'ROLE_SECRETARY']);
 
