@@ -325,7 +325,6 @@ input[type="file"].project-file-btn {
 
 .project-item .v-select ul[role="listbox"] {
     position: relative;
-    z-index: 10000;
 }
 
 
