@@ -35,7 +35,7 @@ class TimestampContentFileGenerator
             'convocations' => $convocations,
         ]);
 
-        $path = $this->getAndCreateTokenDirectory($sitting) . Uuid::uuid4();
+        $path = $this->getAndCreateTokenDirectory($sitting) . 'sendEmail_' . Uuid::uuid4();
         file_put_contents($path, $txt);
 
         return $path;
@@ -54,7 +54,7 @@ class TimestampContentFileGenerator
             'convocation' => $convocation,
         ]);
 
-        $path = $this->getAndCreateTokenDirectory($sitting) . Uuid::uuid4();
+        $path = $this->getAndCreateTokenDirectory($sitting) . 'reSendEmail_' . Uuid::uuid4();
         file_put_contents($path, $txt);
 
         return $path;
@@ -66,7 +66,7 @@ class TimestampContentFileGenerator
             'sitting' => $sitting,
         ]);
 
-        $path = $this->getAndCreateTokenDirectory($sitting) . 'modified_' . Uuid::uuid4();
+        $path = $this->getAndCreateTokenDirectory($sitting) . 'sittingModified_' . Uuid::uuid4();
         file_put_contents($path, $txt);
 
         return $path;

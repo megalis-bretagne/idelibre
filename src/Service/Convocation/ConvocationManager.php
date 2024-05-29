@@ -171,23 +171,21 @@ class ConvocationManager
      */
     public function sendConvocation(Convocation $convocation)
     {
-        $this->createOrRecreateTimestamps($convocation);
+        $hasTimestamps = $convocation->getSentTimestamp() !== null;
+
+        if ($hasTimestamps) {
+            $this->timestampManager->createSendOrResendTimestamp($convocation->getSitting(), $convocation);
+        }
+        if (!$hasTimestamps) {
+            $this->timestampAndActiveConvocations($convocation->getSitting(), [$convocation]);
+        }
+
         $emails = $this->generateEmailsData($convocation->getSitting(), [$convocation]);
         $this->clientNotifier->newSittingNotification([$convocation]);
         $this->emailService->sendBatch($emails);
         $this->messageBus->dispatch(new ConvocationSent([$convocation->getId()], $convocation->getSitting()->getId()));
     }
 
-    private function createOrRecreateTimestamps($convocation)
-    {
-        $hasTimestamps = $convocation->getSentTimestamp() !== null;
-        if ($hasTimestamps) {
-            $this->timestampManager->createUpdatedConvocationTimestamp($convocation->getSitting(), $convocation);
-        }
-        if (!$hasTimestamps) {
-            $this->timestampAndActiveConvocations($convocation->getSitting(), [$convocation]);
-        }
-    }
 
     /**
      * @throws ConnectionException

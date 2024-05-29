@@ -60,7 +60,7 @@ class TimestampManager
      * @throws RuntimeError
      * @throws LoaderError
      */
-    public function createUpdatedConvocationTimestamp(Sitting $sitting, Convocation $convocation): Timestamp
+    public function createSendOrResendTimestamp(Sitting $sitting, Convocation $convocation): Timestamp
     {
         $timeStamp = new Timestamp();
         $timeStamp->setFilePathContent($this->contentGenerator->generateUpdatedConvocationFile($sitting, $convocation));
@@ -78,6 +78,9 @@ class TimestampManager
     }
 
 
+    /**
+     * @throws LsHorodatageException
+     */
     public function createConvocationReceivedTimestamp(convocation $convocation): Timestamp
     {
         $timeStamp = new Timestamp();
