@@ -19,6 +19,9 @@ class StructureManager
 
     public function save(Structure $structure): void
     {
+        if ($structure->getIsActive() === false) {
+            $this->impersonateStructure->logoutEverySuperAdmin($structure);
+        }
         $this->em->persist($structure);
         $this->em->flush();
     }
