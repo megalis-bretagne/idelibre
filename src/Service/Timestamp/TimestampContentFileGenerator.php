@@ -15,9 +15,9 @@ use Twig\Error\SyntaxError;
 class TimestampContentFileGenerator
 {
     public function __construct(
-        private Environment $twig,
-        private ParameterBagInterface $bag,
-        private Filesystem $filesystem
+        private readonly Environment           $twig,
+        private readonly ParameterBagInterface $bag,
+        private readonly Filesystem $filesystem
     ) {
     }
 
@@ -33,6 +33,25 @@ class TimestampContentFileGenerator
         $txt = $this->twig->render('generate/sent_timestamp_template.txt.twig', [
             'sitting' => $sitting,
             'convocations' => $convocations,
+        ]);
+
+        $path = $this->getAndCreateTokenDirectory($sitting) . Uuid::uuid4();
+        file_put_contents($path, $txt);
+
+        return $path;
+    }
+
+
+    /**
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws LoaderError
+     */
+    public function generateUpdatedConvocationFile(Sitting $sitting, Convocation $convocation): string
+    {
+        $txt = $this->twig->render('generate/updated_timestamp_template.txt.twig', [
+            'sitting' => $sitting,
+            'convocation' => $convocation,
         ]);
 
         $path = $this->getAndCreateTokenDirectory($sitting) . Uuid::uuid4();
