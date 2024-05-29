@@ -11,7 +11,6 @@ use App\Repository\TypeRepository;
 use App\Repository\UserRepository;
 use App\Service\Enum\Csv_Records;
 use App\Service\Subscription\SubscriptionManager;
-use App\Service\Util\GenderConverter;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Csv\Exception;
 use League\Csv\Reader;
@@ -103,7 +102,7 @@ class CsvUserManager
             ->setEmail($this->dataFormatter->sanitize($record[Csv_Records::EMAIL->value] ?? ''))
             ->setRole($this->dataFormatter->getRoleFromCode(intval($record[Csv_Records::ROLE->value] ?? 0)))
             ->setPhone($this->dataFormatter->sanitizePhoneNumber($record[Csv_Records::PHONE->value] ?? ''))
-            ->setTitle($this->dataFormatter->actorTitle($record))
+            ->setTitle($this->dataFormatter->actorTitle($record) ?? '')
             ->setPassword(self::INVALID_PASSWORD)
             ->setStructure($structure);
 
