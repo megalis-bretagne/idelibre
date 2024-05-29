@@ -4,7 +4,7 @@ $(document).ready(function () {
     $("#showPassword").on('click', function (event) {
         event.preventDefault();
         let $passwordInput = $('#show_hide_password input');
-        let $passwordSpan = $('#show_hide_password span');
+        let $passwordSpan = $('#showPassword');
 
         if ($passwordInput.attr("type") === "text") {
             $('#show_hide_password input').attr('type', 'password');
