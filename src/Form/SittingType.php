@@ -120,6 +120,7 @@ class SittingType extends AbstractType
                     'Oui' => true,
                     'Non' => false,
                 ],
+                'disabled' => $isAlreadySentConvocation ,
 
             ])
 
@@ -134,6 +135,7 @@ class SittingType extends AbstractType
                     'Oui' => true,
                     'Non' => false,
                 ],
+                'disabled' => $isAlreadySentConvocation,
             ])
 
             ->add('structure', HiddenEntityType::class, [
