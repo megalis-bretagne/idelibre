@@ -39,7 +39,6 @@ class ExportUserTest extends KernelTestCase
     {
         $group = GroupStory::recia()->object();
         $csvPath = $this->exportUsersCsv->exportGroupUsers($group);
-        $this->assertStringContainsString($this->sanitizer->fileNameSanitizer('users-group', 255) , $csvPath);
+        $this->assertStringContainsString($this->sanitizer->fileNameSanitizer('users-group', 255), $csvPath);
     }
-
 }

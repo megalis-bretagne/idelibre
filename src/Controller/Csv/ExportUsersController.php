@@ -56,7 +56,7 @@ class ExportUsersController extends AbstractController
     #[isGranted('MANAGE_GROUPS', subject: 'group')]
     public function exportCsvUsersFromGroup(Group $group): Response
     {
-        if (count($group->getStructures()) < 1){
+        if (count($group->getStructures()) < 1) {
             $this->addFlash('error', 'Aucune structure associée à ce groupe');
 
             return $this->redirectToRoute('group_index');
