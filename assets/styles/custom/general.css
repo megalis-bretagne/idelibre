@@ -40,13 +40,12 @@ a { text-decoration: none; }
     color: white;
 }
 
-.navbar-ls .nav-item .dropdown-menu{
-    top: 2rem!important;
-}
+/*.navbar-ls .nav-item .dropdown-menu{*/
+/*    top: 2rem!important;*/
+/*}*/
 
 .navbar-nav .dropdown-menu {
-    left: -6.5rem;
-    top: 31px;
+
     width: max-content;
     background-color: #222222;
     border-radius: 0;
