@@ -10,9 +10,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class UserChecker implements UserCheckerInterface
 {
-
-
-
     public function checkPreAuth(UserInterface $user)
     {
         if (!$user instanceof User) {
@@ -26,9 +23,9 @@ class UserChecker implements UserCheckerInterface
         }
 
         /** var User $user */
-       if($user->getRole()->getName() === 'SuperAdmin' || $user->getRole()->getName() === 'GroupAdmin') {
-           return;
-       }
+        if ($user->getRole()->getName() === 'SuperAdmin' || $user->getRole()->getName() === 'GroupAdmin') {
+            return;
+        }
 
         if ($user->getStructure() && !$user->getStructure()->getIsActive()) {
             throw new CustomUserMessageAccountStatusException('La structure de votre utilisateur a été désactivée');
