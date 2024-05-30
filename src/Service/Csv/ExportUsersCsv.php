@@ -88,15 +88,10 @@ class ExportUsersCsv
      * @throws UnavailableStream
      * @throws CannotInsertRecord
      * @throws Exception
-     * @throws GroupHasNoStructureException
      */
     public function exportGroupUsers(Group $group): string
     {
         $structuresPath = [];
-
-        if (count($group->getStructures()) < 1) {
-            throw  new GroupHasNoStructureException("Export impossible le groupe n'est rattaché à aucune structure.");
-        }
 
         foreach ($group->getStructures() as $structure) {
             $structuresPath[] = $this->exportStructureUsers($structure);
