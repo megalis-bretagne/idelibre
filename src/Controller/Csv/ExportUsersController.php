@@ -6,6 +6,7 @@ use App\Entity\Group;
 use App\Entity\Structure;
 use App\Entity\User;
 use App\Service\Csv\ExportUsersCsv;
+use App\Service\Csv\GroupHasNoStructureException;
 use App\Service\Export\ExportToZip;
 use App\Service\Util\Sanitizer;
 use League\Csv\CannotInsertRecord;
@@ -23,7 +24,7 @@ class ExportUsersController extends AbstractController
 {
     public function __construct(
         private readonly ExportUsersCsv $exportUsersCsv,
-        private readonly Sanitizer $sanitizer,
+        private readonly Sanitizer      $sanitizer, private readonly User $user,
     ) {
     }
 
@@ -37,6 +38,11 @@ class ExportUsersController extends AbstractController
     #[IsGranted('ROLE_MANAGE_USERS')]
     public function exportCsvUsers(): Response
     {
+        if ($this->user->getStructure() === null ) {
+            $this->addFlash('error', 'Vous devez être rattaché à une structure pour exporter les utilisateurs d\'un groupe');
+            return $this->redirect('group_list');
+        }
+
         $structure = $this->getUser()->getStructure();
         $response = new BinaryFileResponse($this->exportUsersCsv->exportStructureUsers($structure));
         $response->setContentDisposition(
@@ -53,6 +59,7 @@ class ExportUsersController extends AbstractController
      * @throws UnavailableStream
      * @throws CannotInsertRecord
      * @throws Exception
+     * @throws GroupHasNoStructureException
      */
     #[Route('/export/csv/group/{id}/users', name: 'export_csv_users_group', methods: ['GET'])]
     #[isGranted('MANAGE_GROUPS', subject: 'group')]
