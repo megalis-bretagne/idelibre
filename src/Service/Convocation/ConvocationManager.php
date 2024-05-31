@@ -45,8 +45,8 @@ class ConvocationManager
         private readonly MessageBusInterface     $messageBus,
         private readonly CalGenerator            $icalGenerator,
         private readonly AttendanceTokenUtil     $attendanceTokenUtil,
-        private readonly TimestampSitting $timestampSitting,
-        private readonly TimestampConvocation $timestampConvocation,
+        private readonly TimestampSitting        $timestampSitting,
+        private readonly TimestampConvocation    $timestampConvocation,
     ) {
     }
 

@@ -20,7 +20,6 @@ class TimestampManager
 {
     public function __construct(
         private readonly EntityManagerInterface $em,
-        private readonly TimestampContentFileGenerator $contentGenerator,
         private readonly LshorodatageInterface $lshorodatage,
         private readonly Filesystem $filesystem,
     ) {
