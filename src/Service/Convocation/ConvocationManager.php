@@ -17,7 +17,9 @@ use App\Service\Email\CalGenerator;
 use App\Service\Email\EmailNotSendException;
 use App\Service\Email\EmailServiceInterface;
 use App\Service\EmailTemplate\EmailGenerator;
+use App\Service\Timestamp\TimestampConvocation;
 use App\Service\Timestamp\TimestampManager;
+use App\Service\Timestamp\TimestampSitting;
 use App\Util\AttendanceTokenUtil;
 use Doctrine\DBAL\ConnectionException;
 use Doctrine\ORM\EntityManagerInterface;
@@ -43,6 +45,8 @@ class ConvocationManager
         private readonly MessageBusInterface     $messageBus,
         private readonly CalGenerator            $icalGenerator,
         private readonly AttendanceTokenUtil     $attendanceTokenUtil,
+        private readonly TimestampSitting $timestampSitting,
+        private readonly TimestampConvocation $timestampConvocation,
     ) {
     }
 
@@ -393,7 +397,7 @@ class ConvocationManager
 
     public function markAsRead(Convocation $convocation): void
     {
-        $timeStamp = $this->timestampManager->createConvocationReceivedTimestamp($convocation);
+        $timeStamp = $this->timestampConvocation->createConvocationReceivedTimestamp($convocation);
         $convocation->setIsRead(true);
         $convocation->setReceivedTimestamp($timeStamp);
         $this->em->persist($convocation);
