@@ -27,7 +27,7 @@ class EventLogController extends AbstractController
             $this->getParameter('limit_line_table'),
             [
                 'defaultSortFieldName' => ['el.createdAt'],
-                'defaultSortDirection' => 'asc',
+                'defaultSortDirection' => 'desc',
             ]
         );
 
