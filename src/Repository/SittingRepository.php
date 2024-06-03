@@ -32,11 +32,6 @@ class SittingRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('s')
             ->andWhere('s.structure =:structure')
             ->setParameter('structure', $structure)
-            ->leftJoin('s.convocations', 'c')
-            ->leftJoin('c.user', 'u')
-            ->addSelect('c')
-            ->addSelect('u')
-            ->orderBy('u.lastName', 'ASC')
         ;
 
         if ($searchTerm) {
