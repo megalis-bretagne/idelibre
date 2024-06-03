@@ -52,6 +52,7 @@ a { text-decoration: none; }
     margin-top: 0;
     padding-top: 0;
     padding-bottom: 0;
+    color: white;
 }
 
 .dropdown-content {
@@ -59,6 +60,11 @@ a { text-decoration: none; }
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+}
+
+.navbar-nav .dropdown-menu a {
+    color: white;
+    padding: 0.5rem 1rem;
 }
 
 .popup-menu-right .dropdown-item {
