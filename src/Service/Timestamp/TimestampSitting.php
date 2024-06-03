@@ -11,10 +11,10 @@ use Libriciel\LshorodatageApiWrapper\LshorodatageInterface;
 class TimestampSitting
 {
     public function __construct(
-        private readonly EntityManagerInterface $em,
+        private readonly EntityManagerInterface        $em,
         private readonly TimestampContentFileGenerator $contentGenerator,
-        private readonly LshorodatageInterface $lshorodatage,
-        private readonly TimestampManager $timestampManager,
+        private readonly LshorodatageInterface         $lshorodatage,
+        private readonly TimestampManager              $timestampManager,
     ) {
     }
 
@@ -36,5 +36,4 @@ class TimestampSitting
 
         return $timeStamp;
     }
-
 }

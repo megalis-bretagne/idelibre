@@ -5,7 +5,6 @@ namespace App\MessageHandler;
 use App\Message\UpdatedSitting;
 use App\Repository\SittingRepository;
 use App\Service\Seance\SittingManager;
-use App\Service\Timestamp\TimestampManager;
 use App\Service\Timestamp\TimestampSitting;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
@@ -22,7 +21,7 @@ class ModifiedSittingTimestampGeneratorHandler
         private readonly EntityManagerInterface $em,
         private readonly LoggerInterface        $logger,
         private readonly SittingManager $sittingManager,
-        private readonly TimestampSitting $timestampSitting
+        private readonly TimestampSitting $timestampSitting,
     ) {
     }
 
