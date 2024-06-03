@@ -45,29 +45,29 @@ class Sitting
     #[Column(type: 'string', length: 255)]
     #[Length(max: '255', maxMessage: 'Le nom de la séance ne doit pas dépasser 255 caractères.')]
     #[Groups(groups: ['sitting', 'sitting:read'])]
-    private $name;
+    private ?string $name;
 
     #[Column(type: 'datetime')]
     #[NotNull(message: "La date et l'heure sont obligatoires")]
     #[Groups(groups: ['sitting', 'sitting:read', 'sitting:write'])]
-    private $date;
+    private ?DateTimeInterface $date;
 
     #[Column(type: 'integer')]
     #[Groups(groups: ['sitting', 'sitting:detail'])]
-    private $revision = 0;
+    private int $revision = 0;
 
     #[Column(type: 'boolean')]
     #[Groups(groups: ['sitting', 'sitting:read'])]
-    private $isArchived = false;
+    private bool $isArchived = false;
 
     #[Column(type: 'string', length: 255, nullable: true)]
     #[Length(max: '255')]
     #[Groups(['sitting', 'sitting:detail', 'sitting:write'])]
-    private $place;
+    private ?string $place;
 
     #[Column(type: 'datetime')]
     #[Groups(groups: ['sitting', 'sitting:detail'])]
-    private $createdAt;
+    private  $createdAt;
 
     #[OneToMany(mappedBy: 'sitting', targetEntity: Convocation::class)]
     private $convocations;
@@ -75,16 +75,16 @@ class Sitting
     #[ManyToOne(targetEntity: Type::class)]
     #[JoinColumn(onDelete: 'SET NULL')]
     #[Groups(['sitting', 'sitting:detail', 'sitting:write:post'])]
-    private $type;
+    private ?Type $type;
 
     #[ManyToOne(targetEntity: Structure::class)]
     #[JoinColumn(nullable: false, onDelete: 'CASCADE')]
     #[NotNull]
-    private $structure;
+    private ?Structure $structure;
 
     #[OneToOne(inversedBy: 'convocationSitting', targetEntity: File::class, cascade: ['persist', 'remove'])]
     #[Groups(['sitting:detail'])]
-    private $convocationFile;
+    private ?File $convocationFile;
 
     #[OneToMany(mappedBy: 'sitting', targetEntity: Project::class)]
     #[OrderBy(value: ['rank' => 'ASC'])]
@@ -92,15 +92,15 @@ class Sitting
 
     #[OneToOne(inversedBy: 'invitationSitting', targetEntity: File::class, cascade: ['persist', 'remove'])]
     #[Groups(['sitting:detail'])]
-    private $invitationFile;
+    private ?File $invitationFile;
 
     #[Column(type: 'string', length: 255, nullable: true)]
     #[Groups(['sitting', 'sitting:detail'])]
-    private $comelusId;
+    private ?string $comelusId;
 
     #[OneToOne(mappedBy: 'sitting', targetEntity: Reminder::class, cascade: ['persist', 'remove'])]
     #[Groups(['sitting:detail'])]
-    private $reminder;
+    private ?Reminder $reminder;
 
     #[OneToMany(mappedBy: 'sitting', targetEntity: Timestamp::class)]
     private $updatedTimestamps;
@@ -111,7 +111,7 @@ class Sitting
 
     #[Column(type: 'boolean', options: ['default' => false])]
     #[Groups(groups: ['sitting', 'sitting:read', 'sitting:write:post'])]
-    private $isRemoteAllowed = false;
+    private bool $isRemoteAllowed = false;
 
     #[ORM\OneToOne(mappedBy: 'sitting', cascade: ['persist', 'remove'])]
     #[Groups(groups: ['sitting'])]
