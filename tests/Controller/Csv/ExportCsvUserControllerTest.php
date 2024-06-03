@@ -3,6 +3,7 @@
 namespace App\Tests\Controller\Csv;
 
 use App\Service\Util\Sanitizer;
+use App\Tests\Factory\GroupFactory;
 use App\Tests\Factory\StructureFactory;
 use App\Tests\Factory\UserFactory;
 use App\Tests\FindEntityTrait;
@@ -16,6 +17,7 @@ use Doctrine\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
 
@@ -90,5 +92,23 @@ class ExportCsvUserControllerTest extends WebTestCase
         $this->assertSame('attachment; filename=' . $this->sanitizer->fileNameSanitizer($group->getName(), 255) . '.zip', $response->headers->get('content-disposition'));
         $this->assertSame('application/zip', $response->headers->get('content-type'));
         $this->assertGreaterThan(20, intval($response->headers->get('content-length')));
+    }
+
+    public function testExportUserFromGroupWithNoStructure()
+    {
+        UserStory::load();
+        $group = GroupFactory::createOne()->object();
+        $this->loginAsSuperAdmin();
+
+        $this->client->request(Request::METHOD_GET, '/export/csv/group/' . $group->getId() . '/users');
+        $this->assertResponseRedirects('/group');
+
+        $this->assertTrue($this->client->getResponse()->isRedirect());
+
+        $crawler = $this->client->followRedirect();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
+        $errorMsg = $crawler->filter('html:contains("Aucune structure associée à ce groupe")');
+        $this->assertCount(1, $errorMsg);
     }
 }

@@ -4,8 +4,12 @@ namespace App\Tests\Service\Csv;
 
 use App\Service\Csv\ExportUsersCsv;
 use App\Service\Util\Sanitizer;
+use App\Tests\Factory\GroupFactory;
 use App\Tests\Story\GroupStory;
 use App\Tests\Story\StructureStory;
+use League\Csv\CannotInsertRecord;
+use League\Csv\Exception;
+use League\Csv\UnavailableStream;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
@@ -29,5 +33,12 @@ class ExportUserTest extends KernelTestCase
         $structure = StructureStory::libriciel()->object();
         $csvPath = $this->exportUsersCsv->exportStructureUsers($structure);
         $this->assertSame('/tmp/' . $this->sanitizer->fileNameSanitizer($structure->getName(), 255) . '.csv', $csvPath);
+    }
+
+    public function testExportCsvUserFromGroup()
+    {
+        $group = GroupStory::recia()->object();
+        $csvPath = $this->exportUsersCsv->exportGroupUsers($group);
+        $this->assertStringContainsString($this->sanitizer->fileNameSanitizer('users-group', 255), $csvPath);
     }
 }
