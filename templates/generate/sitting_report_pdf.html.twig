@@ -18,7 +18,7 @@
     <div>Généré le {{ date() | date('d/m/Y à H:i' , timezone) }}</div>
 
     <h3> {{ sitting.name }} - {{ sitting.date | date('d/m/Y à H:i', timezone) }}</h3>
-    <h4>Lieu : {{ sitting.place }}</h4>
+    <h4>{% if sitting.place != '' %}{{"Lieu : " ~ sitting.place }}{% endif %}</h4>
 
     <div class="m-5">
         <h3 class="mb-2">Elus</h3>
