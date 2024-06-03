@@ -18,6 +18,7 @@
     <div>Généré le {{ date() | date('d/m/Y à H:i' , timezone) }}</div>
 
     <h3> {{ sitting.name }} - {{ sitting.date | date('d/m/Y à H:i', timezone) }}</h3>
+    <h4>Lieu : {{ sitting.place }}</h4>
 
     <div class="m-5">
         <h3 class="mb-2">Elus</h3>
@@ -123,7 +124,30 @@
             {% endfor %}
             </tbody>
         </table>
+
+    <h3 class="mb-2 mt-5">Projets</h3>
+
+        <table class="table table-striped mt-4">
+            <thead>
+            <tr class="d-flex text-start">
+                <th style="width: 15%;">Rang</th>
+                <th style="width: 85%;">Nom</th>
+            </tr>
+            </thead>
+
+            <tbody>
+                {% for project in sitting.projects %}
+                    <tr class="d-flex text-start">
+                        <td style="width: 15%;">{{ project.rank }}</td>
+                        <td style="width: 85%;">{{ project.name }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
     </div>
+
+
 
 </div>
 
