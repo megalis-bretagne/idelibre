@@ -159,6 +159,19 @@
                             </ul>
                         </li>
                     {% endif %}
+
+
+                    {% if is_granted('ROLE_VISUALIZE_SITTING') %}
+                        <li class="{{ 'board-nav' in activeNavs ? 'active' : '' }}">
+                            <a href="{{ path('easy_sitting_index') }}">
+                                <i class="ls-font ls-seance"></i>
+                                <span>Consulter les séances</span>
+                            </a>
+                            <ul class="sub-menu">
+                            </ul>
+                        </li>
+                    {% endif %}
+
                 {% endif %}
 
                 {% if is_granted('ROLE_MANAGE_STRUCTURES') %}
