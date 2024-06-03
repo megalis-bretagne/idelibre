@@ -1,6 +1,6 @@
-Date de mise a disposition : {{ "now" | date("d/m/Y à H:i") }} UTC
+Date de mise a disposition : {{ "now" | date("d/m/Y à H:i") }} UTC ({{ "now" | date("d/m/Y à H:i", sitting.structure.timezone.name) }} GMT)
 Nom de la seance : {{ sitting.name }}
-Date de la seance : {{ sitting.date | date("d/m/Y à H:i") }} UTC
+Date de la seance : {{ sitting.date | date("d/m/Y à H:i") }} UTC  ({{ sitting.date | date("d/m/Y à H:i", sitting.structure.timezone.name) }} GMT)
 
 Destinataires de cet envoi :
 {% for convocation in convocations %}
