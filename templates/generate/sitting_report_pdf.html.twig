@@ -138,7 +138,7 @@
             <tbody>
                 {% for project in sitting.projects %}
                     <tr>
-                        <td style="width:15%">{{ project.rank }}</td>
+                        <td style="width:15%">{{ project.rank + 1 }}</td>
                         <td style="width:85%">{{ project.name }}</td>
                     </tr>
                 {% endfor %}

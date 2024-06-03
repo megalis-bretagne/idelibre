@@ -131,7 +131,7 @@ class ConvocationRepository extends ServiceEntityRepository
             ->leftJoin('c.receivedTimestamp', 'received')
             ->addSelect('received')
             ->orderBy('role.prettyName', 'ASC')
-            ->addOrderBy('user.firstName')
+            ->addOrderBy('user.lastName', 'ASC')
             ->getQuery()
             ->getResult();
     }
