@@ -178,7 +178,7 @@ class ConvocationManager
         $hasTimestamps = $convocation->getSentTimestamp() !== null;
 
         if ($hasTimestamps) {
-            $this->timestampManager->createSendOrResendTimestamp($convocation->getSitting(), $convocation);
+            $this->timestampConvocation->createSendOrResendTimestamp($convocation->getSitting(), $convocation);
         }
         if (!$hasTimestamps) {
             $this->timestampAndActiveConvocations($convocation->getSitting(), [$convocation]);

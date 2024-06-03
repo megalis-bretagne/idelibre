@@ -2,8 +2,6 @@
 
 namespace App\Service\Timestamp;
 
-use App\Entity\Convocation;
-use App\Entity\Sitting;
 use App\Entity\Timestamp;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -12,9 +10,6 @@ use Libriciel\LshorodatageApiWrapper\LshorodatageInterface;
 use Psr\Http\Message\StreamInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Twig\Error\LoaderError;
-use Twig\Error\RuntimeError;
-use Twig\Error\SyntaxError;
 
 class TimestampManager
 {
