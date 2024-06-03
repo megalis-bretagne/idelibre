@@ -184,6 +184,52 @@ class SecurityControllerTest extends WebTestCase
         $this->assertCount(1, $successMsg);
     }
 
+
+    public function testLoginEmployee()
+    {
+
+        $roleEmployee = RoleStory::employee();
+        $structureLibriciel = StructureStory::libriciel();
+
+
+        $user = UserFactory::createOne([
+            'username' => 'employee@libriciel',
+            'structure' => $structureLibriciel,
+            'role' => $roleEmployee,
+            'password' => UserStory::PASSWORD
+        ]);
+
+
+
+
+        $crawler = $this->client->request(Request::METHOD_GET, '/login');
+        $this->assertResponseStatusCodeSame(200);
+        $title = $crawler->filter('html:contains("Veuillez saisir vos identifiants de connexion")');
+
+        $this->assertCount(1, $title);
+
+
+
+        $form = $crawler->selectButton('Se connecter')->form();
+
+        $form['username'] = 'employee@libriciel';
+        $form['password'] = 'password';
+
+        $this->client->submit($form);
+
+
+        $this->assertTrue($this->client->getResponse()->isRedirect());
+        $this->client->followRedirect();
+
+        $this->assertResponseStatusCodeSame(302);
+        $crawler = $this->client->followRedirect();
+
+        $successMsg = $crawler->filter('html:contains("Séances en cours")');
+
+        $this->assertCount(1, $successMsg);
+    }
+
+
     public function testLoginLegacy()
     {
         UserStory::load();
