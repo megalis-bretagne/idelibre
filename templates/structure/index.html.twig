@@ -10,7 +10,7 @@
                 {{ macros.addButton('structure_add', 'Ajouter une structure', 'Ajouter une structure') }}
             {% endif %}
 
-            {% if is_granted('ROLE_GROUP_ADMIN') %}
+            {% if is_granted('ROLE_GROUP_ADMIN') and structures|length > 0 %}
                 <a href="{{ path('export_csv_users_group', {'id': app.user.group.id}) }}" class="btn btn-outline-primary" title="Exporter les utilisateurs de toute vos structures">
                     <span class="fa fa-download"></span>
                     Exporter les utilisateurs
