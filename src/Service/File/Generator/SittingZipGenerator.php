@@ -62,7 +62,7 @@ class SittingZipGenerator
 
     private function addConvocation(Sitting $sitting, ZipArchive $zip): void
     {
-        $zip->addFile($sitting->getConvocationFile()->getPath(), '00__Convocation');
+        $zip->addFile($sitting->getConvocationFile()->getPath(), '00__Convocation.pdf');
     }
 
     private function addProjectWithAnnexes(Sitting $sitting, ZipArchive $zip): void
