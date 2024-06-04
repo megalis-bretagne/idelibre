@@ -43,7 +43,7 @@ class CsvSittingReport
 
     private function getHeaders(): array
     {
-        return ['Nom', 'Envoi', 'Réception', 'Role', 'groupe politique, présence, mandataire'];
+        return ['Nom', 'Prénom', 'Envoi', 'Réception', 'Role', 'Groupe politique', 'Présence', 'Mandataire'];
     }
 
     private function getConvocationData(Convocation $convocation): array
@@ -51,7 +51,8 @@ class CsvSittingReport
         $structure = $convocation->getSitting()->getStructure();
 
         return [
-            $convocation->getUser()->getLastName() . ' ' . $convocation->getUser()->getFirstName(),
+            $convocation->getUser()->getLastName(),
+            $convocation->getUser()->getFirstName(),
             $this->getDateFormattedTimeStamp($convocation->getSentTimestamp(), $structure),
             $this->getDateFormattedTimeStamp($convocation->getReceivedTimestamp(), $structure),
             $convocation->getUser()->getRole()->getPrettyName(),
