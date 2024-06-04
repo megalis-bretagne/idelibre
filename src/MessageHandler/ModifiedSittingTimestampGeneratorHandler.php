@@ -5,8 +5,9 @@ namespace App\MessageHandler;
 use App\Message\UpdatedSitting;
 use App\Repository\SittingRepository;
 use App\Service\Seance\SittingManager;
-use App\Service\Timestamp\TimestampManager;
+use App\Service\Timestamp\TimestampSitting;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\NonUniqueResultException;
 use Libriciel\LshorodatageApiWrapper\LsHorodatageException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -15,26 +16,19 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 #[AsMessageHandler]
 class ModifiedSittingTimestampGeneratorHandler
 {
-    private SittingRepository $sittingRepository;
-    private EntityManagerInterface $em;
-    private TimestampManager $timestampManager;
-    private LoggerInterface $logger;
-    private SittingManager $sittingManager;
-
     public function __construct(
-        TimestampManager $timestampManager,
-        SittingRepository $sittingRepository,
-        EntityManagerInterface $em,
-        LoggerInterface $logger,
-        SittingManager $sittingManager
+        private readonly SittingRepository      $sittingRepository,
+        private readonly EntityManagerInterface $em,
+        private readonly LoggerInterface        $logger,
+        private readonly SittingManager $sittingManager,
+        private readonly TimestampSitting $timestampSitting,
     ) {
-        $this->timestampManager = $timestampManager;
-        $this->sittingRepository = $sittingRepository;
-        $this->em = $em;
-        $this->logger = $logger;
-        $this->sittingManager = $sittingManager;
     }
 
+
+    /**
+     * @throws NonUniqueResultException
+     */
     public function __invoke(UpdatedSitting $genZipSitting): void
     {
         $this->em->clear();
@@ -48,7 +42,7 @@ class ModifiedSittingTimestampGeneratorHandler
         }
 
         try {
-            $this->timestampManager->createModifiedSittingTimestamp($sitting);
+            $this->timestampSitting->createModifiedSittingTimestamp($sitting);
         } catch (LsHorodatageException $e) {
             $this->logger->error($e->getMessage());
         }
