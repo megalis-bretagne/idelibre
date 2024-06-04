@@ -89,7 +89,7 @@ class SimpleEmailService implements EmailServiceInterface
 
     public function sendInitPassword(User $user, string $token): void
     {
-        $contentSubject = '[ ' . TemplateTag::PRODUCT_NAME . '] Initialisation de votre mot de passe';
+        $contentSubject = '[' . TemplateTag::PRODUCT_NAME . '] Initialisation de votre mot de passe';
         $subject = $this->emailGenerator->generateSubject($user, $contentSubject);
 
         $contents = $this->emailGenerator->generateInitPassword(
@@ -102,7 +102,7 @@ class SimpleEmailService implements EmailServiceInterface
 
     public function sendResetPassword(User $user, string $token): void
     {
-        $contentSubject = '[ ' . TemplateTag::PRODUCT_NAME . '] Réinitialiser votre mot de passe';
+        $contentSubject = '[' . TemplateTag::PRODUCT_NAME . '] Réinitialiser votre mot de passe';
         $subject = $this->emailGenerator->generateSubject($user, $contentSubject);
 
         $contents = $this->emailGenerator->generateForgetPassword(
@@ -115,7 +115,7 @@ class SimpleEmailService implements EmailServiceInterface
 
     public function sendReloadPassword(User $user, string $token): void
     {
-        $contentSubject = '[ ' . TemplateTag::PRODUCT_NAME . '] Demande de réinitialisation par un administrateur';
+        $contentSubject = '[' . TemplateTag::PRODUCT_NAME . '] Demande de réinitialisation par un administrateur';
         $subject = $this->emailGenerator->generateSubject($user, $contentSubject);
 
         $contents = $this->emailGenerator->generateReloadPassword(
