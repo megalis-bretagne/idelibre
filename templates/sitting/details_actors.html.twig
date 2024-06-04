@@ -619,7 +619,7 @@
 
                                                     <td class="col-5" id="changeAttendancePresenceGroup">
 
-                                                        <select class="select form-control" v-model="status.attendance"
+                                                        <select class="select form-select" v-model="status.attendance"
                                                                 @change="changeAttendance(status);" >
                                                             <option value="">Sans Réponse</option>
                                                             <option value="present">Présent</option>
@@ -644,7 +644,7 @@
                                                     <td class="col-3">
 
                                                         <div v-if="status.attendance==='poa'">
-                                                            <select class="select form-control" @change="changeAttendance(status);" v-model="status.mandator" :disabled="status.attendance !== 'poa'">
+                                                            <select class="select form-select" @change="changeAttendance(status);" v-model="status.mandator" :disabled="status.attendance !== 'poa'">
 
                                                                 <option :value="actors.user"
                                                                         v-for="actors in actorConvocations"
@@ -657,7 +657,7 @@
                                                         <div v-else-if="status.attendance==='deputy'">
                                                             <div v-for="actors in actorConvocations"
                                                                  v-if="status.convocationId === actors.id && actors.user.deputy !== null">
-                                                                <select class="select form-control"
+                                                                <select class="select form-select"
                                                                         @change="changeAttendance(status);"
                                                                         v-model="status.deputy"
                                                                         :disabled="status.attendance !== 'deputy'">
@@ -689,7 +689,7 @@
 
                                                     <td class="col-5" id="changeAttendancePresenceGroup">
 
-                                                        <select class="select form-control" v-model="status.attendance"
+                                                        <select class="select form-select" v-model="status.attendance"
                                                                 @change="changeAttendance(status);" >
                                                             <option value="">Sans Réponse</option>
                                                             <option value="present">Présent</option>
@@ -717,7 +717,7 @@
 
                                                     <td class="col-5" id="changeAttendancePresenceGroup">
 
-                                                        <select class="select form-control" v-model="status.attendance"
+                                                        <select class="select form-select" v-model="status.attendance"
                                                                 @change="changeAttendance(status);" >
                                                             <option value="">Sans Réponse</option>
                                                             <option value="present">Présent</option>
