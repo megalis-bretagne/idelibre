@@ -83,7 +83,7 @@ class FileGenerator
 
 
 
-        return [...$fullSittingDocsPath, ...$this->getProjectsAndAnnexesPath($sitting->getProjects()), ...$this->getOtherDocsPath($sitting->getOtherdocs())];
+        return [...$fullSittingDocsPath, ...$this->getOtherDocsPath($sitting->getOtherdocs()), ...$this->getProjectsAndAnnexesPath($sitting->getProjects())];
     }
 
     private function getConvocationPath(Sitting $sitting): string
