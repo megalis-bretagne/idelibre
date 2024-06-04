@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints\Regex;
 
 class StructureType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         /** @var Structure|null $entity */
         $entity = $builder->getData();
@@ -43,7 +43,6 @@ class StructureType extends AbstractType
                     'Oui' => true,
                     'Non' => false,
                 ],
-                'data' => !$entity || $entity->getReplyTo(),
             ])
             ->add('siren', TextType::class, [
                 'label' => 'Numéro de siren',
@@ -84,7 +83,7 @@ class StructureType extends AbstractType
         }
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Structure::class,
