@@ -148,7 +148,10 @@ class SecurityController extends AbstractController
                 'token' => $token
             ]);
         } catch (EntityNotFoundException $e) {
-            throw new NotFoundHttpException('this token does not exist');
+//            throw new NotFoundHttpException('this token does not exist');
+            return $this->render('security/unknown_token_ls.html.twig', [
+                'token' => $token
+            ]);
         }
 
         $form = $this->createForm(UserPasswordType::class, $user, [
