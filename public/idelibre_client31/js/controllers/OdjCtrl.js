@@ -146,7 +146,7 @@
             $modal.open({
                 templateUrl: 'js/templates/modalInfo/ModalpresenceCtrl.html',
                 controller: 'ModalpresenceCtrl',
-                size: 'md',
+                size: 'lg',
                 resolve: {
                     account: function () {
                         return account;
