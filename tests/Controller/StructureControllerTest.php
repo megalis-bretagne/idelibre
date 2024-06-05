@@ -77,6 +77,7 @@ class StructureControllerTest extends WebTestCase
         $form['structure[timezone]'] = $timezone->getId();
         $form['structure[suffix]'] = 'newStr';
         $form['structure[replyTo]'] = 'newStructure@example.org';
+        $form['structure[can_edit_reply_to]'] = true;
         $form['structure[user][username]'] = 'new user';
         $form['structure[user][firstName]'] = 'prenom';
         $form['structure[user][lastName]'] = 'nom';

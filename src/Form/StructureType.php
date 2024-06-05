@@ -34,9 +34,10 @@ class StructureType extends AbstractType
             ]);
         }
 
-        $builder->add('replyTo', TextType::class, [
+        $builder
+            ->add('replyTo', TextType::class, [
             'label' => 'Email de réponse',
-        ])
+            ])
             ->add('can_edit_reply_to', LsChoiceType::class, [
                 'label' => 'Autorisation pour les administrateurs de modifier l\'email de réponse ?',
                 'choices' => [
