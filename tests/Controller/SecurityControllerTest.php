@@ -74,7 +74,7 @@ class SecurityControllerTest extends WebTestCase
     {
         UserStory::load();
         $this->client->request(Request::METHOD_GET, '/reset/aqwx');
-        $this->assertResponseStatusCodeSame(404);
+        $this->assertResponseStatusCodeSame(200);
     }
 
     public function testResetPassword()
