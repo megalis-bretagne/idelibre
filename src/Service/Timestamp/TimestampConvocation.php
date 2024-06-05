@@ -12,10 +12,8 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
-
 class TimestampConvocation
 {
-
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly TimestampContentFileGenerator $contentGenerator,

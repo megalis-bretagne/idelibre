@@ -187,7 +187,6 @@ class SecurityControllerTest extends WebTestCase
 
     public function testLoginEmployee()
     {
-
         $roleEmployee = RoleStory::employee();
         $structureLibriciel = StructureStory::libriciel();
 

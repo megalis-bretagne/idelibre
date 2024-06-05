@@ -67,7 +67,7 @@ class Sitting
 
     #[Column(type: 'datetime')]
     #[Groups(groups: ['sitting', 'sitting:detail'])]
-    private  $createdAt;
+    private $createdAt;
 
     #[OneToMany(mappedBy: 'sitting', targetEntity: Convocation::class)]
     private $convocations;
