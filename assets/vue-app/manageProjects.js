@@ -454,7 +454,7 @@ $('.change-tab').click(function (event) {
     if (isDirty) {
         event.preventDefault();
         $('#confirm-btn').attr('href', $(this).attr('href'));
-        $('#confirm-not-save').modal();
+        $('#confirm-not-save').modal("show");
 
         return false;
     }
